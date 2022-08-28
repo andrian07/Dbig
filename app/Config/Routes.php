@@ -37,6 +37,42 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 
+$routes->group('devman', static function ($routes) {
+    $routes->get('/', 'Devman::index');
+    $routes->get('auth', 'Devman::index');
+    $routes->post('auth/login', 'Devman::login', ['filter' => 'csrf']);
+    $routes->get('auth/logout', 'Devman::logout');
+
+    $routes->get('log-queries', 'Devman::logQueries', ['filter' => 'devauth']);
+    $routes->post('log-queries-table', 'Devman::getLogQueries', ['filter' => 'devauth']);
+    $routes->get('log-queries-detail/(:num)', 'Devman::getLogQueriesDetail/$1', ['filter' => 'devauth']);
+});
+
+
+$routes->group('webmin', static function ($routes) {
+    $routes->get('/', 'Webmin\Auth::index');
+    $routes->get('auth', 'Webmin\Auth::index');
+    $routes->post('auth/login', 'Webmin\Auth::login', ['filter' => 'csrf']);
+    $routes->get('auth/logout', 'Webmin\Auth::logout');
+});
+
+$routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('profile', 'Webmin\Profile::index');
+    $routes->get('profile/update-password', 'Webmin\Profile::update_password');
+});
+
+$routes->group('webmin/category', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\Category::index');
+    $routes->get('getbyid/(:num)', 'Webmin\Category::getById/$1');
+    $routes->get('getbyname', 'Webmin\Category::getByName');
+    $routes->post('table', 'Webmin\Category::table');
+    $routes->post('save/(:alpha)', 'Webmin\Category::save/$1');
+    $routes->get('delete/(:num)', 'Webmin\Category::delete/$1');
+});
+
+
+
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

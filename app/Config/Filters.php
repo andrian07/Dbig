@@ -23,6 +23,8 @@ class Filters extends BaseConfig
         'honeypot'      => Honeypot::class,
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
+        'devauth'       => \App\Filters\DevmanAuth::class,
+        'webminauth'    => \App\Filters\WebminAuth::class,
     ];
 
     /**

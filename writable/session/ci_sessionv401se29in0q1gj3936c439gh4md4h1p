@@ -1,0 +1,1 @@
+__ci_last_regenerate|i:1661688785;_ci_previous_url|s:43:"http://localhost:8080/index.php/devman/auth";input|a:2:{s:8:"username";s:8:"owner123";s:8:"password";s:8:"12345678";}__ci_vars|a:2:{s:5:"input";s:3:"old";s:5:"alert";s:3:"old";}alert|a:2:{s:4:"type";s:6:"danger";s:7:"message";s:34:"Username atau password anda salah!";}

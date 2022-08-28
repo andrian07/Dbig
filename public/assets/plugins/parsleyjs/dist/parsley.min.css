@@ -1,0 +1,65 @@
+input.parsley-success,
+select.parsley-success,
+textarea.parsley-success {
+  border-color: #31ce77 !important;
+}
+
+input.parsley-error,
+select.parsley-error,
+textarea.parsley-error {
+  border-color: #f34943 !important;
+}
+
+.parsley-errors-list {
+  margin: 2px 0 3px;
+  padding: 0;
+  list-style-type: none;
+  font-size: 0.9em;
+  line-height: 0.9em;
+  opacity: 0;
+  color: red;
+
+  transition: all 0.3s ease-in;
+  -o-transition: all 0.3s ease-in;
+  -moz-transition: all 0.3s ease-in;
+  -webkit-transition: all 0.3s ease-in;
+}
+
+.parsley-errors-list.filled {
+  opacity: 1;
+}
+
+.select2-hidden-accessible.parsley-error
+  ~ ul
+  ~ .select2-container--default
+  .select2-selection--single {
+  border-color: #f34943 !important;
+}
+
+.select2-hidden-accessible.parsley-success
+  ~ ul
+  ~ .select2-container--default
+  .select2-selection--single {
+  border-color: #31ce77 !important;
+}
+
+.sel2 .parsley-errors-list.filled {
+  margin-top: 42px;
+  margin-bottom: -60px;
+  background-color: #fff;
+}
+
+.sel2 .parsley-errors-list:not(.filled) {
+  display: none;
+}
+
+.sel2 .parsley-errors-list.filled + span.select2 {
+  margin-bottom: 30px;
+}
+
+.sel2
+  .parsley-errors-list.filled
+  + span.select2
+  span.select2-selection--single {
+  background: #fff !important;
+}

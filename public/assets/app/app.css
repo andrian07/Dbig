@@ -1,0 +1,66 @@
+.text-red {
+  color: red;
+}
+
+.button-upload {
+  margin-bottom: 3px;
+  position: relative;
+  overflow: hidden;
+}
+
+.button-upload input {
+  position: absolute;
+  font-size: 50px;
+  opacity: 0;
+  right: 0;
+  top: 0;
+}
+
+.img-100-100 {
+  width: 100px;
+  height: 100px;
+}
+
+.img-300-120 {
+  width: 300px;
+  height: 120px;
+}
+
+.editable-error-block {
+  color: red;
+  width: 100%;
+}
+.table-config tr td {
+  width: 30px;
+}
+
+.table-config tr td a {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ui-autocomplete {
+  z-index: 215000000 !important;
+}
+
+.pos-input {
+  background-color: #fff;
+  font-size: 18px;
+}
+
+.pos-input[readonly] {
+  background-color: #aceca1;
+  color: black;
+}
+
+.total-display[readonly] {
+  font-size: 35px;
+  background-color: #aceca1;
+  color: black;
+}
+
+.fs-35 {
+  font-size: 35px;
+  color: black;
+}

@@ -43,6 +43,40 @@ defined('YEAR')   || define('YEAR', 31_536_000);
 defined('DECADE') || define('DECADE', 315_360_000);
 
 /*
+ | My Custom 
+*/
+defined('PPN')                  || define('PPN', 0.11);
+defined('PPN_TEXT')             || define('PPN_TEXT', '11%');
+defined('THOUSAND_SEPARATOR')   || define('THOUSAND_SEPARATOR', ',');
+defined('DECIMAL_SEPARATOR')    || define('DECIMAL_SEPARATOR', '.');
+defined('DECIMAL_DIGIT')        || define('DECIMAL_DIGIT', 2);
+
+/*
+ | Company Profile
+*/
+defined('COMPANY_NAME') || define('COMPANY_NAME', 'DBIG');
+defined('COMPANY_ADDRESS') || define('COMPANY_ADDRESS', ' Jalan Sungai Raya Dalam 1. Ruko Ceria No. A2 - A4');
+defined('COMPANY_PHONE') || define('COMPANY_PHONE', '081268880819');
+defined('COMPANY_REGION') || define('COMPANY_REGION', 'Kab.Kubu Raya, Kalimantan Barat');
+
+/*
+| APP
+*/
+defined('APPS_NAME') || define('APPS_NAME', 'd\'BIG');
+defined('APPS_VER') || define('APPS_VER', '1.0');
+
+/*
+| DEVMAN
+*/
+defined('DEV_USERNAME') || define('DEV_USERNAME', 'codeids');
+defined('DEV_PASSWORD') || define('DEV_PASSWORD', '12345678');
+
+/*
+| FOR LOG QUERIES
+*/
+defined('APP_LOG_QUERIES') || define('APP_LOG_QUERIES', TRUE);
+
+/*
  | --------------------------------------------------------------------------
  | Exit Status Codes
  | --------------------------------------------------------------------------
