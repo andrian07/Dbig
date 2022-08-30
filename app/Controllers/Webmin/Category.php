@@ -6,6 +6,7 @@ namespace App\Controllers\Webmin;
 use App\Models\M_category;
 use App\Controllers\Base\WebminController;
 
+
 class Category extends WebminController
 {
     protected $M_category;

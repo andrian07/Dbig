@@ -44,7 +44,7 @@ class M_user_account extends Model
         if ($show_deleted == FALSE) {
             $builder->where('user_account.deleted', 'N');
         }
-
+       
         return $builder->get();
     }
 }
