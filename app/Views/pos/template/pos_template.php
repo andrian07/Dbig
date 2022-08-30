@@ -222,6 +222,8 @@ $assetsUrl = base_url('assets');
 		let csrfHash = '<?= csrf_hash() ?>'; // CSRF hash
 	</script>
 
+
+
 	<!-- jQuery -->
 	<script src="<?= $themeUrl ?>/plugins/jquery/jquery.min.js"></script>
 	<!-- jQuery UI 1.11.4 -->
