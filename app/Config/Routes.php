@@ -70,6 +70,14 @@ $routes->group('webmin/category', ['filter' => 'webminauth'], static function ($
     $routes->get('delete/(:num)', 'Webmin\Category::delete/$1');
 });
 
+$routes->group('webmin/test', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\Category::index');
+    $routes->get('getbyid/(:num)', 'Webmin\Category::getById/$1');
+    $routes->get('getbyname', 'Webmin\Category::getByName');
+    $routes->post('table', 'Webmin\Category::table');
+    $routes->post('save/(:alpha)', 'Webmin\Category::save/$1');
+    $routes->get('delete/(:num)', 'Webmin\Category::delete/$1');
+});
 
 /* POS */
 $routes->group('pos', static function ($routes) {
