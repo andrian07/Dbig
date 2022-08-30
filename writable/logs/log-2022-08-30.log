@@ -1,0 +1,42 @@
+CRITICAL - 2022-08-30 12:32:01 --> Trying to access array offset on value of type null
+in APPPATH\Controllers\Base\PosController.php on line 20.
+ 1 APPPATH\Controllers\Base\PosController.php(20): CodeIgniter\Debug\Exceptions->errorHandler(8, 'Trying to access array offset on value of type null', 'APPPATH\\Controllers\\Base\\PosController.php', 20, [...])
+ 2 APPPATH\Controllers\Pos\Dashboard.php(12): App\Controllers\Base\PosController->initController(Object(CodeIgniter\HTTP\IncomingRequest), Object(CodeIgniter\HTTP\Response), Object(CodeIgniter\Log\Logger))
+ 3 SYSTEMPATH\CodeIgniter.php(867): App\Controllers\Pos\Dashboard->initController(Object(CodeIgniter\HTTP\IncomingRequest), Object(CodeIgniter\HTTP\Response), Object(CodeIgniter\Log\Logger))
+ 4 SYSTEMPATH\CodeIgniter.php(448): CodeIgniter\CodeIgniter->createController()
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Commands\Server\rewrite.php(43): require_once('FCPATH\\index.php')
+CRITICAL - 2022-08-30 12:32:32 --> Invalid file: pos/dashboard.php
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 33.
+ 1 SYSTEMPATH\View\View.php(201): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('pos/dashboard.php')
+ 2 SYSTEMPATH\Common.php(1137): CodeIgniter\View\View->render('pos/dashboard', [], true)
+ 3 APPPATH\Controllers\Base\PosController.php(41): view('pos/dashboard', [...])
+ 4 APPPATH\Controllers\Pos\Dashboard.php(20): App\Controllers\Base\PosController->renderView('dashboard', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(904): App\Controllers\Pos\Dashboard->index()
+ 6 SYSTEMPATH\CodeIgniter.php(457): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Pos\Dashboard))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Commands\Server\rewrite.php(43): require_once('FCPATH\\index.php')
+CRITICAL - 2022-08-30 12:38:20 --> Invalid file: pos/dashboard.php
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 33.
+ 1 SYSTEMPATH\View\View.php(201): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('pos/dashboard.php')
+ 2 SYSTEMPATH\Common.php(1137): CodeIgniter\View\View->render('pos/dashboard', [], true)
+ 3 APPPATH\Controllers\Base\PosController.php(41): view('pos/dashboard', [...])
+ 4 APPPATH\Controllers\Pos\Dashboard.php(20): App\Controllers\Base\PosController->renderView('dashboard', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(904): App\Controllers\Pos\Dashboard->index()
+ 6 SYSTEMPATH\CodeIgniter.php(457): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Pos\Dashboard))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Commands\Server\rewrite.php(43): require_once('FCPATH\\index.php')
+CRITICAL - 2022-08-30 13:49:43 --> Invalid file: pos/customer_screen.php
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 33.
+ 1 SYSTEMPATH\View\View.php(201): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('pos/customer_screen.php')
+ 2 SYSTEMPATH\Common.php(1137): CodeIgniter\View\View->render('pos/customer_screen', [], true)
+ 3 APPPATH\Controllers\Base\PosController.php(41): view('pos/customer_screen', [...])
+ 4 APPPATH\Controllers\Pos\Dashboard.php(29): App\Controllers\Base\PosController->renderView('customer_screen', [...])
+ 5 SYSTEMPATH\CodeIgniter.php(904): App\Controllers\Pos\Dashboard->customerScreen()
+ 6 SYSTEMPATH\CodeIgniter.php(457): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Pos\Dashboard))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(67): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Commands\Server\rewrite.php(43): require_once('FCPATH\\index.php')

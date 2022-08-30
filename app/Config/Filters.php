@@ -25,6 +25,7 @@ class Filters extends BaseConfig
         'secureheaders' => SecureHeaders::class,
         'devauth'       => \App\Filters\DevmanAuth::class,
         'webminauth'    => \App\Filters\WebminAuth::class,
+        'posauth'       => \App\Filters\PosAuth::class,
     ];
 
     /**

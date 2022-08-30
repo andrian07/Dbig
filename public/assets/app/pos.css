@@ -1,0 +1,35 @@
+.invoice-summary tbody tr th {
+  padding: 0px 0px;
+}
+
+.invoice-summary tbody tr td {
+  padding: 0px 10px;
+}
+
+.invoice-summary tbody tr th {
+  text-transform: uppercase;
+}
+
+.invoice-summary .display-total {
+  font-size: 35px;
+  background-color: #aceca1;
+  color: black;
+}
+
+.invoice-summary .display-total small {
+  font-size: 20px;
+}
+
+.pos-input {
+  background-color: #fff;
+  font-size: 25px;
+}
+
+.fs-20 {
+  font-size: 20px;
+}
+
+.pos-input[readonly] {
+  background-color: #aceca1;
+  color: black;
+}

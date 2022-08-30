@@ -71,6 +71,25 @@ $routes->group('webmin/category', ['filter' => 'webminauth'], static function ($
 });
 
 
+/* POS */
+$routes->group('pos', static function ($routes) {
+    $routes->get('/', 'Pos\Auth::index');
+    $routes->get('auth', 'Pos\Auth::index');
+    $routes->post('auth/login', 'Pos\Auth::login', ['filter' => 'csrf']);
+    $routes->get('auth/logout', 'Pos\Auth::logout');
+});
+
+
+$routes->group('pos', ['filter' => 'posauth'], static function ($routes) {
+    //$routes->get('profile', 'Webmin\Profile::index');
+    //$routes->get('profile/update-password', 'Webmin\Profile::update_password');
+    $routes->get('dashboard', 'Pos\Dashboard::index');
+    $routes->get('customer-display', 'Pos\Dashboard::customerDisplay');
+
+    $routes->get('sales', 'Pos\Sales::index');
+    $routes->get('sales-return', 'Pos\Sales_return::index');
+});
+/* END POS */
 
 
 /*
