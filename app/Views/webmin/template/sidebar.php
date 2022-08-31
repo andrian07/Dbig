@@ -37,6 +37,31 @@
 					</a>
 				</li>
 
+				<li class="nav-item">
+		            <a href="#" class="nav-link">
+		              <i class="nav-icon fas fa-shopping-cart"></i>
+		              <p>
+		                 Transaksi
+		                <i class="fas fa-angle-left right"></i>
+		              </p>
+		            </a>
+		            <ul class="nav nav-treeview">
+		              <li class="nav-item">
+		                <a href="<?= base_url('webmin/submission') ?>" class="nav-link">
+		                  <i class="far fa-circle nav-icon"></i>
+		                  <p>Pengajuan</p>
+		                  <span class="right badge badge-danger"></span>
+		                </a>
+		              </li>
+		              <li class="nav-item">
+		                <a href="<?= base_url('webmin/purchase-order') ?>" class="nav-link">
+		                  <i class="far fa-circle nav-icon"></i>
+		                  <p>Purchase Order</p>
+		                  <span class="right badge badge-danger"></span>
+		                </a>
+		              </li>
+		            </ul>
+		         </li>
 
 				<li class="nav-item">
 					<a id="btnlogout" href="<?= base_url('webmin/auth/logout') ?>" data-question="Yakin ingin keluar dari aplikasi?" class="nav-link">

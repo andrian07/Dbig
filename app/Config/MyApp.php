@@ -1,0 +1,190 @@
+<?php
+
+namespace Config;
+
+use CodeIgniter\Config\BaseConfig;
+
+class MyApp extends BaseConfig
+{
+    public $allowedHosts   = ['localhost'];
+
+    public $userRole = [
+        'dashboard' => [
+            'text'   => 'Dasbor',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+            ]
+        ],
+        'unit' => [
+            'text'   => 'Satuan',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+                'add'    => ['text' => 'Tambah'],
+                'edit'   => ['text' => 'Ubah'],
+                'delete' => ['text' => 'Hapus'],
+            ]
+        ],
+        'category' => [
+            'text'   => 'Kategori',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+                'add'    => ['text' => 'Tambah'],
+                'edit'   => ['text' => 'Ubah'],
+                'delete' => ['text' => 'Hapus'],
+            ]
+        ],
+        'product' => [
+            'text'   => 'Produk',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+                'add'    => ['text' => 'Tambah'],
+                'edit'   => ['text' => 'Ubah'],
+                'delete' => ['text' => 'Hapus'],
+            ]
+        ],
+        'supplier' => [
+            'text'   => 'Supplier',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+                'add'    => ['text' => 'Tambah'],
+                'edit'   => ['text' => 'Ubah'],
+                'delete' => ['text' => 'Hapus'],
+            ]
+        ],
+        'customer' => [
+            'text'   => 'Customer',
+            'roles'   => [
+                'view'              => ['text' => 'Lihat'],
+                'add'               => ['text' => 'Tambah'],
+                'edit'              => ['text' => 'Ubah'],
+                'delete'            => ['text' => 'Hapus'],
+                'point_exchange'    => ['text' => 'Penukaran Poin'],
+            ]
+        ],
+        'promo' => [
+            'text'   => 'Promo',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+                'manage' => ['text' => 'Tambah / Ubah'],
+                'delete' => ['text' => 'Hapus'],
+            ]
+        ],
+        'purchase_order' => [
+            'text'   => 'Pesanan Pembelian',
+            'roles'   => [
+                'view'          => ['text' => 'Lihat'],
+                'add'           => ['text' => 'Tambah'],
+                'edit'          => ['text' => 'Ubah'],
+                'cancel_order'  => ['text' => 'Pembatalan Pesanan'],
+            ]
+        ],
+        'purchase' => [
+            'text'   => 'Pembelian',
+            'roles'   => [
+                'view'      => ['text' => 'Lihat'],
+                'add'       => ['text' => 'Tambah'],
+                'repayment' => ['text' => 'Pelunasan Hutang'],
+            ]
+        ],
+        'purchase_return' => [
+            'text'   => 'Retur Pembelian',
+            'roles'   => [
+                'view'      => ['text' => 'Lihat'],
+                'add'       => ['text' => 'Tambah'],
+                'edit'      => ['text' => 'Ubah'],
+                'repayment' => ['text' => 'Pelunasan Retur'],
+            ]
+        ],
+        'sales' => [
+            'text'   => 'Penjualan',
+            'roles'   => [
+                'view'      => ['text' => 'Lihat'],
+            ]
+        ],
+        'sales_return' => [
+            'text'   => 'Retur Penjualan',
+            'roles'   => [
+                'view'      => ['text' => 'Lihat'],
+            ]
+        ],
+        'stock_opname' => [
+            'text'   => 'Stok Opname',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+                'add'    => ['text' => 'Tambah'],
+            ]
+        ],
+        'pos' => [
+            'text'   => 'Point Of Sales (POS)',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+            ]
+        ],
+        'password_control' => [
+            'text'   => 'Password Control',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+                'add'    => ['text' => 'Tambah'],
+                'edit'   => ['text' => 'Ubah'],
+                'delete' => ['text' => 'Hapus'],
+            ]
+        ],
+        'user_group' => [
+            'text'   => 'Grup Pengguna',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+                'add'    => ['text' => 'Tambah'],
+                'edit'   => ['text' => 'Ubah'],
+                'delete' => ['text' => 'Hapus'],
+            ]
+        ],
+        'user_account' => [
+            'text'   => 'Akun Pengguna',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+                'add'    => ['text' => 'Tambah'],
+                'edit'   => ['text' => 'Ubah'],
+                'delete' => ['text' => 'Hapus'],
+            ]
+        ],
+        'accounting' => [
+            'text'   => 'Akuntansi',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+            ]
+        ],
+        'report' => [
+            'text'   => 'Laporan',
+            'roles'   => [
+                'view'                      => ['text' => 'Lihat'],
+                'product_list'              => ['text' => 'Daftar Produk'],
+                'point_exchange_list'       => ['text' => 'Daftar Penukaran Poin'],
+                'stock_opname_list'         => ['text' => 'Daftar Stok Opname'],
+                'customer_point_history_chart' => ['text' => 'Grafik Histori Poin Customer'],
+
+                'purchase_list'             => ['text' => 'Daftar Pembelian'],
+                'supplier_purchase_list'    => ['text' => 'Daftar Pembelian Per Supplier'],
+                'purchase_repayment_list'   => ['text' => 'Daftar Pelunasan Pembelian'],
+                'purchase_debt_due_list'    => ['text' => 'Daftar Tagihan Jatuh Tempo'],
+                'product_purchase_recap'    => ['text' => 'Rekap Pembelian Produk'],
+                'product_purchase_history'  => ['text' => 'Histori Pembelian Produk'],
+
+                'purchase_return_list'             => ['text' => 'Daftar Retur Pembelian'],
+                'product_purchase_return_recap'    => ['text' => 'Rekap Retur Pembelian Produk'],
+
+                'sales_list'                => ['text' => 'Daftar Penjualan'],
+                'user_sales_list'           => ['text' => 'Daftar Penjualan Per User'],
+                'product_sales_recap'       => ['text' => 'Rekap Penjualan Produk'],
+                'category_product_sales_recap' => ['text' => 'Rekap Penjualan Produk Per Kategori'],
+                'invoice_sales_recap'       => ['text' => 'Rekap Penjualan Per Nota'],
+                'invoice_sales_recap_group_date' => ['text' => 'Rekap Penjualan Nota Harian'],
+                'income_recap'              => ['text' => 'Laporan Laba Rugi'],
+
+                'sales_return_list'         => ['text' => 'Daftar Retur Penjualan'],
+                'user_sales_return_list'    => ['text' => 'Daftar Retur Penjualan Per User'],
+
+                'accounting'                => ['text' => 'Akuntansi'],
+            ]
+        ],
+    ];
+}
