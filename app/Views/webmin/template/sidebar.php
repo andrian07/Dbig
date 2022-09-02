@@ -28,40 +28,234 @@
 			   with font-awesome or any other icon font library -->
 
 				<li class="nav-item">
-					<a href="<?= base_url('webmin/category') ?>" class="nav-link">
+					<a href="#" class="nav-link">
 						<i class="nav-icon fas fa-tachometer-alt"></i>
 						<p>
-							Kategori
+							Dashboard
 							<span class="right badge badge-danger"></span>
 						</p>
 					</a>
 				</li>
 
 				<li class="nav-item">
-		            <a href="#" class="nav-link">
-		              <i class="nav-icon fas fa-shopping-cart"></i>
-		              <p>
-		                 Transaksi
-		                <i class="fas fa-angle-left right"></i>
-		              </p>
-		            </a>
-		            <ul class="nav nav-treeview">
-		              <li class="nav-item">
-		                <a href="<?= base_url('webmin/submission') ?>" class="nav-link">
-		                  <i class="far fa-circle nav-icon"></i>
-		                  <p>Pengajuan</p>
-		                  <span class="right badge badge-danger"></span>
-		                </a>
-		              </li>
-		              <li class="nav-item">
-		                <a href="<?= base_url('webmin/purchase-order') ?>" class="nav-link">
-		                  <i class="far fa-circle nav-icon"></i>
-		                  <p>Purchase Order</p>
-		                  <span class="right badge badge-danger"></span>
-		                </a>
-		              </li>
-		            </ul>
-		         </li>
+					<a href="javascript:void(0)" class="nav-link">
+						<i class="nav-icon fas fa-newspaper"></i>
+						<p>
+							Master Data
+							<i class="right fas fa-angle-left"></i>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="<?= base_url('webmin/category') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Kategori</p>
+							</a>
+						</li>
+
+						<li class="nav-item">
+							<a href="<?= base_url('webmin/unit') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Satuan</p>
+							</a>
+						</li>
+
+						<li class="nav-item">
+							<a href="<?= base_url('webmin/warehouse') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Gudang</p>
+							</a>
+						</li>
+
+						<li class="nav-item">
+							<a href="<?= base_url('webmin/product') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Produk</p>
+							</a>
+						</li>
+
+						<li class="nav-item">
+							<a href="<?= base_url('webmin/supplier') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Supplier</p>
+							</a>
+						</li>
+
+						<li class="nav-item">
+							<a href="<?= base_url('webmin/customer') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Customer</p>
+							</a>
+						</li>
+					</ul>
+				</li>
+
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-percent"></i>
+						<p>
+							Diskon Seasonal
+							<span class="right badge badge-danger"></span>
+						</p>
+					</a>
+				</li>
+
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-box"></i>
+						<p>
+							Stok Opname
+							<span class="right badge badge-danger"></span>
+						</p>
+					</a>
+				</li>
+
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-exchange-alt"></i>
+						<p>
+							Transfer Stok
+							<span class="right badge badge-danger"></span>
+						</p>
+					</a>
+				</li>
+
+				<li class="nav-item">
+					<a href="javascript:void(0)" class="nav-link">
+						<i class="nav-icon fas fa-coins"></i>
+						<p>
+							Poin Customer
+							<i class="right fas fa-angle-left"></i>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Hadiah Poin</p>
+							</a>
+						</li>
+
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Penukaran Poin</p>
+							</a>
+						</li>
+					</ul>
+				</li>
+
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-shopping-cart"></i>
+						<p>
+							Transaksi Pembelian
+							<i class="fas fa-angle-left right"></i>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="<?= base_url('webmin/submission') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Pengajuan</p>
+								<span class="right badge badge-danger"></span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?= base_url('webmin/purchase-order') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Purchase Order</p>
+								<span class="right badge badge-danger"></span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Pembelian</p>
+								<span class="right badge badge-danger"></span>
+							</a>
+						</li>
+					</ul>
+				</li>
+
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-shopping-cart"></i>
+						<p>
+							Transaksi Penjualan
+							<i class="fas fa-angle-left right"></i>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Penjualan</p>
+								<span class="right badge badge-danger"></span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Retur Penjualan</p>
+								<span class="right badge badge-danger"></span>
+							</a>
+						</li>
+					</ul>
+				</li>
+
+
+
+				<li class="nav-item">
+					<a href="javascript:void(0)" class="nav-link">
+						<i class="nav-icon fas fa-user"></i>
+						<p>
+							Admin
+							<i class="right fas fa-angle-left"></i>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Grup Pengguna</p>
+							</a>
+						</li>
+
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Akun Pengguna</p>
+							</a>
+						</li>
+
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Password Control</p>
+							</a>
+						</li>
+					</ul>
+				</li>
+
+				<li class="nav-item">
+					<a href="#" class="nav-link">
+						<i class="nav-icon fas fa-file"></i>
+						<p>
+							Laporan
+							<span class="right badge badge-danger"></span>
+						</p>
+					</a>
+				</li>
+
+
+
+
+
+
+
+
+
 
 				<li class="nav-item">
 					<a id="btnlogout" href="<?= base_url('webmin/auth/logout') ?>" data-question="Yakin ingin keluar dari aplikasi?" class="nav-link">
