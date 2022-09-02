@@ -112,6 +112,18 @@ $routes->group('pos', ['filter' => 'posauth'], static function ($routes) {
 /* END POS */
 
 
+/* Eric Demo */
+$routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('unit', 'Webmin\EricDemo::unit');
+    $routes->get('brand', 'Webmin\EricDemo::brand');
+    $routes->get('warehouse', 'Webmin\EricDemo::warehouse');
+    $routes->get('customer', 'Webmin\EricDemo::customer');
+    $routes->get('supplier', 'Webmin\EricDemo::supplier');
+    $routes->get('product', 'Webmin\EricDemo::product');
+});
+/* End Eric Demo */
+
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

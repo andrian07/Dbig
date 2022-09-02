@@ -107,13 +107,14 @@ if (!function_exists('saveQueries')) {
     function saveQueries($queries, $module, $ref_id = 0, $log_remark = '')
     {
         if (APP_LOG_QUERIES) {
+            $user_id = 0;
             $M_log_queries = model('Log/M_log_queries',);
             $user_login = session()->get('user_login');
-            if ($user_login == NULL) {
-                $user_id = 0;
-            } else {
+
+            if ($user_login != NULL) {
                 $user_id = $user_login['user_id'];
             }
+
             $M_log_queries->insertLog($queries, $log_remark, $user_id, $module, $ref_id);
         }
     }
