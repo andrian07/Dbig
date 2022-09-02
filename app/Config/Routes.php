@@ -75,8 +75,8 @@ $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static funct
     $routes->get('/', 'Webmin\purchase_order::index');
 });
 
-$routes->group('webmin/submision', ['filter' => 'webminauth'], static function ($routes) {
-    $routes->get('/', 'Webmin\submision::index');
+$routes->group('webmin/submission', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\Submission::index');
 });
 
 
