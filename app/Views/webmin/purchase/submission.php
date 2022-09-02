@@ -63,15 +63,11 @@ $assetsUrl = base_url('assets');
 
                                         <th data-priority="1">#</th>
 
-                                        <th data-priority="2">No Invoice</th>
+                                        <th data-priority="2">Tanggal Pengajuan</th>
 
-                                        <th data-priority="4">Tanggal Transaksi</th>
+                                        <th data-priority="4">Diajukan</th>
 
-                                        <th data-priority="6">Nama Supplier</th>
-
-                                        <th data-priority="7">Total Transaksi</th>
-
-                                        <th data-priority="5">Status</th>
+                                        <th data-priority="6">Keterangan</th>
 
                                         <th data-priority="3">Aksi</th>
 
@@ -185,126 +181,143 @@ $assetsUrl = base_url('assets');
 
                                     </div>
 
-                                   
 
-                                 <div class="col-sm-3">
 
-                                    <!-- text input -->
+                                    <div class="col-sm-3">
 
-                                    <div class="form-group">
+                                        <!-- text input -->
 
-                                        <label>Diajukan Oleh:</label>
+                                        <div class="form-group">
 
-                                        <input id="display_user" type="text" class="form-control" value="Marketing 01" readonly>
+                                            <label>Diajukan Oleh:</label>
+
+                                            <input id="display_user" type="text" class="form-control" value="Marketing 01" readonly>
+
+                                        </div>
 
                                     </div>
+
+
+
 
                                 </div>
 
 
 
+                            </form>
 
-                            </div>
+                        </div><!-- /.card-body -->
 
+                    </div>
 
-
-                        </form>
-
-                    </div><!-- /.card-body -->
+                    <!-- /.card -->
 
                 </div>
 
-                <!-- /.card -->
+                <!-- /.col -->
 
             </div>
 
-            <!-- /.col -->
+            <!-- /.row -->
 
-        </div>
-
-        <!-- /.row -->
-
-    </div><!-- /.container-fluid -->
+        </div><!-- /.container-fluid -->
 
 
 
 
 
-    <div class="container-fluid">
+            <div class="container-fluid">
 
-        <div class="row">
+            <div class="row">
 
-            <!-- /.col -->
+                <!-- /.col -->
 
-            <div class="col-md-12">
+                <div class="col-md-12">
 
-                <div class="card">
+                    <div class="card">
 
-                    <div class="card-body">
+                        <div class="card-body">
 
-                        <form id="frmaddtemp" class="mb-2">
+                            <form id="frmaddtemp" class="mb-2">
 
-                            <div class="row">
+                                <div class="row well well-sm">
 
-                                <input id="item_id" name="item_id" type="hidden" value="">
+                                    <input id="item_id" name="item_id" type="hidden" value="">
 
-                                <input id="product_tax" name="product_tax" type="hidden" value="">
+                                    <input id="product_tax" name="product_tax" type="hidden" value="">
 
-                                <div class="col-sm-3">
+                                    <div class="col-sm-3">
 
-                                    <!-- text input -->
+                                        <!-- text input -->
 
-                                    <div class="form-group">
+                                        <div class="form-group">
 
-                                        <label>Produk</label>
+                                            <label>Produk</label>
 
-                                        <input id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname required>
+                                            <select id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname required> </select>
+
+                                        </div>
 
                                     </div>
 
-                                </div>
+                                    
 
-                                <div class="col-sm-2">
+                                    <div class="col-sm-2">
 
-                                    <!-- text input -->
+                                        <!-- text input -->
 
-                                    <div class="form-group">
+                                        <div class="form-group">
 
-                                        <label>Qty</label>
+                                            <label>Qty</label>
 
-                                        <input id="temp_qty" name="temp_qty" type="text" class="form-control text-right" value="0" data-parsley-vqty required>
+                                            <input id="temp_qty" name="temp_qty"  class="form-control text-right" value="0" data-parsley-vqty required>
 
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Status</label>
-
-                                        <input id="temp_status" name="temp_status" type="text" class="form-control text-right" required>
+                                        </div>
 
                                     </div>
 
-                                </div>
+                                    <div class="col-sm-2">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Status</label>
+
+                                            <select id="temp_status" name="temp_status" class="form-control text-right" value="0" readonly> </select>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-3">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Keterangan</label>
+
+                                            <input id="temp_status" name="temp_status" type="text" class="form-control" > 
+
+                                        </div>
+
+                                    </div>
 
 
+                                    <div class="col-sm-1">
 
-                                <div class="col-sm-1">
+                                        <!-- text input -->
 
-                                    <!-- text input -->
+                                        <label>&nbsp;</label>
 
-                                    <label>&nbsp;</label>
+                                        <div class="form-group">
 
-                                    <div class="form-group">
+                                            <div class="col-12">
 
-                                        <div class="col-12">
+                                                <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle float-right"><i class="fas fa-plus"></i></button>
 
-                                            <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle float-right"><i class="fas fa-plus"></i></button>
+                                            </div>
 
                                         </div>
 
@@ -312,107 +325,145 @@ $assetsUrl = base_url('assets');
 
                                 </div>
 
-                            </div>
-
-                        </form>
+                            </form>
 
 
 
-                        <div class="row mb-2">
+                            <div class="row mb-2">
 
-                            <div class="col-12">
+                                <div class="col-12">
 
-                                <table id="tbltemp" class="table table-bordered table-hover" width="100%">
+                                    <table id="tbltemp" class="table table-bordered table-hover" width="100%">
 
-                                    <thead>
+                                        <thead>
 
-                                        <tr>
+                                            <tr>
 
-                                            <th data-priority="1">#</th>
+                                                <th data-priority="1">#</th>
 
-                                            <th data-priority="2">Produk</th>
+                                                <th data-priority="1">Kode Produk</th>
 
-                                            <th data-priority="5">Qty</th>
+                                                <th data-priority="2">Produk</th>
 
-                                            <th data-priority="6">Keterangan</th>
+                                                <th data-priority="3">Qty</th>
 
-                                            <th data-priority="3">Aksi</th>
+                                                <th data-priority="4">Status</th>
+
+                                                <th data-priority="5">Keterangan</th>
+
+                                                <th data-priority="6">Aksi</th>
+
+                                            </tr>
+
+                                        </thead>
+
+                                        <tbody>
+                                             <tr>
+
+                                            <td>1</td>
+
+                                            <td>00002050</td>
+
+                                            <td>NIPPON PAINT CAT BASE NIPPON SATIN GLO - PASTEL BASE 2.35L </td>
+
+                                            <td>10</td>
+
+                                            <td>Urgent</td>
+
+                                            <td>Customer sudah DP dan minta antar dalam 3 hari</td>
+
+                                            <td>
+
+                                                <button data-id="{item_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+
+                                                    <i class="fas fa-edit"></i>
+
+                                                </button>
+
+                                                &nbsp;
+
+                                                <button data-id="{item_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+
+                                                    <i class="fas fa-minus"></i>
+
+                                                </button>
+
+                                            </td>
 
                                         </tr>
 
-                                    </thead>
 
-                                    <tbody>
+                                        <tr>
 
-                                    </tbody>
+                                            <td>2</td>
 
-                                </table>
+                                            <td>00009200</td>
 
-                                <template id="template_row_temp">
+                                            <td>ARISTON WATER HEATER ANDRIS AN2 15 LUX 350 ID</td>
 
-                                    <tr>
+                                            <td>10</td>
 
-                                        <td>{row}</td>
+                                            <td>Restock</td>
 
-                                        <td>{product_name}</td>
+                                            <td>Sisa stock per 2/8 tinggal 5</td>
 
-                                        <td>{temp_price}</td>
+                                            <td>
 
-                                        <td>{temp_tax}</td>
+                                                <button data-id="{item_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
-                                        <td>
+                                                    <i class="fas fa-edit"></i>
 
-                                            <button data-id="{item_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                                </button>
 
-                                                <i class="fas fa-edit"></i>
+                                                &nbsp;
 
-                                            </button>
+                                                <button data-id="{item_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
 
-                                            &nbsp;
+                                                    <i class="fas fa-minus"></i>
 
-                                            <button data-id="{item_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+                                                </button>
 
-                                                <i class="fas fa-minus"></i>
+                                            </td>
 
-                                            </button>
+                                        </tr>
+                                        </tbody>
 
-                                        </td>
+                                    </table>
 
-                                    </tr>
-
-                                </template>
-
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="row">
-
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-
-                                <div class="form-group">
-
-                                    <label for="purchase_order_remark" class="col-sm-12">Catatan</label>
-
-                                    <div class="col-sm-12">
-
-                                        <textarea id="purchase_order_remark" name="purchase_order_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="3"></textarea>
-
-                                    </div>
 
                                 </div>
 
                             </div>
 
-                            <div class="col-12">
+
+
+                            <div class="row">
+
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+
+                                    <div class="form-group">
+
+                                        <label for="purchase_order_remark" class="col-sm-12">Catatan</label>
+
+                                        <div class="col-sm-12">
+
+                                            <textarea id="purchase_order_remark" name="purchase_order_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="3"></textarea>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
 
                                 <div class="col-12">
 
-                                    <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
+                                    <div class="col-12">
 
-                                    <button id="btnsave" class="btn btn-success float-right"><i class="fas fa-save"></i> Simpan</button>
+                                        <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
+
+                                        <button id="btnsave" class="btn btn-success float-right"><i class="fas fa-save"></i> Simpan</button>
+
+                                    </div>
 
                                 </div>
 
@@ -422,19 +473,17 @@ $assetsUrl = base_url('assets');
 
                     </div>
 
+                    <!-- /.card -->
+
                 </div>
 
-                <!-- /.card -->
+                <!-- /.col -->
 
             </div>
 
-            <!-- /.col -->
+            <!-- /.row -->
 
-        </div>
-
-        <!-- /.row -->
-
-    </div><!-- /.container-fluid -->
+        </div><!-- /.container-fluid -->
 
 </section>
 
@@ -454,25 +503,61 @@ $assetsUrl = base_url('assets');
 
     $(document).ready(function() {
 
-          let temp_qty = new AutoNumeric('#temp_qty', configQty);
+     // let temp_qty = new AutoNumeric('#temp_qty', configQty);
 
         // init component //
 
         function _initButton() {
 
-    
+
         }
 
 
 
         // select2 //
 
-        $("#employee_id").select2({
+        $("#temp_status").select2({
 
-            data: [{
-                    id:'1',
-                    text: 'Marketing 01'
-            }]
+            data: [
+            {
+                id:'1',
+                text: 'Urgent'
+            },
+            {
+                id:'2',
+                text: 'Restock'
+            },
+            {
+                id:'3',
+                text: 'Baru',
+            }
+
+            ]
+
+        });
+
+
+        $("#product_name").select2({
+
+            data: [
+            {
+                id:'00002050',
+                text: 'NIPPON PAINT CAT BASE NIPPON SATIN GLO - PASTEL BASE 2.35L / 00002050'
+            },
+            {
+                id:'00009200',
+                text: 'ARISTON WATER HEATER ANDRIS AN2 15 LUX 350 ID / 00009200'
+            },
+            {
+                id:'000092009',
+                text: 'KERAMIK LANTAI ACCURA (SERI WASHINGTON BROWN 40X40) KW I / 000092009',
+            },
+            {
+                id:'00005001',
+                text: 'IKAD KERAMIK DINDING DX 2277A FR 25X40 - I / 00005001',
+            }
+            
+            ]
 
         });
 
@@ -480,167 +565,7 @@ $assetsUrl = base_url('assets');
 
 
         // Table //
-        let total_transaction = 0;
 
-        const config_tbltemp = {
-
-            pageLength: 10,
-
-            autoWidth: false,
-
-            select: true,
-
-            responsive: true,
-
-            fixedColumns: true,
-
-            order: [
-
-                [0, 'desc']
-
-            ],
-
-            "language": {
-
-                "url": lang_datatables,
-
-            },
-
-            "columnDefs": [{
-
-                    width: 100,
-
-                    targets: 6
-
-                },
-
-                {
-
-                    targets: [6],
-
-                    orderable: false,
-
-                    searchable: false,
-
-                },
-
-
-
-                {
-
-                    targets: [0, 2, 3, 4, 5],
-
-                    className: "text-right",
-
-                }
-
-            ]
-
-        };
-
-
-
-        let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
-
-         function loadTempData(items) {
-
-            let template = $('#template_row_temp').html();
-
-            let tbody = '';
-
-            let row = 1;
-
-            let temp_total_order = 0;
-
-            items.forEach((val, key) => {
-
-                if (val.temp_delete == 'N') {
-
-                    let item = template;
-
-                    let data_json = htmlEntities.encode(JSON.stringify(val));
-
-                    let product_name = val.item_code + ' - ' + val.product_name;
-
-                    product_name += ' (' + val.unit_name + ')';
-
-
-
-                    let tprice = parseFloat(val.temp_price);
-
-                    let ttax = parseFloat(val.temp_tax);
-
-                    let tqty = parseFloat(val.temp_qty);
-
-                    let stotal = (tprice + ttax) * tqty;
-
-                    temp_total_order += stotal;
-
-
-
-                    item = item.replaceAll('{row}', row)
-
-                        .replaceAll('{item_id}', val.item_id)
-
-                        .replaceAll('{product_name}', product_name)
-
-                        .replaceAll('{temp_price}', 'Rp ' + numberFormat(tprice, true))
-
-                        .replaceAll('{temp_tax}', 'Rp ' + numberFormat(ttax, true))
-
-                        .replaceAll('{temp_qty}', numberFormat(tqty, true))
-
-                        .replaceAll('{subtotal}', 'Rp ' + numberFormat(stotal, true))
-
-                        .replaceAll('{data_json}', data_json);
-
-
-
-                    tbody += item;
-
-                    row++;
-
-                }
-
-            });
-
-
-
-            total_transaction = temp_total_order;
-
-            if (total_transaction > 0) {
-
-                $('#supplier_id').prop('disabled', true);
-
-            } else {
-
-                $('#supplier_id').prop('disabled', false);
-
-            }
-
-
-
-            $('#purchase_order_total').val(total_transaction);
-
-            display_total.set(total_transaction);
-
-            if ($.fn.DataTable.isDataTable('#tbltemp')) {
-
-                $('#tbltemp').DataTable().destroy();
-
-            }
-
-
-
-            $('#tbltemp tbody').html('');
-
-            $('#tbltemp tbody').html(tbody);
-
-            tbltemp = $('#tbltemp').DataTable(config_tbltemp);
-
-            _initTooltip();
-
-        }
 
 
         //End Table //
@@ -671,14 +596,14 @@ $assetsUrl = base_url('assets');
 
             let form = $('#frmsubmission');
                             //let items = response.result.data;
-             $('#title-frmsubmission').html('Pengajuan Pesanan');
+                            $('#title-frmsubmission').html('Pengajuan Pesanan');
 
-            formMode = 'add';
+                            formMode = 'add';
 
-            showInputPage(true);
+                            showInputPage(true);
 
-        })
-       
+                        })
+
 
 
         _initButton();
