@@ -17,7 +17,7 @@ $assetsUrl = base_url('assets');
 
                 <div class="col-sm-6">
 
-                    <h1>Pesanan Pembelian</h1>
+                    <h1>Daftar Pengajuan</h1>
 
                 </div>
 
@@ -115,7 +115,8 @@ $assetsUrl = base_url('assets');
 
                 <div class="col-sm-6">
 
-                    <h1 id="title-frmpurchaseorder">Tambah Pesanan</h1>
+                    <h1 id="title-frmpurchaseorder">Buat
+                     Pengajuan</h1>
 
                 </div>
 
