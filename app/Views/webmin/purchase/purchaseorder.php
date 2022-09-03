@@ -17,7 +17,7 @@ $assetsUrl = base_url('assets');
 
                 <div class="col-sm-6">
 
-                    <h1>Daftar Pengajuan</h1>
+                    <h1>Pruchase Order</h1>
 
                 </div>
 
@@ -63,11 +63,17 @@ $assetsUrl = base_url('assets');
 
                                         <th data-priority="1">#</th>
 
-                                        <th data-priority="2">Tanggal Pengajuan</th>
+                                        <th data-priority="2">Tanggal PO</th>
 
-                                        <th data-priority="4">Diajukan</th>
+                                        <th data-priority="4">Golongan</th>
 
-                                        <th data-priority="6">Keterangan</th>
+                                        <th data-priority="6">Nama Supplier</th>
+
+                                        <th data-priority="6">No Faktur Suplier</th>
+
+                                        <th data-priority="3">Total Harga</th>
+
+                                        <th data-priority="3">Status Barang</th>
 
                                         <th data-priority="3">Aksi</th>
 
@@ -78,19 +84,25 @@ $assetsUrl = base_url('assets');
                                 <tbody>
                                         <tr>
 
-                                        <th data-priority="1">1</th>
+                                        <td data-priority="1">1</td>
 
-                                        <th data-priority="2">02/09/2022</th>
+                                        <td data-priority="2">02/09/2022</td>
 
-                                        <th data-priority="4">Marketing 01</th>
+                                        <td data-priority="4">BKP</td>
 
-                                        <th data-priority="6"> </th>
+                                        <td data-priority="6">PT NIPPON INDONESIA</td>
 
-                                        <th data-priority="3">
+                                        <td data-priority="6">SJ-20220821168</td>
+
+                                        <td data-priority="6">500.000</td>
+
+                                        <td data-priority="6"><span class="badge badge-success">Diterima</span></td>
+
+                                        <td data-priority="3">
                                             <a href="<?php base_url() ?>submission/submissiondetaildemo">
                                             <button class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail" data-original-title="" title=""><i class="fas fa-eye"></i></button>
                                         </a>
-                                        </th>
+                                        </td>
 
                                         </tr>
                                 </tbody>
@@ -133,8 +145,7 @@ $assetsUrl = base_url('assets');
 
                 <div class="col-sm-6">
 
-                    <h1 id="title-frmpurchaseorder">Buat
-                     Pengajuan</h1>
+                    <h1 id="title-frmpurchaseorder">Tambah PO</h1>
 
                 </div>
 
@@ -164,11 +175,45 @@ $assetsUrl = base_url('assets');
 
                         <div class="card-body">
 
-                            <form id="frmsubmission">
+                              <form id="frmpurchaseorder">
 
                                 <div class="row">
 
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-4">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>No Invoice</label>
+
+                                            <input type="hidden" id="purchase_order_id" name="purchase_order_id" value="0">
+
+
+
+                                            <input id="purchase_order_invoice" name="purchase_order_invoice" type="text" class="form-control" value="AUTO" readonly>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-4">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Supplier</label>
+
+                                            <select id="supplier_id" name="supplier_id" class="form-control"></select>
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="col-sm-4">
 
                                         <!-- text input -->
 
@@ -182,46 +227,55 @@ $assetsUrl = base_url('assets');
 
                                     </div>
 
-                                    <div class="col-sm-3">
-
-                                        <!-- text input -->
-
-                                        <div class="form-group">
-
-                                            <label>No Referensi Pengajuan</label>
-
-                                            <input type="hidden" id="purchase_order_id" name="purchase_order_id" value="0">
-
-
-
-                                            <input id="purchase_order_invoice" name="purchase_order_invoice" type="text" class="form-control" value="AUTO" readonly>
-
-                                        </div>
-
-                                    </div>
-
-
-
-                                    <div class="col-sm-3">
-
-                                        <!-- text input -->
-
-                                        <div class="form-group">
-
-                                            <label>Diajukan Oleh:</label>
-
-                                            <input id="display_user" type="text" class="form-control" value="Marketing 01" readonly>
-
-                                        </div>
-
-                                    </div>
-
-
-
-
                                 </div>
 
+                                <div class="row">
 
+                                    <div class="col-sm-3">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>User</label>
+
+                                            <input id="display_user" type="text" class="form-control" value="<?= $user['user_realname'] ?>" readonly>
+
+                                        </div>
+
+                                    </div>
+
+                                     <div class="col-sm-2">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Biaya Ongkir</label>
+
+                                            <input id="ongkir" name="ongkir" type="text" class="form-control text-right" value="0">
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-7">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Total</label>
+
+                                            <input type="hidden" id="purchase_order_total" name="purchase_order_total">
+
+                                            <input id="display_total" name="display_total" type="text" class="form-control text-right" value="0" readonly>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
 
                             </form>
 
@@ -265,6 +319,7 @@ $assetsUrl = base_url('assets');
 
                                     <input id="product_tax" name="product_tax" type="hidden" value="">
 
+                                    
                                     <div class="col-sm-3">
 
                                         <!-- text input -->
@@ -273,13 +328,39 @@ $assetsUrl = base_url('assets');
 
                                             <label>Produk</label>
 
-                                            <select id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname required> </select>
+                                            <select id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" onchange="setprice()" required> </select>
 
                                         </div>
 
                                     </div>
 
-                                    
+                                    <div class="col-sm-2">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Harga Beli</label>
+
+                                            <input id="temp_price" name="temp_price" type="text" class="form-control text-right" value="0" data-parsley-vprice required>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-2">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>PPN <?= PPN_TEXT ?></label>
+
+                                            <input id="temp_tax" name="temp_tax" type="text" class="form-control text-right" value="0" readonly required>
+
+                                        </div>
+
+                                    </div>
 
                                     <div class="col-sm-2">
 
@@ -289,7 +370,7 @@ $assetsUrl = base_url('assets');
 
                                             <label>Qty</label>
 
-                                            <input id="temp_qty" name="temp_qty"  class="form-control text-right" value="0" data-parsley-vqty required>
+                                            <input id="temp_qty" name="temp_qty" type="text" class="form-control text-right" onchange="setppn()" value="0" data-parsley-vqty required>
 
                                         </div>
 
@@ -301,28 +382,13 @@ $assetsUrl = base_url('assets');
 
                                         <div class="form-group">
 
-                                            <label>Status</label>
+                                            <label>Total</label>
 
-                                            <select id="temp_status" name="temp_status" class="form-control text-right" value="0" readonly> </select>
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="col-sm-3">
-
-                                        <!-- text input -->
-
-                                        <div class="form-group">
-
-                                            <label>Keterangan</label>
-
-                                            <input id="temp_status" name="temp_status" type="text" class="form-control" > 
+                                            <input id="subtotal" name="subtotal" type="text" class="form-control text-right" value="0" readonly>
 
                                         </div>
 
                                     </div>
-
 
                                     <div class="col-sm-1">
 
@@ -335,6 +401,8 @@ $assetsUrl = base_url('assets');
                                             <div class="col-12">
 
                                                 <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle float-right"><i class="fas fa-plus"></i></button>
+                                                <button id="getlist" class="btn btn-md btn-warning rounded-circle float-right"><i class="fas fa-cog"></i></button>
+
 
                                             </div>
 
@@ -366,11 +434,11 @@ $assetsUrl = base_url('assets');
 
                                                 <th data-priority="3">Qty</th>
 
-                                                <th data-priority="4">Status</th>
+                                                <th data-priority="4">Harga Satuan</th>
 
-                                                <th data-priority="5">Keterangan</th>
+                                                <th data-priority="5">PPN</th>
 
-                                                <th data-priority="5">Progress</th>
+                                                <th data-priority="5">Total</th>
 
                                                 <th data-priority="6">Aksi</th>
 
@@ -389,11 +457,11 @@ $assetsUrl = base_url('assets');
 
                                             <td>10</td>
 
-                                            <td>Urgent</td>
+                                            <td>Rp. 50,000</td>
 
-                                            <td>Customer sudah DP dan minta antar dalam 3 hari</td>
+                                            <td>Rp. 49,550</td>
 
-                                            <td><span class="badge badge-warning">Pending</span></td>
+                                            <td>Rp. 500,000</td>
 
                                             <td>
 
@@ -426,11 +494,11 @@ $assetsUrl = base_url('assets');
 
                                             <td>10</td>
 
-                                            <td>Restock</td>
+                                            <td>Rp. 50,000</td>
 
-                                            <td>Sisa stock per 2/8 tinggal 5</td>
+                                            <td>Rp. 49,550</td>
 
-                                             <td><span class="badge badge-warning">Pending</span></td>
+                                            <td>Rp. 500,000</td>
 
                                             <td>
 
@@ -526,9 +594,44 @@ $assetsUrl = base_url('assets');
 
 <script>
 
+       function setprice() {
+            var id = document.getElementById("product_name").value;
+            if(id == '00002050'){
+                document.getElementById("temp_price").value = '50000'.toLocaleString('en-US');
+            }
+            if(id == '00009200'){
+                document.getElementById("temp_price").value = '60000'.toLocaleString('en-US');
+            }
+            if(id == '00011521'){
+                document.getElementById("temp_price").value = '59000'.toLocaleString('en-US');
+            }
+            if(id == '00005001'){
+                document.getElementById("temp_price").value = '100000'.toLocaleString('en-US');
+            }
+        }
+
+        function setppn() {
+            let qty = document.getElementById("temp_qty").value;
+            let price = document.getElementById("temp_price").value;
+            var id = document.getElementById("product_name").value;
+            let totalharga = parseInt(price) * parseInt(qty);
+            let ppn = parseInt(totalharga) - parseInt(price) * parseInt(qty) / 1.11;
+            document.getElementById("temp_tax").value = ppn.toLocaleString('en-US');
+            document.getElementById("subtotal").value = totalharga.toLocaleString('en-US');
+        }
+
     $(document).ready(function() {
 
      // let temp_qty = new AutoNumeric('#temp_qty', configQty);
+        let temp_price = new AutoNumeric('#temp_price', configRp);
+
+        let temp_tax = new AutoNumeric('#temp_tax', configRp);
+
+        let temp_qty = new AutoNumeric('#temp_qty', configQty);
+
+        let subtotal = new AutoNumeric('#subtotal', configRp);
+
+        let ongkir = new AutoNumeric('#ongkir', configRp);
 
         // init component //
 
@@ -537,24 +640,20 @@ $assetsUrl = base_url('assets');
 
         }
 
-
+     
 
         // select2 //
 
-        $("#temp_status").select2({
+        $("#supplier_id").select2({
 
             data: [
             {
                 id:'1',
-                text: 'Urgent'
+                text: 'PT IKAD INDONESIA'
             },
             {
                 id:'2',
-                text: 'Restock'
-            },
-            {
-                id:'3',
-                text: 'Baru',
+                text: 'PT NIPPON INDONESIA'
             }
 
             ]
@@ -619,9 +718,9 @@ $assetsUrl = base_url('assets');
 
             e.preventDefault();
 
-            let form = $('#frmsubmission');
+            let form = $('#frmpurchaseorder');
                             //let items = response.result.data;
-                            $('#title-frmsubmission').html('Pengajuan Pesanan');
+                            $('#title-frmpurchaseorder').html('Pengajuan Pesanan');
 
                             formMode = 'add';
 

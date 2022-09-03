@@ -22,7 +22,7 @@ class Purchase_order extends WebminController
         $data = [
             'title'         => 'Purchase Order' 
         ];
-        return $this->renderView('masterdata/category', $data, 'category.view');
+        return $this->renderView('purchase/purchaseorder', $data);
     }
 
     //--------------------------------------------------------------------

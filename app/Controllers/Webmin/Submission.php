@@ -14,7 +14,6 @@ class Submission extends WebminController
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);
-        $this->M_category = new M_category;
     }
 
     public function index()
@@ -22,7 +21,16 @@ class Submission extends WebminController
         $data = [
             'title'         => 'Pengajuan' 
         ];
-        return $this->renderView('purchase/submission', $data, 'submission.view');
+        return $this->renderView('purchase/submission', $data);
+    }
+
+    public function submissiondetaildemo()
+    {
+
+        $data = [
+            'title'         => 'Pengajuan' 
+        ];
+        return $this->renderView('purchase/submissiondemo', $data);
     }
 
     //--------------------------------------------------------------------
