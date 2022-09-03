@@ -65,9 +65,11 @@ $assetsUrl = base_url('assets');
                                     </div>
                                     <div class="col-md-3 border-primary border-left">
                                         <div class="form-group">
-                                            <label>Customer</label>
+                                            <label>
+                                                Customer <span class="badge badge-light">Member Silver</span> <a id="detail-customer" href="#"><i class="fas fa-info-circle"></i></a>
+                                            </label>
                                             <select class="form-control select-customer fs-20" id="customer_id" name="customer_id" placeholder="Customer" value="" required>
-                                                <option value="3" selected>089666677777 - BUDI</option>
+                                                <option value="3" selected>Samsul (0896-7899-8899)</option>
                                             </select>
                                         </div>
                                     </div>
@@ -427,6 +429,64 @@ $assetsUrl = base_url('assets');
     <!-- /.modal-dialog -->
 </div>
 
+<div class="modal fade" id="modal-detail-customer">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">INFO CUSTOMER</h4>
+                <button type="button" class="close close-modal-detail-customer">
+                    <span aria-hidden="true">[END]</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table width="100%" class="table">
+                    <tr>
+                        <th width="30%">Nama</th>
+                        <td width="70%" class="text-right">Samsul</td>
+                    </tr>
+                    <tr>
+                        <th>Grup</th>
+                        <td class="text-right">
+                            <span class="badge badge-light">Member Silver</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Alamat</th>
+                        <td class="text-right">
+                            Jl.Sui raya km 8.5 no 25
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>No Telp</th>
+                        <td class="text-right">
+                            0896-7899-8899
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Poin</th>
+                        <td class="text-right">
+                            <b>100</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Exp. Date</th>
+                        <td class="text-right">
+                            15/10/2022
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer ">
+                <div class="btn-group col-12">
+                    <button type="button" class="btn btn-danger col-12 close-modal-detail-customer"><i class="fas fa-times-circle"></i> Batal</button>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 
 
 <?= $this->endSection() ?>
@@ -519,6 +579,12 @@ $assetsUrl = base_url('assets');
 
         $('.close-modal-payment').click(function(e) {
             $('#modal-payment').modal('hide');
+        })
+
+        $('#detail-customer').click(function(e) {
+            e.preventDefault();
+            $('#modal-detail-customer').modal('show');
+
         })
 
         let obj = new AutoNumeric.multiple('.currency-input', configRp);

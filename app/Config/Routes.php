@@ -110,6 +110,9 @@ $routes->group('pos', ['filter' => 'posauth'], static function ($routes) {
 
     $routes->get('sales', 'Pos\Sales::index');
     $routes->get('sales-return', 'Pos\Sales_return::index');
+
+    $routes->get('view-sales-recap', 'Pos\Dashboard::viewSalesRecap');
+    $routes->get('sales-recap', 'Pos\Dashboard::salesRecap');
 });
 /* END POS */
 
@@ -122,6 +125,10 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('customer', 'Webmin\EricDemo::customer');
     $routes->get('supplier', 'Webmin\EricDemo::supplier');
     $routes->get('product', 'Webmin\EricDemo::product');
+    $routes->get('product/detail', 'Webmin\EricDemo::productDetail');
+    $routes->get('product/parcel-detail', 'Webmin\EricDemo::parcelDetail');
+    $routes->get('point-reward', 'Webmin\EricDemo::pointReward');
+    $routes->get('exchange-point', 'Webmin\EricDemo::exchangePoint');
 });
 /* End Eric Demo */
 

@@ -213,15 +213,15 @@
                     <div class="card-body">
                         <table width="100%">
                             <tr>
-                                <td width="25%" class="product-image">
-                                    <img src="<?= base_url('assets/demo/indomie.PNG') ?>" width="100%" height="100px">
+                                <td width="40%" class="product-image">
+                                    <img src="<?= base_url('assets/demo/indomie.PNG') ?>" width="100%" height="200px">
                                 </td>
-                                <td width="75%" class="product-detail">
+                                <td width="60%" class="product-detail align-middle" style="padding:3px 5px;">
                                     <h5>INDOMIE GORENG</h5>
                                     <p>5.00 x 3,300.00
                                         <br>Diskon : <span class="font-color-red">200.00</span>
                                     </p>
-                                    <p class="text-end fw-bold font-color-blue">16,500.00</p>
+                                    <p class="text-end fw-bold font-color-blue" style="font-size: 25px;"><small>Rp</small>16,500.00</p>
                                 </td>
                             </tr>
                         </table>
@@ -236,6 +236,20 @@
 
         </div>
 
+        <div id="modal-info" class="modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">INFO</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="notice-text"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Optional JavaScript; choose one of the two! -->
 
@@ -243,12 +257,28 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
         <script src="assets/adminlte3/plugins/jquery/jquery.min.js"></script>
+        <script>
+            var modalInfo = new bootstrap.Modal(document.getElementById('modal-info'), {
+                keyboard: false
+            });
+
+            function showInfo(sss) {
+                document.getElementById("notice-text").innerHTML = sss;
+                modalInfo.show();
+
+                setTimeout(function() {
+                    modalInfo.hide();
+                }, 5000);
+            }
+        </script>
+
 
         <!-- Option 2: Separate Popper and Bootstrap JS -->
         <!--
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     -->
+    </div>
 </body>
 
 </html>

@@ -83,6 +83,7 @@ $assetsUrl = base_url('assets');
                                     <th data-priority="5">No Telp</th>
                                     <th data-priority="5">Grup Customer</th>
                                     <th data-priority="7">Poin</th>
+                                    <th data-priority="8">Exp. Date</th>
                                     <th data-priority="3">Aksi</th>
                                 </tr>
                             </thead>
@@ -100,8 +101,12 @@ $assetsUrl = base_url('assets');
                                         100
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-default btndetail" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></button>&nbsp;
-                                        <button class="btn btn-sm btn-default btnresetpassword" data-toggle="tooltip" data-placement="top" data-title="Reset Kata Sandi"><i class="fas fa-key"></i></button>&nbsp;
+                                        15/10/2022
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></button>&nbsp;
+                                        <button class="btn btn-sm btn-default btnresetpassword mb-2" data-toggle="tooltip" data-placement="top" data-title="Reset Kata Sandi"><i class="fas fa-key"></i></button>
+                                        <br>
                                         <button class="btn btn-sm btn-warning btnedit" data-toggle="tooltip" data-placement="top" data-title="Edit"><i class="fas fa-edit"></i></button>&nbsp;
                                         <button class="btn btn-sm btn-danger btndelete" data-toggle="tooltip" data-placement="top" data-title="Hapus"><i class="fas fa-trash"></i></button>
                                     </td>
@@ -122,8 +127,12 @@ $assetsUrl = base_url('assets');
                                         0
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-default btndetail" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></button>&nbsp;
-                                        <button class="btn btn-sm btn-default btnresetpassword" data-toggle="tooltip" data-placement="top" data-title="Reset Kata Sandi"><i class="fas fa-key"></i></button>&nbsp;
+                                        31/10/2022
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></button>&nbsp;
+                                        <button class="btn btn-sm btn-default btnresetpassword mb-2" data-toggle="tooltip" data-placement="top" data-title="Reset Kata Sandi"><i class="fas fa-key"></i></button>
+                                        <br>
                                         <button class="btn btn-sm btn-warning btnedit" data-toggle="tooltip" data-placement="top" data-title="Edit"><i class="fas fa-edit"></i></button>&nbsp;
                                         <button class="btn btn-sm btn-danger btndelete" data-toggle="tooltip" data-placement="top" data-title="Hapus"><i class="fas fa-trash"></i></button>
                                     </td>
@@ -143,8 +152,12 @@ $assetsUrl = base_url('assets');
                                         0
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-default btndetail" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></button>&nbsp;
-                                        <button class="btn btn-sm btn-default btnresetpassword" data-toggle="tooltip" data-placement="top" data-title="Reset Kata Sandi"><i class="fas fa-key"></i></button>&nbsp;
+                                        31/12/2022
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></button>&nbsp;
+                                        <button class="btn btn-sm btn-default btnresetpassword mb-2" data-toggle="tooltip" data-placement="top" data-title="Reset Kata Sandi"><i class="fas fa-key"></i></button>
+                                        <br>
                                         <button class="btn btn-sm btn-warning btnedit" data-toggle="tooltip" data-placement="top" data-title="Edit"><i class="fas fa-edit"></i></button>&nbsp;
                                         <button class="btn btn-sm btn-danger btndelete" data-toggle="tooltip" data-placement="top" data-title="Hapus"><i class="fas fa-trash"></i></button>
                                     </td>
@@ -164,8 +177,12 @@ $assetsUrl = base_url('assets');
                                         100
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-default btndetail" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></button>&nbsp;
-                                        <button class="btn btn-sm btn-default btnresetpassword" data-toggle="tooltip" data-placement="top" data-title="Reset Kata Sandi"><i class="fas fa-key"></i></button>&nbsp;
+                                        31/12/2022
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></button>&nbsp;
+                                        <button class="btn btn-sm btn-default btnresetpassword mb-2" data-toggle="tooltip" data-placement="top" data-title="Reset Kata Sandi"><i class="fas fa-key"></i></button>
+                                        <br>
                                         <button class="btn btn-sm btn-warning btnedit" data-toggle="tooltip" data-placement="top" data-title="Edit"><i class="fas fa-edit"></i></button>&nbsp;
                                         <button class="btn btn-sm btn-danger btndelete" data-toggle="tooltip" data-placement="top" data-title="Hapus"><i class="fas fa-trash"></i></button>
                                     </td>
@@ -233,6 +250,13 @@ $assetsUrl = base_url('assets');
                                     </div>
                                 </div>
 
+                                <div class="form-group">
+                                    <label for="customer_exp_date" class="col-sm-12">Exp. Date</label>
+                                    <div class="col-sm-12">
+                                        <input type="date" class="form-control" id="customer_exp_date" name="customer_exp_date" placeholder="Exp. Date" value="" data-parsley-maxlength="200" required>
+                                    </div>
+                                </div>
+
                             </div>
                             <div class="modal-footer justify-content-between">
                                 <button id="btncancel" class="btn btn-danger close-modal"><i class="fas fa-times-circle"></i> Batal</button>
@@ -272,11 +296,11 @@ $assetsUrl = base_url('assets');
                 _initTooltip();
             },
             columnDefs: [{
-                    width: 150,
-                    targets: 7
+                    width: 100,
+                    targets: 8
                 },
                 {
-                    targets: [0, 6],
+                    targets: [0, 8],
                     orderable: false,
                     searchable: false,
                 },
@@ -315,6 +339,7 @@ $assetsUrl = base_url('assets');
             $('#customer_address').val('');
             $('#customer_email').val('');
             $('#customer_group').val('G1');
+            $('#customer_exp_date').val('');
             $('#modal-customer').modal(configModal);
         }
 
@@ -330,6 +355,7 @@ $assetsUrl = base_url('assets');
             $('#customer_address').val('Jl.Gajah Mada GG.XYZ No 10');
             $('#customer_email').val('ricky@gmail.com');
             $('#customer_group').val('G4');
+            $('#customer_exp_date').val('2022-12-31');
             $('#modal-customer').modal(configModal);
         }
 
