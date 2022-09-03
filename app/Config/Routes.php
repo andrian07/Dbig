@@ -78,18 +78,10 @@ $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static funct
 $routes->group('webmin/submission', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\Submission::index');
     $routes->get('submissiondetaildemo', 'webmin\Submission::submissiondetaildemo');
-    
 });
 
 
-$routes->group('webmin/unit', ['filter' => 'webminauth'], static function ($routes) {
-    $routes->get('/', 'Webmin\Category::index');
-    $routes->get('getbyid/(:num)', 'Webmin\Category::getById/$1');
-    $routes->get('getbyname', 'Webmin\Category::getByName');
-    $routes->post('table', 'Webmin\Category::table');
-    $routes->post('save/(:alpha)', 'Webmin\Category::save/$1');
-    $routes->get('delete/(:num)', 'Webmin\Category::delete/$1');
-});
+
 
 
 
