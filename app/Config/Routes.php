@@ -72,12 +72,12 @@ $routes->group('webmin/category', ['filter' => 'webminauth'], static function ($
 });
 
 $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static function ($routes) {
-    $routes->get('/', 'Webmin\purchase_order::index');
+     $routes->get('/', 'Webmin\Purchase_order::index');
 });
 
 $routes->group('webmin/submission', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\Submission::index');
-    $routes->get('submissiondetaildemo', 'webmin\Submission::submissiondetaildemo');
+    $routes->get('submissiondetaildemo', 'Webmin\Submission::submissiondetaildemo');
     
 });
 

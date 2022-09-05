@@ -528,7 +528,7 @@ $assetsUrl = base_url('assets');
 
     $(document).ready(function() {
 
-     // let temp_qty = new AutoNumeric('#temp_qty', configQty);
+     let temp_qty = new AutoNumeric('#temp_qty', configQty);
 
         // init component //
 
