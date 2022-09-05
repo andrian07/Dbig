@@ -77,21 +77,8 @@ $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static funct
 
 $routes->group('webmin/submission', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\Submission::index');
-    $routes->get('submissiondetaildemo', 'Webmin\Submission::submissiondetaildemo');
-    
+     $routes->get('submissiondetaildemo', 'Webmin\Submission::submissiondetaildemo');
 });
-
-
-$routes->group('webmin/unit', ['filter' => 'webminauth'], static function ($routes) {
-    $routes->get('/', 'Webmin\Category::index');
-    $routes->get('getbyid/(:num)', 'Webmin\Category::getById/$1');
-    $routes->get('getbyname', 'Webmin\Category::getByName');
-    $routes->post('table', 'Webmin\Category::table');
-    $routes->post('save/(:alpha)', 'Webmin\Category::save/$1');
-    $routes->get('delete/(:num)', 'Webmin\Category::delete/$1');
-});
-
-
 
 /* POS */
 $routes->group('pos', static function ($routes) {
@@ -110,6 +97,9 @@ $routes->group('pos', ['filter' => 'posauth'], static function ($routes) {
 
     $routes->get('sales', 'Pos\Sales::index');
     $routes->get('sales-return', 'Pos\Sales_return::index');
+
+    $routes->get('view-sales-recap', 'Pos\Dashboard::viewSalesRecap');
+    $routes->get('sales-recap', 'Pos\Dashboard::salesRecap');
 });
 /* END POS */
 
@@ -122,6 +112,10 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('customer', 'Webmin\EricDemo::customer');
     $routes->get('supplier', 'Webmin\EricDemo::supplier');
     $routes->get('product', 'Webmin\EricDemo::product');
+    $routes->get('product/detail', 'Webmin\EricDemo::productDetail');
+    $routes->get('product/parcel-detail', 'Webmin\EricDemo::parcelDetail');
+    $routes->get('point-reward', 'Webmin\EricDemo::pointReward');
+    $routes->get('exchange-point', 'Webmin\EricDemo::exchangePoint');
 });
 /* End Eric Demo */
 

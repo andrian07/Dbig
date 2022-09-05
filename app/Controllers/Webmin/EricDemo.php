@@ -67,6 +67,40 @@ class EricDemo extends WebminController
         return $this->renderView('demo/masterdata/product', $data);
     }
 
+    public function productDetail()
+    {
+        $data = [
+            'title'         => 'Produk Detail'
+        ];
+        return $this->renderView('demo/masterdata/product_detail', $data);
+    }
+
+    public function parcelDetail()
+    {
+        $data = [
+            'title'         => 'Paket Detail'
+        ];
+        return $this->renderView('demo/masterdata/parcel_detail', $data);
+    }
+
+
+    public function pointReward()
+    {
+        $data = [
+            'title'         => 'Hadiah Poin'
+        ];
+        return $this->renderView('demo/customer_point/point_reward', $data);
+    }
+
+    public function exchangePoint()
+    {
+        $data = [
+            'title'         => 'Penukaran Poin'
+        ];
+        return $this->renderView('demo/customer_point/exchange_point', $data);
+    }
+
+
 
 
     //--------------------------------------------------------------------

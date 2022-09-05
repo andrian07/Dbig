@@ -115,7 +115,7 @@ $assetsUrl = base_url('assets');
                                         <a class="fancy_image" href="<?= base_url('assets/demo/00000565-TX704AES.jpg') ?>"><img src="<?= base_url('assets/demo/00000565-TX704AES.jpg') ?>" alt="" width="100px" height="120px" /></a>
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></button>&nbsp;
+                                        <a href="javascript:;" data-fancybox data-type="iframe" data-src="<?= base_url('webmin/product/detail') ?>" class="btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>
                                         <button class="btn btn-sm btn-default btnsetup mb-2" data-toggle="tooltip" data-placement="top" data-title="Pengaturan Produk"><i class="fas fa-cog"></i></button>&nbsp;
                                         <br />
                                         <button class="btn btn-sm btn-warning btnedit mb-2" data-toggle="tooltip" data-placement="top" data-title="Edit"><i class="fas fa-edit"></i></button>&nbsp;
@@ -148,7 +148,7 @@ $assetsUrl = base_url('assets');
                                         <a class="fancy_image" href="<?= base_url('assets/demo/00000572-TX1DA.jpg') ?>"><img src="<?= base_url('assets/demo/00000572-TX1DA.jpg') ?>" alt="" width="100px" height="120px" /></a>
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></button>&nbsp;
+                                        <a href="javascript:;" data-fancybox data-type="iframe" data-src="<?= base_url('webmin/product/detail') ?>" class="btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>
                                         <button class="btn btn-sm btn-default btnsetup mb-2" data-toggle="tooltip" data-placement="top" data-title="Pengaturan Produk"><i class="fas fa-cog"></i></button>&nbsp;
                                         <br />
                                         <button class="btn btn-sm btn-warning btnedit mb-2" data-toggle="tooltip" data-placement="top" data-title="Edit"><i class="fas fa-edit"></i></button>&nbsp;
@@ -180,7 +180,8 @@ $assetsUrl = base_url('assets');
                                         <a class="fancy_image" href="<?= base_url('assets/demo/00000572-TX1DA.jpg') ?>"><img src="<?= base_url('assets/demo/00000572-TX1DA.jpg') ?>" alt="" width="100px" height="120px" /></a>
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></button>&nbsp;
+
+                                        <a href="javascript:;" data-fancybox data-type="iframe" data-src="<?= base_url('webmin/product/parcel-detail') ?>" class="btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>
                                         <button class="btn btn-sm btn-default btnsetupparcel mb-2" data-toggle="tooltip" data-placement="top" data-title="Pengaturan Produk"><i class="fas fa-cog"></i></button>&nbsp;
                                         <br />
                                         <button class="btn btn-sm btn-warning btneditparcel mb-2" data-toggle="tooltip" data-placement="top" data-title="Edit"><i class="fas fa-edit"></i></button>&nbsp;

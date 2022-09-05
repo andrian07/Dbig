@@ -32,7 +32,7 @@ class Auth extends BaseController
     public function login()
     {
         $this->validationRequest();
-        if (session()->get('user_login') != NULL) {
+        if (session()->get('pos_login') != NULL) {
             return redirect()->to(base_url('pos/dashboard'));
         }
 
@@ -51,7 +51,7 @@ class Auth extends BaseController
             $getUser = $this->M_user_account->getUserByName($input['username'])->getRowArray();
             if ($getUser != NULL) {
                 if ($getUser['active'] == 'N') {
-                    session()->remove('user_login');
+                    session()->remove('pos_login');
                     session()->setFlashdata('alert', ['type' => 'info', 'message' => 'Akun anda berstatus tidak aktif harap hubungi administrator']);
                     return redirect()->to(base_url('pos/auth'));
                 }
