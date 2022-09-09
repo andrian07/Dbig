@@ -3,13 +3,11 @@
 
 namespace App\Controllers\Webmin;
 
-
 use App\Controllers\Base\WebminController;
 
 
-class Purchase_order extends WebminController
+class Purchase extends WebminController
 {
-
 
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
@@ -19,9 +17,9 @@ class Purchase_order extends WebminController
     public function index()
     {
         $data = [
-            'title'         => 'Purchase Order' 
+            'title'         => 'Purchase' 
         ];
-        return $this->renderView('purchase/purchaseorder', $data);
+        return $this->renderView('purchase/purchase', $data);
     }
 
     //--------------------------------------------------------------------

@@ -169,7 +169,7 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="#" class="nav-link">
+							<a href="<?= base_url('webmin/purchase') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>Pembelian</p>
 								<span class="right badge badge-danger"></span>

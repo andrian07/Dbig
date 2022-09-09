@@ -192,8 +192,6 @@ $assetsUrl = base_url('assets');
 
                                             <input type="hidden" id="purchase_order_id" name="purchase_order_id" value="0">
 
-
-
                                             <input id="purchase_order_invoice" name="purchase_order_invoice" type="text" class="form-control" value="AUTO" readonly>
 
                                         </div>
@@ -265,17 +263,36 @@ $assetsUrl = base_url('assets');
 
                                     <input id="product_tax" name="product_tax" type="hidden" value="">
 
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
 
                                         <!-- text input -->
 
                                         <div class="form-group">
 
-                                            <label>Produk</label>
+                                            <label>Status</label>
 
-                                            <select id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname required> </select>
+                                            <select id="temp_status" name="temp_status" class="form-control text-right" value="0" readonly onchange="checkstatus()"> </select>
 
                                         </div>
+
+                                    </div>
+
+
+                                    <div class="col-sm-3">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group" id="product_name_form">
+                                            <label>Produk</label>
+                                            <select id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname required> </select>
+                                        </div>
+
+                                        <div class="form-group" id="product_name2_form">
+                                            <label>Produk</label>
+                                             <input type="text" name="product_name" id="product_name" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname required>
+                                        </div>
+
+                                        
 
                                     </div>
 
@@ -295,19 +312,7 @@ $assetsUrl = base_url('assets');
 
                                     </div>
 
-                                    <div class="col-sm-2">
-
-                                        <!-- text input -->
-
-                                        <div class="form-group">
-
-                                            <label>Status</label>
-
-                                            <select id="temp_status" name="temp_status" class="form-control text-right" value="0" readonly> </select>
-
-                                        </div>
-
-                                    </div>
+                                    
 
                                     <div class="col-sm-3">
 
@@ -526,9 +531,22 @@ $assetsUrl = base_url('assets');
 
 <script>
 
+    function checkstatus(){
+        let status = document.getElementById("temp_status").value;
+        if(status == 'Baru'){
+             $('#product_name_form').hide()
+             $('#product_name2_form').show();
+        }else{
+            $('#product_name_form').show()
+            $('#product_name2_form').hide();
+        }
+    }
+
     $(document).ready(function() {
 
      let temp_qty = new AutoNumeric('#temp_qty', configQty);
+     $('#product_name2_form').hide();
+     
 
         // init component //
 
@@ -545,15 +563,15 @@ $assetsUrl = base_url('assets');
 
             data: [
             {
-                id:'1',
+                id:'Urgent',
                 text: 'Urgent'
             },
             {
-                id:'2',
+                id:'Restock',
                 text: 'Restock'
             },
             {
-                id:'3',
+                id:'Baru',
                 text: 'Baru',
             }
 

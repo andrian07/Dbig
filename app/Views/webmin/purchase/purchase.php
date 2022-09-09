@@ -17,7 +17,7 @@ $assetsUrl = base_url('assets');
 
                 <div class="col-sm-6">
 
-                    <h1>Pruchase Order</h1>
+                    <h1>Pembelian</h1>
 
                 </div>
 
@@ -709,7 +709,7 @@ $(document).ready(function() {
 
             let form = $('#frmpurchaseorder');
                             //let items = response.result.data;
-                            $('#title-frmpurchaseorder').html('Pengajuan Pesanan');
+                            $('#title-frmpurchaseorder').html('Tambah Pembelian');
 
                             formMode = 'add';
 

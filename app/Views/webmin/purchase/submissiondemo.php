@@ -189,9 +189,9 @@ $assetsUrl = base_url('assets');
 
                                             <td>
 
-                                                <button id="btnadd" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                                <button id="btnadd" class="btn btn-sm btn-success btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
-                                                    <i class="fas fa-edit"></i>
+                                                   <i class="fas fa-check-circle"></i>
 
                                                 </button>
 
@@ -219,9 +219,9 @@ $assetsUrl = base_url('assets');
 
                                             <td>
 
-                                                <button id="btnadd" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                                <button id="btnadd" class="btn btn-sm btn-success btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
-                                                    <i class="fas fa-edit"></i>
+                                                   <i class="fas fa-check-circle"></i>
 
                                                 </button>
 
@@ -241,7 +241,7 @@ $assetsUrl = base_url('assets');
                                                                         <label for="approve_by" class="col-sm-12">Diapprove Oleh</label>
                                                                         <div class="col-sm-12">
                                                                             <input type="text" class="form-control" id="approve_by" name="approve_by" placeholder="
-                                                                            Nama" value="" data-parsley-maxlength="200" data-parsley-trigger-after-failure="focusout" data-parsley-vcustomername required>
+                                                                            Nama" value="" required readonly>
                                                                         </div>
                                                                     </div>
 

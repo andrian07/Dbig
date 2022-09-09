@@ -88,3 +88,8 @@
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+
+.button-header-custom-save{
+  margin-left: 5px;
+}

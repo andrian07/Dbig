@@ -71,6 +71,7 @@ $routes->group('webmin/category', ['filter' => 'webminauth'], static function ($
     $routes->get('delete/(:num)', 'Webmin\Category::delete/$1');
 });
 
+/* pembelian */
 $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static function ($routes) {
      $routes->get('/', 'Webmin\Purchase_order::index');
 });
@@ -79,6 +80,11 @@ $routes->group('webmin/submission', ['filter' => 'webminauth'], static function 
     $routes->get('/', 'Webmin\Submission::index');
      $routes->get('submissiondetaildemo', 'Webmin\Submission::submissiondetaildemo');
 });
+
+$routes->group('webmin/purchase', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\Purchase::index');
+});
+/* end pembelian */
 
 /* POS */
 $routes->group('pos', static function ($routes) {
