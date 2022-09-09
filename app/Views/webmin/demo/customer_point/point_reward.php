@@ -40,8 +40,10 @@ $assetsUrl = base_url('assets');
                                     <th data-priority="2">Kode Item</th>
                                     <th data-priority="4">Nama Item</th>
                                     <th data-priority="5">Point</th>
+                                    <th data-priority="7">Dari Tgl</th>
+                                    <th data-priority="8">Sampai Tgl</th>
                                     <th data-priority="6">Aktif</th>
-                                    <th data-priority="7">Gambar Produk</th>
+                                    <th data-priority="9">Gambar Produk</th>
                                     <th data-priority="3">Aksi</th>
                                 </tr>
                             </thead>
@@ -53,6 +55,8 @@ $assetsUrl = base_url('assets');
                                     </td>
                                     <td>Kopin Gelas Coffee Mug Kukuruyuk (KPM-03CM)</td>
                                     <td>50.00</td>
+                                    <td>01/09/2022</td>
+                                    <td>30/09/2022</td>
                                     <td>
                                         <span class="badge badge-success"><i class="fas fa-check-circle"></i></span>
                                     </td>
@@ -72,7 +76,8 @@ $assetsUrl = base_url('assets');
                                     </td>
                                     <td>Kopin Mangkok Vegetable Bowl 9″ Kukuruyuk (KPQ-9VB)</td>
                                     <td>50.00</td>
-
+                                    <td>01/09/2022</td>
+                                    <td>10/09/2022</td>
                                     <td>
                                         <span class="badge badge-danger"><i class="fas fa-times-circle"></i></span>
                                     </td>
@@ -128,6 +133,20 @@ $assetsUrl = base_url('assets');
                                         <label for="reward_point" class="col-sm-12">Poin</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="reward_point" name="reward_point" placeholder="Poin" value="" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="start_date" class="col-sm-12">Dari Tgl</label>
+                                        <div class="col-sm-12">
+                                            <input type="date" class="form-control" id="start_date" name="start_date" placeholder="Dari Tgl" value="" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="end_date" class="col-sm-12">Sampai Tgl</label>
+                                        <div class="col-sm-12">
+                                            <input type="date" class="form-control" id="end_date" name="end_date" placeholder="Sampai Tgl" value="" required>
                                         </div>
                                     </div>
 
@@ -202,15 +221,15 @@ $assetsUrl = base_url('assets');
             },
             columnDefs: [{
                     width: 100,
-                    targets: 6
+                    targets: 8
                 },
                 {
-                    targets: [0, 6],
+                    targets: [0, 8],
                     orderable: false,
                     searchable: false,
                 },
                 {
-                    targets: [4, 5],
+                    targets: [6, 7],
                     className: "text-center",
                 },
                 {
@@ -234,6 +253,8 @@ $assetsUrl = base_url('assets');
             $('#reward_id').val('0');
             $('#reward_name').val('');
             $('#active').val('Y');
+            $('#start_date').val('');
+            $('#end_date').val('');
             $('#reward_description').val('');
             reward_point.set(0);
             $('#modal-reward').modal(configModal);
@@ -249,6 +270,8 @@ $assetsUrl = base_url('assets');
             $('#reward_id').val('0');
             $('#reward_name').val('Kopin Mangkok Vegetable Bowl 9″ Kukuruyuk (KPQ-9VB)');
             $('#active').val('N');
+            $('#start_date').val('2022-09-01');
+            $('#end_date').val('2022-09-10');
             $('#reward_description').val('');
             reward_point.set(50);
             $('#modal-reward').modal(configModal);

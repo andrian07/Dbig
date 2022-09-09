@@ -100,6 +100,23 @@ class EricDemo extends WebminController
         return $this->renderView('demo/customer_point/exchange_point', $data);
     }
 
+    public function exchangePointV2()
+    {
+        $data = [
+            'title'         => 'Penukaran Poin'
+        ];
+        return $this->renderView('demo/customer_point/exchange_point_v2', $data);
+    }
+
+    public function exchangePointDetail()
+    {
+        $data = [
+            'title'         => 'Detail Penukaran Poin'
+        ];
+        return $this->renderView('demo/customer_point/exchange_point_detail', $data);
+    }
+
+
 
 
 

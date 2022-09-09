@@ -20,15 +20,6 @@ class Dashboard extends PosController
         return $this->renderView('dashboard', $data);
     }
 
-
-    public function customerDisplay()
-    {
-        $data = [
-            'title'     => 'Customer Display',
-        ];
-        return $this->renderView('customer_display', $data);
-    }
-
     public function salesRecap()
     {
         $data = [

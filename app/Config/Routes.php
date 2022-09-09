@@ -73,12 +73,12 @@ $routes->group('webmin/category', ['filter' => 'webminauth'], static function ($
 
 /* pembelian */
 $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static function ($routes) {
-     $routes->get('/', 'Webmin\Purchase_order::index');
+    $routes->get('/', 'Webmin\Purchase_order::index');
 });
 
 $routes->group('webmin/submission', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\Submission::index');
-     $routes->get('submissiondetaildemo', 'Webmin\Submission::submissiondetaildemo');
+    $routes->get('submissiondetaildemo', 'Webmin\Submission::submissiondetaildemo');
 });
 
 $routes->group('webmin/purchase', ['filter' => 'webminauth'], static function ($routes) {
@@ -99,14 +99,15 @@ $routes->group('pos', ['filter' => 'posauth'], static function ($routes) {
     //$routes->get('profile', 'Webmin\Profile::index');
     //$routes->get('profile/update-password', 'Webmin\Profile::update_password');
     $routes->get('dashboard', 'Pos\Dashboard::index');
-    $routes->get('customer-display', 'Pos\Dashboard::customerDisplay');
-
     $routes->get('sales', 'Pos\Sales::index');
     $routes->get('sales-return', 'Pos\Sales_return::index');
 
     $routes->get('view-sales-recap', 'Pos\Dashboard::viewSalesRecap');
     $routes->get('sales-recap', 'Pos\Dashboard::salesRecap');
 });
+
+$routes->get('pos/price-checker', 'Pos\Utility::priceChecker');
+$routes->get('pos/customer-display', 'Pos\Utility::customerDisplay');
 /* END POS */
 
 
@@ -122,6 +123,8 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('product/parcel-detail', 'Webmin\EricDemo::parcelDetail');
     $routes->get('point-reward', 'Webmin\EricDemo::pointReward');
     $routes->get('exchange-point', 'Webmin\EricDemo::exchangePoint');
+    $routes->get('exchange-point/v2', 'Webmin\EricDemo::exchangePointV2');
+    $routes->get('exchange-point/detail', 'Webmin\EricDemo::exchangePointDetail');
 });
 /* End Eric Demo */
 

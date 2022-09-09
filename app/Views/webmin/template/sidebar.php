@@ -137,7 +137,7 @@
 						</li>
 
 						<li class="nav-item">
-							<a href="<?= base_url('webmin/exchange-point') ?>" class="nav-link">
+							<a href="<?= base_url('webmin/exchange-point/v2') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>Penukaran Poin</p>
 							</a>
