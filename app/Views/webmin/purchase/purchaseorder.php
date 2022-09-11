@@ -63,13 +63,13 @@ $assetsUrl = base_url('assets');
 
                                         <th data-priority="1">#</th>
 
+                                        <th data-priority="2">No PO</th>
+
                                         <th data-priority="2">Tanggal PO</th>
 
                                         <th data-priority="4">Golongan</th>
 
                                         <th data-priority="6">Nama Supplier</th>
-
-                                        <th data-priority="6">No Faktur Suplier</th>
 
                                         <th data-priority="3">Total Harga</th>
 
@@ -86,13 +86,13 @@ $assetsUrl = base_url('assets');
 
                                         <td data-priority="1">1</td>
 
+                                        <td data-priority="1">PO-KBR-0001</td>
+
                                         <td data-priority="2">02/09/2022</td>
 
                                         <td data-priority="4">BKP</td>
 
                                         <td data-priority="6">PT NIPPON INDONESIA</td>
-
-                                        <td data-priority="6">SJ-20220821168</td>
 
                                         <td data-priority="6">500.000</td>
 

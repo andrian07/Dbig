@@ -93,3 +93,13 @@
 .button-header-custom-save{
   margin-left: 5px;
 }
+
+
+#frmpurchase .form-group,
+.footer-purchase .form-group{
+    margin-bottom: 5px;
+}
+
+.table-input{
+  width: 120px;
+}

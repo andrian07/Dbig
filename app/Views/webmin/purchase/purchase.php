@@ -63,13 +63,17 @@ $assetsUrl = base_url('assets');
 
                                         <th data-priority="1">#</th>
 
-                                        <th data-priority="2">Tanggal PO</th>
+                                        <th data-priority="2">No Invoice</th>
+
+                                        <th data-priority="2">Tanggal Pembelian</th>
 
                                         <th data-priority="4">Golongan</th>
 
                                         <th data-priority="6">Nama Supplier</th>
 
                                         <th data-priority="6">No Faktur Suplier</th>
+
+                                        <th data-priority="3">Total Ongkir</th>
 
                                         <th data-priority="3">Total Harga</th>
 
@@ -86,6 +90,8 @@ $assetsUrl = base_url('assets');
 
                                         <td data-priority="1">1</td>
 
+                                        <td data-priority="2">P-KBR-001</td>
+
                                         <td data-priority="2">02/09/2022</td>
 
                                         <td data-priority="4">BKP</td>
@@ -94,7 +100,9 @@ $assetsUrl = base_url('assets');
 
                                         <td data-priority="6">SJ-20220821168</td>
 
-                                        <td data-priority="6">500.000</td>
+                                        <td data-priority="6">Rp. 20,000</td>
+
+                                        <td data-priority="6">Rp. 500,000</td>
 
                                         <td data-priority="6"><span class="badge badge-success">Diterima</span></td>
 
@@ -176,7 +184,7 @@ $assetsUrl = base_url('assets');
                         <div class="card-body">
 
 
-                          <form id="frmpurchaseorder" class="form-horizontal">
+                          <form id="frmpurchase" class="form-horizontal">
 
                             <div class="form-group row">
 
@@ -188,13 +196,57 @@ $assetsUrl = base_url('assets');
 
                                 </div>
 
-                                <div class="col-md-1"></div>
+                                <div class="col-md-1">
 
-                                <label for="tanggal" class="col-sm-1 col-form-label">Tanggal</label>
+
+                                </div>  
+
+                                <label for="tanggal" class="col-sm-1 col-form-label">No Faktur</label>
 
                                 <div class="col-sm-3">
 
+                                    <input id="no_invoice_suplier" name="purchase_order_invoice" type="text" class="form-control">
+
+                                </div>
+
+
+
+                                <label for="tanggal" class="col-sm-1 col-form-label">Tanggal</label>
+
+                                <div class="col-sm-2">
+
                                     <input id="purchase_order_date" name="purchase_order_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>" readonly>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+
+                                <label for="noinvoice" class="col-sm-1 col-form-label">No Po</label>
+
+                                <div class="col-sm-3">
+
+                                    <select id="no_po_purchase" name="no_po_purchase" class="form-control"></select>
+
+                                </div>
+
+                                <div class="col-md-1"></div>
+
+                                <label for="tanggal" class="col-sm-1 col-form-label">Tgl Faktur</label>
+
+                                <div class="col-sm-3">
+
+                                    <input id="invoice_date" name="invoice_date" type="date" class="form-control">
+
+                                </div>
+
+
+
+                                <label for="cabang" class="col-sm-1 col-form-label">Cabang</label>
+
+                                <div class="col-sm-2">
+
+                                    <input id="cabang" type="text" class="form-control" value="Kota Baru" readonly>
 
                                 </div>
                             </div>
@@ -210,34 +262,52 @@ $assetsUrl = base_url('assets');
 
                                 </div>
 
+
                                 <div class="col-sm-1">
 
                                     <button id="btnadd" class="btn btn-primary"><i class="fas fa-plus"></i></button>
 
                                 </div>
 
-                                <label for="user" class="col-sm-1 col-form-label">Cabang</label>
 
-                                <div class="col-sm-3">
+                                <div class="col-md-4"></div>
 
-                                    <input id="cabang" type="text" class="form-control" value="Kota Baru" readonly>
+
+                                
+                                <label for="user" class="col-sm-1 col-form-label">User</label>
+
+                                <div class="col-sm-2">
+
+                                    <input id="display_user" type="text" class="form-control" value="<?= $user['user_realname'] ?>" readonly>
 
                                 </div>
+
 
                             </div>
 
 
                             <div class="form-group row">
 
-                                <div class="col-md-5"></div>
-
-                                <label for="user" class="col-sm-1 col-form-label">User</label>
+                                <label for="suplier" class="col-sm-1 col-form-label">Pembayaran</label>
 
                                 <div class="col-sm-3">
 
-                                    <input id="display_user" type="text" class="form-control" value="<?= $user['user_realname'] ?>" readonly>
+                                    <select id="payment_type" name="payment_type" class="form-control" onchange="setpayment_type()"></select>
 
                                 </div>
+
+                            </div>
+
+                            <div class="form-group row">
+
+
+                                <label for="suplier" class="col-sm-1 col-form-label">Tempo</label>
+
+                                <div class="col-sm-3">
+                                    <input id="due_date" name="due_date" type="date" class="form-control">
+
+                                </div>
+
 
                             </div>
 
@@ -283,12 +353,7 @@ $assetsUrl = base_url('assets');
 
                             <div class="row well well-sm">
 
-                                <input id="item_id" name="item_id" type="hidden" value="">
-
-                                <input id="product_tax" name="product_tax" type="hidden" value="">
-
-
-                                <div class="col-sm-3">
+                                <div class="col-sm-11">
 
                                     <!-- text input -->
 
@@ -296,63 +361,7 @@ $assetsUrl = base_url('assets');
 
                                         <label>Produk</label>
 
-                                        <select id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" onchange="setprice()" required> </select>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Harga Beli</label>
-
-                                        <input id="temp_price" name="temp_price" type="text" class="form-control text-right" value="0" data-parsley-vprice required>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>PPN <?= PPN_TEXT ?></label>
-
-                                        <input id="temp_tax" name="temp_tax" type="text" class="form-control text-right" value="0" readonly required>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Qty</label>
-
-                                        <input id="temp_qty" name="temp_qty" type="text" class="form-control text-right" onchange="setppn()" value="0" data-parsley-vqty required>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Total</label>
-
-                                        <input id="subtotal" name="subtotal" type="text" class="form-control text-right" value="0" readonly>
+                                        <select id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" required> </select>
 
                                     </div>
 
@@ -368,9 +377,7 @@ $assetsUrl = base_url('assets');
 
                                         <div class="col-12">
 
-                                            <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle float-right" style="margin-left: 2px;"><i class="fas fa-plus"></i></button>
-                                            <button id="getlist" class="btn btn-md btn-warning rounded-circle float-right"><i class="far fa-list-alt"></i></button>
-
+                                            <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle"><i class="fas fa-plus"></i></button>
 
                                         </div>
 
@@ -425,9 +432,9 @@ $assetsUrl = base_url('assets');
 
                                         <td>NIPPON PAINT CAT BASE NIPPON SATIN GLO - PASTEL BASE 2.35L </td>
 
-                                        <td>10</td>
+                                        <td> <input id="temp_qty" name="temp_qty" type="text" class="form-control text-right table-input" value="42" data-parsley-vqty required"></td>
 
-                                        <td>Rp. 50,000</td>
+                                        <td><input id="temp_price" name="temp_price" type="text" class="form-control text-right table-input" value="142" required"></td>
 
                                         <td>Rp. 450,450</td>
 
@@ -464,9 +471,9 @@ $assetsUrl = base_url('assets');
 
                                         <td>IKAD KERAMIK DINDING DX 2277A FR 25X40 - I</td>
 
-                                        <td>148</td>
+                                        <td><input id="temp_qty" name="temp_qty" type="text" class="form-control text-right table-input" value="142" data-parsley-vqty required"></td>
 
-                                        <td>Rp. 100,000</td>
+                                        <td><input id="temp_price" name="temp_price" type="text" class="form-control text-right table-input" value="Rp. 100,000" required"></td>
 
                                         <td>Rp. 13,513,514</td>
 
@@ -504,7 +511,7 @@ $assetsUrl = base_url('assets');
 
 
 
-                    <div class="row">
+                    <div class="row footer-purchase">
 
                         <div class="col-lg-6">
 
@@ -523,9 +530,27 @@ $assetsUrl = base_url('assets');
                         <div class="col-lg-6 text-right">
 
                             <div class="form-group row">
+                                <label for="ongkir" class="col-sm-7 col-form-label text-right:">Discount :</label>
+                                <div class="col-sm-4">
+                                    <input id="discount_header" name="discount_header" type="text" class="form-control text-right" value="0" readonly>
+                                </div>
+                                <div class="col-sm-1">
+                                    <button id="btnadd" class="btn btn-warning"><i class="fas fa-tags"></i></button>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
                                 <label for="ongkir" class="col-sm-7 col-form-label text-right:">PPN <?= PPN_TEXT ?> :</label>
                                 <div class="col-sm-5">
                                     <input id="display_total_ppn" name="display_total_ppn" type="text" class="form-control text-right" value="0" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="ongkir" class="col-sm-7 col-form-label text-right:">Ongkir :</label>
+                                <div class="col-sm-5">
+                                    <input id="display_ongkir" name="display_ongkir" type="text" class="form-control text-right" value="0" readonly>
                                 </div>
                             </div>
 
@@ -539,8 +564,8 @@ $assetsUrl = base_url('assets');
 
                             <div class="form-group row">
                                 <div class="col-sm-12">
-                                <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
-                                <button id="btnsave" class="btn btn-success button-header-custom-save"><i class="fas fa-save"></i> Simpan</button>
+                                    <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
+                                    <button id="btnsave" class="btn btn-success button-header-custom-save"><i class="fas fa-save"></i> Simpan</button>
                                 </div>
                             </div>
 
@@ -597,6 +622,7 @@ $assetsUrl = base_url('assets');
     }
 }
 
+/*
 function setppn() {
     let qty = document.getElementById("temp_qty").value;
     let price = document.getElementById("temp_price").value;
@@ -605,22 +631,31 @@ function setppn() {
     let ppn = parseInt(totalharga) - parseInt(price) * parseInt(qty) / 1.11;
     document.getElementById("temp_tax").value = ppn.toLocaleString('en-US');
     document.getElementById("subtotal").value = totalharga.toLocaleString('en-US');
+}*/
+
+function setpayment_type(){
+ var id = document.getElementById("payment_type").value;
+ if(id == '2'){
+     document.getElementById("due_date").disabled = false;
+ }
 }
 
 $(document).ready(function() {
 
-     // let temp_qty = new AutoNumeric('#temp_qty', configQty);
-     let temp_price = new AutoNumeric('#temp_price', configRp);
-
-     let temp_tax = new AutoNumeric('#temp_tax', configRp);
-
      let temp_qty = new AutoNumeric('#temp_qty', configQty);
 
-     let subtotal = new AutoNumeric('#subtotal', configRp);
+     let temp_price = new AutoNumeric('#temp_price', configRp);
+
+     //let temp_tax = new AutoNumeric('#temp_tax', configRp);
+
+     //let subtotal = new AutoNumeric('#subtotal', configRp);
 
      let display_total_ppn = new AutoNumeric('#display_total_ppn', configRp);
 
      let display_total = new AutoNumeric('#display_total', configRp);
+
+     document.getElementById("due_date").disabled = true;
+
 
         // init component //
 
@@ -648,6 +683,44 @@ $(document).ready(function() {
             ]
 
         });
+
+        $("#no_po_purchase").select2({
+
+            data: [
+            {
+                id:'1',
+                text: 'PO-KBR-0001'
+            },
+            {
+                id:'2',
+                text: 'PO-PST-0002'
+            }
+
+            ]
+
+        });
+
+
+        $("#payment_type").select2({
+
+            data: [
+            {
+                id:'1',
+                text: 'Cash'
+            },
+            {
+                id:'2',
+                text: 'Kredit'
+            },
+            {
+                id:'2',
+                text: 'Transfer'
+            }
+
+            ]
+
+        });
+        
 
 
         $("#product_name").select2({
@@ -691,6 +764,8 @@ $(document).ready(function() {
 
                 $('#po_input').show();
 
+
+
             } else {
 
                 $('#po_list').show();
@@ -707,9 +782,9 @@ $(document).ready(function() {
 
             e.preventDefault();
 
-            let form = $('#frmpurchaseorder');
+            let form = $('#frmpurchase');
                             //let items = response.result.data;
-                            $('#title-frmpurchaseorder').html('Tambah Pembelian');
+                            $('#title-frmpurchase').html('Tambah Pembelian');
 
                             formMode = 'add';
 
