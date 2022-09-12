@@ -432,9 +432,9 @@ $assetsUrl = base_url('assets');
 
                                         <td>NIPPON PAINT CAT BASE NIPPON SATIN GLO - PASTEL BASE 2.35L </td>
 
-                                        <td> <input id="temp_qty" name="temp_qty" type="text" class="form-control text-right table-input" value="42" data-parsley-vqty required"></td>
+                                        <td> <input id="temp_qty_1" name="temp_qty" type="text" class="form-control text-right table-input" value="42" disabled></td>
 
-                                        <td><input id="temp_price" name="temp_price" type="text" class="form-control text-right table-input" value="142" required"></td>
+                                        <td><input id="temp_price_1" name="temp_price" type="text" class="form-control text-right table-input" value="142" disabled></td>
 
                                         <td>Rp. 450,450</td>
 
@@ -444,7 +444,7 @@ $assetsUrl = base_url('assets');
 
                                         <td>
 
-                                            <button data-id="{item_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                            <button onclick="editrow(1)" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
                                                 <i class="fas fa-edit"></i>
 
@@ -452,7 +452,7 @@ $assetsUrl = base_url('assets');
 
                                             &nbsp;
 
-                                            <button data-id="{item_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+                                            <button class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
 
                                                 <i class="fas fa-minus"></i>
 
@@ -471,9 +471,9 @@ $assetsUrl = base_url('assets');
 
                                         <td>IKAD KERAMIK DINDING DX 2277A FR 25X40 - I</td>
 
-                                        <td><input id="temp_qty" name="temp_qty" type="text" class="form-control text-right table-input" value="142" data-parsley-vqty required"></td>
+                                        <td><input id="temp_qty_2" name="temp_qty" type="text" class="form-control text-right table-input" value="142" disabled></td>
 
-                                        <td><input id="temp_price" name="temp_price" type="text" class="form-control text-right table-input" value="Rp. 100,000" required"></td>
+                                        <td><input id="temp_price_2" name="temp_price" type="text" class="form-control text-right table-input" value="Rp. 100,000" disabled></td>
 
                                         <td>Rp. 13,513,514</td>
 
@@ -483,7 +483,7 @@ $assetsUrl = base_url('assets');
 
                                         <td>
 
-                                            <button data-id="{item_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                            <button onclick="editrow(2)" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
                                                 <i class="fas fa-edit"></i>
 
@@ -491,7 +491,7 @@ $assetsUrl = base_url('assets');
 
                                             &nbsp;
 
-                                            <button data-id="{item_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+                                            <button  class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
 
                                                 <i class="fas fa-minus"></i>
 
@@ -622,6 +622,11 @@ $assetsUrl = base_url('assets');
     }
 }
 
+
+function editrow(x){
+    document.getElementById("temp_qty_"+x).disabled = false;
+    document.getElementById("temp_price_"+x).disabled = false;
+}
 /*
 function setppn() {
     let qty = document.getElementById("temp_qty").value;
@@ -642,9 +647,9 @@ function setpayment_type(){
 
 $(document).ready(function() {
 
-     let temp_qty = new AutoNumeric('#temp_qty', configQty);
+     //let temp_qty = new AutoNumeric('#temp_qty', configQty);
 
-     let temp_price = new AutoNumeric('#temp_price', configRp);
+     //let temp_price = new AutoNumeric('#temp_price', configRp);
 
      //let temp_tax = new AutoNumeric('#temp_tax', configRp);
 
@@ -655,6 +660,9 @@ $(document).ready(function() {
      let display_total = new AutoNumeric('#display_total', configRp);
 
      document.getElementById("due_date").disabled = true;
+
+
+     
 
 
         // init component //
