@@ -432,9 +432,9 @@ $assetsUrl = base_url('assets');
 
                                         <td>NIPPON PAINT CAT BASE NIPPON SATIN GLO - PASTEL BASE 2.35L </td>
 
-                                        <td> <input id="temp_qty_1" name="temp_qty" type="text" class="form-control text-right table-input" value="42" disabled></td>
+                                        <td>42</td>
 
-                                        <td><input id="temp_price_1" name="temp_price" type="text" class="form-control text-right table-input" value="142" disabled></td>
+                                        <td>Rp. 450,450</td>
 
                                         <td>Rp. 450,450</td>
 
@@ -471,9 +471,9 @@ $assetsUrl = base_url('assets');
 
                                         <td>IKAD KERAMIK DINDING DX 2277A FR 25X40 - I</td>
 
-                                        <td><input id="temp_qty_2" name="temp_qty" type="text" class="form-control text-right table-input" value="142" disabled></td>
+                                        <td>142 </td>
 
-                                        <td><input id="temp_price_2" name="temp_price" type="text" class="form-control text-right table-input" value="Rp. 100,000" disabled></td>
+                                        <td>Rp. 100,000</td>
 
                                         <td>Rp. 13,513,514</td>
 
@@ -622,11 +622,6 @@ $assetsUrl = base_url('assets');
     }
 }
 
-
-function editrow(x){
-    document.getElementById("temp_qty_"+x).disabled = false;
-    document.getElementById("temp_price_"+x).disabled = false;
-}
 /*
 function setppn() {
     let qty = document.getElementById("temp_qty").value;
@@ -638,12 +633,6 @@ function setppn() {
     document.getElementById("subtotal").value = totalharga.toLocaleString('en-US');
 }*/
 
-function setpayment_type(){
- var id = document.getElementById("payment_type").value;
- if(id == '2'){
-     document.getElementById("due_date").disabled = false;
- }
-}
 
 $(document).ready(function() {
 
@@ -658,12 +647,6 @@ $(document).ready(function() {
      let display_total_ppn = new AutoNumeric('#display_total_ppn', configRp);
 
      let display_total = new AutoNumeric('#display_total', configRp);
-
-     document.getElementById("due_date").disabled = true;
-
-
-     
-
 
         // init component //
 

@@ -188,7 +188,7 @@ $assetsUrl = base_url('assets');
 
                                 </div>
 
-                                <div class="col-md-1"></div>
+                                <div class="col-md-4"></div>
 
                                 <label for="tanggal" class="col-sm-1 col-form-label">Tanggal</label>
 
@@ -216,11 +216,13 @@ $assetsUrl = base_url('assets');
 
                                 </div>
 
-                                <label for="user" class="col-sm-1 col-form-label">Cabang</label>
+                                <div class="col-md-3"></div>
+
+                                <label for="user" class="col-sm-1 col-form-label">Gudang</label>
 
                                 <div class="col-sm-3">
 
-                                    <input id="cabang" type="text" class="form-control" value="Kota Baru" readonly>
+                                    <select id="warehouse" type="text" class="form-control"></select>
 
                                 </div>
 
@@ -229,7 +231,7 @@ $assetsUrl = base_url('assets');
 
                             <div class="form-group row">
 
-                                <div class="col-md-5"></div>
+                                <div class="col-md-8"></div>
 
                                 <label for="user" class="col-sm-1 col-form-label">User</label>
 
@@ -322,6 +324,34 @@ $assetsUrl = base_url('assets');
 
                                     <div class="form-group">
 
+                                        <label>Qty</label>
+
+                                        <input id="temp_qty" name="temp_qty" type="text" class="form-control text-right" value="0" data-parsley-vqty required>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-2">
+
+                                    <!-- text input -->
+
+                                    <div class="form-group">
+
+                                        <label>DPP</label>
+
+                                        <input id="temp_dpp" name="temp_dpp" type="text" class="form-control text-right" value="0" readonly required>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-2">
+
+                                    <!-- text input -->
+
+                                    <div class="form-group">
+
                                         <label>PPN <?= PPN_TEXT ?></label>
 
                                         <input id="temp_tax" name="temp_tax" type="text" class="form-control text-right" value="0" readonly required>
@@ -330,15 +360,17 @@ $assetsUrl = base_url('assets');
 
                                 </div>
 
+                                <div class="col-md-3"></div>
+
                                 <div class="col-sm-2">
 
                                     <!-- text input -->
 
                                     <div class="form-group">
 
-                                        <label>Qty</label>
+                                        <label>Ongkir</label>
 
-                                        <input id="temp_qty" name="temp_qty" type="text" class="form-control text-right" onchange="setppn()" value="0" data-parsley-vqty required>
+                                        <input id="temp_ongkir" name="temp_ongkir" type="text" class="form-control text-right" value="0">
 
                                     </div>
 
@@ -350,9 +382,26 @@ $assetsUrl = base_url('assets');
 
                                     <div class="form-group">
 
+                                        <label>Discount</label>
+
+                                        <input id="temp_discount1" name="temp_discount1" type="hidden" class="form-control text-right" value="0" readonly>
+                                        <input id="temp_discount2" name="temp_discount2" type="hidden" class="form-control text-right" value="0" readonly>
+                                        <input id="temp_discount3" name="temp_discount3" type="hidden" class="form-control text-right" value="0" readonly>
+                                        <input id="total_temp_discount" name="total_temp_discount" type="text" class="form-control text-right" value="0" readonly>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-4">
+
+                                    <!-- text input -->
+
+                                    <div class="form-group">
+
                                         <label>Total</label>
 
-                                        <input id="subtotal" name="subtotal" type="text" class="form-control text-right" value="0" readonly>
+                                        <input id="temp_total" name="temp_total" type="text" class="form-control text-right" value="0" readonly>
 
                                     </div>
 
@@ -417,7 +466,7 @@ $assetsUrl = base_url('assets');
                                     </thead>
 
                                     <tbody>
-                                     <tr>
+                                       <tr>
 
                                         <td>1</td>
 
@@ -539,8 +588,8 @@ $assetsUrl = base_url('assets');
 
                             <div class="form-group row">
                                 <div class="col-sm-12">
-                                <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
-                                <button id="btnsave" class="btn btn-success button-header-custom-save"><i class="fas fa-save"></i> Simpan</button>
+                                    <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
+                                    <button id="btnsave" class="btn btn-success button-header-custom-save"><i class="fas fa-save"></i> Simpan</button>
                                 </div>
                             </div>
 
@@ -565,6 +614,63 @@ $assetsUrl = base_url('assets');
 
 </div><!-- /.container-fluid -->
 
+<div class="modal fade" id="modal-category">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="title-frmtempdiscount"></h4>
+                <button type="button" class="close close-modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="frmtempdiscount" class="form-horizontal">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="row">
+                            <label for="edit_temp_discount1_lbl" class="col-sm-12">Discount 1</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="edit_temp_discount_percentage1" name="edit_temp_discount_percentage1" value="0">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="edit_temp_discount1" name="edit_temp_discount1" value="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label for="edit_temp_discount2_lbl" class="col-sm-12">Discount 2</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="edit_temp_discount_percentage2" name="edit_temp_discount_percentage2" value="0">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="edit_temp_discount2" name="edit_temp_discount2" value="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label for="edit_temp_discount2_lbl" class="col-sm-12">Discount 3</label>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="edit_temp_discount_percentage3" name="edit_temp_discount_percentage3" value="0">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="edit_temp_discount3" name="edit_temp_discount3" value="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button id="btncancel" class="btn btn-danger close-modal"><i class="fas fa-times-circle"></i> Batal</button>
+                    <button id="btndisc" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
 </section>
 
 </div>
@@ -581,46 +687,64 @@ $assetsUrl = base_url('assets');
 
 <script>
 
-   function setprice() {
+ function setprice() {
     var id = document.getElementById("product_name").value;
     if(id == '00002050'){
-        document.getElementById("temp_price").value = '50000'.toLocaleString('en-US');
+        document.getElementById("temp_price").value = '50000';
     }
     if(id == '00009200'){
-        document.getElementById("temp_price").value = '60000'.toLocaleString('en-US');
+        document.getElementById("temp_price").value = '50000';
     }
     if(id == '00011521'){
-        document.getElementById("temp_price").value = '59000'.toLocaleString('en-US');
+        document.getElementById("temp_price").value = '59000';
     }
     if(id == '00005001'){
-        document.getElementById("temp_price").value = '100000'.toLocaleString('en-US');
+        document.getElementById("temp_price").value = '100000';
     }
+    let temp_price = new AutoNumeric('#temp_price', configRp);
 }
 
-function setppn() {
-    let qty = document.getElementById("temp_qty").value;
-    let price = document.getElementById("temp_price").value;
-    var id = document.getElementById("product_name").value;
-    let totalharga = parseInt(price) * parseInt(qty);
-    let ppn = parseInt(totalharga) - parseInt(price) * parseInt(qty) / 1.11;
-    document.getElementById("temp_tax").value = ppn.toLocaleString('en-US');
-    document.getElementById("subtotal").value = totalharga.toLocaleString('en-US');
-}
+
 
 $(document).ready(function() {
 
-     // let temp_qty = new AutoNumeric('#temp_qty', configQty);
-     let temp_price = new AutoNumeric('#temp_price', configRp);
+ let temp_price = new AutoNumeric('#temp_price', configRp);
 
-     let temp_tax = new AutoNumeric('#temp_tax', configRp);
+ let temp_tax = new AutoNumeric('#temp_tax', configRp);
 
-     let temp_qty = new AutoNumeric('#temp_qty', configQty);
+ let temp_dpp = new AutoNumeric('#temp_dpp', configRp); 
 
-     let subtotal = new AutoNumeric('#subtotal', configRp);
+ let temp_qty = new AutoNumeric('#temp_qty', configQty);
 
-     let display_total_ppn = new AutoNumeric('#display_total_ppn', configRp);
+ let temp_ongkir = new AutoNumeric('#temp_ongkir', configRp);
 
-     let display_total = new AutoNumeric('#display_total', configRp);
+ let total_temp_discount = new AutoNumeric('#total_temp_discount', configRp);
+
+ let edit_temp_discount1 = new AutoNumeric('#edit_temp_discount1', configRp);
+
+ let edit_temp_discount_percentage1 = new AutoNumeric('#edit_temp_discount_percentage1', configMargin);
+
+ let edit_temp_discount2 = new AutoNumeric('#edit_temp_discount2', configRp);
+
+ let edit_temp_discount_percentage2 = new AutoNumeric('#edit_temp_discount_percentage2', configMargin);
+
+ let edit_temp_discount3 = new AutoNumeric('#edit_temp_discount3', configRp);
+
+ let edit_temp_discount_percentage3 = new AutoNumeric('#edit_temp_discount_percentage3', configMargin);
+
+ let temp_discount1 = new AutoNumeric('#temp_discount1', configRp);
+
+ let temp_discount2 = new AutoNumeric('#temp_discount2', configRp);
+
+ let temp_discount3 = new AutoNumeric('#temp_discount3', configRp);
+
+ let temp_total = new AutoNumeric('#temp_total', configRp);
+
+
+ let display_total_ppn = new AutoNumeric('#display_total_ppn', configRp);
+
+ let display_total = new AutoNumeric('#display_total', configRp);
+
 
         // init component //
 
@@ -632,6 +756,28 @@ $(document).ready(function() {
 
 
         // select2 //
+
+
+        $("#warehouse").select2({
+
+            data: [
+            {
+                id:'1',
+                text: 'UTM-PUSAT'
+            },
+            {
+                id:'3',
+                text: 'KBR-KOTA BARU'
+            },
+            {
+                id:'2',
+                text: 'KNY-KONSINYASI'
+            }
+
+            ]
+
+        });
+
 
         $("#supplier_id").select2({
 
@@ -673,10 +819,6 @@ $(document).ready(function() {
             ]
 
         });
-
-
-
-
         // Table //
 
 
@@ -691,6 +833,8 @@ $(document).ready(function() {
 
                 $('#po_input').show();
 
+         
+
             } else {
 
                 $('#po_list').show();
@@ -701,7 +845,91 @@ $(document).ready(function() {
 
         }
 
+        function discountMode(data) {
+            let form = $('#frmtempdiscount');
+            $('#title-frmtempdiscount').html('Tambah Discount');
+            formMode = 'edit';
+            $('#edit_temp_discount1').val(data.temp_discount1);
+            $('#edit_temp_discount2').val(data.temp_discount2);
+            $('#edit_temp_discount3').val(data.temp_discount3);
+            $('#modal-category').modal(configModal);
+        }
 
+        $('#total_temp_discount').click(function(e) {
+            e.preventDefault();
+            discountMode({
+                temp_discount1: $('#temp_discount1').val(),
+                temp_discount2: $('#temp_discount2').val(),
+                temp_discount3: $('#temp_discount3').val(),
+            });
+        })
+
+        $('.close-modal').click(function(e) {
+            e.preventDefault();
+            message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
+                let yes = parseMessageResult(answer);
+                if (yes) {
+                    $('#modal-category').modal('hide');
+                }
+            })
+        })
+
+        document.getElementById('temp_qty').addEventListener('change', function() {
+            var price_calculation = AutoNumeric.getAutoNumericElement('#temp_price').get();
+            let qty_calculation = parseFloat(temp_qty.getNumericString());
+            let subtotal_calculation = price_calculation * qty_calculation;
+            let ppn = subtotal_calculation - (subtotal_calculation / 1.11);
+            let dpp = subtotal_calculation - ppn;
+            $('#temp_tax').val(parseFloat(ppn.toFixed(2)));
+            $('#temp_dpp').val(parseFloat(dpp.toFixed(2)));
+            let temp_tax = new AutoNumeric('#temp_tax', configRp);
+            let temp_dpp = new AutoNumeric('#temp_dpp', configRp);
+            calculation_temp_total();
+        });
+
+        document.getElementById('edit_temp_discount_percentage1').addEventListener('change', function() {
+            var price_calculation = AutoNumeric.getAutoNumericElement('#temp_price').get();
+            let qty_calculation = parseFloat(temp_qty.getNumericString());
+            let edit_temp_discount_percentage1 = AutoNumeric.getAutoNumericElement('#edit_temp_discount_percentage1').get();
+            let edit_temp_discount1 = (price_calculation * qty_calculation) * (edit_temp_discount_percentage1/100);
+            $('#edit_temp_discount1').val(parseFloat(edit_temp_discount1.toFixed(2)));
+            let edit_temp_discount1s = new AutoNumeric('#edit_temp_discount1', configRp);
+            let edit_temp_discount2s = new AutoNumeric('#edit_temp_discount2', configRp);
+            let edit_temp_discount3s = new AutoNumeric('#edit_temp_discount3', configRp);
+        });
+
+        function calculation_temp_total(){
+            var price_calculation = AutoNumeric.getAutoNumericElement('#temp_price').get();
+            let qty_calculation = parseFloat(temp_qty.getNumericString());
+            let subtotal_calculation = price_calculation * qty_calculation; 
+            $('#temp_total').val(subtotal_calculation);
+            let temp_total = new AutoNumeric('#temp_total', configRp);
+        }
+
+        $('#btndisc').click(function(e) {
+            e.preventDefault();
+            message.question('Yakin untuk penambahan discount?').then(function(answer) {
+                let yes = parseMessageResult(answer);
+                if (yes) {
+                    $('#modal-category').modal('hide');
+
+                    let edit_temp_discount1 =  $('#edit_temp_discount1').val();
+                    $('#temp_discount1').val(edit_temp_discount1);
+
+                    let edit_temp_discount2 =  $('#edit_temp_discount2').val();
+                    $('#temp_discount2').val(edit_temp_discount2);
+
+                    let edit_temp_discount3 =  $('#edit_temp_discount3').val();
+                    $('#temp_discount3').val(edit_temp_discount3);
+
+                    let temp_discount1 = new AutoNumeric('#temp_discount1', configRp);
+
+                    let temp_discount2 = new AutoNumeric('#temp_discount2', configRp);
+
+                    let temp_discount3 = new AutoNumeric('#temp_discount3', configRp);
+                }
+            })
+        })
 
         $('#btnadd').click(function(e) {
 
