@@ -96,7 +96,9 @@
 
 
 #frmpurchase .form-group,
-.footer-purchase .form-group{
+#frmpurchaseorder .form-group,
+.footer-purchase .form-group,
+.footer-purchaseorder .form-group{
     margin-bottom: 5px;
 }
 

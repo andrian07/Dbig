@@ -327,6 +327,7 @@ $assetsUrl = base_url('assets');
                                         <label>Qty</label>
 
                                         <input id="temp_qty" name="temp_qty" type="text" class="form-control text-right" value="0" data-parsley-vqty required>
+                                        <input id="total_price" name="total_price" type="hidden" class="form-control text-right" value="0" data-parsley-vqty required>
 
                                     </div>
 
@@ -553,7 +554,7 @@ $assetsUrl = base_url('assets');
 
 
 
-                    <div class="row">
+                    <div class="row footer-purchaseorder">
 
                         <div class="col-lg-6">
 
@@ -570,6 +571,24 @@ $assetsUrl = base_url('assets');
                         </div>
 
                         <div class="col-lg-6 text-right">
+
+                            <div class="form-group row">
+                                <label for="total" class="col-sm-7 col-form-label text-right:">Ongkir:</label>
+                                <div class="col-sm-5">
+                                    <input type="hidden" id="purchase_order_total" name="purchase_order_total">
+                                    <input id="display_total" name="display_total" type="text" class="form-control text-right" value="0" readonly>
+                                </div>
+                            </div>
+
+                             <div class="form-group row">
+                                <label for="ongkir" class="col-sm-7 col-form-label text-right:">Discount :</label>
+                                <div class="col-sm-4">
+                                    <input id="discount_header" name="discount_header" type="text" class="form-control text-right" value="0" readonly>
+                                </div>
+                                <div class="col-sm-1">
+                                    <button id="btnadd" class="btn btn-warning"><i class="fas fa-tags"></i></button>
+                                </div>
+                            </div>
 
                             <div class="form-group row">
                                 <label for="ongkir" class="col-sm-7 col-form-label text-right:">PPN <?= PPN_TEXT ?> :</label>
@@ -717,6 +736,8 @@ $(document).ready(function() {
  let temp_qty = new AutoNumeric('#temp_qty', configQty);
 
  let temp_ongkir = new AutoNumeric('#temp_ongkir', configRp);
+
+ let total_price = new AutoNumeric('#total_price', configRp);
 
  let total_temp_discount = new AutoNumeric('#total_temp_discount', configRp);
 
@@ -874,36 +895,58 @@ $(document).ready(function() {
             })
         })
 
-        document.getElementById('temp_qty').addEventListener('change', function() {
+         $('#temp_qty').on('change', function() {
             var price_calculation = AutoNumeric.getAutoNumericElement('#temp_price').get();
             let qty_calculation = parseFloat(temp_qty.getNumericString());
             let subtotal_calculation = price_calculation * qty_calculation;
             let ppn = subtotal_calculation - (subtotal_calculation / 1.11);
             let dpp = subtotal_calculation - ppn;
-            $('#temp_tax').val(parseFloat(ppn.toFixed(2)));
-            $('#temp_dpp').val(parseFloat(dpp.toFixed(2)));
-            let temp_tax = new AutoNumeric('#temp_tax', configRp);
-            let temp_dpp = new AutoNumeric('#temp_dpp', configRp);
+            temp_dpp.set(parseFloat(dpp.toFixed(2)));
+            temp_tax.set(parseFloat(ppn.toFixed(2)));
             calculation_temp_total();
         });
 
-        document.getElementById('edit_temp_discount_percentage1').addEventListener('change', function() {
-            var price_calculation = AutoNumeric.getAutoNumericElement('#temp_price').get();
-            let qty_calculation = parseFloat(temp_qty.getNumericString());
-            let edit_temp_discount_percentage1 = AutoNumeric.getAutoNumericElement('#edit_temp_discount_percentage1').get();
-            let edit_temp_discount1 = (price_calculation * qty_calculation) * (edit_temp_discount_percentage1/100);
-            $('#edit_temp_discount1').val(parseFloat(edit_temp_discount1.toFixed(2)));
-            let edit_temp_discount1s = new AutoNumeric('#edit_temp_discount1', configRp);
-            let edit_temp_discount2s = new AutoNumeric('#edit_temp_discount2', configRp);
-            let edit_temp_discount3s = new AutoNumeric('#edit_temp_discount3', configRp);
+         $('#edit_temp_discount_percentage1').on('change', function() {
+            let edit_temp_discount1_cal = total_price.get() * (edit_temp_discount_percentage1.get()/100);
+            edit_temp_discount1.set(edit_temp_discount1_cal.toFixed(2));
         });
+
+         $('#edit_temp_discount1').on('change', function() {
+            let edit_temp_discount1_cal = edit_temp_discount1.get() / total_price.get() *  100;
+            edit_temp_discount_percentage1.set(edit_temp_discount1_cal);
+        });
+
+        $('#edit_temp_discount_percentage2').on('change', function() {
+            let edit_temp_discount2_cal = (total_price.get() - edit_temp_discount1.get()) * (edit_temp_discount_percentage2.get()/100);
+            edit_temp_discount2.set(edit_temp_discount2_cal.toFixed(2));
+        });
+
+        $('#edit_temp_discount2').on('change', function() {
+            let edit_temp_discount2_cal = edit_temp_discount2.get() / (total_price.get() - edit_temp_discount1.get()) *  100;
+            edit_temp_discount_percentage2.set(edit_temp_discount2_cal.toFixed(2));
+        });
+
+        $('#edit_temp_discount_percentage3').on('change', function() {
+            let edit_temp_discount3_cal = (total_price.get() - edit_temp_discount2.get() - edit_temp_discount2.get()) * (edit_temp_discount_percentage3.get()/100);
+            edit_temp_discount3.set(edit_temp_discount3_cal.toFixed(2));
+        });
+
+        $('#edit_temp_discount3').on('change', function() {
+            let edit_temp_discount3_cal = edit_temp_discount3.get() / (total_price.get() - edit_temp_discount1.get() - edit_temp_discount2.get()) *  100;
+            edit_temp_discount_percentage3.set(edit_temp_discount3_cal.toFixed(2));
+        });
+
+        $('#temp_ongkir').on('change', function() {
+            calculation_temp_total()
+        });
+        
 
         function calculation_temp_total(){
             var price_calculation = AutoNumeric.getAutoNumericElement('#temp_price').get();
             let qty_calculation = parseFloat(temp_qty.getNumericString());
-            let subtotal_calculation = price_calculation * qty_calculation; 
-            $('#temp_total').val(subtotal_calculation);
-            let temp_total = new AutoNumeric('#temp_total', configRp);
+            let subtotal_calculation = price_calculation * qty_calculation;
+            total_price.set(subtotal_calculation);
+            temp_total.set(total_price.get()-total_temp_discount.get()-temp_ongkir.get());
         }
 
         $('#btndisc').click(function(e) {
@@ -913,20 +956,18 @@ $(document).ready(function() {
                 if (yes) {
                     $('#modal-category').modal('hide');
 
-                    let edit_temp_discount1 =  $('#edit_temp_discount1').val();
-                    $('#temp_discount1').val(edit_temp_discount1);
 
-                    let edit_temp_discount2 =  $('#edit_temp_discount2').val();
-                    $('#temp_discount2').val(edit_temp_discount2);
+                    let edit_temp_discount1 =  AutoNumeric.getAutoNumericElement('#edit_temp_discount1').get();
+                    temp_discount1.set(edit_temp_discount1);
 
-                    let edit_temp_discount3 =  $('#edit_temp_discount3').val();
-                    $('#temp_discount3').val(edit_temp_discount3);
+                    let edit_temp_discount2 =  AutoNumeric.getAutoNumericElement('#edit_temp_discount2').get();
+                    temp_discount2.set(edit_temp_discount2);
 
-                    let temp_discount1 = new AutoNumeric('#temp_discount1', configRp);
+                    let edit_temp_discount3 =  AutoNumeric.getAutoNumericElement('#edit_temp_discount3').get();
+                    temp_discount3.set(edit_temp_discount3);
 
-                    let temp_discount2 = new AutoNumeric('#temp_discount2', configRp);
-
-                    let temp_discount3 = new AutoNumeric('#temp_discount3', configRp);
+                    total_temp_discount.set(Number(edit_temp_discount1) + Number(edit_temp_discount2) + Number(edit_temp_discount3));
+                    calculation_temp_total();
                 }
             })
         })
