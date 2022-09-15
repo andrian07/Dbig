@@ -125,7 +125,15 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('exchange-point', 'Webmin\EricDemo::exchangePoint');
     $routes->get('exchange-point/v2', 'Webmin\EricDemo::exchangePointV2');
     $routes->get('exchange-point/detail', 'Webmin\EricDemo::exchangePointDetail');
+
+    $routes->get('user/user-account', 'Webmin\EricDemo::userAccount');
+    $routes->get('user/user-group', 'Webmin\EricDemo::userGroup');
+    $routes->get('password-control', 'Webmin\EricDemo::passwordControl');
+    $routes->get('password-control/logs', 'Webmin\EricDemo::passwordControlLogs');
+    $routes->get('voucher', 'Webmin\EricDemo::voucher');
 });
+
+
 /* End Eric Demo */
 
 

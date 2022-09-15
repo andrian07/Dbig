@@ -72,8 +72,6 @@ $assetsUrl = base_url('assets');
 
 		}
 
-
-
 		.table-product-price .label-price {
 			font-size: 30px;
 		}

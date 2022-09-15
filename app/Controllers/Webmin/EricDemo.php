@@ -116,7 +116,38 @@ class EricDemo extends WebminController
         return $this->renderView('demo/customer_point/exchange_point_detail', $data);
     }
 
+    public function userAccount()
+    {
+        $data = [
+            'title'         => 'Akun Pengguna'
+        ];
+        return $this->renderView('demo/auth/user_account', $data);
+    }
 
+    public function voucher()
+    {
+        $data = [
+            'title'         => 'Voucher'
+        ];
+        return $this->renderView('demo/voucher/voucher', $data);
+    }
+
+    public function passwordControl()
+    {
+        $data = [
+            'title'         => 'Password Control'
+        ];
+        return $this->renderView('demo/password_control/password_control', $data);
+    }
+
+
+    public function passwordControlLogs()
+    {
+        $data = [
+            'title'         => 'Password Control Log'
+        ];
+        return $this->renderView('demo/password_control/password_control_logs', $data);
+    }
 
 
 

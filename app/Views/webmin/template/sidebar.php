@@ -91,10 +91,10 @@
 				</li>
 
 				<li class="nav-item">
-					<a href="#" class="nav-link">
-						<i class="nav-icon fas fa-percent"></i>
+					<a href="<?= base_url('webmin/voucher') ?>" class="nav-link">
+						<i class="nav-icon fas fa-ticket-alt"></i>
 						<p>
-							Diskon Seasonal
+							Voucher
 							<span class="right badge badge-danger"></span>
 						</p>
 					</a>
@@ -216,21 +216,21 @@
 					</a>
 					<ul class="nav nav-treeview">
 						<li class="nav-item">
-							<a href="#" class="nav-link">
+							<a href="<?= base_url('webmin/user/user-group') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>Grup Pengguna</p>
 							</a>
 						</li>
 
 						<li class="nav-item">
-							<a href="#" class="nav-link">
+							<a href="<?= base_url('webmin/user/user-account') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>Akun Pengguna</p>
 							</a>
 						</li>
 
 						<li class="nav-item">
-							<a href="#" class="nav-link">
+							<a href="<?= base_url('webmin/password-control') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>Password Control</p>
 							</a>

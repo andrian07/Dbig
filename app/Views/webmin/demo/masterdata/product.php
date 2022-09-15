@@ -238,9 +238,28 @@ $assetsUrl = base_url('assets');
                                         <th colspan="2" class="text-center">G4 - PLATINUM</th>
                                         <th colspan="2" class="text-center">G5 - PROYEK</th>
                                         <th colspan="2" class="text-center">G6 - CUSTOM</th>
+
+
+                                        <th colspan="9" class="text-center">Diskon Seasonal</th>
+
+                                        <!-- Sisa Margin -->
+                                        <th colspan="2" class="text-center">G1 - UMUM</th>
+                                        <th colspan="2" class="text-center">G2 - SILVER</th>
+                                        <th colspan="2" class="text-center">G3 - GOLD</th>
+                                        <th colspan="2" class="text-center">G4 - PLATINUM</th>
+                                        <th colspan="2" class="text-center">G5 - PROYEK</th>
+                                        <th colspan="2" class="text-center">G6 - CUSTOM</th>
+
+                                        <th colspan="7" class="text-center">Alokasi Margin</th>
+
+
+
+
                                         <th rowspan="2" class="text-center">Dijual</th>
+                                        <th rowspan="2" class="text-center">Tampilkan&nbsp;Di<br>Mobile&nbsp;Apps</th>
                                     </tr>
                                     <tr>
+                                        <!-- Margin-->
                                         <th class="text-right">Margin </th>
                                         <th class="text-right">Hrg.Jual</th>
                                         <th class="text-right">Margin </th>
@@ -253,12 +272,54 @@ $assetsUrl = base_url('assets');
                                         <th class="text-right">Hrg.Jual</th>
                                         <th class="text-right">Margin </th>
                                         <th class="text-right">Hrg.Jual</th>
+
+                                        <!-- Diskon Seasonal -->
+                                        <th class="text-right">Diskon</th>
+
+                                        <th class="text-right">G1&nbsp;-&nbsp;UMUM</th>
+                                        <th class="text-right">G2&nbsp;-&nbsp;SILVER</th>
+                                        <th class="text-right">G3&nbsp;-&nbsp;GOLD</th>
+                                        <th class="text-right">G4&nbsp;-&nbsp;PLATINUM</th>
+                                        <th class="text-right">G5&nbsp;-&nbsp;PROYEK</th>
+                                        <th class="text-right">G6&nbsp;-&nbsp;CUSTOM</th>
+                                        <th class="">Mulai&nbsp;Tanggal</th>
+                                        <th class="">S.d&nbsp;Tanggal</th>
+
+                                        <!-- Margin-->
+                                        <th class="text-right">Sisa&nbsp;Margin </th>
+                                        <th class="text-right">Margin</th>
+                                        <th class="text-right">Sisa&nbsp;Margin </th>
+                                        <th class="text-right">Margin</th>
+                                        <th class="text-right">Sisa&nbsp;Margin </th>
+                                        <th class="text-right">Margin</th>
+                                        <th class="text-right">Sisa&nbsp;Margin </th>
+                                        <th class="text-right">Margin</th>
+                                        <th class="text-right">Sisa.&nbsp;Margin </th>
+                                        <th class="text-right">Margin</th>
+                                        <th class="text-right">Sisa.&nbsp;Margin </th>
+                                        <th class="text-right">Margin</th>
+
+                                        <!-- Alokasi Margin -->
+                                        <th class="text-right">Alokasi</th>
+                                        <th class="text-right">G1&nbsp;-&nbsp;UMUM</th>
+                                        <th class="text-right">G2&nbsp;-&nbsp;SILVER</th>
+                                        <th class="text-right">G3&nbsp;-&nbsp;GOLD</th>
+                                        <th class="text-right">G4&nbsp;-&nbsp;PLATINUM</th>
+                                        <th class="text-right">G5&nbsp;-&nbsp;PROYEK</th>
+                                        <th class="text-right">G6&nbsp;-&nbsp;CUSTOM</th>
+
+
+
+
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <button data-id="" data-json="" class="btn btn-sm btn-warning btnedit" data-toggle="tooltip" data-placement="top" data-title="Edit"><i class="fas fa-edit"></i></button>
+                                            <div class="btn-group">
+                                                <button data-id="" data-json="" class="btn btn-sm btn-warning btnedit" data-toggle="tooltip" data-placement="top" data-title="Edit"><i class="fas fa-edit"></i></button>
+                                                <button type="button" class="btn btn-sm btn-default btnsetdisc" data-toggle="tooltip" data-placement="top" data-title="Atur Diskon"><i class="fas fa-percent"></i></button>
+                                            </div>
                                         </td>
                                         <td>1234567890123</td>
                                         <td>PCS</td>
@@ -266,6 +327,8 @@ $assetsUrl = base_url('assets');
                                         <td class="text-right">25,000.00</td>
                                         <td class="text-right">2,750.00</td>
                                         <td class="text-right">27,750.00</td>
+
+                                        <!-- margin -->
                                         <td class="text-right">50.00%</td>
                                         <td class="text-right">41,700.00</td>
                                         <td class="text-right">40.00%</td>
@@ -274,10 +337,50 @@ $assetsUrl = base_url('assets');
                                         <td class="text-right">36,100.00</td>
                                         <td class="text-right">20.00%</td>
                                         <td class="text-right">33,300.00</td>
-                                        <td class="text-right">20.00%</td>
-                                        <td class="text-right">33,300.00</td>
                                         <td class="text-right">50.00%</td>
                                         <td class="text-right">41,700.00</td>
+                                        <td class="text-right">50.00%</td>
+                                        <td class="text-right">41,700.00</td>
+
+                                        <!-- disc seasonal -->
+                                        <td class="text-right">5.00%</td>
+                                        <td class="text-right">39,700.00</td>
+                                        <td class="text-right">37,000.00</td>
+                                        <td class="text-right">34,300.00</td>
+                                        <td class="text-right">31,700.00</td>
+                                        <td class="text-right">39,700.00</td>
+                                        <td class="text-right">39,700.00</td>
+                                        <td>01/09/2022</td>
+                                        <td>09/09/2022</td>
+
+                                        <!-- Sisa Margin -->
+                                        <td class="text-right">43.00%</td>
+                                        <td class="text-right">11,794.00</td>
+                                        <td class="text-right">33.00%</td>
+                                        <td class="text-right">9,158.00</td>
+                                        <td class="text-right">24.00%</td>
+                                        <td class="text-right">6,521.00</td>
+                                        <td class="text-right">14.00%</td>
+                                        <td class="text-right">3,885.00</td>
+                                        <td class="text-right">43.00%</td>
+                                        <td class="text-right">11,794.00</td>
+                                        <td class="text-right">43.00%</td>
+                                        <td class="text-right">11,794.00</td>
+
+
+                                        <!-- alokasi -->
+                                        <td class="text-right">50.00%</td>
+                                        <td class="text-right">5,897.00</td>
+                                        <td class="text-right">4,579.00</td>
+                                        <td class="text-right">3,261.00</td>
+                                        <td class="text-right">1,943.00</td>
+                                        <td class="text-right">5,897.00</td>
+                                        <td class="text-right">5,897.00</td>
+
+
+                                        <td class="text-center">
+                                            <span class="badge badge-success"><i class="fas fa-check-circle"></i></span>
+                                        </td>
                                         <td class="text-center">
                                             <span class="badge badge-success"><i class="fas fa-check-circle"></i></span>
                                         </td>
@@ -285,7 +388,9 @@ $assetsUrl = base_url('assets');
                                     <tr>
                                         <td>
                                             <div class="btn-group">
+
                                                 <button type="button" class="btn btn-sm btn-warning btnedit" data-toggle="tooltip" data-placement="top" data-title="Edit"><i class="fas fa-edit"></i></button>
+                                                <button type="button" class="btn btn-sm btn-default btnsetdisc" data-toggle="tooltip" data-placement="top" data-title="Atur Diskon"><i class="fas fa-percent"></i></button>
                                                 <button type="button" class="btn btn-sm btn-danger btndelete" data-toggle="tooltip" data-placement="top" data-title="Hapus"><i class="fas fa-times"></i></button>
                                             </div>
                                         </td>
@@ -295,6 +400,7 @@ $assetsUrl = base_url('assets');
                                         <td class="text-right">1,250,000.00</td>
                                         <td class="text-right">137,500.00</td>
                                         <td class="text-right">1,387,500.00</td>
+
                                         <td class="text-right">50.00%</td>
                                         <td class="text-right">2,081,300.00</td>
                                         <td class="text-right">40.00%</td>
@@ -303,17 +409,57 @@ $assetsUrl = base_url('assets');
                                         <td class="text-right">1,803,800.00</td>
                                         <td class="text-right">20.00%</td>
                                         <td class="text-right">1,665,000.00</td>
-                                        <td class="text-right">20.00%</td>
-                                        <td class="text-right">1,665,000.00</td>
                                         <td class="text-right">50.00%</td>
                                         <td class="text-right">2,081,300.00</td>
+                                        <td class="text-right">50.00%</td>
+                                        <td class="text-right">2,081,300.00</td>
+
+                                        <!-- disc seasonal -->
+                                        <td class="text-right">0.00%</td>
+                                        <td class="text-right">2,081,300.00</td>
+                                        <td class="text-right">1,942,500.00</td>
+                                        <td class="text-right">1,803,800.00</td>
+                                        <td class="text-right">1,665,000.00</td>
+                                        <td class="text-right">2,081,300.00</td>
+                                        <td class="text-right">2,081,300.00</td>
+                                        <td>-</td>
+                                        <td>-</td>
+
+                                        <!-- Sisa Margin -->
+                                        <td class="text-right">50.00%</td>
+                                        <td class="text-right">693,750.00</td>
+                                        <td class="text-right">40.00%</td>
+                                        <td class="text-right">555,000.00</td>
+                                        <td class="text-right">30.00%</td>
+                                        <td class="text-right">416,250.00</td>
+                                        <td class="text-right">20.00%</td>
+                                        <td class="text-right">277,500.00</td>
+                                        <td class="text-right">50.00%</td>
+                                        <td class="text-right">693,750.00</td>
+                                        <td class="text-right">50.00%</td>
+                                        <td class="text-right">693,750.00</td>
+
+                                        <!-- alokasi -->
+                                        <td class="text-right">50.00%</td>
+                                        <td class="text-right">346,875.00</td>
+                                        <td class="text-right">277,500.00</td>
+                                        <td class="text-right">208,125.00</td>
+                                        <td class="text-right">138,750.00</td>
+                                        <td class="text-right">346,875.00</td>
+                                        <td class="text-right">346,875.00</td>
+
+
+
+                                        <td class="text-center">
+                                            <span class="badge badge-danger"><i class="fas fa-times-circle"></i></span>
+                                        </td>
                                         <td class="text-center">
                                             <span class="badge badge-danger"><i class="fas fa-times-circle"></i></span>
                                         </td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
-                                    <td colspan="21">
+                                    <td colspan="49">
                                         <a href="#" id="btnadd_item">
                                             <i class="fas fa-plus"></i> Tambahkan
                                         </a>
@@ -502,7 +648,6 @@ $assetsUrl = base_url('assets');
                                     </table>
                                 </div>
                             </div>
-
                             <div class="tab-pane fade" id="custom-content-above-price" role="tabpanel" aria-labelledby="custom-content-above-profile-tab">
                                 <div class="row">
                                     <div class="col-md-6 border-right border-primary">
@@ -543,9 +688,23 @@ $assetsUrl = base_url('assets');
                                                 <input id="parcel_cost" name="parcel_cost" type="text" class="form-control text-right" value="0" readonly />
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
 
+                                        <div class="form-group">
+                                            <label for="parcel_margin_allocation" class="col-sm-12">Alokasi Margin</label>
+                                            <div class="col-sm-12">
+                                                <input id="parcel_margin_allocation" name="parcel_margin_allocation" type="text" class="form-control text-right" value="0" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <div class="col-sm-12">
+                                                <input type="checkbox" class="form-check-input" id="parcel_mobile_app">
+                                                <label class="form-check-label" for="parcel_mobile_app" checked>Tampilkan di Mobile Apps</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 ">
                                         <div class="form-group">
                                             <label for="promo_price" class="col-sm-12">G1 - UMUM</label>
                                             <div class="col-sm-12">
@@ -637,6 +796,91 @@ $assetsUrl = base_url('assets');
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="form-group">
+                                            <label for="parcel_disc_seasonal" class="col-sm-12">Disc Seasonal</label>
+                                            <div class="col-sm-12">
+                                                <input id="parcel_disc_seasonal" name="parcel_disc_seasonal" type="text" class="form-control text-right" value="0" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="parcel_disc_start_date" class="col-sm-12">Mulai Tanggal</label>
+                                            <div class="col-sm-12">
+                                                <input id="parcel_disc_start_date" name="parcel_disc_start_date" type="date" class="form-control" value="" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="parcel_disc_end_date" class="col-sm-12">Sampai Tanggal</label>
+                                            <div class="col-sm-12">
+                                                <input id="parcel_disc_end_date" name="parcel_disc_end_date" type="date" class="form-control" value="" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 mt-3">
+
+
+                                        <p class="text-center"><b>Detail Disc & Margin</b></p>
+                                        <table class="table table-striped table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <td>Grup</td>
+                                                    <td>Harga Jual<small>(Rp)</small></td>
+                                                    <td>Margin <small>(Rp)</small></td>
+                                                    <td>Sisa Margin</td>
+                                                    <td>Alokasi Margin <small>(Rp)</small></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>G1&nbsp;-&nbsp;UMUM</td>
+                                                    <td class="text-right">107,200</td>
+                                                    <td class="text-right">29,400.00</td>
+                                                    <td class="text-right">38.00%</td>
+                                                    <td class="text-right">14,675.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>G2&nbsp;-&nbsp;SILVER</td>
+                                                    <td class="text-right">99,800.00</td>
+                                                    <td class="text-right">22,000.00</td>
+                                                    <td class="text-right">28.00%</td>
+                                                    <td class="text-right">11,000.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>G3&nbsp;-&nbsp;GOLD</td>
+                                                    <td class="text-right">92,400.00</td>
+                                                    <td class="text-right">14,600.00</td>
+                                                    <td class="text-right">20.00%</td>
+                                                    <td class="text-right">7,300.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>G4&nbsp;-&nbsp;PLATINUM</td>
+                                                    <td class="text-right">85,000.00</td>
+                                                    <td class="text-right">7,200.00</td>
+                                                    <td class="text-right">9.00%</td>
+                                                    <td class="text-right">3,600.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>G5&nbsp;-&nbsp;PROYEK</td>
+                                                    <td class="text-right">107,200</td>
+                                                    <td class="text-right">29,400.00</td>
+                                                    <td class="text-right">38.00%</td>
+                                                    <td class="text-right">14,675.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>G6&nbsp;-&nbsp;CUSTOM</td>
+                                                    <td class="text-right">107,200</td>
+                                                    <td class="text-right">29,400.00</td>
+                                                    <td class="text-right">38.00%</td>
+                                                    <td class="text-right">14,675.00</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+
+
                                     </div>
                                 </div>
                             </div>
@@ -708,7 +952,7 @@ $assetsUrl = base_url('assets');
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="product_tax" class="col-sm-12">Jenis Produk</label>
+                                            <label for="product_tax" class="col-sm-12">Golongan Produk</label>
                                             <div class="col-sm-12">
                                                 <select id="product_tax" name="product_tax" class="form-control">
                                                     <option value="Y" selected>Barang Kena Pajak (BKP)</option>
@@ -838,10 +1082,23 @@ $assetsUrl = base_url('assets');
                                         </div>
                                     </div>
 
+                                    <div class="form-group">
+                                        <label for="margin_allocation" class="col-sm-12">Alokasi Margin</label>
+                                        <div class="col-sm-12">
+                                            <input id="margin_allocation" name="margin_allocation" type="text" class="form-control text-right" value="0" />
+                                        </div>
+                                    </div>
+
                                     <div class="form-check">
                                         <div class="col-sm-12">
                                             <input type="checkbox" class="form-check-input" id="is_sale">
                                             <label class="form-check-label" for="is_sale" checked>Dijual</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-check">
+                                        <div class="col-sm-12">
+                                            <input type="checkbox" class="form-check-input" id="show_mobile_app">
+                                            <label class="form-check-label" for="show_mobile_app" checked>Tampilkan di Mobile Apps</label>
                                         </div>
                                     </div>
                                 </div>
@@ -862,7 +1119,6 @@ $assetsUrl = base_url('assets');
                                             </div>
                                         </div>
                                     </div>
-
 
                                     <div class="form-group">
                                         <label for="promo_price" class="col-sm-12">G2 - SILVER</label>
@@ -893,7 +1149,6 @@ $assetsUrl = base_url('assets');
                                             </div>
                                         </div>
                                     </div>
-
 
                                     <div class="form-group">
                                         <label for="promo_price" class="col-sm-12">G4 - PLATINUM</label>
@@ -954,6 +1209,141 @@ $assetsUrl = base_url('assets');
         </div>
 
 
+        <div class="modal fade" id="modal-disc">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="title-frmdisc">Ubah Diskon Seasonal</h4>
+                        <button type="button" class="close close-modal-disc">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="frmdisc" class="form-horizontal">
+                        <div class="modal-body">
+
+                            <div class="row">
+                                <div class="col-md-4 border-right border-primary">
+                                    <p class="text-center"><b>Detail Item</b></p>
+
+
+                                    <div class="form-group">
+                                        <label for="disc_item_code" class="col-sm-12">Kode Item / Barcode</label>
+                                        <div class="col-sm-12">
+                                            <input id="disc_item_code" name="disc_item_code" type="text" class="form-control" maxlength="55" data-parsley-trigger-after-failure="focusout" data-parsley-vitemcode value="1234567890123" readonly required />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="disc_purchase_price" class="col-sm-12">DPP</label>
+                                        <div class="col-sm-12">
+                                            <input id="disc_purchase_price" name="disc_purchase_price" type="text" class="form-control text-right" data-parsley-vpurchaseprice readonly value="0" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="disc_purchase_tax" class="col-sm-12">PPN <?= PPN_TEXT ?></label>
+                                        <div class="col-sm-12">
+                                            <input id="disc_purchase_tax" name="disc_purchase_tax" type="text" class="form-control text-right" data-parsley-vpurchaseprice readonly value="0" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="disc_purchase_price_with_tax" class="col-sm-12">Harga Beli</label>
+                                        <div class="col-sm-12">
+                                            <input id="disc_purchase_price_with_tax" name="disc_purchase_price_with_tax" type="text" class="form-control text-right" value="0" readonly />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="disc_seasonal" class="col-sm-12">Disc Seasonal</label>
+                                        <div class="col-sm-12">
+                                            <input id="disc_seasonal" name="disc_seasonal" type="text" class="form-control text-right" value="0" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="disc_start_date" class="col-sm-12">Mulai Tanggal</label>
+                                        <div class="col-sm-12">
+                                            <input id="disc_start_date" name="disc_start_date" type="date" class="form-control" value="" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="disc_end_date" class="col-sm-12">Sampai Tanggal</label>
+                                        <div class="col-sm-12">
+                                            <input id="disc_end_date" name="disc_end_date" type="date" class="form-control" value="" />
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="text-center"><b>Detail Disc & Margin</b></p>
+                                    <table class="table table-striped table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <td>Grup</td>
+                                                <td>Harga Diskon <small>(Rp)</small></td>
+                                                <td>Margin <small>(Rp)</small></td>
+                                                <td>Sisa Margin</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>G1&nbsp;-&nbsp;UMUM</td>
+                                                <td class="text-right">39,700.00</td>
+                                                <td class="text-right">11,794.00</td>
+                                                <td class="text-right">43.00%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>G2&nbsp;-&nbsp;SILVER</td>
+                                                <td class="text-right">37,000.00</td>
+                                                <td class="text-right">9,158.00</td>
+                                                <td class="text-right">33.00%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>G3&nbsp;-&nbsp;GOLD</td>
+                                                <td class="text-right">34,300.00</td>
+                                                <td class="text-right">6,521.00</td>
+                                                <td class="text-right">24.00%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>G4&nbsp;-&nbsp;PLATINUM</td>
+                                                <td class="text-right">31,700.00</td>
+                                                <td class="text-right">3,885.00</td>
+                                                <td class="text-right">14.00%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>G5&nbsp;-&nbsp;PROYEK</td>
+                                                <td class="text-right">39,700.00</td>
+                                                <td class="text-right">11,794.00</td>
+                                                <td class="text-right">43.00%</td>
+                                            </tr>
+                                            <tr>
+                                                <td>G6&nbsp;-&nbsp;CUSTOM</td>
+                                                <td class="text-right">39,700.00</td>
+                                                <td class="text-right">11,794.00</td>
+                                                <td class="text-right">43.00%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button id="btncancel" class="btn btn-danger close-modal-disc"><i class="fas fa-times-circle"></i> Batal</button>
+                            <button id="btnsave_disc" class="btn btn-success close-modal-disc"><i class="fas fa-save"></i> Simpan</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+
     </div><!-- /.container-fluid -->
 </section>
 
@@ -993,6 +1383,8 @@ $assetsUrl = base_url('assets');
         let margin_rate_G6 = new AutoNumeric('#margin_rate_G6', configMargin);
         let sales_price_G6 = new AutoNumeric('#sales_price_G6', configRp);
 
+        let margin_allocation = new AutoNumeric('#margin_allocation', configMargin);
+
         let parcel_price = new AutoNumeric('#parcel_price', configRp);
         let parcel_tax = new AutoNumeric('#parcel_tax', configRp);
         let parcel_cost = new AutoNumeric('#parcel_cost', configRp);
@@ -1009,7 +1401,14 @@ $assetsUrl = base_url('assets');
         let parcel_sales_price_G5 = new AutoNumeric('#parcel_sales_price_G5', configRp);
         let parcel_margin_rate_G6 = new AutoNumeric('#parcel_margin_rate_G6', configMargin);
         let parcel_sales_price_G6 = new AutoNumeric('#parcel_sales_price_G6', configRp);
+        let parcel_disc_seasonal = new AutoNumeric('#parcel_disc_seasonal', configDisc);
+        let parcel_margin_allocation = new AutoNumeric('#parcel_margin_allocation', configMargin);
 
+        // disc seasonal //
+        let disc_purchase_price = new AutoNumeric('#disc_purchase_price', configRp);
+        let disc_purchase_tax = new AutoNumeric('#disc_purchase_tax', configRp);
+        let disc_purchase_price_with_tax = new AutoNumeric('#disc_purchase_price_with_tax', configRp);
+        let disc_seasonal = new AutoNumeric('#disc_seasonal', configDisc);
 
         parcel_price.set(75000);
         parcel_tax.set(2750);
@@ -1026,7 +1425,17 @@ $assetsUrl = base_url('assets');
         parcel_sales_price_G5.set(89500);
         parcel_margin_rate_G6.set(45);
         parcel_sales_price_G6.set(112800)
+        parcel_disc_seasonal.set(5);
+        parcel_margin_allocation.set(50);
+        $('#parcel_disc_start_date').val('2022-09-01');
+        $('#parcel_disc_end_date').val('2022-09-09');
 
+        disc_purchase_price.set(25000);
+        disc_purchase_tax.set(2750);
+        disc_purchase_price_with_tax.set(27750);
+        disc_seasonal.set(5);
+        $('#disc_start_date').val('2022-09-01')
+        $('#disc_end_date').val('2022-09-09')
 
         $('#filter_category').select2({
             data: [{
@@ -1285,7 +1694,7 @@ $assetsUrl = base_url('assets');
             setSelect2('#base_unit', '1', 'PCS');
             $('#product_tax').val('N');
             $('#active').val('Y');
-            $('#is_parcel').val('N').prop('disabled', true);
+            $('#is_parcel').val('Y').prop('disabled', true);
             $('#product_description').val('Paket Toto');
             min_stock.set(10);
             $('#modal-product').modal(configModal);
@@ -1346,7 +1755,9 @@ $assetsUrl = base_url('assets');
             sales_price_G5.set(0);
             margin_rate_G6.set(0);
             sales_price_G6.set(0);
+            margin_allocation.set(0);
             $('#is_sale').prop('checked', true);
+            $('#show_mobile_app').prop('checked', true);
             $('#modal-item').modal(configModal);
         })
 
@@ -1370,8 +1781,16 @@ $assetsUrl = base_url('assets');
             sales_price_G5.set(1665000);
             margin_rate_G6.set(50);
             sales_price_G6.set(2081300);
+            margin_allocation.set(50);
             $('#is_sale').prop('checked', false);
+            $('#show_mobile_app').prop('checked', false);
             $('#modal-item').modal(configModal);
+        })
+
+
+        $('#tblitem').on('click', '.btnsetdisc', function(e) {
+            e.preventDefault;
+            $('#modal-disc').modal(configModal);
         })
 
         $('.close-modal-item').click(function(e) {
@@ -1407,6 +1826,14 @@ $assetsUrl = base_url('assets');
                 }
             })
         })
+
+
+        $('.close-modal-disc').click(function(e) {
+            e.preventDefault();
+            $('#modal-disc').modal('hide');
+
+        })
+
 
 
     })

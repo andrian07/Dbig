@@ -132,7 +132,7 @@ $assetsUrl = base_url('assets');
                                                     <td>01/08/2022</td>
                                                     <td>Kopin Mangkok Vegetable Bowl 9″ Kukuruyuk (KPQ-9VB)</td>
                                                     <td>50</td>
-                                                    <td>System</td>
+                                                    <td>Reza</td>
                                                     <td>
                                                         <span class="badge badge-success">Selesai</span>
                                                     </td>
@@ -148,7 +148,7 @@ $assetsUrl = base_url('assets');
                                                     <td>21/08/2022</td>
                                                     <td>Kopin Mangkok Vegetable Bowl 9″ Kukuruyuk (KPQ-9VB)</td>
                                                     <td>50</td>
-                                                    <td>Reza</td>
+                                                    <td>System</td>
                                                     <td>
                                                         <span class="badge badge-danger">Batal</span>
                                                     </td>
@@ -199,7 +199,7 @@ $assetsUrl = base_url('assets');
                                                 <tr>
                                                     <td>1</td>
                                                     <td>01/08/2022</td>
-                                                    <td>Transaksi SI/UTM/22/08/00001</td>
+                                                    <td>Belanja Rp150,000.00</td>
                                                     <td><span class="text-success">+150<span></td>
                                                 </tr>
 
