@@ -12,10 +12,10 @@ $assetsUrl = base_url('assets');
             <div class="col-sm-6">
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary"><i class="fas fa-plus"></i> New</button>
-                    <button type="button" class="btn btn-default"><i class="fas fa-print"></i> Print</button>
+                    <button type="button" id="btnprint" class="btn btn-default"><i class="fas fa-print"></i> Print</button>
+
                     <button type="button" id="btnpayment" class="btn btn-success"><i class="fas fa-dollar-sign"></i> Pembayaran</button>
                 </div>
-
             </div>
             <div class="col-sm-6">
                 <div class="row">
@@ -27,7 +27,6 @@ $assetsUrl = base_url('assets');
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -45,7 +44,7 @@ $assetsUrl = base_url('assets');
                                 <div class="row">
                                     <div class="col-md-5">
                                         <div class="form-group">
-                                            <label>Barcode / Nama Produk</label>
+                                            <label>Barcode / Nama Produk &nbsp;&nbsp;<span id="btnsearch" class="badge badge-info"><i class="fas fa-search"></i></span></label>
                                             <input id="scanner" name="scanner" type="text" class="form-control fs-20" placeholder="ketikkan nama produk atau barcode" value="" required>
                                         </div>
                                     </div>
@@ -59,7 +58,7 @@ $assetsUrl = base_url('assets');
                                         <div class="form-group">
                                             <label>&nbsp;</label>
                                             <div class="col-12">
-                                                <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle float-right"><i class="fas fa-plus"></i></button>
+                                                <button id="btnadd_temp" class="btn btn-md btn-primary float-right rounded-circle"><i class="fas fa-plus"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -297,7 +296,7 @@ $assetsUrl = base_url('assets');
 </div>
 
 <div class="modal fade" id="modal-payment">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">PEMBAYARAN</h4>
@@ -328,16 +327,16 @@ $assetsUrl = base_url('assets');
                             <div class="col-12">
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="exampleCheck1" checked>
-                                    <label class="form-check-label font-weight-bold" for="exampleCheck1">VOUCHER</label>
+                                    <label class="form-check-label " for="exampleCheck1"><span class="font-weight-bold">VOUCHER</span>&nbsp;<span id="detail">Diskon Rp40,0000</span></label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-12">
                                     <div class="row">
-                                        <div class="col-sm-6">
-                                            <input id="voucher_code" name="voucher_code" type="text" class="form-control pos-input fs-35" value="0001AX57C652" />
+                                        <div class="col-sm-4">
+                                            <input id="voucher_code" name="voucher_code" type="text" class="form-control pos-input fs-35" value="000000100001" />
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-8">
                                             <input id="voucher_value" name="voucher_value" type="text" class="form-control text-right pos-input fs-35 currency-input" value="40000" readonly />
                                         </div>
                                     </div>
@@ -354,10 +353,13 @@ $assetsUrl = base_url('assets');
                             <div class="form-group">
                                 <div class="col-sm-12">
                                     <div class="row">
-                                        <div class="col-sm-6">
-                                            <input id="appr_code" name="appr_code" type="text" class="form-control pos-input fs-35" value="1234567890" placeholder="KODE APPR" />
+                                        <div class="col-sm-4">
+                                            <input id="card_number" name="card_number" type="text" class="form-control pos-input fs-35" placeholder="NO KARTU" value="1234567890" />
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-4">
+                                            <input id="appr_code" name="appr_code" type="text" class="form-control pos-input fs-35" value="090908" placeholder="KODE APPR" />
+                                        </div>
+                                        <div class="col-sm-4">
                                             <input id="bca_value" name="bca_value" type="text" class="form-control text-right pos-input fs-35 currency-input" value="10000" />
                                         </div>
                                     </div>
@@ -375,10 +377,13 @@ $assetsUrl = base_url('assets');
                             <div class="form-group">
                                 <div class="col-sm-12">
                                     <div class="row">
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-4">
+                                            <input id="card_number" name="card_number" type="text" class="form-control pos-input fs-35" value="" placeholder="NO KARTU" readonly />
+                                        </div>
+                                        <div class="col-sm-4">
                                             <input id="appr_code" name="appr_code" type="text" class="form-control pos-input fs-35" value="" placeholder="KODE APPR" readonly />
                                         </div>
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-4">
                                             <input id="bca_value" name="bca_value" type="text" class="form-control text-right pos-input fs-35" value="0" readonly />
                                         </div>
                                     </div>
@@ -420,6 +425,168 @@ $assetsUrl = base_url('assets');
                     <div class="btn-group col-12">
                         <button type="button" class="btn btn-success col-6 close-modal-payment"><i class="fas fa-check"></i> Ok</button>
                         <button type="button" class="btn btn-danger col-6 close-modal-payment"><i class="fas fa-times-circle"></i> Batal</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="modal-search">
+    <div class="modal-dialog modal-lg modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">PENCARIAN PRODUK</h4>
+                <button type="button" class="close close-modal-search">
+                    <span aria-hidden="true">[END]</span>
+                </button>
+            </div>
+            <form id="frmsearch" class="form-horizontal ">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label>Kategori</label>
+                                <select id="filter_category" name="filter_category" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label>Brand</label>
+                                <select id="filter_brand" name="filter_brand" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <!-- text input -->
+                            <div class="form-group">
+                                <label>Jenis Produk</label>
+                                <select id="filter_product_type" name="filter_product_type" class="form-control">
+                                    <option value="all">Semua</option>
+                                    <option value="Y">Paket</option>
+                                    <option value="N">Produk</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <table id="tblsearch" class="table table-striped table-hovered" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th data-priority="1">#</th>
+                                        <th data-priority="2">Nama Produk</th>
+                                        <th data-priority="4">Satuan</th>
+                                        <th data-priority="7">Harga Produk</th>
+                                        <th data-priority="8">Disc. Seasonal</th>
+                                        <th data-priority="9">Harga Jual</th>
+                                        <th data-priority="10">Gambar Produk</th>
+                                        <th data-priority="3">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>
+                                            <b>P000001</b><br>
+                                            Toto Gantungan Double Robe Hook (TX04AES)
+                                        </td>
+                                        <td>PCS</td>
+                                        <td>
+                                            38,900.00
+                                        </td>
+                                        <td>5.00%</td>
+                                        <td>
+                                            37,000.00
+                                        </td>
+
+                                        <td>
+                                            <a class="fancy_image" href="<?= base_url('assets/demo/00000565-TX704AES.jpg') ?>"><img src="<?= base_url('assets/demo/00000565-TX704AES.jpg') ?>" alt="" width="100px" height="120px" /></a>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary btnadd"><i class="fas fa-plus"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>
+                                            <b>P000001</b><br>
+                                            Toto Gantungan Double Robe Hook (TX04AES)
+                                        </td>
+                                        <td>DUS</td>
+                                        <td>
+                                            1,942,500.00
+                                        </td>
+                                        <td>0.00%</td>
+                                        <td>
+                                            1,942,500.00
+                                        </td>
+
+                                        <td>
+                                            <a class="fancy_image" href="<?= base_url('assets/demo/00000565-TX704AES.jpg') ?>"><img src="<?= base_url('assets/demo/00000565-TX704AES.jpg') ?>" alt="" width="100px" height="120px" /></a>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary btnadd"><i class="fas fa-plus"></i></button>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>3</td>
+                                        <td>
+                                            <b>P000002</b><br>
+                                            Toto Floor Drain (TX1DA)
+                                        </td>
+                                        <td>PCS</td>
+                                        <td>
+                                            38,000.00
+                                        </td>
+                                        <td>0.00%</td>
+                                        <td>
+                                            38,000.00
+                                        </td>
+
+                                        <td>
+                                            <a class="fancy_image" href="<?= base_url('assets/demo/00000572-TX1DA.jpg') ?>"><img src="<?= base_url('assets/demo/00000572-TX1DA.jpg') ?>" alt="" width="100px" height="120px" /></a>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary btnadd"><i class="fas fa-plus"></i></button>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>4</td>
+                                        <td>
+                                            <b>P000002</b><br>
+                                            Toto Floor Drain (TX1DA)
+                                        </td>
+                                        <td>DUS</td>
+                                        <td>
+                                            1,900,000.00
+                                        </td>
+                                        <td>0.00%</td>
+                                        <td>
+                                            1,900,000.00
+                                        </td>
+                                        <td>
+                                            <a class="fancy_image" href="<?= base_url('assets/demo/00000572-TX1DA.jpg') ?>"><img src="<?= base_url('assets/demo/00000572-TX1DA.jpg') ?>" alt="" width="100px" height="120px" /></a>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary btnadd"><i class="fas fa-plus"></i></button>
+                                        </td>
+                                    </tr>
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </form>
@@ -555,6 +722,30 @@ $assetsUrl = base_url('assets');
             ]
         };
 
+        $('#filter_category').select2({
+            data: [{
+                    id: '1',
+                    text: 'Floor Drain'
+                },
+                {
+                    id: '2',
+                    text: 'Gantungan'
+                },
+            ]
+        })
+
+        $('#filter_brand').select2({
+            data: [{
+                    id: '1',
+                    text: 'Toto'
+                },
+                {
+                    id: '2',
+                    text: 'Philips'
+                },
+            ]
+        })
+
         let temp_table = $('#tbltemp').DataTable(config_tbltemp);
 
         $('.select-salesman').select2({
@@ -584,12 +775,70 @@ $assetsUrl = base_url('assets');
         $('#detail-customer').click(function(e) {
             e.preventDefault();
             $('#modal-detail-customer').modal('show');
+        })
 
+        $('#btnprint').click(function(e) {
+            window.open(base_url + '/pos/view-sales-receipt', '_blank');
         })
 
         let obj = new AutoNumeric.multiple('.currency-input', configRp);
         let obj2 = new AutoNumeric.multiple('.number-input', configQty);
         let obj4 = new AutoNumeric.multiple('.percent-input', configDisc);
+
+        $('#btnsearch').click(function(e) {
+            e.preventDefault();
+            $('#modal-search').modal('show');
+        })
+
+        let tblsearch = $("#tblsearch").DataTable({
+            select: true,
+            responsive: true,
+            fixedColumns: true,
+            order: [
+                [1, 'asc']
+            ],
+            language: {
+                url: lang_datatables,
+            },
+
+            drawCallback: function(settings) {
+                _initTooltip();
+            },
+            columnDefs: [{
+                    width: 50,
+                    targets: 7
+                },
+                {
+                    width: 300,
+                    targets: [1]
+                },
+                {
+                    targets: [0, 7],
+                    orderable: false,
+                    searchable: false,
+                },
+                {
+                    targets: [6, 7],
+                    className: "text-center",
+                },
+                {
+                    targets: [0, 3, 4, 5],
+                    className: "text-right",
+                },
+            ],
+        });
+
+
+        $('.close-modal-search').click(function(e) {
+            e.preventDefault();
+            $('#modal-search').modal('hide');
+        })
+
+        $('#tblsearch').on('click', '.btnadd', function(e) {
+            e.preventDefault();
+            $('#modal-search').modal('hide');
+        })
+
 
     })
 </script>

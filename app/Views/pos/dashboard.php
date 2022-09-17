@@ -107,6 +107,80 @@ $assetsUrl = base_url('assets');
     </div>
 </div>
 
+<div class="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-primary card-outline">
+                    <div class="card-body">
+                        <h3 class="text-center">Histori Kas</h3>
+                        <div class="row mb-1">
+                            <table id="tblcashflow" class="table table-bordered table-hover" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th width="20%">Tanggal</th>
+                                        <th width="20%">Jenis Kas</th>
+                                        <th width="35%">Keterangan</th>
+                                        <th width="25%" class="text-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <?= indo_short_date('2022-08-24 08:00:00', TRUE, '<br>') ?>
+                                        </td>
+                                        <td>
+                                            Kas Awal
+                                        </td>
+                                        <td>
+                                            -
+                                        </td>
+                                        <td class="text-right">
+                                            200,000.00
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <?= indo_short_date('2022-08-24 09:00:00', TRUE, '<br>') ?>
+                                        </td>
+                                        <td>
+                                            Kas Keluar
+                                        </td>
+                                        <td>
+                                            Setor Ke Kabag
+                                        </td>
+                                        <td class="text-right">
+                                            100,000.00
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <?= indo_short_date('2022-08-24 18:00:00', TRUE, '<br>') ?>
+                                        </td>
+                                        <td>
+                                            Kas Masuk
+                                        </td>
+                                        <td>
+                                            Tambah Uang Kas
+                                        </td>
+                                        <td class="text-right">
+                                            50,000.00
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
 
 <div class="content">
     <div class="container">
@@ -383,14 +457,11 @@ $assetsUrl = base_url('assets');
 <script>
     $(document).ready(function() {
         const config_tblsales = {
-            scrollY: "240px",
-            scrollCollapse: true,
-            paging: false,
+            paging: true,
             pageLength: 10,
-            autoWidth: false,
+            autoWidth: true,
             select: true,
             responsive: true,
-            fixedColumns: true,
             order: [
                 [0, 'desc']
             ],
@@ -414,6 +485,9 @@ $assetsUrl = base_url('assets');
             ]
         };
 
+        let open_balance = new AutoNumeric('#open_balance', configRp);
+        let close_balance = new AutoNumeric('#close_balance', configRp);
+
         let tblsales = $('#tblsales').DataTable(config_tblsales);
         let tblsalesreturn = $('#tblsalesreturn').DataTable(config_tblsales);
 
@@ -434,6 +508,7 @@ $assetsUrl = base_url('assets');
 
         $('#btnopenpos').click(function(e) {
             e.preventDefault();
+            open_balance.set(0);
             $('#modal-openpos').modal('show');
         })
 
@@ -448,6 +523,7 @@ $assetsUrl = base_url('assets');
 
         $('#btnclosepos').click(function(e) {
             e.preventDefault();
+            close_balance.set(203400);
             $('#modal-closepos').modal('show');
         })
 
@@ -468,6 +544,16 @@ $assetsUrl = base_url('assets');
         $('.close-modal-cash').click(function(e) {
             e.preventDefault();
             $('#modal-cash').modal('hide');
+        })
+
+        $('.close-modal-closepos').click(function(e) {
+            e.preventDefault();
+            $('#modal-closepos').modal('hide');
+        })
+
+        $('.close-modal-openpos').click(function(e) {
+            e.preventDefault();
+            $('#modal-openpos').modal('hide');
         })
 
         $('#btnopenpos').show();

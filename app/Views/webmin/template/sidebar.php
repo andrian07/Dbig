@@ -204,7 +204,30 @@
 					</ul>
 				</li>
 
+				<li class="nav-item">
+					<a href="javascript:void(0)" class="nav-link">
+						<i class="nav-icon fas fa-money-bill"></i>
+						<p>
+							Pelunasan
+							<i class="right fas fa-angle-left"></i>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="<?= base_url('webmin/debt-repayment') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Pelunasan Hutang</p>
+							</a>
+						</li>
 
+						<li class="nav-item">
+							<a href="<?= base_url('webmin/receivable-repayment') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Pelunasan Piutang</p>
+							</a>
+						</li>
+					</ul>
+				</li>
 
 				<li class="nav-item">
 					<a href="javascript:void(0)" class="nav-link">
@@ -247,15 +270,6 @@
 						</p>
 					</a>
 				</li>
-
-
-
-
-
-
-
-
-
 
 				<li class="nav-item">
 					<a id="btnlogout" href="<?= base_url('webmin/auth/logout') ?>" data-question="Yakin ingin keluar dari aplikasi?" class="nav-link">

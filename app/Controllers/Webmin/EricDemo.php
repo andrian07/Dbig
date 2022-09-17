@@ -150,6 +150,24 @@ class EricDemo extends WebminController
     }
 
 
+    public function debtRepayment()
+    {
+        $data = [
+            'title'         => 'Pelunasan Hutang'
+        ];
+        return $this->renderView('demo/repayment/debt_repayment', $data);
+    }
+
+
+    public function receivableRepayment()
+    {
+        $data = [
+            'title'         => 'Pelunasan Piutang'
+        ];
+        return $this->renderView('demo/repayment/receivable_repayment', $data);
+    }
+
+
 
     //--------------------------------------------------------------------
 

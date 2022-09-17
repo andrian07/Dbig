@@ -12,7 +12,7 @@ $assetsUrl = base_url('assets');
             <div class="col-sm-6">
                 <div class="btn-group">
                     <button type="button" class="btn btn-primary"><i class="fas fa-plus"></i> New</button>
-                    <button type="button" class="btn btn-default"><i class="fas fa-print"></i> Print</button>
+                    <button id="btnprint" type="button" class="btn btn-default"><i class="fas fa-print"></i> Print</button>
                     <button type="button" id="btnsave" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
                 </div>
 
@@ -328,6 +328,9 @@ $assetsUrl = base_url('assets');
         let obj2 = new AutoNumeric.multiple('.number-input', configQty);
         let obj4 = new AutoNumeric.multiple('.percent-input', configDisc);
 
+        $('#btnprint').click(function(e) {
+            window.open(base_url + '/pos/view-sales-return-receipt', '_blank');
+        })
     })
 </script>
 <?= $this->endSection() ?>

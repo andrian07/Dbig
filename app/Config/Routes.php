@@ -104,6 +104,11 @@ $routes->group('pos', ['filter' => 'posauth'], static function ($routes) {
 
     $routes->get('view-sales-recap', 'Pos\Dashboard::viewSalesRecap');
     $routes->get('sales-recap', 'Pos\Dashboard::salesRecap');
+
+    $routes->get('view-sales-receipt', 'Pos\Dashboard::viewSalesReceipt');
+    $routes->get('view-sales-return-receipt', 'Pos\Dashboard::viewSalesReturnReceipt');
+    $routes->get('sales-receipt/(:alpha)', 'Pos\Dashboard::salesReceipt/$1');
+    $routes->get('sales-return-receipt', 'Pos\Dashboard::salesReturnReceipt');
 });
 
 $routes->get('pos/price-checker', 'Pos\Utility::priceChecker');
@@ -131,6 +136,10 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('password-control', 'Webmin\EricDemo::passwordControl');
     $routes->get('password-control/logs', 'Webmin\EricDemo::passwordControlLogs');
     $routes->get('voucher', 'Webmin\EricDemo::voucher');
+
+
+    $routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');
+    $routes->get('receivable-repayment', 'Webmin\EricDemo::receivableRepayment');
 });
 
 

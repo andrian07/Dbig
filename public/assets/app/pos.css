@@ -33,3 +33,10 @@
   background-color: #aceca1;
   color: black;
 }
+
+
+@media (min-width: 1200px) {
+  .modal-xl {
+     width: 90%; 
+  }
+}

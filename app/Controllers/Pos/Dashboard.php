@@ -34,7 +34,6 @@ class Dashboard extends PosController
         }
     }
 
-
     public function viewSalesRecap()
     {
         $data = [
@@ -43,5 +42,48 @@ class Dashboard extends PosController
 
         return $this->renderView('view_sales_recap', $data);
     }
+
+    public function viewSalesReceipt()
+    {
+        $data = [
+            'title'     => 'Sample Struk Penjualan',
+        ];
+
+        return $this->renderView('receipt/view_sales_receipt', $data);
+    }
+
+    public function salesReceipt($show_disc)
+    {
+        $data = [
+            'title'     => 'Sample Struk Penjualan',
+        ];
+
+        if ($show_disc == 'Y') {
+            return $this->renderView('receipt/sales_receipt', $data);
+        } else {
+            return $this->renderView('receipt/sales_receipt_no_disc', $data);
+        }
+    }
+
+
+    public function viewSalesReturnReceipt()
+    {
+        $data = [
+            'title'     => 'Sample Struk Retur Penjualan',
+        ];
+
+        return $this->renderView('receipt/view_sales_return_receipt', $data);
+    }
+
+    public function salesReturnReceipt()
+    {
+        $data = [
+            'title'     => 'Sample Struk Retur Penjualan',
+        ];
+
+        return $this->renderView('receipt/sales_return_receipt', $data);
+    }
+
+
     //--------------------------------------------------------------------
 }
