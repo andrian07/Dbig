@@ -158,6 +158,14 @@ class EricDemo extends WebminController
         return $this->renderView('demo/repayment/debt_repayment', $data);
     }
 
+    public function debtRepaymentDetail()
+    {
+        $data = [
+            'title'         => 'Detail Pelunasan Hutang'
+        ];
+        return $this->renderView('demo/repayment/debt_repayment_detail', $data);
+    }
+
 
     public function receivableRepayment()
     {
@@ -165,6 +173,15 @@ class EricDemo extends WebminController
             'title'         => 'Pelunasan Piutang'
         ];
         return $this->renderView('demo/repayment/receivable_repayment', $data);
+    }
+
+
+    public function receivableRepaymentDetail()
+    {
+        $data = [
+            'title'         => 'Detail Pelunasan Piutang'
+        ];
+        return $this->renderView('demo/repayment/receivable_repayment_detail', $data);
     }
 
 

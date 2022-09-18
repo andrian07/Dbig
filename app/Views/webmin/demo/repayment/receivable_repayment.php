@@ -12,7 +12,7 @@ $assetsUrl = base_url('assets');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Pelunasan Hutang</h1>
+                    <h1>Pelunasan Piutang</h1>
                 </div>
                 <div class="col-sm-6"></div>
             </div>
@@ -33,10 +33,10 @@ $assetsUrl = base_url('assets');
 
                             <ul class="nav nav-tabs" id="custom-content-above-tab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="custom-content-above-exchange-tab" data-toggle="pill" href="#custom-content-above-exchange" role="tab" aria-controls="custom-content-above-exchange" aria-selected="true">Daftar Hutang</a>
+                                    <a class="nav-link active" id="custom-content-above-exchange-tab" data-toggle="pill" href="#custom-content-above-exchange" role="tab" aria-controls="custom-content-above-exchange" aria-selected="true">Daftar Piutang</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="custom-content-above-history-tab" data-toggle="pill" href="#custom-content-above-history" role="tab" aria-controls="custom-content-above-history" aria-selected="false">Histori Pelunasan Hutang</a>
+                                    <a class="nav-link" id="custom-content-above-history-tab" data-toggle="pill" href="#custom-content-above-history" role="tab" aria-controls="custom-content-above-history" aria-selected="false">Histori Pelunasan Piutang</a>
                                 </li>
 
                             </ul>
@@ -49,40 +49,24 @@ $assetsUrl = base_url('assets');
                                                 <thead>
                                                     <tr>
                                                         <th data-priority="1">#</th>
-                                                        <th data-priority="2">Kode Supplier</th>
-                                                        <th data-priority="2">Nama Supplier</th>
+                                                        <th data-priority="2">Kode Customer</th>
+                                                        <th data-priority="2">Nama Customer</th>
                                                         <th data-priority="5">Alamat</th>
                                                         <th data-priority="6">No Telp</th>
                                                         <th data-priority="5">Jumlah Nota</th>
-                                                        <th data-priority="4">Total Hutang</th>
+                                                        <th data-priority="4">Total Piutang</th>
                                                         <th data-priority="3">Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
                                                         <td>1</td>
-                                                        <td>NPPI</td>
-                                                        <td>PT NIPPON INDONESIA</td>
-                                                        <td>Jl Sungai Raya Dalam Komplek ABC No.10</td>
-                                                        <td>0896-0899-0888</td>
-                                                        <td>3</td>
-                                                        <td>10,000,000.00</td>
-                                                        <td>
-                                                            <button class="btn btn-sm btn-success btnrepayment" data-toggle="tooltip" data-placement="top" data-title="Pelunasan"><i class="fas fa-money-bill-wave"></i></button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
+                                                        <td>0000000004</td>
+                                                        <td>PT Aneka Jaya</td>
+                                                        <td>Jl.Gajah Mada No.5</td>
+                                                        <td>0896-7899-8899</td>
                                                         <td>2</td>
-                                                        <td>IKAD</td>
-                                                        <td>PT IKAD INDONESIA</td>
-                                                        <td>
-                                                            Jl Sungai Raya Dalam Komplek ABC No.10
-                                                        </td>
-                                                        <td>
-                                                            (600) 8999 0888
-                                                        </td>
-                                                        <td>1</td>
-                                                        <td>2,000,000.00</td>
+                                                        <td>8,000,000.00</td>
                                                         <td>
                                                             <button class="btn btn-sm btn-success btnrepayment" data-toggle="tooltip" data-placement="top" data-title="Pelunasan"><i class="fas fa-money-bill-wave"></i></button>
                                                         </td>
@@ -172,7 +156,7 @@ $assetsUrl = base_url('assets');
                                         <input type="hidden" id="supplier_id" name="supplier_id" value="">
                                         <!-- text input -->
                                         <div class="form-group">
-                                            <label>Nama Supplier</label>
+                                            <label>Nama Customer</label>
                                             <input id="supplier_name" name="supplier_name" type="text" class="form-control" readonly>
                                         </div>
                                     </div>
@@ -208,7 +192,7 @@ $assetsUrl = base_url('assets');
                                     <div class="col-sm-12 col-md-2">
                                         <!-- text input -->
                                         <div class="form-group">
-                                            <label>Total Hutang</label>
+                                            <label>Total Piutang</label>
                                             <input id="supplier_total_debt" name="supplier_total_debt" type="text" class="form-control text-right" value="0" readonly>
                                         </div>
                                     </div>

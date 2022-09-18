@@ -139,7 +139,10 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
 
 
     $routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');
+    $routes->get('debt-repayment/detail', 'Webmin\EricDemo::debtRepaymentDetail');
+
     $routes->get('receivable-repayment', 'Webmin\EricDemo::receivableRepayment');
+    $routes->get('receivable-repayment/detail', 'Webmin\EricDemo::receivableRepaymentDetail');
 });
 
 
