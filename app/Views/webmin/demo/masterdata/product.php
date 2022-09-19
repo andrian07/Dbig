@@ -28,9 +28,15 @@ $assetsUrl = base_url('assets');
                     <div class="card-header p-2">
                         <button id="btnadd" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah</button>
                         <button id="btnreload" class="btn btn-secondary"><i class="fas fa-sync"></i> Reload</button>
-                        <!--
-                        <button id="btnexchange" class="btn btn-default"><i class="fas fa-exchange-alt"></i> Penukaran Poin</button>
-                        -->
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-success"><i class="fas fa-file-excel"></i> Import Excel</button>
+                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu" role="menu">
+                                <a class="dropdown-item" href="#">Template File Excel</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row">

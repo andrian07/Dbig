@@ -218,10 +218,6 @@ $assetsUrl = base_url('assets');
 
                             </div>
                         </div>
-
-
-
-
                     </div>
                 </div>
                 <!-- /.card -->
@@ -231,7 +227,9 @@ $assetsUrl = base_url('assets');
         <!-- /.row -->
     </div><!-- /.container-fluid -->
 
+
 </section>
+
 
 
 

@@ -72,6 +72,7 @@ $assetsUrl = base_url('assets');
                                         <th>Hadiah</th>
                                         <th class="text-right">Jumlah Poin</th>
                                         <th>Tanggal Penyelesaian</th>
+                                        <th>Oleh</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -80,13 +81,19 @@ $assetsUrl = base_url('assets');
                                         <td>Kopin Mangkok Vegetable Bowl 9″ Kukuruyuk (KPQ-9VB)</td>
                                         <td class="text-right">50.00</td>
                                         <td>05/08/2022</td>
+                                        <td>Reza</td>
                                     </tr>
-
                                 </tbody>
                             </table>
                         </div>
                         <!-- /.col -->
                     </div>
+                </div>
+                <div class="col-md-12 col-xs-12">
+                    <p>Lokasi Pengambilan Hadiah: <b><?= COMPANY_NAME ?></b><br> <?= COMPANY_ADDRESS ?>
+                    <p>
+
+
                 </div>
 
             </div>
