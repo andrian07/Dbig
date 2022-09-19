@@ -27,7 +27,7 @@ $assetsUrl = base_url('assets');
                 <div class="col-12">
                     <h2 class="page-header">
                         Pelunasan Piutang
-                        <small class="float-right"><?= indo_date('2022-08-24', false) ?></small>
+                        <small class="float-right"><?= indo_date('2022-09-05', false) ?></small>
                     </h2>
                 </div>
                 <!-- /.col -->
@@ -46,13 +46,13 @@ $assetsUrl = base_url('assets');
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
-                    <b>#PH/UTM/22/08/00001</b><br>
+                    <b>#PP/UTM/22/09/00001</b><br>
                     <br>
-                    <b>Kode Supplier:</b> NPPI<br>
-                    <b>Nama Supplier:</b> PT NIPPON INDONESIA<br>
-                    <b>Alamat:</b> Jl Sungai Raya Dalam Komplek ABC No.10<br>
-                    <b>No Telp:</b> 0896-0899-0888<br>
-                    <b>Metode Pembayaran:</b> BCA a/n DBIG (0123456789012)<br>
+                    <b>Kode Customer:</b> 0000000004<br>
+                    <b>Nama Customer:</b> PT Aneka Jaya<br>
+                    <b>Alamat:</b> Jl.Gajah Mada No.5<br>
+                    <b>No Telp:</b> 0896-7899-8899<br>
+                    <b>Metode Pembayaran:</b> CASH<br>
                 </div>
                 <!-- /.col -->
             </div>
@@ -69,8 +69,8 @@ $assetsUrl = base_url('assets');
                                 <thead>
                                     <tr>
                                         <th>No Invoice</th>
-                                        <th>No Faktur</th>
                                         <th>Tanggal<br>Invoice</th>
+                                        <th>Jatuh<br>Tempo</th>
                                         <th>Keterangan</th>
                                         <th class="text-right">Pembulatan/Disc</th>
                                         <th class="text-right">Pembayaran</th>
@@ -79,31 +79,22 @@ $assetsUrl = base_url('assets');
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>SI/UTM/22/09/00001</td>
-                                        <td>FK00001</td>
-                                        <td>20/08/22</td>
-                                        <td>-</td>
-                                        <td class="text-right"><?= numberFormat(0, true) ?></td>
-                                        <td class="text-right"><?= numberFormat(1000000, true) ?></td>
-                                        <td class="text-right"><?= numberFormat(1000000, true) ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td>SI/UTM/22/09/00002</td>
-                                        <td>FK00002</td>
-                                        <td>25/08/22</td>
-                                        <td>Potongan 200rb</td>
-                                        <td class="text-right"><?= numberFormat(200000, true) ?></td>
-                                        <td class="text-right"><?= numberFormat(3000000, true) ?></td>
-                                        <td class="text-right"><?= numberFormat(3200000, true) ?></td>
+                                        <td>SI/UTM/22/08/00001</td>
+                                        <td>24/08/2022</td>
+                                        <td>03/09/2022</td>
+                                        <td>Potong 100RB</td>
+                                        <td class="text-right"><?= numberFormat(4900000, true) ?></td>
+                                        <td class="text-right"><?= numberFormat(100000, true) ?></td>
+                                        <td class="text-right"><?= numberFormat(5000000, true) ?></td>
                                     </tr>
 
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th colspan="4" class="text-right">TOTAL</th>
-                                        <th class="text-right"><?= numberFormat(200000, true) ?></th>
-                                        <th class="text-right"><?= numberFormat(4000000, true) ?></th>
-                                        <th class="text-right"><?= numberFormat(4200000, true) ?></th>
+                                        <th class="text-right"><?= numberFormat(4900000, true) ?></th>
+                                        <th class="text-right"><?= numberFormat(100000, true) ?></th>
+                                        <th class="text-right"><?= numberFormat(5000000, true) ?></th>
                                     </tr>
                                 </tfoot>
                             </table>

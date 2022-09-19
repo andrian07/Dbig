@@ -37,6 +37,10 @@ $assetsUrl = base_url('assets');
                                 <input class="form-check-input" type="radio" name="show_disc" value="N">
                                 <label class="form-check-label">Jangan Tampilkan Diskon</label>
                             </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="show_disc" value="alocation">
+                                <label class="form-check-label">Alokasi Harga</label>
+                            </div>
                         </div>
                         <div class="row mb-1">
                             <iframe id="preview" src="<?= base_url('pos/sales-receipt/Y') ?>" width="100%" height="1000px"></iframe>

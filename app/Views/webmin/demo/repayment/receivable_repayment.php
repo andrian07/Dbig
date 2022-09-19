@@ -87,7 +87,7 @@ $assetsUrl = base_url('assets');
                                                     <tr>
                                                         <th data-priority="1">#</th>
                                                         <th data-priority="2">No Transaksi</th>
-                                                        <th data-priority="2">Nama Supplier</th>
+                                                        <th data-priority="2">Nama Customer</th>
                                                         <th data-priority="5">Tanggal Pembayaran</th>
                                                         <th data-priority="6">Metode Pembayaran</th>
                                                         <th data-priority="5">Jumlah Nota</th>
@@ -98,14 +98,14 @@ $assetsUrl = base_url('assets');
                                                 <tbody>
                                                     <tr>
                                                         <td>1</td>
-                                                        <td>PH/UTM/22/08/00001</td>
-                                                        <td>PT NIPPON INDONESIA</td>
-                                                        <td>24/08/2022</td>
-                                                        <td>BCA</td>
-                                                        <td>2</td>
-                                                        <td>4,200,000.00</td>
+                                                        <td>PP/UTM/22/09/00001</td>
+                                                        <td>PT Aneka Jaya</td>
+                                                        <td>05/09/2022</td>
+                                                        <td>CASH</td>
+                                                        <td>1</td>
+                                                        <td>5,000,000.00</td>
                                                         <td>
-                                                            <a href="javascript:;" data-fancybox data-type="iframe" data-src="<?= base_url('webmin/debt-repayment/detail') ?>" class="btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>
+                                                            <a href="javascript:;" data-fancybox data-type="iframe" data-src="<?= base_url('webmin/receivable-repayment/detail') ?>" class="btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -135,7 +135,7 @@ $assetsUrl = base_url('assets');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 id="title">Pelunasan Hutang</h1>
+                    <h1 id="title">Pelunasan Piutang</h1>
                 </div>
                 <div class="col-sm-6"></div>
             </div>
@@ -227,19 +227,21 @@ $assetsUrl = base_url('assets');
                                             <input id="purchase_invoice" name="purchase_invoice" type="text" class="form-control" placeholder="No Invoice" value="" readonly>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-2">
-                                        <!-- text input -->
-                                        <div class="form-group">
-                                            <label>No Faktur</label>
-                                            <input id="invoice_number" name="invoice_number" type="text" class="form-control" placeholder="No Faktur" value="" readonly>
-                                        </div>
-                                    </div>
+
 
                                     <div class="col-sm-12 col-md-2">
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Tanggal Invoice</label>
                                             <input id="purchase_date" name="purchase_date" type="date" class="form-control" placeholder="Tanggal Invoice" value="" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12 col-md-2">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>Jatuh Tempo</label>
+                                            <input id="due_date" name="due_date" type="date" class="form-control" placeholder="Tanggal Jatuh Tempo" value="" readonly>
                                         </div>
                                     </div>
 
@@ -258,7 +260,7 @@ $assetsUrl = base_url('assets');
                                     <div class="col-sm-12 col-md-3">
                                         <!-- text input -->
                                         <div class="form-group">
-                                            <label>Saldo Hutang</label>
+                                            <label>Saldo Piutang</label>
                                             <input id="remaining_debt" name="remaining_debt" type="text" class="form-control text-right" value="0" readonly>
                                         </div>
                                     </div>
@@ -282,7 +284,7 @@ $assetsUrl = base_url('assets');
                                     <div class="col-sm-12 col-md-3">
                                         <!-- text input -->
                                         <div class="form-group">
-                                            <label>Sisa Hutang</label>
+                                            <label>Sisa Piutang</label>
                                             <input id="new_remaining_debt" name="new_remaining_debt" type="text" class="form-control text-right" value="0" readonly>
                                         </div>
                                     </div>
@@ -307,25 +309,25 @@ $assetsUrl = base_url('assets');
                                             <tr>
                                                 <th data-priority="1">#</th>
                                                 <th data-priority="2">No Invoice</th>
-                                                <th data-priority="4">No Faktur</th>
-                                                <th data-priority="5">Tanggal Invoice</th>
-                                                <th data-priority="6">Saldo Hutang</th>
+                                                <th data-priority="4">Tanggal Invoice</th>
+                                                <th data-priority="5">Jatuh Tempo</th>
+                                                <th data-priority="6">Saldo Piutang</th>
                                                 <th data-priority="7">Pembulatan/Disc</th>
                                                 <th data-priority="8">Pembayaran</th>
-                                                <th data-priority="9">Sisa Hutang</th>
+                                                <th data-priority="9">Sisa Piutang</th>
                                                 <th data-priority="3">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td>1</td>
-                                                <td>SI/UTM/22/09/00001</td>
-                                                <td>FK00001</td>
-                                                <td>20/08/22</td>
-                                                <td>2,000,000.00</td>
+                                                <td>SI/UTM/22/08/00001</td>
+                                                <td>24/08/2022</td>
+                                                <td>03/09/2022</td>
+                                                <td>5,000,000.00</td>
+                                                <td>100,000.00</td>
+                                                <td>4,900,000.00</td>
                                                 <td>0.00</td>
-                                                <td>1,000,000.00</td>
-                                                <td>1,000,000.00</td>
                                                 <td>
                                                     <button class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
                                                         <i class="fas fa-edit"></i>
@@ -335,33 +337,19 @@ $assetsUrl = base_url('assets');
                                             <tr>
                                                 <td>2</td>
                                                 <td>SI/UTM/22/09/00002</td>
-                                                <td>FK00002</td>
-                                                <td>25/08/22</td>
-                                                <td>3,200,000.00</td>
-                                                <td>200,000.00</td>
+                                                <td>01/09/2022</td>
+                                                <td>10/09/2022</td>
                                                 <td>3,000,000.00</td>
                                                 <td>0.00</td>
+                                                <td>0.00</td>
+                                                <td>3,000,000.00</td>
                                                 <td>
                                                     <button class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>SI/UTM/22/09/00003</td>
-                                                <td>FK00009</td>
-                                                <td>10/09/22</td>
-                                                <td>4,800,000.00</td>
-                                                <td>0.00</td>
-                                                <td>0.00</td>
-                                                <td>4,800,000.00</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
+
                                         </tbody>
                                     </table>
 
@@ -539,7 +527,7 @@ $assetsUrl = base_url('assets');
             $('#temp_key').val('');
             $('#purchase_id').val('');
             $('#purchase_invoice').val('');
-            $('#invoice_number').val('');
+            $('#due_date').val('');
             $('#purchase_date').val('');
             $('#payment_method_id').val(1);
             remaining_debt.set(0);
@@ -602,15 +590,15 @@ $assetsUrl = base_url('assets');
 
         $('#tbltemprepayment').on('click', '.btnedit', function(e) {
             e.preventDefault();
-            $('#purchase_id').val(2);
-            $('#purchase_invoice').val('SI/UTM/22/09/00002');
-            $('#invoice_number').val('FK00002');
-            $('#purchase_date').val('2022-08-25');
-            remaining_debt.set(3200000);
-            repayment_disc.set(200000);
-            repayment_total.set(3000000);
+            $('#purchase_id').val(1);
+            $('#purchase_invoice').val('SI/UTM/22/08/00001');
+            $('#purchase_date').val('2022-08-24');
+            $('#due_date').val('2022-09-03');
+            remaining_debt.set(5000000);
+            repayment_disc.set(100000);
+            repayment_total.set(4900000);
             new_remaining_debt.set(0);
-            $('#repayment_remark').val('Potongan 200rb');
+            $('#repayment_remark').val('Potong 100RB');
         })
 
         $('#btnadd-temp').click(function(e) {
@@ -621,8 +609,8 @@ $assetsUrl = base_url('assets');
         $('#tblpurchaserepayment').on('click', '.btnrepayment', function(e) {
             e.preventDefault();
             showInputPage(true);
-            $('#supplier_name').val('PT NIPPON INDONESIA');
-            supplier_total_debt.set(10000000);
+            $('#supplier_name').val('PT Aneka Jaya');
+            supplier_total_debt.set(8000000);
             clearItemInput();
         })
 

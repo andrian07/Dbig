@@ -58,10 +58,14 @@ class Dashboard extends PosController
             'title'     => 'Sample Struk Penjualan',
         ];
 
-        if ($show_disc == 'Y') {
-            return $this->renderView('receipt/sales_receipt', $data);
+        if ($show_disc == 'alocation') {
+            return $this->renderView('receipt/sales_alocation_receipt', $data);
         } else {
-            return $this->renderView('receipt/sales_receipt_no_disc', $data);
+            if ($show_disc == 'Y') {
+                return $this->renderView('receipt/sales_receipt', $data);
+            } else {
+                return $this->renderView('receipt/sales_receipt_no_disc', $data);
+            }
         }
     }
 
