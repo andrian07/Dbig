@@ -617,13 +617,6 @@ $assetsUrl = base_url('assets');
                             </div>
 
                             <div class="form-group row">
-                                <label for="footer_total_ppn" class="col-sm-7 col-form-label text-right:">PPN <?= PPN_TEXT ?> :</label>
-                                <div class="col-sm-5">
-                                    <input id="footer_total_ppn" name="footer_total_ppn" type="text" class="form-control text-right" value="0" readonly>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
                                 <label for="footer_total_discount" class="col-sm-7 col-form-label text-right:">Discount :</label>
                                 <div class="col-sm-4">
                                     <input id="footer_discount1" name="footer_discount1" type="hidden" class="form-control text-right" value="0" readonly>
@@ -633,6 +626,13 @@ $assetsUrl = base_url('assets');
                                 </div>
                                 <div class="col-sm-1">
                                     <button id="btnaddfooterdiscount" class="btn btn-warning"><i class="fas fa-tags"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="footer_total_ppn" class="col-sm-7 col-form-label text-right:">PPN <?= PPN_TEXT ?> :</label>
+                                <div class="col-sm-5">
+                                    <input id="footer_total_ppn" name="footer_total_ppn" type="text" class="form-control text-right" value="0" readonly>
                                 </div>
                             </div>
 
@@ -1143,8 +1143,8 @@ $assetsUrl = base_url('assets');
             temp_total.set(total_price.get() - total_temp_discount.get() + Number(temp_ongkir.get()));
         }
 
-        function calculation_temp_total_footer(){
-            footer_total_invoice.set(Number(footer_sub_total.get()) + Number(footer_total_ongkir.get()) + Number(footer_total_ppn.get()) - Number(footer_total_discount.get()));
+       function calculation_temp_total_footer(){
+            footer_total_invoice.set(Number(footer_sub_total.get()) + Number(footer_total_ongkir.get())  - Number(footer_total_discount.get()) + Number(footer_total_ppn.get()));
         }
 
 

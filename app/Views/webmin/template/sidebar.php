@@ -175,6 +175,13 @@
 								<span class="right badge badge-danger"></span>
 							</a>
 						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Retur Pembelian</p>
+								<span class="right badge badge-danger"></span>
+							</a>
+						</li>
 					</ul>
 				</li>
 
@@ -188,7 +195,7 @@
 					</a>
 					<ul class="nav nav-treeview">
 						<li class="nav-item">
-							<a href="#" class="nav-link">
+							<a href="<?= base_url('webmin/sales-admin') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>Penjualan</p>
 								<span class="right badge badge-danger"></span>

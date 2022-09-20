@@ -86,6 +86,12 @@ $routes->group('webmin/purchase', ['filter' => 'webminauth'], static function ($
 });
 /* end pembelian */
 
+/* penjualan admin */
+$routes->group('webmin/sales-admin', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\Sales_admin::index');
+});
+/* end penjualan admin */
+
 /* POS */
 $routes->group('pos', static function ($routes) {
     $routes->get('/', 'Pos\Auth::index');
