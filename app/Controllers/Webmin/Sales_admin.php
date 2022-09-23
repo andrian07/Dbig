@@ -24,6 +24,15 @@ class Sales_admin extends WebminController
         return $this->renderView('sales/salesadmin', $data);
     }
 
+    public function printinvoice()
+    {
+        return $this->renderView('sales/salesadmin_invoice');
+    }
+
+    public function printdispatch()
+    {
+        return $this->renderView('sales/salesadmin_dispatch');
+    }
     //--------------------------------------------------------------------
 
 }

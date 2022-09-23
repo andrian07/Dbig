@@ -74,6 +74,7 @@ $routes->group('webmin/category', ['filter' => 'webminauth'], static function ($
 /* pembelian */
 $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\Purchase_order::index');
+    $routes->get('printinvoice', 'Webmin\Purchase_order::printinvoice');
 });
 
 $routes->group('webmin/submission', ['filter' => 'webminauth'], static function ($routes) {
@@ -89,6 +90,8 @@ $routes->group('webmin/purchase', ['filter' => 'webminauth'], static function ($
 /* penjualan admin */
 $routes->group('webmin/sales-admin', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\Sales_admin::index');
+    $routes->get('printinvoice', 'Webmin\Sales_admin::printinvoice');
+    $routes->get('printdispatch', 'Webmin\Sales_admin::printdispatch');
 });
 /* end penjualan admin */
 

@@ -24,6 +24,10 @@ class Purchase_order extends WebminController
         return $this->renderView('purchase/purchaseorder', $data);
     }
 
+    public function printinvoice(){
+        return $this->renderView('purchase/purchaseorder_invoice');
+    }
+
     //--------------------------------------------------------------------
 
 }

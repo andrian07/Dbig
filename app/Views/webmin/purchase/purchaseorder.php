@@ -102,6 +102,9 @@ $assetsUrl = base_url('assets');
                                             <a href="<?php base_url() ?>submission/submissiondetaildemo">
                                                 <button class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail" data-original-title="" title=""><i class="fas fa-eye"></i></button>
                                             </a>
+                                             <a href="<?php base_url() ?>purchase-order/printinvoice">
+                                            <button data-id="1" data-invoice="0000000001" class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Print" data-original-title="" title=""><i class="fas fa-print"></i></button>
+                                            </a>
                                         </td>
 
                                     </tr>

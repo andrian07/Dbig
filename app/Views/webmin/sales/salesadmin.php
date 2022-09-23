@@ -98,6 +98,9 @@ $assetsUrl = base_url('assets');
                                             <a href="<?php base_url() ?>submission/submissiondetaildemo">
                                                 <button class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail" data-original-title="" title=""><i class="fas fa-eye"></i></button>
                                             </a>
+                                            <a href="<?php base_url() ?>sales-admin/printinvoice">
+                                            <button id="print_invoice" data-id="1" data-invoice="0000000001" class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Print" data-original-title="" title=""><i class="fas fa-print"></i></button>
+                                            </a>
                                         </td>
 
                                     </tr>
@@ -119,6 +122,9 @@ $assetsUrl = base_url('assets');
                                         <td data-priority="7">
                                             <a href="<?php base_url() ?>submission/submissiondetaildemo">
                                                 <button class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail" data-original-title="" title=""><i class="fas fa-eye"></i></button>
+                                            </a>
+                                            <a href="<?php base_url() ?>sales-admin/printinvoice">
+                                                <button id="print_invoice" data-id="1" data-invoice="0000000001" class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Print" data-original-title="" title=""><i class="fas fa-print"></i></button>
                                             </a>
                                         </td>
 
@@ -956,6 +962,32 @@ $assetsUrl = base_url('assets');
                 temp_discount2: $('#temp_discount2').val(),
                 temp_discount3: $('#temp_discount3').val(),
             });
+        })
+
+        $('#print_invoice').click(function(e) {
+            e.preventDefault();
+
+            let id = 12;
+        Swal.fire({
+                title: "Cetak",
+                html: "Ingin cetak <b>Faktur Penjualan</b> atau <b>Surat Jalan</b>?",
+                icon: "question",
+                showCancelButton: true,
+                allowOutsideClick: false,
+                confirmButtonColor: "#007bff",
+                cancelButtonColor: "#28a745",
+                confirmButtonText: 'Faktur Penjualan',
+                cancelButtonText: 'Surat Jalan',
+            }).then(function(answer) {
+                let yes = parseMessageResult(answer);
+                if (yes) {
+                    let invUrl = base_url + '/webmin/sales-admin/printinvoice';
+                    window.open(invUrl, '_blank');
+                } else {
+                    let invUrl = base_url + '/webmin/sales-admin/printdispatch';
+                    window.open(invUrl, '_blank');
+                }
+            })
         })
 
         function discountMode(data) {
