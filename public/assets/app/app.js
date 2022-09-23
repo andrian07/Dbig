@@ -38,7 +38,7 @@ let configQty = {
   digitGroupSeparator: ",",
   decimalCharacter: ".",
   maximumValue: "99999",
-  minimumValue: "0",
+  minimumValue: "-99999",
   modifyValueOnWheel: AutoNumeric.options.modifyValueOnWheel.doNothing,
 };
 

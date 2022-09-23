@@ -185,6 +185,31 @@ class EricDemo extends WebminController
     }
 
 
+    public function stockOpname()
+    {
+        $data = [
+            'title'         => 'Stok Opname'
+        ];
+        return $this->renderView('demo/stock_opname/stock_opname', $data);
+    }
+
+    public function stockOpnameDetail()
+    {
+        $data = [
+            'title'         => 'Stok Opname Detail'
+        ];
+        return $this->renderView('demo/stock_opname/stock_opname_detail', $data);
+    }
+
+    public function stockOpnameReport()
+    {
+        $data = [
+            'title'         => 'Stok Opname Report',
+            'userLogin'     => $this->userLogin
+        ];
+        return $this->renderView('demo/stock_opname/stock_opname_report', $data);
+    }
+
 
     //--------------------------------------------------------------------
 
