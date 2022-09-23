@@ -149,9 +149,17 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
 
     $routes->get('receivable-repayment', 'Webmin\EricDemo::receivableRepayment');
     $routes->get('receivable-repayment/detail', 'Webmin\EricDemo::receivableRepaymentDetail');
+
+
+    $routes->get('stock-opname', 'Webmin\EricDemo::stockOpname');
+    $routes->get('stock-opname/detail', 'Webmin\EricDemo::stockOpnameDetail');
+    $routes->get('stock-opname/report', 'Webmin\EricDemo::stockOpnameReport');
+
+
+    $routes->get('stock-transfer', 'Webmin\EricDemo::stockTransfer');
+    $routes->get('stock-transfer/detail', 'Webmin\EricDemo::stockTransferDetail');
+    $routes->get('stock-transfer/report', 'Webmin\EricDemo::stockTransferReport');
 });
-
-
 /* End Eric Demo */
 
 
