@@ -101,7 +101,7 @@
 				</li>
 
 				<li class="nav-item">
-					<a href="#" class="nav-link">
+					<a href="<?= base_url('webmin/stock-opname') ?>" class="nav-link">
 						<i class="nav-icon fas fa-box"></i>
 						<p>
 							Stok Opname
@@ -111,7 +111,7 @@
 				</li>
 
 				<li class="nav-item">
-					<a href="#" class="nav-link">
+					<a href="<?= base_url('webmin/stock-transfer') ?>" class="nav-link">
 						<i class="nav-icon fas fa-exchange-alt"></i>
 						<p>
 							Transfer Stok
@@ -269,7 +269,7 @@
 				</li>
 
 				<li class="nav-item">
-					<a href="#" class="nav-link">
+					<a href="<?= base_url('webmin/report/view-product-sales-recap') ?>" class="nav-link">
 						<i class="nav-icon fas fa-file"></i>
 						<p>
 							Laporan
