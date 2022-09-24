@@ -3,7 +3,7 @@
 
 namespace App\Controllers\Webmin;
 
-
+use Dompdf\Dompdf;
 use App\Controllers\Base\WebminController;
 
 
@@ -19,13 +19,30 @@ class Purchase_order extends WebminController
     public function index()
     {
         $data = [
-            'title'         => 'Purchase Order' 
+            'title'         => 'Purchase Order'
         ];
         return $this->renderView('purchase/purchaseorder', $data);
     }
 
-    public function printinvoice(){
-        return $this->renderView('purchase/purchaseorder_invoice');
+    public function printinvoice()
+    {
+        $export = $this->request->getGet('export');
+        if ($export == 'pdf') {
+            $dompdf = new Dompdf();
+            $viewHtml = $this->renderView('purchase/purchaseorder_invoice');
+            $dompdf->loadHtml($viewHtml);
+
+            // (Optional) Setup the paper size and orientation
+            $dompdf->setPaper('a4', 'landscape');
+
+            // Render the HTML as PDF
+            $dompdf->render();
+
+            // Output the generated PDF to Browser
+            $dompdf->stream('invoice');
+        } else {
+            return $this->renderView('purchase/purchaseorder_invoice');
+        }
     }
 
     //--------------------------------------------------------------------
