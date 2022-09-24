@@ -2,7 +2,10 @@
 
 namespace App\Controllers\Webmin;
 
+use Dompdf\Dompdf;
+
 use App\Controllers\Base\WebminController;
+
 
 class EricDemo extends WebminController
 {
@@ -209,6 +212,74 @@ class EricDemo extends WebminController
         ];
         return $this->renderView('demo/stock_opname/stock_opname_report', $data);
     }
+
+    public function stockTransfer()
+    {
+        $data = [
+            'title'         => 'Stok Transfer'
+        ];
+        return $this->renderView('demo/stock_transfer/stock_transfer', $data);
+    }
+
+    public function stockTransferDetail()
+    {
+        $data = [
+            'title'         => 'Stok Transfer Detail'
+        ];
+        return $this->renderView('demo/stock_transfer/stock_transfer_detail', $data);
+    }
+
+    public function stockTransferReport()
+    {
+        $data = [
+            'title'         => 'Stok Transfer Report',
+            'userLogin'     => $this->userLogin
+        ];
+        return $this->renderView('demo/stock_transfer/stock_transfer_report', $data);
+    }
+
+
+    public function reportSalesProductRecap()
+    {
+        $data = [
+            'title'         => 'Rekap Penjualan Produk',
+            'userLogin'     => $this->userLogin
+        ];
+
+        $export = $this->request->getGet('export');
+        if ($export == 'pdf') {
+            // instantiate and use the dompdf class
+            $dompdf = new Dompdf();
+            $htmlView   = $this->renderView('demo/report/product_sales_recap', $data);
+            $dompdf->loadHtml($htmlView);
+
+            // (Optional) Setup the paper size and orientation
+            $dompdf->setPaper('A4', 'landscape');
+
+            // Render the HTML as PDF
+            $dompdf->render();
+
+            // Output the generated PDF to Browser
+            $dompdf->stream('contoh_file_pdf');
+        } else {
+            return $this->renderView('demo/report/product_sales_recap', $data);
+        }
+    }
+
+    public function viewReportSalesProductRecap()
+    {
+        $data = [
+            'title'         => 'Rekap Penjualan Produk',
+            'userLogin'     => $this->userLogin
+        ];
+
+
+        return $this->renderView('demo/report/view_product_sales_recap', $data);
+    }
+
+
+
+
 
 
     //--------------------------------------------------------------------

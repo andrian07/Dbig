@@ -163,6 +163,9 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('stock-transfer', 'Webmin\EricDemo::stockTransfer');
     $routes->get('stock-transfer/detail', 'Webmin\EricDemo::stockTransferDetail');
     $routes->get('stock-transfer/report', 'Webmin\EricDemo::stockTransferReport');
+
+    $routes->get('report/product-sales-recap', 'Webmin\EricDemo::reportSalesProductRecap');
+    $routes->get('report/view-product-sales-recap', 'Webmin\EricDemo::viewReportSalesProductRecap');
 });
 /* End Eric Demo */
 
