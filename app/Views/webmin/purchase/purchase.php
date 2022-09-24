@@ -184,15 +184,15 @@ $assetsUrl = base_url('assets');
                         <div class="card-body">
 
 
-                          <form id="frmpurchase" class="form-horizontal">
+                          <form id="frmpurchase" class="form-horizontal form-space">
 
                             <div class="form-group row">
 
-                                <label for="noinvoice" class="col-sm-1 col-form-label">No Invoice</label>
+                                <label for="noinvoice" class="col-sm-1 col-form-label text-right">No Invoice :</label>
 
                                 <div class="col-sm-3">
 
-                                    <input id="purchase_order_invoice" name="purchase_order_invoice" type="text" class="form-control" value="AUTO" readonly>
+                                    <input id="purchase_invoice_no" name="purchase_invoice_no" type="text" class="form-control" value="AUTO" readonly>
 
                                 </div>
 
@@ -201,17 +201,17 @@ $assetsUrl = base_url('assets');
 
                                 </div>  
 
-                                <label for="tanggal" class="col-sm-1 col-form-label">No Faktur</label>
+                                <label for="tanggal" class="col-sm-1 col-form-label text-right">No Faktur :</label>
 
                                 <div class="col-sm-3">
 
-                                    <input id="no_invoice_suplier" name="purchase_order_invoice" type="text" class="form-control">
+                                    <input id="no_invoice_suplier" name="no_invoice_suplier" type="text" class="form-control">
 
                                 </div>
 
 
 
-                                <label for="tanggal" class="col-sm-1 col-form-label">Tanggal</label>
+                                <label for="tanggal" class="col-sm-1 col-form-label text-right">Tanggal :</label>
 
                                 <div class="col-sm-2">
 
@@ -222,7 +222,7 @@ $assetsUrl = base_url('assets');
 
                             <div class="form-group row">
 
-                                <label for="noinvoice" class="col-sm-1 col-form-label">No Po</label>
+                                <label for="noinvoice" class="col-sm-1 col-form-label text-right">No Po :</label>
 
                                 <div class="col-sm-3">
 
@@ -232,7 +232,7 @@ $assetsUrl = base_url('assets');
 
                                 <div class="col-md-1"></div>
 
-                                <label for="tanggal" class="col-sm-1 col-form-label">Tgl Faktur</label>
+                                <label for="tanggal" class="col-sm-1 col-form-label text-right">Tgl Faktur :</label>
 
                                 <div class="col-sm-3">
 
@@ -242,7 +242,7 @@ $assetsUrl = base_url('assets');
 
 
 
-                                <label for="cabang" class="col-sm-1 col-form-label">Cabang</label>
+                                <label for="cabang" class="col-sm-1 col-form-label text-right">Cabang :</label>
 
                                 <div class="col-sm-2">
 
@@ -254,7 +254,7 @@ $assetsUrl = base_url('assets');
 
                             <div class="form-group row">
 
-                                <label for="suplier" class="col-sm-1 col-form-label">Supplier</label>
+                                <label for="suplier" class="col-sm-1 col-form-label text-right">Supplier :</label>
 
                                 <div class="col-sm-3">
 
@@ -274,7 +274,7 @@ $assetsUrl = base_url('assets');
 
 
                                 
-                                <label for="user" class="col-sm-1 col-form-label">User</label>
+                                <label for="user" class="col-sm-1 col-form-label text-right">User :</label>
 
                                 <div class="col-sm-2">
 
@@ -288,7 +288,7 @@ $assetsUrl = base_url('assets');
 
                             <div class="form-group row">
 
-                                <label for="suplier" class="col-sm-1 col-form-label">Pembayaran</label>
+                                <label for="suplier" class="col-sm-1 col-form-label text-right">Pembayaran :</label>
 
                                 <div class="col-sm-3">
 
@@ -301,7 +301,7 @@ $assetsUrl = base_url('assets');
                             <div class="form-group row">
 
 
-                                <label for="suplier" class="col-sm-1 col-form-label">Tempo</label>
+                                <label for="suplier" class="col-sm-1 col-form-label text-right">Tempo :</label>
 
                                 <div class="col-sm-3">
                                     <input id="due_date" name="due_date" type="date" class="form-control">
@@ -640,7 +640,7 @@ $assetsUrl = base_url('assets');
 
 
 
-                    <div class="row footer-purchase">
+                    <div class="row form-space">
 
                         <div class="col-lg-6">
 

@@ -84,6 +84,7 @@ $routes->group('webmin/submission', ['filter' => 'webminauth'], static function 
 
 $routes->group('webmin/purchase', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\Purchase::index');
+    $routes->get('retur-purchase', 'Webmin\Purchase::returpurchase');
 });
 /* end pembelian */
 

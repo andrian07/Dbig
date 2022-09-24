@@ -37,15 +37,18 @@ $assetsUrl = base_url('assets');
 			<tbody>
 			<tr>
 				<th width="5%">No</th>
+				<th width="10%">Kode Barang</th>
 				<th width="35%">Nama Barang</th>
 				<th width="10%">Kuantitas</th>
 			</tr>
 			<tr>
 				<td>1</td>
+				<td>0002312</td>
 				<td>DULUX CAT BASE CATYLAC INTERIOR BASE T911AY</td>
 				<td>6 Pail</td>
 			<tr>
 				<td>2</td>
+				<td>0002312</td>
 				<td>NIPPON PAINT CAT BASE NIPPON SATIN GLO - PASTEL ...</td>
 				<td>2 Pail</td>
 			</tr>

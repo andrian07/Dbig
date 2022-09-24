@@ -95,12 +95,8 @@
 }
 
 
-#frmpurchase .form-group,
-#frmpurchaseorder .form-group,
-.footer-purchase .form-group,
-.footer-purchaseorder .form-group,
-.form-header-input .form-group{
-    margin-bottom: 5px;
+.form-space .form-group{
+  margin-bottom: 5px;
 }
 
 .table-input{

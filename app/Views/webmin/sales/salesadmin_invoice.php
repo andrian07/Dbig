@@ -36,14 +36,13 @@ $assetsUrl = base_url('assets');
 			
 			<tbody>
 			<tr>
-				<th width="5%">No</th>
-				<th width="15%">Kode Barang</th>
-				<th width="40%">Nama Barang</th>
+				<th width="3%">No</th>
+				<th width="10%">Kode Barang</th>
+				<th width="48%">Nama Barang</th>
 				<th width="10%">Kuantitas</th>
 				<th width="10%">Harga</th>
 				<th width="10%">Discount</th>
 				<th width="10%">Jumlah</th>
-				<th width="1%"></th>
 			</tr>
 			<tr>
 				<td>1</td>
@@ -57,14 +56,14 @@ $assetsUrl = base_url('assets');
 			<tr>
 				<td>2</td>
 				<td>000231</td>
-				<td>123456789101234567891012345678910123456789101234567891012345678910 12345678910123456789101234567891012345678910</td>
+				<td>12345678910123 45678910123 456789101 23456789101234 567891012 345678910 1234567891012345678 910123 4567891012 345678910</td>
 				<td>2</td>
 				<td>500,000</td>
 				<td>200,000</td>
 				<td>480,000</td>
 			</tr>
 			<tr>
-				<td>1</td>
+				<td>3</td>
 				<td>0002312</td>
 				<td>DULUX CAT BASE CATYLAC INTERIOR BASE T911AY</td>
 				<td>6</td>

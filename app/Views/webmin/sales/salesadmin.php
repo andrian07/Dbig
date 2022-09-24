@@ -199,11 +199,11 @@ $assetsUrl = base_url('assets');
 
                         <div class="card-body">
 
-                            <form id="frmsalesadmin" class="form-horizontal form-header-input">
+                            <form id="frmsalesadmin" class="form-horizontal form-space">
 
                                 <div class="form-group row">
 
-                                    <label for="noinvoice" class="col-sm-1 col-form-label">No Invoice</label>
+                                    <label for="noinvoice" class="col-sm-1 col-form-label text-right">No Invoice :</label>
 
                                     <div class="col-sm-3">
 
@@ -215,7 +215,7 @@ $assetsUrl = base_url('assets');
 
                                     </div>  
 
-                                    <label for="tanggal" class="col-sm-1 col-form-label">No Faktur</label>
+                                    <label for="tanggal" class="col-sm-1 col-form-label text-right">No Faktur :</label>
 
                                     <div class="col-sm-3">
 
@@ -223,7 +223,7 @@ $assetsUrl = base_url('assets');
 
                                     </div>
 
-                                    <label for="tanggal" class="col-sm-1 col-form-label">Tanggal</label>
+                                    <label for="tanggal" class="col-sm-1 col-form-label text-right">Tanggal :</label>
 
                                     <div class="col-sm-2">
 
@@ -234,7 +234,7 @@ $assetsUrl = base_url('assets');
 
                                 <div class="form-group row">
 
-                                    <label for="customer_id" class="col-sm-1 col-form-label">Customer</label>
+                                    <label for="customer_id" class="col-sm-1 col-form-label text-right">Customer :</label>
 
                                     <div class="col-sm-3">
 
@@ -250,7 +250,7 @@ $assetsUrl = base_url('assets');
 
                                     
 
-                                    <label for="tanggal" class="col-sm-1 col-form-label">Tgl Faktur</label>
+                                    <label for="tanggal" class="col-sm-1 col-form-label text-right">Tgl Faktur :</label>
 
                                     <div class="col-sm-3">
 
@@ -258,7 +258,7 @@ $assetsUrl = base_url('assets');
 
                                     </div>
 
-                                    <label for="cabang" class="col-sm-1 col-form-label">Cabang</label>
+                                    <label for="cabang" class="col-sm-1 col-form-label text-right">Cabang :</label>
 
                                     <div class="col-sm-2">
 
@@ -270,7 +270,7 @@ $assetsUrl = base_url('assets');
 
                                 <div class="form-group row">
 
-                                    <label for="suplier" class="col-sm-1 col-form-label">Pembayaran</label>
+                                    <label for="suplier" class="col-sm-1 col-form-label text-right">Pembayaran :</label>
 
                                     <div class="col-sm-3">
 
@@ -282,7 +282,7 @@ $assetsUrl = base_url('assets');
 
                                     </div>  
 
-                                    <label for="Sales" class="col-sm-1 col-form-label">Sales</label>
+                                    <label for="Sales" class="col-sm-1 col-form-label text-right">Sales :</label>
 
                                     <div class="col-md-3">
 
@@ -290,7 +290,7 @@ $assetsUrl = base_url('assets');
 
                                     </div>
 
-                                    <label for="user" class="col-sm-1 col-form-label">User</label>
+                                    <label for="user" class="col-sm-1 col-form-label text-right">User :</label>
 
                                     <div class="col-sm-2">
 
@@ -305,7 +305,7 @@ $assetsUrl = base_url('assets');
                                 <div class="form-group row">
 
 
-                                    <label for="suplier" class="col-sm-1 col-form-label">Tempo</label>
+                                    <label for="suplier" class="col-sm-1 col-form-label text-right">Tempo :</label>
 
                                     <div class="col-sm-3">
                                         <input id="due_date" name="due_date" type="date" class="form-control">
@@ -536,7 +536,7 @@ $assetsUrl = base_url('assets');
 
 
 
-                        <div class="row footer-purchaseorder">
+                        <div class="row form-space">
 
                             <div class="col-lg-6">
 

@@ -22,6 +22,11 @@ class Purchase extends WebminController
         return $this->renderView('purchase/purchase', $data);
     }
 
+    public function returpurchase()
+    {
+        return $this->renderView('purchase/returpurchase');
+    }
+
     //--------------------------------------------------------------------
 
 }

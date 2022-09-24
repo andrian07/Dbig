@@ -7,7 +7,7 @@ $assetsUrl = base_url('assets');
 
 <?= $this->section('content') ?>
 <!-- Content Header (Page header) -->
-<div id="po_list">
+<div id="returpurchase_list">
 
     <section class="content-header">
 
@@ -17,7 +17,7 @@ $assetsUrl = base_url('assets');
 
                 <div class="col-sm-6">
 
-                    <h1>Pruchase Order</h1>
+                    <h1>Retur Pembelian</h1>
 
                 </div>
 
@@ -55,7 +55,7 @@ $assetsUrl = base_url('assets');
 
                         <div class="card-body">
 
-                            <table id="tblpurchaseorders" class="table table-bordered table-hover" width="100%">
+                            <table id="tblreturpurcase" class="table table-bordered table-hover" width="100%">
 
                                 <thead>
 
@@ -63,17 +63,15 @@ $assetsUrl = base_url('assets');
 
                                         <th data-priority="1">#</th>
 
-                                        <th data-priority="2">No PO</th>
+                                        <th data-priority="2">No Invoice</th>
 
-                                        <th data-priority="2">Tanggal PO</th>
+                                        <th data-priority="2">Tanggal</th>
 
-                                        <th data-priority="4">Golongan</th>
+                                        <th data-priority="4">Nama Suplier</th>
 
-                                        <th data-priority="6">Nama Supplier</th>
+                                        <th data-priority="6">Status Pembayaran</th>
 
-                                        <th data-priority="3">Total Harga</th>
-
-                                        <th data-priority="3">Status Barang</th>
+                                        <th data-priority="3">Total Transaksi</th>
 
                                         <th data-priority="3">Aksi</th>
 
@@ -86,17 +84,15 @@ $assetsUrl = base_url('assets');
 
                                         <td data-priority="1">1</td>
 
-                                        <td data-priority="1">PO-KBR-0001</td>
+                                        <td data-priority="1">RTR-KBR-0001</td>
 
                                         <td data-priority="2">02/09/2022</td>
 
-                                        <td data-priority="4">BKP</td>
-
                                         <td data-priority="6">PT NIPPON INDONESIA</td>
 
-                                        <td data-priority="6">500.000</td>
+                                        <td data-priority="6"><span class="badge badge-success">Lunas</span></td>
 
-                                        <td data-priority="6"><span class="badge badge-success">Diterima</span></td>
+                                        <td data-priority="6">5.000.000</td>
 
                                         <td data-priority="3">
                                             <a href="<?php base_url() ?>submission/submissiondetaildemo">
@@ -138,7 +134,7 @@ $assetsUrl = base_url('assets');
 
 
 
-<div id="po_input">
+<div id="returpurchase_input">
 
     <section class="content-header">
 
@@ -148,7 +144,7 @@ $assetsUrl = base_url('assets');
 
                 <div class="col-sm-6">
 
-                    <h1 id="title-frmpurchaseorder">Tambah PO</h1>
+                    <h1 id="title-frmreturpurchase"></h1>
 
                 </div>
 
@@ -179,25 +175,33 @@ $assetsUrl = base_url('assets');
                         <div class="card-body">
 
 
-                          <form id="frmpurchaseorder" class="form-horizontal form-space">
+                          <form id="frmreturpurchase" class="form-horizontal">
 
                             <div class="form-group row">
 
-                                <label for="noinvoice" class="col-sm-1 col-form-label text-right">No Invoice :</label>
+                                <label for="noinvoice" class="col-sm-1 col-form-label">No Invoice</label>
 
                                 <div class="col-sm-3">
 
-                                    <input id="purchase_order_invoice" name="purchase_order_invoice" type="text" class="form-control" value="AUTO" readonly>
+                                    <input id="retur_invoice_no" name="retur_invoice_no" type="text" class="form-control" value="AUTO" readonly>
 
                                 </div>
 
-                                <div class="col-md-4"></div>
+                                <div class="col-md-1"></div>
 
-                                <label for="tanggal" class="col-sm-1 col-form-label text-right">Tanggal :</label>
+                                <label for="noinvoice" class="col-sm-2 col-form-label">No Faktur Pajak</label>
 
-                                <div class="col-sm-3">
+                                <div class="col-sm-2">
 
-                                    <input id="purchase_order_date" name="purchase_order_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>" readonly>
+                                    <input id="invoice_tax_number" name="invoice_tax_number" type="text" class="form-control" >
+
+                                </div>
+
+                                <label for="tanggal" class="col-sm-1 col-form-label">Tanggal</label>
+
+                                <div class="col-sm-2">
+
+                                    <input id="retur_date" name="retur_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>" readonly>
 
                                 </div>
                             </div>
@@ -205,7 +209,7 @@ $assetsUrl = base_url('assets');
 
                             <div class="form-group row">
 
-                                <label for="suplier" class="col-sm-1 col-form-label text-right">Supplier :</label>
+                                <label for="suplier" class="col-sm-1 col-form-label">Supplier</label>
 
                                 <div class="col-sm-3">
 
@@ -219,11 +223,17 @@ $assetsUrl = base_url('assets');
 
                                 </div>
 
-                                <div class="col-md-3"></div>
+                                <label for="noinvoice" class="col-sm-2 col-form-label">Tanggal Faktur Pajak</label>
 
-                                <label for="user" class="col-sm-1 col-form-label text-right">Gudang :</label>
+                                <div class="col-sm-2">
 
-                                <div class="col-sm-3">
+                                    <input id="invoice_tax_date" name="invoice_tax_date" type="date" class="form-control" >
+
+                                </div>
+
+                                <label for="user" class="col-sm-1 col-form-label">Gudang</label>
+
+                                <div class="col-sm-2">
 
                                     <select id="warehouse" type="text" class="form-control"></select>
 
@@ -234,11 +244,11 @@ $assetsUrl = base_url('assets');
 
                             <div class="form-group row">
 
-                                <div class="col-md-8"></div>
+                                <div class="col-md-9"></div>
 
-                                <label for="user" class="col-sm-1 col-form-label text-right">User :</label>
+                                <label for="user" class="col-sm-1 col-form-label">User</label>
 
-                                <div class="col-sm-3">
+                                <div class="col-sm-2">
 
                                     <input id="display_user" type="text" class="form-control" value="<?= $user['user_realname'] ?>" readonly>
 
@@ -587,7 +597,7 @@ $assetsUrl = base_url('assets');
 
 
 
-                    <div class="row form-space">
+                    <div class="row footer-purchaseorder">
 
                         <div class="col-lg-6">
 
@@ -971,17 +981,17 @@ $assetsUrl = base_url('assets');
 
             if (x) {
 
-                $('#po_list').hide();
+                $('#returpurchase_list').hide();
 
-                $('#po_input').show();
+                $('#returpurchase_input').show();
 
 
 
             } else {
 
-                $('#po_list').show();
+                $('#returpurchase_list').show();
 
-                $('#po_input').hide();
+                $('#returpurchase_input').hide();
 
             }
 
@@ -1199,9 +1209,9 @@ $assetsUrl = base_url('assets');
 
             e.preventDefault();
 
-            let form = $('#frmpurchaseorder');
+            let form = $('#frmreturpurchase');
                             //let items = response.result.data;
-                            $('#title-frmpurchaseorder').html('Pengajuan Pesanan');
+                            $('#title-frmreturpurchase').html('Tambah Retur Pembelian');
 
                             formMode = 'add';
 
