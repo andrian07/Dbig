@@ -238,7 +238,6 @@ class EricDemo extends WebminController
         return $this->renderView('demo/stock_transfer/stock_transfer_report', $data);
     }
 
-
     public function reportSalesProductRecap()
     {
         $data = [
@@ -246,23 +245,18 @@ class EricDemo extends WebminController
             'userLogin'     => $this->userLogin
         ];
 
-        $export = $this->request->getGet('export');
-        if ($export == 'pdf') {
-            // instantiate and use the dompdf class
-            $dompdf = new Dompdf();
-            $htmlView   = $this->renderView('demo/report/product_sales_recap', $data);
-            $dompdf->loadHtml($htmlView);
+        $htmlView   = $this->renderView('demo/report/product_sales_recap', $data);
+        $agent = $this->request->getUserAgent();
 
-            // (Optional) Setup the paper size and orientation
-            $dompdf->setPaper('A4', 'landscape');
-
-            // Render the HTML as PDF
-            $dompdf->render();
-
-            // Output the generated PDF to Browser
-            $dompdf->stream('contoh_file_pdf');
+        if ($agent->isMobile()) {
+            return $htmlView;
         } else {
-            return $this->renderView('demo/report/product_sales_recap', $data);
+            $dompdf = new Dompdf();
+            $dompdf->loadHtml($htmlView);
+            $dompdf->setPaper('A4', 'landscape');
+            $dompdf->render();
+            $dompdf->stream('contoh_file_pdf.pdf', array("Attachment" => false));
+            exit();
         }
     }
 
