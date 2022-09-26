@@ -28,18 +28,15 @@ class Sales_admin extends WebminController
     {
         $export = $this->request->getGet('export');
         if ($export == 'pdf') {
+
+            
+            $htmlView   = $this->renderView('sales/salesadmin_invoice');
             $dompdf = new Dompdf();
-            $viewHtml = $this->renderView('sales/salesadmin_invoice');
-            $dompdf->loadHtml($viewHtml);
-
-            // (Optional) Setup the paper size and orientation
+            $dompdf->loadHtml($htmlView);
             $dompdf->setPaper('half-letter', 'landscape');
-
-            // Render the HTML as PDF
             $dompdf->render();
-
-            // Output the generated PDF to Browser
-            $dompdf->stream('invoice');
+            $dompdf->stream('invoice.pdf', array("Attachment" => false));
+            exit();
         } else {
             return $this->renderView('sales/salesadmin_invoice');
         }
