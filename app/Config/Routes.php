@@ -96,6 +96,21 @@ $routes->group('webmin/sales-admin', ['filter' => 'webminauth'], static function
 });
 /* end penjualan admin */
 
+/* Report */
+$routes->group('webmin/report', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\Report\Report::index');
+    $routes->get('barcode-generator', 'Webmin\Report\Report::barcodeGenerator');
+    $routes->get('price-tag', 'Webmin\Report\Report::priceTag');
+});
+
+/* Report Sales */
+$routes->group('webmin/report', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('view-sales-list', 'Webmin\Report\ReportSales::index');
+    $routes->get('sales-list', 'Webmin\Report\ReportSales::salesList');
+});
+
+/* End Report */
+
 /* POS */
 $routes->group('pos', static function ($routes) {
     $routes->get('/', 'Pos\Auth::index');

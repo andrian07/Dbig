@@ -13,6 +13,8 @@
         "dompdf/dompdf": "^2.0",
         "kint-php/kint": "^4.1.1",
         "laminas/laminas-escaper": "^2.9",
+        "phpoffice/phpspreadsheet": "^1.25",
+        "picqer/php-barcode-generator": "^2.2",
         "psr/log": "^1.1"
     },
     "require-dev": {

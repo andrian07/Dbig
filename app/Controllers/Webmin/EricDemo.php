@@ -210,7 +210,15 @@ class EricDemo extends WebminController
             'title'         => 'Stok Opname Report',
             'userLogin'     => $this->userLogin
         ];
-        return $this->renderView('demo/stock_opname/stock_opname_report', $data);
+        $htmlView = $this->renderView('demo/stock_opname/stock_opname_report', $data);
+
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($htmlView);
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+        $dompdf->stream('contoh_file_pdf.pdf', array("Attachment" => false));
+        exit();
     }
 
     public function stockTransfer()
@@ -235,7 +243,15 @@ class EricDemo extends WebminController
             'title'         => 'Stok Transfer Report',
             'userLogin'     => $this->userLogin
         ];
-        return $this->renderView('demo/stock_transfer/stock_transfer_report', $data);
+        $htmlView = $this->renderView('demo/stock_transfer/stock_transfer_report', $data);
+
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($htmlView);
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+        $dompdf->stream('contoh_file_pdf.pdf', array("Attachment" => false));
+        exit();
     }
 
     public function reportSalesProductRecap()
