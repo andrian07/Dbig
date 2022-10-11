@@ -5,6 +5,10 @@
     .text-red {
         color: red;
     }
+
+    .table-detail {
+        font-size: 10pt;
+    }
 </style>
 <?= $this->endSection() ?>
 
@@ -84,8 +88,8 @@
                                         <td>:&nbsp;1/2&nbsp;</td>
                                     </tr>
                                     <tr align="left">
-                                        <td class="text-right">PPN&nbsp;</td>
-                                        <td class="">: -&nbsp;</td>
+                                        <td class="text-right">PPN</td>
+                                        <td class="">: Y</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -100,60 +104,53 @@
                     <thead>
                         <tr>
                             <th class="header-table" width="3%">NO</th>
-                            <th class="header-table" width="10%" nowrap="">CABANG</th>
-                            <th class="header-table" width="10%" nowrap="">KASIR</th>
                             <th class="header-table" width="10%" nowrap="">INVOICE</th>
-                            <th class="header-table" width="10%">TANGGAL</th>
-                            <th class="header-table" width="27%">METODE PEMBAYARAN</th>
-                            <th class="header-table" width="10%">DPP</th>
-                            <th class="header-table" width="10%">PPN</th>
+                            <th class="header-table" width="8%">TANGGAL</th>
+                            <th class="header-table" width="10%">KODE BARANG</th>
+                            <th class="header-table" width="24%">NAMA BARANG</th>
+                            <th class="header-table" width="10%">SALESMAN</th>
+                            <th class="header-table" width="5%" nowrap="">QTY</th>
+                            <th class="header-table" width="10%" nowrap="">DPP</th>
+                            <th class="header-table" width="10%" nowrap="">PPN</th>
                             <th class="header-table" width="10%">TOTAL</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr align="left">
                             <td class="text-right">1&nbsp;</td>
-                            <td class="text-left">UTM</td>
-                            <td class="text-left">ANI</td>
                             <td class="text-left" nowrap="">SI/UTM/22/09/R00001&nbsp;</td>
                             <td class="text-left">01/09/2022&nbsp;</td>
-                            <td class="col-fixed text-left">CASH,VOUCHER,BNI REK 123</td>
-                            <td class="text-right">27,027.00&nbsp;</td>
-                            <td class="text-right">2,973.00&nbsp;</td>
+                            <td class="col-fixed text-left">1234567890123</td>
+                            <td class="col-fixed text-left">Toto Floor Drain (TX1DA)</td>
+                            <td class="col-fixed text-left">CR</td>
+                            <td class="text-right">999.00&nbsp;</td>
+                            <td class="text-right">30,000.00&nbsp;</td>
+                            <td class="text-right">30,000.00&nbsp;</td>
                             <td class="text-right">30,000.00&nbsp;</td>
                         </tr>
                         <tr align="left">
                             <td class="text-right">2&nbsp;</td>
-                            <td class="text-left">UTM</td>
-                            <td class="text-left">ANI</td>
                             <td class="text-left" nowrap="">SI/UTM/22/09/R00002&nbsp;</td>
                             <td class="text-left">02/09/2022&nbsp;</td>
-                            <td class="col-fixed text-left">CASH,BCA</td>
+                            <td class="col-fixed text-left">1234567890123</td>
+                            <td class="col-fixed text-left">Toto Floor Drain (TX1DA)</td>
+                            <td class="col-fixed text-left">CR</td>
+                            <td class="text-right">999.00&nbsp;</td>
                             <td class="text-right">50,000.00&nbsp;</td>
-                            <td class="text-right">0.00&nbsp;</td>
+                            <td class="text-right">50,000.00&nbsp;</td>
                             <td class="text-right">50,000.00&nbsp;</td>
                         </tr>
                         <tr align="left">
                             <td class="text-right">3&nbsp;</td>
-                            <td class="text-left">KBR</td>
-                            <td class="text-left">REZA</td>
                             <td class="text-left" nowrap="">SI/UTM/22/09/R00003&nbsp;</td>
                             <td class="text-left">02/09/2022&nbsp;</td>
-                            <td class="col-fixed text-left">BRI</td>
+                            <td class="col-fixed text-left">1234567890123</td>
+                            <td class="col-fixed text-left">Toto Floor Drain (TX1DA)</td>
+                            <td class="col-fixed text-left">MR</td>
+                            <td class="text-right">999.00&nbsp;</td>
                             <td class="text-right">200,000.00&nbsp;</td>
-                            <td class="text-right">0.00&nbsp;</td>
                             <td class="text-right">200,000.00&nbsp;</td>
-                        </tr>
-                        <tr align="left">
-                            <td class="text-right">4&nbsp;</td>
-                            <td class="text-left">UTM</td>
-                            <td class="text-left">ANI</td>
-                            <td class="text-left" nowrap="">SI/UTM/22/09/R00001&nbsp;</td>
-                            <td class="text-left">01/09/2022&nbsp;</td>
-                            <td class="col-fixed text-left">CASH,VOUCHER,BNI REK 123</td>
-                            <td class="text-right text-red">-27,027.00&nbsp;</td>
-                            <td class="text-right text-red">-2,973.00&nbsp;</td>
-                            <td class="text-right text-red">-30,000.00&nbsp;</td>
+                            <td class="text-right">200,000.00&nbsp;</td>
                         </tr>
                     </tbody>
                 </table>

@@ -54,7 +54,7 @@
                 <tbody>
                     <tr>
                         <td colspan="2" align="center">
-                            <p class="header2">LAPORAN PENJUALAN<br><br></p>
+                            <p class="header2">LAPORAN PENJUALAN PER SALESMAN<br><br></p>
                         </td>
                     </tr>
                     <tr valign="top">
@@ -66,7 +66,7 @@
                                         <td class="loseborder">: 01/09/2022 s.d 30/09/2022</td>
                                     </tr>
                                     <tr align="left">
-                                        <td class="loseborder">User</td>
+                                        <td class="loseborder">Salesman</td>
                                         <td class="loseborder">: -&nbsp;</td>
                                     </tr>
                                     <tr align="left">
@@ -85,7 +85,7 @@
                                     </tr>
                                     <tr align="left">
                                         <td class="text-right">PPN&nbsp;</td>
-                                        <td class="">: -&nbsp;</td>
+                                        <td class="">: Y&nbsp;</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -111,6 +111,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td colspan="9" class="text-left"><b>SALESMAN : CR - CRISTIAN REZA<b></td>
+                        </tr>
                         <tr align="left">
                             <td class="text-right">1&nbsp;</td>
                             <td class="text-left">UTM</td>
@@ -144,8 +147,11 @@
                             <td class="text-right">0.00&nbsp;</td>
                             <td class="text-right">200,000.00&nbsp;</td>
                         </tr>
+                        <tr>
+                            <td colspan="9" class="text-left"><b>SALESMAN : MR - MAMAN RISKI<b></td>
+                        </tr>
                         <tr align="left">
-                            <td class="text-right">4&nbsp;</td>
+                            <td class="text-right">1&nbsp;</td>
                             <td class="text-left">UTM</td>
                             <td class="text-left">ANI</td>
                             <td class="text-left" nowrap="">SI/UTM/22/09/R00001&nbsp;</td>

@@ -187,4 +187,16 @@ class MyApp extends BaseConfig
             ]
         ],
     ];
+
+    public $barcodeType = [
+        'auto'          => 'AUTO',
+        'code_128'      => 'CODE 128',
+        'code_128_a'    => 'CODE 128 A',
+        'code_128_b'    => 'CODE 128 B',
+        'code_128_c'    => 'CODE 128 C',
+        'upc_a'         => 'UPC A',
+        'ean_13'        => 'EAN 13',
+        'ean_8'         => 'EAN 8',
+        'code_39'       => 'CODE 39',
+    ];
 }

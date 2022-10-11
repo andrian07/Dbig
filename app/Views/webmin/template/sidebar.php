@@ -245,6 +245,13 @@
 								<p>Pelunasan Piutang</p>
 							</a>
 						</li>
+
+						<li class="nav-item">
+							<a href="<?= base_url('webmin/consignment-repayment') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Pelunasan Konsinyasi</p>
+							</a>
+						</li>
 					</ul>
 				</li>
 
@@ -281,7 +288,7 @@
 				</li>
 
 				<li class="nav-item">
-					<a href="<?= base_url('webmin/report/view-product-sales-recap') ?>" class="nav-link">
+					<a href="<?= base_url('webmin/report') ?>" class="nav-link">
 						<i class="nav-icon fas fa-file"></i>
 						<p>
 							Laporan

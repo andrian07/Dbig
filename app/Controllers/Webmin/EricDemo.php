@@ -169,6 +169,39 @@ class EricDemo extends WebminController
         return $this->renderView('demo/repayment/debt_repayment_detail', $data);
     }
 
+    public function consignmentRepayment()
+    {
+        $data = [
+            'title'         => 'Pelunasan Konsinyasi'
+        ];
+        return $this->renderView('demo/repayment/consignment_repayment', $data);
+    }
+
+    public function consignmentRepaymentDetail()
+    {
+        $data = [
+            'title'         => 'Detail Pelunasan Konsinyasi'
+        ];
+        return $this->renderView('demo/repayment/consignment_repayment_detail', $data);
+    }
+
+    public function consignmentRepaymentInvoice()
+    {
+        $data = [
+            'title'         => 'Rekap Penjualan Konsinyasi',
+            'userLogin'     => $this->userLogin
+        ];
+        $htmlView = $this->renderView('demo/repayment/consignment_repayment_invoice', $data);
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($htmlView);
+        $dompdf->setPaper('A4', 'landscape');
+        $dompdf->render();
+        $dompdf->stream('invoice_hutang_konsinyasi.pdf', array("Attachment" => false));
+        exit();
+    }
+
+
 
     public function receivableRepayment()
     {
@@ -286,6 +319,13 @@ class EricDemo extends WebminController
 
         return $this->renderView('demo/report/view_product_sales_recap', $data);
     }
+
+    // report customer //
+
+
+
+
+
 
 
 

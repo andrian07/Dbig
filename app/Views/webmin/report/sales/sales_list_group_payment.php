@@ -54,7 +54,7 @@
                 <tbody>
                     <tr>
                         <td colspan="2" align="center">
-                            <p class="header2">LAPORAN PENJUALAN<br><br></p>
+                            <p class="header2">LAPORAN PENJUALAN PER JENIS PEMBAYARAN<br><br></p>
                         </td>
                     </tr>
                     <tr valign="top">
@@ -66,7 +66,7 @@
                                         <td class="loseborder">: 01/09/2022 s.d 30/09/2022</td>
                                     </tr>
                                     <tr align="left">
-                                        <td class="loseborder">User</td>
+                                        <td class="loseborder">Jenis Pembayaran</td>
                                         <td class="loseborder">: -&nbsp;</td>
                                     </tr>
                                     <tr align="left">
@@ -84,8 +84,8 @@
                                         <td>:&nbsp;1/2&nbsp;</td>
                                     </tr>
                                     <tr align="left">
-                                        <td class="text-right">PPN&nbsp;</td>
-                                        <td class="">: -&nbsp;</td>
+                                        <td class="text-right">&nbsp;</td>
+                                        <td class="">&nbsp;</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -104,23 +104,22 @@
                             <th class="header-table" width="10%" nowrap="">KASIR</th>
                             <th class="header-table" width="10%" nowrap="">INVOICE</th>
                             <th class="header-table" width="10%">TANGGAL</th>
-                            <th class="header-table" width="27%">METODE PEMBAYARAN</th>
-                            <th class="header-table" width="10%">DPP</th>
-                            <th class="header-table" width="10%">PPN</th>
-                            <th class="header-table" width="10%">TOTAL</th>
+                            <th class="header-table" width="15%">TOTAL</th>
+                            <th class="header-table" width="42%">KETERANGAN</th>
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td colspan="7" class="text-left"><b>CASH<b></td>
+                        </tr>
                         <tr align="left">
                             <td class="text-right">1&nbsp;</td>
                             <td class="text-left">UTM</td>
                             <td class="text-left">ANI</td>
                             <td class="text-left" nowrap="">SI/UTM/22/09/R00001&nbsp;</td>
                             <td class="text-left">01/09/2022&nbsp;</td>
-                            <td class="col-fixed text-left">CASH,VOUCHER,BNI REK 123</td>
-                            <td class="text-right">27,027.00&nbsp;</td>
-                            <td class="text-right">2,973.00&nbsp;</td>
-                            <td class="text-right">30,000.00&nbsp;</td>
+                            <td class="text-right">10,000.00&nbsp;</td>
+                            <td class="col-fixed text-left">CASH 10,000.00,VOUCHER 20,000.00</td>
                         </tr>
                         <tr align="left">
                             <td class="text-right">2&nbsp;</td>
@@ -128,10 +127,8 @@
                             <td class="text-left">ANI</td>
                             <td class="text-left" nowrap="">SI/UTM/22/09/R00002&nbsp;</td>
                             <td class="text-left">02/09/2022&nbsp;</td>
-                            <td class="col-fixed text-left">CASH,BCA</td>
                             <td class="text-right">50,000.00&nbsp;</td>
-                            <td class="text-right">0.00&nbsp;</td>
-                            <td class="text-right">50,000.00&nbsp;</td>
+                            <td class="col-fixed text-left">CASH 50,000.00</td>
                         </tr>
                         <tr align="left">
                             <td class="text-right">3&nbsp;</td>
@@ -139,21 +136,32 @@
                             <td class="text-left">REZA</td>
                             <td class="text-left" nowrap="">SI/UTM/22/09/R00003&nbsp;</td>
                             <td class="text-left">02/09/2022&nbsp;</td>
-                            <td class="col-fixed text-left">BRI</td>
-                            <td class="text-right">200,000.00&nbsp;</td>
-                            <td class="text-right">0.00&nbsp;</td>
-                            <td class="text-right">200,000.00&nbsp;</td>
+                            <td class="text-right">50,000.00&nbsp;</td>
+                            <td class="col-fixed text-left">CASH 50,000.00,BCA 150,000.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="text-left"><b>VOUCHER<b></td>
                         </tr>
                         <tr align="left">
-                            <td class="text-right">4&nbsp;</td>
+                            <td class="text-right">1&nbsp;</td>
                             <td class="text-left">UTM</td>
                             <td class="text-left">ANI</td>
                             <td class="text-left" nowrap="">SI/UTM/22/09/R00001&nbsp;</td>
                             <td class="text-left">01/09/2022&nbsp;</td>
-                            <td class="col-fixed text-left">CASH,VOUCHER,BNI REK 123</td>
-                            <td class="text-right text-red">-27,027.00&nbsp;</td>
-                            <td class="text-right text-red">-2,973.00&nbsp;</td>
-                            <td class="text-right text-red">-30,000.00&nbsp;</td>
+                            <td class="text-right">20,000.00&nbsp;</td>
+                            <td class="col-fixed text-left">CASH 10,000.00,VOUCHER 20,000.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="text-left"><b>BCA<b></td>
+                        </tr>
+                        <tr align="left">
+                            <td class="text-right">1&nbsp;</td>
+                            <td class="text-left">KBR</td>
+                            <td class="text-left">REZA</td>
+                            <td class="text-left" nowrap="">SI/UTM/22/09/R00003&nbsp;</td>
+                            <td class="text-left">02/09/2022&nbsp;</td>
+                            <td class="text-right">150,000.00&nbsp;</td>
+                            <td class="col-fixed text-left">CASH 50,000.00,BCA 150,000.00</td>
                         </tr>
                     </tbody>
                 </table>

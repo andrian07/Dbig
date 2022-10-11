@@ -5,7 +5,7 @@ namespace App\Controllers\Webmin\Report;
 use Dompdf\Dompdf;
 use App\Controllers\Base\WebminController;
 
-class ReportSales extends WebminController
+class ReportCustomer extends WebminController
 {
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
@@ -14,34 +14,75 @@ class ReportSales extends WebminController
 
     public function index()
     {
-        $data = [
-            'title'     => 'Laporan Penjualan',
-        ];
-        return $this->renderView('report/sales/view_sales_list', $data);
+        die('ReportCustomer');
     }
 
-    public function salesList()
+    public function viewCustomerList()
     {
         $data = [
-            'title'         => 'Laporan Penjualan',
+            'title'         => 'Daftar Customer',
             'userLogin'     => $this->userLogin
         ];
 
-        $agent = $this->request->getUserAgent();
+        return $this->renderView('report/customer/view_customer_list', $data);
+    }
+
+    public function customerList()
+    {
+        $data = [
+            'title'         => 'Daftar Customer',
+            'userLogin'     => $this->userLogin
+        ];
+
+        $htmlView   = view('webmin/report/customer/customer_list', $data);
         $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
         $fileType   = $this->request->getGet('file');
-        $detail     = $this->request->getGet('detail') == NULL ? 'N' : $this->request->getGet('detail');
+        $agent      = $this->request->getUserAgent();
 
-        if (!in_array($fileType, ['pdf', 'xlsx'])) {
+        if (!in_array($fileType, ['pdf'])) {
             $fileType = 'pdf';
         }
 
-        if ($detail == 'Y') {
-            $htmlView = $this->renderView('report/sales/sales_list_detail', $data);
+        if ($agent->isMobile()  && !$isDownload) {
+            return $htmlView;
         } else {
-            $htmlView = $this->renderView('report/sales/sales_list', $data);
+            if ($fileType == 'pdf') {
+                $dompdf = new Dompdf();
+                $dompdf->loadHtml($htmlView);
+                $dompdf->setPaper('A4', 'landscape');
+                $dompdf->render();
+                $dompdf->stream('daftar_customer.pdf', array("Attachment" => $isDownload));
+                exit();
+            } else {
+                die('Export Excel Script');
+            }
         }
+    }
 
+    public function viewPointExchangeList()
+    {
+        $data = [
+            'title'         => 'Daftar Penukaran Poin',
+            'userLogin'     => $this->userLogin
+        ];
+
+        return $this->renderView('report/customer/view_point_exchange_list', $data);
+    }
+
+    public function pointExchangeList()
+    {
+        $data = [
+            'title'         => 'Daftar Penukaran Poin',
+            'userLogin'     => $this->userLogin
+        ];
+
+        $htmlView   = view('webmin/report/customer/point_exchange_list', $data);
+        $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
+        $fileType   = $this->request->getGet('file');
+        $agent      = $this->request->getUserAgent();
+        if (!in_array($fileType, ['pdf'])) {
+            $fileType = 'pdf';
+        }
         if ($agent->isMobile() && !$isDownload) {
             return $htmlView;
         } else {
@@ -50,7 +91,7 @@ class ReportSales extends WebminController
                 $dompdf->loadHtml($htmlView);
                 $dompdf->setPaper('A4', 'landscape');
                 $dompdf->render();
-                $dompdf->stream('laporan_penjualan_ddmmyyyyy_hhiiss.pdf', array("Attachment" => $isDownload));
+                $dompdf->stream('daftar_penukaran_poin.pdf', array("Attachment" => $isDownload));
                 exit();
             } else {
                 die('Export Excel Script');
@@ -58,37 +99,31 @@ class ReportSales extends WebminController
         }
     }
 
-    public function viewSalesListGroupSalesman()
-    {
-        $data = [
-            'title'     => 'Laporan Penjualan Per Salesman',
-        ];
-        return $this->renderView('report/sales/view_sales_list_group_salesman', $data);
-    }
 
-    public function salesListGroupSalesman()
+    public function viewCustomerReceivableList()
     {
         $data = [
-            'title'         => 'Laporan Penjualan Per Salesman',
+            'title'         => 'Daftar Piutang Customer',
             'userLogin'     => $this->userLogin
         ];
 
-        $agent = $this->request->getUserAgent();
+        return $this->renderView('report/customer/view_customer_receivable_list', $data);
+    }
+
+    public function customerReceivableList()
+    {
+        $data = [
+            'title'         => 'Daftar Penukaran Poin',
+            'userLogin'     => $this->userLogin
+        ];
+
+        $htmlView   = view('webmin/report/customer/customer_receivable_list', $data);
         $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
         $fileType   = $this->request->getGet('file');
-        $detail     = $this->request->getGet('detail') == NULL ? 'N' : $this->request->getGet('detail');
-        //$detail = 'Y';
-        if (!in_array($fileType, ['pdf', 'xlsx'])) {
+        $agent      = $this->request->getUserAgent();
+        if (!in_array($fileType, ['pdf'])) {
             $fileType = 'pdf';
         }
-
-        if ($detail == 'Y') {
-            $htmlView = $this->renderView('report/sales/sales_list_group_salesman_detail', $data);
-        } else {
-            $htmlView = $this->renderView('report/sales/sales_list_group_salesman', $data);
-        }
-
-
         if ($agent->isMobile() && !$isDownload) {
             return $htmlView;
         } else {
@@ -97,7 +132,7 @@ class ReportSales extends WebminController
                 $dompdf->loadHtml($htmlView);
                 $dompdf->setPaper('A4', 'landscape');
                 $dompdf->render();
-                $dompdf->stream('laporan_penjualan_ddmmyyyyy_hhiiss.pdf', array("Attachment" => $isDownload));
+                $dompdf->stream('daftar_piutang_customer.pdf', array("Attachment" => $isDownload));
                 exit();
             } else {
                 die('Export Excel Script');
@@ -105,40 +140,40 @@ class ReportSales extends WebminController
         }
     }
 
-    public function viewSalesListGroupPayment()
-    {
-        $data = [
-            'title'     => 'Laporan Penjualan Per Jenis Pembayaran',
-        ];
-        return $this->renderView('report/sales/view_sales_list_group_payment', $data);
-    }
 
-    public function salesListGroupPayment()
+    public function viewCustomerReceivableReceipt()
     {
         $data = [
-            'title'         => 'Laporan Penjualan Per Jenis Pembayaran',
+            'title'         => 'Cetak Kwitansi Tagihan',
             'userLogin'     => $this->userLogin
         ];
 
-        $agent = $this->request->getUserAgent();
+        return $this->renderView('report/customer/view_customer_receivable_receipt', $data);
+    }
+
+    public function customerReceivableReceipt()
+    {
+        $data = [
+            'title'         => 'Kwitansi Tagihan',
+            'userLogin'     => $this->userLogin
+        ];
+
+        $htmlView   = view('webmin/report/customer/customer_receivable_receipt', $data);
         $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
         $fileType   = $this->request->getGet('file');
-
-        if (!in_array($fileType, ['pdf', 'xlsx'])) {
+        $agent      = $this->request->getUserAgent();
+        if (!in_array($fileType, ['pdf'])) {
             $fileType = 'pdf';
         }
-
-        $htmlView = $this->renderView('report/sales/sales_list_group_payment', $data);
-
         if ($agent->isMobile() && !$isDownload) {
             return $htmlView;
         } else {
             if ($fileType == 'pdf') {
                 $dompdf = new Dompdf();
                 $dompdf->loadHtml($htmlView);
-                $dompdf->setPaper('A4', 'landscape');
+                $dompdf->setPaper('A4', 'portait');
                 $dompdf->render();
-                $dompdf->stream('laporan_penjualan_ddmmyyyyy_hhiiss.pdf', array("Attachment" => $isDownload));
+                $dompdf->stream('kwitansi_tagihan_customer.pdf', array("Attachment" => $isDownload));
                 exit();
             } else {
                 die('Export Excel Script');
@@ -147,51 +182,9 @@ class ReportSales extends WebminController
     }
 
 
-    public function viewProjectSalesList()
-    {
-        $data = [
-            'title'     => 'Laporan Penjualan Proyek',
-        ];
-        return $this->renderView('report/sales/view_project_sales_list', $data);
-    }
 
-    public function projectSalesList()
-    {
-        $data = [
-            'title'         => 'Laporan Penjualan Proyek',
-            'userLogin'     => $this->userLogin
-        ];
+    //
 
-        $agent = $this->request->getUserAgent();
-        $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
-        $fileType   = $this->request->getGet('file');
-        $detail     = $this->request->getGet('detail') == NULL ? 'N' : $this->request->getGet('detail');
-
-        if (!in_array($fileType, ['pdf', 'xlsx'])) {
-            $fileType = 'pdf';
-        }
-
-        if ($detail == 'Y') {
-            $htmlView = $this->renderView('report/sales/project_sales_list_detail', $data);
-        } else {
-            $htmlView = $this->renderView('report/sales/project_sales_list', $data);
-        }
-
-        if ($agent->isMobile() && !$isDownload) {
-            return $htmlView;
-        } else {
-            if ($fileType == 'pdf') {
-                $dompdf = new Dompdf();
-                $dompdf->loadHtml($htmlView);
-                $dompdf->setPaper('A4', 'landscape');
-                $dompdf->render();
-                $dompdf->stream('laporan_penjualan_ddmmyyyyy_hhiiss.pdf', array("Attachment" => $isDownload));
-                exit();
-            } else {
-                die('Export Excel Script');
-            }
-        }
-    }
 
 
 

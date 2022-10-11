@@ -2,7 +2,7 @@
 
 <?= $this->section('css') ?>
 <style>
-    .text-red {
+    #sample {
         color: red;
     }
 </style>
@@ -25,7 +25,7 @@
 
     <div class="text-center">
         <div class="text-center">
-            <div width="1100px">
+            <div width="780px">
                 <table width="100%">
                     <tbody>
                         <tr>
@@ -54,29 +54,29 @@
                 <tbody>
                     <tr>
                         <td colspan="2" align="center">
-                            <p class="header2">LAPORAN PENJUALAN<br><br></p>
+                            <p class="header2">Daftar Customer<br><br></p>
                         </td>
                     </tr>
                     <tr valign="top">
-                        <td width="65%" class="loseborder">
+                        <td width="50%" class="loseborder">
                             <table>
                                 <tbody>
                                     <tr align="left" class="loseborder">
-                                        <td width="120" class="loseborder">Tanggal Transaksi</td>
-                                        <td class="loseborder">: 01/09/2022 s.d 30/09/2022</td>
-                                    </tr>
-                                    <tr align="left">
-                                        <td class="loseborder">User</td>
+                                        <td width="120" class="loseborder">Kabupaten</td>
                                         <td class="loseborder">: -&nbsp;</td>
                                     </tr>
                                     <tr align="left">
-                                        <td class="loseborder">Toko</td>
+                                        <td class="loseborder">Kecamatan</td>
+                                        <td class="loseborder">: -</td>
+                                    </tr>
+                                    <tr align="left">
+                                        <td class="loseborder">Kelurahan</td>
                                         <td class="loseborder">: -</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </td>
-                        <td width="35%" class="loseborder">
+                        <td width="50%" class="loseborder">
                             <table>
                                 <tbody>
                                     <tr align="left">
@@ -84,8 +84,12 @@
                                         <td>:&nbsp;1/2&nbsp;</td>
                                     </tr>
                                     <tr align="left">
-                                        <td class="text-right">PPN&nbsp;</td>
-                                        <td class="">: -&nbsp;</td>
+                                        <td class="text-right">Grup</td>
+                                        <td class="">:&nbsp;G1 - UMUM</td>
+                                    </tr>
+                                    <tr align="left">
+                                        <td class="text-right">Masa Berlaku</td>
+                                        <td class="">:&nbsp;Masih Berlaku</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -100,60 +104,55 @@
                     <thead>
                         <tr>
                             <th class="header-table" width="3%">NO</th>
-                            <th class="header-table" width="10%" nowrap="">CABANG</th>
-                            <th class="header-table" width="10%" nowrap="">KASIR</th>
-                            <th class="header-table" width="10%" nowrap="">INVOICE</th>
-                            <th class="header-table" width="10%">TANGGAL</th>
-                            <th class="header-table" width="27%">METODE PEMBAYARAN</th>
-                            <th class="header-table" width="10%">DPP</th>
-                            <th class="header-table" width="10%">PPN</th>
-                            <th class="header-table" width="10%">TOTAL</th>
+                            <th class="header-table" width="10%" nowrap="">KODE CUSTOMER</th>
+                            <th class="header-table" width="15%">NAMA CUSTOMER</th>
+                            <th class="header-table" width="35%">ALAMAT</th>
+                            <th class="header-table" width="17%">NO TELP</th>
+                            <th class="header-table" width="10%" nowrap="">GRUP CUSTOMER</th>
+                            <th class="header-table" width="10%" nowrap="">EXP DATE</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr align="left">
                             <td class="text-right">1&nbsp;</td>
-                            <td class="text-left">UTM</td>
-                            <td class="text-left">ANI</td>
-                            <td class="text-left" nowrap="">SI/UTM/22/09/R00001&nbsp;</td>
-                            <td class="text-left">01/09/2022&nbsp;</td>
-                            <td class="col-fixed text-left">CASH,VOUCHER,BNI REK 123</td>
-                            <td class="text-right">27,027.00&nbsp;</td>
-                            <td class="text-right">2,973.00&nbsp;</td>
-                            <td class="text-right">30,000.00&nbsp;</td>
+                            <td align="text-left" nowrap="">0000000001&nbsp;</td>
+                            <td class="text-left">Samsul&nbsp;</td>
+                            <td class="col-fixed text-left">Jl.Sui raya km 8.5 no 25&nbsp;</td>
+                            <td class="col-fixed text-left">
+                                0896-7899-8899
+                            </td>
+                            <td class="text-left">G1 - Silver&nbsp;</td>
+                            <td class="text-left">15/10/2022&nbsp;</td>
                         </tr>
                         <tr align="left">
                             <td class="text-right">2&nbsp;</td>
-                            <td class="text-left">UTM</td>
-                            <td class="text-left">ANI</td>
-                            <td class="text-left" nowrap="">SI/UTM/22/09/R00002&nbsp;</td>
-                            <td class="text-left">02/09/2022&nbsp;</td>
-                            <td class="col-fixed text-left">CASH,BCA</td>
-                            <td class="text-right">50,000.00&nbsp;</td>
-                            <td class="text-right">0.00&nbsp;</td>
-                            <td class="text-right">50,000.00&nbsp;</td>
+                            <td align="text-left" nowrap="">0000000002&nbsp;</td>
+                            <td class="col-fixed text-left">Udin&nbsp;</td>
+                            <td class="col-fixed text-left">Jl.Sui raya km 8.5 no 39
+                                (Sebelah Smk Immanuel II)&nbsp;</td>
+                            <td class="col-fixed text-left">
+                                0896-7899-5555
+                            </td>
+                            <td class="text-left">G2 - Gold&nbsp;</td>
+                            <td class="text-left">31/10/2022&nbsp;</td>
                         </tr>
                         <tr align="left">
                             <td class="text-right">3&nbsp;</td>
-                            <td class="text-left">KBR</td>
-                            <td class="text-left">REZA</td>
-                            <td class="text-left" nowrap="">SI/UTM/22/09/R00003&nbsp;</td>
-                            <td class="text-left">02/09/2022&nbsp;</td>
-                            <td class="col-fixed text-left">BRI</td>
-                            <td class="text-right">200,000.00&nbsp;</td>
-                            <td class="text-right">0.00&nbsp;</td>
-                            <td class="text-right">200,000.00&nbsp;</td>
+                            <td class="text-left" nowrap="">0000000003&nbsp;</td>
+                            <td class="text-left">Ricky Acinda&nbsp;</td>
+                            <td class="col-fixed text-left">Jl.Gajah Mada GG.XYZ No 10&nbsp;</td>
+                            <td class="col-fixed text-left">0896-8888-5656&nbsp;</td>
+                            <td class="text-left">G3 - Platinum&nbsp;</td>
+                            <td class="text-left">31/12/2022&nbsp;</td>
                         </tr>
                         <tr align="left">
                             <td class="text-right">4&nbsp;</td>
-                            <td class="text-left">UTM</td>
-                            <td class="text-left">ANI</td>
-                            <td class="text-left" nowrap="">SI/UTM/22/09/R00001&nbsp;</td>
-                            <td class="text-left">01/09/2022&nbsp;</td>
-                            <td class="col-fixed text-left">CASH,VOUCHER,BNI REK 123</td>
-                            <td class="text-right text-red">-27,027.00&nbsp;</td>
-                            <td class="text-right text-red">-2,973.00&nbsp;</td>
-                            <td class="text-right text-red">-30,000.00&nbsp;</td>
+                            <td class="text-left" nowrap="">0000000004&nbsp;</td>
+                            <td class="text-left">PT Aneka Jaya&nbsp;</td>
+                            <td class="col-fixed text-left">Jl.Gajah Mada No.5&nbsp;</td>
+                            <td class="col-fixed text-left">0896-7899-8899&nbsp;</td>
+                            <td class="text-left">G4 - Proyek&nbsp;</td>
+                            <td class="text-left">31/12/2022&nbsp;</td>
                         </tr>
                     </tbody>
                 </table>
@@ -163,7 +162,6 @@
         </div>
     </div>
 </div>
-
 
 
 

@@ -98,16 +98,58 @@ $routes->group('webmin/sales-admin', ['filter' => 'webminauth'], static function
 
 /* Report */
 $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($routes) {
+    /* Section Utility */
     $routes->get('/', 'Webmin\Report\Report::index');
-    $routes->get('barcode-generator', 'Webmin\Report\Report::barcodeGenerator');
+    $routes->get('view-barcode-generate', 'Webmin\Report\Report::viewBarcodeGenerate');
+    $routes->get('view-price-tag', 'Webmin\Report\Report::viewPriceTag');
+    $routes->get('barcode-generate', 'Webmin\Report\Report::barcodeGenerate');
     $routes->get('price-tag', 'Webmin\Report\Report::priceTag');
-});
 
-/* Report Sales */
-$routes->group('webmin/report', ['filter' => 'webminauth'], static function ($routes) {
+    /* Section Customer */
+    $routes->get('view-customer-list', 'Webmin\Report\ReportCustomer::viewCustomerList');
+    $routes->get('customer-list', 'Webmin\Report\ReportCustomer::customerList');
+    $routes->get('view-point-exchange-list', 'Webmin\Report\ReportCustomer::viewPointExchangeList');
+    $routes->get('point-exchange-list', 'Webmin\Report\ReportCustomer::pointExchangeList');
+    $routes->get('view-customer-receivable-list', 'Webmin\Report\ReportCustomer::viewCustomerReceivableList');
+    $routes->get('customer-receivable-list', 'Webmin\Report\ReportCustomer::customerReceivableList');
+    $routes->get('view-customer-receivable-receipt', 'Webmin\Report\ReportCustomer::viewCustomerReceivableReceipt');
+    $routes->get('customer-receivable-receipt', 'Webmin\Report\ReportCustomer::customerReceivableReceipt');
+
+    /* Section  Inventory */
+    $routes->get('view-stock-list', 'Webmin\Report\ReportInventory::viewStockList');
+    $routes->get('stock-list', 'Webmin\Report\ReportInventory::stockList');
+    $routes->get('view-stock-card', 'Webmin\Report\ReportInventory::viewStockCard');
+    $routes->get('stock-card', 'Webmin\Report\ReportInventory::stockCard');
+    $routes->get('view-stock-opname-list', 'Webmin\Report\ReportInventory::viewStockOpnameList');
+    $routes->get('stock-opname-list', 'Webmin\Report\ReportInventory::stockOpnameList');
+    $routes->get('view-stock-transfer-list', 'Webmin\Report\ReportInventory::viewStockTransferList');
+    $routes->get('stock-transfer-list', 'Webmin\Report\ReportInventory::stockTransferList');
+
+    $routes->get('view-dead-stock-list', 'Webmin\Report\ReportInventory::viewDeadStockList');
+    $routes->get('dead-stock-list', 'Webmin\Report\ReportInventory::deadStockList');
+    $routes->get('view-exp-stock-list', 'Webmin\Report\ReportInventory::viewExpStockList');
+    $routes->get('exp-stock-list', 'Webmin\Report\ReportInventory::expStockList');
+
+
+    /* Section Sales */
     $routes->get('view-sales-list', 'Webmin\Report\ReportSales::index');
     $routes->get('sales-list', 'Webmin\Report\ReportSales::salesList');
+    $routes->get('view-sales-list-group-salesman', 'Webmin\Report\ReportSales::viewSalesListGroupSalesman');
+    $routes->get('sales-list-group-salesman', 'Webmin\Report\ReportSales::salesListGroupSalesman');
+    $routes->get('view-sales-list-group-payment', 'Webmin\Report\ReportSales::viewSalesListGroupPayment');
+    $routes->get('sales-list-group-payment', 'Webmin\Report\ReportSales::salesListGroupPayment');
+
+    $routes->get('view-project-sales-list', 'Webmin\Report\ReportSales::viewProjectSalesList');
+    $routes->get('project-sales-list', 'Webmin\Report\ReportSales::projectSalesList');
+    $routes->get('view-project-sales-list-group-salesman', 'Webmin\Report\ReportSales::viewProjectSalesListGroupSalesman');
+    $routes->get('project-sales-list-group-salesman', 'Webmin\Report\ReportSales::projectSalesListGroupSalesman');
+    $routes->get('view-project-sales-list-group-customer', 'Webmin\Report\ReportSales::viewProjectSalesListGroupCustomer');
+    $routes->get('project-sales-list-group-customer', 'Webmin\Report\ReportSales::projectSalesListGroupCustomer');
 });
+
+
+
+
 
 /* End Report */
 
@@ -168,6 +210,10 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
 
     $routes->get('receivable-repayment', 'Webmin\EricDemo::receivableRepayment');
     $routes->get('receivable-repayment/detail', 'Webmin\EricDemo::receivableRepaymentDetail');
+
+    $routes->get('consignment-repayment', 'Webmin\EricDemo::consignmentRepayment');
+    $routes->get('consignment-repayment/invoice', 'Webmin\EricDemo::consignmentRepaymentInvoice');
+    $routes->get('consignment-repayment/detail', 'Webmin\EricDemo::consignmentRepaymentDetail');
 
 
     $routes->get('stock-opname', 'Webmin\EricDemo::stockOpname');
