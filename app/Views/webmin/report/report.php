@@ -27,7 +27,7 @@ $report_role = $user_role['report'];
                 <div class="col-md-4">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Daftar</h3>
+                            <h3 class="card-title">Customer</h3>
 
                             <div class="card-tools">
                                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -41,8 +41,9 @@ $report_role = $user_role['report'];
                             <ul class="list-group">
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-customer-list') ?>" class="text-primary">Daftar Customer</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-point-exchange-list') ?>" class="text-primary">Laporan Penukaran Poin</a></li>
+                                <!--
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-customer-point-history-chart') ?>" class="text-primary">Grafik Histori Poin Customer</a></li>
-
+                                -->
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-customer-receivable-list') ?>" class="text-primary">Daftar Tagihan Piutang</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-customer-receivable-receipt') ?>" class="text-primary">Cetak Kwitansi Penagihan</a></li>
 
@@ -69,7 +70,9 @@ $report_role = $user_role['report'];
                         <!-- /.card-header -->
                         <div class="card-body">
                             <ul class="list-group">
+                                <!--
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-product-list') ?>" class="text-primary">Daftar Produk</a></li>
+                                -->
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-list') ?>" class="text-primary">Laporan Stok Produk</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-card') ?>" class="text-primary">Kartu Stok</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-opname-list') ?>" class="text-primary">Laporan Stok Opname</a></li>
@@ -100,20 +103,20 @@ $report_role = $user_role['report'];
                         <!-- /.card-header -->
                         <div class="card-body">
                             <ul class="list-group">
+                                <!--
                                 <li class="list-group-item"><a href="<?= base_url('report/view-purchase-list') ?>" class="text-primary">Daftar Pembelian</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('report/view-supplier-purchase-list') ?>" class="text-primary">Daftar Pembelian Per Supplier</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('report/view-product-purchase-recap') ?>" class="text-primary">Rekap Pembelian Produk</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('report/view-product-purchase-history') ?>" class="text-primary">Histori Pembelian Produk</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('report/view-purchase-debt-due-list') ?>" class="text-primary">Daftar Tagihan Jatuh Tempo</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('report/view-purchase-repayment-list') ?>" class="text-primary">Daftar Pelunasan Pembelian</a></li>
+                                -->
                             </ul>
                         </div>
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
                 </div>
-
-
 
                 <div class="col-md-4">
                     <div class="card card-danger">
@@ -129,14 +132,17 @@ $report_role = $user_role['report'];
                         <!-- /.card-header -->
                         <div class="card-body">
                             <ul class="list-group">
+                                <!--
                                 <li class="list-group-item"><a href="<?= base_url('report/view-purchase-return-list') ?>" class="text-primary">Daftar Retur Pembelian</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('report/view-product-purchase-return-recap') ?>" class="text-primary">Rekap Retur Pembelian Produk</a></li>
+-->
                             </ul>
                         </div>
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
                 </div>
+
 
 
 
@@ -158,17 +164,9 @@ $report_role = $user_role['report'];
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list') ?>" class="text-primary">Laporan Penjualan Retail</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-salesman') ?>" class="text-primary">Laporan Penjualan Retail Per Salesman</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-payment') ?>" class="text-primary">Laporan Penjualan Retail Per Metode Pembayaran</a></li>
-
-
-                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-sales-list') ?>" class="text-primary">Laporan Penjualan Proyek</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-sales-list') ?>" class="text-primary">Laporan Penjualan Proyek </a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-sales-list-group-salesman') ?>" class="text-primary">Laporan Penjualan Proyek Per Salesman</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-sales-list-group-customer') ?>" class="text-primary">Laporan Penjualan Proyek Per Customer</a></li>
-
-
-
-
-
-
                             </ul>
                         </div>
                         <!-- /.card-body -->
@@ -191,9 +189,10 @@ $report_role = $user_role['report'];
                         <!-- /.card-header -->
                         <div class="card-body">
                             <ul class="list-group">
+                                <!--
                                 <li class="list-group-item"><a href="<?= base_url('report/view-sales-return-list') ?>" class="text-primary">Daftar Retur Penjualan</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('report/view-user-sales-return-list') ?>" class="text-primary">Daftar Retur Penjualan Per User</a></li>
-
+-->
                             </ul>
                         </div>
                         <!-- /.card-body -->

@@ -171,6 +171,7 @@ class ReportSales extends WebminController
             $fileType = 'pdf';
         }
 
+        //$detail = 'Y';
         if ($detail == 'Y') {
             $htmlView = $this->renderView('report/sales/project_sales_list_detail', $data);
         } else {
@@ -192,6 +193,101 @@ class ReportSales extends WebminController
             }
         }
     }
+
+
+    public function viewProjectSalesListGroupCustomer()
+    {
+        $data = [
+            'title'     => 'Laporan Penjualan Proyek Per Customer',
+        ];
+        return $this->renderView('report/sales/view_project_sales_list_group_customer', $data);
+    }
+
+    public function projectSalesListGroupCustomer()
+    {
+        $data = [
+            'title'         => 'Laporan Penjualan Proyek Per Customer',
+            'userLogin'     => $this->userLogin
+        ];
+
+        $agent = $this->request->getUserAgent();
+        $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
+        $fileType   = $this->request->getGet('file');
+        $detail     = $this->request->getGet('detail') == NULL ? 'N' : $this->request->getGet('detail');
+
+        if (!in_array($fileType, ['pdf', 'xlsx'])) {
+            $fileType = 'pdf';
+        }
+        //$detail = 'Y';
+        if ($detail == 'Y') {
+            $htmlView = $this->renderView('report/sales/project_sales_list_group_customer_detail', $data);
+        } else {
+            $htmlView = $this->renderView('report/sales/project_sales_list_group_customer', $data);
+        }
+
+        if ($agent->isMobile() && !$isDownload) {
+            return $htmlView;
+        } else {
+            if ($fileType == 'pdf') {
+                $dompdf = new Dompdf();
+                $dompdf->loadHtml($htmlView);
+                $dompdf->setPaper('A4', 'landscape');
+                $dompdf->render();
+                $dompdf->stream('laporan_penjualan_ddmmyyyyy_hhiiss.pdf', array("Attachment" => $isDownload));
+                exit();
+            } else {
+                die('Export Excel Script');
+            }
+        }
+    }
+
+    public function viewProjectSalesListGroupSalesman()
+    {
+        $data = [
+            'title'     => 'Laporan Penjualan Proyek Per Salesman',
+        ];
+        return $this->renderView('report/sales/view_project_sales_list_group_salesman', $data);
+    }
+
+    public function projectSalesListGroupSalesman()
+    {
+        $data = [
+            'title'         => 'Laporan Penjualan Proyek Per Salesman',
+            'userLogin'     => $this->userLogin
+        ];
+
+        $agent = $this->request->getUserAgent();
+        $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
+        $fileType   = $this->request->getGet('file');
+        $detail     = $this->request->getGet('detail') == NULL ? 'N' : $this->request->getGet('detail');
+
+        if (!in_array($fileType, ['pdf', 'xlsx'])) {
+            $fileType = 'pdf';
+        }
+        //$detail = 'Y';
+        if ($detail == 'Y') {
+            $htmlView = $this->renderView('report/sales/project_sales_list_group_salesman_detail', $data);
+        } else {
+            $htmlView = $this->renderView('report/sales/project_sales_list_group_salesman', $data);
+        }
+
+        if ($agent->isMobile() && !$isDownload) {
+            return $htmlView;
+        } else {
+            if ($fileType == 'pdf') {
+                $dompdf = new Dompdf();
+                $dompdf->loadHtml($htmlView);
+                $dompdf->setPaper('A4', 'landscape');
+                $dompdf->render();
+                $dompdf->stream('laporan_penjualan_ddmmyyyyy_hhiiss.pdf', array("Attachment" => $isDownload));
+                exit();
+            } else {
+                die('Export Excel Script');
+            }
+        }
+    }
+
+
 
 
 

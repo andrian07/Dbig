@@ -184,7 +184,15 @@ $assetsUrl = base_url('assets');
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-12 col-md-3">
+                                    <div class="col-sm-12 col-md-4">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>Catatan</label>
+                                            <input id="product_remark" name="product_remark" type="text" class="form-control" placeholder="Catatan" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12 col-md-2">
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>HPP</label>
@@ -192,7 +200,7 @@ $assetsUrl = base_url('assets');
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-12 col-md-3">
+                                    <div class="col-sm-12 col-md-2">
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Stok Sistem</label>
@@ -200,7 +208,7 @@ $assetsUrl = base_url('assets');
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-12 col-md-3">
+                                    <div class="col-sm-12 col-md-2">
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Stok Fisik</label>
@@ -238,7 +246,6 @@ $assetsUrl = base_url('assets');
 
                             <div class="row mb-2">
                                 <div class="col-12">
-
                                     <table id="tbltemp" class="table table-bordered table-hover" width="100%">
                                         <thead>
                                             <tr>
@@ -297,14 +304,11 @@ $assetsUrl = base_url('assets');
                                             </tr>
                                         </tbody>
                                     </table>
-
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-6">
-                                    <textarea id="opname_remark" name="opname_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="3"></textarea>
-                                </div>
+                                <div class="col-6"></div>
                                 <div class="col-6">
                                     <form class="form-horizontal">
                                         <div class="form-group row">
@@ -486,6 +490,7 @@ $assetsUrl = base_url('assets');
             form.parsley().reset();
             $('#product_name').val('');
             $('#unit_name').val('');
+            $('#product_remark').val('');
             product_content.set(0);
             product_cogs.set(0);
             system_stock.set(0);
@@ -496,7 +501,7 @@ $assetsUrl = base_url('assets');
 
         $('#btnadd').click(function(e) {
             e.preventDefault();
-            $('#opname_remark').val('');
+
             total_difference_cogs.set(-152500);
             showInputPage(true);
             clearItemInput();

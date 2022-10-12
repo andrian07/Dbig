@@ -122,13 +122,21 @@ class ReportInventory extends WebminController
             'userLogin'     => $this->userLogin
         ];
 
-        $htmlView   = view('webmin/report/inventory/stock_opname_list', $data);
+
         $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
         $fileType   = $this->request->getGet('file');
+        $detail     = $this->request->getGet('detail') == NULL ? 'N' : $this->request->getGet('detail');
         $agent      = $this->request->getUserAgent();
 
         if (!in_array($fileType, ['pdf'])) {
             $fileType = 'pdf';
+        }
+
+        $detail = 'Y';
+        if ($detail == 'Y') {
+            $htmlView   = view('webmin/report/inventory/stock_opname_list_detail', $data);
+        } else {
+            $htmlView   = view('webmin/report/inventory/stock_opname_list', $data);
         }
 
         if ($agent->isMobile()  && !$isDownload) {
@@ -164,7 +172,7 @@ class ReportInventory extends WebminController
             'userLogin'     => $this->userLogin
         ];
 
-        $htmlView   = view('webmin/report/inventory/stock_transfer_list', $data);
+        $htmlView   = view('webmin/report/inventory/stock_transfer_list_detail', $data);
         $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
         $fileType   = $this->request->getGet('file');
         $agent      = $this->request->getUserAgent();

@@ -12,7 +12,7 @@ $assetsUrl = base_url('assets');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Daftar Penjualan Proyek</h1>
+                    <h1>Daftar Penjualan Proyek Per Salesman</h1>
                 </div>
                 <div class="col-sm-6"></div>
             </div>
@@ -30,29 +30,18 @@ $assetsUrl = base_url('assets');
                                 <div class="row">
                                     <div class="col-md-10">
                                         <div class="row">
-                                            <div class="col-sm-4">
-                                                <!-- text input -->
-                                                <div class="form-group">
-                                                    <label>Toko:</label>
-                                                    <select id="store_id" name="store_id" class="form-control">
-                                                        <option value="1">UTM - UTAMA</option>
-                                                        <option value="2">KBR - CABANG KOTA BARU</option>
-                                                    </select>
-                                                </div>
-
-                                            </div>
 
                                             <div class="col-sm-4">
                                                 <!-- text input -->
                                                 <div class="form-group">
-                                                    <label>User:</label>
-                                                    <select id="user_id" name="user_id" class="form-control">
-                                                        <option value="1" selected>Ani</option>
-                                                        <option value="2">Reza</option>
+                                                    <label>Salesman:</label>
+                                                    <select id="salesman_id" name="salesman_id" class="form-control">
+                                                        <option value="1">CR - CRISTIAN REZA</option>
+                                                        <option value="2">MR - MAMAN RISKI</option>
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <!-- text input -->
                                                 <div class="form-group">
                                                     <label>Jenis Produk:</label>
@@ -60,16 +49,6 @@ $assetsUrl = base_url('assets');
                                                         <option value="1" selected>Semua</option>
                                                         <option value="2">PPN</option>
                                                         <option value="2">NON PPN</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <!-- text input -->
-                                                <div class="form-group">
-                                                    <label>Customer:</label>
-                                                    <select id="customer_id" name="customer_id" class="form-control">
-                                                        <option value="1">PT ABC</option>
-                                                        <option value="2">PT XYZ</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -87,14 +66,11 @@ $assetsUrl = base_url('assets');
                                                     <input id="date_until" name="date_until" type="date" class="form-control" value="<?= date('Y-m-d') ?>">
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-group">
-                                                    <label>&nbsp;</label>
-                                                    <div class="form-check">
-                                                        <div class="col-sm-12">
-                                                            <input type="checkbox" class="form-check-input" id="show_detail">
-                                                            <label class="form-check-label" for="show_detail">Tampilkan Detail</label>
-                                                        </div>
+                                            <div class="col-sm-12">
+                                                <div class="form-check">
+                                                    <div class="col-sm-12">
+                                                        <input type="checkbox" class="form-check-input" id="show_detail">
+                                                        <label class="form-check-label" for="show_detail">Tampilkan Detail</label>
                                                     </div>
                                                 </div>
 
@@ -140,7 +116,7 @@ $assetsUrl = base_url('assets');
                     <div class="card">
                         <div class="card-body">
                             <h5>Preview</h5>
-                            <iframe id="preview" src="<?= base_url('webmin/report/project-sales-list') ?>" width="100%" height="1000px"></iframe>
+                            <iframe id="preview" src="<?= base_url('webmin/report/project-sales-list-group-salesman') ?>" width="100%" height="1000px"></iframe>
                         </div>
                     </div>
                 </div>
@@ -183,9 +159,9 @@ $assetsUrl = base_url('assets');
             e.preventDefault();
             let detail = $('#show_detail').prop('checked');
             console.log('detail:' + detail);
-            let url = base_url + '/webmin/report/project-sales-list';
+            let url = base_url + '/webmin/report/project-sales-list-group-salesman';
             if (detail) {
-                url = base_url + '/webmin/report/project-sales-list?detail=Y';
+                url = base_url + '/webmin/report/project-sales-list-group-salesman?detail=Y';
             }
             $('#preview').attr('src', url);
         })

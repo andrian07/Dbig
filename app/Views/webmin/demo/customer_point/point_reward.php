@@ -42,8 +42,9 @@ $assetsUrl = base_url('assets');
                                     <th data-priority="5">Point</th>
                                     <th data-priority="7">Dari Tgl</th>
                                     <th data-priority="8">Sampai Tgl</th>
-                                    <th data-priority="6">Aktif</th>
-                                    <th data-priority="9">Gambar Produk</th>
+                                    <th data-priority="6">Stok</th>
+                                    <th data-priority="9">Aktif</th>
+                                    <th data-priority="10">Gambar Produk</th>
                                     <th data-priority="3">Aksi</th>
                                 </tr>
                             </thead>
@@ -57,6 +58,7 @@ $assetsUrl = base_url('assets');
                                     <td>50.00</td>
                                     <td>01/09/2022</td>
                                     <td>30/09/2022</td>
+                                    <td>15.00</td>
                                     <td>
                                         <span class="badge badge-success"><i class="fas fa-check-circle"></i></span>
                                     </td>
@@ -78,6 +80,7 @@ $assetsUrl = base_url('assets');
                                     <td>50.00</td>
                                     <td>01/09/2022</td>
                                     <td>10/09/2022</td>
+                                    <td>10.00</td>
                                     <td>
                                         <span class="badge badge-danger"><i class="fas fa-times-circle"></i></span>
                                     </td>
@@ -151,6 +154,13 @@ $assetsUrl = base_url('assets');
                                     </div>
 
                                     <div class="form-group">
+                                        <label for="reward_stock" class="col-sm-12">Stok</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="reward_stock" name="reward_stock" placeholder="Stok" value="" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="active" class="col-sm-12">Status</label>
                                         <div class="col-sm-12">
                                             <select id="active" name="active" class="form-control">
@@ -199,10 +209,7 @@ $assetsUrl = base_url('assets');
         $("a.fancy_image").fancybox();
 
         let reward_point = new AutoNumeric('#reward_point', configQty);
-
-
-
-
+        let reward_stock = new AutoNumeric('#reward_stock', configQty);
 
         // datatables //
         let tblpointreward = $("#tblpointreward").DataTable({
@@ -221,19 +228,19 @@ $assetsUrl = base_url('assets');
             },
             columnDefs: [{
                     width: 100,
-                    targets: 8
+                    targets: 9
                 },
                 {
-                    targets: [0, 8],
+                    targets: [0, 9],
                     orderable: false,
                     searchable: false,
                 },
                 {
-                    targets: [6, 7],
+                    targets: [7, 8],
                     className: "text-center",
                 },
                 {
-                    targets: [0, 3],
+                    targets: [0, 6, 3],
                     className: "text-right",
                 },
             ],
@@ -257,6 +264,7 @@ $assetsUrl = base_url('assets');
             $('#end_date').val('');
             $('#reward_description').val('');
             reward_point.set(0);
+            reward_stock.set(0);
             $('#modal-reward').modal(configModal);
         }
 
@@ -274,6 +282,7 @@ $assetsUrl = base_url('assets');
             $('#end_date').val('2022-09-10');
             $('#reward_description').val('');
             reward_point.set(50);
+            reward_stock.set(10);
             $('#modal-reward').modal(configModal);
         }
 

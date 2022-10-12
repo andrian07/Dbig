@@ -75,6 +75,7 @@ $assetsUrl = base_url('assets');
                                         <th class="text-right">Stok Fisik</th>
                                         <th class="text-right">Stok System</th>
                                         <th>Selisih <small>Unit</small></th>
+                                        <th>Keterangan</th>
                                         <th>Selisih <small>Rp</small></th>
                                     </tr>
                                 </thead>
@@ -87,6 +88,7 @@ $assetsUrl = base_url('assets');
                                         <td class="text-right">240.00</td>
                                         <td class="text-right">250.00</td>
                                         <td class="text-right">-10.00</td>
+                                        <td>Hadiah Tukar Poin</td>
                                         <td class="text-right">-277,500.00</td>
                                     </tr>
                                     <tr>
@@ -97,12 +99,13 @@ $assetsUrl = base_url('assets');
                                         <td class="text-right">100.00</td>
                                         <td class="text-right">105.00</td>
                                         <td class="text-right">5.00</td>
+                                        <td>-</td>
                                         <td class="text-right">125,000.00</td>
                                     </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th class="text-right" colspan="7">TOTAL</th>
+                                        <th class="text-right" colspan="8">TOTAL</th>
                                         <th class="text-right">-152,500.00</th>
                                     </tr>
                                 </tfoot>
