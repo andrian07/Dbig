@@ -1,0 +1,126 @@
+body{
+		background-color: #f4f6f9;
+	}
+	h2{
+		color: #1973BA;
+		margin-left: 15px;
+	}
+
+	p{
+		font-size: 14px;
+	}
+
+	.invoice-a4{
+		width: 210mm !important;
+		height: 297mm !important;
+		margin: auto;
+		word-wrap: break-word;
+		background-color: #ffffff;
+		background-clip: border-box;
+		border: 0 solid rgba(0,0,0,.125);
+		border-radius: 0.25rem;
+		padding:30px;
+	}
+
+	.letterhead-border{
+		border-bottom:1px solid #1973BA;
+		width: 100%;
+		margin: auto;
+	}
+
+	.letterhead p{
+		margin-left: 15px;
+		line-height: 3px;
+	}
+
+	.address-content p{
+		margin-top: -15px;
+	}
+
+	.letterhead .left,
+	.address-content .left{
+		float: left;
+	}
+
+	.letterhead .right,
+	.address-content .right{
+		float: right;
+	}
+
+	.letterhead-left{
+		padding-top: 15px;
+		width: 30%;
+	}
+	.letterhead-right{
+		width: 70%;
+	}
+
+	.text-left{
+		text-align: left;
+	}
+
+	.text-right{
+		text-align: right;
+	}
+
+	.text-center{
+		text-align: center;
+	}
+
+	.info-date{
+		float: right;
+		padding-right: 70px;
+	}
+	.address-content{
+		margin-top: 75px;
+	}
+	.address-content-left{
+		width: 50%;
+	}
+	.address-content-right{
+		width: 50%;
+	}
+
+	.item{
+		width: 100%;
+	}
+
+	.ttd{
+		width: 40%;
+		margin-left: 460px;
+	}
+
+	.ttd-div{
+		margin-top: 50px;
+	}
+
+	.ttd, .ttd td{
+		border: 2px solid #000000;
+		border-collapse: collapse;
+	}
+
+	.item th{
+		background-color: #bdd7ee;
+	}
+	.item,.item th, .item td{
+		border: 2px solid #000000;
+		border-collapse: collapse;
+	}
+	.note{
+		color: #ff0000;
+	}
+
+
+	@page {
+		size: A4;
+		margin: 0;
+	}
+	@media print {
+		html, body {
+			width: 210mm !important;
+			height: 297mm !important;
+		}
+		#debug-icon{
+			display: none !important;
+		}
+	}

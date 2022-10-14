@@ -9,7 +9,8 @@ $assetsUrl = base_url('assets');
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="<?= $themeUrl ?>/plugins/fontawesome-free/css/all.min.css">
-		<link rel="stylesheet" href="<?= $assetsUrl ?>/app/invoice_dbig.css">
+	<link rel="stylesheet" href="<?= $assetsUrl ?>/app/invoice_dbig.css">
+
 <title></title>
 </head>
 <body>
@@ -27,7 +28,7 @@ $assetsUrl = base_url('assets');
 		<div class="letterhead-border"><?php echo  str_repeat('&nbsp;', 2);?></div>
 
 		<div class="content-invoice">
-			<h3 class="text-center">PURCHASE ORDER</h3>
+			<h3 class="text-center">FORM PERMINTAAN BARANG KONSINYASI</h3>
 			<table class="info-date">
 				<tr>
 					<td>Date</td><td>:</td><td>01/09/2022</td>
@@ -57,8 +58,6 @@ $assetsUrl = base_url('assets');
 					<th>Kode</th>
 					<th>Description(Jenis Barang)</th>
 					<th colspan="2">Qty</th>
-					<th>Harga</th>
-					<th>Total</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -67,51 +66,40 @@ $assetsUrl = base_url('assets');
 					<td>8014</td>
 					<td>ESSENZA GRANIT ABSOLUTE WHITE POLISH KW 1 60X60</td>
 					<td>10</td>
-					<td>Dus</td>
-					<td>85.000</td>
-					<td>Rp85.000.000</td>
+					<td>PCS</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>638</td>
+					<td>EUROPE FLOOR DRAIN (D02)</td>
+					<td>10</td>
+					<td>PCS</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>706</td>
+					<td>EUROPE FLOOR DRAIN (D03)</td>
+					<td>10</td>
+					<td>PCS</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>677</td>
+					<td>EUROPE GANTUNGAN ROBE HOOK</td>
+					<td>10</td>
+					<td>PCS</td>
 				</tr>
 				</tbody>
-				<tfoot>
-				<tr>
-					<td colspan="5"></td>
-					<th>Grand Total</th>
-					<th>Rp85.000.000</th>
-				</tr>
-				</tfoot>
 			</table>
 		</div>
 
-		<p>- FAKTUR PAJAK STANDAR DIBUKA A/N : CV.DEPO BANGUNAN INDO GLOBAL <br /> 
-		   - NPWP         : 92.233.181.4-704.000
-		</p>
-
 		<p class="note">
-			NOTE : <br />- UNTUK SETIAP MOTIF KERAMIK/ GRANIT HARAP DAPAT DIMUATKAN DENGAN NOMOR SERI YANG SAMA<br />
-				   - Kami meminta support dari Bapak/Ibu jika terdapat brosur & souvenir Sehingga bisa membantu memasarkan produk ke konsumen<br />
-				   - Kami juga mengharapakan jika untuk keramik bisa mensupport rak display dan sample keramik untuk display <br /><br /><br />
-			Via EMKL CV. Jasa Karya <br />
+			NOTE : <br />- Untuk Setiap Produk/Barang Yang Di PO, Harap Di Antar Ke Alamat Dibawah Ini:<br />
+				  <br />
+			PT. USAHA <br />
+			Jl. Pahlawan No 1, Bogor <br />
 			Telp  : (021) 66600635- 66600638 <br />
-			Hub  :  Bp. ACHUA / Bpk Adrian
 		</p>
-
-		<p>Penerima : CV DEPO BANGUNAN INDO GLOBAL <br />Tlp (+62 561 6733572) / Hp (0822 1999 6819 / SESE )<br />Untuk Semua Koresponden Dikirim Ke Alamat : Jalan Sungai Raya Dalam Ruko Ceria No. A2-A3 </p>
-
-		<div class="ttd-div">
-			<p class="text-right" style="margin-right: 130px;">Hormat Kami,</p>
-		<table class="ttd" style="margin-top: -10px;">
-			<tr>
-				<td class="text-center">Dibuat Oleh,</td><td class="text-center">Disetujui Oleh ,</td>
-			</tr>
-			<tr>
-				<td style="height: 80px;"></td><td></td>
-			</tr>
-			<tr>
-				<td class="text-center">Bag.Pembelian</td><td class="text-center">Direktur</td>
-			</tr>
-		</table>
-		  <p class="text-right" style="text-decoration: underline; margin-right: 60px; font-size: 17px;margin-top: 5px;">CV. Depo Bangunan Indo Global</p>
-		</div>
 	</div>
 </body>
 </html>

@@ -86,7 +86,14 @@ $routes->group('webmin/purchase', ['filter' => 'webminauth'], static function ($
     $routes->get('/', 'Webmin\Purchase::index');
     $routes->get('retur-purchase', 'Webmin\Purchase::returpurchase');
 });
+
+$routes->group('webmin/purchase-order-consignment', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\Purchase_order_consignment::index');
+     $routes->get('printinvoice', 'Webmin\Purchase_order_consignment::printinvoice');
+});
+
 /* end pembelian */
+
 
 /* penjualan admin */
 $routes->group('webmin/sales-admin', ['filter' => 'webminauth'], static function ($routes) {

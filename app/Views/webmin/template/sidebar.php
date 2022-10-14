@@ -214,7 +214,7 @@
 					</a>
 					<ul class="nav nav-treeview">
 						<li class="nav-item">
-							<a href="<?= base_url('webmin/submission') ?>" class="nav-link">
+							<a href="<?= base_url('webmin/purchase-order-consignment') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>PO Konsinyasi</p>
 								<span class="right badge badge-danger"></span>
