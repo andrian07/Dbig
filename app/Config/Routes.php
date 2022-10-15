@@ -61,7 +61,6 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('profile/update-password', 'Webmin\Profile::update_password');
 });
 
-
 $routes->group('webmin/category', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\Category::index');
     $routes->get('getbyid/(:num)', 'Webmin\Category::getById/$1');
@@ -70,6 +69,31 @@ $routes->group('webmin/category', ['filter' => 'webminauth'], static function ($
     $routes->post('save/(:alpha)', 'Webmin\Category::save/$1');
     $routes->get('delete/(:num)', 'Webmin\Category::delete/$1');
 });
+
+
+$routes->group('webmin/unit', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\Unit::index');
+    $routes->get('getbyid/(:num)', 'Webmin\Unit::getById/$1');
+    $routes->get('getbyname', 'Webmin\Unit::getByName');
+    $routes->post('table', 'Webmin\Unit::table');
+    $routes->post('save/(:alpha)', 'Webmin\Unit::save/$1');
+    $routes->get('delete/(:num)', 'Webmin\Unit::delete/$1');
+});
+
+
+$routes->group('webmin/user/user-group', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\UserGroup::index');
+    $routes->get('getbycode/(:alphanum)', 'Webmin\UserGroup::getByCode/$1');
+    $routes->get('getbyname', 'Webmin\UserGroup::getByName');
+    $routes->post('table', 'Webmin\UserGroup::table');
+    $routes->post('save/(:alpha)', 'Webmin\UserGroup::save/$1');
+    $routes->get('delete/(:alphanum)', 'Webmin\UserGroup::delete/$1');
+    $routes->get('getgrouprole/(:alphanum)', 'Webmin\UserGroup::getGroupRole/$1');
+    $routes->post('setgrouprole', 'Webmin\UserGroup::setGroupRole');
+});
+
+
+
 
 /* pembelian */
 $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static function ($routes) {
@@ -153,12 +177,18 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
     $routes->get('view-project-sales-list-group-customer', 'Webmin\Report\ReportSales::viewProjectSalesListGroupCustomer');
     $routes->get('project-sales-list-group-customer', 'Webmin\Report\ReportSales::projectSalesListGroupCustomer');
 });
-
-
-
-
-
 /* End Report */
+
+
+/* Select2 */
+$routes->group('webmin/select', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('unit', 'Webmin\Select::unit');
+    $routes->get('pc/provinces', 'Webmin\Select::pcProvinces');
+    $routes->get('pc/cities', 'Webmin\Select::pcCities');
+    $routes->get('pc/districts', 'Webmin\Select::pcDistricts');
+    $routes->get('pc/subdistricts', 'Webmin\Select::pcSubDistricts');
+});
+/* END Select2 */
 
 /* POS */
 $routes->group('pos', static function ($routes) {
@@ -192,10 +222,11 @@ $routes->get('pos/customer-display', 'Pos\Utility::customerDisplay');
 
 /* Eric Demo */
 $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
-    $routes->get('unit', 'Webmin\EricDemo::unit');
+    //$routes->get('unit', 'Webmin\EricDemo::unit'); ok
     $routes->get('brand', 'Webmin\EricDemo::brand');
     $routes->get('warehouse', 'Webmin\EricDemo::warehouse');
     $routes->get('customer', 'Webmin\EricDemo::customer');
+    $routes->get('mapping-area', 'Webmin\EricDemo::mappingArea');
     $routes->get('supplier', 'Webmin\EricDemo::supplier');
     $routes->get('product', 'Webmin\EricDemo::product');
     $routes->get('product/detail', 'Webmin\EricDemo::productDetail');
@@ -206,7 +237,6 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('exchange-point/detail', 'Webmin\EricDemo::exchangePointDetail');
 
     $routes->get('user/user-account', 'Webmin\EricDemo::userAccount');
-    $routes->get('user/user-group', 'Webmin\EricDemo::userGroup');
     $routes->get('password-control', 'Webmin\EricDemo::passwordControl');
     $routes->get('password-control/logs', 'Webmin\EricDemo::passwordControlLogs');
     $routes->get('voucher', 'Webmin\EricDemo::voucher');
