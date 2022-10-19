@@ -61,7 +61,7 @@ $assetsUrl = base_url('assets');
                                 <div class="form-group">
                                     <label for="group_name" class="col-sm-12">Nama Grup</label>
                                     <div class="col-sm-12">
-                                        <input type="text" class="form-control" id="group_name" name="group_name" placeholder="Nama Grup" value="" data-parsley-pattern="^[a-zA-Z0-9 ]+$" data-parsley-maxlength="100" data-parsley-vgroupname required>
+                                        <input type="text" class="form-control" id="group_name" name="group_name" placeholder="Nama Grup" value="" data-parsley-pattern="^[a-zA-Z0-9 ]+$" data-parsley-maxlength="100" data-parsley-trigger-after-failure="focusout" data-parsley-vgroupname required>
                                     </div>
                                 </div>
                             </div>

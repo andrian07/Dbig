@@ -18,6 +18,52 @@ class Select extends WebminController
         die('Select2 Controllers');
     }
 
+    public function store()
+    {
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('ms_store');
+
+        $select2->db->select('store_id,store_code,store_name');
+        $select2->db->where('deleted', 'N');
+
+        $select2->searchFields  = ['store_code', 'store_name'];
+        $select2->orderBy       = 'store_id';
+        $select2->orderDir      = 'ASC';
+
+
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = esc($row['store_id']);
+            $result['text'] = esc($row['store_code'] . ' - ' . $row['store_name']);
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
+    public function userGroup()
+    {
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('user_group');
+
+        $select2->db->select('group_code,group_name');
+        $select2->db->where('deleted', 'N');
+
+        $select2->searchFields  = ['group_name'];
+        $select2->orderBy       = 'group_name';
+        $select2->orderDir      = 'ASC';
+
+
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = esc($row['group_code']);
+            $result['text'] = esc($row['group_name']);
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
     public function pcProvinces()
     {
         $this->validationRequest(TRUE);
@@ -167,6 +213,9 @@ class Select extends WebminController
 
         $select2->generate();
     }
+
+
+
 
 
 

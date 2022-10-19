@@ -18,6 +18,7 @@ class WebminController extends BaseController
 		parent::initController($request, $response, $logger);
 		$this->session = \Config\Services::session();
 		$this->userLogin = $this->session->get('user_login');
+
 		$this->role = new \App\Libraries\Roles($this->myConfig->userRole, $this->userLogin['user_group']);
 		$M_user_role = new \App\Models\Auth\M_user_role();
 		$getGroupRole = $M_user_role->getRole($this->userLogin['user_group']);

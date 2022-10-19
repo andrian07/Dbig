@@ -44,7 +44,57 @@ class M_user_account extends Model
         if ($show_deleted == FALSE) {
             $builder->where('user_account.deleted', 'N');
         }
-       
+
         return $builder->get();
+    }
+
+
+    public function insertUser($user_data)
+    {
+        $this->db->query('LOCK TABLES user_account WRITE');
+        $maxUserCode = $this->db->table($this->table)->select('max(user_code) as user_code')->get()->getRowArray();
+        if ($maxUserCode['user_code'] == NULL) {
+            $user_data['user_code'] = "U001";
+        } else {
+            $user_data['user_code'] = 'U' . substr('000' . strval(floatval(substr($maxUserCode['user_code'], -3)) + 1), -3);
+        }
+        $save = $this->db->table($this->table)->insert($user_data);
+        $saveQueries = NULL;
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries = $this->db->getLastQuery()->getQuery();
+        }
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'user_account', 0, 'ADD USER ' . $user_data['user_code']);
+        return $save;
+    }
+
+    public function updateUser($user_data)
+    {
+        $this->db->query('LOCK TABLES user_account WRITE');
+        $save = $this->db->table($this->table)->update($user_data, ['user_code' => $user_data['user_code']]);
+        $saveQueries = NULL;
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries = $this->db->getLastQuery()->getQuery();
+        }
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'user_account', 0, 'EDIT USER ' . $user_data['user_code']);
+        return $save;
+    }
+
+    public function deleteUser($user_code)
+    {
+        $this->db->query('LOCK TABLES user_account WRITE');
+        $user_data = ['deleted' => 'Y'];
+        $save = $this->db->table($this->table)->update($user_data, ['user_code' => $user_code]);
+        $saveQueries = NULL;
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries = $this->db->getLastQuery()->getQuery();
+        }
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'user_account', 0, 'DELETE USER ' . $user_code);
+        return $save;
     }
 }

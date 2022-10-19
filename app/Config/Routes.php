@@ -80,6 +80,24 @@ $routes->group('webmin/unit', ['filter' => 'webminauth'], static function ($rout
     $routes->get('delete/(:num)', 'Webmin\Unit::delete/$1');
 });
 
+$routes->group('webmin/brand', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\Brand::index');
+    $routes->get('getbyid/(:num)', 'Webmin\Brand::getById/$1');
+    $routes->get('getbyname', 'Webmin\Brand::getByName');
+    $routes->post('table', 'Webmin\Brand::table');
+    $routes->post('save/(:alpha)', 'Webmin\Brand::save/$1');
+    $routes->get('delete/(:num)', 'Webmin\Brand::delete/$1');
+});
+
+$routes->group('webmin/mapping-area', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\MappingArea::index');
+    $routes->post('table', 'Webmin\MappingArea::table');
+    $routes->get('getbyid/(:num)', 'Webmin\MappingArea::getById/$1');
+    $routes->get('getbyaddress', 'Webmin\MappingArea::getByAddress');
+    $routes->post('save/(:alpha)', 'Webmin\MappingArea::save/$1');
+    $routes->get('delete/(:num)', 'Webmin\MappingArea::delete/$1');
+});
+
 
 $routes->group('webmin/user/user-group', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\UserGroup::index');
@@ -91,6 +109,18 @@ $routes->group('webmin/user/user-group', ['filter' => 'webminauth'], static func
     $routes->get('getgrouprole/(:alphanum)', 'Webmin\UserGroup::getGroupRole/$1');
     $routes->post('setgrouprole', 'Webmin\UserGroup::setGroupRole');
 });
+
+
+$routes->group('webmin/user/user-account', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\UserAccount::index');
+    $routes->post('table', 'Webmin\UserAccount::table');
+    $routes->get('getbycode/(:alphanum)', 'Webmin\UserAccount::getByCode/$1');
+    $routes->get('getbyname', 'Webmin\UserAccount::getByName');
+    $routes->post('save/(:alpha)', 'Webmin\UserAccount::save/$1');
+    $routes->get('delete/(:alphanum)', 'Webmin\UserAccount::delete/$1');
+    $routes->get('reset-password/(:alphanum)', 'Webmin\UserAccount::resetPassword/$1');
+});
+
 
 
 
@@ -113,7 +143,7 @@ $routes->group('webmin/purchase', ['filter' => 'webminauth'], static function ($
 
 $routes->group('webmin/purchase-order-consignment', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\Purchase_order_consignment::index');
-     $routes->get('printinvoice', 'Webmin\Purchase_order_consignment::printinvoice');
+    $routes->get('printinvoice', 'Webmin\Purchase_order_consignment::printinvoice');
 });
 
 /* end pembelian */
@@ -182,6 +212,8 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 
 /* Select2 */
 $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('store', 'Webmin\Select::store');
+    $routes->get('user-group', 'Webmin\Select::userGroup');
     $routes->get('unit', 'Webmin\Select::unit');
     $routes->get('pc/provinces', 'Webmin\Select::pcProvinces');
     $routes->get('pc/cities', 'Webmin\Select::pcCities');
@@ -223,10 +255,10 @@ $routes->get('pos/customer-display', 'Pos\Utility::customerDisplay');
 /* Eric Demo */
 $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
     //$routes->get('unit', 'Webmin\EricDemo::unit'); ok
-    $routes->get('brand', 'Webmin\EricDemo::brand');
+
     $routes->get('warehouse', 'Webmin\EricDemo::warehouse');
     $routes->get('customer', 'Webmin\EricDemo::customer');
-    $routes->get('mapping-area', 'Webmin\EricDemo::mappingArea');
+
     $routes->get('supplier', 'Webmin\EricDemo::supplier');
     $routes->get('product', 'Webmin\EricDemo::product');
     $routes->get('product/detail', 'Webmin\EricDemo::productDetail');
@@ -236,7 +268,6 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('exchange-point/v2', 'Webmin\EricDemo::exchangePointV2');
     $routes->get('exchange-point/detail', 'Webmin\EricDemo::exchangePointDetail');
 
-    $routes->get('user/user-account', 'Webmin\EricDemo::userAccount');
     $routes->get('password-control', 'Webmin\EricDemo::passwordControl');
     $routes->get('password-control/logs', 'Webmin\EricDemo::passwordControlLogs');
     $routes->get('voucher', 'Webmin\EricDemo::voucher');
