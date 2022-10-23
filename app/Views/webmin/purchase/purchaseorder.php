@@ -102,8 +102,8 @@ $assetsUrl = base_url('assets');
                                             <a href="<?php base_url() ?>submission/submissiondetaildemo">
                                                 <button class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail" data-original-title="" title=""><i class="fas fa-eye"></i></button>
                                             </a>
-                                             <a href="<?php base_url() ?>purchase-order/printinvoice">
-                                            <button data-id="1" data-invoice="0000000001" class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Print" data-original-title="" title=""><i class="fas fa-print"></i></button>
+                                            <a href="<?php base_url() ?>purchase-order/printinvoice">
+                                                <button data-id="1" data-invoice="0000000001" class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Print" data-original-title="" title=""><i class="fas fa-print"></i></button>
                                             </a>
                                         </td>
 
@@ -316,40 +316,12 @@ $assetsUrl = base_url('assets');
                                         <label>Harga Beli Per Unit</label>
 
                                         <input id="temp_price" name="temp_price" type="text" class="form-control text-right" value="0" data-parsley-vprice required>
-
+                                        <input id="temp_dpp" name="temp_dpp" type="hidden" class="form-control text-right" value="0" required>
+                                        <input id="temp_tax" name="temp_tax" type="hidden" class="form-control text-right" value="0" readonly required>
                                     </div>
 
                                 </div>
 
-                                
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>DPP</label>
-
-                                        <input id="temp_dpp" name="temp_dpp" type="text" class="form-control text-right" value="0" required>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>PPN <?= PPN_TEXT ?></label>
-
-                                        <input id="temp_tax" name="temp_tax" type="text" class="form-control text-right" value="0" readonly required>
-
-                                    </div>
-
-                                </div>
 
                                 <div class="col-sm-2">
 
@@ -365,9 +337,6 @@ $assetsUrl = base_url('assets');
                                     </div>
 
                                 </div>
-
-                                <div class="col-md-1"></div>
-                                <div class="col-md-1"></div>
 
                                 <div class="col-sm-2">
 
@@ -400,6 +369,7 @@ $assetsUrl = base_url('assets');
 
                                 </div>
 
+                                <div class="col-md-5"></div>
                                 <div class="col-sm-2">
 
                                     <!-- text input -->
@@ -429,7 +399,7 @@ $assetsUrl = base_url('assets');
 
                                 </div>
 
-                                <div class="col-sm-1">
+                                <div class="col-sm-1" style="padding-right: 62px;">
 
                                     <!-- text input -->
 
@@ -437,13 +407,7 @@ $assetsUrl = base_url('assets');
 
                                     <div class="form-group">
 
-                                        <div class="col-12">
-
-                                            <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle float-right" style="margin-left: 2px;"><i class="fas fa-plus"></i></button>
-                                            <button id="getlist" class="btn btn-md btn-warning rounded-circle float-right"><i class="far fa-list-alt"></i></button>
-
-
-                                        </div>
+                                        <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle float-right"><i class="fas fa-plus"></i></button>
 
                                     </div>
 
@@ -471,21 +435,19 @@ $assetsUrl = base_url('assets');
 
                                             <th data-priority="3" width="25%;">Produk</th>
 
-                                            <th data-priority="4">Qty</th>
+                                            <th data-priority="4">Harga Satuan</th>
 
-                                            <th data-priority="5">Harga Satuan</th>
+                                            <th data-priority="5">Qty</th>
 
-                                            <th data-priority="6">DPP</th>
+                                            <th data-priority="6">Diskon</th>
 
-                                            <th data-priority="7">PPN</th>
+                                            <th data-priority="7">Ongkir</th>
 
-                                            <th data-priority="8">Ongkir</th>
+                                            <th data-priority="8">E.D</th>
 
-                                            <th data-priority="9">E.D</th>
+                                            <th data-priority="9">Total</th>
 
-                                            <th data-priority="10">Total</th>
-
-                                            <th data-priority="11">Aksi</th>
+                                            <th data-priority="10">Aksi</th>
 
                                         </tr>
 
@@ -500,19 +462,17 @@ $assetsUrl = base_url('assets');
 
                                         <td>NIPPON PAINT CAT BASE NIPPON SATIN GLO - PASTEL BASE 2.35L </td>
 
+                                        <td>Rp. 45,000</td>
+
                                         <td>10</td>
 
-                                        <td>Rp. 50,000</td>
-
-                                        <td>Rp. 450,450</td>
-
-                                        <td>Rp. 49,550</td>
+                                        <td>Rp. 0</td>
 
                                         <td>Rp. 10,000</td>
 
                                         <td>12 - 12 -2029</td>
 
-                                        <td>Rp. 500,000</td>
+                                        <td>Rp. 450,000</td>
 
                                         <td>
 
@@ -543,19 +503,17 @@ $assetsUrl = base_url('assets');
 
                                         <td>IKAD KERAMIK DINDING DX 2277A FR 25X40 - I</td>
 
-                                        <td>148</td>
+                                        <td>Rp. 50,000</td>
 
-                                        <td>Rp. 100,000</td>
+                                        <td>10</td>
 
-                                        <td>Rp. 13,513,514</td>
-
-                                        <td>Rp. 1,486,486</td>
+                                        <td>Rp. 10,000</td>
 
                                         <td>Rp. 10,000</td>
 
                                         <td>12 - 12 -2029</td>
 
-                                        <td>Rp.  15,000,000</td>
+                                        <td>Rp. 490,000</td>
 
                                         <td>
 
@@ -613,13 +571,6 @@ $assetsUrl = base_url('assets');
                             </div>
 
                             <div class="form-group row">
-                                <label for="footer_total_ongkir" class="col-sm-7 col-form-label text-right:">Ongkir:</label>
-                                <div class="col-sm-5">
-                                    <input id="footer_total_ongkir" name="footer_total_ongkir" type="text" class="form-control text-right" value="0" readonly>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
                                 <label for="footer_total_discount" class="col-sm-7 col-form-label text-right:">Discount :</label>
                                 <div class="col-sm-4">
                                     <input id="footer_discount1" name="footer_discount1" type="hidden" class="form-control text-right" value="0" readonly>
@@ -633,6 +584,13 @@ $assetsUrl = base_url('assets');
                             </div>
 
                             <div class="form-group row">
+                                <label for="footer_dpp" class="col-sm-7 col-form-label text-right:">DPP :</label>
+                                <div class="col-sm-5">
+                                    <input id="footer_dpp" name="footer_dpp" type="text" class="form-control text-right" value="0" readonly>
+                                </div>
+                            </div>
+
+                             <div class="form-group row">
                                 <label for="footer_total_ppn" class="col-sm-7 col-form-label text-right:">PPN <?= PPN_TEXT ?> :</label>
                                 <div class="col-sm-5">
                                     <input id="footer_total_ppn" name="footer_total_ppn" type="text" class="form-control text-right" value="0" readonly>
@@ -640,11 +598,19 @@ $assetsUrl = base_url('assets');
                             </div>
 
                             <div class="form-group row">
-                                <label for="footer_total_invoice" class="col-sm-7 col-form-label text-right:">Total :</label>
+                                <label for="footer_total_ongkir" class="col-sm-7 col-form-label text-right:">Ongkir:</label>
+                                <div class="col-sm-5">
+                                    <input id="footer_total_ongkir" name="footer_total_ongkir" type="text" class="form-control text-right" value="0" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="footer_total_invoice" class="col-sm-7 col-form-label text-right:">Grand Total :</label>
                                 <div class="col-sm-5">
                                     <input id="footer_total_invoice" name="footer_total_invoice" type="text" class="form-control text-right" value="0" readonly>
                                 </div>
                             </div>
+                          
 
                             <div class="form-group row">
                                 <div class="col-sm-12">
@@ -819,21 +785,23 @@ $assetsUrl = base_url('assets');
 
        let total_price = new AutoNumeric('#total_price', configRp);
 
+       let footer_dpp = new AutoNumeric('#footer_dpp', configRp);
+
         //popup Temp discount //
 
-       let total_temp_discount = new AutoNumeric('#total_temp_discount', configRp);
+        let total_temp_discount = new AutoNumeric('#total_temp_discount', configRp);
 
-       let edit_temp_discount1 = new AutoNumeric('#edit_temp_discount1', configRp);
+        let edit_temp_discount1 = new AutoNumeric('#edit_temp_discount1', configRp);
 
-       let edit_temp_discount_percentage1 = new AutoNumeric('#edit_temp_discount_percentage1', configMargin);
+        let edit_temp_discount_percentage1 = new AutoNumeric('#edit_temp_discount_percentage1', configMargin);
 
-       let edit_temp_discount2 = new AutoNumeric('#edit_temp_discount2', configRp);
+        let edit_temp_discount2 = new AutoNumeric('#edit_temp_discount2', configRp);
 
-       let edit_temp_discount_percentage2 = new AutoNumeric('#edit_temp_discount_percentage2', configMargin);
+        let edit_temp_discount_percentage2 = new AutoNumeric('#edit_temp_discount_percentage2', configMargin);
 
-       let edit_temp_discount3 = new AutoNumeric('#edit_temp_discount3', configRp);
+        let edit_temp_discount3 = new AutoNumeric('#edit_temp_discount3', configRp);
 
-       let edit_temp_discount_percentage3 = new AutoNumeric('#edit_temp_discount_percentage3', configMargin);
+        let edit_temp_discount_percentage3 = new AutoNumeric('#edit_temp_discount_percentage3', configMargin);
 
        //End popup Temp discount //
 
@@ -881,9 +849,8 @@ $assetsUrl = base_url('assets');
 
 
 
-       footer_sub_total.set(15500000);
+       footer_sub_total.set(940000);
        footer_total_ongkir.set(20000);
-       footer_total_ppn.set(1536036);
 
        calculation_temp_total_footer();
 
@@ -1009,7 +976,7 @@ $assetsUrl = base_url('assets');
             $('#modal-tempdiscount').modal(configModal);
         }
 
-         $('#btnaddfooterdiscount').click(function(e) {
+        $('#btnaddfooterdiscount').click(function(e) {
             e.preventDefault();
             discountFooterMode({
                 footer_discount1: $('#footer_discount1').val(),
@@ -1075,32 +1042,32 @@ $assetsUrl = base_url('assets');
 
 
         $('#edit_footer_discount_percentage1').on('change', function() {
-            let edit_footer_discount1_cal = footer_total_invoice.get() * (edit_footer_discount_percentage1.get()/100);
+            let edit_footer_discount1_cal = footer_sub_total.get() * (edit_footer_discount_percentage1.get()/100);
             edit_footer_discount1.set(edit_footer_discount1_cal.toFixed(2));
         });
 
         $('#edit_footer_discount1').on('change', function() {
-            let edit_footer_discount1_cal = edit_footer_discount1.get() / footer_total_invoice.get() *  100;
+            let edit_footer_discount1_cal = edit_footer_discount1.get() / footer_sub_total.get() *  100;
             edit_footer_discount_percentage1.set(edit_footer_discount1_cal);
         });
 
         $('#edit_footer_discount_percentage2').on('change', function() {
-            let edit_footer_discount2_cal = (footer_total_invoice.get() - edit_footer_discount1.get()) * (edit_footer_discount_percentage2.get()/100);
+            let edit_footer_discount2_cal = (footer_sub_total.get() - edit_footer_discount1.get()) * (edit_footer_discount_percentage2.get()/100);
             edit_footer_discount2.set(edit_footer_discount2_cal.toFixed(2));
         });
 
         $('#edit_footer_discount2').on('change', function() {
-            let edit_footer_discount2_cal = edit_footer_discount2.get() / (footer_total_invoice.get() - edit_footer_discount1.get()) *  100;
+            let edit_footer_discount2_cal = edit_footer_discount2.get() / (footer_sub_total.get() - edit_footer_discount1.get()) *  100;
             edit_footer_discount_percentage2.set(edit_footer_discount2_cal.toFixed(2));
         });
 
         $('#edit_footer_discount_percentage3').on('change', function() {
-            let edit_footer_discount3_cal = (footer_total_invoice.get() - edit_footer_discount2.get() - edit_footer_discount2.get()) * (edit_footer_discount_percentage3.get()/100);
+            let edit_footer_discount3_cal = (footer_sub_total.get() - edit_footer_discount2.get() - edit_footer_discount2.get()) * (edit_footer_discount_percentage3.get()/100);
             edit_footer_discount3.set(edit_footer_discount3_cal.toFixed(2));
         });
 
         $('#edit_footer_discount3').on('change', function() {
-            let edit_footer_discount3_cal = edit_footer_discount3.get() / (footer_total_invoice.get() - edit_footer_discount1.get() - edit_footer_discount2.get()) *  100;
+            let edit_footer_discount3_cal = edit_footer_discount3.get() / (footer_sub_total.get() - edit_footer_discount1.get() - edit_footer_discount2.get()) *  100;
             edit_footer_discount_percentage3.set(edit_footer_discount3_cal.toFixed(2));
         });
 
@@ -1113,25 +1080,25 @@ $assetsUrl = base_url('assets');
 
         $('#product_name').on('change', function() {
          var id = document.getElementById("product_name").value;
-          if(id == '00002050'){
+         if(id == '00002050'){
             document.getElementById("temp_price").value = '40000';
-           }
+        }
         
-           if(id == '00009200'){
+        if(id == '00009200'){
             document.getElementById("temp_price").value = '50000';
-           }
+        }
         
-           if(id == '00011521'){
+        if(id == '00011521'){
             document.getElementById("temp_price").value = '59000';
-           }
+        }
         
-           if(id == '00005001'){
+        if(id == '00005001'){
             document.getElementById("temp_price").value = '100000';
-           }
+        }
         
-           let temp_price = new AutoNumeric('#temp_price', configRp);
-           calculation_temp_total();
-        });
+        let temp_price = new AutoNumeric('#temp_price', configRp);
+        calculation_temp_total();
+    });
 
 
         function calculation_temp_total(){
@@ -1146,8 +1113,10 @@ $assetsUrl = base_url('assets');
             temp_total.set(total_price.get() - total_temp_discount.get() + Number(temp_ongkir.get()));
         }
 
-       function calculation_temp_total_footer(){
-            footer_total_invoice.set(Number(footer_sub_total.get()) + Number(footer_total_ongkir.get())  - Number(footer_total_discount.get()) + Number(footer_total_ppn.get()));
+        function calculation_temp_total_footer(){
+            footer_dpp.set(Number(footer_sub_total.get()) - Number(footer_total_discount.get()));
+            footer_total_ppn.set(Number(footer_dpp.get()) * 0.11);
+            footer_total_invoice.set(Number(footer_dpp.get())   - Number(footer_total_ppn.get()) + Number(footer_total_ppn.get()));
         }
 
 

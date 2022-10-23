@@ -1,13 +1,11 @@
 <?php
 
-
-namespace App\Controllers\Webmin;
+namespace App\Controllers\Webmin\Consignment;
 
 use Dompdf\Dompdf;
 use App\Controllers\Base\WebminController;
 
-
-class Purchase_order_consignment extends WebminController
+class Consignment extends WebminController
 {
 
 
@@ -16,12 +14,22 @@ class Purchase_order_consignment extends WebminController
         parent::initController($request, $response, $logger);
     }
 
-    public function index()
-    {
+    public function index(){
+        
+    }
+
+    public function purchaseOrderConsignment(){
         $data = [
             'title'         => 'Purchase Order Konsinyasi'
         ];
         return $this->renderView('consignment/purchaseorder_consignment', $data);
+    }
+
+    public function stockInputConsignment(){
+        $data = [
+            'title'         => 'Input Stok Konsinyasi'
+        ];
+        return $this->renderView('consignment/stock_input_consignment', $data);
     }
 
     public function printinvoice(){

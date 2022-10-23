@@ -214,9 +214,16 @@
 					</a>
 					<ul class="nav nav-treeview">
 						<li class="nav-item">
-							<a href="<?= base_url('webmin/purchase-order-consignment') ?>" class="nav-link">
+							<a href="<?= base_url('webmin/consignment/purchase-order-consignment') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>PO Konsinyasi</p>
+								<span class="right badge badge-danger"></span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?= base_url('webmin/consignment/stock-input-consignment') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Input Stok Konsinyasi</p>
 								<span class="right badge badge-danger"></span>
 							</a>
 						</li>
@@ -250,6 +257,24 @@
 							<a href="<?= base_url('webmin/consignment-repayment') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>Pelunasan Konsinyasi</p>
+							</a>
+						</li>
+					</ul>
+				</li>
+
+				<li class="nav-item">
+					<a href="javascript:void(0)" class="nav-link">
+						<i class="nav-icon fas fa-mobile"></i>
+						<p>
+							Mobile APPS
+							<i class="right fas fa-angle-left"></i>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="<?= base_url('webmin/mobileapps/mobileapps-banner') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Banner Slider</p>
 							</a>
 						</li>
 					</ul>

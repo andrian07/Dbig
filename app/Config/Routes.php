@@ -87,9 +87,10 @@ $routes->group('webmin/purchase', ['filter' => 'webminauth'], static function ($
     $routes->get('retur-purchase', 'Webmin\Purchase::returpurchase');
 });
 
-$routes->group('webmin/purchase-order-consignment', ['filter' => 'webminauth'], static function ($routes) {
-    $routes->get('/', 'Webmin\Purchase_order_consignment::index');
-     $routes->get('printinvoice', 'Webmin\Purchase_order_consignment::printinvoice');
+$routes->group('webmin/consignment', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('purchase-order-consignment', 'Webmin\Consignment\Consignment::purchaseOrderConsignment');
+    $routes->get('printinvoice', 'Webmin\Consignment\Consignment::printinvoice');
+    $routes->get('stock-input-consignment', 'Webmin\Consignment\Consignment::stockInputConsignment');
 });
 
 /* end pembelian */
@@ -102,6 +103,14 @@ $routes->group('webmin/sales-admin', ['filter' => 'webminauth'], static function
     $routes->get('printdispatch', 'Webmin\Sales_admin::printdispatch');
 });
 /* end penjualan admin */
+
+/* Mobile*/
+$routes->group('webmin/mobileapps', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\Mobileapps\Mobileapps::index');
+    $routes->post('table', 'Webmin\Mobileapps\Mobileapps::table');
+    $routes->get('mobileapps-banner', 'Webmin\Mobileapps\Mobileapps::mobileappsBanner');
+});
+/* end Mobile*/
 
 /* Report */
 $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($routes) {
