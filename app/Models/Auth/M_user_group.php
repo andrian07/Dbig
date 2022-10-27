@@ -26,53 +26,58 @@ class M_user_group extends Model
         return $this->getWhere(['group_name' => $group_name]);
     }
 
-    // public function insertGroup($group_data)
-    // {
-    //     $this->db->query('LOCK TABLES user_group WRITE');
-    //     $maxGroupCode = $this->db->table($this->table)->select('max(group_code) as group_code')->get()->getRowArray();
-    //     if ($maxGroupCode['group_code'] == NULL) {
-    //         $group_data['group_code'] = "L01";
-    //     } else {
-    //         $group_data['group_code'] = 'L' . substr('00' . strval(floatval(substr($maxGroupCode['group_code'], -2)) + 1), -2);
-    //     }
+    public function hasUser($group_code)
+    {
+        return 0;
+    }
 
-    //     $save = $this->db->table($this->table)->insert($group_data);
-    //     $saveQueries = NULL;
-    //     if ($this->db->affectedRows() > 0) {
-    //         $saveQueries = $this->db->getLastQuery()->getQuery();
-    //     }
-    //     $this->db->query('UNLOCK TABLES');
+    public function insertGroup($group_data)
+    {
+        $this->db->query('LOCK TABLES user_group WRITE');
+        $maxGroupCode = $this->db->table($this->table)->select('max(group_code) as group_code')->get()->getRowArray();
+        if ($maxGroupCode['group_code'] == NULL) {
+            $group_data['group_code'] = "L01";
+        } else {
+            $group_data['group_code'] = 'L' . substr('00' . strval(floatval(substr($maxGroupCode['group_code'], -2)) + 1), -2);
+        }
 
-    //     saveQueries($saveQueries, 'user_group');
-    //     return $save;
-    // }
+        $save = $this->db->table($this->table)->insert($group_data);
+        $saveQueries = NULL;
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries = $this->db->getLastQuery()->getQuery();
+        }
+        $this->db->query('UNLOCK TABLES');
 
-    // public function updateGroup($group_data)
-    // {
-    //     $this->db->query('LOCK TABLES user_group WRITE');
-    //     $save = $this->db->table($this->table)->update($group_data, ['group_code' => $group_data['group_code']]);
-    //     $saveQueries = NULL;
-    //     if ($this->db->affectedRows() > 0) {
-    //         $saveQueries = $this->db->getLastQuery()->getQuery();
-    //     }
-    //     $this->db->query('UNLOCK TABLES');
+        saveQueries($saveQueries, 'user_group', 0, 'ADD GROUP ' . $group_data['group_code']);
+        return $save;
+    }
 
-    //     saveQueries($saveQueries, 'user_group');
-    //     return $save;
-    // }
+    public function updateGroup($group_data)
+    {
+        $this->db->query('LOCK TABLES user_group WRITE');
+        $save = $this->db->table($this->table)->update($group_data, ['group_code' => $group_data['group_code']]);
+        $saveQueries = NULL;
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries = $this->db->getLastQuery()->getQuery();
+        }
+        $this->db->query('UNLOCK TABLES');
 
-    // public function deleteGroup($group_code)
-    // {
-    //     $this->db->query('LOCK TABLES user_group WRITE');
-    //     $group_data = ['deleted' => 'Y'];
-    //     $save = $this->db->table($this->table)->update($group_data, ['group_code' => $group_code]);
-    //     $saveQueries = NULL;
-    //     if ($this->db->affectedRows() > 0) {
-    //         $saveQueries = $this->db->getLastQuery()->getQuery();
-    //     }
-    //     $this->db->query('UNLOCK TABLES');
+        saveQueries($saveQueries, 'user_group', 0, 'EDIT GROUP ' . $group_data['group_code']);
+        return $save;
+    }
 
-    //     saveQueries($saveQueries, 'user_group');
-    //     return $save;
-    // }
+    public function deleteGroup($group_code)
+    {
+        $this->db->query('LOCK TABLES user_group WRITE');
+        $group_data = ['deleted' => 'Y'];
+        $save = $this->db->table($this->table)->update($group_data, ['group_code' => $group_code]);
+        $saveQueries = NULL;
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries = $this->db->getLastQuery()->getQuery();
+        }
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'user_group', 0, 'DELETE GROUP ' . $group_code);
+        return $save;
+    }
 }

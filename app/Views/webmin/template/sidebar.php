@@ -87,6 +87,13 @@
 								<p>Customer</p>
 							</a>
 						</li>
+
+						<li class="nav-item">
+							<a href="<?= base_url('webmin/mapping-area') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Mapping Area</p>
+							</a>
+						</li>
 					</ul>
 				</li>
 

@@ -11,7 +11,7 @@ $assetsUrl = base_url('assets');
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Banner Mobile Apps</h1>
+                <h1>Satuan</h1>
             </div>
             <div class="col-sm-6"></div>
         </div>
@@ -30,14 +30,13 @@ $assetsUrl = base_url('assets');
                         <button id="btnreload" class="btn btn-secondary"><i class="fas fa-sync"></i> Reload</button>
                     </div>
                     <div class="card-body">
-                        <table id="tblmobilebanner" class="table table-bordered table-hover" width="100%">
+                        <table id="tblunit" class="table table-bordered table-hover" width="100%">
                             <thead>
                                 <tr>
                                     <th data-priority="1">#</th>
-                                    <th data-priority="2">Title</th>
-                                    <th data-priority="3">Gambar</th>
-                                    <th data-priority="4">Status</th>
-                                    <th data-priority="5">Aksi</th>
+                                    <th data-priority="2">Nama Satuan</th>
+                                    <th data-priority="4">Deskripsi</th>
+                                    <th data-priority="3">Aksi</th>
                                 </tr>
                             </thead>
                         </table>
@@ -48,43 +47,28 @@ $assetsUrl = base_url('assets');
             </div>
             <!-- /.col -->
 
-            <!-- popup modal add -->
-            <div class="modal fade" id="modal-addbanner">
-                <div class="modal-dialog modal-lg">
+            <div class="modal fade" id="modal-unit">
+                <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title" id="title-frmaddbanner"></h4>
+                            <h4 class="modal-title" id="title-frmunit"></h4>
                             <button type="button" class="close close-modal">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form id="frmaddbanner" class="form-horizontal">
+                        <form id="frmunit" class="form-horizontal">
                             <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <input id="product_id" name="product_id" value="0" type="hidden">
-
-                                        <div class="form-group">
-                                            <img id="uploadedImage" src="<?= base_url('assets/images/no-image.PNG') ?>" width="100%" height="200px">
-                                            <input type="file" class="btn btn-primary btn-block mt-2" id="setpicture" value="Pilih Banner"></input>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="product_name" class="col-sm-12">Judul Banner</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control" id="title_banner" name="title_banner" placeholder="Judul Banner" value="" data-parsley-maxlength="200" data-parsley-trigger-after-failure="focusout" data-parsley-vproductname required>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="active" class="col-sm-12">Status</label>
-                                            <div class="col-sm-12">
-                                                <select id="active" name="active" class="form-control">
-                                                    <option value="Y" selected>Aktif</option>
-                                                    <option value="N">Tidak Aktif</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
+                                <input id="unit_id" name="unit_id" value="" type="hidden">
+                                <div class="form-group">
+                                    <label for="unit_name" class="col-sm-12">Nama Satuan</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="unit_name" name="unit_name" placeholder="Nama Satuan" value="" data-parsley-maxlength="200" data-parsley-trigger-after-failure="focusout" data-parsley-vunitname required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="unit_description" class="col-sm-12">Deskripsi</label>
+                                    <div class="col-sm-12">
+                                        <textarea id="unit_description" name="unit_description" class="form-control" placeholder="Deskripsi" data-parsley-maxlength="500" rows="3"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -98,9 +82,6 @@ $assetsUrl = base_url('assets');
                 </div>
                 <!-- /.modal-dialog -->
             </div>
-            <!-- end popup modal -->
-
-
         </div>
         <!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -110,46 +91,32 @@ $assetsUrl = base_url('assets');
 
 <?= $this->section('js') ?>
 <script>
-
     $(document).ready(function() {
         let formMode = '';
 
-        document.getElementById("setpicture").addEventListener("change", function () {
-          if (this.files[0]) {
-            var picture = new FileReader();
-            picture.readAsDataURL(this.files[0]);
-            picture.addEventListener("load", function (event) {
-              document
-              .getElementById("uploadedImage")
-              .setAttribute("src", event.target.result);
-              document.getElementById("uploadedImage").style.display = "block";
-          });
-        }
-    });
-
-        /*
         function _initButton() {
-            $('#btnadd').prop('disabled', !hasRole('category.add'));
-            $('.btnedit').prop('disabled', !hasRole('category.edit'));
-            $('.btndelete').prop('disabled', !hasRole('category.delete'));
+            $('#btnadd').prop('disabled', !hasRole('unit.add'));
+            $('.btnedit').prop('disabled', !hasRole('unit.edit'));
+            $('.btndelete').prop('disabled', !hasRole('unit.delete'));
         }
-        */
-        
+
+
+
         // datatables //
-        let tblmobilebanner = $("#tblmobilebanner").DataTable({
+        let tblunit = $("#tblunit").DataTable({
             processing: true,
             select: true,
             serverSide: true,
             responsive: true,
             fixedColumns: true,
             order: [
-            [1, 'asc']
+                [1, 'asc']
             ],
             language: {
                 url: lang_datatables,
             },
             ajax: {
-                url: base_url + '/webmin/mobileapps/table',
+                url: base_url + '/webmin/unit/table',
                 type: "POST",
                 error: function() {
                     notification.danger('Gagal memuat table, harap coba lagi');
@@ -160,25 +127,23 @@ $assetsUrl = base_url('assets');
                 _initButton();
             },
             columnDefs: [{
-                width: 100,
-                targets: 4
-            },
-            {
-                targets: [0, 3],
-                orderable: false,
-                searchable: false,
-            },
-            {
-                targets: [0],
-                className: "text-right",
-            },
+                    width: 100,
+                    targets: 3
+                },
+                {
+                    targets: [0, 3],
+                    orderable: false,
+                    searchable: false,
+                },
+                {
+                    targets: [0],
+                    className: "text-right",
+                },
             ],
         });
 
-
-
         function updateTable() {
-            tblmobilebanner.ajax.reload(null, false);
+            tblunit.ajax.reload(null, false);
         }
 
         $('#btnreload').click(function(e) {
@@ -186,21 +151,66 @@ $assetsUrl = base_url('assets');
             updateTable();
         })
 
+        // crud  //
+        function checkName(unit_name) {
+            let actUrl = base_url + '/webmin/unit/getbyname';
+            useLoader = false;
+            let getData = ajax_get(actUrl, {
+                unit_name: unit_name
+            }, {}, false);
+            useLoader = true;
+
+            if (getData.success) {
+                let result = getData.result;
+                if (result.exist) {
+                    let uCode = result.data.unit_id;
+                    if (uCode.toUpperCase() == $("#unit_id").val().toUpperCase()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        }
+
+        Parsley.addMessages('id', {
+            vunitname: 'Nama satuan sudah terdaftar'
+        });
+
+        Parsley.setLocale('id');
+
+        window.Parsley.addValidator("vunitname", {
+            validateString: function(value) {
+                return checkName(value)
+            },
+        });
+
         function addMode() {
-            let form = $('#frmaddbanner');
-            $('#title-frmaddbanner').html('Tambah Banner');
+            let form = $('#frmunit');
+            $('#title-frmunit').html('Tambah Satuan');
+            form[0].reset();
+            form.parsley().reset();
             formMode = 'add';
-            $('#modal-addbanner').modal(configModal);
+            $('#unit_id').val('0');
+            $('#unit_name').val('');
+            $('#unit_description').val('');
+            $('#modal-unit').modal(configModal);
         }
 
         function editMode(data) {
-            let form = $('#frmaddbanner');
-            $('#title-frmaddbanner').html('Ubah Kategori');
+            let form = $('#frmunit');
+            $('#title-frmunit').html('Ubah Satuan');
+            form[0].reset();
+            form.parsley().reset();
             formMode = 'edit';
-            $('#category_id').val(htmlEntities.decode(data.category_id));
-            $('#title_banner').val(htmlEntities.decode(data.title_banner));
-            $('#active').val(htmlEntities.decode(data.active));
-            $('#modal-category').modal(configModal);
+            $('#unit_id').val(htmlEntities.decode(data.unit_id));
+            $('#unit_name').val(htmlEntities.decode(data.unit_name));
+            $('#unit_description').val(htmlEntities.decode(data.unit_description));
+            $('#modal-unit').modal(configModal);
         }
 
         $('#btnadd').click(function(e) {
@@ -213,7 +223,7 @@ $assetsUrl = base_url('assets');
             message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
                 let yes = parseMessageResult(answer);
                 if (yes) {
-                    $('#modal-addbanner').modal('hide');
+                    $('#modal-unit').modal('hide');
                 }
             })
         })
@@ -221,15 +231,15 @@ $assetsUrl = base_url('assets');
 
         $('#btnsave').click(function(e) {
             e.preventDefault();
-            let form = $('#frmcategory');
+            let form = $('#frmunit');
             let btnSubmit = $('#btnsave')
             form.parsley().validate();
             if (form.parsley().isValid()) {
-                let question = 'Yakin ingin menyimpan data kategori?';
-                let actUrl = base_url + '/webmin/category/save/add';
+                let question = 'Yakin ingin menyimpan data satuan?';
+                let actUrl = base_url + '/webmin/unit/save/add';
                 if (formMode == 'edit') {
-                    question = 'Yakin ingin memperbarui data kategori?';
-                    actUrl = base_url + '/webmin/category/save/edit';
+                    question = 'Yakin ingin memperbarui data satuan?';
+                    actUrl = base_url + '/webmin/unit/save/edit';
                 }
 
                 message.question(question).then(function(answer) {
@@ -244,7 +254,7 @@ $assetsUrl = base_url('assets');
                                         form[0].reset();
                                         notification.success(response.result.message);
                                         form.parsley().reset();
-                                        $('#modal-category').modal('hide');
+                                        $('#modal-unit').modal('hide');
                                     } else {
                                         message.error(response.result.message);
                                     }
@@ -264,10 +274,10 @@ $assetsUrl = base_url('assets');
             }
         })
 
-        $("#tblmobilebanner").on('click', '.btnedit', function(e) {
+        $("#tblunit").on('click', '.btnedit', function(e) {
             e.preventDefault();
             let id = $(this).attr('data-id');
-            let actUrl = base_url + '/webmin/category/getbyid/' + id;
+            let actUrl = base_url + '/webmin/unit/getbyid/' + id;
             ajax_get(actUrl, null, {
                 success: function(response) {
                     if (response.success) {
@@ -282,12 +292,12 @@ $assetsUrl = base_url('assets');
 
         })
 
-        $("#tblmobilebanner").on('click', '.btndelete', function(e) {
+        $("#tblunit").on('click', '.btndelete', function(e) {
             e.preventDefault();
             let id = $(this).attr('data-id');
-            let category_name = $(this).attr('data-name');
-            let question = 'Yakin ingin menghapus kategori <b>' + category_name + '</b>?';
-            let actUrl = base_url + '/webmin/category/delete/' + id;
+            let unit_name = $(this).attr('data-name');
+            let question = 'Yakin ingin menghapus satuan <b>' + unit_name + '</b>?';
+            let actUrl = base_url + '/webmin/unit/delete/' + id;
             message.question(question).then(function(answer) {
                 let yes = parseMessageResult(answer);
                 if (yes) {
@@ -313,7 +323,5 @@ $assetsUrl = base_url('assets');
         _initButton();
 
     })
-
-
 </script>
 <?= $this->endSection() ?>

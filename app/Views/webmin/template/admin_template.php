@@ -70,6 +70,7 @@ $assetsUrl = base_url('assets');
 	<!-- Tempusdominus Bootstrap 4 -->
 	<link rel="stylesheet" href="<?= $themeUrl ?>/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 
+	<?= $this->renderSection('css') ?>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">

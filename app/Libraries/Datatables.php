@@ -102,8 +102,6 @@ class Datatables
         $result_list = [];
         foreach ($data->getResultArray() as $field) {
             $result_row = [];
-            $_sendData['field'] = $field;
-            $_sendData['row'] = $_row;
             if (is_callable($this->renderColumn)) {
                 $result_row = call_user_func($this->renderColumn, $field, $_row);
             }

@@ -15,6 +15,7 @@ class MyApp extends BaseConfig
                 'view'   => ['text' => 'Lihat'],
             ]
         ],
+
         'unit' => [
             'text'   => 'Satuan',
             'roles'   => [
@@ -24,6 +25,7 @@ class MyApp extends BaseConfig
                 'delete' => ['text' => 'Hapus'],
             ]
         ],
+
         'category' => [
             'text'   => 'Kategori',
             'roles'   => [
@@ -33,8 +35,9 @@ class MyApp extends BaseConfig
                 'delete' => ['text' => 'Hapus'],
             ]
         ],
-        'product' => [
-            'text'   => 'Produk',
+
+        'brand' => [
+            'text'   => 'Brand',
             'roles'   => [
                 'view'   => ['text' => 'Lihat'],
                 'add'    => ['text' => 'Tambah'],
@@ -42,6 +45,26 @@ class MyApp extends BaseConfig
                 'delete' => ['text' => 'Hapus'],
             ]
         ],
+
+        'mapping_area' => [
+            'text'   => 'Mapping Area',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+                'add'    => ['text' => 'Tambah'],
+                'edit'   => ['text' => 'Ubah'],
+                'delete' => ['text' => 'Hapus'],
+            ]
+        ],
+
+        'product' => [
+            'text'   => 'Produk',
+            'roles'   => [
+                'view'      => ['text' => 'Lihat'],
+                'manage'    => ['text' => 'Tambah/Ubah'],
+                'delete'    => ['text' => 'Hapus'],
+            ]
+        ],
+
         'supplier' => [
             'text'   => 'Supplier',
             'roles'   => [
@@ -51,6 +74,7 @@ class MyApp extends BaseConfig
                 'delete' => ['text' => 'Hapus'],
             ]
         ],
+
         'customer' => [
             'text'   => 'Customer',
             'roles'   => [
@@ -58,17 +82,10 @@ class MyApp extends BaseConfig
                 'add'               => ['text' => 'Tambah'],
                 'edit'              => ['text' => 'Ubah'],
                 'delete'            => ['text' => 'Hapus'],
-                'point_exchange'    => ['text' => 'Penukaran Poin'],
+                'reset_password'    => ['text' => 'Reset Password'],
             ]
         ],
-        'promo' => [
-            'text'   => 'Promo',
-            'roles'   => [
-                'view'   => ['text' => 'Lihat'],
-                'manage' => ['text' => 'Tambah / Ubah'],
-                'delete' => ['text' => 'Hapus'],
-            ]
-        ],
+
         'purchase_order' => [
             'text'   => 'Pesanan Pembelian',
             'roles'   => [
@@ -78,6 +95,7 @@ class MyApp extends BaseConfig
                 'cancel_order'  => ['text' => 'Pembatalan Pesanan'],
             ]
         ],
+
         'purchase' => [
             'text'   => 'Pembelian',
             'roles'   => [
@@ -86,6 +104,7 @@ class MyApp extends BaseConfig
                 'repayment' => ['text' => 'Pelunasan Hutang'],
             ]
         ],
+
         'purchase_return' => [
             'text'   => 'Retur Pembelian',
             'roles'   => [
@@ -95,18 +114,21 @@ class MyApp extends BaseConfig
                 'repayment' => ['text' => 'Pelunasan Retur'],
             ]
         ],
+
         'sales' => [
             'text'   => 'Penjualan',
             'roles'   => [
                 'view'      => ['text' => 'Lihat'],
             ]
         ],
+
         'sales_return' => [
             'text'   => 'Retur Penjualan',
             'roles'   => [
                 'view'      => ['text' => 'Lihat'],
             ]
         ],
+
         'stock_opname' => [
             'text'   => 'Stok Opname',
             'roles'   => [
@@ -114,12 +136,14 @@ class MyApp extends BaseConfig
                 'add'    => ['text' => 'Tambah'],
             ]
         ],
+
         'pos' => [
             'text'   => 'Point Of Sales (POS)',
             'roles'   => [
                 'view'   => ['text' => 'Lihat'],
             ]
         ],
+
         'password_control' => [
             'text'   => 'Password Control',
             'roles'   => [
@@ -129,6 +153,7 @@ class MyApp extends BaseConfig
                 'delete' => ['text' => 'Hapus'],
             ]
         ],
+
         'user_group' => [
             'text'   => 'Grup Pengguna',
             'roles'   => [
@@ -138,6 +163,7 @@ class MyApp extends BaseConfig
                 'delete' => ['text' => 'Hapus'],
             ]
         ],
+
         'user_account' => [
             'text'   => 'Akun Pengguna',
             'roles'   => [
@@ -145,14 +171,11 @@ class MyApp extends BaseConfig
                 'add'    => ['text' => 'Tambah'],
                 'edit'   => ['text' => 'Ubah'],
                 'delete' => ['text' => 'Hapus'],
+                'add_fingerprint'   => ['text' => 'Tambah Fingerprint'],
+                'reset_password'    => ['text' => 'Reset Password'],
             ]
         ],
-        'accounting' => [
-            'text'   => 'Akuntansi',
-            'roles'   => [
-                'view'   => ['text' => 'Lihat'],
-            ]
-        ],
+
         'report' => [
             'text'   => 'Laporan',
             'roles'   => [

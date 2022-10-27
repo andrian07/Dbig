@@ -40,11 +40,18 @@ class Mobileapps extends WebminController
 
                 $column[] = $i;
                 $column[] = esc($row['mobile_banner_title']);
-                $column[] = esc($row['mobile_banner_image']);
-                $column[] = esc($row['active']);
-
+                $caption = esc($row['mobile_banner_title']);
+                $imageUrl = base_url().'/assets/demo/cthbanner.jpg';
+                $thumbUrl = base_url().'/assets/demo/cthbanner.jpg';
+                $column[] = fancy_image($caption, $imageUrl, $thumbUrl, $imageClass = 'width="60px" height="80px"');
+                if($row['active'] == 'N'){
+                $column[] = '<span class="badge badge-danger"><i class="fas fa-times-circle"></i></span>';
+                }else{
+                $column[] = '<span class="badge badge-success"><i class="fas fa-check-circle"></i></span>';
+                }
                 $btns = [];
                 $prop =  'data-id="' . $row['mobile_banner_id'] . '" data-name="' . esc($row['mobile_banner_title']) . '"';
+
                 $btns[] = button_edit($prop);
                 $btns[] = button_delete($prop);
                 $column[] = implode('&nbsp;', $btns);

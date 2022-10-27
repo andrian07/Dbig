@@ -62,6 +62,14 @@ class EricDemo extends WebminController
         return $this->renderView('demo/masterdata/customer', $data);
     }
 
+    public function mappingArea()
+    {
+        $data = [
+            'title'         => 'Mapping Area'
+        ];
+        return $this->renderView('demo/masterdata/mapping_area', $data);
+    }
+
     public function product()
     {
         $data = [

@@ -245,6 +245,10 @@ $assetsUrl = base_url('assets');
                                     </div>
                                 </div>
 
+
+
+
+
                                 <div class="form-group">
                                     <label for="customer_group" class="col-sm-12">Grup</label>
                                     <div class="col-sm-12">
@@ -255,6 +259,14 @@ $assetsUrl = base_url('assets');
                                             <option value="G4">G4 - PLATINUM</option>
                                             <option value="G5">G5 - PROYEK</option>
                                             <option value="G6">G6 - CUSTOM</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="mapping_id" class="col-sm-12">Mapping Area</label>
+                                    <div class="col-sm-12">
+                                        <select id="mapping_id" name="mapping_id" class="form-control">
                                         </select>
                                     </div>
                                 </div>
@@ -333,6 +345,27 @@ $assetsUrl = base_url('assets');
             let actUrl = base_url + '/customer/view-point-exchange';
             window.location.href = actUrl;
         })
+
+        const mapData = [{
+                id: 1,
+                text: "JL GAJAH MADA",
+                address: "KALIMANTAN BARAT"
+            },
+            {
+                id: 2,
+                text: "JL ABC",
+                address: "KALIMANTAN BARAT"
+            },
+            {
+                id: 3,
+                text: "JL XYZ",
+                address: "KALIMANTAN BARAT"
+            }
+        ]
+
+        $('#mapping_id').select2({
+            data: mapData,
+        });
 
 
 
