@@ -30,11 +30,10 @@ class Select extends WebminController
         $select2->orderBy       = 'store_id';
         $select2->orderDir      = 'ASC';
 
-
         $select2->renderResult(function ($row, $i) {
             $result = [];
             $result['id']   = esc($row['store_id']);
-            $result['text'] = esc($row['store_code'] . ' - ' . $row['store_name']);
+            $result['text'] = $row['store_code'] . ' - ' . $row['store_name'];
             return $result;
         });
 
@@ -214,13 +213,123 @@ class Select extends WebminController
         $select2->generate();
     }
 
+    public function brand()
+    {
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('ms_brand');
+
+        $select2->db->select('brand_id,brand_name');
+        $select2->db->where('deleted', 'N');
+
+        $select2->searchFields  = ['brand_name'];
+        $select2->orderBy       = 'brand_name';
+        $select2->orderDir      = 'ASC';
 
 
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = esc($row['brand_id']);
+            $result['text'] = esc($row['brand_name']);
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
+    public function category()
+    {
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('ms_category');
+
+        $select2->db->select('category_id,category_name');
+        $select2->db->where('deleted', 'N');
+
+        $select2->searchFields  = ['category_name'];
+        $select2->orderBy       = 'category_name';
+        $select2->orderDir      = 'ASC';
 
 
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = esc($row['category_id']);
+            $result['text'] = esc($row['category_name']);
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
+    public function warehouse()
+    {
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('ms_warehouse');
+
+        $select2->db->select('warehouse_id,warehouse_code,warehouse_name');
+        $select2->db->where('deleted', 'N');
+
+        $store_id = $this->request->getGet('store_id');
+        if ($store_id != NULL) {
+            $select2->db->where('store_id', $store_id);
+        }
+
+        $select2->searchFields  = ['warehouse_code', 'warehouse_name'];
+        $select2->orderBy       = 'warehouse_code';
+        $select2->orderDir      = 'ASC';
+
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = $row['warehouse_id'];
+            $result['text'] = $row['warehouse_code'] . ' - ' . $row['warehouse_name'];
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
+    public function mappingArea()
+    {
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('ms_mapping_area');
+
+        $select2->db->select('mapping_id,mapping_code,mapping_address');
+        $select2->db->where('deleted', 'N');
 
 
+        $select2->searchFields  = ['mapping_code', 'mapping_address'];
+        $select2->orderBy       = 'mapping_code';
+        $select2->orderDir      = 'ASC';
 
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = $row['mapping_id'];
+            $result['text'] = $row['mapping_code'] . ' - ' . $row['mapping_address'];
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
+    public function supplier()
+    {
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('ms_supplier');
+
+        $select2->db->select('supplier_id,supplier_code,supplier_name');
+        $select2->db->where('deleted', 'N');
+
+        $select2->searchFields  = ['supplier_code', 'supplier_name'];
+        $select2->orderBy       = 'supplier_code';
+        $select2->orderDir      = 'ASC';
+
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = $row['supplier_id'];
+            $result['text'] = $row['supplier_code'] . ' - ' . $row['supplier_name'];
+            return $result;
+        });
+
+        $select2->generate();
+    }
 
     //--------------------------------------------------------------------
 

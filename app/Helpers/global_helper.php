@@ -119,3 +119,43 @@ if (!function_exists('saveQueries')) {
         }
     }
 }
+
+/* Get Upload File */
+if (!function_exists('getImage')) {
+    function getImage($filename, $_configImageName, $isThumb = FALSE, $noImage = '')
+    {
+        $image_uri = $noImage;
+        if ($filename != '') {
+            $_get_config    = config('MyApp');
+            $config         = $_get_config->uploadImage[$_configImageName];
+            $dir = $isThumb == FALSE ?  $config['upload_dir'] : $config['thumb_dir'];
+
+            if (file_exists($dir . $filename)) {
+                $image_uri = base_url($dir . $filename);
+            } else {
+                $image_uri = $noImage;
+            }
+        }
+        return $image_uri;
+    }
+}
+
+if (!function_exists('deleteImage')) {
+    function deleteImage($filename, $_configImageName)
+    {
+        if (!($filename == '')) {
+            $_get_config    = config('MyApp');
+            $config         = $_get_config->uploadImage[$_configImageName];
+
+            $image = $config['upload_dir'] . $filename;
+            $thumb = $config['thumb_dir'] . $filename;
+            if (file_exists($image)) {
+                unlink($image);
+            }
+
+            if (file_exists($thumb)) {
+                unlink($thumb);
+            }
+        }
+    }
+}

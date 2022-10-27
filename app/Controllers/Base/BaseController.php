@@ -22,6 +22,7 @@ class BaseController extends Controller
 {
 	public $myConfig;
 	public $appConfig;
+	public $maxUploadSize;
 
 	public function validationRequest($ajax = FALSE, $blocking = TRUE, $host = TRUE)
 	{
@@ -75,6 +76,27 @@ class BaseController extends Controller
 		// }
 		// $this->appConfig = $appConfig;
 
+		// settings max upload size // 
+		$get_config_upload = min(ini_get('post_max_size'), ini_get('upload_max_filesize'));
+		$unit = preg_replace('/[^bkmgtpezy]/i', '', $get_config_upload); // Remove the non-unit characters from the size.
+		$size = preg_replace('/[^0-9\.]/', '', $get_config_upload); // Remove the non-numeric characters from the size.
+
+		if ($unit) {
+			// Find the position of the unit in the ordered string which is the power of magnitude to multiply a bite by.
+			$bit_size = round($size * pow(1024, stripos('bkmgtpezy', $unit[0])));
+		} else {
+			$bit_size = round($size);
+		}
+
+		// convert bit to kb and mb // 
+		$kb_size = $bit_size / 1024;
+		$mb_size = $kb_size / 1024;
+
+		$this->maxUploadSize = [
+			'b' 	=> $bit_size,
+			'kb' 	=> $kb_size,
+			'mb'	=> $mb_size
+		];
 
 		date_default_timezone_set("Asia/Jakarta");
 	}

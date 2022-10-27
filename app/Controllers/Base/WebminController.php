@@ -36,10 +36,13 @@ class WebminController extends BaseController
 		}
 
 		if ($isValid) {
-			$viewData               = $data == NULL ? [] : $data;
-			$viewData['user']       = $this->userLogin;
-			$viewData['user_role']  = $this->role->get();
-			$viewData['role']   	= $this->role;
+			$viewData               		= $data == NULL ? [] : $data;
+			$viewData['user']       		= $this->userLogin;
+			$viewData['user_role']  		= $this->role->get();
+			$viewData['role']   			= $this->role;
+			$viewData['max_upload_size'] 	= $this->maxUploadSize;
+			$viewData['upload_file_type'] 	= $this->myConfig->uploadFileType;
+
 			return view('webmin/' . $view_name, $viewData);
 		} else {
 			return redirect()->to(base_url('webmin/profile'));

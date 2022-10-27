@@ -115,6 +115,9 @@ $assetsUrl = base_url('assets');
 		const DECIMAL_SEPARATOR = '<?= DECIMAL_SEPARATOR ?>';
 		const DECIMAL_DIGIT = <?= DECIMAL_DIGIT ?>;
 
+		const max_upload_size = <?= json_encode($max_upload_size) ?>;
+		const upload_file_type = <?= json_encode($upload_file_type) ?>;
+
 		let csrfName = '<?= csrf_token() ?>'; // CSRF Token name
 		let csrfHash = '<?= csrf_hash() ?>'; // CSRF hash
 	</script>
