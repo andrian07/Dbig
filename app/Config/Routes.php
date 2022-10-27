@@ -89,6 +89,16 @@ $routes->group('webmin/brand', ['filter' => 'webminauth'], static function ($rou
     $routes->get('delete/(:num)', 'Webmin\Brand::delete/$1');
 });
 
+$routes->group('webmin/warehouse', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\Warehouse::index');
+    $routes->post('table', 'Webmin\Warehouse::table');
+    $routes->get('getbyid/(:num)', 'Webmin\Warehouse::getById/$1');
+    $routes->get('getbycode', 'Webmin\Warehouse::getByCode');
+    $routes->get('getbyname', 'Webmin\Warehouse::getByName');
+    $routes->post('save/(:alpha)', 'Webmin\Warehouse::save/$1');
+    $routes->get('delete/(:num)', 'Webmin\Warehouse::delete/$1');
+});
+
 $routes->group('webmin/mapping-area', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\MappingArea::index');
     $routes->post('table', 'Webmin\MappingArea::table');
@@ -97,6 +107,28 @@ $routes->group('webmin/mapping-area', ['filter' => 'webminauth'], static functio
     $routes->post('save/(:alpha)', 'Webmin\MappingArea::save/$1');
     $routes->get('delete/(:num)', 'Webmin\MappingArea::delete/$1');
 });
+
+$routes->group('webmin/supplier', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\Supplier::index');
+    $routes->post('table', 'Webmin\Supplier::table');
+    $routes->get('getbyid/(:num)', 'Webmin\Supplier::getById/$1');
+    $routes->get('getbycode', 'Webmin\Supplier::getByCode');
+    $routes->get('getbyname', 'Webmin\Supplier::getByName');
+    $routes->post('save/(:alpha)', 'Webmin\Supplier::save/$1');
+    $routes->get('delete/(:num)', 'Webmin\Supplier::delete/$1');
+});
+
+$routes->group('webmin/product', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\Product::index');
+    $routes->post('table', 'Webmin\Product::table');
+    $routes->post('save/(:alpha)', 'Webmin\Product::save/$1');
+    $routes->get('delete/(:num)', 'Webmin\Product::delete/$1');
+
+    $routes->get('getbyid/(:num)', 'Webmin\Supplier::getById/$1');
+    $routes->get('getbycode', 'Webmin\Supplier::getByCode');
+    $routes->get('getbyname', 'Webmin\Supplier::getByName');
+});
+
 
 
 $routes->group('webmin/user/user-group', ['filter' => 'webminauth'], static function ($routes) {
@@ -215,10 +247,16 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
     $routes->get('store', 'Webmin\Select::store');
     $routes->get('user-group', 'Webmin\Select::userGroup');
     $routes->get('unit', 'Webmin\Select::unit');
+    $routes->get('category', 'Webmin\Select::category');
+    $routes->get('brand', 'Webmin\Select::brand');
+    $routes->get('supplier', 'Webmin\Select::supplier');
+
     $routes->get('pc/provinces', 'Webmin\Select::pcProvinces');
     $routes->get('pc/cities', 'Webmin\Select::pcCities');
     $routes->get('pc/districts', 'Webmin\Select::pcDistricts');
     $routes->get('pc/subdistricts', 'Webmin\Select::pcSubDistricts');
+    $routes->get('mapping-area', 'Webmin\Select::mappingArea');
+    $routes->get('warehouse', 'Webmin\Select::warehouse');
 });
 /* END Select2 */
 
@@ -256,13 +294,14 @@ $routes->get('pos/customer-display', 'Pos\Utility::customerDisplay');
 $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
     //$routes->get('unit', 'Webmin\EricDemo::unit'); ok
 
-    $routes->get('warehouse', 'Webmin\EricDemo::warehouse');
+    //$routes->get('warehouse', 'Webmin\EricDemo::warehouse');
     $routes->get('customer', 'Webmin\EricDemo::customer');
 
     $routes->get('supplier', 'Webmin\EricDemo::supplier');
-    $routes->get('product', 'Webmin\EricDemo::product');
-    $routes->get('product/detail', 'Webmin\EricDemo::productDetail');
-    $routes->get('product/parcel-detail', 'Webmin\EricDemo::parcelDetail');
+    //$routes->get('product', 'Webmin\EricDemo::product');
+    //$routes->get('product/detail', 'Webmin\EricDemo::productDetail');
+    //$routes->get('product/parcel-detail', 'Webmin\EricDemo::parcelDetail');
+
     $routes->get('point-reward', 'Webmin\EricDemo::pointReward');
     $routes->get('exchange-point', 'Webmin\EricDemo::exchangePoint');
     $routes->get('exchange-point/v2', 'Webmin\EricDemo::exchangePointV2');

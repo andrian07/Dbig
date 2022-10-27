@@ -6,7 +6,10 @@ use CodeIgniter\Config\BaseConfig;
 
 class MyApp extends BaseConfig
 {
-    public $allowedHosts   = ['localhost'];
+    public $allowedHosts        = ['localhost'];
+    public $uploadFileType      = [
+        'image' => ['jpg', 'jpeg', 'png']
+    ];
 
     public $userRole = [
         'dashboard' => [
@@ -43,6 +46,16 @@ class MyApp extends BaseConfig
                 'add'    => ['text' => 'Tambah'],
                 'edit'   => ['text' => 'Ubah'],
                 'delete' => ['text' => 'Hapus'],
+            ]
+        ],
+
+        'warehouse' => [
+            'text'   => 'Gudang',
+            'roles'   => [
+                'view'      => ['text' => 'Lihat'],
+                'add'       => ['text' => 'Tambah'],
+                'edit'      => ['text' => 'Ubah'],
+                'delete'    => ['text' => 'Hapus'],
             ]
         ],
 
@@ -221,5 +234,37 @@ class MyApp extends BaseConfig
         'ean_13'        => 'EAN 13',
         'ean_8'         => 'EAN 8',
         'code_39'       => 'CODE 39',
+    ];
+
+    public $uploadImage = [
+        'default' => [
+            // gd or imagick
+            'module'        => 'gd',
+            'width'         => 800,
+            'height'        => 800,
+            'create_thumb'  => FALSE,
+            'thumb_width'   => 150,
+            'thumb_height'  => 150,
+            'maintainRatio' => FALSE,
+            'masterDim'     => 'auto',
+        ],
+        'product' => [
+            'width'         => 800,
+            'height'        => 800,
+            'create_thumb'  => TRUE,
+            'thumb_width'   => 150,
+            'thumb_height'  => 150,
+            'upload_dir'    => 'contents/upload/product/',
+            'thumb_dir'     => 'contents/thumb/product/',
+        ],
+        'banner' => [
+            'width'         => 1000,
+            'height'        => 700,
+            'create_thumb'  => TRUE,
+            'thumb_width'   => 320,
+            'thumb_height'  => 150,
+            'upload_dir'    => 'contents/upload/banner/',
+            'thumb_dir'     => 'contents/thumb/banner/',
+        ],
     ];
 }
