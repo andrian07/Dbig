@@ -65,8 +65,8 @@ $assetsUrl = base_url('assets');
                                         <input id="product_id" name="product_id" value="0" type="hidden">
 
                                         <div class="form-group">
-                                            <img id="uploadedImage" src="<?= base_url('assets/images/no-image.PNG') ?>" width="100%" height="200px">
-                                            <input type="file" class="btn btn-primary btn-block mt-2" id="setpicture" value="Pilih Banner"></input>
+                                             <img id="image_product" src="<?= base_url('assets/images/no-image.PNG') ?>" width="100%" height="200px">
+                                             <button class="btn btn-primary btn-block mt-2"><i class="fas fa-cloud-upload-alt"></i> Unggah Gambar</button>
                                         </div>
                                         <div class="form-group">
                                             <label for="product_name" class="col-sm-12">Judul Banner</label>
@@ -114,26 +114,14 @@ $assetsUrl = base_url('assets');
     $(document).ready(function() {
         let formMode = '';
 
-        document.getElementById("setpicture").addEventListener("change", function () {
-          if (this.files[0]) {
-            var picture = new FileReader();
-            picture.readAsDataURL(this.files[0]);
-            picture.addEventListener("load", function (event) {
-              document
-              .getElementById("uploadedImage")
-              .setAttribute("src", event.target.result);
-              document.getElementById("uploadedImage").style.display = "block";
-          });
-        }
-    });
 
-        /*
+        
         function _initButton() {
             $('#btnadd').prop('disabled', !hasRole('category.add'));
             $('.btnedit').prop('disabled', !hasRole('category.edit'));
             $('.btndelete').prop('disabled', !hasRole('category.delete'));
         }
-        */
+        
         
         // datatables //
         let tblmobilebanner = $("#tblmobilebanner").DataTable({
