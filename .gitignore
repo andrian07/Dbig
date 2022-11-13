@@ -1,2 +1,4 @@
 .env
 writable/
+public/contents/thumb
+public/contents/upload

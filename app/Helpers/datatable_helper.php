@@ -19,3 +19,22 @@ if (!function_exists('fancy_image')) {
         return implode('', $result);
     }
 }
+
+if (!function_exists('badge')) {
+    function badge($text, $badgeStyle = '', $badgeClass = '')
+    {
+        return "<span class=\"badge badge-$badgeStyle $badgeClass \">$text</span>";
+    }
+}
+
+
+if (!function_exists('activeSymbol')) {
+    function activeSymbol($x)
+    {
+        if ($x) {
+            return badge('<i class="fas fa-check-circle"></i>', 'success');
+        } else {
+            return badge('<i class="fas fa-times-circle"></i>', 'danger');
+        }
+    }
+}

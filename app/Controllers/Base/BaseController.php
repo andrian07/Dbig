@@ -67,14 +67,14 @@ class BaseController extends Controller
 
 
 		helper(['global']);
-		// $appConfig = new \App\Libraries\ConfigReader();
-		// $M_config = model('M_config');
-		// $getConfig = $M_config->getConfig();
+		$appConfig = new \App\Libraries\ConfigReader();
+		$M_config = model('M_config');
+		$getConfig = $M_config->getConfig();
 
-		// foreach ($getConfig->getResultArray() as $cfg) {
-		// 	$appConfig->set($cfg['config_group'], $cfg['config_name'], $cfg['config_value']);
-		// }
-		// $this->appConfig = $appConfig;
+		foreach ($getConfig->getResultArray() as $cfg) {
+			$appConfig->set($cfg['config_group'], $cfg['config_subgroup'], $cfg['config_name'], $cfg['config_value']);
+		}
+		$this->appConfig = $appConfig;
 
 		// settings max upload size // 
 		$get_config_upload = min(ini_get('post_max_size'), ini_get('upload_max_filesize'));
