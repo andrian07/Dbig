@@ -16,6 +16,7 @@ class Purchase_order extends WebminController
         parent::initController($request, $response, $logger);
     }
 
+
     public function index()
     {
         $data = [
@@ -23,6 +24,51 @@ class Purchase_order extends WebminController
         ];
         return $this->renderView('purchase/purchaseorder', $data);
     }
+
+
+    public function searchProductBysuplier()
+    {
+
+        $this->validationRequest(TRUE, 'GET');
+
+        $keyword = $this->request->getGet('term');
+
+        $result = ['success' => FALSE, 'num_product' => 0, 'data' => [], 'message' => ''];
+
+        if (!($keyword == '' || $keyword == NULL)) {
+
+            $M_product = model('M_product');
+
+            $find = $M_product->searchProductUnitByName($keyword)->getResultArray();
+
+            $find_result = [];
+
+            foreach ($find as $row) {
+
+                $diplay_text = $row['product_name'];
+
+                $find_result[] = [
+
+                    'id'                => $diplay_text,
+
+                    'value'             => $diplay_text,
+
+                    'item_id'           => $row['item_id'],
+
+                    'product_id'        => $row['product_id']
+
+                ];
+
+            }
+
+            $result = ['success' => TRUE, 'num_product' => count($find_result), 'data' => $find_result, 'message' => ''];
+
+        }
+
+        resultJSON($result);
+
+    }
+
 
     public function printinvoice()
     {

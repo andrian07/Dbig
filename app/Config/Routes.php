@@ -123,7 +123,6 @@ $routes->group('webmin/product', ['filter' => 'webminauth'], static function ($r
     $routes->post('table', 'Webmin\Product::table');
     $routes->post('save/(:alpha)', 'Webmin\Product::save/$1');
     $routes->get('delete/(:num)', 'Webmin\Product::delete/$1');
-
     $routes->get('getbyid/(:num)', 'Webmin\Supplier::getById/$1');
     $routes->get('getbycode', 'Webmin\Supplier::getByCode');
     $routes->get('getbyname', 'Webmin\Supplier::getByName');
@@ -155,17 +154,24 @@ $routes->group('webmin/user/user-account', ['filter' => 'webminauth'], static fu
 
 
 
-
-
 /* pembelian */
 $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\Purchase_order::index');
+    $routes->get('search-product-bysuplier', 'Webmin\Purchase_order::searchProductBysuplier');
     $routes->get('printinvoice', 'Webmin\Purchase_order::printinvoice');
 });
 
 $routes->group('webmin/submission', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\Submission::index');
+    $routes->post('tblhdsubmission', 'Webmin\Submission::tblhdsubmission');
+    $routes->get('get-submission-temp', 'Webmin\Submission::getSubmissionTemp');
+    $routes->get('temp-delete/(:alphanum)', 'Webmin\Submission::deleteTemp/$1');
     $routes->get('submissiondetaildemo', 'Webmin\Submission::submissiondetaildemo');
+    $routes->post('tbltempsubmission', 'Webmin\Submission::tbltempsubmission');
+    $routes->get('search-product', 'Webmin\Submission::search_product');
+    $routes->post('temp-add', 'Webmin\Submission::tempadd');
+    $routes->post('save/(:alpha)', 'Webmin\submission::save/$1');
+    $routes->get('get-submission-detail/(:alphanum)', 'Webmin\submission::getSubmissionDetail/$1');
 });
 
 $routes->group('webmin/purchase', ['filter' => 'webminauth'], static function ($routes) {
@@ -194,8 +200,15 @@ $routes->group('webmin/sales-admin', ['filter' => 'webminauth'], static function
 /* Mobile*/
 $routes->group('webmin/mobileapps', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\Mobileapps\Mobileapps::index');
-    $routes->post('table', 'Webmin\Mobileapps\Mobileapps::table');
+    $routes->post('tablebanner', 'Webmin\Mobileapps\Mobileapps::tablebanner');
+    $routes->post('tablepromo', 'Webmin\Mobileapps\Mobileapps::tablepromo');
     $routes->get('mobileapps-banner', 'Webmin\Mobileapps\Mobileapps::mobileappsBanner');
+    $routes->get('mobileapps-promo', 'Webmin\Mobileapps\Mobileapps::mobileappsPromo');
+    $routes->post('savebanner/(:alpha)', 'Webmin\Mobileapps\Mobileapps::savebanner/$1');
+    $routes->post('savepromo/(:alpha)', 'Webmin\Mobileapps\Mobileapps::savepromo/$1');
+    $routes->get('getbyid/(:num)', 'Webmin\Mobileapps\Mobileapps::getById/$1');
+    $routes->get('deletebanner/(:num)', 'Webmin\Mobileapps\Mobileapps::deletebanner/$1');
+    $routes->get('deletepromo/(:num)', 'Webmin\Mobileapps\Mobileapps::deletepromo/$1');
 });
 /* end Mobile*/
 

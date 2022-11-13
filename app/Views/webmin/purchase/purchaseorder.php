@@ -301,7 +301,7 @@ $assetsUrl = base_url('assets');
 
                                         <label>Produk</label>
 
-                                        <select id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" required> </select>
+                                        <input id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname required>
 
                                     </div>
 
@@ -378,7 +378,7 @@ $assetsUrl = base_url('assets');
 
                                         <label>Expire Date</label>
 
-                                        <input id="temp_ed_date" name="temp_ed_date" type="date" class="form-control" value="0">
+                                        <input id="temp_ed_date" name="temp_ed_date" type="date" class="form-control">
 
                                     </div>
 
@@ -905,29 +905,43 @@ $assetsUrl = base_url('assets');
         });
 
 
-        $("#product_name").select2({
+        $('#product_name').autocomplete({
 
-            data: [
-            {
-                id:'00002050',
-                text: 'NIPPON PAINT CAT BASE NIPPON SATIN GLO - PASTEL BASE 2.35L / 00002050'
-            },
-            {
-                id:'00009200',
-                text: 'ARISTON WATER HEATER ANDRIS AN2 15 LUX 350 ID / 00009200'
-            },
-            {
-                id:'00011521',
-                text: 'KERAMIK LANTAI ACCURA (SERI WASHINGTON BROWN 40X40) KW I / 00011521',
-            },
-            {
-                id:'00005001',
-                text: 'IKAD KERAMIK DINDING DX 2277A FR 25X40 - I / 00005001',
-            }
-            
-            ]
+           minLength: 2,
 
-        });
+           source: function(req, add) {
+
+               $.ajax({
+
+                   url: base_url + '/webmin/purchase-order/search-product-bysuplier?sup=1',
+
+                   dataType: 'json',
+
+                   type: 'GET',
+
+                   data: req,
+
+                   success: function(res) {
+
+                       if (res.success == true) {
+
+                           add(res.data);
+
+                       }
+
+                   },
+
+               });
+
+           },
+
+           select: function(event, ui) {
+
+               $('#item_id').val(ui.item.item_id);
+
+           },
+
+       });
         // Table //
 
 

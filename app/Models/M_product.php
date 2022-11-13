@@ -146,4 +146,35 @@ class M_product extends Model
         saveQueries($saveQueries, 'unit', $unit_id);
         return $save;
     }
+
+
+    public function searchProductUnitByName($keyword, $supplier_id = '', $show_last_purchase_data = FALSE)
+
+    {
+
+        $builder = $this->db->table($this->table);
+
+        $builder->select('*')
+
+            ->join('ms_product_unit', 'ms_product_unit.product_id = ms_product.product_id')
+
+            ->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id');
+
+        $builder->where('ms_product.deleted', 'N');
+
+        $builder->groupStart();
+
+        $builder->like('ms_product_unit.item_code', $keyword);
+
+        $builder->orLike('ms_product.product_name', $keyword);
+
+        $builder->groupEnd();
+
+        $builder->limit(10);
+
+        return $builder->get();
+
+    }
+
+    
 }

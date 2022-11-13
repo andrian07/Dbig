@@ -45,6 +45,23 @@ class M_log_queries extends Model
         }
     }
 
+    public function insertLogEdit($queries = NULL, $log_remark = '', $user_id, $module = 'system', $ref_id = 0)
+    {
+        $db = \Config\Database::connect($this->DBGroup);
+        if ($queries != NULL) {
+            $db->query('LOCK TABLES log_transaction_edit_queries WRITE');
+            $data = [
+                'log_transaction_code'      => $module,
+                'log_transaction_id'        => $ref_id,
+                'log_user_id'               => $user_id,
+                'log_remark'                => $log_remark
+            ];
+            $db->table('log_transaction_edit_queries')->insert($data);
+            $log_id = $db->insertID();
+            $db->query('UNLOCK TABLES');
+        }
+    }
+
     public function getLogDetail($log_id)
     {
         $db = \Config\Database::connect($this->DBGroup);

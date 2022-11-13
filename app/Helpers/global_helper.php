@@ -120,6 +120,23 @@ if (!function_exists('saveQueries')) {
     }
 }
 
+if (!function_exists('saveEditQueries')) {
+    function saveEditQueries($queries, $module, $ref_id = 0, $log_remark = '')
+    {
+        if (APP_LOG_QUERIES) {
+            $user_id = 0;
+            $M_log_queries = model('Log/M_log_queries',);
+            $user_login = session()->get('user_login');
+
+            if ($user_login != NULL) {
+                $user_id = $user_login['user_id'];
+            }
+
+            $M_log_queries->insertLogEdit($queries, $log_remark, $user_id, $module, $ref_id);
+        }
+    }
+}
+
 /* Get Upload File */
 if (!function_exists('getImage')) {
     function getImage($filename, $_configImageName, $isThumb = FALSE, $noImage = '')

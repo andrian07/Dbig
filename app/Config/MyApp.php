@@ -59,6 +59,26 @@ class MyApp extends BaseConfig
             ]
         ],
 
+        'mobilebanner' => [
+            'text'   => 'Mobile Banner',
+            'roles'   => [
+                'view'      => ['text' => 'Lihat'],
+                'add'       => ['text' => 'Tambah'],
+                'edit'      => ['text' => 'Ubah'],
+                'delete'    => ['text' => 'Hapus'],
+            ]
+        ],
+
+        'mobilepromo' => [
+            'text'   => 'Mobile Promo',
+            'roles'   => [
+                'view'      => ['text' => 'Lihat'],
+                'add'       => ['text' => 'Tambah'],
+                'edit'      => ['text' => 'Ubah'],
+                'delete'    => ['text' => 'Hapus'],
+            ]
+        ],
+
         'mapping_area' => [
             'text'   => 'Mapping Area',
             'roles'   => [
@@ -96,6 +116,17 @@ class MyApp extends BaseConfig
                 'edit'              => ['text' => 'Ubah'],
                 'delete'            => ['text' => 'Hapus'],
                 'reset_password'    => ['text' => 'Reset Password'],
+            ]
+        ],
+
+        'submission' => [
+            'text'   => 'Pengajuan Pembelian',
+            'roles'   => [
+                'view'          => ['text' => 'Lihat'],
+                'add'           => ['text' => 'Tambah'],
+                'edit'          => ['text' => 'Ubah'],
+                'delete'        => ['text' => 'Hapus'],
+                //'cancel_order'  => ['text' => 'Pembatalan Pesanan'],
             ]
         ],
 
