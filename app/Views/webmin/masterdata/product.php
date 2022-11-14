@@ -138,23 +138,23 @@ $assetsUrl = base_url('assets');
                                         <th rowspan="2" class="text-right">DPP</th>
                                         <th rowspan="2" class="text-right">PPN</th>
                                         <th rowspan="2" class="text-right">Harga Beli</th>
-                                        <th colspan="2" class="text-center">G1 - UMUM</th>
-                                        <th colspan="2" class="text-center">G2 - SILVER</th>
-                                        <th colspan="2" class="text-center">G3 - GOLD</th>
-                                        <th colspan="2" class="text-center">G4 - PLATINUM</th>
-                                        <th colspan="2" class="text-center">G5 - PROYEK</th>
-                                        <th colspan="2" class="text-center">G6 - CUSTOM</th>
+                                        <th colspan="2" class="text-center">G1 - <?= isset($customer_group['G1']) ? $customer_group['G1'] : 'NO CONFIG' ?></th>
+                                        <th colspan="2" class="text-center">G2 - <?= isset($customer_group['G2']) ? $customer_group['G2'] : 'NO CONFIG' ?></th>
+                                        <th colspan="2" class="text-center">G3 - <?= isset($customer_group['G3']) ? $customer_group['G3'] : 'NO CONFIG' ?></th>
+                                        <th colspan="2" class="text-center">G4 - <?= isset($customer_group['G4']) ? $customer_group['G4'] : 'NO CONFIG' ?></th>
+                                        <th colspan="2" class="text-center">G5 - <?= isset($customer_group['G5']) ? $customer_group['G5'] : 'NO CONFIG' ?></th>
+                                        <th colspan="2" class="text-center">G6 - <?= isset($customer_group['G6']) ? $customer_group['G6'] : 'NO CONFIG' ?></th>
 
 
                                         <th colspan="9" class="text-center">Diskon Seasonal</th>
 
                                         <!-- Sisa Margin -->
-                                        <th colspan="2" class="text-center">G1 - UMUM</th>
-                                        <th colspan="2" class="text-center">G2 - SILVER</th>
-                                        <th colspan="2" class="text-center">G3 - GOLD</th>
-                                        <th colspan="2" class="text-center">G4 - PLATINUM</th>
-                                        <th colspan="2" class="text-center">G5 - PROYEK</th>
-                                        <th colspan="2" class="text-center">G6 - CUSTOM</th>
+                                        <th colspan="2" class="text-center">G1 - <?= isset($customer_group['G1']) ? $customer_group['G1'] : 'NO CONFIG' ?></th>
+                                        <th colspan="2" class="text-center">G2 - <?= isset($customer_group['G2']) ? $customer_group['G2'] : 'NO CONFIG' ?></th>
+                                        <th colspan="2" class="text-center">G3 - <?= isset($customer_group['G3']) ? $customer_group['G3'] : 'NO CONFIG' ?></th>
+                                        <th colspan="2" class="text-center">G4 - <?= isset($customer_group['G4']) ? $customer_group['G4'] : 'NO CONFIG' ?></th>
+                                        <th colspan="2" class="text-center">G5 - <?= isset($customer_group['G5']) ? $customer_group['G5'] : 'NO CONFIG' ?></th>
+                                        <th colspan="2" class="text-center">G6 - <?= isset($customer_group['G6']) ? $customer_group['G6'] : 'NO CONFIG' ?></th>
 
                                         <th colspan="7" class="text-center">Alokasi Margin</th>
 
@@ -183,12 +183,12 @@ $assetsUrl = base_url('assets');
                                         <!-- Diskon Seasonal -->
                                         <th class="text-right">Diskon</th>
 
-                                        <th class="text-right">G1&nbsp;-&nbsp;UMUM</th>
-                                        <th class="text-right">G2&nbsp;-&nbsp;SILVER</th>
-                                        <th class="text-right">G3&nbsp;-&nbsp;GOLD</th>
-                                        <th class="text-right">G4&nbsp;-&nbsp;PLATINUM</th>
-                                        <th class="text-right">G5&nbsp;-&nbsp;PROYEK</th>
-                                        <th class="text-right">G6&nbsp;-&nbsp;CUSTOM</th>
+                                        <th class="text-right">G1&nbsp;-&nbsp;<?= isset($customer_group['G1']) ? $customer_group['G1'] : 'NO CONFIG' ?></th>
+                                        <th class="text-right">G2&nbsp;-&nbsp;<?= isset($customer_group['G2']) ? $customer_group['G2'] : 'NO CONFIG' ?></th>
+                                        <th class="text-right">G3&nbsp;-&nbsp;<?= isset($customer_group['G3']) ? $customer_group['G3'] : 'NO CONFIG' ?></th>
+                                        <th class="text-right">G4&nbsp;-&nbsp;<?= isset($customer_group['G4']) ? $customer_group['G4'] : 'NO CONFIG' ?></th>
+                                        <th class="text-right">G5&nbsp;-&nbsp;<?= isset($customer_group['G5']) ? $customer_group['G5'] : 'NO CONFIG' ?></th>
+                                        <th class="text-right">G6&nbsp;-&nbsp;<?= isset($customer_group['G6']) ? $customer_group['G6'] : 'NO CONFIG' ?></th>
                                         <th class="">Mulai&nbsp;Tanggal</th>
                                         <th class="">S.d&nbsp;Tanggal</th>
 
@@ -208,12 +208,12 @@ $assetsUrl = base_url('assets');
 
                                         <!-- Alokasi Margin -->
                                         <th class="text-right">Alokasi</th>
-                                        <th class="text-right">G1&nbsp;-&nbsp;UMUM</th>
-                                        <th class="text-right">G2&nbsp;-&nbsp;SILVER</th>
-                                        <th class="text-right">G3&nbsp;-&nbsp;GOLD</th>
-                                        <th class="text-right">G4&nbsp;-&nbsp;PLATINUM</th>
-                                        <th class="text-right">G5&nbsp;-&nbsp;PROYEK</th>
-                                        <th class="text-right">G6&nbsp;-&nbsp;CUSTOM</th>
+                                        <th class="text-right">G1&nbsp;-&nbsp;<?= isset($customer_group['G1']) ? $customer_group['G1'] : 'NO CONFIG' ?></th>
+                                        <th class="text-right">G2&nbsp;-&nbsp;<?= isset($customer_group['G2']) ? $customer_group['G2'] : 'NO CONFIG' ?></th>
+                                        <th class="text-right">G3&nbsp;-&nbsp;<?= isset($customer_group['G3']) ? $customer_group['G3'] : 'NO CONFIG' ?></th>
+                                        <th class="text-right">G4&nbsp;-&nbsp;<?= isset($customer_group['G4']) ? $customer_group['G4'] : 'NO CONFIG' ?></th>
+                                        <th class="text-right">G5&nbsp;-&nbsp;<?= isset($customer_group['G5']) ? $customer_group['G5'] : 'NO CONFIG' ?></th>
+                                        <th class="text-right">G6&nbsp;-&nbsp;<?= isset($customer_group['G6']) ? $customer_group['G6'] : 'NO CONFIG' ?></th>
 
 
 
@@ -234,7 +234,6 @@ $assetsUrl = base_url('assets');
                                             <td>
                                                 <div class="btn-group">
                                                     <button data-id="{item_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit" data-toggle="tooltip" data-placement="top" data-title="Edit"><i class="fas fa-edit"></i></button>
-                                                    <button data-id="{item_id}" data-json="{data_json}" type="button" class="btn btn-sm btn-default btnsetdisc" data-toggle="tooltip" data-placement="top" data-title="Atur Diskon"><i class="fas fa-percent"></i></button>
                                                 </div>
                                             </td>
                                             <td>{item_code}</td>
@@ -303,8 +302,7 @@ $assetsUrl = base_url('assets');
                                             <td>
                                                 <div class="btn-group">
                                                     <button data-id="{item_id}" data-json="{data_json}" type="button" class="btn btn-sm btn-warning btnedit" data-toggle="tooltip" data-placement="top" data-title="Edit"><i class="fas fa-edit"></i></button>
-                                                    <button data-id="{item_id}" data-json="{data_json}" type="button" class="btn btn-sm btn-default btnsetdisc" data-toggle="tooltip" data-placement="top" data-title="Atur Diskon"><i class="fas fa-percent"></i></button>
-                                                    <button data-id="{item_id}" type="button" class="btn btn-sm btn-danger btndelete" data-toggle="tooltip" data-placement="top" data-title="Hapus"><i class="fas fa-times"></i></button>
+                                                    <button data-id="{item_id}" data-code="{item_code}" type="button" class="btn btn-sm btn-danger btndelete" data-toggle="tooltip" data-placement="top" data-title="Hapus"><i class="fas fa-times"></i></button>
                                                 </div>
                                             </td>
                                             <td>{item_code}</td>
@@ -380,7 +378,6 @@ $assetsUrl = base_url('assets');
                 <!-- /.card -->
             </div>
 
-
             <div id="parcel_setup" class="col-md-12">
                 <div class="card">
                     <div class="card-header p-2">
@@ -401,29 +398,30 @@ $assetsUrl = base_url('assets');
                                 <tr>
                                     <th width="15%">Kode Produk</th>
                                     <td width="1%">:</td>
-                                    <td width="84%" id="setup_product_code">P000003</td>
+                                    <td width="84%" id="parcel_product_code"></td>
                                 </tr>
                                 <tr>
                                     <th>Nama Produk</th>
                                     <td>:</td>
-                                    <td id="setup_product_name">Paket Double Toto</td>
+                                    <td id="parcel_product_name"></td>
                                 </tr>
                                 <tr>
                                     <th>Satuan Dasar</th>
                                     <td>:</td>
-                                    <td id="setup_base_unit">PCS</td>
+                                    <td id="parcel_base_unit"></td>
                                 </tr>
                             </table>
                         </div>
                         <div class="tab-content" id="custom-content-above-tabContent">
                             <div class="tab-pane fade show active" id="custom-content-above-list" role="tabpanel" aria-labelledby="custom-content-above-home-tab">
-                                <form class="mb-2">
+                                <form id="frmparcelitem" class="mb-2">
                                     <div class="row">
+                                        <input type="hidden" id="parcel_item_id" name="parcel_item_id">
                                         <div class="col-sm-4">
                                             <!-- text input -->
                                             <div class="form-group">
                                                 <label>Produk</label>
-                                                <input id="parcel_item" name="product_item" type="text" class="form-control" placeholder="ketikkan nama produk atau barcode" value="" data-parsley-vproductname required>
+                                                <input id="parcel_item_name" name="parcel_item_name" type="text" class="form-control" placeholder="ketikkan nama produk atau barcode" value="" data-parsley-vproductname required>
                                             </div>
                                         </div>
 
@@ -431,7 +429,7 @@ $assetsUrl = base_url('assets');
                                             <!-- text input -->
                                             <div class="form-group">
                                                 <label>Qty</label>
-                                                <input id="parcel_qty" name="parcel_qty" type="text" class="form-control text-right" value="0" data-parsley-vprice required>
+                                                <input id="parcel_item_qty" name="parcel_item_qty" type="text" class="form-control text-right" value="0" required>
                                             </div>
                                         </div>
 
@@ -440,7 +438,7 @@ $assetsUrl = base_url('assets');
                                             <label>&nbsp;</label>
                                             <div class="form-group">
                                                 <div class="col-12">
-                                                    <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle float-right"><i class="fas fa-plus"></i></button>
+                                                    <button id="btnadd_item_parcel" class="btn btn-md btn-primary rounded-circle float-right"><i class="fas fa-plus"></i></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -449,7 +447,7 @@ $assetsUrl = base_url('assets');
 
 
                                 <div class="table-responsive">
-                                    <table id="tblitem" class="table table-bordered table-hover" width="100%">
+                                    <table id="tblparcelitem" class="table table-bordered table-hover" width="100%">
                                         <thead>
                                             <tr>
                                                 <th rowspan="2">Aksi</th>
@@ -457,12 +455,12 @@ $assetsUrl = base_url('assets');
                                                 <th rowspan="2" class="text-right">Qty</th>
                                                 <th rowspan="2">Satuan</th>
                                                 <th rowspan="2" class="text-right">Harga Beli</th>
-                                                <th colspan="2" class="text-center">G1 - UMUM</th>
-                                                <th colspan="2" class="text-center">G2 - SILVER</th>
-                                                <th colspan="2" class="text-center">G3 - GOLD</th>
-                                                <th colspan="2" class="text-center">G4 - PLATINUM</th>
-                                                <th colspan="2" class="text-center">G5 - PROYEK</th>
-                                                <th colspan="2" class="text-center">G6 - CUSTOM</th>
+                                                <th colspan="2" class="text-center">G1 - <?= isset($customer_group['G1']) ? $customer_group['G1'] : 'NO CONFIG' ?></th>
+                                                <th colspan="2" class="text-center">G2 - <?= isset($customer_group['G2']) ? $customer_group['G2'] : 'NO CONFIG' ?></th>
+                                                <th colspan="2" class="text-center">G3 - <?= isset($customer_group['G3']) ? $customer_group['G3'] : 'NO CONFIG' ?></th>
+                                                <th colspan="2" class="text-center">G4 - <?= isset($customer_group['G4']) ? $customer_group['G4'] : 'NO CONFIG' ?></th>
+                                                <th colspan="2" class="text-center">G5 - <?= isset($customer_group['G5']) ? $customer_group['G5'] : 'NO CONFIG' ?></th>
+                                                <th colspan="2" class="text-center">G6 - <?= isset($customer_group['G6']) ? $customer_group['G6'] : 'NO CONFIG' ?></th>
 
                                             </tr>
                                             <tr>
@@ -480,114 +478,88 @@ $assetsUrl = base_url('assets');
                                                 <th class="text-right">Hrg.Jual</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn btn-sm btn-warning btnedit" data-toggle="tooltip" data-placement="top" data-title="Edit"><i class="fas fa-edit"></i></button>
-                                                        <button type="button" class="btn btn-sm btn-danger btndelete" data-toggle="tooltip" data-placement="top" data-title="Hapus"><i class="fas fa-times"></i></button>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <b>1234567890123</b><br>
-                                                    Toto Gantungan Double Robe Hook (TX04AES)
-                                                </td>
-                                                <td class="text-right">1.00</td>
-                                                <td class="text-right">PCS</td>
-                                                <td class="text-right">27,750.00</td>
-                                                <td class="text-right">50.00%</td>
-                                                <td class="text-right">41,700.00</td>
-                                                <td class="text-right">40.00%</td>
-                                                <td class="text-right">38,900.00</td>
-                                                <td class="text-right">30.00%</td>
-                                                <td class="text-right">36,100.00</td>
-                                                <td class="text-right">20.00%</td>
-                                                <td class="text-right">33,300.00</td>
-                                                <td class="text-right">20.00%</td>
-                                                <td class="text-right">33,300.00</td>
-                                                <td class="text-right">50.00%</td>
-                                                <td class="text-right">41,700.00</td>
-
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn btn-sm btn-warning btnedit" data-toggle="tooltip" data-placement="top" data-title="Edit"><i class="fas fa-edit"></i></button>
-                                                        <button type="button" class="btn btn-sm btn-danger btndelete" data-toggle="tooltip" data-placement="top" data-title="Hapus"><i class="fas fa-times"></i></button>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <b>1234567877777</b><br>
-                                                    Toto Floor Drain (TX1DA)
-                                                </td>
-                                                <td class="text-right">2.00</td>
-                                                <td>PCS</td>
-                                                <td class="text-right">50,000.00</td>
-                                                <td class="text-right">50.00%</td>
-                                                <td class="text-right">75,000.00</td>
-                                                <td class="text-right">40.00%</td>
-                                                <td class="text-right">70,000.00</td>
-                                                <td class="text-right">30.00%</td>
-                                                <td class="text-right">65,000.00</td>
-                                                <td class="text-right">20.00%</td>
-                                                <td class="text-right">60,000.00</td>
-                                                <td class="text-right">20.00%</td>
-                                                <td class="text-right">60,000.00</td>
-                                                <td class="text-right">50.00%</td>
-                                                <td class="text-right">75,000.00</td>
-                                            </tr>
-                                        </tbody>
+                                        <tbody></tbody>
                                         <tfoot>
                                             <tr>
                                                 <th colspan="4" class="text-right">TOTAL</th>
-                                                <th class="text-right">77,750.00</th>
-                                                <th colspan="2" class="text-right">116,700.00</th>
-                                                <th colspan="2" class="text-right">108,900.00</th>
-                                                <th colspan="2" class="text-right">101,100.00</th>
-                                                <th colspan="2" class="text-right">93,300.00</th>
-                                                <th colspan="2" class="text-right">93,300.00</th>
-                                                <th colspan="2" class="text-right">116,700.00</th>
+                                                <th id="view_parcel_purchase_total" class="text-right">0.00</th>
+                                                <th id="view_parcel_sales_price_total_G1" colspan="2" class="text-right">0.00</th>
+                                                <th id="view_parcel_sales_price_total_G2" colspan="2" class="text-right">0.00</th>
+                                                <th id="view_parcel_sales_price_total_G3" colspan="2" class="text-right">0.00</th>
+                                                <th id="view_parcel_sales_price_total_G4" colspan="2" class="text-right">0.00</th>
+                                                <th id="view_parcel_sales_price_total_G5" colspan="2" class="text-right">0.00</th>
+                                                <th id="view_parcel_sales_price_total_G6" colspan="2" class="text-right">0.00</th>
                                             </tr>
+                                            <template id="parcel_item_template">
+                                                <tr>
+                                                    <td>
+                                                        <div class="btn-group">
+                                                            <button data-id="{item_id}" data-json="{data_json}" type="button" class="btn btn-sm btn-warning btnedit" data-toggle="tooltip" data-placement="top" data-title="Edit"><i class="fas fa-edit"></i></button>
+                                                            <button data-id="{item_id}" data-name="{item_code} - {product_name}" type="button" class="btn btn-sm btn-danger btndelete" data-toggle="tooltip" data-placement="top" data-title="Hapus"><i class="fas fa-times"></i></button>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <b>{item_code}</b><br>
+                                                        {product_name}
+                                                    </td>
+                                                    <td class="text-right">{item_qty}</td>
+                                                    <td class="text-right">{unit_name}</td>
+                                                    <td class="text-right">{purchase_price_with_tax}</td>
+                                                    <td class="text-right">{margin_rate_G1}%</td>
+                                                    <td class="text-right">{sales_price_G1}</td>
+                                                    <td class="text-right">{margin_rate_G2}%</td>
+                                                    <td class="text-right">{sales_price_G2}</td>
+                                                    <td class="text-right">{margin_rate_G3}%</td>
+                                                    <td class="text-right">{sales_price_G3}</td>
+                                                    <td class="text-right">{margin_rate_G4}%</td>
+                                                    <td class="text-right">{sales_price_G4}</td>
+                                                    <td class="text-right">{margin_rate_G5}%</td>
+                                                    <td class="text-right">{sales_price_G5}</td>
+                                                    <td class="text-right">{margin_rate_G6}%</td>
+                                                    <td class="text-right">{sales_price_G6}</td>
+                                                </tr>
+                                            </template>
                                         </tfoot>
                                     </table>
                                 </div>
                             </div>
+
                             <div class="tab-pane fade" id="custom-content-above-price" role="tabpanel" aria-labelledby="custom-content-above-profile-tab">
                                 <div class="row">
                                     <div class="col-md-6 border-right border-primary">
-                                        <input id="item_id" name="item_id" value="" type="hidden">
+                                        <input id="parcel_id" name="parcel_id" value="" type="hidden">
 
                                         <div class="form-group">
-                                            <label for="item_code" class="col-sm-12">Kode Item / Barcode</label>
+                                            <label for="parcel_code" class="col-sm-12">Kode Item / Barcode</label>
                                             <div class="col-sm-12">
-                                                <input id="item_code" name="item_code" type="text" class="form-control" maxlength="55" data-parsley-trigger-after-failure="focusout" data-parsley-vitemcode value="9999999888777" required />
+                                                <input id="parcel_code" name="parcel_code" type="text" class="form-control" maxlength="20" data-parsley-trigger-after-failure="focusout" data-parsley-vparcelcode value="9999999888777" required />
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="unit_id" class="col-sm-12">Satuan</label>
+                                            <label for="parcel_unit_id" class="col-sm-12">Satuan</label>
                                             <div class="col-sm-12 sel2">
-                                                <select id="unit_id" name="unit_id" class="form-control" required></select>
+                                                <select id="parcel_unit_id" name="parcel_unit_id" class="form-control" required></select>
                                             </div>
                                         </div>
 
 
                                         <div class="form-group">
-                                            <label for="purchase_price" class="col-sm-12">TOTAL DPP</label>
+                                            <label for="parcel_purchase_price" class="col-sm-12">TOTAL DPP</label>
                                             <div class="col-sm-12">
-                                                <input id="parcel_price" name="parcel_price" type="text" class="form-control text-right" data-parsley-vpurchaseprice value="0" readonly />
+                                                <input id="parcel_purchase_price" name="parcel_purchase_price" type="text" class="form-control text-right" value="0" readonly />
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="purchase_tax" class="col-sm-12">TOTAL PPN</label>
+                                            <label for="parcel_purchase_tax" class="col-sm-12">TOTAL PPN</label>
                                             <div class="col-sm-12">
-                                                <input id="parcel_tax" name="parcel_tax" type="text" class="form-control text-right" data-parsley-vpurchaseprice value="0" readonly />
+                                                <input id="parcel_purchase_tax" name="parcel_purchase_tax" type="text" class="form-control text-right" value="0" readonly />
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="purchase_price_with_tax" class="col-sm-12">Modal Paket</label>
+                                            <label for="parcel_cost" class="col-sm-12">Modal Paket</label>
                                             <div class="col-sm-12">
                                                 <input id="parcel_cost" name="parcel_cost" type="text" class="form-control text-right" value="0" readonly />
                                             </div>
@@ -602,15 +574,28 @@ $assetsUrl = base_url('assets');
 
                                         <div class="form-check">
                                             <div class="col-sm-12">
-                                                <input type="checkbox" class="form-check-input" id="parcel_mobile_app">
-                                                <label class="form-check-label" for="parcel_mobile_app" checked>Tampilkan di Mobile Apps</label>
+                                                <input type="checkbox" class="form-check-input" id="parcel_is_sale" name="parcel_is_sale">
+                                                <label class="form-check-label" for="parcel_is_sale">Dijual</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <div class="col-sm-12">
+                                                <input type="checkbox" class="form-check-input" id="parcel_show_mobile_app" name="parcel_show_mobile_app">
+                                                <label class="form-check-label" for="parcel_show_mobile_app">Tampilkan di Mobile Apps</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-check">
+                                            <div class="col-sm-12">
+                                                <input type="checkbox" class="form-check-input" id="parcel_allow_change_price" name="parcel_allow_change_price">
+                                                <label class="form-check-label" for="parcel_allow_change_price">Ijinkan Ubah Harga di POS</label>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6 ">
                                         <div class="form-group">
-                                            <label for="promo_price" class="col-sm-12">G1 - UMUM</label>
+                                            <label for="parcel_sales_price_G1" class="col-sm-12">G1 - <?= isset($customer_group['G1']) ? $customer_group['G1'] : 'NO CONFIG' ?></label>
                                             <div class="col-sm-12">
                                                 <div class="row">
                                                     <div class="col-sm-4">
@@ -618,7 +603,7 @@ $assetsUrl = base_url('assets');
                                                     </div>
 
                                                     <div class="col-sm-8">
-                                                        <input id="parcel_sales_price_G1" name="parcel_sales_price_G1" type="text" class="form-control text-right" data-parsley-vsalesprice value="0" />
+                                                        <input id="parcel_sales_price_G1" name="parcel_sales_price_G1" type="text" class="form-control text-right" value="0" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -626,7 +611,7 @@ $assetsUrl = base_url('assets');
 
 
                                         <div class="form-group">
-                                            <label for="promo_price" class="col-sm-12">G2 - SILVER</label>
+                                            <label for="parcel_sales_price_G2" class="col-sm-12">G2 - <?= isset($customer_group['G2']) ? $customer_group['G2'] : 'NO CONFIG' ?></label>
                                             <div class="col-sm-12">
                                                 <div class="row">
                                                     <div class="col-sm-4">
@@ -634,14 +619,14 @@ $assetsUrl = base_url('assets');
                                                     </div>
 
                                                     <div class="col-sm-8">
-                                                        <input id="parcel_sales_price_G2" name="parcel_sales_price_G2" type="text" class="form-control text-right" data-parsley-vsalesprice value="0" />
+                                                        <input id="parcel_sales_price_G2" name="parcel_sales_price_G2" type="text" class="form-control text-right" value="0" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="promo_price" class="col-sm-12">G3 - GOLD</label>
+                                            <label for="parcel_sales_price_G3" class="col-sm-12">G3 - <?= isset($customer_group['G3']) ? $customer_group['G3'] : 'NO CONFIG' ?></label>
                                             <div class="col-sm-12">
                                                 <div class="row">
                                                     <div class="col-sm-4">
@@ -649,7 +634,7 @@ $assetsUrl = base_url('assets');
                                                     </div>
 
                                                     <div class="col-sm-8">
-                                                        <input id="parcel_sales_price_G3" name="parcel_sales_price_G3" type="text" class="form-control text-right" data-parsley-vsalesprice value="0" />
+                                                        <input id="parcel_sales_price_G3" name="parcel_sales_price_G3" type="text" class="form-control text-right" value="0" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -657,7 +642,7 @@ $assetsUrl = base_url('assets');
 
 
                                         <div class="form-group">
-                                            <label for="promo_price" class="col-sm-12">G4 - PLATINUM</label>
+                                            <label for="parcel_sales_price_G4" class="col-sm-12">G4 - <?= isset($customer_group['G4']) ? $customer_group['G4'] : 'NO CONFIG' ?></label>
                                             <div class="col-sm-12">
                                                 <div class="row">
                                                     <div class="col-sm-4">
@@ -665,14 +650,14 @@ $assetsUrl = base_url('assets');
                                                     </div>
 
                                                     <div class="col-sm-8">
-                                                        <input id="parcel_sales_price_G4" name="parcel_sales_price_G4" type="text" class="form-control text-right" data-parsley-vsalesprice value="0" />
+                                                        <input id="parcel_sales_price_G4" name="parcel_sales_price_G4" type="text" class="form-control text-right" value="0" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="promo_price" class="col-sm-12">G5 - PROYEK</label>
+                                            <label for="parcel_sales_price_G5" class="col-sm-12">G5 - <?= isset($customer_group['G5']) ? $customer_group['G5'] : 'NO CONFIG' ?></label>
                                             <div class="col-sm-12">
                                                 <div class="row">
                                                     <div class="col-sm-4">
@@ -680,14 +665,14 @@ $assetsUrl = base_url('assets');
                                                     </div>
 
                                                     <div class="col-sm-8">
-                                                        <input id="parcel_sales_price_G5" name="parcel_sales_price_G5" type="text" class="form-control text-right" data-parsley-vsalesprice value="0" />
+                                                        <input id="parcel_sales_price_G5" name="parcel_sales_price_G5" type="text" class="form-control text-right" value="0" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="promo_price" class="col-sm-12">G6 - CUSTOM</label>
+                                            <label for="parcel_sales_price_G6" class="col-sm-12">G6 - <?= isset($customer_group['G6']) ? $customer_group['G6'] : 'NO CONFIG' ?></label>
                                             <div class="col-sm-12">
                                                 <div class="row">
                                                     <div class="col-sm-4">
@@ -695,7 +680,7 @@ $assetsUrl = base_url('assets');
                                                     </div>
 
                                                     <div class="col-sm-8">
-                                                        <input id="parcel_sales_price_G6" name="parcel_sales_price_G6" type="text" class="form-control text-right" data-parsley-vsalesprice value="0" />
+                                                        <input id="parcel_sales_price_G6" name="parcel_sales_price_G6" type="text" class="form-control text-right" value="0" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -724,8 +709,6 @@ $assetsUrl = base_url('assets');
                                     </div>
 
                                     <div class="col-md-12 mt-3">
-
-
                                         <p class="text-center"><b>Detail Disc & Margin</b></p>
                                         <table class="table table-striped table-hover table-bordered">
                                             <thead>
@@ -739,46 +722,46 @@ $assetsUrl = base_url('assets');
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>G1&nbsp;-&nbsp;UMUM</td>
-                                                    <td class="text-right">107,200</td>
-                                                    <td class="text-right">29,400.00</td>
-                                                    <td class="text-right">38.00%</td>
-                                                    <td class="text-right">14,675.00</td>
+                                                    <td>G1&nbsp;-&nbsp;<?= isset($customer_group['G1']) ? $customer_group['G1'] : 'NO CONFIG' ?></td>
+                                                    <td class="text-right" id="view_parcel_price_G1">0.00</td>
+                                                    <td class="text-right" id="view_parcel_remain_margin_G1">0.00</td>
+                                                    <td class="text-right" id="view_parcel_margin_rate_G1">0.00%</td>
+                                                    <td class="text-right" id="view_margin_allocation_G1">0.00</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>G2&nbsp;-&nbsp;SILVER</td>
-                                                    <td class="text-right">99,800.00</td>
-                                                    <td class="text-right">22,000.00</td>
-                                                    <td class="text-right">28.00%</td>
-                                                    <td class="text-right">11,000.00</td>
+                                                    <td>G2&nbsp;-&nbsp;<?= isset($customer_group['G2']) ? $customer_group['G2'] : 'NO CONFIG' ?></td>
+                                                    <td class="text-right" id="view_parcel_price_G2">0.00</td>
+                                                    <td class="text-right" id="view_parcel_remain_margin_G2">0.00</td>
+                                                    <td class="text-right" id="view_parcel_margin_rate_G2">0.00%</td>
+                                                    <td class="text-right" id="view_margin_allocation_G2">0.00</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>G3&nbsp;-&nbsp;GOLD</td>
-                                                    <td class="text-right">92,400.00</td>
-                                                    <td class="text-right">14,600.00</td>
-                                                    <td class="text-right">20.00%</td>
-                                                    <td class="text-right">7,300.00</td>
+                                                    <td>G3&nbsp;-&nbsp;<?= isset($customer_group['G3']) ? $customer_group['G3'] : 'NO CONFIG' ?></td>
+                                                    <td class="text-right" id="view_parcel_price_G3">0.00</td>
+                                                    <td class="text-right" id="view_parcel_remain_margin_G3">0.00</td>
+                                                    <td class="text-right" id="view_parcel_margin_rate_G3">0.00%</td>
+                                                    <td class="text-right" id="view_margin_allocation_G3">0.00</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>G4&nbsp;-&nbsp;PLATINUM</td>
-                                                    <td class="text-right">85,000.00</td>
-                                                    <td class="text-right">7,200.00</td>
-                                                    <td class="text-right">9.00%</td>
-                                                    <td class="text-right">3,600.00</td>
+                                                    <td>G4&nbsp;-&nbsp;<?= isset($customer_group['G4']) ? $customer_group['G4'] : 'NO CONFIG' ?></td>
+                                                    <td class="text-right" id="view_parcel_price_G4">0.00</td>
+                                                    <td class="text-right" id="view_parcel_remain_margin_G4">0.00</td>
+                                                    <td class="text-right" id="view_parcel_margin_rate_G4">0.00%</td>
+                                                    <td class="text-right" id="view_margin_allocation_G4">0.00</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>G5&nbsp;-&nbsp;PROYEK</td>
-                                                    <td class="text-right">107,200</td>
-                                                    <td class="text-right">29,400.00</td>
-                                                    <td class="text-right">38.00%</td>
-                                                    <td class="text-right">14,675.00</td>
+                                                    <td>G5&nbsp;-&nbsp;<?= isset($customer_group['G5']) ? $customer_group['G5'] : 'NO CONFIG' ?></td>
+                                                    <td class="text-right" id="view_parcel_price_G5">0.00</td>
+                                                    <td class="text-right" id="view_parcel_remain_margin_G5">0.00</td>
+                                                    <td class="text-right" id="view_parcel_margin_rate_G5">0.00%</td>
+                                                    <td class="text-right" id="view_margin_allocation_G5">0.00</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>G6&nbsp;-&nbsp;CUSTOM</td>
-                                                    <td class="text-right">107,200</td>
-                                                    <td class="text-right">29,400.00</td>
-                                                    <td class="text-right">38.00%</td>
-                                                    <td class="text-right">14,675.00</td>
+                                                    <td>G6&nbsp;-&nbsp;<?= isset($customer_group['G6']) ? $customer_group['G6'] : 'NO CONFIG' ?></td>
+                                                    <td class="text-right" id="view_parcel_price_G6">0.00</td>
+                                                    <td class="text-right" id="view_parcel_remain_margin_G6">0.00</td>
+                                                    <td class="text-right" id="view_parcel_margin_rate_G6">0.00%</td>
+                                                    <td class="text-right" id="view_margin_allocation_G6">0.00</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -795,13 +778,16 @@ $assetsUrl = base_url('assets');
                         <div class="justify-content-between mt-2">
                             <button class="btn btn-danger close-setup-parcel"><i class="fas fa-arrow-circle-left"></i> Kembali</button>
                             <button id="btnsave_parcel" class="btn btn-success close-setup-parcel float-right"><i class="fas fa-save"></i> Simpan</button>
-
                         </div>
                         <!-- /.tab-content -->
                     </div><!-- /.card-body -->
                 </div>
                 <!-- /.card -->
             </div>
+
+
+
+
             <!-- /.col -->
         </div>
         <!-- /.row -->
@@ -1348,12 +1334,15 @@ $assetsUrl = base_url('assets');
         $('#filter_category').on('change', function(e) {
             updateTable();
         })
+
         $('#filter_brand').on('change', function(e) {
             updateTable();
         })
+
         $('#filter_supplier').on('change', function(e) {
             updateTable();
         })
+
         $('#filter_product_type').on('change', function(e) {
             updateTable();
         })
@@ -1475,8 +1464,34 @@ $assetsUrl = base_url('assets');
             }
         }
 
+        function checkItemCode(item_code, item_id) {
+            let actUrl = base_url + '/webmin/product/getitembycode';
+            useLoader = false;
+            let getData = ajax_get(actUrl, {
+                item_code: item_code
+            }, {}, false);
+            useLoader = true;
+
+            if (getData.success) {
+                let result = getData.result;
+                if (result.exist) {
+                    let uID = result.data.item_id;
+                    if (uID.toUpperCase() == item_id.toUpperCase()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        }
+
         Parsley.addMessages('id', {
             vproductname: 'Nama produk sudah terdaftar',
+            vitemcode: 'Kode item atau barcode sudah terdaftar'
         });
 
         Parsley.setLocale('id');
@@ -1484,6 +1499,13 @@ $assetsUrl = base_url('assets');
         window.Parsley.addValidator("vproductname", {
             validateString: function(value) {
                 return checkName(value)
+            },
+        });
+
+        window.Parsley.addValidator("vitemcode", {
+            validateString: function(value) {
+                let item_id = $('#item_id').val();
+                return checkItemCode(value, item_id)
             },
         });
 
@@ -2135,6 +2157,238 @@ $assetsUrl = base_url('assets');
             $('#view_remain_margin_G6').html(numberFormat(remain_margin_rate, true) + '%');
         })
 
+        $('#sales_price_G1').on('change blur', function(e) {
+            let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
+            let mr = 0;
+            let sp = 0;
+            let ds = parseFloat(item_disc_seasonal.getNumericString());
+            let ma = parseFloat(item_margin_allocation.getNumericString());
+
+            if (item_sales_price_G1.getNumericString() == '' || item_sales_price_G1.getNumericString() == null) {
+                item_sales_price_G1.set(0);
+            } else {
+                sp = parseFloat(item_sales_price_G1.getNumericString());
+            }
+
+            mr = calcPercentRate(ppt, sp);
+            item_margin_alocation_G1 = 0;
+            item_remain_margin_G1 = 0;
+            item_disc_price_G1 = 0;
+            item_promo_price_G1 = sp;
+
+            if (ds > 0) {
+                item_disc_price_G1 = (ds / 100) * sp;
+                item_promo_price_G1 = sp - item_disc_price_G1;
+                item_promo_price_G1 = threeDigitRound(item_promo_price_G1);
+            }
+
+            item_remain_margin_G1 = item_promo_price_G1 - ppt;
+            if (ma > 0) {
+                item_margin_alocation_G1 = (ma / 100) * item_remain_margin_G1;
+            }
+
+            item_margin_rate_G1.set(mr);
+            $('#view_disc_G1').html(numberFormat(item_promo_price_G1, true));
+            $('#view_margin_G1').html(numberFormat(item_remain_margin_G1, true));
+
+            let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G1);
+            $('#view_remain_margin_G1').html(numberFormat(remain_margin_rate, true) + '%');
+
+
+        })
+
+        $('#sales_price_G2').on('change blur', function(e) {
+            let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
+            let mr = 0;
+            let sp = 0;
+            let ds = parseFloat(item_disc_seasonal.getNumericString());
+            let ma = parseFloat(item_margin_allocation.getNumericString());
+
+            if (item_sales_price_G2.getNumericString() == '' || item_sales_price_G2.getNumericString() == null) {
+                item_sales_price_G2.set(0);
+            } else {
+                sp = parseFloat(item_sales_price_G2.getNumericString());
+            }
+
+            mr = calcPercentRate(ppt, sp);
+            item_margin_alocation_G2 = 0;
+            item_remain_margin_G2 = 0;
+            item_disc_price_G2 = 0;
+            item_promo_price_G2 = sp;
+
+            if (ds > 0) {
+                item_disc_price_G2 = (ds / 100) * sp;
+                item_promo_price_G2 = sp - item_disc_price_G2;
+                item_promo_price_G2 = threeDigitRound(item_promo_price_G2);
+            }
+
+            item_remain_margin_G2 = item_promo_price_G2 - ppt;
+            if (ma > 0) {
+                item_margin_alocation_G2 = (ma / 100) * item_remain_margin_G2;
+            }
+
+            item_margin_rate_G2.set(mr);
+            $('#view_disc_G2').html(numberFormat(item_promo_price_G2, true));
+            $('#view_margin_G2').html(numberFormat(item_remain_margin_G2, true));
+
+            let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G2);
+            $('#view_remain_margin_G2').html(numberFormat(remain_margin_rate, true) + '%');
+
+
+        })
+
+        $('#sales_price_G3').on('change blur', function(e) {
+            let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
+            let mr = 0;
+            let sp = 0;
+            let ds = parseFloat(item_disc_seasonal.getNumericString());
+            let ma = parseFloat(item_margin_allocation.getNumericString());
+
+            if (item_sales_price_G3.getNumericString() == '' || item_sales_price_G3.getNumericString() == null) {
+                item_sales_price_G3.set(0);
+            } else {
+                sp = parseFloat(item_sales_price_G3.getNumericString());
+            }
+
+            mr = calcPercentRate(ppt, sp);
+            item_margin_alocation_G3 = 0;
+            item_remain_margin_G3 = 0;
+            item_disc_price_G3 = 0;
+            item_promo_price_G3 = sp;
+
+            if (ds > 0) {
+                item_disc_price_G3 = (ds / 100) * sp;
+                item_promo_price_G3 = sp - item_disc_price_G3;
+                item_promo_price_G3 = threeDigitRound(item_promo_price_G3);
+            }
+
+            item_remain_margin_G3 = item_promo_price_G3 - ppt;
+            if (ma > 0) {
+                item_margin_alocation_G3 = (ma / 100) * item_remain_margin_G3;
+            }
+
+            item_margin_rate_G3.set(mr);
+            $('#view_disc_G3').html(numberFormat(item_promo_price_G3, true));
+            $('#view_margin_G3').html(numberFormat(item_remain_margin_G3, true));
+
+            let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G3);
+            $('#view_remain_margin_G3').html(numberFormat(remain_margin_rate, true) + '%');
+        })
+
+        $('#sales_price_G4').on('change blur', function(e) {
+            let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
+            let mr = 0;
+            let sp = 0;
+            let ds = parseFloat(item_disc_seasonal.getNumericString());
+            let ma = parseFloat(item_margin_allocation.getNumericString());
+
+            if (item_sales_price_G4.getNumericString() == '' || item_sales_price_G4.getNumericString() == null) {
+                item_sales_price_G4.set(0);
+            } else {
+                sp = parseFloat(item_sales_price_G4.getNumericString());
+            }
+
+            mr = calcPercentRate(ppt, sp);
+            item_margin_alocation_G4 = 0;
+            item_remain_margin_G4 = 0;
+            item_disc_price_G4 = 0;
+            item_promo_price_G4 = sp;
+
+            if (ds > 0) {
+                item_disc_price_G4 = (ds / 100) * sp;
+                item_promo_price_G4 = sp - item_disc_price_G4;
+                item_promo_price_G4 = threeDigitRound(item_promo_price_G4);
+            }
+
+            item_remain_margin_G4 = item_promo_price_G4 - ppt;
+            if (ma > 0) {
+                item_margin_alocation_G4 = (ma / 100) * item_remain_margin_G4;
+            }
+
+            item_margin_rate_G4.set(mr);
+            $('#view_disc_G4').html(numberFormat(item_promo_price_G4, true));
+            $('#view_margin_G4').html(numberFormat(item_remain_margin_G4, true));
+
+            let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G4);
+            $('#view_remain_margin_G4').html(numberFormat(remain_margin_rate, true) + '%');
+        })
+
+        $('#sales_price_G5').on('change blur', function(e) {
+            let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
+            let mr = 0;
+            let sp = 0;
+            let ds = parseFloat(item_disc_seasonal.getNumericString());
+            let ma = parseFloat(item_margin_allocation.getNumericString());
+
+            if (item_sales_price_G5.getNumericString() == '' || item_sales_price_G5.getNumericString() == null) {
+                item_sales_price_G5.set(0);
+            } else {
+                sp = parseFloat(item_sales_price_G5.getNumericString());
+            }
+
+            mr = calcPercentRate(ppt, sp);
+            item_margin_alocation_G5 = 0;
+            item_remain_margin_G5 = 0;
+            item_disc_price_G5 = 0;
+            item_promo_price_G5 = sp;
+
+            if (ds > 0) {
+                item_disc_price_G5 = (ds / 100) * sp;
+                item_promo_price_G5 = sp - item_disc_price_G5;
+                item_promo_price_G5 = threeDigitRound(item_promo_price_G5);
+            }
+
+            item_remain_margin_G5 = item_promo_price_G5 - ppt;
+            if (ma > 0) {
+                item_margin_alocation_G5 = (ma / 100) * item_remain_margin_G5;
+            }
+
+            item_margin_rate_G5.set(mr);
+            $('#view_disc_G5').html(numberFormat(item_promo_price_G5, true));
+            $('#view_margin_G5').html(numberFormat(item_remain_margin_G5, true));
+
+            let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G5);
+            $('#view_remain_margin_G5').html(numberFormat(remain_margin_rate, true) + '%');
+        })
+
+        $('#sales_price_G6').on('change blur', function(e) {
+            let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
+            let mr = 0;
+            let sp = 0;
+            let ds = parseFloat(item_disc_seasonal.getNumericString());
+            let ma = parseFloat(item_margin_allocation.getNumericString());
+
+            if (item_sales_price_G6.getNumericString() == '' || item_sales_price_G6.getNumericString() == null) {
+                item_sales_price_G6.set(0);
+            } else {
+                sp = parseFloat(item_sales_price_G6.getNumericString());
+            }
+
+            mr = calcPercentRate(ppt, sp);
+            item_margin_alocation_G6 = 0;
+            item_remain_margin_G6 = 0;
+            item_disc_price_G6 = 0;
+            item_promo_price_G6 = sp;
+
+            if (ds > 0) {
+                item_disc_price_G6 = (ds / 100) * sp;
+                item_promo_price_G6 = sp - item_disc_price_G6;
+                item_promo_price_G6 = threeDigitRound(item_promo_price_G6);
+            }
+
+            item_remain_margin_G6 = item_promo_price_G6 - ppt;
+            if (ma > 0) {
+                item_margin_alocation_G6 = (ma / 100) * item_remain_margin_G6;
+            }
+
+            item_margin_rate_G6.set(mr);
+            $('#view_disc_G6').html(numberFormat(item_promo_price_G6, true));
+            $('#view_margin_G6').html(numberFormat(item_remain_margin_G6, true));
+
+            let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G6);
+            $('#view_remain_margin_G6').html(numberFormat(remain_margin_rate, true) + '%');
+        })
+
         $('#disc_seasonal').on('change blur', function(e) {
             let ds = 0;
             let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
@@ -2201,8 +2455,6 @@ $assetsUrl = base_url('assets');
             item_remain_margin_G5 = item_promo_price_G5 - ppt;
             item_remain_margin_G6 = item_promo_price_G6 - ppt;
 
-
-
             if (ma > 0) {
                 ma = ma / 100;
                 item_margin_alocation_G1 = ma * item_remain_margin_G1;
@@ -2219,7 +2471,6 @@ $assetsUrl = base_url('assets');
                 item_margin_alocation_G5 = 0;
                 item_margin_alocation_G6 = 0;
             }
-
 
             let rmrG1 = calcPercentRate(ppt, item_promo_price_G1);
             let rmrG2 = calcPercentRate(ppt, item_promo_price_G2);
@@ -2251,9 +2502,6 @@ $assetsUrl = base_url('assets');
             $('#view_disc_G6').html(numberFormat(item_promo_price_G6, true));
             $('#view_margin_G6').html(numberFormat(item_remain_margin_G6, true));
             $('#view_remain_margin_G6').html(numberFormat(rmrG6, true) + '%');
-
-
-
         })
 
         $('#margin_allocation').on('change blur', function(e) {
@@ -2264,7 +2512,6 @@ $assetsUrl = base_url('assets');
             } else {
                 ma = parseFloat(item_margin_allocation.getNumericString());
             }
-
 
             if (ma > 0) {
                 ma = ma / 100;
@@ -2282,18 +2529,7 @@ $assetsUrl = base_url('assets');
                 item_margin_alocation_G5 = 0;
                 item_margin_alocation_G6 = 0;
             }
-
-
-
-
-
         })
-
-
-
-
-
-
 
         function addItem() {
             let form = $('#frmitem');
@@ -2304,6 +2540,7 @@ $assetsUrl = base_url('assets');
             $('#item_code').val('');
             setSelect2('#unit_id');
 
+            $('#product_content').prop('readonly', false);
             item_product_content.set(1);
             item_purchase_price.set(base_purchase_price);
             item_purchase_tax.set(base_purchase_tax);
@@ -2350,6 +2587,13 @@ $assetsUrl = base_url('assets');
             item_margin_alocation_G5 = 0;
             item_margin_alocation_G6 = 0;
 
+            item_remain_margin_G1 = 0;
+            item_remain_margin_G2 = 0;
+            item_remain_margin_G3 = 0;
+            item_remain_margin_G4 = 0;
+            item_remain_margin_G5 = 0;
+            item_remain_margin_G6 = 0;
+
 
             $('#view_disc_G1').html('0.00');
             $('#view_margin_G1').html('0.00');
@@ -2374,6 +2618,149 @@ $assetsUrl = base_url('assets');
             $('#view_disc_G6').html('0.00');
             $('#view_margin_G6').html('0.00');
             $('#view_remain_margin_G6').html('0.00');
+
+            $('#is_sale').prop('checked', true);
+            $('#show_mobile_app').prop('checked', false);
+            $('#allow_change_price').prop('checked', false);
+
+            $('#modal-item').modal(configModal);
+        }
+
+        function editItem(data) {
+            let form = $('#frmitem');
+            formModeItem = 'edit';
+            form.parsley().reset();
+            $('#title-frmitem').html('Tambah Satuan');
+            $('#item_id').val(data.item_id);
+            $('#item_code').val(data.item_code);
+            setSelect2('#unit_id', data.unit_id, data.unit_name);
+            let pc = parseFloat(data.product_content);
+            let pp = parseFloat(data.product_price);
+            let pt = parseFloat(data.product_tax);
+
+            $('#product_content').prop('readonly', true);
+            item_product_content.set(pc);
+            item_purchase_price.set(pp);
+            item_purchase_tax.set(pt);
+
+            let ppt = pp + pt;
+            item_purchase_price_with_tax.set(ppt);
+
+            let spG1 = parseFloat(data.G1_sales_price);
+            let spG2 = parseFloat(data.G2_sales_price);
+            let spG3 = parseFloat(data.G3_sales_price);
+            let spG4 = parseFloat(data.G4_sales_price);
+            let spG5 = parseFloat(data.G5_sales_price);
+            let spG6 = parseFloat(data.G6_sales_price);
+
+            let mrG1 = calcPercentRate(ppt, spG1);
+            let mrG2 = calcPercentRate(ppt, spG2);
+            let mrG3 = calcPercentRate(ppt, spG3);
+            let mrG4 = calcPercentRate(ppt, spG4);
+            let mrG5 = calcPercentRate(ppt, spG5);
+            let mrG6 = calcPercentRate(ppt, spG6);
+
+            let ds = parseFloat(data.disc_seasonal);
+            let ma = parseFloat(data.margin_allocation);
+
+
+            item_margin_rate_G1.set(mrG1);
+            item_sales_price_G1.set(spG1);
+            item_margin_rate_G2.set(mrG2);
+            item_sales_price_G2.set(spG2);
+            item_margin_rate_G3.set(mrG3);
+            item_sales_price_G3.set(spG3);
+            item_margin_rate_G4.set(mrG4);
+            item_sales_price_G4.set(spG4);
+            item_margin_rate_G5.set(mrG5);
+            item_sales_price_G5.set(spG5);
+            item_margin_rate_G6.set(mrG6);
+            item_sales_price_G6.set(spG6);
+
+            $('#disc_start_date').val(data.disc_start_date);
+            $('#disc_end_date').val(data.disc_end_date);
+            item_disc_seasonal.set(ds);
+
+            item_disc_price_G1 = parseFloat(data.G1_disc_price);
+            item_promo_price_G1 = parseFloat(data.G1_promo_price);
+            item_disc_price_G2 = parseFloat(data.G2_disc_price);
+            item_promo_price_G2 = parseFloat(data.G2_promo_price);
+            item_disc_price_G3 = parseFloat(data.G3_disc_price);
+            item_promo_price_G3 = parseFloat(data.G3_promo_price);
+            item_disc_price_G4 = parseFloat(data.G4_disc_price);
+            item_promo_price_G4 = parseFloat(data.G4_promo_price);
+            item_disc_price_G5 = parseFloat(data.G5_disc_price);
+            item_promo_price_G5 = parseFloat(data.G5_promo_price);
+            item_disc_price_G6 = parseFloat(data.G6_disc_price);
+            item_promo_price_G6 = parseFloat(data.G6_promo_price);
+
+
+            item_margin_allocation.set(ma);
+
+            item_remain_margin_G1 = item_promo_price_G1 - ppt;
+            item_remain_margin_G2 = item_promo_price_G2 - ppt;
+            item_remain_margin_G3 = item_promo_price_G3 - ppt;
+            item_remain_margin_G4 = item_promo_price_G4 - ppt;
+            item_remain_margin_G5 = item_promo_price_G5 - ppt;
+            item_remain_margin_G6 = item_promo_price_G6 - ppt;
+
+            item_margin_alocation_G1 = item_remain_margin_G1 * (ma / 100);
+            item_margin_alocation_G2 = item_remain_margin_G2 * (ma / 100);
+            item_margin_alocation_G3 = item_remain_margin_G3 * (ma / 100);
+            item_margin_alocation_G4 = item_remain_margin_G4 * (ma / 100);
+            item_margin_alocation_G5 = item_remain_margin_G5 * (ma / 100);
+            item_margin_alocation_G6 = item_remain_margin_G6 * (ma / 100);
+
+
+            let rmG1 = calcPercentRate(ppt, item_promo_price_G1);
+            let rmG2 = calcPercentRate(ppt, item_promo_price_G2);
+            let rmG3 = calcPercentRate(ppt, item_promo_price_G3);
+            let rmG4 = calcPercentRate(ppt, item_promo_price_G4);
+            let rmG5 = calcPercentRate(ppt, item_promo_price_G5);
+            let rmG6 = calcPercentRate(ppt, item_promo_price_G6);
+
+            $('#view_disc_G1').html(numberFormat(item_promo_price_G1, true));
+            $('#view_margin_G1').html(numberFormat(item_remain_margin_G1, true));
+            $('#view_remain_margin_G1').html(numberFormat(rmG1, true) + '%');
+
+            $('#view_disc_G2').html(numberFormat(item_promo_price_G2, true));
+            $('#view_margin_G2').html(numberFormat(item_remain_margin_G2, true));
+            $('#view_remain_margin_G2').html(numberFormat(rmG2, true) + '%');
+
+            $('#view_disc_G3').html(numberFormat(item_promo_price_G3, true));
+            $('#view_margin_G3').html(numberFormat(item_remain_margin_G3, true));
+            $('#view_remain_margin_G3').html(numberFormat(rmG3, true) + '%');
+
+            $('#view_disc_G4').html(numberFormat(item_promo_price_G4, true));
+            $('#view_margin_G4').html(numberFormat(item_remain_margin_G4, true));
+            $('#view_remain_margin_G4').html(numberFormat(rmG4, true) + '%');
+
+            $('#view_disc_G5').html(numberFormat(item_promo_price_G5, true));
+            $('#view_margin_G5').html(numberFormat(item_remain_margin_G5, true));
+            $('#view_remain_margin_G5').html(numberFormat(rmG5, true) + '%');
+
+            $('#view_disc_G6').html(numberFormat(item_promo_price_G6, true));
+            $('#view_margin_G6').html(numberFormat(item_remain_margin_G6, true));
+            $('#view_remain_margin_G6').html(numberFormat(rmG6, true) + '%');
+
+            if (data.is_sale == 'Y') {
+                $('#is_sale').prop('checked', true);
+            } else {
+                $('#is_sale').prop('checked', false);
+            }
+
+            if (data.show_mobile_app == 'Y') {
+                $('#show_mobile_app').prop('checked', true);
+            } else {
+                $('#show_mobile_app').prop('checked', false);
+            }
+
+            if (data.allow_change_price == 'Y') {
+                $('#allow_change_price').prop('checked', true);
+            } else {
+                $('#allow_change_price').prop('checked', false);
+            }
+
             $('#modal-item').modal(configModal);
         }
 
@@ -2542,7 +2929,6 @@ $assetsUrl = base_url('assets');
 
 
                 tableData += template;
-                //console.log('jso:' + data_json);
             });
 
             $('#setup_base_unit').html(base_unit);
@@ -2552,6 +2938,7 @@ $assetsUrl = base_url('assets');
 
         function setupProductUnit(res) {
             let data = res.data;
+            setup_product_id = data.product_id;
             $('#setup_product_code').html(data.product_code);
             $('#setup_product_name').html(data.product_name);
             item_has_tax = data.has_tax;
@@ -2564,9 +2951,190 @@ $assetsUrl = base_url('assets');
             addItem();
         })
 
+        $('#btnsave_item').click(function(e) {
+            e.preventDefault();
+            let form = $('#frmitem');
+            let btnSubmit = $('#btnsave_item')
+            form.parsley().validate();
+            if (form.parsley().isValid()) {
+                let question = 'Yakin ingin menyimpan data satuan produk?';
+                let actUrl = base_url + '/webmin/product/save-item/add';
+                if (formModeItem == 'edit') {
+                    question = 'Yakin ingin memperbarui data satuan produk?';
+                    actUrl = base_url + '/webmin/product/save-item/edit';
+                }
+
+                message.question(question).then(function(answer) {
+                    let yes = parseMessageResult(answer);
+                    if (yes) {
+                        let is_sale = 'N';
+                        let show_on_mobile_apps = 'N';
+                        let allow_change_price = 'N';
+
+                        if ($('#is_sale').prop('checked') == true) {
+                            is_sale = 'Y';
+                        }
+
+                        if ($('#show_on_mobile_apps').prop('checked') == true) {
+                            show_on_mobile_apps = 'Y';
+                        }
+
+                        if ($('#allow_change_price').prop('checked') == true) {
+                            allow_change_price = 'Y';
+                        }
+
+                        let formValues = {
+                            product_id: setup_product_id,
+                            item_id: $('#item_id').val(),
+                            item_code: $('#item_code').val(),
+                            unit_id: $('#unit_id').val(),
+                            product_content: parseFloat(item_product_content.getNumericString()),
+                            purchase_price: parseFloat(item_purchase_price.getNumericString()),
+                            purchase_tax: parseFloat(item_purchase_tax.getNumericString()),
+                            G1_margin_rate: parseFloat(item_margin_rate_G1.getNumericString()),
+                            G1_sales_price: parseFloat(item_sales_price_G1.getNumericString()),
+                            G2_margin_rate: parseFloat(item_margin_rate_G2.getNumericString()),
+                            G2_sales_price: parseFloat(item_sales_price_G2.getNumericString()),
+                            G3_margin_rate: parseFloat(item_margin_rate_G3.getNumericString()),
+                            G3_sales_price: parseFloat(item_sales_price_G3.getNumericString()),
+                            G4_margin_rate: parseFloat(item_margin_rate_G4.getNumericString()),
+                            G4_sales_price: parseFloat(item_sales_price_G4.getNumericString()),
+                            G5_margin_rate: parseFloat(item_margin_rate_G5.getNumericString()),
+                            G5_sales_price: parseFloat(item_sales_price_G5.getNumericString()),
+                            G6_margin_rate: parseFloat(item_margin_rate_G6.getNumericString()),
+                            G6_sales_price: parseFloat(item_sales_price_G6.getNumericString()),
+                            disc_seasonal: parseFloat(item_disc_seasonal.getNumericString()),
+                            disc_start_date: $('#disc_start_date').val(),
+                            disc_end_date: $('#disc_end_date').val(),
+                            G1_disc_price: item_disc_price_G1,
+                            G1_promo_price: item_promo_price_G1,
+                            G2_disc_price: item_disc_price_G2,
+                            G2_promo_price: item_promo_price_G2,
+                            G3_disc_price: item_disc_price_G3,
+                            G3_promo_price: item_promo_price_G3,
+                            G4_disc_price: item_disc_price_G4,
+                            G4_promo_price: item_promo_price_G4,
+                            G5_disc_price: item_disc_price_G5,
+                            G5_promo_price: item_promo_price_G5,
+                            G6_disc_price: item_disc_price_G6,
+                            G6_promo_price: item_promo_price_G6,
+                            margin_allocation: parseFloat(item_margin_allocation.getNumericString()),
+                            G1_margin_allocation: item_margin_alocation_G1,
+                            G2_margin_allocation: item_margin_alocation_G2,
+                            G3_margin_allocation: item_margin_alocation_G3,
+                            G4_margin_allocation: item_margin_alocation_G4,
+                            G5_margin_allocation: item_margin_alocation_G5,
+                            G6_margin_allocation: item_margin_alocation_G6,
+                            is_sale: is_sale,
+                            show_on_mobile_apps: show_on_mobile_apps,
+                            allow_change_price: allow_change_price
+                        };
+
+                        btnSubmit.prop('disabled', true);
+                        ajax_post(actUrl, formValues, {
+                            success: function(response) {
+                                if (response.success) {
+                                    if (response.result.success) {
+                                        form[0].reset();
+                                        notification.success(response.result.message);
+                                        let punit = response.result.product_unit;
+                                        if (punit.length) {
+                                            loadProductUnit(punit)
+                                        }
+
+                                        form.parsley().reset();
+                                        $('#modal-item').modal('hide');
+                                    } else {
+                                        message.error(response.result.message);
+                                    }
+                                }
+                                btnSubmit.prop('disabled', false);
+                                updateTable();
+                            },
+                            error: function(response) {
+                                btnSubmit.prop('disabled', false);
+                                updateTable();
+                            }
+                        });
+                    }
+
+                })
+
+            }
+        })
+
+        $('#tblitem').on('click', '.btnedit', function(e) {
+            e.preventDefault();
+            let json_data = $(this).attr('data-json');
+            let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
+            if (is_json) {
+                editItem(json);
+            } else {
+                message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
+            }
+        })
+
+        $("#tblitem").on('click', '.btndelete', function(e) {
+            e.preventDefault();
+            let id = $(this).attr('data-id');
+            let item_code = $(this).attr('data-code');
+            let question = 'Yakin ingin menghapus satuan produk dengan kode/barcode <b>' + item_code + '</b>?';
+            let actUrl = base_url + '/webmin/product/delete-item/' + id;
+            message.question(question).then(function(answer) {
+                let yes = parseMessageResult(answer);
+                if (yes) {
+                    ajax_get(actUrl, {
+                        product_id: setup_product_id
+                    }, {
+                        success: function(response) {
+                            if (response.success) {
+                                if (response.result.success) {
+                                    let punit = response.result.product_unit;
+                                    if (punit.length) {
+                                        loadProductUnit(punit)
+                                    }
+
+                                    notification.success(response.result.message);
+                                } else {
+                                    message.error(response.result.message);
+                                }
+                            }
+                        },
+                        error: function(response) {
+                            console.log('error!')
+                        }
+                    })
+                }
+            })
+        })
+
+        $('.close-modal-item').click(function(e) {
+            e.preventDefault();
+            message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
+                let yes = parseMessageResult(answer);
+                if (yes) {
+                    $('#modal-item').modal('hide');
+                }
+            })
+        })
+
+        $('.close-setup-page').click(function(e) {
+            e.preventDefault();
+            message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
+                let yes = parseMessageResult(answer);
+                if (yes) {
+                    showPage('#product_list');
+                    updateTable();
+                }
+            })
+        })
         /* End Product Unit */
 
         /* Parcel Setup */
+
+
+        /* End Parcel Setup */
+
         $("#tblproduct").on('click', '.btnsetup', function(e) {
             e.preventDefault();
             let id = $(this).attr('data-id');
@@ -2589,9 +3157,6 @@ $assetsUrl = base_url('assets');
                 console.log('Parcel!')
             }
         })
-        /* End Parcel Setup */
-
-
 
         showPage('#product_list');
     })

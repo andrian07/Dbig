@@ -47,6 +47,26 @@ class M_product extends Model
             ->get();
     }
 
+    public function getParcelItem($product_id)
+    {
+        return $this->db->table('ms_product_parcel')
+            ->select('ms_product_parcel.product_id as parcel_id,ms_product_parcel.item_qty,ms_product.product_name,ms_product_unit.*,(ms_product_unit.product_content*ms_product.base_purchase_price) as product_price,(ms_product_unit.product_content*ms_product.base_purchase_tax) as product_tax,ms_unit.unit_name')
+            ->join('ms_product_unit', 'ms_product_unit.item_id=ms_product_parcel.item_id')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->where('ms_product_parcel.product_id', $product_id)
+            ->get();
+    }
+
+    public function getProductUnitByCode($item_code)
+    {
+        return $this->db->table('ms_product_unit')
+            ->select('ms_product_unit.*,(ms_product_unit.product_content*ms_product.base_purchase_price) as product_price,(ms_product_unit.product_content*ms_product.base_purchase_tax) as product_tax,ms_unit.unit_name')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->where('ms_product_unit.item_code', $item_code)
+            ->get();
+    }
 
     public function getProductByName($product_name, $show_deleted = FALSE)
     {
@@ -59,6 +79,21 @@ class M_product extends Model
     }
 
     public function hasTransaction($product_id)
+    {
+        return 0;
+        // $getData = $this->db->table('ms_product_unit')
+        //     ->select('item_code')
+        //     ->where('unit_id', $unit_id)
+        //     ->limit(1)->get()->getRowArray();
+
+        // if ($getData == NULL) {
+        //     return 0;
+        // } else {
+        //     return 1;
+        // }
+    }
+
+    public function productUnitHasTransaction($item_id)
     {
         return 0;
         // $getData = $this->db->table('ms_product_unit')
@@ -202,5 +237,131 @@ class M_product extends Model
 
         saveQueries($saveQueries, 'product', $product_id, 'delete');
         return $save;
+    }
+
+    public function insertProductUnit($data)
+    {
+        $this->db->query('LOCK TABLES ms_product WRITE,ms_product_unit WRITE');
+
+        $saveQueries = NULL;
+
+
+        $product_id         = $data['product_id'];
+        $product_content    = floatval($data['product_content']);
+        $purchase_price     = floatval($data['purchase_price']);
+        $purchase_tax       = floatval($data['purchase_tax']);
+
+
+        $base_purchase_price = round(($purchase_price / $product_content), 2);
+        $base_purchase_tax   = round(($purchase_tax / $product_content), 2);
+
+        unset($data['purchase_price']);
+        unset($data['purchase_tax']);
+        $data['base_unit'] = 'N';
+
+
+        $this->db->transBegin();
+
+        $this->db->table($this->tProductUnit)->insert($data);
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        }
+
+        $update_data = [
+            'base_purchase_price'   => $base_purchase_price,
+            'base_purchase_tax'     => $base_purchase_tax
+        ];
+
+        $this->db->table($this->table)->update($update_data, ['product_id' => $product_id]);
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        }
+
+
+        if ($this->db->transStatus() === false) {
+            $this->db->transRollback();
+            $saveQueries = NULL;
+            $save = 0;
+        } else {
+            $this->db->transCommit();
+            $save = 1;
+        }
+
+        $this->db->query('UNLOCK TABLES');
+        saveQueries($saveQueries, 'product',  $product_id, 'add_item');
+        return $save;
+    }
+
+    public function updateProductUnit($data)
+    {
+        $this->db->query('LOCK TABLES ms_product WRITE,ms_product_unit WRITE');
+
+        $saveQueries = NULL;
+
+        $item_id            = $data['item_id'];
+        $product_id         = $data['product_id'];
+        $product_content    = floatval($data['product_content']);
+        $purchase_price     = floatval($data['purchase_price']);
+        $purchase_tax       = floatval($data['purchase_tax']);
+
+
+        $base_purchase_price = round(($purchase_price / $product_content), 2);
+        $base_purchase_tax   = round(($purchase_tax / $product_content), 2);
+
+        unset($data['purchase_price']);
+        unset($data['purchase_tax']);
+
+
+        $this->db->transBegin();
+
+        $this->db->table($this->tProductUnit)->update($data, ['item_id' => $item_id]);
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        }
+
+        $update_data = [
+            'base_purchase_price'   => $base_purchase_price,
+            'base_purchase_tax'     => $base_purchase_tax
+        ];
+
+        $this->db->table($this->table)->update($update_data, ['product_id' => $product_id]);
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        }
+
+
+        if ($this->db->transStatus() === false) {
+            $this->db->transRollback();
+            $saveQueries = NULL;
+            $save = 0;
+        } else {
+            $this->db->transCommit();
+            $save = 1;
+        }
+
+        $this->db->query('UNLOCK TABLES');
+        saveQueries($saveQueries, 'product',  $product_id, 'update_item');
+        return $save;
+    }
+
+    public function deleteProductUnit($item_id)
+    {
+        $getProductUnit = $this->db->table('ms_product_unit')->where('item_id', $item_id)->get()->getRowArray();
+        if ($getProductUnit != NULL) {
+            $this->db->query('LOCK TABLES ms_product_unit WRITE');
+            $saveQueries = NULL;
+
+            $product_id  = $getProductUnit['product_id'];
+            $delete = $this->db->table($this->tProductUnit)->where('item_id', $item_id)->delete();
+            if ($this->db->affectedRows() > 0) {
+                $saveQueries = $this->db->getLastQuery()->getQuery();
+            }
+
+            $this->db->query('UNLOCK TABLES');
+            saveQueries($saveQueries, 'product',  $product_id, 'delete_item');
+            return $delete;
+        } else {
+            return 0;
+        }
     }
 }
