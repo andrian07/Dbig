@@ -207,8 +207,15 @@ $assetsUrl = base_url('assets');
 
         function _initButton() {
             $('#btnadd').prop('disabled', !hasRole('voucher.add'));
-            $('.btnedit').prop('disabled', !hasRole('voucher.edit'));
-            $('.btndelete').prop('disabled', !hasRole('voucher.delete'));
+
+            if (!hasRole('voucher.edit')) {
+                $('.btnedit').prop('disabled', true);
+            }
+
+            if (!hasRole('voucher.delete')) {
+                $('.btndelete').prop('disabled', true);
+            }
+
 
             $('#btngenerate').prop('disabled', !hasRole('voucher.generate_voucher'));
 

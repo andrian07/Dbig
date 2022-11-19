@@ -76,13 +76,6 @@ class M_voucher extends Model
         unset($data['category_restriction']);
         unset($data['brand_restriction']);
 
-        $maxCode = $this->db->table('ms_voucher_group')->select('voucher_group_code')->limit(1)->orderBy('voucher_group_id', 'desc')->get()->getRowArray();
-        if ($maxCode == NULL) {
-            $data['voucher_group_code'] = "000001";
-        } else {
-            $data['voucher_group_code'] = substr('000000' . strval(floatval(substr($maxCode['voucher_group_code'], -6)) + 1), -6);
-        }
-
         $this->db->transBegin();
         $saveQueries        = NULL;
         $voucher_group_id   = 0;
@@ -259,35 +252,51 @@ class M_voucher extends Model
         $maxVoucher     = 9999;
         $saveQueries    = NULL;
 
-
         $getVoucherGroup = $this->db->table('ms_voucher_group')->where('deleted', 'N')->where('voucher_group_id', $voucher_group_id)->get()->getRowArray();
         if ($getVoucherGroup != NULL) {
-            $voucher_group_code     = $getVoucherGroup['voucher_group_code'];
             $last_voucher_number    = floatval($getVoucherGroup['last_voucher_number']);
 
             if (($last_voucher_number + $count_voucher) > $maxVoucher) {
                 $result         = ['success' => FALSE, 'message' => 'Jumlah voucher melebihi batas maximum'];
             } else {
-                $voucher_data = [];
-                for ($i = 1; $i <= $count_voucher; $i++) {
-                    $last_voucher_number++;
-                    $voucher_code = $voucher_group_code . substr('000000' . strval($last_voucher_number), -4);
-                    $voucher_data[] = [
-                        'voucher_group_id'  => $voucher_group_id,
-                        'voucher_code'      => $voucher_code,
-                        'created_by'        => $user_id,
-                    ];
+                helper('text');
+                $voucher_data       = [];
+                $count_voucher      = intval($count_voucher);
+                $totalGenerate      = 0;
+                $listGenerateCode   = [];
+
+                while ($totalGenerate < $count_voucher) {
+                    $new_voucher_code = strtoupper(random_string('alnum', 12));
+                    if (!in_array($new_voucher_code, $listGenerateCode)) {
+                        $check = $this->getVoucherByCode($new_voucher_code, TRUE)->getRowArray();
+                        if ($check == NULL) {
+                            $voucher_data[] = [
+                                'voucher_group_id'  => $voucher_group_id,
+                                'voucher_code'      => $new_voucher_code,
+                                'created_by'        => $user_id,
+                            ];
+                            $listGenerateCode[] = $new_voucher_code;
+                            $totalGenerate++;
+                        }
+                    }
                 }
 
+
+
                 $this->db->transBegin();
+                $last_voucher_number += $count_voucher;
                 $this->db->table('ms_voucher_group')->where('voucher_group_id', $voucher_group_id)->update(['last_voucher_number' => $last_voucher_number]);
                 if ($this->db->affectedRows() > 0) {
                     $saveQueries[] = $this->db->getLastQuery()->getQuery();
                 }
 
-                $this->db->table('ms_voucher')->insertBatch($voucher_data);
-                if ($this->db->affectedRows() > 0) {
-                    $saveQueries[] = $this->db->getLastQuery()->getQuery();
+                $maxInsert = 500;
+                $batchQueue = array_chunk($voucher_data, $maxInsert);
+                foreach ($batchQueue as $insertData) {
+                    $this->db->table('ms_voucher')->insertBatch($insertData, TRUE, 500);
+                    if ($this->db->affectedRows() > 0) {
+                        $saveQueries[] = $this->db->getLastQuery()->getQuery();
+                    }
                 }
 
                 if ($this->db->transStatus() === false) {

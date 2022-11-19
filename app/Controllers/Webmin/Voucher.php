@@ -40,7 +40,8 @@ class Voucher extends WebminController
                 $column[] = esc($row['voucher_name']);
                 $column[] = esc($row['voucher_remark']);
                 $column[] = numberFormat($row['voucher_value'], TRUE);
-                $column[] = numberFormat($row['count_voucher'], TRUE);
+                $count_voucher = floatval($row['count_voucher']);
+                $column[] = numberFormat($count_voucher, TRUE);
                 $column[] = indo_short_date($row['exp_date'], FALSE);
 
                 $btns = [];
@@ -49,7 +50,9 @@ class Voucher extends WebminController
                 $btns[] = "&nbsp;";
                 $btns[] = '<button ' . $prop . ' class="btn btn-sm btn-default btnmanagevoucher mb-2" data-toggle="tooltip" data-placement="top" data-title="Pengaturan Voucher"><i class="fas fa-ticket-alt"></i></button>';
                 $btns[] = "<br>";
-                $btns[] = button_edit($prop);
+
+                $disabled_edit = $count_voucher > 0 ? ' disabled' : ' ';
+                $btns[] = button_edit($prop . $disabled_edit);
                 $btns[] = "&nbsp;";
                 $btns[] = button_delete($prop);
                 $column[] = implode('', $btns);

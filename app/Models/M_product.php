@@ -47,10 +47,20 @@ class M_product extends Model
             ->get();
     }
 
+    public function getProductStock($product_id)
+    {
+        return $this->db->table('ms_product_stock')
+            ->select('ms_product_stock.*,ms_warehouse.warehouse_code,ms_warehouse.warehouse_name,ms_store.store_name')
+            ->join('ms_warehouse', 'ms_warehouse.warehouse_id=ms_product_stock.warehouse_id')
+            ->join('ms_store', 'ms_store.store_id=ms_warehouse.store_id')
+            ->where('ms_product_stock.product_id', $product_id)
+            ->get();
+    }
+
     public function getParcelItem($product_id)
     {
         return $this->db->table('ms_product_parcel')
-            ->select('ms_product_parcel.product_id as parcel_id,ms_product_parcel.item_qty,ms_product.product_name,ms_product_unit.*,(ms_product_unit.product_content*ms_product.base_purchase_price) as product_price,(ms_product_unit.product_content*ms_product.base_purchase_tax) as product_tax,ms_unit.unit_name')
+            ->select('ms_product_parcel.product_id as parcel_id,ms_product_parcel.item_qty,ms_product.product_name,ms_product_unit.*,(ms_product_unit.product_content*ms_product.base_purchase_price) as purchase_price,(ms_product_unit.product_content*ms_product.base_purchase_tax) as purchase_tax,ms_unit.unit_name')
             ->join('ms_product_unit', 'ms_product_unit.item_id=ms_product_parcel.item_id')
             ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
             ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
@@ -153,8 +163,9 @@ class M_product extends Model
             'unit_id'               => $unit_id,
             'base_unit'             => 'Y',
             'product_content'       => 1,
+            'margin_allocation'     => 50,
             'is_sale'               => 'N',
-            'show_on_mobile_apps'   => 'N',
+            'show_on_mobile_app'    => 'N',
             'allow_change_price'    => 'N',
         ];
         $this->db->table($this->tProductUnit)->insert($data_unit);
@@ -416,6 +427,162 @@ class M_product extends Model
             return $delete;
         } else {
             return 0;
+        }
+    }
+
+    public function updateParcel($data, $user_id)
+    {
+        $this->db->query('LOCK TABLES ms_product WRITE,ms_product_unit WRITE,ms_product_parcel WRITE,temp_parcel WRITE,ms_unit READ');
+        $saveQueries = NULL;
+
+        $item_id            = $data['item_id'];
+        $product_id         = $data['product_id'];
+        $total_parcel_price = 0;
+        $total_parcel_tax   = 0;
+
+        $getTemp = $this->getTempParcel($product_id, $user_id)->getResultArray();
+        $parcel_item_list = [];
+        $parcel_delete_product_list = [];
+        $query_update_parcel = "INSERT INTO ms_product_parcel(product_id,item_id,item_qty) VALUES";
+
+        foreach ($getTemp as $row) {
+            if ($row['temp_delete'] == 'Y') {
+                $parcel_delete_product_list[] = $row['item_id'];
+            } else {
+                $parcel_item_id         = $row['item_id'];
+                $parcel_item_qty        = floatval($row['item_qty']);
+                $purchase_price         = floatval($row['purchase_price']);
+                $purchase_tax           = floatval($row['purchase_tax']);
+
+                $total_parcel_price += ($purchase_price * $parcel_item_qty);
+                $total_parcel_tax   += ($purchase_tax * $parcel_item_qty);
+
+                $parcel_item_list[] = "('$product_id','$parcel_item_id',$parcel_item_qty)";
+            }
+        }
+
+        $query_update_parcel .= implode(',', $parcel_item_list) . " ON DUPLICATE KEY UPDATE item_qty=VALUES(item_qty)";
+
+        $base_purchase_price   = floatval($data['purchase_price']);
+        $base_purchase_tax     = floatval($data['purchase_tax']);
+
+        unset($data['purchase_price']);
+        unset($data['purchase_tax']);
+        $this->db->transBegin();
+
+        $this->db->table($this->tProductUnit)->update($data, ['item_id' => $item_id]);
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        }
+
+        $update_data = [
+            'base_purchase_price'   => $base_purchase_price,
+            'base_purchase_tax'     => $base_purchase_tax
+        ];
+
+        $this->db->table($this->table)->update($update_data, ['product_id' => $product_id]);
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        }
+
+
+        $this->db->query($query_update_parcel);
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        }
+
+        if (count($parcel_delete_product_list) > 0) {
+            $this->db->table('ms_product_parcel')->where('product_id', $product_id)->whereIn('item_id', $parcel_delete_product_list)->delete();
+            if ($this->db->affectedRows() > 0) {
+                $saveQueries[] = $this->db->getLastQuery()->getQuery();
+            }
+        }
+
+        if ($this->db->transStatus() === false) {
+            $this->db->transRollback();
+            $saveQueries = NULL;
+            $save = 0;
+        } else {
+            $this->db->transCommit();
+            $save = 1;
+        }
+
+        $this->db->query('UNLOCK TABLES');
+        saveQueries($saveQueries, 'product',  $product_id, 'update_parcel');
+        return $save;
+    }
+
+    public function getTempParcel($product_id, $user_id)
+    {
+        return $this->db->table('temp_parcel')
+            ->select('temp_parcel.product_id as parcel_id,temp_parcel.item_qty,ms_product.product_name,ms_product_unit.*,(ms_product_unit.product_content*ms_product.base_purchase_price) as purchase_price,(ms_product_unit.product_content*ms_product.base_purchase_tax) as purchase_tax,ms_unit.unit_name,temp_parcel.temp_add,temp_parcel.temp_delete')
+            ->join('ms_product_unit', 'ms_product_unit.item_id=temp_parcel.item_id')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->where('temp_parcel.product_id', $product_id)
+            ->where('temp_parcel.user_id', $user_id)
+            ->get();
+    }
+
+    public function copyToTempParcel($product_id, $user_id)
+    {
+        $this->db->table('temp_parcel')->where('product_id', $product_id)->where('user_id', $user_id)->delete();
+        $getData = $this->db->table('ms_product_parcel')->where('product_id', $product_id)->get()->getResultArray();
+
+        $data_parcel = [];
+
+        foreach ($getData as $item) {
+            $data_parcel[] = [
+                'item_id'       => $item['item_id'],
+                'product_id'    => $item['product_id'],
+                'item_qty'      => $item['item_qty'],
+                'user_id'       => $user_id,
+                'temp_add'      => 'N'
+            ];
+        }
+        if (count($data_parcel) > 0) {
+            $this->db->table('temp_parcel')->insertBatch($data_parcel);
+        }
+
+        return $this->getTempParcel($product_id, $user_id);
+    }
+
+    public function insertTempParcel($data)
+    {
+        $wheres = [
+            'item_id'       => $data['item_id'],
+            'product_id'    => $data['product_id'],
+            'user_id'       => $data['user_id'],
+        ];
+
+        $data['temp_delete'] = 'N';
+        $getData = $this->db->table('temp_parcel')->where($wheres)->get()->getRowArray();
+        if ($getData == NULL) {
+            return $this->db->table('temp_parcel')->insert($data);
+        } else {
+
+            return $this->db->table('temp_parcel')->update($data, $wheres);
+        }
+    }
+
+    public function deleteTempParcel($item_id, $product_id, $user_id)
+    {
+        $wheres = [
+            'item_id'       => $item_id,
+            'product_id'    => $product_id,
+            'user_id'       => $user_id,
+        ];
+
+        $getData = $this->db->table('temp_parcel')->where($wheres)->get()->getRowArray();
+        if ($getData == NULL) {
+            return 1;
+        } else {
+            $temp_add = $getData['temp_add'];
+            if ($temp_add == 'Y') {
+                return $this->db->table('temp_parcel')->where($wheres)->delete();
+            } else {
+                return $this->db->table('temp_parcel')->where($wheres)->update(['temp_delete' => 'Y']);
+            }
         }
     }
 }

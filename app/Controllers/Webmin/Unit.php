@@ -21,7 +21,6 @@ class Unit extends WebminController
         $data = [
             'title'         => 'Satuan'
         ];
-
         return $this->renderView('masterdata/unit', $data, 'unit.view');
     }
 

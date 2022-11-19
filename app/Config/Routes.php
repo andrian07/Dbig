@@ -131,6 +131,7 @@ $routes->group('webmin/customer', ['filter' => 'webminauth'], static function ($
 
 $routes->group('webmin/product', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\Product::index');
+    $routes->get('detail/(:num)', 'Webmin\Product::detail/$1');
     $routes->post('table', 'Webmin\Product::table');
     $routes->post('save/(:alpha)', 'Webmin\Product::save/$1');
     $routes->get('getbyid/(:num)', 'Webmin\Product::getById/$1');
@@ -144,7 +145,11 @@ $routes->group('webmin/product', ['filter' => 'webminauth'], static function ($r
     $routes->post('save-item/(:alpha)', 'Webmin\Product::saveProductUnit/$1');
     $routes->get('delete-item/(:num)', 'Webmin\Product::deleteProductUnit/$1');
 
-    $routes->get('get-parcel-unit/(:num)', 'Webmin\Product::getParcelUnit/$1');
+    $routes->post('save-parcel', 'Webmin\Product::saveParcel');
+    $routes->get('temp-parcel/(:num)', 'Webmin\Product::getTempParcel/$1');
+    $routes->post('add-temp-parcel', 'Webmin\Product::addTempParcel');
+    $routes->get('delete-temp-parcel/(:num)/(:num)', 'Webmin\Product::deleteTempParcel/$1/$2');
+    $routes->get('search-product', 'Webmin\Product::searchProduct');
 });
 
 
