@@ -140,6 +140,11 @@ $routes->group('webmin/product', ['filter' => 'webminauth'], static function ($r
     $routes->get('getbycode', 'Webmin\Supplier::getByCode');
     $routes->get('getbyname', 'Webmin\Supplier::getByName');
     $routes->get('get-product-unit/(:num)', 'Webmin\Product::getProductUnit/$1');
+    $routes->get('getitembycode', 'Webmin\Product::getProductUnitByCode');
+    $routes->post('save-item/(:alpha)', 'Webmin\Product::saveProductUnit/$1');
+    $routes->get('delete-item/(:num)', 'Webmin\Product::deleteProductUnit/$1');
+
+    $routes->get('get-parcel-unit/(:num)', 'Webmin\Product::getParcelUnit/$1');
 });
 
 

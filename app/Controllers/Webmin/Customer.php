@@ -320,7 +320,5 @@ class Customer extends WebminController
         }
         resultJSON($result);
     }
-
     //--------------------------------------------------------------------
-
 }

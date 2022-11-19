@@ -146,9 +146,31 @@ class Product extends WebminController
         resultJSON($result);
     }
 
+    public function getByName()
+    {
+        $this->validationRequest(TRUE);
+        $result = ['success' => FALSE, 'message' => 'Data product tidak ditemukan'];
+        if ($this->role->hasRole('product.view')) {
+            $product_name = $this->request->getGet('product_name');
+            if (!($product_name == '' || $product_name == NULL)) {
+                $find = $this->M_product->getProductByName($product_name, TRUE)->getRowArray();
+                if ($find == NULL) {
+                    $result = ['success' => TRUE, 'exist' => FALSE, 'message' => 'Data produk tidak ditemukan'];
+                } else {
+                    $find_result = array();
+                    foreach ($find as $k => $v) {
+                        $find_result[$k] = esc($v);
+                    }
+                    $result = ['success' => TRUE, 'exist' => TRUE, 'data' => $find_result, 'message' => ''];
+                }
+            }
+        }
+        resultJSON($result);
+    }
+
     public function getProductUnit($product_id = '')
     {
-        //$this->validationRequest(TRUE);
+        $this->validationRequest(TRUE);
         $result = ['success' => FALSE, 'message' => 'Data produk tidak ditemukan'];
         if ($this->role->hasRole('product.view')) {
             if ($product_id != '') {
@@ -195,25 +217,32 @@ class Product extends WebminController
         resultJSON($result);
     }
 
-    public function getByName()
+    public function getProductUnitByCode()
     {
         $this->validationRequest(TRUE);
-        $result = ['success' => FALSE, 'message' => 'Data product tidak ditemukan'];
+        $result = ['success' => FALSE, 'message' => 'Data produk tidak ditemukan'];
         if ($this->role->hasRole('product.view')) {
-            $product_name = $this->request->getGet('product_name');
-            if (!($product_name == '' || $product_name == NULL)) {
-                $find = $this->M_product->getProductByName($product_name, TRUE)->getRowArray();
+            $item_code = $this->request->getGet('item_code');
+            if (!($item_code == '' || $item_code == NULL)) {
+                $find = $this->M_product->getProductUnitByCode($item_code)->getRowArray();
                 if ($find == NULL) {
                     $result = ['success' => TRUE, 'exist' => FALSE, 'message' => 'Data produk tidak ditemukan'];
                 } else {
-                    $find_result = array();
+                    $find_result = [];
                     foreach ($find as $k => $v) {
                         $find_result[$k] = esc($v);
                     }
-                    $result = ['success' => TRUE, 'exist' => TRUE, 'data' => $find_result, 'message' => ''];
+
+                    $result = [
+                        'success' => TRUE,
+                        'exist' => TRUE,
+                        'data' => $find_result,
+                        'message' => ''
+                    ];
                 }
             }
         }
+
         resultJSON($result);
     }
 
@@ -346,6 +375,247 @@ class Product extends WebminController
         }
         resultJSON($result);
     }
+
+    public function saveProductUnit($type)
+    {
+        $this->validationRequest(TRUE);
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        $validation =  \Config\Services::validation();
+
+        $input = [
+            'item_id'               => $this->request->getPost('item_id'),
+            'product_id'            => $this->request->getPost('product_id'),
+            'item_code'             => $this->request->getPost('item_code'),
+            'unit_id'               => $this->request->getPost('unit_id'),
+            'product_content'       => $this->request->getPost('product_content'),
+            'purchase_price'        => $this->request->getPost('purchase_price'),
+            'purchase_tax'          => $this->request->getPost('purchase_tax'),
+            'G1_margin_rate'        => $this->request->getPost('G1_margin_rate'),
+            'G1_sales_price'        => $this->request->getPost('G1_sales_price'),
+            'G2_margin_rate'        => $this->request->getPost('G2_margin_rate'),
+            'G2_sales_price'        => $this->request->getPost('G2_sales_price'),
+            'G3_margin_rate'        => $this->request->getPost('G3_margin_rate'),
+            'G3_sales_price'        => $this->request->getPost('G3_sales_price'),
+            'G4_margin_rate'        => $this->request->getPost('G4_margin_rate'),
+            'G4_sales_price'        => $this->request->getPost('G4_sales_price'),
+            'G5_margin_rate'        => $this->request->getPost('G5_margin_rate'),
+            'G5_sales_price'        => $this->request->getPost('G5_sales_price'),
+            'G6_margin_rate'        => $this->request->getPost('G6_margin_rate'),
+            'G6_sales_price'        => $this->request->getPost('G6_sales_price'),
+
+            'disc_seasonal'         => $this->request->getPost('disc_seasonal'),
+            'disc_start_date'       => $this->request->getPost('disc_start_date'),
+            'disc_end_date'         => $this->request->getPost('disc_end_date'),
+            'G1_disc_price'         => $this->request->getPost('G1_disc_price'),
+            'G1_promo_price'        => $this->request->getPost('G1_promo_price'),
+            'G2_disc_price'         => $this->request->getPost('G2_disc_price'),
+            'G2_promo_price'        => $this->request->getPost('G2_promo_price'),
+            'G3_disc_price'         => $this->request->getPost('G3_disc_price'),
+            'G3_promo_price'        => $this->request->getPost('G3_promo_price'),
+            'G4_disc_price'         => $this->request->getPost('G4_disc_price'),
+            'G4_promo_price'        => $this->request->getPost('G4_promo_price'),
+            'G5_disc_price'         => $this->request->getPost('G5_disc_price'),
+            'G5_promo_price'        => $this->request->getPost('G5_promo_price'),
+            'G6_disc_price'         => $this->request->getPost('G6_disc_price'),
+            'G6_promo_price'        => $this->request->getPost('G6_promo_price'),
+
+            'margin_allocation'     => $this->request->getPost('margin_allocation'),
+            'G1_margin_allocation'  => $this->request->getPost('G1_margin_allocation'),
+            'G2_margin_allocation'  => $this->request->getPost('G2_margin_allocation'),
+            'G3_margin_allocation'  => $this->request->getPost('G3_margin_allocation'),
+            'G4_margin_allocation'  => $this->request->getPost('G4_margin_allocation'),
+            'G5_margin_allocation'  => $this->request->getPost('G5_margin_allocation'),
+            'G6_margin_allocation'  => $this->request->getPost('G6_margin_allocation'),
+
+            'is_sale'               => $this->request->getPost('is_sale'),
+            'show_on_mobile_apps'   => $this->request->getPost('show_on_mobile_apps'),
+            'allow_change_price'    => $this->request->getPost('allow_change_price')
+        ];
+
+        $validation->setRules([
+            'item_id'               => ['rules' => 'required'],
+            'product_id'            => ['rules' => 'required'],
+            'item_code'             => ['rules' => 'required|max_length[20]'],
+            'unit_id'               => ['rules' => 'required'],
+            'product_content'       => ['rules' => 'required'],
+            'purchase_price'        => ['rules' => 'required'],
+            'purchase_tax'          => ['rules' => 'required'],
+            'G1_margin_rate'        => ['rules' => 'required'],
+            'G1_sales_price'        => ['rules' => 'required'],
+            'G2_margin_rate'        => ['rules' => 'required'],
+            'G2_sales_price'        => ['rules' => 'required'],
+            'G3_margin_rate'        => ['rules' => 'required'],
+            'G3_sales_price'        => ['rules' => 'required'],
+            'G4_margin_rate'        => ['rules' => 'required'],
+            'G4_sales_price'        => ['rules' => 'required'],
+            'G5_margin_rate'        => ['rules' => 'required'],
+            'G5_sales_price'        => ['rules' => 'required'],
+            'G6_margin_rate'        => ['rules' => 'required'],
+            'G6_sales_price'        => ['rules' => 'required'],
+
+            'disc_seasonal'         => ['rules' => 'required'],
+            'G1_disc_price'         => ['rules' => 'required'],
+            'G1_promo_price'        => ['rules' => 'required'],
+            'G2_disc_price'         => ['rules' => 'required'],
+            'G2_promo_price'        => ['rules' => 'required'],
+            'G3_disc_price'         => ['rules' => 'required'],
+            'G3_promo_price'        => ['rules' => 'required'],
+            'G4_disc_price'         => ['rules' => 'required'],
+            'G4_promo_price'        => ['rules' => 'required'],
+            'G5_disc_price'         => ['rules' => 'required'],
+            'G5_promo_price'        => ['rules' => 'required'],
+            'G6_disc_price'         => ['rules' => 'required'],
+            'G6_promo_price'        => ['rules' => 'required'],
+
+            'margin_allocation'     => ['rules' => 'required'],
+            'G1_margin_allocation'  => ['rules' => 'required'],
+            'G2_margin_allocation'  => ['rules' => 'required'],
+            'G3_margin_allocation'  => ['rules' => 'required'],
+            'G4_margin_allocation'  => ['rules' => 'required'],
+            'G5_margin_allocation'  => ['rules' => 'required'],
+            'G6_margin_allocation'  => ['rules' => 'required'],
+
+            'is_sale'               => ['rules' => 'required|in_list[Y,N]'],
+            'show_on_mobile_apps'   => ['rules' => 'required|in_list[Y,N]'],
+            'allow_change_price'    => ['rules' => 'required|in_list[Y,N]'],
+        ]);
+
+        if ($validation->run($input) === FALSE) {
+            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        } else {
+            if ($type == 'add') {
+                if ($this->role->hasRole('product.manage')) {
+                    unset($input['item_id']);
+                    $save = $this->M_product->insertProductUnit($input);
+                    if ($save) {
+                        $result = ['success' => TRUE, 'message' => 'Data satuan produk berhasil disimpan'];
+                    } else {
+                        $result = ['success' => FALSE, 'message' => 'Data satuan produk gagal disimpan'];
+                    }
+                } else {
+                    $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menambah atau mengubah satuan produk'];
+                }
+            } else if ($type == 'edit') {
+                if ($this->role->hasRole('product.manage')) {
+                    $save = $this->M_product->updateProductUnit($input);
+                    if ($save) {
+                        $result = ['success' => TRUE, 'message' => 'Data satuan produk berhasil diperbarui'];
+                    } else {
+                        $result = ['success' => FALSE, 'message' => 'Data satuan produk gagal diperbarui'];
+                    }
+                } else {
+                    $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menambah atau mengubah satuan produk'];
+                }
+            }
+        }
+
+        $product_unit = [];
+        if ($input['product_id'] != NULL) {
+            $getProductUnit =  $this->M_product->getProductUnit($input['product_id'])->getResultArray();
+            foreach ($getProductUnit as $pu) {
+                $_product_unit = [];
+                foreach ($pu as $k => $v) {
+                    $_product_unit[$k] = esc($v);
+                    if ($k == 'disc_start_date' || $k == 'disc_end_date') {
+                        $_product_unit['indo_' . $k] = indo_short_date($v);
+                    }
+                }
+                $product_unit[] = $_product_unit;
+            }
+        }
+
+        $result['product_unit'] = $product_unit;
+        $result['csrfHash'] = csrf_hash();
+        resultJSON($result);
+    }
+
+    public function deleteProductUnit($item_id = '')
+    {
+        $this->validationRequest(TRUE);
+        $product_id = $this->request->getGet('product_id');
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        if ($this->role->hasRole('product.delete')) {
+            $hasTransaction = $this->M_product->productUnitHasTransaction($item_id);
+            if ($hasTransaction) {
+                $result = ['success' => FALSE, 'message' => 'Satuan produk tidak dapat dihapus'];
+            } else {
+                if ($item_id != '') {
+                    $delete = $this->M_product->deleteProductUnit($item_id);
+                    if ($delete) {
+                        $result = ['success' => TRUE, 'message' => 'Data satuan produk berhasil dihapus'];
+                    } else {
+                        $result = ['success' => FALSE, 'message' => 'Data satuan produk gagal dihapus'];
+                    }
+                }
+            }
+        } else {
+            $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menghapus satuan produk'];
+        }
+
+        $product_unit = [];
+        if ($product_id != NULL) {
+            $getProductUnit =  $this->M_product->getProductUnit($product_id)->getResultArray();
+            foreach ($getProductUnit as $pu) {
+                $_product_unit = [];
+                foreach ($pu as $k => $v) {
+                    $_product_unit[$k] = esc($v);
+                    if ($k == 'disc_start_date' || $k == 'disc_end_date') {
+                        $_product_unit['indo_' . $k] = indo_short_date($v);
+                    }
+                }
+                $product_unit[] = $_product_unit;
+            }
+        }
+
+        $result['product_unit'] = $product_unit;
+        resultJSON($result);
+    }
+
+
+    public function getParcelUnit($product_id = '')
+    {
+        //$this->validationRequest(TRUE);
+        $result = ['success' => FALSE, 'message' => 'Data produk tidak ditemukan'];
+        if ($this->role->hasRole('product.view')) {
+            if ($product_id != '') {
+                $find = $this->M_product->getProduct($product_id)->getRowArray();
+                if ($find == NULL) {
+                    $result = ['success' => TRUE, 'exist' => FALSE, 'message' => 'Data produk tidak ditemukan'];
+                } else {
+                    $find_result = [];
+                    foreach ($find as $k => $v) {
+                        $find_result[$k] = esc($v);
+                    }
+
+                    $product_unit = [];
+                    $getProductUnit = $this->M_product->getProductUnit($product_id)->getRowArray();
+                    foreach ($getProductUnit as $k => $v) {
+                        $product_unit[$k] = esc($v);
+                        if ($k == 'disc_start_date' || $k == 'disc_end_date') {
+                            $product_unit['indo_' . $k] = indo_short_date($v);
+                        }
+                    }
+
+                    $parcel_item_list = $this->M_product->getParcelItem($product_id)->getResultArray();
+
+
+
+                    $result = [
+                        'success'       => TRUE,
+                        'exist'         => TRUE,
+                        'data'          => $find_result,
+                        'product_unit'  => $product_unit,
+                        'item_list'     => $parcel_item_list,
+                        'message'       => ''
+                    ];
+                }
+            }
+        }
+
+        resultJSON($result);
+    }
+
+
 
     //--------------------------------------------------------------------
 
