@@ -119,6 +119,7 @@ class MyApp extends BaseConfig
             ]
         ],
 
+
         'submission' => [
             'text'   => 'Pengajuan Pembelian',
             'roles'   => [
@@ -130,8 +131,29 @@ class MyApp extends BaseConfig
             ]
         ],
 
+        'voucher'       => [
+            'text'      => 'Voucher',
+            'roles'     => [
+                'view'              => ['text' => 'Lihat'],
+                'add'               => ['text' => 'Tambah'],
+                'edit'              => ['text' => 'Ubah'],
+                'delete'            => ['text' => 'Hapus'],
+                'generate_voucher'  => ['text' => 'Generate Voucher']
+            ]
+        ],
+
         'purchase_order' => [
             'text'   => 'Pesanan Pembelian',
+            'roles'   => [
+                'view'          => ['text' => 'Lihat'],
+                'add'           => ['text' => 'Tambah'],
+                'edit'          => ['text' => 'Ubah'],
+                'cancel_order'  => ['text' => 'Pembatalan Pesanan'],
+            ]
+        ],
+
+        'purchase_order_consignment' => [
+            'text'   => 'Pesanan Pembelian Konsinyasi',
             'roles'   => [
                 'view'          => ['text' => 'Lihat'],
                 'add'           => ['text' => 'Tambah'],
@@ -252,7 +274,7 @@ class MyApp extends BaseConfig
 
                 'accounting'                => ['text' => 'Akuntansi'],
             ]
-        ],
+        ]
     ];
 
     public $barcodeType = [

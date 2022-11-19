@@ -47,6 +47,13 @@
 					</a>
 					<ul class="nav nav-treeview">
 						<li class="nav-item">
+							<a href="<?= base_url('webmin/brand') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Brand</p>
+							</a>
+						</li>
+
+						<li class="nav-item">
 							<a href="<?= base_url('webmin/category') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>Kategori</p>

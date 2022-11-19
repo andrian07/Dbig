@@ -2,16 +2,19 @@
 
 namespace App\Controllers\Webmin\Consignment;
 
+use App\Models\M_consignment;
 use Dompdf\Dompdf;
 use App\Controllers\Base\WebminController;
 
 class Consignment extends WebminController
 {
 
+    protected $M_consignment;
 
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);
+         $this->M_consignment = new M_consignment;
     }
 
     public function index(){
@@ -23,6 +26,37 @@ class Consignment extends WebminController
             'title'         => 'Purchase Order Konsinyasi'
         ];
         return $this->renderView('consignment/purchaseorder_consignment', $data);
+    }
+
+    public function tblhdPoConsignment()
+    {
+        $this->validationRequest(TRUE);
+        if ($this->role->hasRole('purchase_order_consignment.view')) {
+            helper('datatable');
+            $table = new \App\Libraries\Datatables('hd_purchase_order_consignment');
+            $table->db->select('purchase_order_consignment_id, purchase_order_consignment_invoice, purchase_order_consignment_date, supplier_name, user_realname, purchase_order_consignment_status');
+            $table->db->join('ms_supplier', 'ms_supplier.supplier_id  = hd_purchase_order_consignment.purchase_order_consignment_supplier_id');
+            $table->db->join('user_account', 'user_account.user_id = hd_purchase_order_consignment.purchase_order_consignment_user_id');
+            $table->renderColumn(function ($row, $i) {
+                $column = [];
+                $column[] = $i;
+                $column[] = esc($row['purchase_order_consignment_invoice']);
+                $column[] = indo_short_date($row['purchase_order_consignment_date'], FALSE);
+                $column[] = esc($row['supplier_name']);
+                $column[] = esc($row['purchase_order_consignment_status']);
+                $btns = [];
+                $prop =  'data-id="' . $row['purchase_order_consignment_id'] . '" data-name="' . esc($row['purchase_order_consignment_invoice']) . '"';
+                $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/submission/get-submission-detail/'.$row['purchase_order_consignment_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
+                $btns[] = button_edit($prop);
+                $btns[] = button_delete($prop);
+                $column[] = implode('&nbsp;', $btns);
+                return $column;
+            });
+
+            $table->orderColumn  = ['', 'purchase_order_consignment_invoice','supplier_name','purchase_order_consignment_date','','purchase_order_consignment_status',''];
+            $table->searchColumn = ['purchase_order_consignment_invoice','supplier_name', 'purchase_order_consignment_date','purchase_order_consignment_status'];
+            $table->generate();
+        }
     }
 
     public function stockInputConsignment(){
@@ -50,6 +84,209 @@ class Consignment extends WebminController
         } else {
             return $this->renderView('consignment/purchaseorder_consignment_invoice');
         }
+    }
+
+     public function tempadd(){
+
+        $this->validationRequest(TRUE, 'POST');
+
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+        $validation =  \Config\Services::validation();
+
+        $input = [
+            'temp_po_consignment_id'            => $this->request->getPost('temp_po_consignment_id'),
+            'temp_po_consignment_product_id'    => $this->request->getPost('product_id'),
+            'temp_po_consignment_qty'           => $this->request->getPost('temp_qty'),
+            'temp_po_consignment_expire_date'   => $this->request->getPost('temp_ed_date'),
+            'temp_po_consignment_suplier_id'    => $this->request->getPost('temp_supplier_id'),
+            'temp_po_consignment_suplier_name'  => $this->request->getPost('temp_supplier_name'),
+        ];
+
+        $validation->setRules([
+            'temp_po_consignment_qty'    => ['rules' => 'required|greater_than[0]']
+        ]);
+
+        if ($validation->run($input) === FALSE) {
+
+                $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+            } else {
+
+                $input['temp_po_consignment_user_id'] = $this->userLogin['user_id'];
+                $save = $this->M_consignment->insertTemp($input);
+                if ($save) {
+
+                    $result = ['success' => TRUE, 'message' => 'Data item berhasil ditambahkan'];
+
+                } else {
+
+                    $result = ['success' => FALSE, 'message' => 'Data item gagal ditambahkan'];
+
+                }
+
+            }
+        
+
+        $getTemp = $this->M_consignment->getTemp($this->userLogin['user_id'])->getResultArray();
+
+        $find_result = [];
+
+        foreach ($getTemp as $k => $v) {
+
+            $find_result[$k] = esc($v);
+
+        }
+
+        $result['data'] = $find_result;
+
+        $result['csrfHash'] = csrf_hash();
+
+        resultJSON($result);
+
+        
+    }
+
+    public function deleteTemp($temp_po_consignment_id = '')
+    {
+        //$this->validationRequest(TRUE);
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        if ($this->role->hasRole('purchase_order_consignment.delete')) {
+            if ($temp_po_consignment_id != '') {
+                $delete = $this->M_consignment->deletetemp($temp_po_consignment_id);
+                if ($delete) {
+                   $getTemp = $this->M_consignment->getTemp($this->userLogin['user_id'])->getResultArray();
+                   $find_result = [];
+                   foreach ($getTemp as $k => $v) {
+                   $find_result[$k] = esc($v);
+                }
+                $result['data'] = $find_result;
+                $result['csrfHash'] = csrf_hash();
+                $result['success'] = 'TRUE';
+                $result['message'] = 'Data Berhasil Di Hapus';
+            } else {
+                $result = ['success' => FALSE, 'message' => 'Data Gagal Di Hapus'];
+            }
+        }
+        } else {
+            $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menghapus data ini'];
+        }
+    resultJSON($result);
+    }
+
+    public function getConsignmentTemp()
+    {
+        $getTemp = $this->M_consignment->getTemp($this->userLogin['user_id'])->getResultArray();
+
+        $find_result = [];
+
+        foreach ($getTemp as $k => $v) {
+
+            $find_result[$k] = esc($v);
+
+        }
+
+        $result['data'] = $find_result;
+
+        $result['csrfHash'] = csrf_hash();
+
+        $result['success'] = 'TRUE';
+
+        resultJSON($result);
+    }
+
+
+    public function save($type)
+    {
+
+        $this->validationRequest(TRUE, 'POST');
+
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+        $validation =  \Config\Services::validation();
+
+        $input = [
+
+            'purchase_order_consignment_supplier_id' => $this->request->getPost('supplier_id'),
+            'purchase_order_consignment_date'        => $this->request->getPost('po_consignment_date'),
+            'purchase_order_consignment_store_id'    => $this->request->getPost('warehouse'),
+            'purchase_order_consignment_remark'      => $this->request->getPost('po_consignment_remark'),
+
+        ];
+
+        $validation->setRules([
+
+            'purchase_order_consignment_store_id'    => ['rules' => 'required'],
+            'purchase_order_consignment_date'        => ['rules' => 'required'],
+            'purchase_order_consignment_remark'      => ['rules' => 'max_length[500]'],
+        ]);
+
+        if ($validation->run($input) === FALSE) {
+
+            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+        } else {
+
+            if ($type == 'add') {
+
+                if ($this->role->hasRole('purchase_order_consignment.add')) {
+
+                    unset($input['purchase_order_consignment_id']);
+
+                    $input['purchase_order_consignment_user_id']= $this->userLogin['user_id'];
+
+                    $input['purchase_order_consignment_status'] = 'Pending';
+
+                    $save = $this->M_consignment->insertConsignment($input);
+
+                    if ($save['success']) {
+
+                        $result = ['success' => TRUE, 'message' => 'Data PO Konsinyasi berhasil disimpan', 'purchase_order_consignment_id' => $save['purchase_order_consignment_id']];
+
+                    } else {
+
+                        $result = ['success' => FALSE, 'message' => 'Data PO Konsinyasi  gagal disimpan'];
+
+                    }
+
+                } else {
+
+                    $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menambah PO Konsinyasi'];
+
+                }
+
+            } else if ($type == 'edit') {
+
+                if ($this->role->hasRole('purchase_order_consignment.edit')) {
+
+                    $input['purchase_order_consignment_user_id']   = $this->userLogin['user_id'];
+
+                    $save = $this->M_purchase_order->updateOrder($input);
+
+                    if ($save['success']) {
+
+                        $result = ['success' => TRUE, 'message' => 'Data pesanan berhasil diperbarui', 'purchase_order_consignment_id' => $save['purchase_order_consignment_id']];
+
+                    } else {
+
+                        $result = ['success' => FALSE, 'message' => 'Data pesanan gagal diperbarui'];
+
+                    }
+
+                } else {
+
+                    $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk mengubah PO Konsinyasi'];
+
+                }
+
+            }
+
+        }
+
+        $result['csrfHash'] = csrf_hash();
+
+        resultJSON($result);
+
     }
 
     //--------------------------------------------------------------------

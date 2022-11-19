@@ -195,6 +195,7 @@ $assetsUrl = base_url('assets');
 	<!-- My JS -->
 	<script src="<?= $assetsUrl ?>/app/theme.js"></script>
 	<script src="<?= $assetsUrl ?>/app/app.js?ver=<?= date('dmYHis') ?>"></script>
+	<script src="<?= $assetsUrl ?>/app/helper.js?ver=<?= date('dmYHis') ?>"></script>
 	<?= $this->renderSection('js') ?>
 </body>
 

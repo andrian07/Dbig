@@ -30,7 +30,7 @@ class M_submission extends Model
     {
         $builder = $this->db->table($this->table_temp_submission);
 
-        return $builder->select('ms_product.product_id, ms_product.product_code, ms_product.product_name, temp_submission.temp_submission_product_name, temp_submission.temp_submission_id, temp_submission.temp_submission_order_qty, temp_submission.temp_submission_status, temp_submission.temp_submission_desc, temp_submission.temp_submission_approval')
+        return $builder->select('ms_product.product_id, ms_product.product_code, ms_product.product_name, ms_product.product_code, temp_submission.temp_submission_product_name, temp_submission.temp_submission_id, temp_submission.temp_submission_order_qty, temp_submission.temp_submission_status, temp_submission.temp_submission_desc, temp_submission.temp_submission_approval')
 
         ->join('ms_product', 'ms_product.product_id = temp_submission.temp_submission_product_id', 'left')
 

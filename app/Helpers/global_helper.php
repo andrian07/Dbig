@@ -25,6 +25,9 @@ if (!function_exists('indo_date')) {
 if (!function_exists('indo_short_date')) {
     function indo_short_date($str, $icon = FALSE,  $datetime_separator = ' ')
     {
+        if ($str == '' || $str == NULL || $str == '0000-00-00' || $str == '0000-00-00 00:00:00') {
+            return  '';
+        }
         $iDate = $icon == TRUE ? '<i class="fas fa-calendar-alt"></i> ' : '';
         $iTime = $icon == TRUE ? '<i class="fas fa-clock"></i> ' : '';
 
@@ -38,8 +41,8 @@ if (!function_exists('indo_short_date')) {
     }
 }
 
-if (!function_exists('triple_digit_round')) {
-    function triple_digit_round($value)
+if (!function_exists('threeDigitRound')) {
+    function threeDigitRound($value)
     {
         // value = 1999.87
         $cval               = floor($value); // = 1999.87 => 1999
@@ -68,15 +71,15 @@ if (!function_exists('resultJSON')) {
     }
 }
 
-if (!function_exists('calcMarginRate')) {
-    function calcMarginRate($purchase_price, $sales_price)
+if (!function_exists('calcPercentRate')) {
+    function calcPercentRate($start_value, $end_value)
     {
-        if ($purchase_price == 0 && $sales_price == 0) {
+        if ($start_value == 0 && $end_value == 0) {
             $mr = 0;
-        } elseif ($purchase_price == 0) {
+        } elseif ($start_value == 0) {
             $mr = 100;
         } else {
-            $mr = (($sales_price - $purchase_price) / $purchase_price) * 100;
+            $mr = (($end_value - $start_value) / $start_value) * 100;
         }
         return $mr;
     }

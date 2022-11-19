@@ -48,7 +48,6 @@ $routes->group('devman', static function ($routes) {
     $routes->get('log-queries-detail/(:num)', 'Devman::getLogQueriesDetail/$1', ['filter' => 'devauth']);
 });
 
-
 $routes->group('webmin', static function ($routes) {
     $routes->get('/', 'Webmin\Auth::index');
     $routes->get('auth', 'Webmin\Auth::index');
@@ -118,16 +117,45 @@ $routes->group('webmin/supplier', ['filter' => 'webminauth'], static function ($
     $routes->get('delete/(:num)', 'Webmin\Supplier::delete/$1');
 });
 
+$routes->group('webmin/customer', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\Customer::index');
+    $routes->post('table', 'Webmin\Customer::table');
+    $routes->get('getbyid/(:num)', 'Webmin\Customer::getById/$1');
+    $routes->get('getbycode', 'Webmin\Customer::getByCode');
+    $routes->get('getbyemail', 'Webmin\Customer::getByEmail');
+    $routes->get('getbyphone', 'Webmin\Customer::getByPhone');
+    $routes->post('save/(:alpha)', 'Webmin\Customer::save/$1');
+    $routes->get('delete/(:num)', 'Webmin\Customer::delete/$1');
+    $routes->get('reset-password/(:num)', 'Webmin\Customer::resetPassword/$1');
+});
+
 $routes->group('webmin/product', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\Product::index');
     $routes->post('table', 'Webmin\Product::table');
     $routes->post('save/(:alpha)', 'Webmin\Product::save/$1');
+    $routes->get('getbyid/(:num)', 'Webmin\Product::getById/$1');
+    $routes->get('getbyname', 'Webmin\Product::getByName');
     $routes->get('delete/(:num)', 'Webmin\Product::delete/$1');
     $routes->get('getbyid/(:num)', 'Webmin\Supplier::getById/$1');
     $routes->get('getbycode', 'Webmin\Supplier::getByCode');
     $routes->get('getbyname', 'Webmin\Supplier::getByName');
+    $routes->get('get-product-unit/(:num)', 'Webmin\Product::getProductUnit/$1');
 });
 
+
+$routes->group('webmin/voucher', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\Voucher::index');
+    $routes->post('table', 'Webmin\Voucher::table');
+
+    $routes->get('getbyid/(:num)', 'Webmin\Voucher::getById/$1');
+    $routes->post('save/(:alpha)', 'Webmin\Voucher::save/$1');
+    $routes->get('delete/(:num)', 'Webmin\Voucher::delete/$1');
+
+    $routes->post('table-voucher', 'Webmin\Voucher::tableVoucher');
+    $routes->get('generate-voucher/(:num)/(:num)', 'Webmin\Voucher::generateVoucher/$1/$2');
+    $routes->get('delete-voucher/(:num)', 'Webmin\Voucher::deleteVoucher/$1');
+    $routes->get('export-voucher/(:num)', 'Webmin\Voucher::exportVoucher/$1');
+});
 
 
 $routes->group('webmin/user/user-group', ['filter' => 'webminauth'], static function ($routes) {
@@ -157,7 +185,13 @@ $routes->group('webmin/user/user-account', ['filter' => 'webminauth'], static fu
 /* pembelian */
 $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\Purchase_order::index');
+    $routes->post('tblpurchaseorders', 'Webmin\Purchase_order::tblpurchaseorders');
     $routes->get('search-product-bysuplier', 'Webmin\Purchase_order::searchProductBysuplier');
+    $routes->post('temp-add', 'Webmin\Purchase_order::tempadd');
+    $routes->get('temp-delete/(:alphanum)', 'Webmin\Purchase_order::deleteTemp/$1');
+    $routes->get('get-po-temp', 'Webmin\Purchase_order::getPoTemp');
+    $routes->get('get-po-footer', 'Webmin\Purchase_order::getPoFooter');
+    $routes->post('save/(:alpha)', 'Webmin\Purchase_order::save/$1');
     $routes->get('printinvoice', 'Webmin\Purchase_order::printinvoice');
 });
 
@@ -183,7 +217,13 @@ $routes->group('webmin/purchase', ['filter' => 'webminauth'], static function ($
 $routes->group('webmin/consignment', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('purchase-order-consignment', 'Webmin\Consignment\Consignment::purchaseOrderConsignment');
     $routes->get('printinvoice', 'Webmin\Consignment\Consignment::printinvoice');
+    $routes->post('tblhdpoconsignment', 'Webmin\Consignment\Consignment::tblhdPoConsignment');
     $routes->get('stock-input-consignment', 'Webmin\Consignment\Consignment::stockInputConsignment');
+    $routes->post('temp-add', 'Webmin\Consignment\Consignment::tempadd');
+    $routes->get('get-consignment-temp', 'Webmin\Consignment\Consignment::getConsignmentTemp');
+    $routes->get('temp-delete/(:alphanum)', 'Webmin\Consignment\Consignment::deleteTemp/$1');
+    $routes->post('save/(:alpha)', 'Webmin\Consignment\Consignment::save/$1');
+    
 });
 
 /* end pembelian */
@@ -315,12 +355,10 @@ $routes->get('pos/customer-display', 'Pos\Utility::customerDisplay');
 
 /* Eric Demo */
 $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
-    //$routes->get('unit', 'Webmin\EricDemo::unit'); ok
 
-    //$routes->get('warehouse', 'Webmin\EricDemo::warehouse');
-    $routes->get('customer', 'Webmin\EricDemo::customer');
+    //$routes->get('customer', 'Webmin\EricDemo::customer');
 
-    $routes->get('supplier', 'Webmin\EricDemo::supplier');
+    //$routes->get('supplier', 'Webmin\EricDemo::supplier');
     //$routes->get('product', 'Webmin\EricDemo::product');
     //$routes->get('product/detail', 'Webmin\EricDemo::productDetail');
     //$routes->get('product/parcel-detail', 'Webmin\EricDemo::parcelDetail');
@@ -332,7 +370,7 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
 
     $routes->get('password-control', 'Webmin\EricDemo::passwordControl');
     $routes->get('password-control/logs', 'Webmin\EricDemo::passwordControlLogs');
-    $routes->get('voucher', 'Webmin\EricDemo::voucher');
+    //$routes->get('voucher', 'Webmin\EricDemo::voucher');
 
 
     $routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');

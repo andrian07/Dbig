@@ -51,7 +51,7 @@ class Submission extends WebminController
             $table->renderColumn(function ($row, $i) {
                 $column = [];
                 $column[] = $i;
-                $column[] = esc($row['submission_date']);
+                $column[] = indo_short_date($row['submission_date'], FALSE);
                 $column[] = esc($row['user_realname']);
                 $column[] = esc($row['submission_desc']);
                 $column[] = esc($row['submission_status']);
@@ -193,7 +193,6 @@ class Submission extends WebminController
             }
 
         }
-
 
 
         $getTemp = $this->M_submission->getTemp($this->userLogin['user_id'])->getResultArray();

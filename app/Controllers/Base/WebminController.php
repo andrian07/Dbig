@@ -14,7 +14,6 @@ class WebminController extends BaseController
 	/*  Constructor */
 	public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
 	{
-
 		parent::initController($request, $response, $logger);
 		$this->session = \Config\Services::session();
 		$this->userLogin = $this->session->get('user_login');

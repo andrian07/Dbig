@@ -103,6 +103,13 @@
   width: 120px;
 }
 
+<<<<<<< HEAD
 .margins{
   margin-top: 10px;
+=======
+@media (min-width: 1200px) {
+  .modal-xl {
+     width: 90%; 
+  }
+>>>>>>> e5ab01c9c78ddc47538b72ff3333a9a0badbe0b1
 }

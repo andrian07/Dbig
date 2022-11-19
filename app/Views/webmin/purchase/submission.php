@@ -60,7 +60,7 @@ $assetsUrl = base_url('assets');
                                 <thead>
 
                                     <tr>
-
+                                        
                                         <th data-priority="1">#</th>
 
                                         <th data-priority="2">Tanggal Pengajuan</th>
@@ -676,12 +676,9 @@ $assetsUrl = base_url('assets');
 
         $('#product_name').autocomplete({
 
-
-
            minLength: 2,
 
            source: function(req, add) {
-
 
                $.ajax({
 
