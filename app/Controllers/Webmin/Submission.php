@@ -57,7 +57,7 @@ class Submission extends WebminController
                 $column[] = esc($row['submission_status']);
 
                 $btns = [];
-                $prop =  'data-id="' . $row['submission_id'] . '" data-name="' . esc($row['submission_inv']) . '"';
+                $prop =  'data-id="' . $row['submission_inv'] . '" data-name="' . esc($row['submission_inv']) . '"';
                 $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/submission/get-submission-detail/'.$row['submission_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
                 $btns[] = button_edit($prop);
                 $btns[] = button_delete($prop);
@@ -256,6 +256,7 @@ class Submission extends WebminController
 
             'submission_date'            => $this->request->getPost('submission_order_date'),
             'submission_desc'            => $this->request->getPost('submission_desc'),
+            'submission_id'              => $this->request->getPost('submission_id'),
 
         ];
 
@@ -276,7 +277,7 @@ class Submission extends WebminController
 
                 if ($this->role->hasRole('submission.add')) {
 
-                    unset($input['purchase_order_id']);
+                    unset($input['submission_id']);
 
                     $input['submission_user_id']= $this->userLogin['user_id'];
 
@@ -286,7 +287,7 @@ class Submission extends WebminController
 
                     if ($save['success']) {
 
-                        $result = ['success' => TRUE, 'message' => 'Data pengajuan berhasil disimpan', 'purchase_order_id' => $save['submission_id']];
+                        $result = ['success' => TRUE, 'message' => 'Data pengajuan berhasil disimpan', 'submission_id' => $save['submission_id']];
 
                     } else {
 
@@ -302,15 +303,15 @@ class Submission extends WebminController
 
             } else if ($type == 'edit') {
 
-                if ($this->role->hasRole('purchase_order.edit')) {
+                if ($this->role->hasRole('submission.edit')) {
 
                     $input['user_id']       = $this->userLogin['user_id'];
 
-                    $save = $this->M_purchase_order->updateOrder($input);
+                    $save = $this->M_submission->updateOrder($input);
 
                     if ($save['success']) {
 
-                        $result = ['success' => TRUE, 'message' => 'Data pesanan berhasil diperbarui', 'purchase_order_id' => $save['purchase_order_id']];
+                        $result = ['success' => TRUE, 'message' => 'Data pesanan berhasil diperbarui', 'submission_id' => $save['submission_id']];
 
                     } else {
 
@@ -328,14 +329,14 @@ class Submission extends WebminController
 
         }
 
-        $result['csrfHash'] = csrf_hash();
 
+        $result['csrfHash'] = csrf_hash();
         resultJSON($result);
 
     }
 
 
-    public function editSubmission($submission_id = '')
+    public function editSubmission($submission_inv = '')
     {
 
         $this->validationRequest(TRUE, 'GET');
@@ -344,7 +345,7 @@ class Submission extends WebminController
 
         if ($this->role->hasRole('submission.edit')) {
 
-            $getSubmission = $this->M_submission->getSubmission($submission_id)->getRowArray();
+            $getSubmission = $this->M_submission->getSubmission($submission_inv)->getRowArray();
 
             if ($getSubmission == NULL) {
 
@@ -354,7 +355,7 @@ class Submission extends WebminController
 
                 $user_id = $this->userLogin['user_id'];
 
-                $getTemp = $this->M_purchase_order->copyDtOrderToTemp($submission_id, $user_id)->getResultArray();
+                $getTemp = $this->M_purchase_order->copyDtOrderToTemp($submission_inv, $user_id)->getResultArray();
 
                 $find_result = [];
 
@@ -365,6 +366,46 @@ class Submission extends WebminController
                 }
 
                 $result = ['success' => TRUE, 'header' => $getSubmission, 'data' => $find_result, 'message' => ''];
+
+            }
+
+        }
+
+        resultJSON($result);
+
+    }
+
+    public function editOrder($submission_inv = '')
+    {
+
+
+        $this->validationRequest(TRUE, 'GET');
+
+        $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk mengubah pegajuan pesanan'];
+
+        if ($this->role->hasRole('submission.edit')) {
+
+            $getOrderInv = $this->M_submission->getOrderInv($submission_inv)->getRowArray();
+
+            if ($getOrderInv == NULL) {
+
+                $result = ['success' => FALSE, 'message' => 'Transaksi dengan No invoice <b>' . $submission_inv . '</b> tidak ditemukan'];
+
+            } else {
+
+                $user_id = $this->userLogin['user_id'];
+
+                $getTemp = $this->M_submission->copyDtOrderToTemp($submission_inv, $user_id)->getResultArray();
+
+                $find_result = [];
+
+                foreach ($getTemp as $k => $v) {
+
+                    $find_result[$k] = esc($v);
+
+                }
+
+                $result = ['success' => TRUE, 'header' => $getOrderInv, 'data' => $find_result, 'message' => ''];
 
             }
 

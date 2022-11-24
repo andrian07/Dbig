@@ -80,8 +80,6 @@ $assetsUrl = base_url('assets');
 
                             </table>
 
-
-
                             <!-- /.tab-content -->
 
                         </div><!-- /.card-body -->
@@ -116,8 +114,7 @@ $assetsUrl = base_url('assets');
 
                 <div class="col-sm-6">
 
-                    <h1 id="title-frmsubmisiion">Buat
-                    Pengajuan</h1>
+                    <h1 id="title-frmsubmission">Buat Pengajuan</h1>
 
                 </div>
 
@@ -173,9 +170,9 @@ $assetsUrl = base_url('assets');
 
                                             <label>No Referensi Pengajuan</label>
 
-                                            <input type="hidden" id="purchase_order_id" name="purchase_order_id" value="0">
+                                            <input type="hidden" id="submission_id" name="submission_id" value="0">
 
-                                            <input id="purchase_order_invoice" name="purchase_order_invoice" type="text" class="form-control" value="AUTO" readonly>
+                                            <input id="submission_order_invoice" name="submission_order_invoice" type="text" class="form-control" value="AUTO" readonly>
 
                                         </div>
 
@@ -248,7 +245,12 @@ $assetsUrl = base_url('assets');
 
                                             <label>Status</label>
 
-                                            <select id="temp_status" name="temp_status" class="form-control text-right" value="0" readonly> </select>
+                                            <select id="temp_status" name="temp_status" class="form-control"> 
+                                                <option></option>
+                                                <option value="Urgent">Urgent</option>
+                                                <option value="New">New</option>
+                                                <option value="Restock">Restock</option>
+                                            </select>
 
                                         </div>
 
@@ -309,6 +311,8 @@ $assetsUrl = base_url('assets');
                                             <div class="col-12">
 
                                                 <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle float-right"><i class="fas fa-plus"></i></button>
+
+
 
                                             </div>
 
@@ -504,27 +508,6 @@ $assetsUrl = base_url('assets');
 
         // select2 //
 
-        $("#temp_status").select2({
-
-            data: [
-            {
-                id:'Urgent',
-                text: 'Urgent'
-            },
-            {
-                id:'Restock',
-                text: 'Restock'
-            },
-            {
-                id:'New',
-                text: 'New',
-            }
-
-            ]
-
-        });
-
-
         let tblhdsubmission = $("#tblhdsubmission").DataTable({
             processing: true,
             select: true,
@@ -603,75 +586,6 @@ $assetsUrl = base_url('assets');
        })
 
 
-        $("#tblhdsubmission").on('click', '.btnedit', function(e) {
-
-             e.preventDefault();
-
-             let id = $(this).attr('data-id');
-
-             let actUrl = base_url + '/webmin/submission/get-submission-edit';
-
-             ajax_get(actUrl, null, {
-
-                 success: function(response) {
-
-                     if (response.success) {
-
-                         if (response.result.success) {
-
-                             let form = $('#frmsubmission');
-
-                             let items = response.result.data;
-
-                             $('#title-frmsubmission').html('Ubah Pengajuan');
-
-                             let header = response.result.header;
-
-                             //if (header.purchase_order_status == 'pending') {
-
-                                 $('#title-frmpurchaseorder').html('Ubah Pesanan');
-
-                                 formMode = 'edit';
-
-                                 $('#purchase_order_id').val(header.purchase_order_id);
-
-                                 $('#purchase_order_invoice').val('PO-' + header.purchase_order_invoice);
-
-                                 $('#purchase_order_date').val(header.purchase_order_date);
-
-                                 $('#purchase_order_total').val(header.purchase_order_total);
-
-                                 $('#purchase_order_remark').val(htmlEntities.decode(header.purchase_order_remark));
-
-                                 $('#display_user').val(header.user_realname);
-
-                                 setSelect2("#supplier_id", header.supplier_id, header.supplier_name);
-
-                                 loadTempData(items);
-
-                                 showInputPage(true);
-
-                            // } else {
-
-                             //    message.info('Pesanan yang sudah selesai atau dibatalkan tidak dapat di ubah lagi');
-
-                              //   updateTable();
-
-                            // }
-
-                         } else {
-
-                             message.error(response.result.message);
-
-                         }
-
-                     }
-
-                 }
-
-             })
-
-         })
 
 
         $('#product_name').autocomplete({
@@ -712,6 +626,75 @@ $assetsUrl = base_url('assets');
 
        });
 
+
+        
+
+          $("#tblhdsubmission").on('click', '.btnedit', function(e) {
+
+            e.preventDefault();
+
+            let id = $(this).attr('data-id');
+
+            let actUrl = base_url + '/webmin/submission/edit-order/' + id;
+
+            ajax_get(actUrl, null, {
+
+                success: function(response) {
+
+                    if (response.success) {
+
+                        if (response.result.success) {
+
+                            let form = $('#frmsubmission');
+
+                            let items = response.result.data;
+
+                            $('#title-frmsubmission').html('Ubah Pengajuan Pesanan');
+
+                            let header = response.result.header;
+
+                            if (header.submission_status == 'Pending') {
+
+                                $('#title-frmsubmission').html('Ubah Pengajuan Pesanan');
+
+                                formMode = 'edit';
+
+                                $('#submission_id ').val(header.submission_id );
+
+                                //$('#submission_order_invoice').val('PJ-' + header.submission_inv);
+
+                                $('#submission_order_invoice').val(header.submission_inv);
+
+                                $('#submission_order_date').val(header.submission_date);
+
+                                $('#submisson_order_remark').val(htmlEntities.decode(header.submission_desc));
+
+                                $('#display_user').val(header.user_realname);
+
+                                loadTempData(items);
+
+                                showInputPage(true);
+
+                            } else {
+
+                                message.info('Pesanan yang sudah selesai atau dibatalkan tidak dapat di ubah lagi');
+
+                                //updateTable();
+
+                            }
+
+                        } else {
+
+                            message.error(response.result.message);
+
+                        }
+
+                    }
+
+                }
+
+            })
+        })
 
 
 
@@ -915,8 +898,6 @@ $assetsUrl = base_url('assets');
 
          let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
 
-         console.log(json);
-
          if (is_json) {
 
              $('#item_id').val(json.product_id);
@@ -928,6 +909,12 @@ $assetsUrl = base_url('assets');
              $('#temp_desc').val(json.temp_submission_desc);
 
              $('#temp_id').val(json.temp_submission_id);
+
+            let temp_submission_status = json.temp_submission_status;
+
+            document.getElementById("temp_status").value = temp_submission_status;
+
+            //setSelect2('#temp_status', temp_submission_status, temp_submission_status);
 
              $('#temp_qty').focus();
 
@@ -972,7 +959,11 @@ $assetsUrl = base_url('assets');
 
                     submission_order_date: $('#submission_order_date').val(),
 
-                    submission_desc: $('#submisson_order_remark').val()
+                    submission_desc: $('#submisson_order_remark').val(),
+
+                    submission_id: $('#submission_id').val(),
+
+                    submission_inv: $('#submission_order_invoice').val()
 
                 };
 
@@ -996,9 +987,9 @@ $assetsUrl = base_url('assets');
 
                                 let invoice = response.result.purchase_order_id;
 
-                                let invUrl = base_url + '/submission/invoice/' + invoice + '?print=Y';
+                                //let invUrl = base_url + '/submission/invoice/' + invoice + '?print=Y';
 
-                                window.open(invUrl, '_blank');
+                                //window.open(invUrl, '_blank');
 
                             } else {
 
@@ -1047,6 +1038,8 @@ $assetsUrl = base_url('assets');
            $('#item_id').val('');
 
            $('#product_name').val('');
+
+           $('#temp_status').val('');
 
            temp_qty.set('0.00');
 
@@ -1110,13 +1103,7 @@ $assetsUrl = base_url('assets');
 
      };
 
-
-
      let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
-
-
-
-
 
      _initButton();
 

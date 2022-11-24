@@ -9,7 +9,7 @@ class M_log_queries extends Model
     protected $table = 'hd_log_queries';
     protected $DBGroup = 'logs';
 
-    public function insertLog($queries = NULL, $log_remark = '', $user_id, $module = 'system', $ref_id = 0)
+    public function insertLog($queries = NULL, $log_remark = '', $user_id = '', $module = 'system', $ref_id = 0)
     {
         $db = \Config\Database::connect($this->DBGroup);
         if ($queries != NULL) {
@@ -41,23 +41,6 @@ class M_log_queries extends Model
                 $db->table('dt_log_queries')->insertBatch($data_details);
             }
 
-            $db->query('UNLOCK TABLES');
-        }
-    }
-
-    public function insertLogEdit($queries = NULL, $log_remark = '', $user_id, $module = 'system', $ref_id = 0)
-    {
-        $db = \Config\Database::connect($this->DBGroup);
-        if ($queries != NULL) {
-            $db->query('LOCK TABLES log_transaction_edit_queries WRITE');
-            $data = [
-                'log_transaction_code'      => $module,
-                'log_transaction_id'        => $ref_id,
-                'log_user_id'               => $user_id,
-                'log_remark'                => $log_remark
-            ];
-            $db->table('log_transaction_edit_queries')->insert($data);
-            $log_id = $db->insertID();
             $db->query('UNLOCK TABLES');
         }
     }

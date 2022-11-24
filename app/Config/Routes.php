@@ -216,6 +216,8 @@ $routes->group('webmin/submission', ['filter' => 'webminauth'], static function 
     $routes->post('temp-add', 'Webmin\Submission::tempadd');
     $routes->post('save/(:alpha)', 'Webmin\submission::save/$1');
     $routes->get('get-submission-detail/(:alphanum)', 'Webmin\submission::getSubmissionDetail/$1');
+    //$routes->get('get-submission-edit/(:alphanum)', 'Webmin\submission::getSubmissionEdit/$1');
+    $routes->get('edit-order/(:alphanum)', 'Webmin\submission::editOrder/$1'); 
 });
 
 $routes->group('webmin/purchase', ['filter' => 'webminauth'], static function ($routes) {
