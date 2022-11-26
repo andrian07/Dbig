@@ -184,13 +184,8 @@ $assetsUrl = base_url('assets');
 
                                 </div>
 
-                                <div class="col-sm-1">
 
-                                    <button id="btnadd" class="btn btn-primary"><i class="fas fa-plus"></i></button>
-
-                                </div>
-
-                                <div class="col-md-3"></div>
+                                <div class="col-md-4"></div>
 
                                 <label for="user" class="col-sm-1 col-form-label text-right">Gudang :</label>
 
@@ -1015,6 +1010,14 @@ $assetsUrl = base_url('assets');
 
      let discount3 = parseFloat(edit_temp_discount3.getNumericString());
 
+     let edit_temp_discount_percentage1 = parseFloat(edit_temp_discount_percentage1.getNumericString());
+
+     let edit_temp_discount_percentage2 = parseFloat(edit_temp_discount_percentage2.getNumericString());
+
+     let edit_temp_discount_percentage3 = parseFloat(edit_temp_discount_percentage3.getNumericString());
+
+     let total_temp_discount = parseFloat(total_temp_discount.getNumericString());
+     
      let total = parseFloat(temp_total.getNumericString());
 
      let supplier_id = $('#supplier_id').val();
@@ -1050,11 +1053,19 @@ $assetsUrl = base_url('assets');
 
              temp_discount1: discount1,
 
+             edit_temp_discount_percentage1: edit_temp_discount_percentage1,
+
              temp_discount2: discount2,
+
+             edit_temp_discount_percentage2: edit_temp_discount_percentage2,
 
              temp_discount3: discount3,
 
+             edit_temp_discount_percentage3: edit_temp_discount_percentage3,
+
              temp_po_suplier_id:supplier_id,
+
+             total_temp_discount:total_temp_discount,
 
              temp_po_suplier_name:supplier_name,
 
@@ -1079,6 +1090,8 @@ $assetsUrl = base_url('assets');
                          $('#product_name').focus();
 
                          setSelect2('#supplier_id', supplier_id, supplier_name);
+
+                         $('#supplier_id').attr("disabled", true);
 
                          notification.success(response.result.message);
 
@@ -1159,15 +1172,41 @@ $assetsUrl = base_url('assets');
 
        if (is_json) {
 
-           $('#product_id').val(json.product_id);
+           $('#product_id').val(json.temp_po_product_id);
 
-           $('#product_name').val(json.temp_submission_product_name);
+           $('#product_name').val(json.product_name);
 
-           temp_qty.set(json.temp_submission_order_qty);
+           temp_price.set(json.temp_po_price);
 
-           $('#temp_desc').val(json.temp_submission_desc);
+           temp_qty.set(json.temp_po_qty);
 
-           $('#temp_id').val(json.temp_submission_id);
+           temp_ongkir.set(json.temp_po_ongkir);
+
+           edit_temp_discount1.set(json.temp_po_discount1);
+           
+           edit_temp_discount_percentage1.set((json.temp_po_discount1 / json.temp_po_price *  10).toFixed(2));
+
+           edit_temp_discount2.set(json.temp_po_discount2);
+ 
+           edit_temp_discount_percentage2.set((json.temp_po_discount2 / (json.temp_po_price - json.temp_po_discount1)*  10).toFixed(2));
+
+           edit_temp_discount3.set(json.temp_po_discount3);
+
+           edit_temp_discount_percentage3.set((json.temp_po_discount3 / (json.temp_po_price - json.temp_po_discount1 - json.temp_po_discount2)*  10).toFixed(2));
+
+           total_temp_discount.set(json.temp_po_discount3);
+
+           $('#temp_ed_date').val(json.temp_po_expire_date);
+
+           $('#temp_po_id').val(json.temp_po_id );
+
+           $('#product_tax').val(json.temp_po_ppn);
+
+           temp_total.set(json.temp_po_total);
+
+           temp_dpp.set(json.temp_po_dpp);
+
+           temp_tax.set(json.temp_po_ppn);
 
            $('#temp_qty').focus();
 
@@ -1547,7 +1586,7 @@ $('#temp_ongkir').on('change', function() {
 
 function calculation_temp_total(){
     var price_calculation = AutoNumeric.getAutoNumericElement('#temp_price').get();
-    let ppn = price_calculation - (price_calculation / 1.11);
+    let ppn = price_calculation - (price_calculation * 11/100);
     let dpp = price_calculation - ppn;
     let qty_calculation = parseFloat(temp_qty.getNumericString());
     let subtotal_calculation = price_calculation * qty_calculation;
