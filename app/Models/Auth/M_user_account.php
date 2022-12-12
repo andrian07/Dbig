@@ -97,4 +97,31 @@ class M_user_account extends Model
         saveQueries($saveQueries, 'user_account', 0, 'DELETE USER ' . $user_code);
         return $save;
     }
+
+
+    public function updateFingerPrint($user_id, $user_index_fingerprint, $user_middle_fingerprint)
+    {
+        $this->db->query('LOCK TABLES user_account WRITE');
+        $data = [
+            'user_index_fingerprint'    => $user_index_fingerprint,
+            'user_middle_fingerprint'   => $user_middle_fingerprint
+        ];
+        $save = $this->db->table($this->table)->update($data, ['user_id' => $user_id]);
+        $saveQueries = NULL;
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries = $this->db->getLastQuery()->getQuery();
+        }
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'user_account', $user_id, 'add_fingerprint');
+        return $save;
+    }
+
+    public function getUserHasFingerPrint()
+    {
+        return $this->db->table($this->table)
+            ->where('user_index_fingerprint!=', '')
+            ->where('user_middle_fingerprint!=', '')
+            ->get();
+    }
 }

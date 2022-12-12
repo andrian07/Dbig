@@ -131,6 +131,23 @@ class MyApp extends BaseConfig
             ]
         ],
 
+        'point_reward' => [
+            'text'   => 'Hadiah Point',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+                'add'    => ['text' => 'Tambah'],
+                'edit'   => ['text' => 'Ubah'],
+                'delete' => ['text' => 'Hapus'],
+            ]
+        ],
+
+        'point_exchange' => [
+            'text'   => 'Tukar Point',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+            ]
+        ],
+
         'voucher'       => [
             'text'      => 'Voucher',
             'roles'     => [
@@ -139,6 +156,16 @@ class MyApp extends BaseConfig
                 'edit'              => ['text' => 'Ubah'],
                 'delete'            => ['text' => 'Hapus'],
                 'generate_voucher'  => ['text' => 'Generate Voucher']
+            ]
+        ],
+
+        'password_control' => [
+            'text'      => 'Password Control',
+            'roles'     => [
+                'view'              => ['text' => 'Lihat'],
+                'add'               => ['text' => 'Tambah'],
+                'edit'              => ['text' => 'Ubah'],
+                'delete'            => ['text' => 'Hapus'],
             ]
         ],
 
@@ -230,6 +257,8 @@ class MyApp extends BaseConfig
             ]
         ],
 
+
+
         'user_account' => [
             'text'   => 'Akun Pengguna',
             'roles'   => [
@@ -318,6 +347,15 @@ class MyApp extends BaseConfig
             'thumb_height'  => 150,
             'upload_dir'    => 'contents/upload/banner/',
             'thumb_dir'     => 'contents/thumb/banner/',
+        ],
+        'reward_point' => [
+            'width'         => 1000,
+            'height'        => 1000,
+            'create_thumb'  => TRUE,
+            'thumb_width'   => 300,
+            'thumb_height'  => 300,
+            'upload_dir'    => 'contents/upload/reward/',
+            'thumb_dir'     => 'contents/thumb/reward/',
         ],
     ];
 }

@@ -149,7 +149,9 @@ $assetsUrl = base_url('assets');
                         </div>
                         <form id="frmaddfingerprint" class="form-horizontal">
                             <div class="modal-body">
-                                <input id="fp_user_code" name="fp_user_code" value="" type="hidden">
+                                <input id="fp_user_id" name="fp_user_id" value="" type="hidden">
+                                <div id="fp_status"></div>
+
                                 <div class="form-group">
                                     <label for="fp_user_name" class="col-sm-12">Username</label>
                                     <div class="col-sm-12">
@@ -166,10 +168,10 @@ $assetsUrl = base_url('assets');
 
 
                                 <div class="form-group">
-                                    <label for="user_group" class="col-sm-12">Fingerprint Reader</label>
+                                    <label for="fp_reader" class="col-sm-12">Fingerprint Reader</label>
                                     <div class="col-sm-12 sel2">
                                         <select class="form-control" id="fp_reader" name="fp_reader" required>
-                                            <option value="0" disabled>-- Pilih Fingerprint Reader --</option>
+                                            <option selected>Select Fingerprint Reader</option>
                                         </select>
                                     </div>
                                 </div>
@@ -178,7 +180,7 @@ $assetsUrl = base_url('assets');
                                 <div class="form-group">
                                     <label for="fp_indexfinger" class="col-sm-12">Index Finger</label>
                                     <div class="col-12">
-                                        <div class="row">
+                                        <div id="fp_indexfinger" class="row">
                                             <div id="fp_indexfinger1" class="col-3 text-center"><span class="icon icon-indexfinger-not-enrolled" title="not_enrolled"></span></div>
                                             <div id="fp_indexfinger2" class="col-3 text-center"><span class="icon icon-indexfinger-not-enrolled" title="not_enrolled"></span></div>
                                             <div id="fp_indexfinger3" class="col-3 text-center"><span class="icon icon-indexfinger-not-enrolled" title="not_enrolled"></span></div>
@@ -190,7 +192,7 @@ $assetsUrl = base_url('assets');
                                 <div class="form-group">
                                     <label for="fp_middlefinger" class="col-sm-12">Middle Finger</label>
                                     <div class="col-12">
-                                        <div class="row">
+                                        <div id="fp_middlefinger" class="row">
                                             <div id="fp_middlefinger1" class="col-3 text-center"><span class="icon icon-middlefinger-not-enrolled" title="not_enrolled"></span></div>
                                             <div id="fp_middlefinger2" class="col-3 text-center"><span class="icon icon-middlefinger-not-enrolled" title="not_enrolled"></span></div>
                                             <div id="fp_middlefinger3" class="col-3 text-center"><span class="icon icon-middlefinger-not-enrolled" title="not_enrolled"></span></div>
@@ -205,7 +207,7 @@ $assetsUrl = base_url('assets');
                             </div>
                             <div class="modal-footer justify-content-between">
                                 <button id="" class="btn btn-danger close-modal-addfingerprint"><i class="fas fa-times-circle"></i> Batal</button>
-                                <button id="btncapture" class="btn btn-warning"><i class="fas fa-fingerprint"></i> Mulai Capture</button>
+                                <button id="btncapture" class="btn btn-warning" data-action="capture"><i class="fas fa-fingerprint"></i> Mulai Capture</button>
                                 <button id="btnsave_fingerprint" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
                             </div>
                         </form>
@@ -223,10 +225,14 @@ $assetsUrl = base_url('assets');
 <?= $this->endSection() ?>
 
 <?= $this->section('js') ?>
+<script src="<?= $assetsUrl ?>/plugins/fingerprint/js/es6-shim.js"></script>
+<script src="<?= $assetsUrl ?>/plugins/fingerprint/js/websdk.client.bundle.min.js"></script>
+<script src="<?= $assetsUrl ?>/plugins/fingerprint/js/fingerprint.sdk.min.js"></script>
+<script src="<?= $assetsUrl ?>/plugins/fingerprint/fingerprint.js?ver=<?= date('YmdHis') ?>"></script>
+
 <script>
     $(document).ready(function() {
         let formMode;
-
 
         function _initButton() {
 
@@ -383,8 +389,6 @@ $assetsUrl = base_url('assets');
             let opt = $(this).prop('checked');
             showPassword(opt);
         })
-
-
 
         function addMode() {
             let form = $('#frmuseraccount');
@@ -571,10 +575,6 @@ $assetsUrl = base_url('assets');
             })
         })
 
-
-
-
-
         $('.close-modal').click(function(e) {
             e.preventDefault();
             message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
@@ -586,9 +586,104 @@ $assetsUrl = base_url('assets');
         })
 
         // fingerprint //
+        function buttonCapture(x) {
+            if (x) {
+                $('#btncapture').attr('data-action', 'capture');
+                $('#btncapture').html('<i class="fas fa-fingerprint"></i> Mulai Capture');
+                $('#btncapture').removeClass('btn-default').addClass('btn-warning');
+            } else {
+                $('#btncapture').attr('data-action', 'reset');
+                $('#btncapture').html('<i class="fas fa-fingerprint"></i> Reset Capture');
+                $('#btncapture').removeClass('btn-warning').addClass('btn-default');
+            }
+        }
+
         $('#tbluseraccount').on('click', '.btnaddfingerprint', function(e) {
             e.preventDefault();
-            $('#modal-addfingerprint').modal(configModal);
+            let id = $(this).attr('data-id');
+            let actUrl = base_url + '/webmin/user/user-account/getbycode/' + id;
+            ajax_get(actUrl, null, {
+                success: function(response) {
+                    if (response.success) {
+                        if (response.result.exist) {
+                            let data = response.result.data;
+                            $('#fp_user_id').val(data.user_id);
+                            $('#fp_user_name').val(data.user_name);
+                            $('#fp_user_realname').val(data.user_realname);
+                            clearCapture();
+                            buttonCapture(true);
+                            beginEnrollment();
+                            $('#modal-addfingerprint').modal(configModal);
+                        } else {
+                            message.error(response.result.message);
+                        }
+                    }
+                }
+            })
+        })
+
+        $('#btncapture').click(function(e) {
+            e.preventDefault();
+            if (!readyForEnroll()) {
+                showMessage('Harap pilih reader fingerprint terlebih dahulu');
+            } else {
+                let action = $('#btncapture').attr('data-action');
+                if (action == 'capture') {
+                    beginCapture();
+                    buttonCapture(false);
+                } else {
+                    clearCapture();
+                    buttonCapture(true);
+                }
+            }
+        })
+
+        $('#btnsave_fingerprint').click(function(e) {
+            e.preventDefault();
+            let fingerData = myReader.currentHand.generateFullHand();
+            let curHand = myReader.currentHand;
+            let nIndex = curHand.index_finger.length;
+            let nMiddle = curHand.middle_finger.length;
+
+            if (nIndex == 4 && nMiddle == 4) {
+                let question = 'Yakin ingin menambahkan atau memperbarui data sidik jari pengguna?';
+                let actUrl = base_url + '/webmin/user/user-account/add-fingerprint/' + $('#fp_user_id').val();
+                let formValues = {
+                    fingerdata: fingerData
+                };
+                let btnSubmit = $('#btnsave_fingerprint');
+                message.question(question).then(function(answer) {
+                    let yes = parseMessageResult(answer);
+                    if (yes) {
+                        btnSubmit.prop('disabled', true);
+                        ajax_post(actUrl, formValues, {
+                            success: function(response) {
+                                if (response.success) {
+                                    if (response.result.success) {
+                                        $('#fp_user_id').val('');
+                                        $('#fp_user_name').val('');
+                                        $('#fp_user_realname').val('');
+                                        clearCapture();
+                                        buttonCapture(true);
+                                        notification.success(response.result.message);
+                                        $('#modal-addfingerprint').modal('hide');
+                                    } else {
+                                        message.error(response.result.message);
+                                    }
+                                }
+                                btnSubmit.prop('disabled', false);
+                                updateTable();
+                            },
+                            error: function(response) {
+                                btnSubmit.prop('disabled', false);
+                                updateTable();
+                            }
+                        });
+                    }
+                })
+            } else {
+                message.error('Harap input sidik jari anda terlebih dahulu');
+            }
         })
 
         $('.close-modal-addfingerprint').click(function(e) {
@@ -600,7 +695,6 @@ $assetsUrl = base_url('assets');
                 }
             })
         })
-
     })
 </script>
 <?= $this->endSection() ?>

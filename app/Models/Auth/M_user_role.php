@@ -39,4 +39,20 @@ class M_user_role extends Model
         saveQueries($saveQueries, 'user_role', 0, 'EDIT ROLE ' . $group_code);
         return $save;
     }
+
+    public function hasRole($group_code, $module_name, $role_name)
+    {
+        $wheres = [
+            'group_code'    => $group_code,
+            'module_name'   => $module_name,
+            'role_name'     => $role_name
+        ];
+        $getRole = $this->db->table($this->table)->where($wheres)->get()->getRowArray();
+
+        if ($getRole == NULL) {
+            return 0;
+        } else {
+            return intval($getRole['role_value']);
+        }
+    }
 }

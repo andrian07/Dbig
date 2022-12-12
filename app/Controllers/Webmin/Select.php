@@ -4,7 +4,7 @@
 namespace App\Controllers\Webmin;
 
 use App\Controllers\Base\WebminController;
-
+use DateTime;
 
 class Select extends WebminController
 {
@@ -57,6 +57,34 @@ class Select extends WebminController
             $result = [];
             $result['id']   = esc($row['group_code']);
             $result['text'] = esc($row['group_name']);
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
+    public function userAccount()
+    {
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('user_account');
+
+        $select2->db->select('user_id,user_code,user_name,user_realname');
+        $select2->db->where('deleted', 'N');
+
+        $select2->searchFields  = ['user_name', 'user_realname'];
+        $select2->orderBy       = 'user_name';
+        $select2->orderDir      = 'ASC';
+
+        $store_id = $this->request->getGet('store_id');
+        if ($store_id != NULL) {
+            $list_store_id = explode(',', $store_id);
+            $select2->db->whereIn('store_id', $list_store_id);
+        }
+
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = esc($row['user_id']);
+            $result['text'] = $row['user_name'] . ' - ' . $row['user_realname'];
             return $result;
         });
 
@@ -325,6 +353,57 @@ class Select extends WebminController
             $result = [];
             $result['id']   = $row['supplier_id'];
             $result['text'] = $row['supplier_code'] . ' - ' . $row['supplier_name'];
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
+
+
+    public function customer()
+    {
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('ms_customer');
+
+        $select2->db->select('customer_id,customer_code,customer_name,customer_group,customer_address,customer_phone,customer_point,exp_date,active');
+        $select2->db->where('deleted', 'N');
+
+        if ($this->request->getGet('customer_group') != NULL) {
+            $customer_group = $this->request->getGet('customer_group');
+            $filter_group = explode(',', $customer_group);
+            $select2->db->whereIn('customer_group', $filter_group);
+        }
+
+        $select2->searchFields  = ['customer_name', 'customer_phone'];
+        $select2->orderBy       = 'customer_name';
+        $select2->orderDir      = 'ASC';
+
+        $config_label_group = $this->appConfig->get('default', 'label_customer_group');
+        $select2->renderResult(function ($row, $i) use ($config_label_group) {
+            $result = [];
+            $result['id']                   = $row['customer_id'];
+            $result['text']                 = $row['customer_name'] . ' (' . $row['customer_phone'] . ')';
+            $result['customer_id']          = $row['customer_id'];
+            $result['customer_code']        = $row['customer_code'];
+            $result['customer_name']        = $row['customer_name'];
+            $result['customer_group']       = $row['customer_group'];
+            $result['customer_group_label'] = isset($config_label_group[$row['customer_group']]) ? $config_label_group[$row['customer_group']] : 'NO_CONFIG';
+            $result['customer_address']     = $row['customer_address'];
+            $result['customer_phone']       = $row['customer_phone'];
+            $result['customer_point']       = $row['customer_point'];
+            $result['exp_date']             = indo_short_date($row['exp_date'], FALSE);
+
+            $cur_date   = new DateTime(date('Y-m-d'));
+            $exp_date   = new DateTime($row['exp_date']);
+
+            if ($exp_date < $cur_date) {
+                $result['exp_status']       = 'Y';
+            } else {
+                $result['exp_status']       = 'N';
+            }
+            $result['active']               = $row['active'];
+
             return $result;
         });
 
