@@ -15,7 +15,11 @@
         "laminas/laminas-escaper": "^2.9",
         "phpoffice/phpspreadsheet": "^1.25",
         "picqer/php-barcode-generator": "^2.2",
-        "psr/log": "^1.1"
+        "psr/log": "^1.1",
+		"ext-sodium": "*",
+		"firebase/php-jwt": "^5.2",
+		"grpc/grpc": "v1.35.0",
+		"google/protobuf": "^v3.14.0"
     },
     "require-dev": {
         "codeigniter/coding-standard": "^1.1",
@@ -55,7 +59,9 @@
     },
     "autoload": {
         "psr-4": {
-            "CodeIgniter\\": "system/"
+            "CodeIgniter\\": "system/",
+			"Fingerprint\\": "app/ThirdParty/grpc-fingerprint-engine/src/php/Fingerprint/",
+			"GPBMetadata\\": "app/ThirdParty/grpc-fingerprint-engine/src/php/GPBMetadata/"
         },
         "exclude-from-classmap": [
             "**/Database/Migrations/**"

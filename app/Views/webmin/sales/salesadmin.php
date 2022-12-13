@@ -31,6 +31,7 @@ $assetsUrl = base_url('assets');
 
 
 
+
     <!-- Main content -->
 
     <section class="content">
@@ -927,7 +928,43 @@ $assetsUrl = base_url('assets');
         });
         // Table //
 
-
+        let tblpurchaseorders = $("#tblpurchaseorders").DataTable({
+            processing: true,
+            select: true,
+            serverSide: true,
+            responsive: true,
+            fixedColumns: true,
+            order: [
+            [1, 'asc']
+            ],
+            language: {
+                url: lang_datatables,
+            },
+            ajax: {
+                url: base_url + '/webmin/sales-admin/tblsalesadmin',
+                type: "POST",
+                error: function() {
+                    notification.danger('Gagal memuat table, harap coba lagi');
+                },
+            },
+            drawCallback: function(settings) {
+                _initTooltip();
+                _initButton();
+            },
+            columnDefs: [{
+                width: 100
+            },
+            {
+                targets: [0, 3, 5],
+                orderable: false,
+                searchable: false,
+            },
+            {
+                targets: [0],
+                className: "text-right",
+            },
+            ],
+        });
 
         //End Table //
 

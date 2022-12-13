@@ -34,7 +34,7 @@ class UserAccount extends WebminController
         if ($this->role->hasRole('user_account.view')) {
             helper('datatable');
             $table = new \App\Libraries\Datatables('user_account');
-            $table->db->select('user_account.user_id,user_account.user_code,user_account.user_name,user_account.user_realname,ms_store.store_name,user_group.group_name,user_account.active');
+            $table->db->select('user_account.user_id,user_account.user_code,user_account.user_name,user_account.user_realname,ms_store.store_name,user_group.group_name,user_account.active,user_account.user_index_fingerprint');
             $table->db->join('ms_store', 'ms_store.store_id=user_account.store_id');
             $table->db->join('user_group', 'user_group.group_code=user_account.user_group');
 
@@ -52,9 +52,16 @@ class UserAccount extends WebminController
                 $column[] = esc($row['group_name']);
                 $column[] = $row['active'] == 'Y' ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-danger">Tidak Aktif</span>';
 
+                $has_fingerprint = $row['user_index_fingerprint'] == '' ? FALSE : TRUE;
+
                 $btns = [];
                 $prop =  'data-id="' . $row['user_code'] . '" data-name="' . esc($row['user_name']) . '" data-realname="' . esc($row['user_realname']) . '"';
-                $btns[] = '<button ' . $prop . ' class="btn btn-sm btn-default btnaddfingerprint mb-2" data-toggle="tooltip" data-placement="top" data-title="Tambah Fingerprint"><i class="fas fa-fingerprint"></i></button>&nbsp';
+                if ($has_fingerprint) {
+                    $btns[] = '<button ' . $prop . ' class="btn btn-sm btn-warning btnaddfingerprint mb-2" data-toggle="tooltip" data-placement="top" data-title="Ubah Fingerprint"><i class="fas fa-fingerprint"></i></button>&nbsp';
+                } else {
+                    $btns[] = '<button ' . $prop . ' class="btn btn-sm btn-default btnaddfingerprint mb-2" data-toggle="tooltip" data-placement="top" data-title="Tambah Fingerprint"><i class="fas fa-fingerprint"></i></button>&nbsp';
+                }
+
                 $btns[] = '<button ' . $prop . ' class="btn btn-sm btn-default btnresetpassword mb-2" data-toggle="tooltip" data-placement="top" data-title="Reset Kata Sandi"><i class="fas fa-key"></i></button><br>';
                 $btns[] = button_edit($prop) . '&nbsp;';
                 $btns[] = button_delete($prop);
@@ -227,6 +234,90 @@ class UserAccount extends WebminController
         }
         resultJSON($result);
     }
+
+    public function addFingerPrint($user_id)
+    {
+        $this->validationRequest(TRUE);
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        if ($this->role->hasRole('user_account.add_fingerprint')) {
+            $fingerdata = $this->request->getPost('fingerdata');
+
+            if ($user_id != '' && $fingerdata != NULL) {
+                $user_data = json_decode($fingerdata, true);
+                helper('fingerprint');
+                $index_finger   = isset($user_data['index_finger']) ? $user_data['index_finger'] : [];
+                $middle_finger  = isset($user_data['middle_finger']) ? $user_data['middle_finger'] : [];
+
+                $pre_reg_fmd_array = [
+                    "index_finger"  => $index_finger,
+                    "middle_finger" => $middle_finger
+                ];
+
+
+                $list_fingerprints = [];
+                $getData = $this->M_user_account->getUserHasFingerPrint()->getResultArray();
+                foreach ($getData as $row) {
+                    $list_fingerprints[] = [
+                        'indexfinger'   => $row['user_index_fingerprint'],
+                        'middlefinger'  => $row['user_middle_fingerprint']
+                    ];
+                }
+
+                $isDuplicate = FALSE;
+
+                if (count($list_fingerprints) > 0) {
+                    $json_response = is_duplicate_fingerprint($index_finger[0],  $list_fingerprints);
+                    $response = json_decode($json_response);
+                    if ($response) {
+                        $isDuplicate = TRUE;
+                    }
+                }
+
+                if (count($list_fingerprints) > 0) {
+                    $json_response = is_duplicate_fingerprint($middle_finger[0],  $list_fingerprints);
+                    $response = json_decode($json_response);
+                    if ($response) {
+                        $isDuplicate = TRUE;
+                    }
+                }
+
+
+                if ($isDuplicate) {
+                    $result = ['success' => FALSE, 'message' => 'Sidik jari sudah terdaftar'];
+                } else {
+                    $json_response = enroll_fingerprint($pre_reg_fmd_array);
+                    $response = json_decode($json_response);
+                    if ($response !== "enrollment failed") {
+                        $enrolled_index_finger_fmd_string = $response->enrolled_index_finger;
+                        $enrolled_middle_finger_fmd_string = $response->enrolled_middle_finger;
+
+                        $update = $this->M_user_account->updateFingerPrint($user_id, $enrolled_index_finger_fmd_string, $enrolled_middle_finger_fmd_string);
+                        if ($update) {
+                            $result = ['success' => TRUE, 'message' => 'Sidik jari pengguna berhasil didaftarkan'];
+                        } else {
+                            $result = ['success' => FALSE, 'message' => 'Sidik jari pengguna gagal didaftarkan'];
+                        }
+                    } else {
+                        $result = ['success' => FALSE, 'message' => 'Terjadi kesalahan dalam mendaftarkan sidik jari pengguna'];
+                    }
+                }
+            }
+        } else {
+            $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk mendaftarkan sidik jari pengguna'];
+        }
+        resultJSON($result);
+    }
+
+    public function testFingerPrint()
+    {
+        $data = [
+            'title'         => 'Test Fingerprint',
+        ];
+
+        return $this->renderView('auth/test_fingerprint', $data, 'user_account.view');
+    }
+
+
 
     //--------------------------------------------------------------------
 

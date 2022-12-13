@@ -86,8 +86,6 @@ $routes->group('devman', static function ($routes) {
 
     $routes->get('auth/logout', 'Devman::logout');
 
-
-
     $routes->get('log-queries', 'Devman::logQueries', ['filter' => 'devauth']);
 
     $routes->post('log-queries-table', 'Devman::getLogQueries', ['filter' => 'devauth']);
@@ -216,6 +214,7 @@ $routes->group('webmin/mapping-area', ['filter' => 'webminauth'], static functio
 
 
 
+
 $routes->group('webmin/password-control', ['filter' => 'webminauth'], static function ($routes) {
 
     $routes->get('/', 'Webmin\PasswordControl::index');
@@ -238,9 +237,25 @@ $routes->group('webmin/password-control', ['filter' => 'webminauth'], static fun
 
 
 
+$routes->group('webmin/point-reward', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\PointReward::index');
+    $routes->post('table', 'Webmin\PointReward::table');
+    $routes->get('getbyid/(:num)', 'Webmin\PointReward::getById/$1');
+    $routes->post('save/(:alpha)', 'Webmin\PointReward::save/$1');
+    $routes->get('delete/(:num)', 'Webmin\PointReward::delete/$1');
+});
 
-
-
+$routes->group('webmin/point-exchange', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\PointExchange::index');
+    $routes->post('table', 'Webmin\PointReward::table');
+    $routes->get('search-reward', 'Webmin\PointExchange::searchReward');
+    $routes->post('exchange', 'Webmin\PointExchange::exchange');
+    $routes->post('table-exchange', 'Webmin\PointExchange::tableExchange');
+    $routes->post('table-history', 'Webmin\PointExchange::tableHistory');
+    $routes->get('cancel-exchange/(:num)', 'Webmin\PointExchange::cancelExchange/$1');
+    $routes->get('success-exchange/(:num)', 'Webmin\PointExchange::successExchange/$1');
+    $routes->get('detail/(:num)', 'Webmin\PointExchange::detail/$1');
+});
 
 $routes->group('webmin/supplier', ['filter' => 'webminauth'], static function ($routes) {
 
@@ -260,6 +275,23 @@ $routes->group('webmin/supplier', ['filter' => 'webminauth'], static function ($
 
 });
 
+
+$routes->group('webmin/salesman', ['filter' => 'webminauth'], static function ($routes) {
+
+    $routes->get('/', 'Webmin\Salesman::index');
+
+    $routes->post('table', 'Webmin\Supplier::table');
+
+    $routes->get('getbyid/(:num)', 'Webmin\Supplier::getById/$1');
+
+    $routes->get('getbycode', 'Webmin\Supplier::getByCode');
+
+    $routes->get('getbyname', 'Webmin\Supplier::getByName');
+
+    $routes->post('save/(:alpha)', 'Webmin\Supplier::save/$1');
+
+    $routes->get('delete/(:num)', 'Webmin\Supplier::delete/$1');
+});
 
 
 $routes->group('webmin/customer', ['filter' => 'webminauth'], static function ($routes) {
@@ -481,6 +513,10 @@ $routes->group('webmin/submission', ['filter' => 'webminauth'], static function 
     $routes->get('cancel-order/(:alphanum)', 'Webmin\Submission::cancelOrder/$1');
 
     $routes->post('temp-add', 'Webmin\Purchase_order::tempadd');
+    $routes->post('save/(:alpha)', 'Webmin\submission::save/$1');
+    $routes->get('get-submission-detail/(:alphanum)', 'Webmin\submission::getSubmissionDetail/$1');
+    //$routes->get('get-submission-edit/(:alphanum)', 'Webmin\submission::getSubmissionEdit/$1');
+    $routes->get('edit-order/(:alphanum)', 'Webmin\submission::editOrder/$1');
 });
 
 
@@ -545,9 +581,7 @@ $routes->group('webmin/consignment', ['filter' => 'webminauth'], static function
 
     $routes->get('copy-purchase-order-consignment/(:alphanum)', 'Webmin\Consignment\Consignment::copyPurchaseOrderConsignment/$1');
 
-
 });
-
 /* end pembelian */
 
 
@@ -558,7 +592,9 @@ $routes->group('webmin/consignment', ['filter' => 'webminauth'], static function
 
 $routes->group('webmin/sales-admin', ['filter' => 'webminauth'], static function ($routes) {
 
-    $routes->get('/', 'Webmin\Sales_admin::index');
+    //$routes->get('/', 'Webmin\Sales_admin::index');
+
+    //$routes->post('tblsalesadmin', 'Webmin\Sales_admin::tblsalesadmin');
 
     $routes->get('printinvoice', 'Webmin\Sales_admin::printinvoice');
 
@@ -714,6 +750,7 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
 
     $routes->get('user-group', 'Webmin\Select::userGroup');
 
+
     $routes->get('user-account', 'Webmin\Select::userAccount');
 
     $routes->get('unit', 'Webmin\Select::unit');
@@ -723,6 +760,7 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
     $routes->get('brand', 'Webmin\Select::brand');
 
     $routes->get('supplier', 'Webmin\Select::supplier');
+    $routes->get('customer', 'Webmin\Select::customer');
 
     $routes->get('pc/provinces', 'Webmin\Select::pcProvinces');
 
@@ -832,6 +870,7 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
 
 
 
+
     $routes->get('point-reward', 'Webmin\EricDemo::pointReward');
 
     $routes->get('exchange-point', 'Webmin\EricDemo::exchangePoint');
@@ -841,11 +880,18 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('exchange-point/detail', 'Webmin\EricDemo::exchangePointDetail');
 
 
-
     //$routes->get('password-control', 'Webmin\EricDemo::passwordControl');
 
     //$routes->get('password-control/logs', 'Webmin\EricDemo::passwordControlLogs');
 
+
+    // $routes->get('point-reward', 'Webmin\EricDemo::pointReward');
+    // $routes->get('exchange-point', 'Webmin\EricDemo::exchangePoint');
+    // $routes->get('exchange-point/v2', 'Webmin\EricDemo::exchangePointV2');
+    // $routes->get('exchange-point/detail', 'Webmin\EricDemo::exchangePointDetail');
+
+    //$routes->get('password-control', 'Webmin\EricDemo::passwordControl');
+    //$routes->get('password-control/logs', 'Webmin\EricDemo::passwordControlLogs');
     //$routes->get('voucher', 'Webmin\EricDemo::voucher');
 
 
