@@ -148,16 +148,29 @@ class MyApp extends BaseConfig
                 'view'          => ['text' => 'Lihat'],
                 'add'           => ['text' => 'Tambah'],
                 'edit'          => ['text' => 'Ubah'],
+                'delete'        => ['text' => 'Hapus'],
+                'print'         => ['text' => 'Cetak'],
                 'cancel_order'  => ['text' => 'Pembatalan Pesanan'],
             ]
         ],
 
         'purchase_order_consignment' => [
-            'text'   => 'Pesanan Pembelian Konsinyasi',
+            'text'   => 'Input Pemesanan Konsinyasi',
             'roles'   => [
                 'view'          => ['text' => 'Lihat'],
                 'add'           => ['text' => 'Tambah'],
                 'edit'          => ['text' => 'Ubah'],
+                'cancel_order'  => ['text' => 'Pembatalan Pesanan'],
+            ]
+        ],
+
+        'input_consignment' => [
+            'text'   => 'Input Pembelian Konsinyasi',
+            'roles'   => [
+                'view'          => ['text' => 'Lihat'],
+                'add'           => ['text' => 'Tambah'],
+                'edit'          => ['text' => 'Ubah'],
+                'delete'        => ['text' => 'Hapus'],
                 'cancel_order'  => ['text' => 'Pembatalan Pesanan'],
             ]
         ],
@@ -167,7 +180,7 @@ class MyApp extends BaseConfig
             'roles'   => [
                 'view'      => ['text' => 'Lihat'],
                 'add'       => ['text' => 'Tambah'],
-                'repayment' => ['text' => 'Pelunasan Hutang'],
+                'repayment' => ['text' => 'Pelunasan Hutang']
             ]
         ],
 

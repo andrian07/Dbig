@@ -86,7 +86,7 @@ $assetsUrl = base_url('assets');
 
                 <div class="col-sm-4 invoice-col">
 
-                    <b>PO-<?= esc($hdsubmission['submission_inv']) ?></b><br>
+                    <b><?= esc($hdsubmission['submission_inv']) ?></b><br>
 
                 </div>
 
@@ -122,8 +122,6 @@ $assetsUrl = base_url('assets');
 
                                 <th class="text-right">Keterangan</th>
 
-                                <th class="text-right">Proses</th>
-
                             </tr>
 
                         </thead>
@@ -136,47 +134,19 @@ $assetsUrl = base_url('assets');
 
                                 $detail_submission_order_qty = floatval($row['detail_submission_order_qty']);
 
-                                 $status = '';
-
-                                 switch ($row['detail_submission_approval']) {
-
-                                    case 'Pending':
-
-                                    $status = '<span class="badge badge-primary">Pending</span>';
-
-                                    break;
-
-                                    case 'Approve':
-
-                                    $status = '<span class="badge badge-success">Diterima</span>';
-
-                                    break;
-
-                                    case 'Decline':
-
-                                    $status = '<span class="badge badge-danger">Ditolak</span>';
-
-                                    break;
-
-                                    default:
-
-                                    $status = '';
-                                }
                             ?>
 
                             <tr>
 
                                 <td><?= esc($row['product_code']) ?></td>
 
-                                <td><?= esc($row['product_name']) ?></td>
+                                <td><?= esc($row['detail_submission_product_name']) ?></td>
 
                                 <td class="text-right">Rp <?= numberFormat($detail_submission_order_qty, TRUE) ?></td>
 
                                 <td class="text-right"><?= esc($row['detail_submission_status']) ?></td>
 
                                 <td class="text-right"><?= esc($row['detail_submission_desc']) ?></td>
-
-                                <td class="text-right"><?= $status ?></td>
 
                             </tr>
 
@@ -261,7 +231,7 @@ $assetsUrl = base_url('assets');
                             </tr>
 
 
-                            <?php /* foreach ($logupdate as $log) : ?>
+                            <?php foreach ($logupdate as $log) : ?>
 
                                 <tr>
 
@@ -273,7 +243,7 @@ $assetsUrl = base_url('assets');
 
                                 </tr>
 
-                            <?php endforeach; */ ?>
+                            <?php endforeach;  ?>
 
 
 

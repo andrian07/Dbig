@@ -60,18 +60,20 @@ $assetsUrl = base_url('assets');
                                 <thead>
 
                                     <tr>
-                                        
+
                                         <th data-priority="1">#</th>
 
-                                        <th data-priority="2">Tanggal Pengajuan</th>
+                                        <th data-priority="2">No Invoice Pengajuan</th>
 
-                                        <th data-priority="3">Diajukan</th>
+                                        <th data-priority="3">Tanggal Pengajuan</th>
 
-                                        <th data-priority="4">Keterangan</th>
+                                        <th data-priority="4">Diajukan</th>
 
-                                        <th data-priority="4">Status</th>
+                                        <th data-priority="5">Keterangan</th>
 
-                                        <th data-priority="5">Aksi</th>
+                                        <th data-priority="6">Status</th>
+
+                                        <th data-priority="7">Aksi</th>
 
                                     </tr>
 
@@ -144,55 +146,74 @@ $assetsUrl = base_url('assets');
 
                         <div class="card-body">
 
-                            <form id="frmsubmission">
+                            <form id="frmsubmission" class="form-horizontal form-space">
 
-                                <div class="row">
+                                <div class="form-group row">
 
-                                    <div class="col-sm-2">
-
-                                        <!-- text input -->
-
-                                        <div class="form-group">
-
-                                            <label>Tanggal Transaksi</label>
-
-                                            <input id="submission_order_date" name="submission_order_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>" readonly>
-
-                                        </div>
-
-                                    </div>
+                                    <label for="tanggal" class="col-sm-1 col-form-label text-right">No Invoice:</label>
 
                                     <div class="col-sm-3">
 
-                                        <!-- text input -->
+                                        <input type="hidden" id="submission_id" name="submission_id" value="0">
 
-                                        <div class="form-group">
-
-                                            <label>No Referensi Pengajuan</label>
-
-                                            <input type="hidden" id="submission_id" name="submission_id" value="0">
-
-                                            <input id="submission_order_invoice" name="submission_order_invoice" type="text" class="form-control" value="AUTO" readonly>
-
-                                        </div>
+                                        <input id="submission_order_invoice" name="submission_order_invoice" type="text" class="form-control" value="AUTO" readonly>
 
                                     </div>
 
+                                    <div class="col-sm-4">
+                    
+                                    </div>
+
+                                    <label for="noinvoice" class="col-sm-1 col-form-label text-right">Tanggal:</label>
 
                                     <div class="col-sm-3">
 
-                                        <!-- text input -->
+                                        <input id="submission_order_date" name="submission_order_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>" readonly>
 
-                                        <div class="form-group">
+                                    </div>
+                                    
+                                </div>
 
-                                            <label>Diajukan Oleh:</label>
 
-                                            <input id="display_user" type="text" class="form-control" value="<?= $user['user_realname'] ?>" readonly>
 
-                                        </div>
+
+                                <div class="form-group row">
+
+                                    <label for="tanggal" class="col-sm-1 col-form-label text-right">Supplier:</label>
+
+                                    <div class="col-sm-3">
+
+                                        <select id="supplier_id" name="supplier_id" class="form-control"></select>
 
                                     </div>
 
+                                    <div class="col-sm-4">
+                    
+                                    </div>
+
+                                    <label for="warehouse" class="col-sm-1 col-form-label text-right">Gudang:</label>
+
+                                    <div class="col-sm-3">
+
+                                        <select id="warehouse" type="text" class="form-control"></select>
+
+                                    </div>
+                                    
+                                </div>
+
+
+                                <div class="form-group row">
+
+                                    <div class="col-sm-8"></div>
+
+                                    <label for="noinvoice" class="col-sm-1 col-form-label text-right">User:</label>
+
+                                    <div class="col-sm-3">
+
+                                        <input id="display_user" type="text" class="form-control" value="<?= $user['user_realname'] ?>" readonly>
+
+                                    </div>
+                                    
                                 </div>
 
                             </form>
@@ -245,7 +266,7 @@ $assetsUrl = base_url('assets');
 
                                             <label>Status</label>
 
-                                            <select id="temp_status" name="temp_status" class="form-control"> 
+                                            <select id="temp_status" name="temp_status" class="form-control" data-parsley-vtempstatus required> 
                                                 <option></option>
                                                 <option value="Urgent">Urgent</option>
                                                 <option value="New">New</option>
@@ -348,9 +369,7 @@ $assetsUrl = base_url('assets');
 
                                                 <th data-priority="6">Keterangan</th>
 
-                                                <th data-priority="7">Progress</th>
-
-                                                <th data-priority="8">Aksi</th>
+                                                <th data-priority="7">Aksi</th>
 
                                             </tr>
 
@@ -364,51 +383,49 @@ $assetsUrl = base_url('assets');
 
                                     <template id="template_row_temp">
 
-                                       <tr>
+                                     <tr>
 
-                                           <td>{row}</td>
+                                         <td>{row}</td>
 
-                                           <td>{product_code}</td>
+                                         <td>{product_code}</td>
 
-                                           <td>{product_name}</td>
+                                         <td>{product_name}</td>
 
-                                           <td>{temp_qty}</td>
+                                         <td>{temp_qty}</td>
 
-                                           <td>{temp_status}</td>
+                                         <td>{temp_status}</td>
 
-                                           <td>{temp_desc}</td>
+                                         <td>{temp_desc}</td>
 
-                                           <td>{temp_approval}</td>
+                                         <td>
 
-                                           <td>
+                                             <button data-id="{temp_submission_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
-                                               <button data-id="{temp_submission_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                                 <i class="fas fa-edit"></i>
 
-                                                   <i class="fas fa-edit"></i>
+                                             </button>
 
-                                               </button>
+                                             &nbsp;
 
-                                               &nbsp;
+                                             <button data-id="{temp_submission_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
 
-                                               <button data-id="{temp_submission_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+                                                 <i class="fas fa-minus"></i>
 
-                                                   <i class="fas fa-minus"></i>
+                                             </button>
 
-                                               </button>
+                                         </td>
 
-                                           </td>
+                                     </tr>
 
-                                       </tr>
+                                 </template>
 
-                                   </template>
+                             </div>
 
-                               </div>
-
-                           </div>
+                         </div>
 
 
 
-                           <div class="row">
+                         <div class="row">
 
                             <div class="col-lg-6 col-md-6 col-sm-12">
 
@@ -476,11 +493,11 @@ $assetsUrl = base_url('assets');
 
     $(document).ready(function() {
 
-       let temp_qty = new AutoNumeric('#temp_qty', configQty);
-       $('#product_name2_form').hide();
+     let temp_qty = new AutoNumeric('#temp_qty', configQty);
+     $('#product_name2_form').hide();
 
 
-       function showInputPage(x) {
+     function showInputPage(x) {
 
         if (x) {
 
@@ -501,10 +518,10 @@ $assetsUrl = base_url('assets');
        // init component //
 
        function _initButton() {
-         $('#btnadd').prop('disabled', !hasRole('submission.add'));
-         $('.btnedit').prop('disabled', !hasRole('submission.edit'));
-         $('.btndelete').prop('disabled', !hasRole('submission.delete'));
-     }
+           $('#btnadd').prop('disabled', !hasRole('submission.add'));
+           $('.btnedit').prop('disabled', !hasRole('submission.edit'));
+           $('.btndelete').prop('disabled', !hasRole('submission.delete'));
+       }
 
         // select2 //
 
@@ -535,7 +552,7 @@ $assetsUrl = base_url('assets');
                 width: 100
             },
             {
-                targets: [0, 3, 5],
+                targets: [0, 6],
                 orderable: false,
                 searchable: false,
             },
@@ -549,87 +566,123 @@ $assetsUrl = base_url('assets');
 
         $('#btnadd').click(function(e) {
 
-           e.preventDefault();
+         e.preventDefault();
 
-           let actUrl = base_url + '/webmin/submission/get-submission-temp';
+         let actUrl = base_url + '/webmin/submission/get-submission-temp';
 
-           ajax_get(actUrl, null, {
+         ajax_get(actUrl, null, {
 
-               success: function(response) {
+             success: function(response) {
 
                 if (response.result.success == 'TRUE') {
 
-                   let form = $('#frmaddtemp');
+                 let form = $('#frmaddtemp');
 
-                   let items = response.result.data;
+                 let items = response.result.data;
 
-                   $('#title-frmsubmisiion').html('Tambah Pengajuan Pesanan');
+                 $('#title-frmsubmisiion').html('Tambah Pengajuan Pesanan');
 
-                   formMode = 'add';
+                 setSelect2('#supplier_id', "", "");
+                 setSelect2('#warehouse', "", "");
 
-                   loadTempData(items);
+                 $('#supplier_id').prop("disabled", false);
 
-                   clearItemInput();
+                 formMode = 'add';
 
-                   showInputPage(true);
+                 loadTempData(items);
+                 console.log(items);
+                 if(items.length > 0){
+                    let supplier_ids = items[0].temp_submission_supplier_id;
+                    let supplier_names = items[0].temp_submission_supplier_name;
+                    setSelect2('#supplier_id', supplier_ids, supplier_names);
+                    $('#supplier_id').prop("disabled", true);
+                }
 
-               } else {
+                clearItemInput();
 
-                   message.error(response.result.message);
+                showInputPage(true);
 
-               }
+            } else {
 
-           }
+             message.error(response.result.message);
+
+         }
+
+     }
+
+ })
+
+     })
+
+
+
+
+        $('#product_name').autocomplete({   
+
+         minLength: 2,
+
+         source: function(req, add) {
+
+             $.ajax({
+
+                 url: base_url + '/webmin/purchase-order/search-product-bysuplier?sup='+$('#supplier_id').val(),
+
+                 dataType: 'json',
+
+                 type: 'GET',
+
+                 data: req,
+
+                 success: function(res) {
+
+                     if (res.success == true) {
+
+                        add(res.data);
+
+                    }else{
+
+                       message.error(res.message);
+
+                       $('#product_name').val('');
+
+                   }
+
+               },
+
+           });
+
+         },
+
+         select: function(event, ui) {
+
+            $('#item_id').val(ui.item.item_id);
+
+        },
+
+    });
+
+
+
+        $('#btncancel').click(function(e) {
+
+            e.preventDefault();
+
+            message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
+
+                let yes = parseMessageResult(answer);
+
+                if (yes) {
+
+                    showInputPage(false);
+
+                }
+
+            })
 
         })
-
-       })
-
-
-
-
-        $('#product_name').autocomplete({
-
-           minLength: 2,
-
-           source: function(req, add) {
-
-               $.ajax({
-
-                   url: base_url + '/webmin/submission/search-product',
-
-                   dataType: 'json',
-
-                   type: 'GET',
-
-                   data: req,
-
-                   success: function(res) {
-
-                       if (res.success == true) {
-
-                           add(res.data);
-
-                       }
-
-                   },
-
-               });
-
-           },
-
-           select: function(event, ui) {
-
-               $('#item_id').val(ui.item.item_id);
-
-           },
-
-       });
-
-
         
 
-          $("#tblhdsubmission").on('click', '.btnedit', function(e) {
+        $("#tblhdsubmission").on('click', '.btnedit', function(e) {
 
             e.preventDefault();
 
@@ -653,6 +706,7 @@ $assetsUrl = base_url('assets');
 
                             let header = response.result.header;
 
+
                             if (header.submission_status == 'Pending') {
 
                                 $('#title-frmsubmission').html('Ubah Pengajuan Pesanan');
@@ -660,6 +714,16 @@ $assetsUrl = base_url('assets');
                                 formMode = 'edit';
 
                                 $('#submission_id ').val(header.submission_id );
+
+                                setSelect2("#supplier_id", header.submission_supplier_id, header.supplier_name);
+
+                                $('#supplier_id').prop('disabled', true);
+
+                                let warehouse_name = header.warehouse_name;
+
+                                setSelect2("#warehouse", header.submission_store_id, warehouse_name);
+
+                                $('#warehouse').prop('disabled', true);
 
                                 //$('#submission_order_invoice').val('PJ-' + header.submission_inv);
 
@@ -697,160 +761,355 @@ $assetsUrl = base_url('assets');
         })
 
 
+        $("#tblhdsubmission").on('click', '.btndelete', function(e) {
+
+            e.preventDefault();
+
+            let id = $(this).attr('data-id');
+
+            message.question('Yakin ingin membatalkan pengajuan ini?').then(function(answer) {
+
+                let yes = parseMessageResult(answer);
+
+                if (yes) {
+
+                    let actUrl = base_url + '/webmin/submission/cancel-order/' + id;
+
+                    ajax_get(actUrl, null, {
+
+                        success: function(response) {
+
+                            if (response.success) {
+
+                                if (response.result.success) {
+
+                                    notification.success(response.result.message);
+
+
+
+                                } else {
+
+                                    message.error(response.result.message);
+
+                                }
+
+                                updateTableHeader();
+
+                            }
+
+                        }
+
+                    })
+
+                }
+
+            })
+
+        })
+
+
+        $("#warehouse").select2({
+            placeholder: '-- Pilih Gudang --',
+            width: "100%",
+            allowClear: true,
+            ajax: {
+                url: base_url + "/webmin/select/warehouse",
+                dataType: "json",
+                type: "GET",
+                delay: select2Delay,
+                data: function(params) {
+                    return {
+                        search: params.term,
+                    };
+                },
+                processResults: function(data, page) {
+                    return {
+                        results: data,
+                    };
+                },
+            },
+        });
+
+        $("#supplier_id").select2({
+            placeholder: '-- Pilih Supplier --',
+            width: "100%",
+            allowClear: true,
+            ajax: {
+                url: base_url + "/webmin/select/supplier",
+                dataType: "json",
+                type: "GET",
+                delay: select2Delay,
+                data: function(params) {
+                    return {
+                        search: params.term,
+                    };
+                },
+                processResults: function(data, page) {
+                    return {
+                        results: data,
+                    };
+                },
+            },
+        });
+
 
         $('#btnadd_temp').click(function(e) {
 
-           e.preventDefault();
+         e.preventDefault();
 
-           let qty = parseFloat(temp_qty.getNumericString());
+         let qty = parseFloat(temp_qty.getNumericString());
 
-           let btnSubmit = $('#btnadd_temp');
+         let btnSubmit = $('#btnadd_temp');
 
-           let form = $('#frmaddtemp');
+         let form = $('#frmaddtemp');
 
-           form.parsley().validate();
+         let supplier_name = $( "#supplier_id option:selected" ).text();
 
-           if (form.parsley().isValid()) {
+         form.parsley().validate();
 
-               let actUrl = base_url + '/webmin/submission/temp-add';
+         if (form.parsley().isValid()) {
 
-               let formValues = {
-                   item_id: $('#item_id').val(),
-                   temp_id: $('#temp_id').val(),
-                   temp_status: $('#temp_status').val(),
-                   product_name: $('#product_name').val(),
-                   temp_qty: qty,
-                   temp_desc:$('#temp_desc').val()
-               };
+             let actUrl = base_url + '/webmin/submission/temp-add';
 
-               btnSubmit.prop('disabled', true);
+             let formValues = {
+                 item_id: $('#item_id').val(),
+                 temp_id: $('#temp_id').val(),
+                 temp_status: $('#temp_status').val(),
+                 product_name: $('#product_name').val(),
+                 temp_qty: qty,
+                 temp_desc:$('#temp_desc').val(),
+                 supplier_id:$('#supplier_id').val(),
+                 supplier_name:supplier_name,
+             };
 
-               ajax_post(actUrl, formValues, {
 
-                   success: function(response) {
+             btnSubmit.prop('disabled', true);
 
-                       if (response.success) {
+             ajax_post(actUrl, formValues, {
 
-                           if (response.result.success) {
+                 success: function(response) {
 
-                               clearItemInput();
+                     if (response.success) {
 
-                               $('#product_name').focus();
+                         if (response.result.success) {
 
-                               notification.success(response.result.message);
+                             $('#product_name').focus();
 
-                           } else {
+                             let supplier_id_selected = response.result.data[0].temp_submission_supplier_id;
 
-                               message.error(response.result.message);
+                             setSelect2('#supplier_id', supplier_id_selected, supplier_name);
 
-                           }
+                             $('#supplier_id').attr("disabled", true);
 
-                           clearItemInput();
+                             notification.success(response.result.message);
 
-                           loadTempData(response.result.data);
+                         } else {
 
-                       }
+                             message.error(response.result.message);
 
-                       btnSubmit.prop('disabled', false);
+                         }
 
-                   },
+                         clearItemInput();
 
-                   error: function(response) {
+                         loadTempData(response.result.data);
 
-                       btnSubmit.prop('disabled', false);
+                     }
 
-                   }
+                     btnSubmit.prop('disabled', false);
 
-               });
+                 },
 
-           }
+                 error: function(response) {
 
-       })
+                     btnSubmit.prop('disabled', false);
+
+                 }
+
+             });
+
+         }
+
+     })
+
+        Parsley.addMessages('id', {
+
+            vproductname: 'Harap pilih produk terlebih dahulu',
+
+            vprice: 'Harga beli wajib diatas Rp 0',
+
+            vqty: 'Qty wajib diatas Rp 0',
+
+            vtempstatus: 'Status wajib di pilih ',
+
+        });
+
+
+
+        Parsley.setLocale('id');
+
+
+
+        window.Parsley.addValidator("vproductname", {
+
+            validateString: function(value) {
+
+                if ($('#product_name').val() == '') {
+
+                    return false;
+
+                } else {
+
+                    return true;
+
+                }
+            },
+
+        });
+
+        window.Parsley.addValidator("vtempstatus", {
+
+            validateString: function(value) {
+
+                if ($('#temp_status').val() == '') {
+
+                    return false;
+
+                } else {
+
+                    return true;
+
+                }
+            },
+
+        });
+
+        window.Parsley.addValidator("vprice", {
+
+            validateString: function(value) {
+
+                let vprice = parseFloat(temp_price.getNumericString());
+
+                if (vprice <= 0) {
+
+                    return false;
+
+                } else {
+
+                    return true;
+
+                }
+
+            },
+
+        });
+
+
+
+        window.Parsley.addValidator("vqty", {
+
+            validateString: function(value) {
+
+                let vqty = parseFloat(temp_qty.getNumericString());
+
+                if (vqty <= 0) {
+
+                    return false;
+
+                } else {
+
+                    return true;
+
+                }
+            },
+
+        });
+
+
 
 
         function loadTempData(items) {
 
-           let template = $('#template_row_temp').html();
+         let template = $('#template_row_temp').html();
 
-           let tbody = '';
+         let tbody = '';
 
-           let row = 1;
+         let row = 1;
 
-           let temp_total_order = 0;
+         let temp_total_order = 0;
 
-           items.forEach((val, key) => {
+         items.forEach((val, key) => {
 
+             let item = template;
 
-               let item = template;
+             let data_json = htmlEntities.encode(JSON.stringify(val));
 
-               let data_json = htmlEntities.encode(JSON.stringify(val));
+             let temp_submission_id = val.temp_submission_id;
 
-               let temp_submission_id = val.temp_submission_id;
+             let item_id = val.item_id;
 
-               let product_id = val.product_id;
+             let product_code = val.item_code;
 
-               let product_code = val.product_code;
+             let product_name = val.temp_submission_product_name;
 
-               let product_name = val.temp_submission_product_name;
+             let temp_submission_order_qty = parseFloat(val.temp_submission_order_qty);
 
-               let temp_submission_order_qty = parseFloat(val.temp_submission_order_qty);
+             let temp_submission_status = val.temp_submission_status;
 
-               let temp_submission_status = val.temp_submission_status;
+             let temp_submission_desc = val.temp_submission_desc;
 
-               let temp_submission_desc = val.temp_submission_desc;
+             let temp_submission_approval = val.temp_submission_approval;
 
-               let temp_submission_approval = val.temp_submission_approval;
+             item = item.replaceAll('{row}', row)
 
+             .replaceAll('{product_code}', product_code)
 
-               item = item.replaceAll('{row}', row)
+             .replaceAll('{product_name}', product_name)
 
-               .replaceAll('{product_code}', val.product_code)
+             .replaceAll('{temp_qty}', numberFormat(temp_submission_order_qty, true))
 
-               .replaceAll('{product_name}', product_name)
+             .replaceAll('{temp_status}', temp_submission_status)
 
-               .replaceAll('{temp_qty}', numberFormat(temp_submission_order_qty, true))
+             .replaceAll('{temp_desc}', temp_submission_desc)
 
-               .replaceAll('{temp_status}', temp_submission_status)
+             .replaceAll('{temp_approval}', temp_submission_approval)
 
-               .replaceAll('{temp_desc}', temp_submission_desc)
+             .replaceAll('{item_id}', item_id)
 
-               .replaceAll('{temp_approval}', temp_submission_approval)
+             .replaceAll('{temp_submission_id}', temp_submission_id)
 
-               .replaceAll('{temp_submission_id}', temp_submission_id)
-
-               .replaceAll('{data_json}', data_json);
-
-
-
-               tbody += item;
-
-               row++;
-
-           });
-
-
-           if ($.fn.DataTable.isDataTable('#tbltemp')) {
-
-               $('#tbltemp').DataTable().destroy();
-
-           }
+             .replaceAll('{data_json}', data_json);
 
 
 
-           $('#tbltemp tbody').html('');
+             tbody += item;
 
-           $('#tbltemp tbody').html(tbody);
+             row++;
 
-           tbltemp = $('#tbltemp').DataTable(config_tbltemp);
-
-           clearItemInput();
-
-           _initTooltip();
-
-       }
+         });
 
 
-       $("#tbltemp").on('click', '.btndelete', function(e) {
+         if ($.fn.DataTable.isDataTable('#tbltemp')) {
+
+             $('#tbltemp').DataTable().destroy();
+
+         }
+
+
+
+         $('#tbltemp tbody').html('');
+
+         $('#tbltemp tbody').html(tbody);
+
+         tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+
+         clearItemInput();
+
+         _initTooltip();
+
+     }
+
+
+     $("#tbltemp").on('click', '.btndelete', function(e) {
 
         e.preventDefault();
 
@@ -890,46 +1149,48 @@ $assetsUrl = base_url('assets');
 
     })
 
-       $("#tbltemp").on('click', '.btnedit', function(e) {
+     $("#tbltemp").on('click', '.btnedit', function(e) {
 
-         e.preventDefault();
+       e.preventDefault();
 
-         let json_data = $(this).attr('data-json');
+       let json_data = $(this).attr('data-json');
 
-         let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
+       let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
 
-         if (is_json) {
+       if (is_json) {
 
-             $('#item_id').val(json.product_id);
+            console.log(json);
+            
+           $('#item_id').val(json.item_id);
 
-             $('#product_name').val(json.temp_submission_product_name);
+           $('#product_name').val(json.temp_submission_product_name);
 
-             temp_qty.set(json.temp_submission_order_qty);
+           temp_qty.set(json.temp_submission_order_qty);
 
-             $('#temp_desc').val(json.temp_submission_desc);
+           $('#temp_desc').val(json.temp_submission_desc);
 
-             $('#temp_id').val(json.temp_submission_id);
+           $('#temp_id').val(json.temp_submission_id);
 
-            let temp_submission_status = json.temp_submission_status;
+           let temp_submission_status = json.temp_submission_status;
 
-            document.getElementById("temp_status").value = temp_submission_status;
+           document.getElementById("temp_status").value = temp_submission_status;
 
             //setSelect2('#temp_status', temp_submission_status, temp_submission_status);
 
-             $('#temp_qty').focus();
+            $('#temp_qty').focus();
 
-         } else {
+        } else {
 
-             getTemp();
+           getTemp();
 
-             message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
+           message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
 
-         }
+       }
 
-     })  
+   })  
 
 
-       $('#btnsave').click(function(e) {
+     $('#btnsave').click(function(e) {
 
         e.preventDefault();
 
@@ -949,7 +1210,19 @@ $assetsUrl = base_url('assets');
 
         }
 
+        let warehouse = $('#warehouse').val();
+
+        if(warehouse == null){
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Silahkan Isi Gudang Terlebih Dahulu !'
+              })
+
+        }else{
+
         message.question(question).then(function(answer) {
+
 
             let yes = parseMessageResult(answer);
 
@@ -961,9 +1234,13 @@ $assetsUrl = base_url('assets');
 
                     submission_desc: $('#submisson_order_remark').val(),
 
+                    submission_supplier_id: $('#supplier_id').val(),
+
                     submission_id: $('#submission_id').val(),
 
-                    submission_inv: $('#submission_order_invoice').val()
+                    submission_inv: $('#submission_order_invoice').val(),
+
+                    submission_store_id: warehouse,
 
                 };
 
@@ -987,10 +1264,6 @@ $assetsUrl = base_url('assets');
 
                                 let invoice = response.result.purchase_order_id;
 
-                                //let invUrl = base_url + '/submission/invoice/' + invoice + '?print=Y';
-
-                                //window.open(invUrl, '_blank');
-
                             } else {
 
                                 message.error(response.result.message);
@@ -1001,7 +1274,9 @@ $assetsUrl = base_url('assets');
 
                         btnSubmit.prop('disabled', false);
 
-                        window.location.href = base_url + '/webmin/submission/';
+                        updateTableHeader();
+
+                        //window.location.href = base_url + '/webmin/submission/';
 
                     },
 
@@ -1019,97 +1294,105 @@ $assetsUrl = base_url('assets');
 
         })
 
+    }
+
     });
 
 
 
-       function updateTable() {
+     function updateTable() {
 
-           tbltemp.ajax.reload(null, false);
+         tbltemp.ajax.reload(null, false);
+
+     }
+
+     function updateTableHeader() {
+
+         tblhdsubmission.ajax.reload(null, false);
+
+     }
+
+     function clearItemInput() {
+
+         let form = $('#frmaddtemp');
+
+         form.parsley().reset();
+
+         $('#item_id').val('');
+
+         $('#product_name').val('');
+
+         $('#temp_status').val('');
+
+         temp_qty.set('0.00');
+
+         $('#temp_desc').val('');
+
+     }
+
+     const config_tbltemp = {
+
+       pageLength: 10,
+
+       autoWidth: false,
+
+       select: true,
+
+       responsive: true,
+
+       fixedColumns: true,
+
+       order: [
+
+       [0, 'desc']
+
+       ],
+
+       "language": {
+
+           "url": lang_datatables,
+
+       },
+
+       "columnDefs": [{
+
+           width: 100,
+
+           targets: 6
+
+       },
+
+       {
+
+           targets: [6],
+
+           orderable: false,
+
+           searchable: false,
+
+       },
+
+
+
+       {
+
+           targets: [0, 2, 3, 4, 5],
+
+           className: "text-right",
 
        }
 
-       function clearItemInput() {
+       ]
 
-           let form = $('#frmaddtemp');
+   };
 
-           form.parsley().reset();
+   let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
 
-           $('#item_id').val('');
+   _initButton();
 
-           $('#product_name').val('');
+   showInputPage(false);
 
-           $('#temp_status').val('');
-
-           temp_qty.set('0.00');
-
-           $('#temp_desc').val('');
-
-       }
-
-       const config_tbltemp = {
-
-         pageLength: 10,
-
-         autoWidth: false,
-
-         select: true,
-
-         responsive: true,
-
-         fixedColumns: true,
-
-         order: [
-
-         [0, 'desc']
-
-         ],
-
-         "language": {
-
-             "url": lang_datatables,
-
-         },
-
-         "columnDefs": [{
-
-             width: 100,
-
-             targets: 6
-
-         },
-
-         {
-
-             targets: [6],
-
-             orderable: false,
-
-             searchable: false,
-
-         },
-
-
-
-         {
-
-             targets: [0, 2, 3, 4, 5],
-
-             className: "text-right",
-
-         }
-
-         ]
-
-     };
-
-     let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
-
-     _initButton();
-
-     showInputPage(false);
-
- })
+})
 
 </script>
 

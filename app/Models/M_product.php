@@ -251,7 +251,7 @@ class M_product extends Model
     }
 
 
-    public function searchProductUnitByName($keyword, $supplier_id = '', $show_last_purchase_data = FALSE)
+    /*public function searchProductUnitByName($keyword, $supplier_id = '', $show_last_purchase_data = FALSE)
 
     {
 
@@ -277,31 +277,50 @@ class M_product extends Model
 
         return $builder->get();
 
+    }*/
+
+    public function searchProductUnitByName($keyword, $isItemCode = FALSE, $limit = 10)
+    {
+        $builder = $this->db->table('ms_product_unit');
+        $builder->select('ms_product_unit.*,ms_product.product_name,(ms_product.base_purchase_price*ms_product_unit.product_content) as purchase_price,(ms_product.base_purchase_tax*ms_product_unit.product_content) as purchase_tax,ms_unit.unit_name')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->where('ms_product.deleted', 'N')
+            ->where('ms_product.active', 'Y')
+            ->where('ms_product_unit.is_sale', 'Y');
+
+        if ($isItemCode) {
+            $builder->where('ms_product_unit.item_code', $keyword);
+        } else {
+            $builder->groupStart();
+            $builder->like('ms_product_unit.item_code', $keyword);
+            $builder->orLike('ms_product.product_name', $keyword);
+            $builder->groupEnd();
+        }
+        return  $builder->limit($limit)->get();
     }
 
-     public function searchProductBysuplier($keyword, $supplier_id)
+     public function searchProductBysuplier($keyword, $supplier_id = '',$isItemCode = FALSE, $limit = 10)
     {
+        $builder = $this->db->table('ms_product_unit');
+        $builder->select('ms_product_unit.*,ms_product.product_name,(ms_product.base_purchase_price*ms_product_unit.product_content) as purchase_price,(ms_product.base_purchase_tax*ms_product_unit.product_content) as purchase_tax,ms_unit.unit_name')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_product_supplier', 'ms_product_supplier.product_id = ms_product.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->where('ms_product.deleted', 'N')
+            ->where('ms_product.active', 'Y')
+            ->where('ms_product_unit.is_sale', 'Y');
 
-        $builder = $this->db->table($this->table);
-
-        $builder->select('*')
-
-            ->join('ms_product_supplier', 'ms_product_supplier.product_id = ms_product.product_id');
-
-        $builder->where('ms_product.deleted', 'N');
-
-        $builder->groupStart();
-
-        $builder->orLike('ms_product.product_name', $keyword);
-
-        $builder->Like('ms_product_supplier.supplier_id', $supplier_id);
-
-        $builder->groupEnd();
-
-        $builder->limit(10);
-
-        return $builder->get();
-
+        if ($isItemCode) {
+            $builder->where('ms_product_unit.item_code', $keyword);
+        } else {
+            $builder->groupStart();
+            $builder->like('ms_product_unit.item_code', $keyword);
+            $builder->orLike('ms_product.product_name', $keyword);
+            $builder->orLike('ms_product_supplier.supplier_id', $supplier_id);
+            $builder->groupEnd();
+        }
+        return  $builder->limit($limit)->get();
     }
 
     public function insertProductUnit($data)

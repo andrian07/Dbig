@@ -286,6 +286,93 @@ class Select extends WebminController
         $select2->generate();
     }
 
+    public function payment_method()
+    {
+         $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('ms_payment_method');
+
+        $select2->db->select('payment_method_id, payment_method_name, bank_account_name');
+        $select2->db->where('deleted', 'N');
+
+        $select2->searchFields  = ['payment_method_name'];
+        $select2->orderBy       = 'payment_method_name';
+        $select2->orderDir      = 'ASC';
+
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = $row['payment_method_id'];
+            $result['text'] = $row['payment_method_name'].'-'.$row['bank_account_name'];
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
+    public function noSubmission()
+    {
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('hd_submission');
+
+        $select2->db->select('submission_id, submission_inv');
+        $select2->db->where('submission_status', 'Pending');
+
+        $select2->searchFields  = ['submission_inv'];
+        $select2->orderBy       = 'submission_inv';
+        $select2->orderDir      = 'ASC';
+
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = $row['submission_id'];
+            $result['text'] = $row['submission_inv'];
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
+    public function noPo()
+    {
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('hd_purchase_order');
+
+        $select2->db->select('purchase_order_invoice, purchase_order_id');
+        $select2->db->where('purchase_order_status', 'Pending');
+
+        $select2->searchFields  = ['purchase_order_invoice'];
+        $select2->orderBy       = 'purchase_order_invoice';
+        $select2->orderDir      = 'ASC';
+
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = $row['purchase_order_id'];
+            $result['text'] = $row['purchase_order_invoice'];
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
+    public function noPoConsignment(){
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('hd_purchase_order_consignment');
+
+        $select2->db->select('purchase_order_consignment_invoice, purchase_order_consignment_id');
+        $select2->db->where('purchase_order_consignment_status', 'Pending');
+
+        $select2->searchFields  = ['purchase_order_consignment_invoice'];
+        $select2->orderBy       = 'purchase_order_consignment_invoice';
+        $select2->orderDir      = 'ASC';
+
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = $row['purchase_order_consignment_id'];
+            $result['text'] = $row['purchase_order_consignment_invoice'];
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
     public function mappingArea()
     {
         $this->validationRequest(TRUE);

@@ -26,15 +26,6 @@ class Submission extends WebminController
         return $this->renderView('purchase/submission', $data);
     }
 
-    public function submissiondetaildemo()
-    {
-
-        $data = [
-            'title'         => 'Pengajuan' 
-        ];
-        return $this->renderView('purchase/submissiondemo', $data);
-    }
-
     //--------------------------------------------------------------------
 
 
@@ -46,18 +37,29 @@ class Submission extends WebminController
             helper('datatable');
 
             $table = new \App\Libraries\Datatables('hd_submission');
-            $table->db->select('submission_id, submission_inv, submission_date, user_realname, submission_desc, submission_status');
+            $table->db->select('submission_id, submission_inv, submission_date, user_realname, submission_desc, submission_status', 'hd_submission.created_at');
             $table->db->join('user_account', 'user_account.user_id = hd_submission.submission_user_id');
+            $table->db->orderBy('hd_submission.created_at', 'desc');
             $table->renderColumn(function ($row, $i) {
                 $column = [];
                 $column[] = $i;
+                $column[] = esc($row['submission_inv']);
                 $column[] = indo_short_date($row['submission_date'], FALSE);
                 $column[] = esc($row['user_realname']);
                 $column[] = esc($row['submission_desc']);
-                $column[] = esc($row['submission_status']);
+                if($row['submission_status'] == 'Pending'){
+                $column[] = '<span class="badge badge-primary">Pending</span>';
+                }else if($row['submission_status'] == 'Accept'){
+                $column[] = '<span class="badge badge-success">Diterima</span>';
+                }else if($row['submission_status'] == 'Decline'){
+                $column[] = '<span class="badge badge-danger">Ditolak</span>'; 
+                }else{
+                $column[] = '<span class="badge badge-danger">Dibatalkan</span>';  
+                }
+                //$column[] = esc($row['submission_status']);
 
                 $btns = [];
-                $prop =  'data-id="' . $row['submission_inv'] . '" data-name="' . esc($row['submission_inv']) . '"';
+                $prop =  'data-id="' . $row['submission_id'] . '" data-name="' . esc($row['submission_inv']) . '"';
                 $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/submission/get-submission-detail/'.$row['submission_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
                 $btns[] = button_edit($prop);
                 $btns[] = button_delete($prop);
@@ -65,8 +67,8 @@ class Submission extends WebminController
                 return $column;
             });
 
-            $table->orderColumn  = ['', 'submission_inv', 'submission_date','','submission_status',''];
-            $table->searchColumn = ['submission_inv', 'submission_date','submission_status'];
+            $table->orderColumn  = ['', 'submission_inv', 'submission_date','','submission_status','submission_status',''];
+            $table->searchColumn = ['submission_inv', 'submission_date','submission_status','submission_status'];
             $table->generate();
         }
     }
@@ -159,7 +161,9 @@ class Submission extends WebminController
             'temp_submission_order_qty'    => $this->request->getPost('temp_qty'),
             'temp_submission_status'       => $this->request->getPost('temp_status'),
             'temp_submission_desc'         => $this->request->getPost('temp_desc'),
-            'temp_submission_product_name' => $this->request->getPost('product_name')
+            'temp_submission_product_name' => $this->request->getPost('product_name'),
+            'temp_submission_supplier_id'  => $this->request->getPost('supplier_id'),
+            'temp_submission_supplier_name'=> $this->request->getPost('supplier_name')
         ];
 
         $validation->setRules([
@@ -176,6 +180,7 @@ class Submission extends WebminController
         } else {
 
             $input['temp_submission_user_id'] = $this->userLogin['user_id'];
+            
             if($input['temp_submission_id'] == ''){
                 $save = $this->M_submission->insertTemp($input);
             }else{
@@ -246,6 +251,7 @@ class Submission extends WebminController
     public function save($type)
     {
 
+
         $this->validationRequest(TRUE, 'POST');
 
         $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
@@ -257,14 +263,15 @@ class Submission extends WebminController
             'submission_date'            => $this->request->getPost('submission_order_date'),
             'submission_desc'            => $this->request->getPost('submission_desc'),
             'submission_id'              => $this->request->getPost('submission_id'),
-
+            'submission_supplier_id'     => $this->request->getPost('submission_supplier_id'),
+            'submission_store_id'        => $this->request->getPost('submission_store_id'),
         ];
 
         $validation->setRules([
 
             'submission_date'            => ['rules' => 'required'],
             'submission_desc'            => ['rules' => 'max_length[500]'],
-
+            'submission_supplier_id'     => ['rules' => 'required'],
         ]);
 
         if ($validation->run($input) === FALSE) {
@@ -355,7 +362,11 @@ class Submission extends WebminController
 
                 $user_id = $this->userLogin['user_id'];
 
-                $getTemp = $this->M_purchase_order->copyDtOrderToTemp($submission_inv, $user_id)->getResultArray();
+                $supplier_id = $getSubmission['submission_supplier_id'];
+
+                $supplier_name = $getSubmission['supplier_name'];
+
+                $getTemp = $this->M_purchase_order->copyDtOrderToTemp($submission_inv, $user_id, $supplier_id, $supplier_name)->getResultArray();
 
                 $find_result = [];
 
@@ -375,7 +386,7 @@ class Submission extends WebminController
 
     }
 
-    public function editOrder($submission_inv = '')
+    public function editOrder($submission_id = '')
     {
 
 
@@ -385,17 +396,23 @@ class Submission extends WebminController
 
         if ($this->role->hasRole('submission.edit')) {
 
-            $getOrderInv = $this->M_submission->getOrderInv($submission_inv)->getRowArray();
+            $getOrder = $this->M_submission->getOrder($submission_id)->getRowArray();
 
-            if ($getOrderInv == NULL) {
+            if ($getOrder == NULL) {
 
-                $result = ['success' => FALSE, 'message' => 'Transaksi dengan No invoice <b>' . $submission_inv . '</b> tidak ditemukan'];
+                $result = ['success' => FALSE, 'message' => 'Transaksi dengan No invoice <b>' . $submission_id . '</b> tidak ditemukan'];
 
             } else {
 
                 $user_id = $this->userLogin['user_id'];
 
-                $getTemp = $this->M_submission->copyDtOrderToTemp($submission_inv, $user_id)->getResultArray();
+                $supplier_id = $getOrder['submission_supplier_id'];
+
+                $supplier_name = $getOrder['supplier_name'];
+
+                $submission_inv = $getOrder['submission_inv'];
+
+                $getTemp = $this->M_submission->copyDtOrderToTemp($submission_inv, $user_id, $supplier_id, $supplier_name)->getResultArray();
 
                 $find_result = [];
 
@@ -405,25 +422,60 @@ class Submission extends WebminController
 
                 }
 
-                $result = ['success' => TRUE, 'header' => $getOrderInv, 'data' => $find_result, 'message' => ''];
+                $result = ['success' => TRUE, 'header' => $getOrder, 'data' => $find_result, 'message' => ''];
+
+            }
+
+        }
+        $result['csrfHash'] = csrf_hash();
+        
+        resultJSON($result);
+
+    }
+
+    public function cancelOrder($submission_id = '')
+    {
+
+        $this->validationRequest(TRUE, 'GET');
+
+        $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk Membatalkan pegajuan pesanan'];
+
+        if ($this->role->hasRole('submission.delete')) {
+
+            $getOrderInv = $this->M_submission->getOrder($submission_id)->getRowArray();
+
+            $submission_inv = $getOrderInv['submission_inv'];
+
+            if ($getOrderInv == NULL) {
+
+                $result = ['success' => FALSE, 'message' => 'Transaksi dengan No invoice <b>' . $submission_inv . '</b> tidak ditemukan'];
+
+            } else {
+
+                $user_id = $this->userLogin['user_id'];
+
+                $cancelOrder = $this->M_submission->cancelOrder($submission_inv, $submission_id);
+
+                $result = ['success' => TRUE, 'message' => 'Pengajuan Berhasil Di Batalkan'];
 
             }
 
         }
 
+        $result['csrfHash'] = csrf_hash();
         resultJSON($result);
-
     }
 
     public function getSubmissionDetail($submission_id = '')
     {
+
         if ($submission_id == '') {
 
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 
         } else {
 
-            $getOrder =  $this->M_submission->getSubmission($submission_id)->getRowArray();
+            $getOrder =  $this->M_submission->getSubmissiondetail($submission_id)->getRowArray();
 
             if ($getOrder == NULL) {
 
@@ -439,7 +491,7 @@ class Submission extends WebminController
 
                     'dtsubmission' => $this->M_submission->getDtSubmission($invoice_num)->getResultArray(),
 
-                    //'logupdate' => $this->M_purchase_order->getLogEditOrder($purchase_order_id)->getResultArray()
+                    'logupdate' => $this->M_submission->getLogEditOrder($submission_id)->getResultArray()
 
                 ];
 

@@ -10,6 +10,7 @@ class M_submission extends Model
     protected $table_hd_submission   = 'hd_submission';
     protected $table_dt_submission   = 'dt_submission';
     protected $logUpdate             = 'log_transaction_edit_queries';
+    protected $table_warehouse       = 'ms_warehouse';
 
 
 
@@ -18,9 +19,13 @@ class M_submission extends Model
 
         $builder = $this->db->table($this->table_hd_submission);
 
-        $builder->select('hd_submission.*,user_account.user_realname');
+        $builder->select('hd_submission.*,user_account.user_realname,supplier_name, CONCAT(warehouse_code, " - " ,warehouse_name) as warehouse_name');
 
         $builder->join('user_account', 'user_account.user_id = hd_submission.submission_user_id');
+
+        $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_submission.submission_store_id');
+
+        $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_submission.submission_supplier_id');
 
         if ($submission_id  != '') {
 
@@ -31,14 +36,28 @@ class M_submission extends Model
         return $builder->get();
     }
 
+      public function checkNullItem($submission_inv = '')
+    {
+
+        $builder = $this->db->table($this->table_dt_submission);
+        $builder->select('*');
+        $builder->where(['detail_submission_inv' => $submission_inv ]);
+        $builder->where(['detail_submission_product_id' => 0 ]);
+        return $builder->get();
+    }
+
     public function getOrderInv($submission_inv = '')
     {
 
         $builder = $this->db->table($this->table_hd_submission);
 
-        $builder->select('hd_submission.*,user_account.user_realname');
+        $builder->select('hd_submission.*,user_account.user_realname,supplier_name, CONCAT(warehouse_code, " - " ,warehouse_name) as warehouse_name');
 
         $builder->join('user_account', 'user_account.user_id = hd_submission.submission_user_id');
+
+        $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_submission.submission_store_id');
+
+        $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_submission.submission_supplier_id');
 
         if ($submission_inv  != '') {
 
@@ -51,15 +70,16 @@ class M_submission extends Model
 
 
 
-    public function copyDtOrderToTemp($submission_inv, $user_id)
+    public function copyDtOrderToTemp($submission_inv, $user_id, $supplier_id, $supplier_name)
     {
         $this->clearTemp($user_id);
 
-        $sqlText = "INSERT INTO temp_submission(temp_submission_product_name,temp_submission_product_id,temp_submission_order_qty,temp_submission_status,temp_submission_approval,temp_submission_desc,temp_submission_user_id) ";
+        $sqlText = "INSERT INTO temp_submission(temp_submission_product_name,temp_submission_product_id,temp_submission_order_qty,temp_submission_status,temp_submission_desc,temp_submission_user_id,temp_submission_supplier_id,temp_submission_supplier_name) ";
 
-        $sqlText .= "SELECT detail_submission_product_name, detail_submission_product_id, detail_submission_order_qty, detail_submission_status,detail_submission_approval,detail_submission_desc,detail_submission_user_id";
+        $sqlText .= "SELECT detail_submission_product_name, detail_submission_product_id, detail_submission_order_qty, detail_submission_status,detail_submission_desc,detail_submission_user_id,'".$supplier_id."' as supplier_id,'".$supplier_name."' as supplier_name";
 
         $sqlText .= " FROM dt_submission WHERE detail_submission_inv = '$submission_inv'";
+
 
         $this->db->query($sqlText);
 
@@ -87,9 +107,11 @@ class M_submission extends Model
     {
         $builder = $this->db->table($this->table_temp_submission);
 
-        return $builder->select('ms_product.product_id, ms_product.product_code, ms_product.product_name, ms_product.product_code, temp_submission.temp_submission_product_name, temp_submission.temp_submission_id, temp_submission.temp_submission_order_qty, temp_submission.temp_submission_status, temp_submission.temp_submission_desc, temp_submission.temp_submission_approval')
+        return $builder->select('ms_product.product_id, ms_product.product_code, ms_product.product_name, ms_product.product_code, temp_submission.temp_submission_product_name, temp_submission.temp_submission_id, temp_submission.temp_submission_order_qty, temp_submission.temp_submission_status, temp_submission.temp_submission_desc, temp_submission.temp_submission_approval, temp_submission.temp_submission_supplier_id, temp_submission.temp_submission_supplier_name, ms_product_unit.item_code, ms_product_unit.item_id')
 
-        ->join('ms_product', 'ms_product.product_id = temp_submission.temp_submission_product_id', 'left')
+        ->join('ms_product_unit', 'ms_product_unit.item_id = temp_submission.temp_submission_product_id', 'left')
+
+        ->join('ms_product', 'ms_product.product_id = ms_product_unit.product_id', 'left')
 
         ->where('temp_submission.temp_submission_user_id', $user_id)
 
@@ -124,26 +146,43 @@ class M_submission extends Model
         return $save;
     }
 
+    public function cancelOrder($submission_inv, $submission_id){
+        $this->db->query('LOCK TABLES hd_submission WRITE');
+        $save = $this->db->table($this->table_hd_submission)->update(['submission_status' => 'Cancel'], ['submission_id ' => $submission_id]);
+        $saveQueries = NULL;
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries = $this->db->getLastQuery()->getQuery();
+        }
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'cancelsubmission', $submission_id);
+        return $save;
+    }
+
     public function insertSubmission($data)
-
     {
-
         $this->db->query('LOCK TABLES hd_submission WRITE,dt_submission WRITE');
 
         $this->db->transBegin();
 
         $saveQueries = NULL;
 
-        $maxCode = $this->db->table($this->table_hd_submission)->select('max(submission_inv) as submission_inv')->get()->getRowArray();
+        $maxCode = $this->db->table($this->table_hd_submission)->select('submission_id, submission_inv')->orderBy('submission_id', 'desc')->limit(1)->get()->getRowArray();
+
+        $warehouse_code = $this->db->table($this->table_warehouse)->select('warehouse_code')->where('warehouse_id', $data['submission_store_id'])->get()->getRowArray();
+
+        $invoice_date =  date_format(date_create($data['submission_date']),"y/m/d");
 
         if ($maxCode == NULL) {
 
-            $data['submission_inv'] = "0000000001";
+            $data['submission_inv'] = 'PJ/'.$warehouse_code['warehouse_code'].'/'.$invoice_date.'/'.'0000000001';
 
         } else {
 
-            $data['submission_inv'] = substr('000000000' . strval(floatval($maxCode['submission_inv']) + 1), -10);
+            $invoice = substr($maxCode['submission_inv'], -10);
 
+            $data['submission_inv'] = 'PJ/'.$warehouse_code['warehouse_code'].'/'.$invoice_date.'/'.substr('000000000' . strval(floatval($invoice) + 1), -10);
+            
         }
 
         $this->db->table($this->table_hd_submission)->insert($data);
@@ -164,9 +203,7 @@ class M_submission extends Model
 
         }
 
-
-
-        $sqlDtOrder = "insert into dt_submission(detail_submission_product_name,detail_submission_inv,detail_submission_product_id,detail_submission_order_qty,detail_submission_status,detail_submission_approval,detail_submission_desc,detail_submission_user_id) VALUES";
+        $sqlDtOrder = "insert into dt_submission(detail_submission_product_name,detail_submission_inv,detail_submission_product_id,detail_submission_order_qty,detail_submission_status,detail_submission_desc,detail_submission_user_id) VALUES";
 
         $sqlDtValues = [];
 
@@ -179,10 +216,9 @@ class M_submission extends Model
             $detail_submission_product_id      = $row['temp_submission_product_id'];
             $detail_submission_order_qty       = $row['temp_submission_order_qty'];
             $detail_submission_status          = $row['temp_submission_status'];
-            $detail_submission_approval        = $row['temp_submission_approval'];
             $detail_submission_desc            = $row['temp_submission_desc'];
             $detail_submission_user_id         = $row['temp_submission_user_id'];
-            $sqlDtValues[] = "('$detail_submission_product_name','$detail_submission_inv','$detail_submission_product_id',$detail_submission_order_qty,'$detail_submission_status','$detail_submission_approval','$detail_submission_desc','$detail_submission_user_id')";
+            $sqlDtValues[] = "('$detail_submission_product_name','$detail_submission_inv','$detail_submission_product_id',$detail_submission_order_qty,'$detail_submission_status','$detail_submission_desc','$detail_submission_user_id')";
 
         }
 
@@ -240,15 +276,30 @@ class M_submission extends Model
             ->delete();
     }
 
-    public function getSubmission($submission_inv){
+    public function getSubmission($submission_id){
 
         $builder = $this->db->table($this->table_hd_submission);
 
         return $builder->select('*')
 
+        ->join('user_account', 'user_account.user_id = hd_submission.submission_user_id')
+
+        ->join('ms_supplier', 'ms_supplier.supplier_id = hd_submission.submission_supplier_id')
+
+        ->where('submission_id', $submission_id)
+
+        ->get();
+    }
+
+    public function getSubmissiondetail($submission_id){
+
+         $builder = $this->db->table($this->table_hd_submission);
+
+        return $builder->select('*')
+
          ->join('user_account', 'user_account.user_id = hd_submission.submission_user_id')
 
-        ->where('submission_inv', $submission_inv)
+        ->where('submission_id', $submission_id)
 
         ->get();
     }
@@ -267,6 +318,29 @@ class M_submission extends Model
 
     }
 
+      public function getLogEditOrder($submission_id = '')
+
+    {
+
+        $builder = $this->db->table($this->logUpdate);
+
+        $builder->select('log_transaction_edit_queries.log_user_id,user_account.user_name,user_account.user_realname,log_transaction_edit_queries.created_at');
+
+        $builder->join('user_account', 'user_account.user_id=log_transaction_edit_queries.log_user_id');
+
+        if ($submission_id  != '') {
+
+            $builder->where('log_transaction_edit_queries.log_transaction_id', $submission_id);
+
+        }
+
+        $builder->where('log_transaction_edit_queries.log_transaction_code', 'Submission');
+
+        $builder->orderBy('log_transaction_edit_queries.log_edit_id', 'ASC');
+
+        return $builder->get();
+
+    }
 
     public function saveLastData($submission_id, $input_detail_last_data)
     {
@@ -274,11 +348,13 @@ class M_submission extends Model
 
     }
 
+
+
     public function updateOrder($data)
 
     {
 
-        $this->db->query('LOCK TABLES hd_submission WRITE,dt_submission WRITE,temp_submission WRITE,ms_supplier READ,user_account READ');
+        $this->db->query('LOCK TABLES hd_submission WRITE,dt_submission WRITE,temp_submission WRITE,ms_supplier READ,ms_warehouse READ, user_account READ');
 
         $submission_id = $data['submission_id'];
 
@@ -300,7 +376,7 @@ class M_submission extends Model
 
                 unset($data['user_id']);
 
-                $sqlDtOrder = "INSERT INTO dt_submission(detail_submission_product_name,detail_submission_inv,detail_submission_product_id,detail_submission_order_qty,detail_submission_status,detail_submission_approval,detail_submission_desc,detail_submission_user_id) VALUES ";
+                $sqlDtOrder = "INSERT INTO dt_submission(detail_submission_product_name,detail_submission_inv,detail_submission_product_id,detail_submission_order_qty,detail_submission_status,detail_submission_desc,detail_submission_user_id) VALUES ";
 
                 $sqlDtValues = [];
 
@@ -319,69 +395,25 @@ class M_submission extends Model
                     $detail_submission_order_qty        = $row['temp_submission_order_qty'];
 
                     $detail_submission_status           = $row['temp_submission_status'];
-
-                    $detail_submission_approval         = $row['temp_submission_approval'];
                       
                     $detail_submission_desc             = $row['temp_submission_desc'];
                     
                     $detail_submission_user_id          = $row['temp_submission_user_id'];
 
-                    $sqlDtValues[] = "('$detail_submission_product_name','$detail_submission_inv',$detail_submission_product_id,$detail_submission_order_qty,'$detail_submission_status','$detail_submission_approval','$detail_submission_desc','$detail_submission_user_id')";
+                    $sqlDtValues[] = "('$detail_submission_product_name','$detail_submission_inv',$detail_submission_product_id,$detail_submission_order_qty,'$detail_submission_status','$detail_submission_desc','$detail_submission_user_id')";
                 }
 
                 $sqlDtOrder .= implode(',', $sqlDtValues);
-
-                //print_r($sqlDtOrder);die();
-
+                
                 //$sqlDtOrder .= " ON DUPLICATE KEY UPDATE detail_submission_order_qty = VALUES(detail_submission_order_qty)";
                
                 $this->db->table($this->table_hd_submission)->where('submission_id', $submission_id)->update($data);
 
-                if ($this->db->affectedRows() > 0) {
-
-                    $saveQueries[] = [
-
-                        'query_text'    => $this->db->getLastQuery()->getQuery(),
-
-                        'ref_id'        => $submission_id
-
-                    ];
-
-                }
+                $query_text_header = $this->db->getLastQuery()->getQuery();
 
                 $this->clearUpdateDetail($submission_inv);
 
                 $this->db->query($sqlDtOrder);
-
-                if ($this->db->affectedRows() > 0) {
-
-                    $saveQueries[] = [
-
-                        'query_text'    => $this->db->getLastQuery()->getQuery(),
-
-                        'ref_id'        => $submission_id
-
-                    ];
-
-                }
-
-               /* if (count($deleteItemId) > 0) {
-
-                    $this->db->table($this->dtPurchaseOrder)->where('submission_id', $submission_id)->whereIn('item_id', $deleteItemId)->delete();
-
-                    if ($this->db->affectedRows() > 0) {
-
-                        $saveQueries[] = [
-
-                            'query_text'    => $this->db->getLastQuery()->getQuery(),
-
-                            'ref_id'        => $purchase_order_id
-
-                        ];
-
-                    }
-
-                }*/
 
                 $logUpdate = [
 
@@ -391,24 +423,15 @@ class M_submission extends Model
 
                     'log_user_id' => $user_id,
 
-                    'log_remark' => '',
+                    'log_remark' => 'EditSubmission',
+
+                    'log_detail' => $sqlDtOrder,
+
+                    'log_header' => $query_text_header
 
                 ];
 
                 $this->db->table($this->logUpdate)->insert($logUpdate);
-
-                if ($this->db->affectedRows() > 0) {
-
-                    $saveQueries[] = [
-
-                        'query_text'    => $this->db->getLastQuery()->getQuery(),
-
-                        'ref_id'        => $submission_id
-
-                    ];
-
-                }
-
 
 
                 if ($this->db->transStatus() === false) {
@@ -431,7 +454,7 @@ class M_submission extends Model
 
                 $this->db->query('UNLOCK TABLES');
 
-                 $data_save = saveQueries("EditSubmission", 'EditSubmission', $submission_id);
+                 $data_save = saveQueries("EditSubmission", "EditSubmission", $submission_id);
 
             }
 

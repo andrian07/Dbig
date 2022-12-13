@@ -1,92 +1,92 @@
 body{
-		background-color: #f4f6f9;
-		font-size: 13px;
-	}
+	background-color: #f4f6f9;
+	font-size: 13px;
+}
 
-	.faktur-print{
+.faktur-print{
+	width: 21.59cm !important;
+	height: 13.97cm !important;
+	margin: auto;
+	word-wrap: break-word;
+	background-color: #ffffff;
+	background-clip: border-box;
+	padding: 10px;
+}
+
+table{
+	width: 100%;
+}
+
+.text-left{
+	text-align: left;
+}
+
+.title-faktur{
+	text-decoration: underline;
+	font-size: 16px;
+}
+
+.text-right{
+	text-align: right;
+}
+
+.text-center{
+	text-align: center;
+}
+
+.header-invoice tr{ 
+	line-height: 11px; 
+}
+
+.header-invoice h3{
+	font-size: 17px; text-decoration: underline;
+}
+
+.header-invoice p{
+	font-size: 13px;margin-top: -10px; text-decoration: none;
+}
+.invoice-item{
+	width: 100%;
+	border-top: double !important;
+}
+
+.invoice-item, .invoice-item th{
+	border-bottom: 1px solid;
+	border-collapse: collapse;
+}
+
+.invoice-item th{
+	text-align:left;
+}
+
+.invoice-item tbody{
+	min-height:280px; width: 100%; display: block;
+}
+
+.footer-ttd{
+	padding-top: 50px;
+}
+.total-all{
+	padding-top: 20px; padding-left: 80px; font-size: 16px; font-weight: 600;
+}
+
+.dispatch{
+	margin-top: 30px;
+}
+
+.invoice-item td {
+	vertical-align: text-top;
+	padding-left: 5px;
+}
+
+
+@media print {
+	html, body {
 		width: 21.59cm !important;
 		height: 13.97cm !important;
-		margin: auto;
-		word-wrap: break-word;
-		background-color: #ffffff;
-		background-clip: border-box;
-		padding: 10px;
 	}
 
-	table{
-		width: 100%;
+	#debug-icon{
+		display: none !important;
 	}
-
-	.text-left{
-		text-align: left;
-	}
-
-	.title-faktur{
-		text-decoration: underline;
-		font-size: 16px;
-	}
-
-	.text-right{
-		text-align: right;
-	}
-
-	.text-center{
-		text-align: center;
-	}
-
-	.header-invoice tr{ 
-		line-height: 11px; 
-	}
-
-	.header-invoice h3{
-		font-size: 17px; text-decoration: underline;
-	}
-
-	.header-invoice p{
-		font-size: 13px;margin-top: -10px; text-decoration: none;
-	}
-	.invoice-item{
-		width: 100%;
-		border-top: double !important;
-	}
-
-	.invoice-item, .invoice-item th{
-  		border-bottom: 1px solid;
-  		border-collapse: collapse;
-	}
-
-	.invoice-item th{
-		text-align:left;
-	}
-
-	.invoice-item tbody{
-		min-height:280px; width: 100%; display: block;
-	}
-
-	.footer-ttd{
-		padding-top: 50px;
-	}
-	.total-all{
-		 padding-top: 20px; padding-left: 80px; font-size: 16px; font-weight: 600;
-	}
-
-	.dispatch{
-		margin-top: 30px;
-	}
-
-	.invoice-item td {
-    vertical-align: text-top;
-    padding-left: 5px;
-	}
-
-
-	@media print {
-		html, body {
-			width: 21.59cm !important;
-			height: 13.97cm !important;
-		}
-
-		#debug-icon{
-			display: none !important;
-		}
-	}
+}

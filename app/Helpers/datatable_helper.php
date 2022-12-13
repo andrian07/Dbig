@@ -10,6 +10,11 @@ function button_delete($prop)
 }
 
 
+function button_print($prop)
+{
+    return '<button ' . $prop . ' class="btn btn-sm btn-default btnprint" data-toggle="tooltip" data-placement="top" data-title="Print"><i class="fas fa-print"></i></button>';
+}
+
 
 if (!function_exists('fancy_image')) {
     function fancy_image($caption, $imageUrl, $thumbUrl, $imageClass = '')

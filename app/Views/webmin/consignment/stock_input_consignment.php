@@ -17,7 +17,7 @@ $assetsUrl = base_url('assets');
 
                 <div class="col-sm-6">
 
-                    <h1>Pruchase Order Konsinyasi</h1>
+                    <h1>Input Data Konsinyasi</h1>
 
                 </div>
 
@@ -55,7 +55,7 @@ $assetsUrl = base_url('assets');
 
                         <div class="card-body">
 
-                            <table id="tblpurchaseorders" class="table table-bordered table-hover" width="100%">
+                            <table id="tblinsertconsignment" class="table table-bordered table-hover" width="100%">
 
                                 <thead>
 
@@ -63,48 +63,19 @@ $assetsUrl = base_url('assets');
 
                                         <th data-priority="1">#</th>
 
-                                        <th data-priority="2">No PO</th>
+                                        <th data-priority="2">No Invoice</th>
 
-                                        <th data-priority="2">Tanggal PO</th>
+                                        <th data-priority="2">No PO Konsinyasi</th>
 
-                                        <th data-priority="6">Nama Supplier</th>
+                                        <th data-priority="3">Tanggal</th>
 
-                                        <th data-priority="3">Total Harga</th>
+                                        <th data-priority="4">Nama Supplier</th>
 
-                                        <th data-priority="3">Status Barang</th>
-
-                                        <th data-priority="3">Aksi</th>
+                                        <th data-priority="5">Aksi</th>
 
                                     </tr>
 
                                 </thead>
-
-                                <tbody>
-                                    <tr>
-
-                                        <td data-priority="1">1</td>
-
-                                        <td data-priority="1">PO-KBR-0001</td>
-
-                                        <td data-priority="2">02/09/2022</td>
-
-                                        <td data-priority="6">PT NIPPON INDONESIA</td>
-
-                                        <td data-priority="6">500.000</td>
-
-                                        <td data-priority="6"><span class="badge badge-success">Diterima</span></td>
-
-                                        <td data-priority="3">
-                                            <a href="<?php base_url() ?>submission/submissiondetaildemo">
-                                                <button class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail" data-original-title="" title=""><i class="fas fa-eye"></i></button>
-                                            </a>
-                                             <a href="<?php base_url() ?>printinvoice">
-                                            <button data-id="1" data-invoice="0000000001" class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Print" data-original-title="" title=""><i class="fas fa-print"></i></button>
-                                            </a>
-                                        </td>
-
-                                    </tr>
-                                </tbody>
 
                             </table>
 
@@ -144,7 +115,7 @@ $assetsUrl = base_url('assets');
 
                 <div class="col-sm-6">
 
-                    <h1 id="title-frm-purchase-order-consignment">Tambah PO</h1>
+                    <h1 id="title-frm-input-consignment">Input Konsinyasi</h1>
 
                 </div>
 
@@ -175,7 +146,7 @@ $assetsUrl = base_url('assets');
                         <div class="card-body">
 
 
-                          <form id="frm-purchase-order-consignment" class="form-horizontal form-space">
+                          <form id="frm-input-consignment" class="form-horizontal form-space">
 
                             <div class="form-group row">
 
@@ -183,7 +154,7 @@ $assetsUrl = base_url('assets');
 
                                 <div class="col-sm-3">
 
-                                    <input id="purchase_order_invoice" name="purchase_order_invoice" type="text" class="form-control" value="AUTO" readonly>
+                                    <input id="purchase_input_invoice" name="purchase_input_invoice" type="text" class="form-control" value="AUTO" readonly>
 
                                 </div>
 
@@ -193,7 +164,7 @@ $assetsUrl = base_url('assets');
 
                                 <div class="col-sm-3">
 
-                                    <input id="purchase_order_date" name="purchase_order_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>" readonly>
+                                    <input id="purchase_consignment_date" name="purchase_consignment_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>" readonly>
 
                                 </div>
                             </div>
@@ -201,21 +172,16 @@ $assetsUrl = base_url('assets');
 
                             <div class="form-group row">
 
-                                <label for="suplier" class="col-sm-1 col-form-label text-right">Supplier :</label>
+                                <label for="suplier" class="col-sm-1 col-form-label text-right">No PO :</label>
 
                                 <div class="col-sm-3">
 
-                                    <select id="supplier_id" name="supplier_id" class="form-control"></select>
+                                    <select id="no_po_consignment" name="no_po_consignment" class="form-control"></select>
 
                                 </div>
 
-                                <div class="col-sm-1">
 
-                                    <button id="btnadd" class="btn btn-primary"><i class="fas fa-plus"></i></button>
-
-                                </div>
-
-                                <div class="col-md-3"></div>
+                                <div class="col-md-4"></div>
 
                                 <label for="user" class="col-sm-1 col-form-label text-right">Gudang :</label>
 
@@ -230,7 +196,15 @@ $assetsUrl = base_url('assets');
 
                             <div class="form-group row">
 
-                                <div class="col-md-8"></div>
+                                <label for="suplier" class="col-sm-1 col-form-label text-right">Supplier :</label>
+
+                                <div class="col-sm-3">
+
+                                    <select id="supplier_id" name="supplier_id" class="form-control"></select>
+
+                                </div>
+
+                                <div class="col-md-4"></div>
 
                                 <label for="user" class="col-sm-1 col-form-label text-right">User :</label>
 
@@ -297,7 +271,11 @@ $assetsUrl = base_url('assets');
 
                                         <label>Produk</label>
 
-                                        <select id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" required> </select>
+                                        <input id="temp_consignment_id" name="temp_consignment_id" type="hidden" value="">
+
+                                        <input id="item_id" name="item_id" type="hidden" value="">
+
+                                        <input id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname required>
 
                                     </div>
 
@@ -313,7 +291,20 @@ $assetsUrl = base_url('assets');
                                         <label>Qty</label>
 
                                         <input id="temp_qty" name="temp_qty" type="text" class="form-control text-right" value="0" data-parsley-vqty required>
-                                        <input id="total_price" name="total_price" type="hidden" class="form-control text-right" value="0" data-parsley-vqty required>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-2">
+
+                                    <!-- text input -->
+
+                                    <div class="form-group">
+
+                                        <label>Expire Date</label>
+
+                                        <input id="temp_ed_date" name="temp_ed_date" type="date" class="form-control">
 
                                     </div>
 
@@ -354,123 +345,70 @@ $assetsUrl = base_url('assets');
 
                                             <th data-priority="1">#</th>
 
-                                            <th data-priority="2">Kode Produk</th>
+                                            <th data-priority="2">Kode Item</th>
 
                                             <th data-priority="3" width="50%;">Produk</th>
 
                                             <th data-priority="4">Qty</th>
 
-                                            <th data-priority="5">Aksi</th>
+                                            <th data-priority="5">E.D</th>
+
+                                            <th data-priority="6">Aksi</th>
 
                                         </tr>
 
                                     </thead>
 
                                     <tbody>
-                                     <tr>
 
-                                        <td>1</td>
+                                    </tbody>
 
-                                        <td>651</td>
+                                </table>
 
-                                        <td>EUROPE FLOOR DRAIN (D02)</td>
+                                <template id="template_row_temp">
 
-                                        <td>10</td>
+                                 <tr>
 
+                                     <td>{row}</td>
 
-                                        <td>
+                                     <td>{item_code}</td>
 
-                                            <button data-id="{item_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                     <td>{product_name}</td>
 
-                                                <i class="fas fa-edit"></i>
+                                     <td>{temp_qty}</td>
 
-                                            </button>
+                                     <td>{temp_ed_date}</td>
 
-                                            &nbsp;
+                                     <td>
 
-                                            <button data-id="{item_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+                                         <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
-                                                <i class="fas fa-minus"></i>
+                                             <i class="fas fa-edit"></i>
 
-                                            </button>
+                                         </button>
 
-                                        </td>
+                                         &nbsp;
 
-                                    </tr>
+                                         <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
 
+                                             <i class="fas fa-minus"></i>
 
-                                    <tr>
+                                         </button>
 
-                                        <td>2</td>
+                                     </td>
 
-                                        <td>638</td>
+                                 </tr>
 
-                                        <td>EUROPE FLOOR DRAIN (D03)</td>
-
-                                        <td>10</td>
-
-
-                                        <td>
-
-                                            <button data-id="{item_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
-
-                                                <i class="fas fa-edit"></i>
-
-                                            </button>
-
-                                            &nbsp;
-
-                                            <button data-id="{item_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
-
-                                                <i class="fas fa-minus"></i>
-
-                                            </button>
-
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-
-                                        <td>3</td>
-
-                                        <td>706</td>
-
-                                        <td>EUROPE GANTUNGAN ROBE HOOK (E1108)</td>
-
-                                        <td>10</td>
+                             </template>
 
 
-                                        <td>
+                         </div>
 
-                                            <button data-id="{item_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
-
-                                                <i class="fas fa-edit"></i>
-
-                                            </button>
-
-                                            &nbsp;
-
-                                            <button data-id="{item_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
-
-                                                <i class="fas fa-minus"></i>
-
-                                            </button>
-
-                                        </td>
-
-                                    </tr>
-                                </tbody>
-
-                            </table>
-
-
-                        </div>
-
-                    </div>
+                     </div>
 
 
 
-                    <div class="row form-space">
+                     <div class="row form-space">
 
                         <div class="col-lg-6">
 
@@ -478,7 +416,7 @@ $assetsUrl = base_url('assets');
 
                                 <div class="col-sm-12">
 
-                                    <textarea id="purchase_order_remark" name="purchase_order_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="3"></textarea>
+                                    <textarea id="purchase_consignment_remark" name="purchase_consignment_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="3"></textarea>
 
                                 </div>
 
@@ -534,121 +472,703 @@ $assetsUrl = base_url('assets');
 
     $(document).ready(function() {
 
-       let temp_qty = new AutoNumeric('#temp_qty', configQty);
+     let temp_qty = new AutoNumeric('#temp_qty', configQty);
+
+     function _initButton() {
+       $('#btnadd').prop('disabled', !hasRole('input_consignment.add'));
+       $('.btnedit').prop('disabled', !hasRole('input_consignment.edit'));
+       $('.btndelete').prop('disabled', !hasRole('input_consignment.delete'));
+   }
+
+   let tblinsertconsignment = $("#tblinsertconsignment").DataTable({
+    processing: true,
+    select: true,
+    serverSide: true,
+    responsive: true,
+    fixedColumns: true,
+    order: [
+    [1, 'asc']
+    ],
+    language: {
+        url: lang_datatables,
+    },
+    ajax: {
+        url: base_url + '/webmin/consignment/tblhdInputConsignment',
+        type: "POST",
+        error: function() {
+            notification.danger('Gagal memuat table, harap coba lagi');
+        },
+    },
+    drawCallback: function(settings) {
+        _initTooltip();
+        _initButton();
+    },
+    columnDefs: [{
+        width: 100
+    },
+    {
+        targets: [0, 4],
+        orderable: false,
+        searchable: false,
+    },
+    {
+        targets: [0],
+        className: "text-right",
+    },
+    ],
+});
 
 
-        // init component //
+   $("#supplier_id").select2({
+    placeholder: '-- Pilih Supplier --',
+    width: "100%",
+    allowClear: true,
+    ajax: {
+        url: base_url + "/webmin/select/supplier",
+        dataType: "json",
+        type: "GET",
+        delay: select2Delay,
+        data: function(params) {
+            return {
+                search: params.term,
+            };
+        },
+        processResults: function(data, page) {
+            return {
+                results: data,
+            };
+        },
+    },
+});
 
-        function _initButton() {
 
+   $("#warehouse").select2({
+    placeholder: '-- Pilih Gudang --',
+    width: "100%",
+    allowClear: true,
+    ajax: {
+        url: base_url + "/webmin/select/warehouse",
+        dataType: "json",
+        type: "GET",
+        delay: select2Delay,
+        data: function(params) {
+            return {
+                search: params.term,
+            };
+        },
+        processResults: function(data, page) {
+            return {
+                results: data,
+            };
+        },
+    },
+});
 
-        }
-
-
-
-        // select2 //
-
-
-        $("#warehouse").select2({
-
-            data: [
-            {
-                id:'2',
-                text: 'KNY-KONSINYASI'
-            }
-
-            ]
-
+   $("#no_po_consignment").select2({
+            placeholder: '-- Pilih No PO --',
+            width: "100%",
+            allowClear: true,
+            ajax: {
+                url: base_url + "/webmin/select/no-po-consignment",
+                dataType: "json",
+                type: "GET",
+                delay: select2Delay,
+                data: function(params) {
+                    return {
+                        search: params.term,
+                    };
+                },
+                processResults: function(data, page) {
+                    return {
+                        results: data,
+                    };
+                },
+                select: function(event, ui) {
+                    console.log("asdas");
+                },
+            },
         });
 
+        $("#no_po_consignment").change(function(e) {
 
-        $("#supplier_id").select2({
+            let id = $(this).val();
 
-            data: [
-            {
-                id:'1',
-                text: 'PT IKAD INDONESIA'
-            },
-            {
-                id:'2',
-                text: 'PT NIPPON INDONESIA'
-            }
+            if (id != null) {
 
-            ]
+                let actUrl = base_url + '/webmin/consignment/copy-purchase-order-consignment/' + id;
 
-        });
+                ajax_get(actUrl, null, {
 
+                    success: function(response) {
 
-        $("#product_name").select2({
+                        if (response.success) {
 
-            data: [
-            {
-                id:'00002050',
-                text: 'NIPPON PAINT CAT BASE NIPPON SATIN GLO - PASTEL BASE 2.35L / 00002050'
-            },
-            {
-                id:'00009200',
-                text: 'ARISTON WATER HEATER ANDRIS AN2 15 LUX 350 ID / 00009200'
-            },
-            {
-                id:'00011521',
-                text: 'KERAMIK LANTAI ACCURA (SERI WASHINGTON BROWN 40X40) KW I / 00011521',
-            },
-            {
-                id:'00005001',
-                text: 'IKAD KERAMIK DINDING DX 2277A FR 25X40 - I / 00005001',
-            }
-            
-            ]
+                            if (response.result.success) {
 
-        });
-        // Table //
+                                let header = response.result.header;
 
+                                let items = response.result.data;
 
+                                console.log(header);
 
-        //End Table //
+                                if (header.purchase_order_status == 'Pending') {
 
-        function showInputPage(x) {
+                                    setSelect2("#supplier_id", header.purchase_order_supplier_id, header.supplier_name);
 
-            if (x) {
+                                    $('#supplier_id').prop('disabled', true);
 
-                $('#po_list').hide();
+                                    setSelect2("#warehouse", header.purchase_order_store_id, header.warehouse_name);
 
-                $('#po_input').show();
+                                    $('#warehouse').attr('disabled', true);
 
+                                } else {
 
+                                    $('#supplier_id').prop('disabled', true);
+
+                                }
+
+                                supplier_tax = header.supplier_tax;
+
+                                loadTempData(items);
+
+                                clearItemInput();
+
+                                cleardiscountfooter();
+
+                            } else {
+
+                                message.error(response.result.message);
+
+                                setSelect2("#purchase_id");
+
+                                $('#supplier_id').prop('disabled', false);
+
+                            }
+
+                        }
+
+                    }
+
+                })
 
             } else {
 
-                $('#po_list').show();
-
-                $('#po_input').hide();
+                $('#supplier_id').prop('disabled', false);
 
             }
 
-        }
-
-        $('#btnadd').click(function(e) {
-
-            e.preventDefault();
-
-            let form = $('#frm-purchase-order-consignment');
-                            //let items = response.result.data;
-                            $('#title-frm-purchase-order-consignment').html('Pengajuan Pesanan Konsinyasi');
-
-                            formMode = 'add';
-
-                            showInputPage(true);
-
-                        })
 
 
+        })
 
-        _initButton();
+   $('#btnadd_temp').click(function(e) {
 
-        showInputPage(false);
+       e.preventDefault();
+
+       let qty = parseFloat(temp_qty.getNumericString());
+
+       let supplier_id = $('#supplier_id').val();
+
+       let supplier_name = $( "#supplier_id option:selected" ).text();
+
+       let btnSubmit = $('#btnadd_temp');
+
+       let form = $('#frmaddtemp');
+
+       form.parsley().validate();
+
+       if (form.parsley().isValid()) {
+
+           let actUrl = base_url + '/webmin/consignment/temp-add-input';
+
+           let formValues = {
+
+               temp_consignment_id: $('#temp_consignment_id').val(),
+
+               item_id: $('#item_id').val(),
+
+               temp_qty: qty,
+
+               temp_supplier_id: supplier_id,
+
+               temp_supplier_name: supplier_name,
+
+               temp_ed_date: $('#temp_ed_date').val()
+
+           };
+
+           btnSubmit.prop('disabled', true);
+
+           ajax_post(actUrl, formValues, {
+
+               success: function(response) {
+
+                   if (response.success) {
+
+                       if (response.result.success) {
+
+                           clearItemInput();
+
+                           $('#product_name').focus();
+
+                           setSelect2('#supplier_id', supplier_id, supplier_name);
+
+                           $('#supplier_id').attr("disabled", true);
+
+                           notification.success(response.result.message);
+
+                       } else {
+
+                           message.error(response.result.message);
+
+                       }
+
+                       loadTempData(response.result.data);
+
+                   }
+
+                   btnSubmit.prop('disabled', false);
+
+               },
+
+               error: function(response) {
+
+                   btnSubmit.prop('disabled', false);
+
+               }
+           });
+       }
+   })
+
+
+   $("#tbltemp").on('click', '.btnedit', function(e) {
+
+         e.preventDefault();
+
+         let json_data = $(this).attr('data-json');
+
+         let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
+
+         console.log(json);
+
+         if (is_json) {
+
+             $('#temp_consignment_id ').val(json.temp_consignment_id);
+
+             $('#product_name').val(json.product_name);
+
+             $('#item_id').val(json.temp_consignment_item_id);
+
+             temp_qty.set(json.temp_consignment_qty);
+
+             $('#temp_qty').focus();
+
+             $('#temp_ed_date').val(json.temp_consignment_expire_date);
+
+         } else {
+
+             getTemp();
+
+             message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
+
+         }
+
+     })
+
+   $("#tbltemp").on('click', '.btndelete', function(e) {
+
+        e.preventDefault();
+
+        let id = $(this).attr('data-id');
+
+        let actUrl = base_url + '/webmin/consignment/temp-delete-cons/' + id;
+
+        ajax_get(actUrl, null, {
+
+            success: function(response) {
+
+                if (response.success) {
+
+                    if (response.result.success) {
+
+                        notification.success(response.result.message);
+
+                    } else {
+
+                        message.error(response.result.message);
+
+                    }
+
+                    loadTempData(response.result.data);
+
+                }
+
+            },
+
+            error: function(response) {
+
+                getTemp();
+
+            }
+
+        })
 
     })
+
+    function loadTempData(items) {
+
+           let template = $('#template_row_temp').html();
+
+           let tbody = '';
+
+           let row = 1;
+
+           let temp_total_order = 0;
+
+           console.log(items);
+
+           items.forEach((val, key) => {
+
+
+               let item = template;
+
+               let data_json = htmlEntities.encode(JSON.stringify(val));
+
+               let temp_consignment_id  = val.temp_consignment_id ;
+
+               let item_id = val.temp_consignment_item_id;
+
+               let product_name  = val.product_name+'('+val.unit_name+')';
+
+               let temp_consignment_qty = parseFloat(val.temp_consignment_qty);
+
+               let temp_consignment_expire_date = val.temp_consignment_expire_date;
+
+
+               item = item.replaceAll('{row}', row)
+
+               .replaceAll('{item_code}', val.item_code)
+
+               .replaceAll('{product_name}', product_name)
+
+               .replaceAll('{temp_qty}', numberFormat(temp_consignment_qty, true))
+
+               .replaceAll('{temp_ed_date}', temp_consignment_expire_date)
+
+               .replaceAll('{temp_id}', temp_consignment_id)
+
+               .replaceAll('{data_json}', data_json);
+
+               tbody += item;
+
+               row++;
+
+           });
+
+
+           if ($.fn.DataTable.isDataTable('#tbltemp')) {
+
+               $('#tbltemp').DataTable().destroy();
+
+           }
+
+
+
+           $('#tbltemp tbody').html('');
+
+           $('#tbltemp tbody').html(tbody);
+
+           tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+
+           clearItemInput();
+
+           _initTooltip();
+
+       }
+        // select2 //
+
+
+        
+
+        const config_tbltemp = {
+
+         pageLength: 10,
+
+         autoWidth: false,
+
+         select: true,
+
+         responsive: true,
+
+         fixedColumns: true,
+
+         order: [
+
+         [0, 'desc']
+
+         ],
+
+         "language": {
+
+             "url": lang_datatables,
+
+         },
+         "columnDefs": [{
+
+             width: 100,
+
+             targets: 4
+
+         },
+         {
+
+             targets: [4],
+
+             orderable: false,
+
+             searchable: false,
+
+         },
+         {
+
+             targets: [0, 3, 4],
+
+             className: "text-right",
+
+         },
+         ]
+
+     };
+
+     let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+
+
+     $('#btnsave').click(function(e) {
+
+        e.preventDefault();
+
+        let form = $('#frmaddtemp');
+
+        let btnSubmit = $('#btnsave');
+
+        let question = 'Yakin ingin menyimpan data Konsinyasi?';
+
+        let actUrl = base_url + '/webmin/consignment/save-input/add';
+
+        message.question(question).then(function(answer) {
+
+            let yes = parseMessageResult(answer);
+
+            if (yes) {
+
+                let formValues = {
+
+                    supplier_id: $('#supplier_id').val(),
+
+                    purchase_consignment_date: $('#purchase_consignment_date').val(),
+
+                    warehouse : $('#warehouse').val(),
+
+                    purchase_consignment_remark : $('#purchase_consignment_remark').val(),
+
+                };
+
+                btnSubmit.prop('disabled', true);
+
+                ajax_post(actUrl, formValues, {
+
+                    success: function(response) {
+
+                        if (response.success) {
+
+                            if (response.result.success) {
+
+                                form[0].reset();
+
+                                notification.success(response.result.message);
+
+                                form.parsley().reset();
+
+                                showInputPage(false);
+
+                                let invoice = response.result.purchase_order_id;
+
+                            } else {
+
+                                message.error(response.result.message);
+
+                            }
+
+                        }
+
+                        btnSubmit.prop('disabled', false);
+
+                        updateTableHeader();
+
+                    },
+
+                    error: function(response) {
+
+                        btnSubmit.prop('disabled', false);
+
+                        updateTable();
+
+                    }
+
+                });
+
+            }
+
+        })
+
+    });
+
+
+     $('#product_name').autocomplete({   
+
+         minLength: 2,
+
+         source: function(req, add) {
+
+             $.ajax({
+
+                 url: base_url + '/webmin/purchase-order/search-product-bysuplier?sup='+$('#supplier_id').val(),
+
+                 dataType: 'json',
+
+                 type: 'GET',
+
+                 data: req,
+
+                 success: function(res) {
+
+                     if (res.success == true) {
+
+                        add(res.data);
+
+                    }else{
+
+                       message.error(res.message);
+
+                       $('#product_name').val('');
+
+                   }
+
+               },
+
+           });
+
+         },
+
+         select: function(event, ui) {
+
+           $('#item_id').val(ui.item.item_id);
+
+               //temp_price.set(parseFloat(ui.item.base_purchase_price));\
+
+           },
+
+       });
+
+
+    function clearItemInput() {
+
+             let form = $('#frmaddtemp');
+
+             form.parsley().reset();
+
+             $('#item_id').val('');
+
+             $('#product_name').val('');
+
+             $('#temp_ed_date').val('');
+
+             temp_qty.set('0.00');
+    }
+
+
+     function showInputPage(x) {
+
+        if (x) {
+
+            $('#po_list').hide();
+
+            $('#po_input').show();
+
+
+
+        } else {
+
+            $('#po_list').show();
+
+            $('#po_input').hide();
+
+        }
+
+    }
+
+    function updateTableHeader() {
+
+        tblinsertconsignment.ajax.reload(null, false);
+
+    }
+
+    $('#btnadd').click(function(e) {
+
+           e.preventDefault();
+
+           let actUrl = base_url + '/webmin/consignment/get-input-consignment-temp';
+
+           ajax_get(actUrl, null, {
+
+               success: function(response) {
+
+                if (response.result.success == 'TRUE') {
+
+                   let form = $('#frm-input-consignment');
+
+                   let items = response.result.data;
+
+                   $('#title-frm-input-consignment').html('Input Pesanan Konsinyasi');
+                        setSelect2("#warehouse", '3', 'KNY - KONSINYASI');
+                        $('#warehouse').attr('disabled', true);
+
+                   formMode = 'add';
+
+                   loadTempData(items);
+
+                   if(items.length != 0){
+                        let supplier_ids = items[0].temp_consignment_suplier_id;
+                        let supplier_names = items[0].temp_consignment_suplier_name;
+                        setSelect2('#supplier_id', supplier_ids, supplier_names);
+                        $('#supplier_id').attr("disabled", true);
+                   
+
+                   }
+
+                   clearItemInput();
+
+                   showInputPage(true);
+
+               } else {
+
+                   message.error(response.result.message);
+
+               }
+
+           }
+
+        })
+
+    })
+
+
+
+    _initButton();
+
+    showInputPage(false);
+
+})
 
 </script>
 

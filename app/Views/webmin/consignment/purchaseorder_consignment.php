@@ -65,13 +65,13 @@ $assetsUrl = base_url('assets');
 
                                         <th data-priority="2">No PO</th>
 
-                                        <th data-priority="2">Tanggal PO</th>
+                                        <th data-priority="3">Tanggal PO</th>
 
-                                        <th data-priority="6">Nama Supplier</th>
+                                        <th data-priority="4">Nama Supplier</th>
 
-                                        <th data-priority="3">Status Pemesanan</th>
+                                        <th data-priority="5">Status Pemesanan</th>
 
-                                        <th data-priority="3">Aksi</th>
+                                        <th data-priority="6">Aksi</th>
 
                                     </tr>
 
@@ -266,7 +266,7 @@ $assetsUrl = base_url('assets');
 
                                         <input id="temp_po_consignment_id" name="temp_po_consignment_id" type="hidden" value="">
 
-                                        <input id="product_id" name="product_id" type="hidden" value="">
+                                        <input id="item_id" name="item_id" type="hidden" value="">
 
                                         <input id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname required>
 
@@ -338,7 +338,7 @@ $assetsUrl = base_url('assets');
 
                                             <th data-priority="1">#</th>
 
-                                            <th data-priority="2">Kode Produk</th>
+                                            <th data-priority="2">Kode Item</th>
 
                                             <th data-priority="3" width="50%;">Produk</th>
 
@@ -364,7 +364,7 @@ $assetsUrl = base_url('assets');
 
                                      <td>{row}</td>
 
-                                     <td>{product_code}</td>
+                                     <td>{item_code}</td>
 
                                      <td>{product_name}</td>
 
@@ -582,7 +582,7 @@ $assetsUrl = base_url('assets');
 
                temp_po_consignment_id: $('#temp_po_consignment_id').val(),
 
-               product_id: $('#product_id').val(),
+               item_id: $('#item_id').val(),
 
                temp_qty: qty,
 
@@ -654,7 +654,7 @@ $assetsUrl = base_url('assets');
 
              $('#product_name').val(json.product_name);
 
-             $('#product_id').val(json.temp_po_consignment_product_id);
+             $('#item_id').val(json.temp_po_consignment_item_id);
 
              temp_qty.set(json.temp_po_consignment_qty);
 
@@ -731,9 +731,9 @@ $assetsUrl = base_url('assets');
 
                let temp_po_consignment_id = val.temp_po_consignment_id;
 
-               let product_id = val.product_id;
+               let item_id = val.item_id;
 
-               let product_name = val.product_name;
+               let product_name  = val.product_name+'('+val.unit_name+')';
 
                let temp_po_consignment_qty = parseFloat(val.temp_po_consignment_qty);
 
@@ -742,7 +742,7 @@ $assetsUrl = base_url('assets');
 
                item = item.replaceAll('{row}', row)
 
-               .replaceAll('{product_code}', val.product_code)
+               .replaceAll('{item_code}', val.item_code)
 
                .replaceAll('{product_name}', product_name)
 
@@ -896,10 +896,6 @@ $assetsUrl = base_url('assets');
 
                                 let invoice = response.result.purchase_order_id;
 
-                                //let invUrl = base_url + '/submission/invoice/' + invoice + '?print=Y';
-
-                                //window.open(invUrl, '_blank');
-
                             } else {
 
                                 message.error(response.result.message);
@@ -910,7 +906,7 @@ $assetsUrl = base_url('assets');
 
                         btnSubmit.prop('disabled', false);
 
-                        window.location.href = base_url + '/webmin/consignment/purchase-order-consignment/';
+                        updateTableHeader();
 
                     },
 
@@ -969,7 +965,7 @@ $assetsUrl = base_url('assets');
 
          select: function(event, ui) {
 
-           $('#product_id').val(ui.item.product_id);
+           $('#item_id').val(ui.item.item_id);
 
                //temp_price.set(parseFloat(ui.item.base_purchase_price));\
 
@@ -984,7 +980,7 @@ $assetsUrl = base_url('assets');
 
              form.parsley().reset();
 
-             $('#product_id').val('');
+             $('#item_id').val('');
 
              $('#product_name').val('');
 
@@ -1014,7 +1010,11 @@ $assetsUrl = base_url('assets');
 
     }
 
+    function updateTableHeader() {
 
+        tblpurchaseordersconsignment.ajax.reload(null, false);
+
+    }
 
     $('#btnadd').click(function(e) {
 
@@ -1033,6 +1033,8 @@ $assetsUrl = base_url('assets');
                    let items = response.result.data;
 
                    $('#title-frm-purchase-order-consignment').html('Pengajuan Pesanan Konsinyasi');
+                        setSelect2("#warehouse", '3', 'KNY - KONSINYASI');
+                        $('#warehouse').attr('disabled', true);
 
                    formMode = 'add';
 
@@ -1043,6 +1045,8 @@ $assetsUrl = base_url('assets');
                         let supplier_names = items[0].temp_po_consignment_suplier_name;
                         setSelect2('#supplier_id', supplier_ids, supplier_names);
                         $('#supplier_id').attr("disabled", true);
+                   
+
                    }
 
                    clearItemInput();
