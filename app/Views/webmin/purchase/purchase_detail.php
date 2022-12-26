@@ -97,7 +97,7 @@ $assetsUrl = base_url('assets');
                 <div class="col-sm-4 invoice-col">
                     <p><b><?= esc($hdPurchase['purchase_invoice']) ?></b><br>
                        No PO: <b><?= esc($hdPurchase['purchase_po_invoice']) ?></b><br>
-                        Gudang : <b><?= esc($hdPurchase['store_code']) ?>/<?= esc($hdPurchase['store_name']) ?></b>
+                        Gudang : <b><?= esc($hdPurchase['warehouse_code']) ?>/<?= esc($hdPurchase['warehouse_name']) ?></b>
                     </p>
                 </div>
 

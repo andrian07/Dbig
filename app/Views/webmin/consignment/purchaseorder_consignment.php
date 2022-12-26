@@ -103,8 +103,6 @@ $assetsUrl = base_url('assets');
 
 </div>
 
-
-
 <div id="po_input">
 
     <section class="content-header">

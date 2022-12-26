@@ -127,7 +127,7 @@ class MyApp extends BaseConfig
                 'add'           => ['text' => 'Tambah'],
                 'edit'          => ['text' => 'Ubah'],
                 'delete'        => ['text' => 'Hapus'],
-                //'cancel_order'  => ['text' => 'Pembatalan Pesanan'],
+                'decline'       => ['text' => 'Tolak'],
             ]
         ],
 
@@ -178,6 +178,26 @@ class MyApp extends BaseConfig
                 'delete'        => ['text' => 'Hapus'],
                 'print'         => ['text' => 'Cetak'],
                 'cancel_order'  => ['text' => 'Pembatalan Pesanan'],
+            ]
+        ],
+
+        'debt_repayment' => [
+            'text'   => 'Pelunasan Hutang',
+            'roles'   => [
+                'view'          => ['text' => 'Lihat'],
+                'add'           => ['text' => 'Tambah'],
+                'edit'          => ['text' => 'Ubah'],
+                'delete'        => ['text' => 'Hapus'],
+            ]
+        ],
+
+        'receivable_repayment' => [
+            'text'   => 'Pelunasan Piutang',
+            'roles'   => [
+                'view'          => ['text' => 'Lihat'],
+                'add'           => ['text' => 'Tambah'],
+                'edit'          => ['text' => 'Ubah'],
+                'delete'        => ['text' => 'Hapus'],
             ]
         ],
 
@@ -234,6 +254,7 @@ class MyApp extends BaseConfig
                 'view'      => ['text' => 'Lihat'],
                 'add'       => ['text' => 'Tambah'],
                 'edit'      => ['text' => 'Ubah'],
+                'delete'    => ['text' => 'hapus'],
             ]
         ],
 

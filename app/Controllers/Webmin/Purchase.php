@@ -272,7 +272,7 @@ class Purchase extends WebminController
             'purchase_date'                             => $this->request->getPost('purchase_date'),
             'purchase_faktur_date'                      => $this->request->getPost('purchase_faktur_date'),
             'purchase_supplier_id'                      => $this->request->getPost('purchase_supplier_id'),
-            'purchase_store_id'                         => $this->request->getPost('purchase_store_id'),
+            'purchase_warehouse_id'                     => $this->request->getPost('purchase_warehouse_id'),
             'purchase_remark'                           => $this->request->getPost('purchase_remark'),
             'purchase_sub_total'                        => $this->request->getPost('purchase_sub_total'),
             'purchase_discount1'                        => $this->request->getPost('purchase_discount1'),
@@ -295,7 +295,7 @@ class Purchase extends WebminController
         $validation->setRules([
             'purchase_faktur_date'            => ['rules' => 'required'],
             'purchase_supplier_id'            => ['rules' => 'required'],
-            'purchase_store_id'               => ['rules' => 'required'],
+            'purchase_warehouse_id'               => ['rules' => 'required'],
             'purchase_remark'                 => ['rules' => 'max_length[500]']
         ]);
 
@@ -309,13 +309,8 @@ class Purchase extends WebminController
 
                 $input['purchase_user_id']= $this->userLogin['user_id'];
 
-                $checkEd = $this->M_purchase->checkEd($this->userLogin['user_id'])->getResultArray();
+                //$checkEd = $this->M_purchase->checkEd($this->userLogin['user_id'])->getResultArray();
 
-                if($checkEd != null){
-
-                    $result = ['success' => FALSE, 'message' => 'Silahkan Isi Semua Tanggal Kadaluarsa Item'];
-
-                }else{
 
                     $save = $this->M_purchase->insertPurchase($input);
 
@@ -328,7 +323,6 @@ class Purchase extends WebminController
                         $result = ['success' => FALSE, 'message' => 'Data Pembelian gagal disimpan'];
 
                     }
-                }
 
             } else {
 

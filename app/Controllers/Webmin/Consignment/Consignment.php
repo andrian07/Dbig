@@ -52,8 +52,9 @@ class Consignment extends WebminController
                     $column[] = '<span class="badge badge-danger">Batal</span>';
                 }
                 $btns = [];
+
                 $prop =  'data-id="' . $row['purchase_order_consignment_id'] . '" data-name="' . esc($row['purchase_order_consignment_invoice']) . '"';
-                $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/submission/get-submission-detail/'.$row['purchase_order_consignment_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
+                $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/consignment/get-consignment-po-detail/'.$row['purchase_order_consignment_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
                 $btns[] = button_edit($prop);
                 $btns[] = button_delete($prop);
                 $column[] = implode('&nbsp;', $btns);
@@ -95,6 +96,40 @@ class Consignment extends WebminController
             $table->generate();
         }
     }
+
+    public function getConsignmentPoDetail($purchase_order_consignment_id = '')
+    {
+        if ($purchase_order_consignment_id == '') {
+
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+
+        } else {
+
+            $getOrder =  $this->M_consignment->getOrderPoConsignment($purchase_order_consignment_id)->getRowArray();
+
+            if ($getOrder == NULL) {
+
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+
+            } else {
+
+                $purchase_order_consignment_invoice = $getOrder['purchase_order_consignment_invoice'];
+
+                $data = [
+
+                    'hdConsignment' => $getOrder,
+
+                    'dtConsignment' => $this->M_consignment->getDtConsignmentPoDetail($purchase_order_consignment_invoice)->getResultArray(),
+
+                ];
+
+                return view('webmin/consignment/consignment_po_detail', $data);
+
+            }
+
+        }
+    }
+
 
     public function stockInputConsignment(){
         $data = [
@@ -455,6 +490,7 @@ class Consignment extends WebminController
             'purchase_consignment_date'        => $this->request->getPost('purchase_consignment_date'),
             'purchase_consignment_store_id'    => $this->request->getPost('warehouse'),
             'purchase_consignment_remark'      => $this->request->getPost('purchase_consignment_remark'),
+            'purchase_consignment_po'          => $this->request->getPost('no_po_consignment'),
 
         ];
 
@@ -515,10 +551,10 @@ class Consignment extends WebminController
         if ($this->role->hasRole('input_consignment.add')) {
 
             $getOrderPoConsignment = $this->M_consignment->getOrderPoConsignment($purchase_order_consignment_id)->getRowArray();
-
+            
             if ($getOrderPoConsignment == NULL) {
 
-                $result = ['success' => FALSE, 'message' => 'Transaksi dengan id invoice <b>' . $purchase_order_id . '</b> tidak ditemukan'];
+                $result = ['success' => FALSE, 'message' => 'Transaksi dengan id invoice <b>' . $purchase_order_consignment_id . '</b> tidak ditemukan'];
 
             } else {
 

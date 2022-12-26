@@ -1583,7 +1583,7 @@ $('#btnsave').click(function(e) {
 
                     purchase_due_date: $('#due_date').val(),
 
-                    purchase_store_id: $('#warehouse').val(),
+                    purchase_warehouse_id: $('#warehouse').val(),
 
                     purchase_remark: $('#purchase_remark').val(),
 
@@ -1791,17 +1791,13 @@ $('#btncancel').click(function(e) {
 
                                 let items = response.result.data;
 
-                                console.log(header);
-
                                 if (header.purchase_order_status == 'Pending') {
 
                                     setSelect2("#supplier_id", header.purchase_order_supplier_id, header.supplier_name);
 
                                     $('#supplier_id').prop('disabled', true);
 
-                                    setSelect2("#warehouse", header.purchase_order_store_id, header.warehouse_name);
-
-                                    $('#warehouse').attr('disabled', true);
+                                    setSelect2("#warehouse", header.purchase_order_warehouse_id, header.warehouse_name);
 
                                 } else {
 

@@ -65,13 +65,13 @@ $assetsUrl = base_url('assets');
 
                                         <th data-priority="2">No Invoice</th>
 
-                                        <th data-priority="2">No PO Konsinyasi</th>
+                                        <th data-priority="3">No PO Konsinyasi</th>
 
-                                        <th data-priority="3">Tanggal</th>
+                                        <th data-priority="4">Tanggal</th>
 
-                                        <th data-priority="4">Nama Supplier</th>
+                                        <th data-priority="5">Nama Supplier</th>
 
-                                        <th data-priority="5">Aksi</th>
+                                        <th data-priority="6">Aksi</th>
 
                                     </tr>
 
@@ -507,7 +507,7 @@ $assetsUrl = base_url('assets');
         width: 100
     },
     {
-        targets: [0, 4],
+        targets: [0, 5],
         orderable: false,
         searchable: false,
     },
@@ -609,17 +609,13 @@ $assetsUrl = base_url('assets');
 
                                 let items = response.result.data;
 
-                                console.log(header);
+                                
 
-                                if (header.purchase_order_status == 'Pending') {
+                                if (header.purchase_order_consignment_status == 'Pending') {
 
-                                    setSelect2("#supplier_id", header.purchase_order_supplier_id, header.supplier_name);
+                                    setSelect2("#supplier_id", header.supplier_id, header.supplier_name);
 
                                     $('#supplier_id').prop('disabled', true);
-
-                                    setSelect2("#warehouse", header.purchase_order_store_id, header.warehouse_name);
-
-                                    $('#warehouse').attr('disabled', true);
 
                                 } else {
 
@@ -632,8 +628,6 @@ $assetsUrl = base_url('assets');
                                 loadTempData(items);
 
                                 clearItemInput();
-
-                                cleardiscountfooter();
 
                             } else {
 
@@ -749,8 +743,6 @@ $assetsUrl = base_url('assets');
 
          let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
 
-         console.log(json);
-
          if (is_json) {
 
              $('#temp_consignment_id ').val(json.temp_consignment_id);
@@ -824,8 +816,6 @@ $assetsUrl = base_url('assets');
            let row = 1;
 
            let temp_total_order = 0;
-
-           console.log(items);
 
            items.forEach((val, key) => {
 
@@ -970,6 +960,8 @@ $assetsUrl = base_url('assets');
                     warehouse : $('#warehouse').val(),
 
                     purchase_consignment_remark : $('#purchase_consignment_remark').val(),
+
+                    no_po_consignment: $("#no_po_consignment option:selected" ).text()
 
                 };
 
@@ -1130,8 +1122,6 @@ $assetsUrl = base_url('assets');
                    let items = response.result.data;
 
                    $('#title-frm-input-consignment').html('Input Pesanan Konsinyasi');
-                        setSelect2("#warehouse", '3', 'KNY - KONSINYASI');
-                        $('#warehouse').attr('disabled', true);
 
                    formMode = 'add';
 

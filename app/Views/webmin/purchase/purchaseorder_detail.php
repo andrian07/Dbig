@@ -95,8 +95,7 @@ $assetsUrl = base_url('assets');
                 </div>
 
                 <div class="col-sm-4 invoice-col">
-                    <p><b>PO-<?= esc($hdPO['purchase_order_invoice']) ?></b><br>
-                       No Pengajuan: <b><?= esc($hdPO['purchase_order_submission_inv']) ?></b><br>
+                    <p><b><?= esc($hdPO['purchase_order_invoice']) ?></b><br>
                        Status :
                         <?php if($hdPO['purchase_order_status'] == 'Pending'){ ?>
                         <span class="badge badge-primary">Pending</span>
@@ -108,7 +107,7 @@ $assetsUrl = base_url('assets');
                         <span class="badge badge-danger">Batal</span>
                         <?php } ?>
                         <br>
-                        Gudang : <b><?= esc($hdPO['store_code']) ?>/<?= esc($hdPO['store_name']) ?></b>
+                        Gudang : <b><?= esc($hdPO['warehouse_code']) ?>/<?= esc($hdPO['warehouse_name']) ?></b>
                     </p>
                 </div>
 

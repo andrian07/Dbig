@@ -28,8 +28,6 @@ class Purchase_order extends WebminController
         return $this->renderView('purchase/purchaseorder', $data);
     }
 
-
-
     public function tblpurchaseorders()
     {
         $this->validationRequest(TRUE);
@@ -126,6 +124,28 @@ class Purchase_order extends WebminController
         resultJSON($result);
     }
 
+
+    public function getSubmissionDetail($submission_id = '')
+    {
+        $this->validationRequest(TRUE, 'GET');
+        $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses'];
+        if ($this->role->hasRole('purchase_order.add')) {
+            $M_submission = model('M_submission');
+            $getOrder = $M_submission->getSubmissiondetaildata($submission_id)->getRowArray();
+            if ($getOrder == NULL) {
+                $result = ['success' => FALSE, 'message' => 'Transaksi dengan id invoice <b>' . $submission_id . '</b> tidak ditemukan'];
+            } else {
+                $checkNullItem = $M_submission->checkNullItem($submission_id)->getRowArray();
+                if($checkNullItem != null){
+                    $result = ['success' => FALSE, 'message' => 'Silahkan Lengkapi Data Produk Terlebih Dahulu'];
+                }else{
+                    $result = ['success' => TRUE, 'header' => $getOrder,  'message' => ''];
+                }
+            }
+        }
+        resultJSON($result);
+    }
+
     public function getPurchaseOrderDetail($purchase_order_id = '')
     {
 
@@ -149,7 +169,7 @@ class Purchase_order extends WebminController
 
                     'hdPO' => $getOrder,
 
-                    'dtPO' => $this->M_purchase_order->getDtPurchaseOrder($invoice_num)->getResultArray(),
+                    'dtPO' => $this->M_purchase_order->getDtPurchaseOrder($purchase_order_id)->getResultArray(),
 
                     'logupdate' => $this->M_purchase_order->getLogEditOrder($purchase_order_id)->getResultArray()
 
@@ -183,13 +203,10 @@ class Purchase_order extends WebminController
                 $purchase_order_invoice = $getOrder['purchase_order_invoice'];
 
                 $datacopy = [
-                    'purchase_order_invoice'            => $purchase_order_invoice,
+                    'purchase_order_id'                 => $purchase_order_id,
                     'user_id'                           => $this->userLogin['user_id'],
                     'temp_po_supplier_id'               => $getOrder['purchase_order_supplier_id'],
-                    'temp_po_supplier_name'             => $getOrder['supplier_name'],
-                    'purchase_order_submission_id'      => $getOrder['purchase_order_submission_id'],
-                    'purchase_order_submission_inv'    => $getOrder['purchase_order_submission_inv']
-
+                    'temp_po_supplier_name'             => $getOrder['supplier_name']
                 ];
 
                 $getTemp = $this->M_purchase_order->copyDtOrderToTemp($datacopy)->getResultArray();
@@ -258,6 +275,7 @@ public function tempadd(){
     $input = [
         'temp_po_id'                        => $this->request->getPost('temp_po_id'),
         'temp_po_submission_id'             => $this->request->getPost('temp_po_submission_id'),
+        'temp_po_submission_invoice'        => $this->request->getPost('temp_po_submission_invoice'),
         'temp_po_item_id'                   => $this->request->getPost('item_id'),
         'temp_po_qty'                       => $this->request->getPost('temp_qty'),
         'temp_po_ppn'                       => $this->request->getPost('temp_tax'),
@@ -274,7 +292,6 @@ public function tempadd(){
         'temp_po_total'                     => $this->request->getPost('temp_total'),
         'temp_po_supplier_id'               => $this->request->getPost('temp_po_suplier_id'),
         'temp_po_supplier_name'             => $this->request->getPost('temp_po_suplier_name'),
-        'temp_po_user_id'                   => $this->request->getPost('product_name'),
         'temp_po_discount_total'            => $this->request->getPost('total_temp_discount'),
 
     ];
@@ -445,11 +462,9 @@ public function save($type)
 
     $input = [
         'purchase_order_id'                       => $this->request->getPost('purchase_order_id'),
-        'purchase_order_submission_id'            => $this->request->getPost('purchase_order_submission_id'),
-        'purchase_order_submission_inv'           => $this->request->getPost('purchase_order_submission_inv'),
         'purchase_order_date'                     => $this->request->getPost('purchase_order_date'),
         'purchase_order_supplier_id'              => $this->request->getPost('purchase_order_supplier_id'),
-        'purchase_order_store_id'                 => $this->request->getPost('purchase_order_store_id'),
+        'purchase_order_warehouse_id'             => $this->request->getPost('purchase_order_warehouse_id'),
         'purchase_order_remark'                   => $this->request->getPost('purchase_order_remark'),
         'purchase_order_sub_total'                => $this->request->getPost('purchase_order_sub_total'),
         'purchase_order_discount1'                => $this->request->getPost('purchase_order_discount1'),
@@ -468,7 +483,7 @@ public function save($type)
     $validation->setRules([
         'purchase_order_date'            => ['rules' => 'required'],
         'purchase_order_supplier_id'     => ['rules' => 'required'],
-        'purchase_order_store_id'        => ['rules' => 'required'],
+        'purchase_order_warehouse_id'     => ['rules' => 'required'],
         'purchase_order_remark'          => ['rules' => 'max_length[500]']
     ]);
 
@@ -514,10 +529,6 @@ public function save($type)
 
                 $getOrder = $this->M_purchase_order->getOrder($input['purchase_order_id'])->getRowArray();
 
-                $input['purchase_order_submission_id'] = $getOrder['purchase_order_submission_id'];
-
-                $input['purchase_order_submission_inv'] = $getOrder['purchase_order_submission_inv'];
-
                 $save = $this->M_purchase_order->updateOrder($input);
 
                 if ($save['success']) {
@@ -547,75 +558,6 @@ public function save($type)
 
 }
 
-
-
-public function copySubmission($submission_id = ''){
-
-    $this->validationRequest(TRUE, 'GET');
-
-    $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses'];
-
-    if ($this->role->hasRole('purchase_order.add')) {
-
-        $M_submission = model('M_submission');
-
-        $getOrder = $M_submission->getOrder($submission_id)->getRowArray();
-
-
-
-        if ($getOrder == NULL) {
-
-            $result = ['success' => FALSE, 'message' => 'Transaksi dengan id invoice <b>' . $submission_id . '</b> tidak ditemukan'];
-
-        } else {
-
-            $submission_inv = $getOrder['submission_inv'];
-
-            $checkNullItem = $M_submission->checkNullItem($submission_inv)->getRowArray();
-
-            if($checkNullItem != null){
-
-                $result = ['success' => FALSE, 'message' => 'Silahkan Lengkapi Data Produk Terlebih Dahulu'];
-
-            }else{
-
-                $find_result = [];
-
-                $user_id = $this->userLogin['user_id'];
-
-                if ($getOrder['submission_status'] == 'Pending') {
-
-                    $submission_inv = $getOrder['submission_inv'];
-
-                    $submission_supplier_id = $getOrder['submission_supplier_id'];
-
-                    $submission_supplier_name = $getOrder['supplier_name'];
-
-                    $getTemp = $this->M_purchase_order->copyDtOrderToTempPO($submission_id, $submission_inv, $user_id, $submission_supplier_id, $submission_supplier_name)->getResultArray();
-
-
-                    foreach ($getTemp as $k => $v) {
-
-                        $find_result[$k] = esc($v);
-
-                    }
-
-                } else {
-
-                    $this->M_purchase_order->clearTemp($user_id);
-
-                }
-
-            $result = ['success' => TRUE, 'header' => $getOrder, 'data' => $find_result, 'message' => ''];
-
-            }
-
-        }
-
-    }
-
-    resultJSON($result);
-}
 
 
 public function printinvoice($purchase_order_id = "")
@@ -657,7 +599,7 @@ public function printinvoice($purchase_order_id = "")
 
                 'hdPO' => $getOrder,
 
-                'dtPO' => $this->M_purchase_order->getDtPurchaseOrder($invoice_num)->getResultArray()
+                'dtPO' => $this->M_purchase_order->getDtPurchaseOrder($purchase_order_id)->getResultArray()
 
             ];
 

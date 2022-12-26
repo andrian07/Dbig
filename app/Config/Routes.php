@@ -478,8 +478,7 @@ $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static funct
 
     $routes->get('cancel-order/(:alphanum)', 'Webmin\Purchase_order::cancelOrder/$1');
 
-    $routes->get('copy-submission/(:alphanum)', 'Webmin\Purchase_order::copySubmission/$1');
-
+    $routes->get('get-submission-detail/(:alphanum)', 'Webmin\Purchase_order::getSubmissionDetail/$1');
 });
 
 
@@ -490,33 +489,22 @@ $routes->group('webmin/submission', ['filter' => 'webminauth'], static function 
 
     $routes->post('tblhdsubmission', 'Webmin\Submission::tblhdsubmission');
 
-    $routes->get('get-submission-temp', 'Webmin\Submission::getSubmissionTemp');
-
-    $routes->get('temp-delete/(:alphanum)', 'Webmin\Submission::deleteTemp/$1');
-
     $routes->get('submissiondetaildemo', 'Webmin\Submission::submissiondetaildemo');
-
-    $routes->post('tbltempsubmission', 'Webmin\Submission::tbltempsubmission');
 
     $routes->get('search-product', 'Webmin\Submission::search_product');
 
-    $routes->post('temp-add', 'Webmin\Submission::tempadd');
-
     $routes->post('save/(:alpha)', 'Webmin\Submission::save/$1');
-
-    $routes->get('get-submission-detail/(:alphanum)', 'Webmin\Submission::getSubmissionDetail/$1');
-
-    //$routes->get('get-submission-edit/(:alphanum)', 'Webmin\Submission::getSubmissionEdit/$1');
-
-    $routes->get('edit-order/(:alphanum)', 'Webmin\Submission::editOrder/$1');
 
     $routes->get('cancel-order/(:alphanum)', 'Webmin\Submission::cancelOrder/$1');
 
-    $routes->post('temp-add', 'Webmin\Purchase_order::tempadd');
-    $routes->post('save/(:alpha)', 'Webmin\submission::save/$1');
-    $routes->get('get-submission-detail/(:alphanum)', 'Webmin\submission::getSubmissionDetail/$1');
-    //$routes->get('get-submission-edit/(:alphanum)', 'Webmin\submission::getSubmissionEdit/$1');
-    $routes->get('edit-order/(:alphanum)', 'Webmin\submission::editOrder/$1');
+    $routes->post('decline-order', 'Webmin\Submission::declineOrder');
+
+    $routes->get('search-product-submission', 'Webmin\Submission::searchProductSubmission');
+
+    $routes->get('get-submission-detail/(:alphanum)', 'Webmin\Submission::getSubmissionDetail/$1');
+
+    $routes->get('getbyid/(:num)', 'Webmin\Submission::getById/$1');
+    
 });
 
 
@@ -581,6 +569,9 @@ $routes->group('webmin/consignment', ['filter' => 'webminauth'], static function
 
     $routes->get('copy-purchase-order-consignment/(:alphanum)', 'Webmin\Consignment\Consignment::copyPurchaseOrderConsignment/$1');
 
+    $routes->get('get-consignment-po-detail/(:alphanum)', 'Webmin\Consignment\Consignment::getConsignmentPoDetail/$1');
+
+
 });
 /* end pembelian */
 
@@ -592,18 +583,69 @@ $routes->group('webmin/consignment', ['filter' => 'webminauth'], static function
 
 $routes->group('webmin/sales-admin', ['filter' => 'webminauth'], static function ($routes) {
 
-    //$routes->get('/', 'Webmin\Sales_admin::index');
+    $routes->get('/', 'Webmin\Sales_admin::index');
 
-    //$routes->post('tblsalesadmin', 'Webmin\Sales_admin::tblsalesadmin');
+    $routes->post('tblsalesadmin', 'Webmin\Sales_admin::tblsalesadmin');
+
+    $routes->get('search-product', 'Webmin\Sales_admin::searchProduct');
 
     $routes->get('printinvoice', 'Webmin\Sales_admin::printinvoice');
 
     $routes->get('printdispatch', 'Webmin\Sales_admin::printdispatch');
 
+    $routes->post('temp-add', 'Webmin\Sales_admin::tempadd');
+
+    $routes->get('temp-delete/(:alphanum)', 'Webmin\Sales_admin::deleteTemp/$1');
+
+    $routes->get('get-salesadmin-temp', 'Webmin\Sales_admin::getSalesadminTemp');
+
+    $routes->get('get-salesadmin-footer', 'Webmin\Sales_admin::getSalesadminFooter');
+
+    $routes->post('save/(:alpha)', 'Webmin\Sales_admin::save/$1');
+
 });
 
 /* end penjualan admin */
 
+
+
+
+$routes->group('webmin/payment', ['filter' => 'webminauth'], static function ($routes) {
+
+    /* Pelunasan Hutang */
+
+    $routes->get('debt-repayment', 'Webmin\Payment\Debt_repayment::index');
+
+    $routes->post('tbldebtrepaymenthistory', 'Webmin\Payment\Debt_repayment::tbl_debtrepaymenthistory');
+
+    $routes->post('tbldebtrepayment', 'Webmin\Payment\Debt_repayment::tbl_debtrepayment');
+
+    $routes->get('tbltemprepayment/(:alphanum)', 'Webmin\Payment\Debt_repayment::tbltemprepayment/$1');
+
+    $routes->post('copy_data_temp', 'Webmin\Payment\Debt_repayment::copyDataTemp');
+
+    $routes->post('temp-add', 'Webmin\Payment\Debt_repayment::tempadd');
+
+    $routes->get('get-payment-footer', 'Webmin\Payment\Debt_repayment::getPaymentFooter');
+
+    $routes->post('save/(:alpha)', 'Webmin\Payment\Debt_repayment::save/$1');
+
+    /* End Pelunasan Hutang */
+
+    /* Pelunasan Piutang */
+
+    $routes->get('receivable-repayment', 'Webmin\Payment\Receivable_repayment::index');
+
+    $routes->post('tblreceivablerepayment', 'Webmin\Payment\Receivable_repayment::tbl_receivable_repayment');
+
+    $routes->post('copy_data_temp_repayment', 'Webmin\Payment\Receivable_repayment::copyDataTempRepayment');
+
+     $routes->post('temp-receivable-add', 'Webmin\Payment\Receivable_repayment::tempadd');
+    
+
+    /* End Pelunasan Piutang */
+
+});
 
 
 /* Mobile*/
@@ -738,10 +780,6 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 
 /* End Report */
 
-
-
-
-
 /* Select2 */
 
 $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($routes) {
@@ -750,16 +788,18 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
 
     $routes->get('user-group', 'Webmin\Select::userGroup');
 
-
     $routes->get('user-account', 'Webmin\Select::userAccount');
 
     $routes->get('unit', 'Webmin\Select::unit');
 
     $routes->get('category', 'Webmin\Select::category');
 
+    $routes->get('salesman', 'Webmin\Select::salesman');
+
     $routes->get('brand', 'Webmin\Select::brand');
 
     $routes->get('supplier', 'Webmin\Select::supplier');
+
     $routes->get('customer', 'Webmin\Select::customer');
 
     $routes->get('pc/provinces', 'Webmin\Select::pcProvinces');
@@ -782,7 +822,7 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
 
     $routes->get('payment-method', 'Webmin\Select::payment_method');
 
-   
+
 
 });
 
@@ -898,15 +938,15 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
 
 
 
-    $routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');
+    //$routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');
 
-    $routes->get('debt-repayment/detail', 'Webmin\EricDemo::debtRepaymentDetail');
+    //$routes->get('debt-repayment/detail', 'Webmin\EricDemo::debtRepaymentDetail');
 
 
 
-    $routes->get('receivable-repayment', 'Webmin\EricDemo::receivableRepayment');
+    //$routes->get('receivable-repayment', 'Webmin\EricDemo::receivableRepayment');
 
-    $routes->get('receivable-repayment/detail', 'Webmin\EricDemo::receivableRepaymentDetail');
+    //$routes->get('receivable-repayment/detail', 'Webmin\EricDemo::receivableRepaymentDetail');
 
 
 

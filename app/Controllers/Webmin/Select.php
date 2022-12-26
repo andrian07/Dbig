@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controllers\Webmin;
 
 use App\Controllers\Base\WebminController;
@@ -240,6 +239,31 @@ class Select extends WebminController
 
         $select2->generate();
     }
+
+
+    public function salesman()
+    {
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('ms_salesman');
+
+        $select2->db->select('salesman_id,salesman_code,salesman_name ');
+        $select2->db->where('deleted', 'N');
+
+        $select2->searchFields  = ['salesman_name', 'salesman_code'];
+        $select2->orderBy       = 'salesman_name';
+        $select2->orderDir      = 'ASC';
+
+
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = esc($row['salesman_id']);
+            $result['text'] = $row['salesman_name'] . ' - ' . $row['salesman_code'];
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
 
     public function brand()
     {
@@ -496,6 +520,48 @@ class Select extends WebminController
 
         $select2->generate();
     }
+
+
+    public function searchProduct()
+    {
+
+        $this->validationRequest(TRUE, 'GET');
+
+        $keyword = $this->request->getGet('term');
+
+        if (!($keyword == '' || $keyword == NULL)) {
+
+            $M_product = model('M_product');
+
+            $find = $M_product->searchProductUnitByName($keyword)->getResultArray();
+
+            $find_result = [];
+
+            foreach ($find as $row) {
+
+                $diplay_text = $row['product_name'];
+
+                $find_result[] = [
+
+                    'id'                  => $diplay_text,
+
+                    'value'               => $diplay_text.'('.$row['unit_name'].')',
+
+                    'item_id'             => $row['item_id'],
+
+                    'price'               => $row['G5_sales_price']  
+
+                ];
+
+            }
+
+            $result = ['success' => TRUE, 'num_product' => count($find_result), 'data' => $find_result, 'message' => ''];
+
+        }
+
+        resultJSON($result);
+    }
+    
 
     //--------------------------------------------------------------------
 

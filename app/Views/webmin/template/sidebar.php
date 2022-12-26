@@ -254,21 +254,21 @@
 					</a>
 					<ul class="nav nav-treeview">
 						<li class="nav-item">
-							<a href="<?= base_url('webmin/debt-repayment') ?>" class="nav-link">
+							<a href="<?= base_url('webmin/payment/debt-repayment') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>Pelunasan Hutang</p>
 							</a>
 						</li>
 
 						<li class="nav-item">
-							<a href="<?= base_url('webmin/receivable-repayment') ?>" class="nav-link">
+							<a href="<?= base_url('webmin/payment/receivable-repayment') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>Pelunasan Piutang</p>
 							</a>
 						</li>
 
 						<li class="nav-item">
-							<a href="<?= base_url('webmin/consignment-repayment') ?>" class="nav-link">
+							<a href="<?= base_url('webmin/payment/consignment-repayment') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>Pelunasan Konsinyasi</p>
 							</a>

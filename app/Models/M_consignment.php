@@ -7,11 +7,34 @@ use CodeIgniter\Model;
 class M_consignment extends Model
 {
     protected $table_hd_po_consignment = 'hd_purchase_order_consignment';
+    protected $table_dt_po_consignment = 'dt_purchase_order_consignment';
     protected $table_temp_po_consignment = 'temp_purchase_order_consignment';
     protected $table_temp_consignment = 'temp_purchase_consignment';
     protected $table_warehouse = 'ms_warehouse';
     protected $table_hd_purchase_consignment = 'hd_purchase_consignment';
 
+
+    public function getDtConsignmentPoDetail($purchase_order_consignment_invoice = '')
+    {
+
+        $builder = $this->db->table($this->table_dt_po_consignment);
+
+        $builder->select('*');
+
+        $builder->join('ms_product_unit', 'ms_product_unit.item_id  = dt_purchase_order_consignment.dt_po_consignment_item_id');
+
+        $builder->join('ms_product', 'ms_product.product_id  = ms_product_unit.product_id');
+
+        $builder->join('ms_unit', 'ms_unit.unit_id  = ms_product_unit.unit_id');
+
+        if ($purchase_order_consignment_invoice  != '') {
+
+            $builder->where(['dt_po_consignment_invoice' => $purchase_order_consignment_invoice]);
+
+        }
+
+        return $builder->get();
+    }
 
     public function getTemp($user_id)
     {
@@ -53,17 +76,17 @@ class M_consignment extends Model
         ->get();
     }
 
-    public function getOrderPoConsignment($purchase_order_consignment_id)
+    public function getOrderPoConsignment($purchase_order_consignment_id = '')
     {
         $builder = $this->db->table($this->table_hd_po_consignment);
 
-        $builder->select('hd_purchase_order_consignment.*,supplier_name ,user_account.user_realname, warehouse_name');
+        $builder->select('*, hd_purchase_order_consignment.created_at as created_at');
 
         $builder->join('user_account', 'user_account.user_id = hd_purchase_order_consignment.purchase_order_consignment_user_id');
 
         $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_purchase_order_consignment.purchase_order_consignment_supplier_id');
 
-        $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_purchase_order_consignment.purchase_order_consignment_store_id');
+        $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_purchase_order_consignment.purchase_order_consignment_warehouse_id');
 
         if ($purchase_order_consignment_id  != '') {
 
@@ -153,8 +176,7 @@ class M_consignment extends Model
 
     }
 
-
-     public function deletetemp($temp_po_consignment_id){
+    public function deletetemp($temp_po_consignment_id){
         $this->db->query('LOCK TABLES temp_purchase_order_consignment WRITE');
         $save = $this->db->table($this->table_temp_po_consignment)->delete(['temp_po_consignment_id' => $temp_po_consignment_id]);
         $saveQueries = NULL;
@@ -205,7 +227,7 @@ class M_consignment extends Model
 
         $maxCode = $this->db->table($this->table_hd_po_consignment)->select('max(purchase_order_consignment_invoice) as purchase_order_consignment_invoice')->get()->getRowArray();
 
-        $warehouse_code = $this->db->table($this->table_warehouse)->select('warehouse_code')->where('warehouse_id', $data['purchase_order_consignment_store_id'])->get()->getRowArray();
+        $warehouse_code = $this->db->table($this->table_warehouse)->select('warehouse_code')->where('warehouse_id', $data['purchase_order_consignment_warehouse_id'])->get()->getRowArray();
 
         $invoice_date =  date_format(date_create($data['purchase_order_consignment_date']),"y/m");
 
@@ -309,7 +331,6 @@ class M_consignment extends Model
 
         $invoice_date =  date_format(date_create($data['purchase_consignment_date']),"y/m");
 
-
         if ($maxCode['purchase_consignment_invoice'] == NULL) {
 
             $data['purchase_consignment_invoice'] = 'IC/'.$invoice_date.'/'.'0000000001';
@@ -326,6 +347,9 @@ class M_consignment extends Model
 
         $purchase_consignment_id = $this->db->insertID();
 
+         if($data['purchase_consignment_po'] != null){
+          $updateStatus =  $this->db->table($this->table_hd_po_consignment)->where('purchase_order_consignment_invoice', $data['purchase_consignment_po'])->update(['purchase_order_consignment_status' => 'Accept']);
+        }
 
 
         if ($this->db->affectedRows() > 0) {

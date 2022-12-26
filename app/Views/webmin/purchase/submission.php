@@ -3,6 +3,7 @@ $themeUrl = base_url('assets/adminlte3');
 $assetsUrl = base_url('assets');
 ?>
 
+
 <?= $this->extend('webmin/template/admin_template') ?>
 
 <?= $this->section('content') ?>
@@ -69,11 +70,15 @@ $assetsUrl = base_url('assets');
 
                                         <th data-priority="4">Diajukan</th>
 
-                                        <th data-priority="5">Keterangan</th>
+                                        <th data-priority="5">Nama Produk</th>
 
-                                        <th data-priority="6">Status</th>
+                                        <th data-priority="6">Keterangan</th>
 
-                                        <th data-priority="7">Aksi</th>
+                                        <th data-priority="7">Status</th>
+
+                                        <th data-priority="8">Catatan Admin</th>
+
+                                        <th data-priority="9">Aksi</th>
 
                                     </tr>
 
@@ -104,379 +109,155 @@ $assetsUrl = base_url('assets');
 
 </div>
 
-
-
-<div id="submission_input">
-
-    <section class="content-header">
-
-        <div class="container-fluid">
-
-            <div class="row mb-2">
-
-                <div class="col-sm-6">
-
-                    <h1 id="title-frmsubmission">Buat Pengajuan</h1>
-
-                </div>
-
-                <div class="col-sm-6"></div>
-
+<!-- add submission -->
+<div class="modal fade" id="modal-addsubmission">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="title-addsubmission"></h4>
+                <button type="button" class="close close-modal-addsubmission">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-
-        </div><!-- /.container-fluid -->
-
-    </section>
-
-
-
-    <!-- Main content -->
-
-    <section class="content">
-
-        <div class="container-fluid">
-
-            <div class="row">
-
-                <!-- /.col -->
-
-                <div class="col-md-12">
-
-                    <div class="card">
-
-                        <div class="card-body">
-
-                            <form id="frmsubmission" class="form-horizontal form-space">
-
-                                <div class="form-group row">
-
-                                    <label for="tanggal" class="col-sm-1 col-form-label text-right">No Invoice:</label>
-
-                                    <div class="col-sm-3">
-
-                                        <input type="hidden" id="submission_id" name="submission_id" value="0">
-
-                                        <input id="submission_order_invoice" name="submission_order_invoice" type="text" class="form-control" value="AUTO" readonly>
-
-                                    </div>
-
-                                    <div class="col-sm-4">
-                    
-                                    </div>
-
-                                    <label for="noinvoice" class="col-sm-1 col-form-label text-right">Tanggal:</label>
-
-                                    <div class="col-sm-3">
-
-                                        <input id="submission_order_date" name="submission_order_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>" readonly>
-
-                                    </div>
-                                    
+            <form id="frmaddsubmission" class="form-horizontal">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 border-right border-primary">
+                            <div class="form-group">
+                                <label for="submission_order_invoice" class="col-sm-12">No Invoice:</label>
+                                <div class="col-sm-12">
+                                    <input type="hidden" id="submission_id" name="submission_id">
+                                    <input id="submission_order_invoice" name="submission_order_invoice" type="text" class="form-control" value="AUTO" readonly>
                                 </div>
-
-
-
-
-                                <div class="form-group row">
-
-                                    <label for="tanggal" class="col-sm-1 col-form-label text-right">Supplier:</label>
-
-                                    <div class="col-sm-3">
-
-                                        <select id="supplier_id" name="supplier_id" class="form-control"></select>
-
-                                    </div>
-
-                                    <div class="col-sm-4">
-                    
-                                    </div>
-
-                                    <label for="warehouse" class="col-sm-1 col-form-label text-right">Gudang:</label>
-
-                                    <div class="col-sm-3">
-
-                                        <select id="warehouse" type="text" class="form-control"></select>
-
-                                    </div>
-                                    
-                                </div>
-
-
-                                <div class="form-group row">
-
-                                    <div class="col-sm-8"></div>
-
-                                    <label for="noinvoice" class="col-sm-1 col-form-label text-right">User:</label>
-
-                                    <div class="col-sm-3">
-
-                                        <input id="display_user" type="text" class="form-control" value="<?= $user['user_realname'] ?>" readonly>
-
-                                    </div>
-                                    
-                                </div>
-
-                            </form>
-
-                        </div><!-- /.card-body -->
-
-                    </div>
-
-                    <!-- /.card -->
-
-                </div>
-
-                <!-- /.col -->
-
-            </div>
-
-            <!-- /.row -->
-
-        </div><!-- /.container-fluid -->
-
-
-
-
-
-        <div class="container-fluid">
-
-            <div class="row">
-
-                <!-- /.col -->
-
-                <div class="col-md-12">
-
-                    <div class="card">
-
-                        <div class="card-body">
-
-                            <form id="frmaddtemp" class="mb-2">
-
-                                <div class="row well well-sm">
-
-                                    <input id="item_id" name="item_id" type="hidden" value="">
-
-                                    <input id="temp_id" name="temp_id" type="hidden" value="">
-
-                                    <div class="col-sm-2">
-
-                                        <!-- text input -->
-
-                                        <div class="form-group">
-
-                                            <label>Status</label>
-
-                                            <select id="temp_status" name="temp_status" class="form-control" data-parsley-vtempstatus required> 
-                                                <option></option>
-                                                <option value="Urgent">Urgent</option>
-                                                <option value="New">New</option>
-                                                <option value="Restock">Restock</option>
-                                            </select>
-
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="col-sm-3">
-
-                                        <!-- text input -->
-
-                                        <div class="form-group">
-                                            <label>Produk</label>
-
-                                            <input id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname required>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-2">
-
-                                        <!-- text input -->
-
-                                        <div class="form-group">
-
-                                            <label>Qty</label>
-
-                                            <input id="temp_qty" name="temp_qty"  class="form-control text-right" value="0" data-parsley-vqty required>
-
-                                        </div>
-
-                                    </div>
-
-                                    
-
-                                    <div class="col-sm-3">
-
-                                        <!-- text input -->
-
-                                        <div class="form-group">
-
-                                            <label>Keterangan</label>
-
-                                            <input id="temp_desc" name="temp_desc" type="text" class="form-control" > 
-
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="col-sm-1">
-
-                                        <!-- text input -->
-
-                                        <label>&nbsp;</label>
-
-                                        <div class="form-group">
-
-                                            <div class="col-12">
-
-                                                <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle float-right"><i class="fas fa-plus"></i></button>
-
-
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </form>
-
-
-
-                            <div class="row mb-2">
-
-                                <div class="col-12">
-
-                                    <table id="tbltemp" class="table table-bordered table-hover" width="100%">
-
-                                        <thead>
-
-                                            <tr>
-
-                                                <th data-priority="1">#</th>
-
-                                                <th data-priority="2">Kode Produk</th>
-
-                                                <th data-priority="3">Produk</th>
-
-                                                <th data-priority="4">Qty</th>
-
-                                                <th data-priority="5">Status</th>
-
-                                                <th data-priority="6">Keterangan</th>
-
-                                                <th data-priority="7">Aksi</th>
-
-                                            </tr>
-
-                                        </thead>
-
-                                        <tbody>
-
-                                        </tbody>
-
-                                    </table>
-
-                                    <template id="template_row_temp">
-
-                                     <tr>
-
-                                         <td>{row}</td>
-
-                                         <td>{product_code}</td>
-
-                                         <td>{product_name}</td>
-
-                                         <td>{temp_qty}</td>
-
-                                         <td>{temp_status}</td>
-
-                                         <td>{temp_desc}</td>
-
-                                         <td>
-
-                                             <button data-id="{temp_submission_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
-
-                                                 <i class="fas fa-edit"></i>
-
-                                             </button>
-
-                                             &nbsp;
-
-                                             <button data-id="{temp_submission_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
-
-                                                 <i class="fas fa-minus"></i>
-
-                                             </button>
-
-                                         </td>
-
-                                     </tr>
-
-                                 </template>
-
-                             </div>
-
-                         </div>
-
-
-
-                         <div class="row">
-
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-
-                                <div class="form-group">
-
-                                    <label for="submisson_order_remark" class="col-sm-12">Catatan</label>
-
-                                    <div class="col-sm-12">
-
-                                        <textarea id="submisson_order_remark" name="submisson_order_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="3"></textarea>
-
-                                    </div>
-
-                                </div>
-
                             </div>
 
-                            <div class="col-12">
-
-                                <div class="col-12">
-
-                                    <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
-
-                                    <button id="btnsave" class="btn btn-success float-right"><i class="fas fa-save"></i> Simpan</button>
-
+                            <div class="form-group">
+                                <label for="submission_order_date" class="col-sm-12">Tanggal:</label>
+                                <div class="col-sm-12">
+                                    <input id="submission_order_date" name="submission_order_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>" readonly>
                                 </div>
-
                             </div>
 
+                            <div class="form-group">
+                                <label for="warehouse" class="col-sm-1 col-form-label text-right">Gudang:</label>
+                                <div class="col-sm-12">
+                                    <select id="warehouse" type="text" class="form-control" data-parsley-vwarehousecode required></select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="salesman_id" class="col-sm-1 col-form-label text-right">Sales:</label>
+                                <div class="col-sm-12">
+                                    <select id="salesman_id" type="text" class="form-control" data-parsley-vsalesman required></select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="display_user" class="col-sm-1 col-form-label text-right">User:</label>
+                                <div class="col-sm-12">
+                                    <input id="display_user" type="text" class="form-control" value="<?= $user['user_realname'] ?>" readonly>
+                                </div>
+                            </div>
                         </div>
 
+                        <div class="col-md-6">
+
+
+
+                            <div class="form-group">
+                               <label for="temp_status" class="col-sm-12">Status:</label>
+                               <div class="col-sm-12">
+                                <select id="temp_status" name="temp_status" class="form-control" data-parsley-vtempstatus required> 
+                                    <option></option>
+                                    <option value="Urgent">Urgent</option>
+                                    <option value="New">New</option>
+                                    <option value="Restock">Restock</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                           <label for="item_code" class="col-sm-12">Produk Code:</label>
+                           <div class="col-sm-12">
+                            <input id="item_id" name="item_id" class="form-control" type="hidden">
+                            <input id="item_code" name="item_code" class="form-control" type="text" readonly>
+                        </div>
                     </div>
 
+                    <div class="form-group">
+                       <label for="product_name" class="col-sm-12">Produk:</label>
+                       <div class="col-sm-12">
+                        <input id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname required>
+                    </div>
                 </div>
 
-                <!-- /.card -->
-
+                <div class="form-group">
+                   <label for="temp_qty" class="col-sm-12">Qty:</label>
+                   <div class="col-sm-12">
+                    <input id="temp_qty" name="temp_qty"  class="form-control" value="0" data-parsley-vqty required>
+                </div>
             </div>
 
-            <!-- /.col -->
-
+            <div class="form-group">
+               <label for="desc" class="col-sm-12">Keterangan:</label>
+               <div class="col-sm-12">
+                <textarea id="desc" name="desc" type="text" class="form-control"></textarea>
+            </div>
         </div>
 
-        <!-- /.row -->
 
-    </div><!-- /.container-fluid -->
+    </div>
+</div>
+</div>
+<div class="modal-footer justify-content-between">
+    <button class="btn btn-danger close-modal-addsubmission"><i class="fas fa-times-circle"></i> Batal</button>
+    <button id="btnsave_submission" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
+</div>
+</form>
+</div>
+<!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->
+</div>
+<!-- end submission -->
 
-</section>
 
+<!-- decline -->
+<div class="modal fade" id="modal-decline">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="title-frmdecline"></h4>
+                <button type="button" class="close close-modal-decline">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="frmdecline" class="form-horizontal">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                           <div class="form-group">
+                               <label for="desc" class="col-sm-12">Keterangan:</label>
+                               <div class="col-sm-12">
+                                <input type="hidden" id="submission_id_decline" name="submission_id_decline">
+                                <textarea id="desc_decline" name="desc_decline" type="text" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button class="btn btn-danger close-modal-decline"><i class="fas fa-times-circle"></i> Batal</button>
+                <button id="btn_decline" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
+            </div>
+        </form>
+    </div>
+    <!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->
 </div>
 
+<!-- end Decline -->
 
 
 <!-- /.content -->
@@ -493,27 +274,8 @@ $assetsUrl = base_url('assets');
 
     $(document).ready(function() {
 
-     let temp_qty = new AutoNumeric('#temp_qty', configQty);
-     $('#product_name2_form').hide();
+        let temp_qty = new AutoNumeric('#temp_qty', configQty);
 
-
-     function showInputPage(x) {
-
-        if (x) {
-
-            $('#submission_list').hide();
-
-            $('#submission_input').show();
-
-        } else {
-
-            $('#submission_list').show();
-
-            $('#submission_input').hide();
-
-        }
-
-    }
 
        // init component //
 
@@ -521,6 +283,7 @@ $assetsUrl = base_url('assets');
            $('#btnadd').prop('disabled', !hasRole('submission.add'));
            $('.btnedit').prop('disabled', !hasRole('submission.edit'));
            $('.btndelete').prop('disabled', !hasRole('submission.delete'));
+           $('.btndecline').prop('disabled', !hasRole('submission.decline'));
        }
 
         // select2 //
@@ -552,7 +315,7 @@ $assetsUrl = base_url('assets');
                 width: 100
             },
             {
-                targets: [0, 6],
+                targets: [0, 8],
                 orderable: false,
                 searchable: false,
             },
@@ -565,67 +328,115 @@ $assetsUrl = base_url('assets');
 
 
         $('#btnadd').click(function(e) {
+            e.preventDefault();
+            let form = $('#frmaddsubmission');
+            $('#title-addsubmission').html('Tambah Pengajuan');
+            $('#modal-addsubmission').modal(configModal);
+            clearItemInput();
+            formMode = 'add';
 
-         e.preventDefault();
+        })
 
-         let actUrl = base_url + '/webmin/submission/get-submission-temp';
-
-         ajax_get(actUrl, null, {
-
-             success: function(response) {
-
-                if (response.result.success == 'TRUE') {
-
-                 let form = $('#frmaddtemp');
-
-                 let items = response.result.data;
-
-                 $('#title-frmsubmisiion').html('Tambah Pengajuan Pesanan');
-
-                 setSelect2('#supplier_id', "", "");
-                 setSelect2('#warehouse', "", "");
-
-                 $('#supplier_id').prop("disabled", false);
-
-                 formMode = 'add';
-
-                 loadTempData(items);
-                 console.log(items);
-                 if(items.length > 0){
-                    let supplier_ids = items[0].temp_submission_supplier_id;
-                    let supplier_names = items[0].temp_submission_supplier_name;
-                    setSelect2('#supplier_id', supplier_ids, supplier_names);
-                    $('#supplier_id').prop("disabled", true);
+        $('.close-modal-addsubmission').click(function(e) {
+            e.preventDefault();
+            message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
+                let yes = parseMessageResult(answer);
+                if (yes) {
+                    $('#modal-addsubmission').modal('hide');
                 }
+            })
+        })
 
-                clearItemInput();
+        $('.close-modal-decline').click(function(e) {
+            e.preventDefault();
+            message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
+                let yes = parseMessageResult(answer);
+                if (yes) {
+                    $('#modal-decline').modal('hide');
+                }
+            })
+        })
 
-                showInputPage(true);
+        $("#tblhdsubmission").on('click', '.btnedit', function(e) {
+            e.preventDefault();
+            let id = $(this).attr('data-id');
+            let actUrl = base_url + '/webmin/submission/getbyid/' + id;
+            ajax_get(actUrl, null, {
+                success: function(response) {
+                    if (response.success) {
+                        if (response.result.exist){
+                            if(response.result.data.submission_status == 'Pending'){
+                                editMode(response.result.data);
+                            }else{
+                                message.info('Pesanan yang sudah selesai atau dibatalkan tidak dapat di ubah lagi');
+                            }
+                        } else {
+                            message.error(response.result.message);
+                        }
+                    }
+                }
+            })
 
-            } else {
+        })
 
-             message.error(response.result.message);
+        function editMode(data) {
+            let form = $('#frmaddsubmission');
+            $('#title-frmaddsubmission').html('Ubah Pengajuan');
+            form.parsley().reset();
+            formMode = 'edit';
+            $('#submission_id').val(htmlEntities.decode(data.submission_id));
+            $('#submission_order_invoice').val(htmlEntities.decode(data.submission_inv));
+            $('#submission_order_date').val(htmlEntities.decode(data.submission_date));
+            setSelect2("#warehouse",htmlEntities.decode(data.submission_warehouse_id),htmlEntities.decode(data.warehouse_code)+' - '+htmlEntities.decode(data.warehouse_name));
+            setSelect2("#salesman_id",htmlEntities.decode(data.submission_salesman_id),htmlEntities.decode(data.salesman_code)+' - '+htmlEntities.decode(data.salesman_name));
+            $('#temp_status').val(htmlEntities.decode(data.submission_item_status));
+            $('#item_code').val(htmlEntities.decode(data.item_code));
+            $('#item_id').val(htmlEntities.decode(data.submission_item_id));
+            $('#product_name').val(htmlEntities.decode(data.submission_product_name));
+            temp_qty.set(data.submission_qty);
+            $('#desc').val(htmlEntities.decode(data.submission_desc));
+            $('#modal-addsubmission').modal(configModal);
+        }
 
-         }
+        $("#tblhdsubmission").on('click', '.btndecline', function(e) {
+            e.preventDefault();
+            let id = $(this).attr('data-id');
+            let actUrl = base_url + '/webmin/submission/getbyid/' + id;
+            ajax_get(actUrl, null, {
+                success: function(response) {
+                    if (response.success) {
+                        if (response.result.exist){
+                            if(response.result.data.submission_status == 'Pending'){
+                                declineMode(response.result.data);
+                            }else{
+                                message.info('Pesanan yang sudah selesai atau dibatalkan tidak dapat di ubah lagi');
+                            }
+                        } else {
+                            message.error(response.result.message);
+                        }
+                    }
+                }
+            })
 
-     }
+        })
 
- })
-
-     })
-
-
-
+        function declineMode(data) {
+            let form = $('#frmdecline');
+            $('#title-frmdecline').html('Tolak Pengajuan');
+            form.parsley().reset();
+            $('#submission_id_decline').val(htmlEntities.decode(data.submission_id));
+            $('#modal-decline').modal(configModal);
+        }
 
         $('#product_name').autocomplete({   
 
-         minLength: 2,
+            minLength: 2,
 
-         source: function(req, add) {
+            source: function(req, add) {
 
              $.ajax({
 
-                 url: base_url + '/webmin/purchase-order/search-product-bysuplier?sup='+$('#supplier_id').val(),
+                 url: base_url + '/webmin/submission/search-product-submission',
 
                  dataType: 'json',
 
@@ -657,123 +468,27 @@ $assetsUrl = base_url('assets');
 
             $('#item_id').val(ui.item.item_id);
 
+            $('#item_code').val(ui.item.item_code);
+
         },
 
     });
 
-
-
-        $('#btncancel').click(function(e) {
-
-            e.preventDefault();
-
-            message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
-
-                let yes = parseMessageResult(answer);
-
-                if (yes) {
-
-                    showInputPage(false);
-
-                }
-
-            })
-
-        })
         
-
-        $("#tblhdsubmission").on('click', '.btnedit', function(e) {
-
-            e.preventDefault();
-
-            let id = $(this).attr('data-id');
-
-            let actUrl = base_url + '/webmin/submission/edit-order/' + id;
-
-            ajax_get(actUrl, null, {
-
-                success: function(response) {
-
-                    if (response.success) {
-
-                        if (response.result.success) {
-
-                            let form = $('#frmsubmission');
-
-                            let items = response.result.data;
-
-                            $('#title-frmsubmission').html('Ubah Pengajuan Pesanan');
-
-                            let header = response.result.header;
-
-
-                            if (header.submission_status == 'Pending') {
-
-                                $('#title-frmsubmission').html('Ubah Pengajuan Pesanan');
-
-                                formMode = 'edit';
-
-                                $('#submission_id ').val(header.submission_id );
-
-                                setSelect2("#supplier_id", header.submission_supplier_id, header.supplier_name);
-
-                                $('#supplier_id').prop('disabled', true);
-
-                                let warehouse_name = header.warehouse_name;
-
-                                setSelect2("#warehouse", header.submission_store_id, warehouse_name);
-
-                                $('#warehouse').prop('disabled', true);
-
-                                //$('#submission_order_invoice').val('PJ-' + header.submission_inv);
-
-                                $('#submission_order_invoice').val(header.submission_inv);
-
-                                $('#submission_order_date').val(header.submission_date);
-
-                                $('#submisson_order_remark').val(htmlEntities.decode(header.submission_desc));
-
-                                $('#display_user').val(header.user_realname);
-
-                                loadTempData(items);
-
-                                showInputPage(true);
-
-                            } else {
-
-                                message.info('Pesanan yang sudah selesai atau dibatalkan tidak dapat di ubah lagi');
-
-                                //updateTable();
-
-                            }
-
-                        } else {
-
-                            message.error(response.result.message);
-
-                        }
-
-                    }
-
-                }
-
-            })
-        })
-
 
         $("#tblhdsubmission").on('click', '.btndelete', function(e) {
 
             e.preventDefault();
 
-            let id = $(this).attr('data-id');
+            let submission_id_decline = $('#submission_id_decline').val();
 
-            message.question('Yakin ingin membatalkan pengajuan ini?').then(function(answer) {
+            message.question('Yakin ingin Menolak pengajuan ini?').then(function(answer) {
 
                 let yes = parseMessageResult(answer);
 
                 if (yes) {
 
-                    let actUrl = base_url + '/webmin/submission/cancel-order/' + id;
+                    let actUrl = base_url + '/webmin/submission/cancel-order/' + submission_id_decline;
 
                     ajax_get(actUrl, null, {
 
@@ -784,8 +499,6 @@ $assetsUrl = base_url('assets');
                                 if (response.result.success) {
 
                                     notification.success(response.result.message);
-
-
 
                                 } else {
 
@@ -805,6 +518,72 @@ $assetsUrl = base_url('assets');
 
             })
 
+        })
+
+        $('#btn_decline').click(function(e) {
+
+            e.preventDefault();
+
+            let form = $('#frmdecline');
+
+            let btnSubmit = $('#btn_decline');
+
+            let question = 'Yakin ingin Menolak data Pengajuan?';
+
+            let actUrl = base_url + '/webmin/submission/decline-order';
+
+            message.question(question).then(function(answer) {
+
+                let yes = parseMessageResult(answer);
+
+                if (yes) {
+
+                    let formValues = {
+
+                        submission_id_decline: $('#submission_id_decline').val(),
+
+                        desc_decline: $('#desc_decline').val()
+
+                    };
+
+                    btnSubmit.prop('disabled', true);
+
+                    ajax_post(actUrl, formValues, {
+
+                        success: function(response) {
+
+                            if (response.success) {
+
+                                if (response.result.success) {
+
+                                    notification.success(response.result.message);
+
+                                    $('#modal-decline').modal('hide');
+
+                                } else {
+
+                                    message.error(response.result.message);
+
+                                }
+
+                            }
+
+                            btnSubmit.prop('disabled', false);
+
+                            updateTableHeader();
+
+                        },
+
+                        error: function(response) {
+
+                            btnSubmit.prop('disabled', false);
+
+                            updateTable();
+
+                        }
+                    });
+                }
+            })
         })
 
 
@@ -830,12 +609,12 @@ $assetsUrl = base_url('assets');
             },
         });
 
-        $("#supplier_id").select2({
-            placeholder: '-- Pilih Supplier --',
+        $("#salesman_id").select2({
+            placeholder: '-- Pilih Salesman --',
             width: "100%",
             allowClear: true,
             ajax: {
-                url: base_url + "/webmin/select/supplier",
+                url: base_url + "/webmin/select/salesman",
                 dataType: "json",
                 type: "GET",
                 delay: select2Delay,
@@ -852,86 +631,121 @@ $assetsUrl = base_url('assets');
             },
         });
 
+        $('#btnsave_submission').click(function(e) {
 
-        $('#btnadd_temp').click(function(e) {
+            e.preventDefault();
 
-         e.preventDefault();
+            let qty = parseFloat(temp_qty.getNumericString());
 
-         let qty = parseFloat(temp_qty.getNumericString());
+            let form = $('#frmaddsubmission');
 
-         let btnSubmit = $('#btnadd_temp');
+            let btnSubmit = $('#btnsave');
 
-         let form = $('#frmaddtemp');
-
-         let supplier_name = $( "#supplier_id option:selected" ).text();
-
-         form.parsley().validate();
-
-         if (form.parsley().isValid()) {
-
-             let actUrl = base_url + '/webmin/submission/temp-add';
-
-             let formValues = {
-                 item_id: $('#item_id').val(),
-                 temp_id: $('#temp_id').val(),
-                 temp_status: $('#temp_status').val(),
-                 product_name: $('#product_name').val(),
-                 temp_qty: qty,
-                 temp_desc:$('#temp_desc').val(),
-                 supplier_id:$('#supplier_id').val(),
-                 supplier_name:supplier_name,
-             };
+            let question = 'Yakin ingin menyimpan data Pengajuan?';
 
 
-             btnSubmit.prop('disabled', true);
+            form.parsley().validate();
 
-             ajax_post(actUrl, formValues, {
+            if (form.parsley().isValid()) {
 
-                 success: function(response) {
+                let actUrl = base_url + '/webmin/submission/save/add';
 
-                     if (response.success) {
+                if (formMode == 'edit') {
 
-                         if (response.result.success) {
+                    question = 'Yakin ingin memperbarui data Pengajuan?';
 
-                             $('#product_name').focus();
+                    actUrl = base_url + '/webmin/submission/save/edit';
 
-                             let supplier_id_selected = response.result.data[0].temp_submission_supplier_id;
+                }
 
-                             setSelect2('#supplier_id', supplier_id_selected, supplier_name);
+                message.question(question).then(function(answer) {
 
-                             $('#supplier_id').attr("disabled", true);
 
-                             notification.success(response.result.message);
+                    let yes = parseMessageResult(answer);
 
-                         } else {
+                    if (yes) {
 
-                             message.error(response.result.message);
+                        let formValues = {
 
-                         }
+                            submission_id: $('#submission_id').val(),
 
-                         clearItemInput();
+                            submission_order_date: $('#submission_order_date').val(),
 
-                         loadTempData(response.result.data);
+                            submission_warehouse_id: $('#warehouse').val(),
 
-                     }
+                            salesman_id: $('#salesman_id').val(),
 
-                     btnSubmit.prop('disabled', false);
+                            temp_status: $('#temp_status').val(),
 
-                 },
+                            item_id: $('#item_id').val(),
 
-                 error: function(response) {
+                            product_name: $('#product_name').val(),
 
-                     btnSubmit.prop('disabled', false);
+                            qty:qty,
 
-                 }
+                            desc:$('#desc').val(),
 
-             });
+                        };
 
-         }
+                        btnSubmit.prop('disabled', true);
 
-     })
+                        ajax_post(actUrl, formValues, {
+
+                            success: function(response) {
+
+                                if (response.success) {
+
+                                    if (response.result.success) {
+
+                                        form[0].reset();
+
+                                        notification.success(response.result.message);
+
+                                        form.parsley().reset();
+
+                                        clearItemInput();
+
+                                        let invoice = response.result.purchase_order_id;
+
+                                        $('#modal-addsubmission').modal('hide');
+
+                                    } else {
+
+                                        message.error(response.result.message);
+
+                                    }
+
+                                }
+
+                                btnSubmit.prop('disabled', false);
+
+                                updateTableHeader();
+
+                        //window.location.href = base_url + '/webmin/submission/';
+
+                    },
+
+                    error: function(response) {
+
+                        btnSubmit.prop('disabled', false);
+
+                        updateTable();
+
+                    }
+
+                });
+
+                    }
+
+                })
+            }
+        });
 
         Parsley.addMessages('id', {
+
+            vwarehousecode: 'Gudang Harus Di Pilih',
+
+            vsalesman: 'Salesman Harus Di Isi',
 
             vproductname: 'Harap pilih produk terlebih dahulu',
 
@@ -944,9 +758,41 @@ $assetsUrl = base_url('assets');
         });
 
 
-
         Parsley.setLocale('id');
 
+        window.Parsley.addValidator("vwarehousecode", {
+
+            validateString: function(value) {
+
+                if ($('#warehouse').val() == '') {
+
+                    return false;
+
+                } else {
+
+                    return true;
+
+                }
+            },
+
+        });
+
+        window.Parsley.addValidator("vsalesman", {
+
+            validateString: function(value) {
+
+                if ($('#salesman_id').val() == '') {
+
+                    return false;
+
+                } else {
+
+                    return true;
+
+                }
+            },
+
+        });
 
 
         window.Parsley.addValidator("vproductname", {
@@ -1024,289 +870,7 @@ $assetsUrl = base_url('assets');
 
         });
 
-
-
-
-        function loadTempData(items) {
-
-         let template = $('#template_row_temp').html();
-
-         let tbody = '';
-
-         let row = 1;
-
-         let temp_total_order = 0;
-
-         items.forEach((val, key) => {
-
-             let item = template;
-
-             let data_json = htmlEntities.encode(JSON.stringify(val));
-
-             let temp_submission_id = val.temp_submission_id;
-
-             let item_id = val.item_id;
-
-             let product_code = val.item_code;
-
-             let product_name = val.temp_submission_product_name;
-
-             let temp_submission_order_qty = parseFloat(val.temp_submission_order_qty);
-
-             let temp_submission_status = val.temp_submission_status;
-
-             let temp_submission_desc = val.temp_submission_desc;
-
-             let temp_submission_approval = val.temp_submission_approval;
-
-             item = item.replaceAll('{row}', row)
-
-             .replaceAll('{product_code}', product_code)
-
-             .replaceAll('{product_name}', product_name)
-
-             .replaceAll('{temp_qty}', numberFormat(temp_submission_order_qty, true))
-
-             .replaceAll('{temp_status}', temp_submission_status)
-
-             .replaceAll('{temp_desc}', temp_submission_desc)
-
-             .replaceAll('{temp_approval}', temp_submission_approval)
-
-             .replaceAll('{item_id}', item_id)
-
-             .replaceAll('{temp_submission_id}', temp_submission_id)
-
-             .replaceAll('{data_json}', data_json);
-
-
-
-             tbody += item;
-
-             row++;
-
-         });
-
-
-         if ($.fn.DataTable.isDataTable('#tbltemp')) {
-
-             $('#tbltemp').DataTable().destroy();
-
-         }
-
-
-
-         $('#tbltemp tbody').html('');
-
-         $('#tbltemp tbody').html(tbody);
-
-         tbltemp = $('#tbltemp').DataTable(config_tbltemp);
-
-         clearItemInput();
-
-         _initTooltip();
-
-     }
-
-
-     $("#tbltemp").on('click', '.btndelete', function(e) {
-
-        e.preventDefault();
-
-        let id = $(this).attr('data-id');
-
-        let actUrl = base_url + '/webmin/submission/temp-delete/' + id;
-
-        ajax_get(actUrl, null, {
-
-            success: function(response) {
-
-                if (response.success) {
-
-                    if (response.result.success) {
-
-                        notification.success(response.result.message);
-
-                    } else {
-
-                        message.error(response.result.message);
-
-                    }
-
-                    loadTempData(response.result.data);
-
-                }
-
-            },
-
-            error: function(response) {
-
-                getTemp();
-
-            }
-
-        })
-
-    })
-
-     $("#tbltemp").on('click', '.btnedit', function(e) {
-
-       e.preventDefault();
-
-       let json_data = $(this).attr('data-json');
-
-       let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
-
-       if (is_json) {
-
-            console.log(json);
-            
-           $('#item_id').val(json.item_id);
-
-           $('#product_name').val(json.temp_submission_product_name);
-
-           temp_qty.set(json.temp_submission_order_qty);
-
-           $('#temp_desc').val(json.temp_submission_desc);
-
-           $('#temp_id').val(json.temp_submission_id);
-
-           let temp_submission_status = json.temp_submission_status;
-
-           document.getElementById("temp_status").value = temp_submission_status;
-
-            //setSelect2('#temp_status', temp_submission_status, temp_submission_status);
-
-            $('#temp_qty').focus();
-
-        } else {
-
-           getTemp();
-
-           message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
-
-       }
-
-   })  
-
-
-     $('#btnsave').click(function(e) {
-
-        e.preventDefault();
-
-        let form = $('#frmaddtemp');
-
-        let btnSubmit = $('#btnsave');
-
-        let question = 'Yakin ingin menyimpan data Pengajuan?';
-
-        let actUrl = base_url + '/webmin/submission/save/add';
-
-        if (formMode == 'edit') {
-
-            question = 'Yakin ingin memperbarui data Pengajuan?';
-
-            actUrl = base_url + '/webmin/submission/save/edit';
-
-        }
-
-        let warehouse = $('#warehouse').val();
-
-        if(warehouse == null){
-              Swal.fire({
-                  icon: 'error',
-                  title: 'Oops...',
-                  text: 'Silahkan Isi Gudang Terlebih Dahulu !'
-              })
-
-        }else{
-
-        message.question(question).then(function(answer) {
-
-
-            let yes = parseMessageResult(answer);
-
-            if (yes) {
-
-                let formValues = {
-
-                    submission_order_date: $('#submission_order_date').val(),
-
-                    submission_desc: $('#submisson_order_remark').val(),
-
-                    submission_supplier_id: $('#supplier_id').val(),
-
-                    submission_id: $('#submission_id').val(),
-
-                    submission_inv: $('#submission_order_invoice').val(),
-
-                    submission_store_id: warehouse,
-
-                };
-
-                btnSubmit.prop('disabled', true);
-
-                ajax_post(actUrl, formValues, {
-
-                    success: function(response) {
-
-                        if (response.success) {
-
-                            if (response.result.success) {
-
-                                form[0].reset();
-
-                                notification.success(response.result.message);
-
-                                form.parsley().reset();
-
-                                showInputPage(false);
-
-                                let invoice = response.result.purchase_order_id;
-
-                            } else {
-
-                                message.error(response.result.message);
-
-                            }
-
-                        }
-
-                        btnSubmit.prop('disabled', false);
-
-                        updateTableHeader();
-
-                        //window.location.href = base_url + '/webmin/submission/';
-
-                    },
-
-                    error: function(response) {
-
-                        btnSubmit.prop('disabled', false);
-
-                        updateTable();
-
-                    }
-
-                });
-
-            }
-
-        })
-
-    }
-
-    });
-
-
-
-     function updateTable() {
-
-         tbltemp.ajax.reload(null, false);
-
-     }
-
-     function updateTableHeader() {
+        function updateTableHeader() {
 
          tblhdsubmission.ajax.reload(null, false);
 
@@ -1314,85 +878,32 @@ $assetsUrl = base_url('assets');
 
      function clearItemInput() {
 
-         let form = $('#frmaddtemp');
+         let form = $('#frmaddsubmission');
 
          form.parsley().reset();
 
-         $('#item_id').val('');
+         setSelect2("#warehouse", '', '');
 
-         $('#product_name').val('');
+         setSelect2("#salesman_id", '', '');
 
          $('#temp_status').val('');
 
-         temp_qty.set('0.00');
+         $('#item_id').val('');
 
-         $('#temp_desc').val('');
+         $('#item_code').val('');
+
+         $('#product_name').val('');
+
+         temp_qty.set(0);
+
+         $('#desc').val('');
 
      }
 
-     const config_tbltemp = {
 
-       pageLength: 10,
+     _initButton();
 
-       autoWidth: false,
-
-       select: true,
-
-       responsive: true,
-
-       fixedColumns: true,
-
-       order: [
-
-       [0, 'desc']
-
-       ],
-
-       "language": {
-
-           "url": lang_datatables,
-
-       },
-
-       "columnDefs": [{
-
-           width: 100,
-
-           targets: 6
-
-       },
-
-       {
-
-           targets: [6],
-
-           orderable: false,
-
-           searchable: false,
-
-       },
-
-
-
-       {
-
-           targets: [0, 2, 3, 4, 5],
-
-           className: "text-right",
-
-       }
-
-       ]
-
-   };
-
-   let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
-
-   _initButton();
-
-   showInputPage(false);
-
-})
+ })
 
 </script>
 

@@ -63,9 +63,9 @@ class M_purchase extends Model
 
         $sqlText = "INSERT INTO temp_purchase(temp_purchase_po_id, temp_purchase_po_invoice, temp_purchase_item_id, temp_purchase_qty,temp_purchase_ppn, temp_purchase_dpp, temp_purchase_price, temp_purchase_discount1, temp_purchase_discount1_percentage, temp_purchase_discount2,temp_purchase_discount2_percentage, temp_purchase_discount3, temp_purchase_discount3_percentage, temp_purchase_discount_total,temp_purchase_ongkir, temp_purchase_expire_date,temp_purchase_total, temp_purchase_supplier_id,temp_purchase_supplier_name,temp_purchase_user_id) ";
 
-        $sqlText .= "SELECT detail_purchase_order_inv, detail_purchase_order_inv, detail_purchase_po_item_id, detail_purchase_po_qty,detail_purchase_po_ppn,detail_purchase_po_dpp,detail_purchase_po_price,detail_purchase_po_discount1,detail_purchase_po_discount1_percentage,detail_purchase_po_discount2,detail_purchase_po_discount2_percentage,detail_purchase_po_discount3,detail_purchase_po_discount3_percentage,detail_purchase_po_total_discount,detail_purchase_po_ongkir,detail_purchase_po_expire_date,detail_purchase_po_total,'".$supplier_id."' as detail_purchase_supplier_id,'".$supplier_name."' as detail_purchase_supplier_name,'".$user_id."' as detail_purchase_user_id";
+        $sqlText .= "SELECT purchase_order_id, '". $purchase_order_invoice."' as purchase_order_invoice, detail_purchase_po_item_id, detail_purchase_po_qty,detail_purchase_po_ppn,detail_purchase_po_dpp,detail_purchase_po_price,detail_purchase_po_discount1,detail_purchase_po_discount1_percentage,detail_purchase_po_discount2,detail_purchase_po_discount2_percentage,detail_purchase_po_discount3,detail_purchase_po_discount3_percentage,detail_purchase_po_total_discount,detail_purchase_po_ongkir,detail_purchase_po_expire_date,detail_purchase_po_total,'".$supplier_id."' as detail_purchase_supplier_id,'".$supplier_name."' as detail_purchase_supplier_name,'".$user_id."' as detail_purchase_user_id";
 
-        $sqlText .= " FROM dt_purchase_order WHERE detail_purchase_order_inv = '$purchase_order_invoice'";
+        $sqlText .= " FROM dt_purchase_order WHERE purchase_order_id = '$purchase_order_id'";
 
         $this->db->query($sqlText);
 
@@ -168,13 +168,13 @@ class M_purchase extends Model
 
        $builder = $this->db->table($this->table_hd_purchase);
 
-       return $builder->select('*')
+       return $builder->select('*, hd_purchase.created_at as created_at')
 
        ->join('user_account', 'user_account.user_id = hd_purchase.purchase_user_id')
 
        ->join('ms_supplier', 'ms_supplier.supplier_id = hd_purchase.purchase_supplier_id')
 
-       ->join('ms_store', 'ms_store.store_id = hd_purchase.purchase_store_id')
+       ->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_purchase.purchase_warehouse_id')
 
        ->where('purchase_id', $purchase_id)
 
@@ -212,7 +212,7 @@ class M_purchase extends Model
 
         $maxCode = $this->db->table($this->table_hd_purchase)->select('purchase_id, purchase_invoice')->orderBy('purchase_id', 'desc')->limit(1)->get()->getRowArray();
 
-        $warehouse_code = $this->db->table($this->table_warehouse)->select('warehouse_code')->where('warehouse_id', $data['purchase_store_id'])->get()->getRowArray();
+        $warehouse_code = $this->db->table($this->table_warehouse)->select('warehouse_code')->where('warehouse_id', $data['purchase_warehouse_id'])->get()->getRowArray();
 
         $invoice_date =  date_format(date_create($data['purchase_date']),"y/m");
 
@@ -303,9 +303,9 @@ class M_purchase extends Model
             $active                 = $row['active'];
             $deleted                = $row['deleted'];
             $base_cogs              = $row['base_cogs'];
-            $warehouse_id           = $data['purchase_store_id'];
+            $warehouse_id           = $data['purchase_warehouse_id'];
 
-            $getStock = $this->db->table($this->table_ms_product_stock)->select('stock')->where('product_id', $product_id)->where('warehouse_id', $warehouse_id)->get()->getRowArray();
+            $getStock = $this->db->table($this->table_ms_product_stock)->select('sum(stock) as stock')->where('product_id', $product_id)->get()->getRowArray();
             if($getStock == null){
             $stock                  = 0;
             }else{
@@ -320,7 +320,7 @@ class M_purchase extends Model
 
          
 
-            $calcualtion_cogs       = round((($stock * $base_cogs) +  ($base_purchase_qty + $base_purchase_tax) /  $base_purchase_qty + $base_purchase_price),2);
+            $calcualtion_cogs       = round((($stock * $base_cogs) +  ($base_purchase_qty * $base_purchase_price + $base_purchase_tax) /  $base_purchase_qty + $base_purchase_stock),2);
 
             //print_r($calcualtion_cogs);die();
 
@@ -343,7 +343,7 @@ class M_purchase extends Model
 
 
         if($data['purchase_po_invoice'] != null){
-          $updateStatus =  $this->db->table($this->table_hd_po)->where('purchase_order_invoice', $data['purchase_po_invoice'])->update(['purchase_order_status' => 'Accept']);
+          $updateStatus =  $this->db->table($this->table_hd_po)->where('purchase_order_invoice', $data['purchase_po_invoice'])->update(['purchase_order_status' => 'Selesai']);
         }
 
         $this->db->query($sqlDtOrder);
@@ -408,7 +408,7 @@ class M_purchase extends Model
 
             $this->db->transRollback();
 
-            $save = ['success' => FALSE, 'purchase_order_id' => 0];
+            $save = ['success' => FALSE, 'sale_admin_id' => 0];
 
         } else {
 

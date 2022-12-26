@@ -18,7 +18,7 @@ $assetsUrl = base_url('assets');
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Detail Pesanan Pembelian</title>
+    <title>Detail PO Konsinyasi</title>
 
 
 
@@ -56,7 +56,7 @@ $assetsUrl = base_url('assets');
 
                         Detail Transaksi
 
-                        <small class="float-right"><?= COMPANY_REGION ?>, <?= indo_date($hdsubmission['submission_date'], FALSE) ?></small>
+                        <small class="float-right"><?= COMPANY_REGION ?>, <?= indo_date($hdConsignment['purchase_order_consignment_date'], FALSE) ?></small>
 
                     </h2>
 
@@ -86,8 +86,29 @@ $assetsUrl = base_url('assets');
 
                 <div class="col-sm-4 invoice-col">
 
-                    <b><?= esc($hdsubmission['submission_inv']) ?></b><br>
+                    <p>Supplier:<br />
+                    <b><?= esc($hdConsignment['supplier_name']) ?></b><br>
+                       <?= esc($hdConsignment['supplier_address']) ?><br>
+                       <?= esc($hdConsignment['supplier_phone']) ?>
+                   </p>
 
+                </div>
+
+                <div class="col-sm-4 invoice-col">
+                    <p><b><?= esc($hdConsignment['purchase_order_consignment_invoice']) ?></b><br>
+                       Status :
+                        <?php if($hdConsignment['purchase_order_consignment_status'] == 'Pending'){ ?>
+                        <span class="badge badge-primary">Pending</span>
+                        <?php } ?>
+                        <?php if($hdConsignment['purchase_order_consignment_status'] == 'Selesai'){ ?>
+                        <span class="badge badge-success">Selesai</span>
+                        <?php } ?>
+                        <?php if($hdConsignment['purchase_order_consignment_status'] == 'Batal'){ ?>
+                        <span class="badge badge-danger">Batal</span>
+                        <?php } ?>
+                        <br>
+                        Gudang : <b><?= esc($hdConsignment['warehouse_code']) ?>/<?= esc($hdConsignment['warehouse_name']) ?></b>
+                    </p>
                 </div>
 
                 <!-- /.col -->
@@ -111,43 +132,40 @@ $assetsUrl = base_url('assets');
                         <thead>
 
                             <tr>
-
-                                <th>Kode Item</th>
+                                <th>Kode Produk</th>
 
                                 <th>Nama Produk</th>
 
-                                <th>Status Pengajuan</th>
-
-                                <th class="text-right">Qty Order</th>
-
-                                <th>Keterangan</th>
-
-                                <th>Status</th>
-
-                                <th>Catatan Admin</th>
+                                <th class="text-right">Qty</th>
 
                             </tr>
 
                         </thead>
 
                         <tbody>
-                            <tr>
 
-                                <td><?= esc($hdsubmission['item_code']) ?></td>
+                            <?php
 
-                                <td><?= esc($hdsubmission['submission_product_name']) ?></td>
+                            foreach ($dtConsignment as $row) :
 
-                                <td><?= esc($hdsubmission['submission_item_status']) ?></td>
+                                $dt_po_consignment_qty = floatval($row['dt_po_consignment_qty']);
+                                ?>
 
-                                <td class="text-right">Rp <?= numberFormat($hdsubmission['submission_qty'], TRUE) ?></td>
+                                <tr>
 
-                                <td><?= esc($hdsubmission['submission_desc']) ?></td>
+                                    <th><?= esc($row['product_code']) ?></th>
 
-                                <td><?= esc($hdsubmission['submission_status']) ?></td>
+                                    <th><?= esc($row['product_name']) ?>(<?= esc($row['unit_name']) ?>)</th>
 
-                                <td><?= esc($hdsubmission['submission_admin_remark']) ?></td>
+                                    <th class="text-right"><?= numberFormat($dt_po_consignment_qty, TRUE) ?></th>
 
-                            </tr>
+                                </tr>
+
+                                <?php
+
+                            endforeach;
+
+                            ?>
 
                         </tbody>
 
@@ -171,20 +189,9 @@ $assetsUrl = base_url('assets');
 
                     <p class="lead">&nbsp;</p>
 
-
-
                     <div class="table-responsive">
 
                         <table class="table">
-
-
-                            <tr>
-
-                                <th>Catatan:</th>
-
-                                <td><?= esc($hdsubmission['submission_desc']) ?></td>
-
-                            </tr>
 
                         </table>
 
@@ -193,7 +200,7 @@ $assetsUrl = base_url('assets');
                 </div>
 
 
-            
+
 
                 <div class="col-md-6 col-xs-12 order-md-1">
 
@@ -217,14 +224,14 @@ $assetsUrl = base_url('assets');
 
                                 <th style="width:10%">Created</th>
 
-                                <td><?= esc($hdsubmission['user_realname']) ?></td>
+                                <td><?= esc($hdConsignment['user_realname']) ?></td>
 
-                                <td><?= indo_date($hdsubmission['created_at']) ?></td>
+                                <td><?= indo_date($hdConsignment['created_at']) ?></td>
 
                             </tr>
 
 
-                            <?php foreach ($logupdate as $log) : ?>
+                            <?php /*foreach ($logupdate as $log) : ?>
 
                                 <tr>
 
@@ -236,9 +243,16 @@ $assetsUrl = base_url('assets');
 
                                 </tr>
 
-                            <?php endforeach;  ?>
+                            <?php endforeach; */ ?>
 
 
+                            <tr>
+
+                                <th>Catatan:</th>
+
+                                <td colspan="2"><?= esc($hdConsignment['purchase_order_consignment_remark']) ?></td>
+
+                            </tr>
 
                         </table>
 
