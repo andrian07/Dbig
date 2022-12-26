@@ -32,10 +32,7 @@ $assetsUrl = base_url('assets');
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Pilih Produk:</label>
-                                            <select id="item_code" name="item_code" class="form-control">
-                                                <option value="480528304523">480528304523 - Kopin Gelas Coffee Mug Kukuruyuk (KPM-03CM)</option>
-                                                <option value="480528304525">480528304525 - Amstad Wastafel Studio 45 Wall Hung Lavatory White - paket</option>
-                                            </select>
+                                            <select id="item_id" name="item_id" class="form-control"></select>
                                         </div>
                                     </div>
 
@@ -61,12 +58,10 @@ $assetsUrl = base_url('assets');
                                             <label>Jumlah:</label>
                                             <select id="print_count" name="print_count" class="form-control">
                                                 <?php
-                                                $countBarcode = 2;
-                                                for ($i = 1; $i <= 6; $i++) {
+                                                for ($i = 1; $i <= 12; $i++) {
                                                 ?>
-                                                    <option value="<?= $i ?>"><?= $i ?> Baris (<?= $countBarcode ?> Barcode)</option>
+                                                    <option value="<?= $i ?>"><?= $i ?> Baris</option>
                                                 <?php
-                                                    $countBarcode += 2;
                                                 }
                                                 ?>
                                             </select>
@@ -125,56 +120,43 @@ $assetsUrl = base_url('assets');
 <?= $this->section('js') ?>
 <script>
     $(document).ready(function() {
-        // $("#item_code").select2({
-        //     placeholder: '-- Semua --',
-        //     width: "100%",
-        //     allowClear: true,
-        //     ajax: {
-        //         url: base_url + "/select/product-unit",
-        //         dataType: "json",
-        //         type: "POST",
-        //         delay: select2Delay,
-        //         data: function(params) {
-        //             return {
-        //                 search: params.term,
-        //             };
-        //         },
-        //         processResults: function(data, page) {
-        //             return {
-        //                 results: data,
-        //             };
-        //         },
-        //     },
-        // });
+        $("#item_id").select2({
+            placeholder: '-- Semua --',
+            width: "100%",
+            allowClear: true,
+            ajax: {
+                url: base_url + "/webmin/select/product-unit",
+                dataType: "json",
+                type: "GET",
+                delay: select2Delay,
+                data: function(params) {
+                    return {
+                        search: params.term,
+                    };
+                },
+                processResults: function(data, page) {
+                    return {
+                        results: data,
+                    };
+                },
+            },
+        });
 
         $('#btnsearch').click(function(e) {
             e.preventDefault();
-            let item_code = $("#item_code").val();
+            let item_id = $("#item_id").val();
             let barcode_type = $("#barcode_type").val();
             let print_count = $('#print_count').val();
-            if (item_code == null) {
-                item_code = '';
+            if (item_id == null) {
+                item_id = '';
             }
 
             let reportUrl = '<?= base_url('webmin/report/barcode-generate') ?>?';
-            reportUrl += 'item_code=' + item_code + '&barcode_type=' + barcode_type;
+            reportUrl += 'item_id=' + item_id + '&barcode_type=' + barcode_type;
             reportUrl += '&print_count=' + print_count;
             $('#preview').prop('src', reportUrl);
         })
 
-        $('#btnprint').click(function(e) {
-            e.preventDefault();
-            let item_code = $("#item_code").val();
-            let barcode_type = $("#barcode_type").val();
-            let print_count = $('#print_count').val();
-            if (item_code == null) {
-                item_code = '';
-            }
-            let reportUrl = '<?= base_url('report/print-barcode') ?>?';
-            reportUrl += 'item_code=' + item_code + '&barcode_type=' + barcode_type;
-            reportUrl += '&print_count=' + print_count + '&print=Y';
-            window.open(reportUrl, '_blank');
-        })
     })
 </script>
 <?= $this->endSection() ?>

@@ -47,6 +47,16 @@ class M_product extends Model
             ->get();
     }
 
+    public function getListProductUnit($item_id)
+    {
+        return $this->db->table('ms_product_unit')
+            ->select('ms_product.product_code,ms_product.product_name,ms_product_unit.*,(ms_product_unit.product_content*ms_product.base_purchase_price) as product_price,(ms_product_unit.product_content*ms_product.base_purchase_tax) as product_tax,ms_unit.unit_name')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->whereIn('ms_product_unit.item_id', $item_id)
+            ->get();
+    }
+
     public function getProductStock($product_id)
     {
         return $this->db->table('ms_product_stock')
@@ -272,7 +282,7 @@ class M_product extends Model
         return  $builder->limit($limit)->get();
     }
 
-     public function searchProductBysuplier($keyword, $supplier_id = '',$isItemCode = FALSE, $limit = 10)
+    public function searchProductBysuplier($keyword, $supplier_id = '', $isItemCode = FALSE, $limit = 10)
     {
         
         $builder = $this->db->table('ms_product_unit');

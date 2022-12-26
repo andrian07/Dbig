@@ -1,0 +1,25 @@
+StartFontMetrics 4.1
+Notice Converted by PHP-font-lib
+Comment https://github.com/PhenX/php-font-lib
+EncodingScheme FontSpecific
+Copyright © 2006 Microsoft Corporation. All Rights Reserved.
+FontName Wingdings
+FontSubfamily Normal
+UniqueID Wingdings Regular: MS: 2006
+FullName Wingdings
+Version Version 5.01
+PostScriptName Wingdings-Regular
+Trademark Wingdings is either a registered trademark or a trademark of Microsoft Corporation in the United States and/or other countries. 
+Manufacturer Microsoft Typography
+FontVendorURL http://www.microsoft.com/truetype/fonts/wingdings/
+LicenseDescription Microsoft supplied font. You may use this font to create, display, and print content as permitted by the license terms or terms of use, of the Microsoft product, service, or content in which this font was included. You may only (i) embed this font in content as permitted by the embedding restrictions included in this font; and (ii) temporarily download this font to a printer or other output device to help print content. Any other use is prohibited.
+Weight Medium
+ItalicAngle 0
+IsFixedPitch false
+UnderlineThickness 49
+UnderlinePosition -98
+FontHeightOffset 0
+Ascender 899
+Descender -211
+FontBBox 0 -211 1359 899
+EndFontMetrics

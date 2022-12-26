@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package dompdf
  * @link    https://github.com/dompdf/dompdf
@@ -97,6 +98,8 @@ class CPDF implements Canvas
         "8.5x11" => [0.0, 0.0, 612.00, 792.00],
         "8.5x14" => [0.0, 0.0, 612.00, 1008.00],
         "11x17" => [0.0, 0.0, 792.00, 1224.00],
+
+        "f4"    => [0.0, 0.0, 595.28, 935.43],
     ];
 
     /**
@@ -454,8 +457,12 @@ class CPDF implements Canvas
         $this->_set_stroke_color($color);
         $this->_set_line_style($width, $cap, "", $style);
 
-        $this->_pdf->line($x1, $this->y($y1),
-            $x2, $this->y($y2));
+        $this->_pdf->line(
+            $x1,
+            $this->y($y1),
+            $x2,
+            $this->y($y2)
+        );
         $this->_set_line_transparency("Normal", $this->_current_opacity);
     }
 
@@ -593,7 +600,7 @@ class CPDF implements Canvas
         if ($filename !== null && file_exists($filename)) {
             return $filename;
         }
- 
+
         $func_name = "imagecreatefrom$type";
 
         set_error_handler([Helpers::class, "record_warnings"]);
@@ -651,9 +658,9 @@ class CPDF implements Canvas
                 break;
 
             case "webp":
-            /** @noinspection PhpMissingBreakStatementInspection */
+                /** @noinspection PhpMissingBreakStatementInspection */
             case "gif":
-            /** @noinspection PhpMissingBreakStatementInspection */
+                /** @noinspection PhpMissingBreakStatementInspection */
             case "bmp":
                 if ($debug_png) print "!!!{$type}!!!";
                 $img = $this->_convert_to_png($img, $type);
