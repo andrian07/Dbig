@@ -1,0 +1,23 @@
+StartFontMetrics 4.1
+Notice Converted by PHP-font-lib
+Comment https://github.com/PhenX/php-font-lib
+EncodingScheme FontSpecific
+Copyright © 2006 Microsoft Corporation. All Rights Reserved.
+FontName Marlett
+FontSubfamily Regular
+UniqueID Marlett
+FullName Marlett
+Version Version 5.01
+PostScriptName Marlett
+LicenseDescription Microsoft supplied font. You may use this font to create, display, and print content as permitted by the license terms or terms of use, of the Microsoft product, service, or content in which this font was included. You may only (i) embed this font in content as permitted by the embedding restrictions included in this font; and (ii) temporarily download this font to a printer or other output device to help print content. Any other use is prohibited.
+LicenseURL http://www.microsoft.com/typography/fonts
+Weight Bold
+ItalicAngle 0
+IsFixedPitch false
+UnderlineThickness 0
+UnderlinePosition 0
+FontHeightOffset 0
+Ascender 938
+Descender 0
+FontBBox -109 -208 1000 1000
+EndFontMetrics

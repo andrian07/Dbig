@@ -287,6 +287,55 @@ class Select extends WebminController
         $select2->generate();
     }
 
+    public function product()
+    {
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('ms_product');
+
+        $select2->db->select('product_id,product_name,product_code');
+        $select2->db->where('deleted', 'N');
+
+        $select2->searchFields  = ['product_code', 'product_name'];
+        $select2->orderBy       = 'product_code';
+        $select2->orderDir      = 'ASC';
+
+
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = esc($row['product_id']);
+            $result['text'] = $row['product_code'] . ' - ' . $row['product_name'];
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
+    public function productUnit()
+    {
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('ms_product_unit');
+
+        $select2->db->select('ms_product_unit.item_id,ms_product_unit.item_code,ms_product.product_name,ms_unit.unit_name');
+        $select2->db->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id');
+        $select2->db->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id');
+        $select2->db->where('ms_product.deleted', 'N');
+
+        $select2->searchFields  = ['ms_product_unit.item_code', 'ms_product.product_name'];
+        $select2->orderBy       = 'ms_product.product_name';
+        $select2->orderDir      = 'ASC';
+
+
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = esc($row['item_id']);
+            $result['text'] = $row['item_code'] . ' - ' . $row['product_name'] . ' (' . $row['unit_name'] . ')';
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
+
     public function warehouse()
     {
         $this->validationRequest(TRUE);
@@ -316,7 +365,7 @@ class Select extends WebminController
 
     public function payment_method()
     {
-         $this->validationRequest(TRUE);
+        $this->validationRequest(TRUE);
         $select2 = new \App\Libraries\Select2('ms_payment_method');
 
         $select2->db->select('payment_method_id, payment_method_name, bank_account_name');
@@ -329,7 +378,7 @@ class Select extends WebminController
         $select2->renderResult(function ($row, $i) {
             $result = [];
             $result['id']   = $row['payment_method_id'];
-            $result['text'] = $row['payment_method_name'].'-'.$row['bank_account_name'];
+            $result['text'] = $row['payment_method_name'] . '-' . $row['bank_account_name'];
             return $result;
         });
 
@@ -380,7 +429,8 @@ class Select extends WebminController
         $select2->generate();
     }
 
-    public function noPoConsignment(){
+    public function noPoConsignment()
+    {
         $this->validationRequest(TRUE);
         $select2 = new \App\Libraries\Select2('hd_purchase_order_consignment');
 

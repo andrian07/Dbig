@@ -3,6 +3,7 @@
 
 namespace App\Controllers\Webmin;
 
+use Dompdf\Dompdf;
 use App\Models\M_voucher;
 use App\Controllers\Base\WebminController;
 
@@ -364,6 +365,64 @@ class Voucher extends WebminController
                 }
             } else {
                 throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            }
+        }
+    }
+
+    public function printVoucher($voucher_group_id = '')
+    {
+        $item_code          = $this->request->getGet('item_code') != NULL ? $this->request->getGet('item_code') : '480528304523';
+        $print_count        = $this->request->getGet('print_count') != NULL ? intval($this->request->getGet('print_count')) : 1;
+
+        $demo_product = [
+            '480528304523' => ['item_code' => '480528304523', 'product_name' => 'Kopin Gelas Coffee Mug Kukuruyuk (KPM-03CM)', 'unit_name' => 'PCS', 'sales_price' => '15000'],
+            '480528304525' => ['item_code' => '480528304525', 'product_name' => ' Amstad Wastafel Studio 45 Wall Hung Lavatory White - paket', 'unit_name' => 'PCS', 'sales_price' => '18000'],
+        ];
+        $getProductUnit = isset($demo_product[$item_code]) ? $demo_product[$item_code] : NULL;
+
+        $agent = $this->request->getUserAgent();
+        $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE; // param export
+        $fileType   = $this->request->getGet('file'); // jenis file pdf|xlsx 
+
+
+        if (!in_array($fileType, ['pdf'])) {
+            $fileType = 'pdf';
+        }
+
+        if ($item_code == '') {
+            die('<h1>Harap Pilih Item Yang Akan Dicetak</h1>');
+        } else {
+            if ($getProductUnit == NULL) {
+                die("<h1>Item dengan barcode \" $item_code \" tidak ditemukan</h1>");
+            } else {
+
+                $img_path = 'assets/images/voucher-cover.png';
+                $getImg = file_get_contents($img_path);
+                $img_base64 = base64_encode($getImg);
+                $data = [
+                    'title'         => 'Voucher',
+                    'product'       => $getProductUnit,
+                    'printCount'    => $print_count,
+                    'cover_background'  => $img_base64
+                ];
+                $htmlView   = $this->renderView('masterdata/voucher_print', $data);
+
+                //$agent->isMobile() && !$isDownload
+
+                if ($agent->isMobile() && !$isDownload) {
+                    return $htmlView;
+                } else {
+                    if ($fileType == 'pdf') {
+                        $dompdf = new Dompdf();
+                        $dompdf->loadHtml($htmlView);
+
+                        $dompdf->setPaper('f4');
+                        $dompdf->render();
+                        //$dompdf->stream('voucher.pdf', array("Attachment" => $isDownload));
+                        $dompdf->stream('voucher.pdf', array("Attachment" => FALSE));
+                        exit();
+                    }
+                }
             }
         }
     }

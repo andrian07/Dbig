@@ -3,6 +3,9 @@
 if (!function_exists('indo_date')) {
     function indo_date($str, $icon = FALSE,  $datetime_separator = ' ')
     {
+        if ($str == '' || $str == NULL || $str == '0000-00-00' || $str == '0000-00-00 00:00:00') {
+            return  '';
+        }
         $iDate = $icon == TRUE ? '<i class="fas fa-calendar-alt"></i> ' : '';
         $iTime = $icon == TRUE ? '<i class="fas fa-clock"></i> ' : '';
 

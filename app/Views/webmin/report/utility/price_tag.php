@@ -1,125 +1,384 @@
-<html>
+<?= $this->extend('webmin/template/report_A4_landscape_template') ?>
 
-<head>
-    <title> Cetak Label Harga </title>
-    <style>
-        * {
-            margin: 0px;
-            padding: 0px;
-            font-size: 10px;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-        }
+<?= $this->section('css') ?>
+<style>
+    * {
+        margin: 0px;
+        padding: 0px;
+        font-size: 10px;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
+    }
 
-        .price-tag {
-            width: 226.77px;
-            height: 151.18px;
-            background-color: #1034A6;
-            margin: auto;
-        }
+    .font-primary {
+        font-family: Arial, Helvetica, sans-serif;
+    }
 
-        .price-tag .tag-header {
-            width: 226.77px;
-            height: 60px;
-            background-color: #1034A6;
-            color: #FFF;
-            padding: 2px 3px;
-            font-size: 15px;
-            overflow: hidden;
-        }
+    .font-secondary {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
 
-        .price-tag .tag-body {
-            width: 226.77px;
-            height: 80px;
-            background-color: #FFF;
-            padding: 2px 3px;
-            font-size: 15px;
-            overflow: hidden;
-            position: relative;
-        }
+    .price-tag {
+        width: 226.77px;
+        height: 151.18px;
+        background-color: white;
+        margin: auto;
+        border: 1px solid #000;
+    }
 
-        .price-tag .tag-body small {
-            font-size: 15px;
-        }
+    .price-tag tbody tr {
+        margin: 0px;
+        padding: 0px;
+    }
 
-        .price-tag .tag-body .label-price {
-            float: right;
-            position: absolute;
-            font-size: 25px;
-            top: 18;
-            right: 3;
-        }
+    .price-tag tbody tr td {
+        margin: 0px;
+        padding: 0px 3px;
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+    }
 
-        .price-tag .tag-body .label-unit {
-            float: right;
-            position: absolute;
-            font-size: 15px;
-            top: 43;
-            right: 3;
-        }
+    .price-tag .tag-header {
+        font-family: Arial, Helvetica, sans-serif;
+        color: #FFF;
+        padding: 2px 3px;
+        font-size: 14px;
+        font-weight: bold;
+        vertical-align: top;
 
-        .price-tag .tag-body .label-promo {
-            float: right;
-            position: absolute;
-            font-size: 15px;
-            top: 2;
-            right: 3;
-        }
+    }
 
-        .price-tag .tag-body .label-promo del {
+    .va-top {
+        vertical-align: top;
+    }
 
-            font-size: 15px;
-        }
-    </style>
-</head>
+    .va-bottom {
+        vertical-align: bottom;
+    }
 
+    .fs-15 {
+        font-size: 15px;
+    }
 
+    .fs-16 {
+        font-size: 16px;
+    }
 
-<body>
-    <table width="100%">
-        <?php
-        $label_promo = '';
-        $sales_price = 0;
-        $promo_price = 0;
-        $label_promo = '<del>' . numberFormat(30000, true) . '</del> s.d ' . indo_short_date('2022-10-10', FALSE);
+    .fs-18 {
+        font-size: 18px;
+    }
 
-        ?>
-        <?php for ($i = 1; $i <= $printCount; $i++) { ?>
-            <tr>
-                <td width="50%">
-                    <div class="price-tag">
-                        <div class="tag-header">
-                            <?= esc($product['product_name']) ?>
-                        </div>
-                        <div class="tag-body">
-                            <small>Rp</small>
-                            <span class="label-promo"></span>
-                            <span class="label-price"><?= numberFormat(30000, true) ?></span>
-                            <span class="label-unit">per PCS</span>
-                        </div>
-                    </div>
-                </td>
-                <td width="50%">
-                    <div class="price-tag">
-                        <div class="tag-header">
-                            <?= esc($product['product_name']) ?>
-                        </div>
-                        <div class="tag-body">
-                            <small>Rp</small>
-                            <span class="label-promo"><?= $label_promo ?></span>
-                            <span class="label-price"><?= numberFormat(25000, true) ?></span>
-                            <span class="label-unit">per PCS</span>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        <?php } ?>
-    </table>
+    .fs-25 {
+        font-size: 25px;
+    }
+
+    .fs-20 {
+        font-size: 20px;
+    }
+
+    .fs-12 {
+        font-size: 12px;
+    }
+
+    .disc-price {
+        color: black;
+
+    }
+
+    .bg-blue {
+        background-color: dodgerblue;
+    }
+
+    .bg-yellow {
+        background-color: yellow;
+    }
+
+    .text-left {
+        text-align: left;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-center {
+        text-align: center;
+    }
 
 
 
+    .label-group {
+        font-weight: bold;
+        font-style: italic;
+        font-size: 10;
+    }
 
-</body>
 
-</html>
+    .label-currency {
+        vertical-align: top;
+        font-size: 14px;
+    }
+
+    .label-price {
+        font-weight: bold;
+        font-style: italic;
+        vertical-align: top;
+        font-size: 22px;
+    }
+
+
+
+    .label-unit {
+        font-style: italic;
+        vertical-align: bottom;
+        font-size: 12px;
+    }
+
+    .label-info {
+        font-size: 12px;
+    }
+
+    .group-G2 {
+        color: grey;
+    }
+
+    .group-G3 {
+        color: orange;
+    }
+
+    .group-G4 {
+        color: gray;
+    }
+</style>
+<?= $this->endSection() ?>
+
+
+<?= $this->section('content') ?>
+
+<?php
+$page = 1;
+foreach ($list_product as $pageData) {
+
+?>
+    <div style="margin:0px;padding:0px;<?= $page == $max_page ? '' : 'page-break-after:always;' ?>">
+        <table width="100%">
+            <?php
+            foreach ($pageData as $product) {
+                $item_code      = $product['item_code'];
+                $product_name   = $product['product_name'];
+                $unit_name      = $product['unit_name'];
+            ?>
+
+                <?php if ($print_version == 1) { ?>
+                    <tr>
+                        <td width="25%">
+                            <table class="price-tag" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td class="bg-blue tag-header" colspan="4" height="50px"><?= $product_name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-info" colspan="4" height="12px">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-currency" height="18px">Rp.</td>
+                                        <td class="text-right label-price" colspan="2"><?= numberFormat($product['G1_sales_price']) ?></td>
+                                        <td class="text-left label-unit">Per <?= $unit_name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-group group-G1" colspan="2" height="15px" colspan="2">Harga Umum</td>
+                                        <td class="label-group" colspan="2" height="15px" colspan="2"><?= $item_code ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-info text-center font-primary" style="border-bottom: black solid 1px;" colspan="4" height="15px">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td width="25%">
+                            <table class="price-tag" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td class="bg-blue tag-header" colspan="4" height="50px"><?= $product_name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-info" colspan="4" height="12px">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-currency" height="18px">Rp.</td>
+                                        <td class="text-right label-price" colspan="2"><?= numberFormat($product['G2_sales_price']) ?></td>
+                                        <td class="text-left label-unit">Per <?= $unit_name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-group group-G2" colspan="2" height="15px" colspan="2">Member Silver</td>
+                                        <td class="label-group" colspan="2" height="15px" colspan="2"><?= $item_code ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-info text-center font-primary" style="border-bottom: black solid 1px;" colspan="4" height="15px">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td width="25%">
+                            <table class="price-tag" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td class="bg-blue tag-header" colspan="4" height="50px"><?= $product_name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-info" colspan="4" height="12px">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-currency" height="18px">Rp.</td>
+                                        <td class="text-right label-price" colspan="2"><?= numberFormat($product['G3_sales_price']) ?></td>
+                                        <td class="text-left label-unit">Per <?= $unit_name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-group group-G3" colspan="2" height="15px" colspan="2">Member Gold</td>
+                                        <td class="label-group" colspan="2" height="15px" colspan="2"><?= $item_code ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-info text-center font-primary" colspan="4" height="15px">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td width="25%">
+                            <table class="price-tag" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td class="bg-blue tag-header" colspan="4" height="50px"><?= $product_name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-info" colspan="4" height="12px">&nbsp;</td>
+                                    </tr>
+                                    <tr class="">
+                                        <td class="label-currency" height="18px">Rp.</td>
+                                        <td class="text-right label-price" colspan="2"><?= numberFormat($product['G4_sales_price']) ?></td>
+                                        <td class="text-left label-unit">Per <?= $unit_name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-group group-G4" colspan="2" height="15px" colspan="2">Member Platinum</td>
+                                        <td class="label-group" colspan="2" height="15px" colspan="2"><?= $item_code ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-info text-center font-primary" colspan="4" height="15px">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                <?php } else { ?>
+                    <tr>
+                        <td width="25%">
+                            <table class="price-tag" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td class="bg-blue tag-header" colspan="4" height="50px"><?= $product_name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-info" colspan="4" height="12px">Harga Normal&nbsp;&nbsp;<del class="disc-price fs-15">Rp <?= numberFormat($product['G1_sales_price']) ?></del></td>
+                                    </tr>
+                                    <tr class="">
+                                        <td class="label-currency" height="18px">Rp.</td>
+                                        <td class="text-right label-price" style="color:red;" colspan="2"><?= numberFormat($product['G1_promo_price']) ?></td>
+                                        <td class="text-left label-unit">Per <?= $unit_name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-group group-G1" colspan="2" height="15px" colspan="2">Harga Umum</td>
+                                        <td class="label-group" colspan="2" height="15px" colspan="2"><?= $item_code ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-info text-center font-primary" style="border-bottom: black solid 1px;" colspan="4" height="15px">s.d <?= indo_date($product['disc_end_date']) ?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td width="25%">
+                            <table class="price-tag" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td class="bg-blue tag-header" colspan="4" height="50px"><?= $product_name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-info" colspan="4" height="12px">Harga Normal&nbsp;&nbsp;<del class="disc-price fs-15">Rp <?= numberFormat($product['G2_sales_price']) ?></del></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-currency" height="18px">Rp.</td>
+                                        <td class="text-right label-price" style="color:red;" colspan="2"><?= numberFormat($product['G2_promo_price']) ?></td>
+                                        <td class="text-left label-unit">Per <?= $unit_name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-group group-G2" colspan="2" height="15px" colspan="2">Member Silver</td>
+                                        <td class="label-group" colspan="2" height="15px" colspan="2"><?= $item_code ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-info text-center font-primary" style="border-bottom: black solid 1px;" colspan="4" height="15px">s.d <?= indo_date($product['disc_end_date']) ?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td width="25%">
+                            <table class="price-tag" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td class="tag-header bg-blue" colspan="4" height="50px"><?= $product_name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-info" colspan="4" height="12px">Harga Normal&nbsp;&nbsp;<del class="disc-price fs-15">Rp <?= numberFormat($product['G3_sales_price']) ?></del></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-currency" height="18px">Rp.</td>
+                                        <td class="text-right label-price" style="color:red;" colspan="2"><?= numberFormat($product['G3_promo_price']) ?></td>
+                                        <td class="text-left label-unit">Per <?= $unit_name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-group group-G3" colspan="2" height="15px" colspan="2">Member Gold</td>
+                                        <td class="label-group" colspan="2" height="15px" colspan="2"><?= $item_code ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-info text-center font-primary" style="border-bottom: black solid 1px;" colspan="4" height="15px">s.d <?= indo_date($product['disc_end_date']) ?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td width="25%">
+                            <table class="price-tag" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td class="tag-header bg-blue" colspan="4" height="50px"><?= $product_name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-info" colspan="4" height="12px">Harga Normal&nbsp;&nbsp;<del class="disc-price fs-15">Rp <?= numberFormat($product['G4_sales_price']) ?></del></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-currency" height="18px">Rp.</td>
+                                        <td class="text-right label-price" style="color:red;" colspan="2"><?= numberFormat($product['G4_promo_price']) ?></td>
+                                        <td class="text-left label-unit">Per <?= $unit_name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-group group-G4" colspan="2" height="15px" colspan="2">Member Platinum</td>
+                                        <td class="label-group" colspan="2" height="15px" colspan="2"><?= $item_code ?></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label-info text-center font-primary" style="border-bottom: black solid 1px;" colspan="4" height="15px">s.d <?= indo_date($product['disc_end_date']) ?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                <?php } ?>
+            <?php
+            }
+            ?>
+        </table>
+
+    </div>
+<?php
+    $page++;
+}
+?>
+
+<?= $this->endSection() ?>

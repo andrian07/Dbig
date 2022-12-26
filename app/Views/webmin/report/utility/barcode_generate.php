@@ -58,15 +58,8 @@
                         <div class="title">
                             <?= esc($product['product_name'] . ' (' . $product['unit_name'] . ')') ?>
                         </div>
-                        <p class="price fs-20">Rp <?= numberFormat($product['sales_price'], true) ?></p>
                     </td>
                     <td class="right">
-                        <img src="data:image/svg+xml;base64,<?= base64_encode($ubarcode)  ?>" />
-                        <p class="info fs-20"><?= esc($product['item_code']) ?><br></p>
-                        <div class="title">
-                            <?= esc($product['product_name'] . ' (' . $product['unit_name'] . ')') ?>
-                        </div>
-                        <p class="price fs-20">Rp <?= numberFormat($product['sales_price'], true) ?></p>
 
                     </td>
                 </tr>

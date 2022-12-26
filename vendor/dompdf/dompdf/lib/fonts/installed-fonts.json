@@ -1,0 +1,392 @@
+{
+    "helvetica": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Helvetica",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Helvetica",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Helvetica",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Helvetica"
+    },
+    "candara": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Candara",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Candarab",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Candarai",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Candaraz"
+    },
+    "candara light": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Candaral",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Candaral",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Candarali",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Candaral"
+    },
+    "gabriola": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Gabriola",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Gabriola",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Gabriola",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Gabriola"
+    },
+    "ink free": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Inkfree",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Inkfree",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Inkfree",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Inkfree"
+    },
+    "leelawadee ui semilight": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/LeelUIsl",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/LeelUIsl",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/LeelUIsl",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/LeelUIsl"
+    },
+    "leelawadee ui": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/LeelawUI",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/LeelawUI",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/LeelawUI",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/LeelawUI"
+    },
+    "nirmala ui": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/NirmalaB",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/NirmalaB",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/NirmalaB",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/NirmalaB"
+    },
+    "nirmala ui semilight": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/NirmalaS",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/NirmalaS",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/NirmalaS",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/NirmalaS"
+    },
+    "roboto": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Roboto-Regular",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Roboto-Bold",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Roboto-Italic",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Roboto-Regular"
+    },
+    "roboto lt": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Roboto-Medium",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Roboto-Medium",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Roboto-LightItalic",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Roboto-MediumItalic"
+    },
+    "roboto th": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Roboto-Thin",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Roboto-Thin",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Roboto-ThinItalic",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/Roboto-Thin"
+    },
+    "arial": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/ariali",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/ariali",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/ariali",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/ariali"
+    },
+    "arial black": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/ariblk",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/ariblk",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/ariblk",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/ariblk"
+    },
+    "bahnschrift": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/bahnschrift",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/bahnschrift",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/bahnschrift",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/bahnschrift"
+    },
+    "calibri": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/calibri",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/calibrib",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/calibrii",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/calibriz"
+    },
+    "calibri light": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/calibril",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/calibril",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/calibrili",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/calibril"
+    },
+    "comic sans ms": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/comicz",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/comicz",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/comicz",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/comicz"
+    },
+    "consolas": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/consola",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/consolab",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/consolai",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/consolaz"
+    },
+    "constantia": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/constan",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/constanb",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/constani",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/constanz"
+    },
+    "corbel": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/corbel",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/corbelb",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/corbeli",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/corbelz"
+    },
+    "corbel light": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/corbell",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/corbell",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/corbelli",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/corbell"
+    },
+    "courier new": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/couri",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/couri",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/couri",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/couri"
+    },
+    "ebrima": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/ebrimabd",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/ebrimabd",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/ebrimabd",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/ebrimabd"
+    },
+    "franklin gothic medium": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/framdit",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/framdit",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/framdit",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/framdit"
+    },
+    "gadugi": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/gadugi",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/gadugib",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/gadugi",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/gadugi"
+    },
+    "georgia": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/georgiaz",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/georgiaz",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/georgiaz",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/georgiaz"
+    },
+    "microsoft himalaya": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/himalaya",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/himalaya",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/himalaya",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/himalaya"
+    },
+    "hololens mdl2 assets": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/holomdl2",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/holomdl2",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/holomdl2",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/holomdl2"
+    },
+    "impact": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/impact",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/impact",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/impact",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/impact"
+    },
+    "javanese text": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/javatext",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/javatext",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/javatext",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/javatext"
+    },
+    "lucida sans unicode": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/l_10646",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/l_10646",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/l_10646",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/l_10646"
+    },
+    "lucida console": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/lucon",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/lucon",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/lucon",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/lucon"
+    },
+    "\ub9d1\uc740 \uace0\ub515": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/malgun",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/malgunbd",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/malgun",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/malgun"
+    },
+    "\ub9d1\uc740 \uace0\ub515 semilight": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/malgunsl",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/malgunsl",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/malgunsl",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/malgunsl"
+    },
+    "marlett": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/marlett",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/marlett",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/marlett",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/marlett"
+    },
+    "microsoft sans serif": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/micross",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/micross",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/micross",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/micross"
+    },
+    "myanmar text": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/mmrtext",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/mmrtextb",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/mmrtext",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/mmrtext"
+    },
+    "mongolian baiti": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/monbaiti",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/monbaiti",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/monbaiti",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/monbaiti"
+    },
+    "microsoft yi baiti": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/msyi",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/msyi",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/msyi",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/msyi"
+    },
+    "mv boli": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/mvboli",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/mvboli",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/mvboli",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/mvboli"
+    },
+    "microsoft new tai lue": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/ntailu",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/ntailub",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/ntailu",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/ntailu"
+    },
+    "palatino linotype": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/palai",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/palai",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/palai",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/palai"
+    },
+    "microsoft phagspa": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/phagspa",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/phagspab",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/phagspa",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/phagspa"
+    },
+    "segoe mdl2 assets": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segmdl2",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segmdl2",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segmdl2",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segmdl2"
+    },
+    "segoe print": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoepr",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoeprb",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoepr",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoepr"
+    },
+    "segoe script": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoesc",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoescb",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoesc",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoesc"
+    },
+    "segoe ui": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoeuiz",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoeuiz",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoeuiz",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoeuiz"
+    },
+    "segoe ui light": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoeuil",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoeuil",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguili",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoeuil"
+    },
+    "segoe ui semilight": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoeuisl",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoeuisl",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguisli",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/segoeuisl"
+    },
+    "segoe ui black": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguibl",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguibl",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguibli",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguibl"
+    },
+    "segoe ui emoji": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguiemj",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguiemj",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguiemj",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguiemj"
+    },
+    "segoe ui historic": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguihis",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguihis",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguihis",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguihis"
+    },
+    "segoe ui semibold": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguisb",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguisb",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguisbi",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguisb"
+    },
+    "segoe ui symbol": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguisym",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguisym",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguisym",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/seguisym"
+    },
+    "simsun-extb": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/simsunb",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/simsunb",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/simsunb",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/simsunb"
+    },
+    "sylfaen": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/sylfaen",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/sylfaen",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/sylfaen",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/sylfaen"
+    },
+    "symbol": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/symbol",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/symbol",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/symbol",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/symbol"
+    },
+    "tahoma": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/tahomabd",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/tahomabd",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/tahomabd",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/tahomabd"
+    },
+    "microsoft tai le": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/taile",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/taileb",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/taile",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/taile"
+    },
+    "times new roman": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/timesi",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/timesi",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/timesi",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/timesi"
+    },
+    "trebuchet ms": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/trebucit",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/trebucit",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/trebucit",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/trebucit"
+    },
+    "verdana": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/verdanaz",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/verdanaz",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/verdanaz",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/verdanaz"
+    },
+    "webdings": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/webdings",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/webdings",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/webdings",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/webdings"
+    },
+    "wingdings": {
+        "normal": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/wingding",
+        "bold": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/wingding",
+        "italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/wingding",
+        "bold_italic": "D:\\Apps\\laragon\\www\\Dbig\\vendor\\dompdf\\dompdf\/lib\/fonts\/wingding"
+    }
+}

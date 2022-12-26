@@ -1,0 +1,28 @@
+StartFontMetrics 4.1
+Notice Converted by PHP-font-lib
+Comment https://github.com/PhenX/php-font-lib
+EncodingScheme FontSpecific
+Copyright Typeface © The Monotype Corporation plc. Data © The Monotype Corporation All Rights Reserved
+FontName Symbol
+FontSubfamily Normal
+UniqueID Monotype:Symbol :version 1.70 (Microsoft)
+FullName Symbol
+Version Version 5.01
+PostScriptName SymbolMT
+Manufacturer Monotype Typography
+Designer Monotype Type Drawing Office 1989
+Description This font contains Times New Roman Greek capitals and lowercase, figures and basic punctuation together with a collection of mathematical signs and general purpose Pi characters.  Use for setting mathematical and scientific work and as a compliment to the symbols found in standard fonts.
+FontVendorURL http://www.monotype.com/html/mtname/ms_symbol.html
+FontDesignerURL http://www.monotype.com/html/mtname/ms_welcome.html
+LicenseDescription Microsoft supplied font. You may use this font to create, display, and print content as permitted by the license terms or terms of use, of the Microsoft product, service, or content in which this font was included. You may only (i) embed this font in content as permitted by the embedding restrictions included in this font; and (ii) temporarily download this font to a printer or other output device to help print content. Any other use is prohibited.
+LicenseURL http://www.monotype.com/html/type/license.html
+Weight Medium
+ItalicAngle 0
+IsFixedPitch false
+UnderlineThickness 49
+UnderlinePosition -109
+FontHeightOffset 0
+Ascender 1005
+Descender -220
+FontBBox -0 -220 1113 1005
+EndFontMetrics

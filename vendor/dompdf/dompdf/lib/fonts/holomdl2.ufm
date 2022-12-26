@@ -1,0 +1,217 @@
+StartFontMetrics 4.1
+Notice Converted by PHP-font-lib
+Comment https://github.com/PhenX/php-font-lib
+EncodingScheme FontSpecific
+FontSubfamily Normal
+Copyright © 2014 Microsoft Corporation. All Rights Reserved.
+FontName HoloLens MDL2 Assets
+UniqueID HoloLens MDL2 Assets
+FullName HoloLens MDL2 Assets
+Version Version 2.02
+PostScriptName HoloLensMDL2Assets
+Trademark Segoe is a trademark of the Microsoft group of companies.
+Manufacturer Microsoft Corporation
+FontVendorURL http://www.microsoft.com/typography/fonts/
+LicenseDescription You may use this font as permitted by the EULA for the product in which this font is included to display and print content. You may only (i) embed this font in content as permitted by the embedding restrictions included in this font; and (ii) temporarily download this font to a printer or other output device to help print content.
+LicenseURL http://www.microsoft.com/typography/fonts/
+Weight Medium
+ItalicAngle 0
+IsFixedPitch false
+UnderlineThickness 58
+UnderlinePosition -87
+FontHeightOffset 0
+Ascender 1000
+Descender 0
+FontBBox 0 0 1438 1000
+StartCharMetrics 191
+U 13 ; WX 0 ; N uni000d ; G 1
+U 32 ; WX 274 ; N uni0020 ; G 2
+U 59136 ; WX 1000 ; N unie700 ; G 4
+U 59137 ; WX 1000 ; N unie701 ; G 32
+U 59138 ; WX 1000 ; N unie702 ; G 33
+U 59142 ; WX 1000 ; N unie706 ; G 34
+U 59149 ; WX 1000 ; N unie70d ; G 5
+U 59150 ; WX 1000 ; N unie70e ; G 35
+U 59152 ; WX 1000 ; N unie710 ; G 6
+U 59153 ; WX 1000 ; N unie711 ; G 7
+U 59154 ; WX 1000 ; N unie712 ; G 36
+U 59155 ; WX 1000 ; N unie713 ; G 8
+U 59156 ; WX 1000 ; N unie714 ; G 37
+U 59160 ; WX 1000 ; N unie718 ; G 9
+U 59162 ; WX 1000 ; N unie71a ; G 38
+U 59165 ; WX 1000 ; N unie71d ; G 39
+U 59166 ; WX 1000 ; N unie71e ; G 40
+U 59168 ; WX 1000 ; N unie720 ; G 41
+U 59170 ; WX 1000 ; N unie722 ; G 65
+U 59176 ; WX 1000 ; N unie728 ; G 42
+U 59178 ; WX 1000 ; N unie72a ; G 43
+U 59179 ; WX 1000 ; N unie72b ; G 44
+U 59180 ; WX 1000 ; N unie72c ; G 45
+U 59181 ; WX 1000 ; N unie72d ; G 10
+U 59182 ; WX 1000 ; N unie72e ; G 46
+U 59190 ; WX 1000 ; N unie736 ; G 47
+U 59192 ; WX 1000 ; N unie738 ; G 11
+U 59199 ; WX 1000 ; N unie73f ; G 48
+U 59210 ; WX 1000 ; N unie74a ; G 49
+U 59211 ; WX 1000 ; N unie74b ; G 50
+U 59213 ; WX 1000 ; N unie74d ; G 66
+U 59215 ; WX 1000 ; N unie74f ; G 51
+U 59216 ; WX 1000 ; N unie750 ; G 12
+U 59217 ; WX 1000 ; N unie751 ; G 13
+U 59218 ; WX 1000 ; N unie752 ; G 14
+U 59232 ; WX 1000 ; N unie760 ; G 15
+U 59233 ; WX 1000 ; N unie761 ; G 16
+U 59237 ; WX 1000 ; N unie765 ; G 17
+U 59239 ; WX 1000 ; N unie767 ; G 52
+U 59240 ; WX 1000 ; N unie768 ; G 53
+U 59241 ; WX 1000 ; N unie769 ; G 54
+U 59243 ; WX 1000 ; N unie76b ; G 55
+U 59244 ; WX 1000 ; N unie76c ; G 56
+U 59248 ; WX 1000 ; N unie770 ; G 57
+U 59250 ; WX 1000 ; N unie772 ; G 107
+U 59252 ; WX 1000 ; N unie774 ; G 58
+U 59255 ; WX 1000 ; N unie777 ; G 59
+U 59257 ; WX 1000 ; N unie779 ; G 60
+U 59258 ; WX 1000 ; N unie77a ; G 61
+U 59259 ; WX 1000 ; N unie77b ; G 62
+U 59266 ; WX 1000 ; N unie782 ; G 18
+U 59267 ; WX 1000 ; N unie783 ; G 67
+U 59269 ; WX 1000 ; N unie785 ; G 68
+U 59270 ; WX 1000 ; N unie786 ; G 69
+U 59289 ; WX 1000 ; N unie799 ; G 70
+U 59305 ; WX 1000 ; N unie7a9 ; G 71
+U 59306 ; WX 1000 ; N unie7aa ; G 72
+U 59307 ; WX 1000 ; N unie7ab ; G 73
+U 59311 ; WX 1000 ; N unie7af ; G 74
+U 59312 ; WX 1000 ; N unie7b0 ; G 75
+U 59313 ; WX 1000 ; N unie7b1 ; G 76
+U 59316 ; WX 1000 ; N unie7b4 ; G 77
+U 59336 ; WX 1000 ; N unie7c8 ; G 78
+U 59368 ; WX 1000 ; N unie7e8 ; G 79
+U 59369 ; WX 1000 ; N unie7e9 ; G 80
+U 59388 ; WX 1000 ; N unie7fc ; G 109
+U 59407 ; WX 1000 ; N unie80f ; G 63
+U 59425 ; WX 1000 ; N unie821 ; G 64
+U 59455 ; WX 1000 ; N unie83f ; G 81
+U 59472 ; WX 1000 ; N unie850 ; G 19
+U 59473 ; WX 1000 ; N unie851 ; G 20
+U 59474 ; WX 1000 ; N unie852 ; G 21
+U 59475 ; WX 1000 ; N unie853 ; G 22
+U 59476 ; WX 1000 ; N unie854 ; G 23
+U 59477 ; WX 1000 ; N unie855 ; G 24
+U 59478 ; WX 1000 ; N unie856 ; G 25
+U 59479 ; WX 1000 ; N unie857 ; G 26
+U 59480 ; WX 1000 ; N unie858 ; G 27
+U 59481 ; WX 1000 ; N unie859 ; G 28
+U 59506 ; WX 1000 ; N unie872 ; G 29
+U 59507 ; WX 1000 ; N unie873 ; G 30
+U 59508 ; WX 1000 ; N unie874 ; G 31
+U 59540 ; WX 1000 ; N unie894 ; G 82
+U 59541 ; WX 1000 ; N unie895 ; G 83
+U 59559 ; WX 1000 ; N unie8a7 ; G 84
+U 59570 ; WX 1000 ; N unie8b2 ; G 85
+U 59575 ; WX 1000 ; N unie8b7 ; G 86
+U 59577 ; WX 1000 ; N unie8b9 ; G 87
+U 59605 ; WX 1000 ; N unie8d5 ; G 88
+U 59628 ; WX 1000 ; N unie8ec ; G 89
+U 59643 ; WX 1000 ; N unie8fb ; G 90
+U 59657 ; WX 1000 ; N unie909 ; G 91
+U 59675 ; WX 1000 ; N unie91b ; G 92
+U 59692 ; WX 1000 ; N unie92c ; G 93
+U 59714 ; WX 1000 ; N unie942 ; G 96
+U 59739 ; WX 1000 ; N unie95b ; G 101
+U 59794 ; WX 1000 ; N unie992 ; G 97
+U 59795 ; WX 1000 ; N unie993 ; G 98
+U 59796 ; WX 1000 ; N unie994 ; G 99
+U 59797 ; WX 1000 ; N unie995 ; G 100
+U 59881 ; WX 1000 ; N unie9e9 ; G 108
+U 59882 ; WX 1000 ; N unie9ea ; G 110
+U 59959 ; WX 1000 ; N uniea37 ; G 103
+U 59968 ; WX 1000 ; N uniea40 ; G 106
+U 59978 ; WX 1000 ; N uniea4a ; G 105
+U 59989 ; WX 1000 ; N uniea55 ; G 104
+U 60054 ; WX 1000 ; N uniea96 ; G 102
+U 60241 ; WX 1000 ; N unieb51 ; G 94
+U 60242 ; WX 1000 ; N unieb52 ; G 95
+U 60261 ; WX 1000 ; N unieb65 ; G 111
+U 60317 ; WX 1000 ; N unieb9d ; G 112
+U 60318 ; WX 1000 ; N unieb9e ; G 113
+U 60319 ; WX 1000 ; N unieb9f ; G 114
+U 60320 ; WX 1500 ; N unieba0 ; G 136
+U 60321 ; WX 1500 ; N unieba1 ; G 135
+U 60322 ; WX 1500 ; N unieba2 ; G 134
+U 60323 ; WX 1500 ; N unieba3 ; G 133
+U 60324 ; WX 1500 ; N unieba4 ; G 132
+U 60325 ; WX 1500 ; N unieba5 ; G 131
+U 60326 ; WX 1500 ; N unieba6 ; G 130
+U 60327 ; WX 1500 ; N unieba7 ; G 129
+U 60328 ; WX 1500 ; N unieba8 ; G 128
+U 60329 ; WX 1500 ; N unieba9 ; G 127
+U 60330 ; WX 1500 ; N uniebaa ; G 126
+U 60331 ; WX 1500 ; N uniebab ; G 125
+U 60332 ; WX 1500 ; N uniebac ; G 124
+U 60333 ; WX 1500 ; N uniebad ; G 123
+U 60334 ; WX 1500 ; N uniebae ; G 122
+U 60335 ; WX 1500 ; N uniebaf ; G 121
+U 60336 ; WX 1500 ; N uniebb0 ; G 120
+U 60337 ; WX 1500 ; N uniebb1 ; G 119
+U 60338 ; WX 1500 ; N uniebb2 ; G 118
+U 60339 ; WX 1500 ; N uniebb3 ; G 117
+U 60340 ; WX 1500 ; N uniebb4 ; G 116
+U 60341 ; WX 1500 ; N uniebb5 ; G 115
+U 60363 ; WX 1000 ; N uniebcb ; G 143
+U 60364 ; WX 1000 ; N uniebcc ; G 142
+U 60367 ; WX 1000 ; N uniebcf ; G 141
+U 60368 ; WX 1000 ; N uniebd0 ; G 140
+U 60369 ; WX 1000 ; N uniebd1 ; G 139
+U 60370 ; WX 1000 ; N uniebd2 ; G 138
+U 60371 ; WX 1000 ; N uniebd3 ; G 137
+U 60419 ; WX 1000 ; N uniec03 ; G 144
+U 60441 ; WX 1000 ; N uniec19 ; G 145
+U 60479 ; WX 1000 ; N uniec3f ; G 146
+U 60538 ; WX 1000 ; N uniec7a ; G 147
+U 60558 ; WX 1000 ; N uniec8e ; G 159
+U 60559 ; WX 1000 ; N uniec8f ; G 158
+U 60560 ; WX 1000 ; N uniec90 ; G 157
+U 60561 ; WX 1000 ; N uniec91 ; G 156
+U 60562 ; WX 1000 ; N uniec92 ; G 155
+U 60563 ; WX 1000 ; N uniec93 ; G 154
+U 60564 ; WX 1000 ; N uniec94 ; G 153
+U 60565 ; WX 1000 ; N uniec95 ; G 152
+U 60566 ; WX 1000 ; N uniec96 ; G 151
+U 60567 ; WX 1000 ; N uniec97 ; G 150
+U 60568 ; WX 1000 ; N uniec98 ; G 149
+U 60578 ; WX 1000 ; N unieca2 ; G 148
+U 60632 ; WX 1000 ; N uniecd8 ; G 168
+U 60633 ; WX 1000 ; N uniecd9 ; G 167
+U 60634 ; WX 1000 ; N uniecda ; G 166
+U 60640 ; WX 1000 ; N uniece0 ; G 165
+U 60647 ; WX 1000 ; N uniece7 ; G 164
+U 60648 ; WX 1000 ; N uniece8 ; G 163
+U 60649 ; WX 1000 ; N uniece9 ; G 162
+U 60650 ; WX 1000 ; N uniecea ; G 161
+U 60651 ; WX 1000 ; N unieceb ; G 160
+U 60695 ; WX 1000 ; N unied17 ; G 169
+U 61075 ; WX 1000 ; N uniee93 ; G 170
+U 61353 ; WX 1000 ; N uniefa9 ; G 171
+U 61716 ; WX 1000 ; N unif114 ; G 172
+U 61717 ; WX 1000 ; N unif115 ; G 173
+U 61718 ; WX 1000 ; N unif116 ; G 174
+U 61719 ; WX 1000 ; N unif117 ; G 175
+U 61720 ; WX 1000 ; N unif118 ; G 176
+U 61721 ; WX 1000 ; N unif119 ; G 177
+U 61722 ; WX 1000 ; N unif11a ; G 178
+U 61723 ; WX 1000 ; N unif11b ; G 179
+U 61724 ; WX 1000 ; N unif11c ; G 180
+U 61725 ; WX 1000 ; N unif11d ; G 181
+U 61726 ; WX 1000 ; N unif11e ; G 182
+U 61727 ; WX 1000 ; N unif11f ; G 183
+U 61728 ; WX 1000 ; N unif120 ; G 184
+U 61746 ; WX 1000 ; N unif132 ; G 185
+U 61825 ; WX 1000 ; N unif181 ; G 186
+U 61827 ; WX 1000 ; N unif183 ; G 187
+U 61828 ; WX 1000 ; N unif184 ; G 188
+U 61829 ; WX 1000 ; N unif185 ; G 189
+U 61830 ; WX 1000 ; N unif186 ; G 190
+EndCharMetrics
+EndFontMetrics
