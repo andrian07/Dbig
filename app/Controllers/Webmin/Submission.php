@@ -273,7 +273,6 @@ class Submission extends WebminController
 
     }
 
-
     public function cancelOrder($submission_id = '')
     {
 
@@ -283,7 +282,7 @@ class Submission extends WebminController
 
         if ($this->role->hasRole('submission.delete')) {
 
-            $getSubmissiondetail = $this->M_submission->getSubmissiondetail($submission_id)->getRowArray();
+            $getSubmissiondetail = $this->M_submission->getSubmissiondetaildata($submission_id)->getRowArray();
 
             $submission_inv = $getSubmissiondetail['submission_inv'];
 
@@ -291,7 +290,11 @@ class Submission extends WebminController
 
                 $result = ['success' => FALSE, 'message' => 'Transaksi dengan No invoice <b>' . $submission_inv . '</b> tidak ditemukan'];
 
-            } else {
+            } else if($getSubmissiondetail['submission_status'] != 'Pending'){
+
+                $result = ['success' => FALSE, 'message' => 'Transaksi Yang Sudah Di Proses Tidak Dapat Di Batalkan'];
+
+            }else{
 
                 $user_id = $this->userLogin['user_id'];
 
@@ -388,7 +391,7 @@ class Submission extends WebminController
         $result = ['success' => FALSE, 'message' => 'Data Pengajuan tidak ditemukan'];
         if ($this->role->hasRole('submission.view')) {
             if ($submission_id != '') {
-                $find = $this->M_submission->getSubmissiondetail($submission_id)->getRowArray();
+                $find = $this->M_submission->getSubmissiondetaildata($submission_id)->getRowArray();
                 if ($find == NULL) {
                     $result = ['success' => TRUE, 'exist' => FALSE, 'message' => 'Data kategori tidak ditemukan'];
                 } else {

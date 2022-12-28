@@ -26,11 +26,14 @@ class M_submission extends Model
 
         ->join('user_account', 'user_account.user_id = hd_submission.submission_user_id')
 
+        ->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_submission.submission_warehouse_id')
+
+        ->join('ms_salesman', 'ms_salesman.salesman_id = hd_submission.submission_salesman_id')
+
         ->where('submission_id', $submission_id)
 
         ->get();
     }
-
 
 
     public function cancelOrder($submission_inv, $submission_id){

@@ -480,6 +480,8 @@ $assetsUrl = base_url('assets');
 
             e.preventDefault();
 
+            let id = $(this).attr('data-id');
+            
             let submission_id_decline = $('#submission_id_decline').val();
 
             message.question('Yakin ingin Menolak pengajuan ini?').then(function(answer) {
@@ -488,7 +490,7 @@ $assetsUrl = base_url('assets');
 
                 if (yes) {
 
-                    let actUrl = base_url + '/webmin/submission/cancel-order/' + submission_id_decline;
+                    let actUrl = base_url + '/webmin/submission/cancel-order/' + id;
 
                     ajax_get(actUrl, null, {
 
