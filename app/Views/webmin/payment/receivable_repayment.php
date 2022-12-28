@@ -5,6 +5,7 @@ $assetsUrl = base_url('assets');
 
 <?= $this->extend('webmin/template/admin_template') ?>
 
+
 <?= $this->section('content') ?>
 <!-- Content Header (Page header) -->
 <div id="repayment_list">
@@ -50,12 +51,12 @@ $assetsUrl = base_url('assets');
                                                     <tr>
                                                         <th data-priority="1">#</th>
                                                         <th data-priority="2">Kode Customer</th>
-                                                        <th data-priority="2">Nama Customer</th>
-                                                        <th data-priority="5">Alamat</th>
-                                                        <th data-priority="6">No Telp</th>
-                                                        <th data-priority="5">Jumlah Nota</th>
-                                                        <th data-priority="4">Total Piutang</th>
-                                                        <th data-priority="3">Aksi</th>
+                                                        <th data-priority="3">Nama Customer</th>
+                                                        <th data-priority="4">Alamat</th>
+                                                        <th data-priority="5">No Telp</th>
+                                                        <th data-priority="6">Jumlah Nota</th>
+                                                        <th data-priority="7">Total Piutang</th>
+                                                        <th data-priority="8">Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -70,32 +71,21 @@ $assetsUrl = base_url('assets');
                                     <!-- history -->
                                     <div class="row mb-1 pt-2">
                                         <div class="col-12">
-                                            <table id="tbldebtrepayment" class="table table-bordered table-hover" width="100%">
+                                            <table id="tblreceivablerepaymenthistory" class="table table-bordered table-hover" width="100%">
                                                 <thead>
                                                     <tr>
                                                         <th data-priority="1">#</th>
                                                         <th data-priority="2">No Transaksi</th>
-                                                        <th data-priority="2">Nama Customer</th>
-                                                        <th data-priority="5">Tanggal Pembayaran</th>
-                                                        <th data-priority="6">Metode Pembayaran</th>
-                                                        <th data-priority="5">Jumlah Nota</th>
-                                                        <th data-priority="4">Total Pembayaran</th>
-                                                        <th data-priority="3">Aksi</th>
+                                                        <th data-priority="3">Nama Customer</th>
+                                                        <th data-priority="4">Tanggal Pembayaran</th>
+                                                        <th data-priority="5">Metode Pembayaran</th>
+                                                        <th data-priority="6">Jumlah Nota</th>
+                                                        <th data-priority="7">Total Pembayaran</th>
+                                                        <th data-priority="8">Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>PP/UTM/22/09/00001</td>
-                                                        <td>PT Aneka Jaya</td>
-                                                        <td>05/09/2022</td>
-                                                        <td>CASH</td>
-                                                        <td>1</td>
-                                                        <td>5,000,000.00</td>
-                                                        <td>
-                                                            <a href="javascript:;" data-fancybox data-type="iframe" data-src="<?= base_url('webmin/receivable-repayment/detail') ?>" class="btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>
-                                                        </td>
-                                                    </tr>
+                                                    
                                                 </tbody>
                                             </table>
                                         </div>
@@ -161,11 +151,7 @@ $assetsUrl = base_url('assets');
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Metode Pembayaran</label>
-                                            <select id="payment_method_id" name="payment_method_id" class="form-control">
-                                                <option value="1">CASH</option>
-                                                <option value="2">BCA a/n DBIG (0123456789012)</option>
-                                                <option value="3">BNI a/n DBIG2 (0123456789012)</option>
-                                            </select>
+                                            <select id="payment_method_id" name="payment_method_id" class="form-control"></select>
                                         </div>
                                     </div>
 
@@ -316,45 +302,66 @@ $assetsUrl = base_url('assets');
 
                                         <tr>
 
-                                         <td>{row}</td>
+                                           <td>{row}</td>
 
-                                         <td>{sales_admin_invoice}</td>
+                                           <td>{sales_admin_invoice}</td>
 
-                                         <td>{sales_date}</td>
+                                           <td>{sales_date}</td>
 
-                                         <td>{due_date}</td>
+                                           <td>{due_date}</td>
 
-                                         <td>{sales_admin_remaining_payment}</td>
+                                           <td>{sales_admin_remaining_payment}</td>
 
-                                         <td>{temp_payment_receivable_discount}</td>
+                                           <td>{temp_payment_receivable_discount}</td>
 
-                                         <td>{temp_payment_receivable_nominal}</td>
+                                           <td>{temp_payment_receivable_nominal}</td>
 
-                                         <td>{temp_payment_remaining}</td>
+                                           <td>{temp_payment_remaining}</td>
 
-                                         <td>
+                                           <td>
 
-                                             <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                               <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
-                                                 <i class="fas fa-money-bill-wave"></i>
+                                                   <i class="fas fa-money-bill-wave"></i>
 
-                                             </button>
+                                               </button>
 
-                                         </td>
+                                           </td>
 
-                                     </tr>
+                                       </tr>
 
-                                 </template>
+                                   </template>
 
-                             </div>
-                         </div>
+                               </div>
+                           </div>
 
-                         <div class="row">
+                           <div class="row form-space">
 
-                            <div class="col-12">
-                                <div class="col-12">
-                                    <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
-                                    <button id="btnsave" class="btn btn-success float-right"><i class="fas fa-save"></i> Simpan</button>
+                            <div class="col-lg-6">
+
+                            </div>
+
+                            <div class="col-lg-6 text-right">
+
+                                <div class="form-group row">
+                                    <label for="footer_invoice_total" class="col-sm-7 col-form-label text-right:">Total Pembayaran:</label>
+                                    <div class="col-sm-5">
+                                        <input id="footer_invoice_total" name="footer_invoice_total" type="text" class="form-control text-right" value="0" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="footer_total_pay" class="col-sm-7 col-form-label text-right:">Jumlah Nota:</label>
+                                    <div class="col-sm-5">
+                                        <input id="footer_total_pay" name="footer_total_pay" type="text" class="form-control text-right" value="0" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
+                                        <button id="btnsave" class="btn btn-success button-header-custom-save"><i class="fas fa-save"></i> Simpan</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -390,44 +397,68 @@ $assetsUrl = base_url('assets');
         let repayment_disc = new AutoNumeric('#repayment_disc', configRp);
         let new_remaining_receivable = new AutoNumeric('#new_remaining_receivable', configRp);
         let customer_total_debt = new AutoNumeric('#customer_total_debt', configRp);
+        let footer_invoice_total = new AutoNumeric('#footer_invoice_total', configRp);
+        let footer_total_pay = new AutoNumeric('#footer_total_pay', configQty);
 
-        let total_repayment_debt = 0;
 
+        $("#payment_method_id").select2({
+            placeholder: '-- Pilih Jenis Pembayaran --',
+            width: "100%",
+            allowClear: true,
+            ajax: {
+                url: base_url + "/webmin/select/payment-method",
+                dataType: "json",
+                type: "GET",
+                delay: select2Delay,
+                data: function(params) {
+                    return {
+                        search: params.term,
+                    };
+                },
+                processResults: function(data, page) {
+                    return {
+                        results: data,
+                    };
+                },
+            },
+        });
+        
 
         // datatables //
 
-        let tbldebtrepayment = $("#tbldebtrepayment").DataTable({
+        let tblreceivablerepaymenthistory = $("#tblreceivablerepaymenthistory").DataTable({
+            processing: true,
             select: true,
+            serverSide: true,
             responsive: true,
             fixedColumns: true,
             order: [
-            [1, 'desc']
+            [1, 'asc']
             ],
             language: {
                 url: lang_datatables,
             },
+            ajax: {
+                url: base_url + '/webmin/payment/tblreceivablehistory',
+                type: "POST",
+                error: function() {
+                    notification.danger('Gagal memuat table, harap coba lagi');
+                },
+            },
             drawCallback: function(settings) {
                 _initTooltip();
+                _initButton();
             },
             columnDefs: [{
-                width: 50,
-                targets: 7
+                width: 100
             },
             {
-                width: 80,
-                targets: 5
-            },
-            {
-                width: 120,
-                targets: [4, 6]
-            },
-            {
-                targets: [0, 5, 6, 7],
+                targets: [0, 7],
                 orderable: false,
                 searchable: false,
             },
             {
-                targets: [0, 5, 6],
+                targets: [0],
                 className: "text-right",
             },
             ],
@@ -474,89 +505,89 @@ $assetsUrl = base_url('assets');
 
         $('#btnadd_temp').click(function(e) {
 
-           e.preventDefault();
+         e.preventDefault();
 
-           let temp_key = $("#temp_key").val();
+         let temp_key = $("#temp_key").val();
 
-           let sales_admin_id = $("#sales_admin_id").val();
+         let sales_admin_id = $("#sales_admin_id").val();
 
-           let customer_id = $("#customer_id").val();
+         let customer_id = $("#customer_id").val();
 
-           let sales_admin_invoice = $("#sales_admin_invoice").val();
+         let sales_admin_invoice = $("#sales_admin_invoice").val();
 
-           let sales_admin_date = $("#sales_admin_date").val();
+         let sales_admin_date = $("#sales_admin_date").val();
 
-           let due_date = $("#due_date").val();
+         let due_date = $("#due_date").val();
 
-           let repayment_remark = $("#repayment_remark").val();
+         let repayment_remark = $("#repayment_remark").val();
 
-           let repayment_total_input = parseFloat(repayment_total.getNumericString());
+         let repayment_total_input = parseFloat(repayment_total.getNumericString());
 
-           let repayment_disc_input = parseFloat(repayment_disc.getNumericString());
+         let repayment_disc_input = parseFloat(repayment_disc.getNumericString());
 
-           let new_remaining_receivable_input = parseFloat(new_remaining_receivable.getNumericString());
+         let new_remaining_receivable_input = parseFloat(new_remaining_receivable.getNumericString());
 
-           let btnSubmit = $('#btnadd_temp');
+         let btnSubmit = $('#btnadd_temp');
 
-           let form = $('#frmrepayment');
+         let form = $('#frmrepayment');
 
-           form.parsley().validate();
+         form.parsley().validate();
 
-           if (form.parsley().isValid()) {
+         if (form.parsley().isValid()) {
 
-               let actUrl = base_url + '/webmin/payment/temp-receivable-add';
+             let actUrl = base_url + '/webmin/payment/temp-receivable-add';
 
-               let formValues = {
+             let formValues = {
 
-                   temp_payment_receivable_id : temp_key,
+                 temp_payment_receivable_id : temp_key,
 
-                   temp_payment_receivable_sales_id : sales_admin_id,
+                 temp_payment_receivable_sales_id : sales_admin_id,
 
-                   temp_payment_receivable_discount: repayment_disc_input,
+                 temp_payment_receivable_discount: repayment_disc_input,
 
-                   temp_payment_receivable_nominal: repayment_total_input,
+                 temp_payment_receivable_nominal: repayment_total_input,
 
-                   temp_payment_receivable_desc: repayment_remark,
+                 temp_payment_receivable_desc: repayment_remark,
 
-                   customer_id:customer_id,
+                 customer_id:customer_id,
 
-               };
+             };
 
-               btnSubmit.prop('disabled', true);
+             btnSubmit.prop('disabled', true);
 
-               ajax_post(actUrl, formValues, {
+             ajax_post(actUrl, formValues, {
 
-                   success: function(response) {
+                 success: function(response) {
 
-                       if (response.success) {
+                     if (response.success) {
 
-                           if (response.result.success) {
+                         if (response.result.success) {
 
-                               notification.success(response.result.message);
+                             notification.success(response.result.message);
 
-                           } else {
+                         } else {
 
-                               message.error(response.result.message);
+                             message.error(response.result.message);
 
-                           }
+                         }
 
-                           clearItemInput();
-                           loadTempData(response.result.data);
+                         clearItemInput();
+                         loadTempData(response.result.data);
 
-                       }
+                     }
 
-                       btnSubmit.prop('disabled', false);
+                     btnSubmit.prop('disabled', false);
 
-                   },
+                 },
 
-                   error: function(response) {
+                 error: function(response) {
 
-                       btnSubmit.prop('disabled', false);
+                     btnSubmit.prop('disabled', false);
 
-                   }
-               });
-           }
-       })
+                 }
+             });
+         }
+     })
 
         Parsley.addMessages('id', {
 
@@ -634,7 +665,7 @@ $assetsUrl = base_url('assets');
             $('#sales_admin_invoice').val('');
             $('#due_date').val('');
             $('#sales_admin_date').val('');
-            $('#payment_method_id').val(1);
+            $('#payment_method_id').val('');
             remaining_receivable.set(0);
             repayment_disc.set(0);
             repayment_total.set(0);
@@ -669,22 +700,22 @@ $assetsUrl = base_url('assets');
 
             let payment_receivable_date = $('#repayment_date').val();
 
-            //let invoice_total = parseFloat(footer_invoice_total.getNumericString());
+            let invoice_total = parseFloat(footer_invoice_total.getNumericString());
 
 
             let question = 'Yakin ingin menyimpan data Pelunasan Piutang?';
 
-            let actUrl = base_url + '/webmin/payment/save/add';
+            let actUrl = base_url + '/webmin/payment/save-receivable/add';
 
 
             if($('#payment_method_id').val() == null){
-               Swal.fire({
-                  icon: 'error',
-                  title: 'Oops...',
-                  text: 'Silahkan Pilih Metode Pembayaran Terlebih Dahulu !'
-              })
+             Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Silahkan Pilih Metode Pembayaran Terlebih Dahulu !'
+          })
 
-           }else if(invoice_total <= 0){
+         }else if(invoice_total <= 0){
             Swal.fire({
               icon: 'error',
               title: 'Oops...',
@@ -701,15 +732,15 @@ $assetsUrl = base_url('assets');
 
                     let formValues = {
 
-                        payment_debt_supplier_id: payment_debt_supplier_id,
+                        payment_receivable_customer_id: payment_receivable_customer_id,
 
-                        payment_debt_total_pay: invoice_total,
+                        payment_receivable_total_pay: invoice_total,
 
-                        payment_debt_method_id: payment_debt_method_id,
+                        payment_receivable_method_id: payment_receivable_method_id,
 
-                        payment_debt_method_name: payment_debt_method_name,
+                        payment_receivable_method_name: payment_receivable_method_name,
 
-                        repayment_date:repayment_date,
+                        payment_receivable_date:payment_receivable_date,
 
                     };
 
@@ -834,90 +865,90 @@ $assetsUrl = base_url('assets');
 
             } else {
 
-             getTemp();
+               getTemp();
 
-             message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
+               message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
 
-         }
-     })
+           }
+       })
 
 
 
         function loadTempData(items) {
 
-         let template = $('#template_row_temp').html();
+           let template = $('#template_row_temp').html();
 
-         let tbody = '';
+           let tbody = '';
 
-         let row = 1;
+           let row = 1;
 
-         let temp_total_order = 0;
+           let temp_total_order = 0;
 
-         items.forEach((val, key) => {
+           items.forEach((val, key) => {
 
-             let item = template;
+               let item = template;
 
-             let data_json = htmlEntities.encode(JSON.stringify(val));
+               let data_json = htmlEntities.encode(JSON.stringify(val));
 
-             let temp_id  = val.temp_payment_receivable_id;
+               let temp_id  = val.temp_payment_receivable_id;
 
-             let sales_admin_invoice = val.sales_admin_invoice ;
+               let sales_admin_invoice = val.sales_admin_invoice ;
 
-             let sales_date = val.sales_date;
+               let sales_date = val.sales_date;
 
-             let due_date = val.sales_due_date;
+               let due_date = val.sales_due_date;
 
-             let sales_admin_remaining_payment = val.sales_admin_remaining_payment;
+               let sales_admin_remaining_payment = val.sales_admin_remaining_payment;
 
-             let temp_payment_receivable_nominal  = val.temp_payment_receivable_nominal;
+               let temp_payment_receivable_nominal  = val.temp_payment_receivable_nominal;
 
-             let temp_payment_receivable_discount = val.temp_payment_receivable_discount;
+               let temp_payment_receivable_discount = val.temp_payment_receivable_discount;
 
-             let temp_payment_remaining  = val.sales_admin_remaining_payment - val.temp_payment_receivable_nominal;
-
-
-             item = item.replaceAll('{row}', row)
-
-             .replaceAll('{temp_id}', temp_id)
-
-             .replaceAll('{sales_admin_invoice}', sales_admin_invoice)
-
-             .replaceAll('{sales_date}', sales_date)
-
-             .replaceAll('{due_date}', due_date)
-
-             .replaceAll('{sales_admin_remaining_payment}', numberFormat(sales_admin_remaining_payment, true))
-
-             .replaceAll('{temp_payment_receivable_discount}', numberFormat(temp_payment_receivable_discount, true))
-
-             .replaceAll('{temp_payment_receivable_nominal}', numberFormat(temp_payment_receivable_nominal, true))
-
-             .replaceAll('{temp_payment_remaining}', numberFormat(temp_payment_remaining, true))
-
-             .replaceAll('{data_json}', data_json);
-
-             tbody += item;
-
-             row++;
-
-         });
+               let temp_payment_remaining  = val.sales_admin_remaining_payment - val.temp_payment_receivable_nominal;
 
 
-         if ($.fn.DataTable.isDataTable('#tbltemp')) {
+               item = item.replaceAll('{row}', row)
 
-             $('#tbltemp').DataTable().destroy();
+               .replaceAll('{temp_id}', temp_id)
 
-         }
+               .replaceAll('{sales_admin_invoice}', sales_admin_invoice)
+
+               .replaceAll('{sales_date}', sales_date)
+
+               .replaceAll('{due_date}', due_date)
+
+               .replaceAll('{sales_admin_remaining_payment}', numberFormat(sales_admin_remaining_payment, true))
+
+               .replaceAll('{temp_payment_receivable_discount}', numberFormat(temp_payment_receivable_discount, true))
+
+               .replaceAll('{temp_payment_receivable_nominal}', numberFormat(temp_payment_receivable_nominal, true))
+
+               .replaceAll('{temp_payment_remaining}', numberFormat(temp_payment_remaining, true))
+
+               .replaceAll('{data_json}', data_json);
+
+               tbody += item;
+
+               row++;
+
+           });
+
+
+           if ($.fn.DataTable.isDataTable('#tbltemp')) {
+
+               $('#tbltemp').DataTable().destroy();
+
+           }
 
 
 
-         $('#tbltemp tbody').html('');
+           $('#tbltemp tbody').html('');
 
-         $('#tbltemp tbody').html(tbody);
+           $('#tbltemp tbody').html(tbody);
 
-         tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+           tbltemp = $('#tbltemp').DataTable(config_tbltemp);
 
-         //setfootervalue();
+            setfootervalue();
 
             //clearItemInput();
 
@@ -927,54 +958,54 @@ $assetsUrl = base_url('assets');
 
         const config_tbltemp = {
 
-           pageLength: 10,
+         pageLength: 10,
 
-           autoWidth: false,
+         autoWidth: false,
 
-           select: true,
+         select: true,
 
-           responsive: true,
+         responsive: true,
 
-           fixedColumns: true,
+         fixedColumns: true,
 
-           order: [
+         order: [
 
-           [0, 'desc']
+         [0, 'desc']
 
-           ],
+         ],
 
-           "language": {
+         "language": {
 
-               "url": lang_datatables,
+             "url": lang_datatables,
 
-           },
-           "columnDefs": [{
+         },
+         "columnDefs": [{
 
-               width: 100
+             width: 100
 
-           },
-           {
+         },
+         {
 
-               targets: [0],
+             targets: [0],
 
-               orderable: false,
+             orderable: false,
 
-               searchable: false,
+             searchable: false,
 
-           },
-           {
+         },
+         {
 
-               targets: [0],
+             targets: [0],
 
-               className: "text-right",
+             className: "text-right",
 
-           }
+         }
 
-           ]
+         ]
 
-       };
+     };
 
-       $('#tblreceivablerepayment').on('click', '.btnrepayment', function(e) {
+     $('#tblreceivablerepayment').on('click', '.btnrepayment', function(e) {
         e.preventDefault();
         $('#customer_id').val($(this).attr('data-customerid'));
         $('#customer_name').val($(this).attr('data-customername'));
@@ -987,9 +1018,9 @@ $assetsUrl = base_url('assets');
             success: function(response) {
                 if (response.success) {
                     if (response.result.success) {
-                       let items = response.result.data;
-                       loadTempData(items);
-                   } else {
+                     let items = response.result.data;
+                     loadTempData(items);
+                 } else {
                     message.error(response.result.message);
                 }
             }
@@ -1001,10 +1032,32 @@ $assetsUrl = base_url('assets');
     });
     })
 
-       $('#tbltemp').DataTable(config_tbltemp);
-       _initTooltip();
+     function setfootervalue(){
+        let actUrl = base_url + '/webmin/payment/get-receivable-footer';
+        ajax_get(actUrl, null, {
+            success: function(response) { 
+                if (response.result.success == 'TRUE') {
+                    footer_invoice_total.set(response.result.data[0].subTotal);
+                    footer_total_pay.set(response.result.data[0].temp_payment_isedit);
+                } else {
+                    message.error(response.result.message);
+                }
+            }
+        });
+    }
 
-       showInputPage(false);
-   })
+    function updateTable() {
+
+       tblreceivablerepayment.ajax.reload(null, false);
+
+       tblreceivablerepaymenthistory.ajax.reload(null, false);
+
+   }
+
+   $('#tbltemp').DataTable(config_tbltemp);
+   _initTooltip();
+
+   showInputPage(false);
+})
 </script>
 <?= $this->endSection() ?>

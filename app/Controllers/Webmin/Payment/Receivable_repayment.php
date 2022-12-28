@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controllers\Webmin\Payment;
 
 use Dompdf\Dompdf;
@@ -56,6 +55,35 @@ class Receivable_repayment extends WebminController
 
             $table->orderColumn  = ['customer_code', 'customer_name'];
             $table->searchColumn = ['customer_code', 'customer_name'];
+            $table->generate();
+        }
+    }
+
+    public function tbl_receivablehistory()
+    {
+        $this->validationRequest(TRUE);
+        if ($this->role->hasRole('receivable_repayment.view')) {
+            helper('datatable');
+            $table = new \App\Libraries\Datatables('hd_payment_receivable');
+            $table->db->select('payment_receivable_id,payment_receivable_invoice, customer_name, payment_receivable_date, payment_receivable_method_name, payment_receivable_total_invoice, payment_receivable_total_pay');
+            $table->db->join('ms_customer', 'ms_customer.customer_id  = hd_payment_receivable.payment_receivable_customer_id');
+            $table->renderColumn(function ($row, $i) {
+                $column = [];
+                $column[] = $i;
+                $column[] = esc($row['payment_receivable_invoice']);
+                $column[] = esc($row['customer_name']);
+                $column[] = indo_short_date($row['payment_receivable_date']);
+                $column[] = esc($row['payment_receivable_method_name']);
+                $column[] = esc($row['payment_receivable_total_invoice']);
+                $column[] = 'Rp. '.esc(number_format($row['payment_receivable_total_pay']));
+                $btns = [];
+                 $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/purchase-order/get-purchase-order-detail/'.$row['payment_receivable_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
+                $column[] = implode('&nbsp;', $btns);
+                return $column;
+            });
+
+            $table->orderColumn  = ['payment_receivable_invoice', 'customer_name'];
+            $table->searchColumn = ['payment_receivable_invoice', 'customer_name'];
             $table->generate();
         }
     }
@@ -164,6 +192,82 @@ class Receivable_repayment extends WebminController
         $result['csrfHash'] = csrf_hash();
         
         resultJSON($result); 
+    }
+
+    public function saveReceivable()
+    {
+        $this->validationRequest(TRUE, 'POST');
+
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+        $validation =  \Config\Services::validation();
+
+        $input = [
+            'payment_receivable_customer_id'            => $this->request->getPost('payment_receivable_customer_id'),
+            'payment_receivable_total_pay'              => $this->request->getPost('payment_receivable_total_pay'),
+            'payment_receivable_method_id'              => $this->request->getPost('payment_receivable_method_id'),
+            'payment_receivable_method_name'            => $this->request->getPost('payment_receivable_method_name'),
+            'payment_receivable_date'                   => $this->request->getPost('payment_receivable_date'),
+        ];
+
+        $validation->setRules([
+            'payment_receivable_total_pay'            => ['rules' => 'required']
+        ]);
+
+        if ($validation->run($input) === FALSE) {
+
+            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+        } else {
+
+            if ($this->role->hasRole('receivable_repayment.add')) {
+
+                $input['user_id']= $this->userLogin['user_id'];
+
+                $save = $this->M_receivable_repayment->insertPayment($input);
+
+                if ($save['success']) {
+
+                    $result = ['success' => TRUE, 'message' => 'Data pelunasan Piutang berhasil disimpan', 'payment_receivable_id' => $save['payment_receivable_id']];
+
+                } else {
+
+                    $result = ['success' => FALSE, 'message' => 'Data pelunasan Piutang gagal disimpan / Tidak ada data yang di Lunasi'];
+
+                }
+
+            } else {
+
+                $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menambah pelunasan Piutang'];
+
+            }
+
+        }
+
+        $result['csrfHash'] = csrf_hash();
+
+        resultJSON($result);
+    }
+
+    public function getReceivableFooter()
+    {
+        $getReceivableFooter = $this->M_receivable_repayment->getReceivableFooter($this->userLogin['user_id'])->getResultArray();
+
+        $find_result = [];
+
+        foreach ($getReceivableFooter as $k => $v) {
+
+            $find_result[$k] = esc($v);
+
+        }
+
+        $result['data'] = $find_result;
+
+        $result['csrfHash'] = csrf_hash();
+
+        $result['success'] = 'TRUE';
+
+        resultJSON($result);
     }
 
 

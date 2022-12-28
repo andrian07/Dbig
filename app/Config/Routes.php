@@ -1,16 +1,10 @@
 <?php
 
-
-
 namespace Config;
-
-
 
 // Create a new instance of our RouteCollection class.
 
 $routes = Services::routes();
-
-
 
 // Load the system's routing file first, so that the app and ENVIRONMENT
 
@@ -566,6 +560,7 @@ $routes->group('webmin/consignment', ['filter' => 'webminauth'], static function
     $routes->get('get-consignment-po-detail/(:alphanum)', 'Webmin\Consignment\Consignment::getConsignmentPoDetail/$1');
 
 
+});
 
 /* end pembelian */
 
@@ -624,6 +619,8 @@ $routes->group('webmin/payment', ['filter' => 'webminauth'], static function ($r
 
     $routes->post('save/(:alpha)', 'Webmin\Payment\Debt_repayment::save/$1');
 
+    $routes->get('get-debt-history-detail/(:alphanum)', 'Webmin\Payment\Debt_repayment::getDebtHistoryDetail/$1');
+
     /* End Pelunasan Hutang */
 
     /* Pelunasan Piutang */
@@ -634,7 +631,16 @@ $routes->group('webmin/payment', ['filter' => 'webminauth'], static function ($r
 
     $routes->post('copy_data_temp_repayment', 'Webmin\Payment\Receivable_repayment::copyDataTempRepayment');
 
-     $routes->post('temp-receivable-add', 'Webmin\Payment\Receivable_repayment::tempadd');
+    $routes->post('temp-receivable-add', 'Webmin\Payment\Receivable_repayment::tempadd');
+
+    $routes->post('save-receivable/(:alpha)', 'Webmin\Payment\Receivable_repayment::saveReceivable/$1');
+
+    $routes->get('get-receivable-footer', 'Webmin\Payment\Receivable_repayment::getReceivableFooter');
+
+    $routes->post('tblreceivablehistory', 'Webmin\Payment\Receivable_repayment::tbl_receivablehistory');
+
+     
+     
     
 
     /* End Pelunasan Piutang */
@@ -780,14 +786,19 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
     $routes->get('user-group', 'Webmin\Select::userGroup');
 
     $routes->get('user-account', 'Webmin\Select::userAccount');
+
     $routes->get('unit', 'Webmin\Select::unit');
+
     $routes->get('product', 'Webmin\Select::product');
+
     $routes->get('product-unit', 'Webmin\Select::productUnit');
+
     $routes->get('category', 'Webmin\Select::category');
 
     $routes->get('salesman', 'Webmin\Select::salesman');
 
     $routes->get('brand', 'Webmin\Select::brand');
+
     $routes->get('supplier', 'Webmin\Select::supplier');
 
     $routes->get('customer', 'Webmin\Select::customer');
@@ -809,6 +820,8 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
     $routes->get('no-submission', 'Webmin\Select::noSubmission');
 
     $routes->get('no-po-consignment', 'Webmin\Select::noPoConsignment');
+
+    $routes->get('payment-method', 'Webmin\Select::payment_method');
 
 
 });

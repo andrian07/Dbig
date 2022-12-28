@@ -2,7 +2,6 @@
 $themeUrl = base_url('assets/adminlte3');
 $assetsUrl = base_url('assets');
 ?>
-
 <?= $this->extend('webmin/template/admin_template') ?>
 
 <?= $this->section('content') ?>
@@ -73,12 +72,12 @@ $assetsUrl = base_url('assets');
                                                     <tr>
                                                         <th data-priority="1">#</th>
                                                         <th data-priority="2">No Transaksi</th>
-                                                        <th data-priority="2">Nama Supplier</th>
-                                                        <th data-priority="5">Tanggal Pembayaran</th>
-                                                        <th data-priority="6">Metode Pembayaran</th>
-                                                        <th data-priority="5">Jumlah Nota</th>
-                                                        <th data-priority="4">Total Pembayaran</th>
-                                                        <th data-priority="3">Aksi</th>
+                                                        <th data-priority="3">Nama Supplier</th>
+                                                        <th data-priority="4">Tanggal Pembayaran</th>
+                                                        <th data-priority="5">Metode Pembayaran</th>
+                                                        <th data-priority="6">Jumlah Nota</th>
+                                                        <th data-priority="7">Total Pembayaran</th>
+                                                        <th data-priority="8">Aksi</th>
                                                     </tr>
                                                 </thead>
                                             </table>

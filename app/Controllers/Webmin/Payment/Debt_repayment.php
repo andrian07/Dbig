@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controllers\Webmin\Payment;
 
 use Dompdf\Dompdf;
@@ -79,7 +78,7 @@ class Debt_repayment extends WebminController
                 $column[] = esc($row['payment_debt_total_invoice']);
                 $column[] = 'Rp. '.esc(number_format($row['payment_debt_total_pay']));
                 $btns = [];
-                $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/purchase-order/get-purchase-order-detail/'.$row['payment_debt_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
+                $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/payment/get-debt-history-detail/'.$row['payment_debt_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
                 $column[] = implode('&nbsp;', $btns);
                 return $column;
             });
@@ -88,6 +87,40 @@ class Debt_repayment extends WebminController
             $table->searchColumn = ['payment_debt_invoice', 'supplier_name'];
             $table->generate();
         }
+    }
+
+    public function getDebtHistoryDetail($payment_debt_id = '')
+    {
+        if ($payment_debt_id == '') {
+
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+
+        } else {
+
+            $getHdDebtdetail =  $this->M_debt_repayment->getHdDebtdetail($payment_debt_id)->getRowArray();
+
+            if ($getHdDebtdetail == NULL) {
+
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+
+            } else {
+
+                $data = [
+
+                    'hdDebt' => $getHdDebtdetail,
+
+                    'dtDebt' => $this->M_debt_repayment->getDtDebtdetail($payment_debt_id)->getResultArray(),
+
+                    //'log' => $this->M_debt_repayment->getLog($purchase_order_id)->getResultArray()
+
+                ];
+
+                return view('webmin/payment/debt_repayment_detail', $data);
+
+            }
+
+        }
+
     }
 
     public function copyDataTemp()
