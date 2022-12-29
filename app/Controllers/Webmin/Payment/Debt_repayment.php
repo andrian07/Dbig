@@ -68,6 +68,7 @@ class Debt_repayment extends WebminController
             $table = new \App\Libraries\Datatables('hd_payment_debt');
             $table->db->select('payment_debt_id,payment_debt_invoice, supplier_name, payment_debt_date, payment_debt_method_name,payment_debt_total_invoice,payment_debt_total_pay');
             $table->db->join('ms_supplier', 'ms_supplier.supplier_id  = hd_payment_debt.payment_debt_supplier_id');
+            $table->db->orderBy('payment_debt_id', 'desc');
             $table->renderColumn(function ($row, $i) {
                 $column = [];
                 $column[] = $i;
@@ -246,7 +247,7 @@ class Debt_repayment extends WebminController
             'payment_debt_total_pay'              => $this->request->getPost('payment_debt_total_pay'),
             'payment_debt_method_id'              => $this->request->getPost('payment_debt_method_id'),
             'payment_debt_method_name'            => $this->request->getPost('payment_debt_method_name'),
-            'repayment_date'                      => $this->request->getPost('repayment_date'),
+            'payment_debt_date'                   => $this->request->getPost('repayment_date'),
         ];
 
         $validation->setRules([

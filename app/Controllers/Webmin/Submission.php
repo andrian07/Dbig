@@ -61,7 +61,7 @@ class Submission extends WebminController
                 $prop =  'data-id="'.$row['submission_id'].'" data-name="'.esc($row['submission_inv']).'"';
                 $btns[] = button_edit($prop);
                 $btns[] = button_delete($prop);
-                  $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/submission/get-submission-detail/'.$row['submission_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
+                $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/submission/get-submission-detail/'.$row['submission_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
                 $btns[] = '<button data-id="'.$row['submission_id'] .'" data-name="'. esc($row['submission_inv']) .'" class="margins btn btn-sm btn-default mb-2 btndecline" data-toggle="tooltip" data-placement="top" data-title="Approve" data-original-title="" title=""><i class="fas fa-ban"></i></button>';
                 
                 $column[] = implode('&nbsp;', $btns);
@@ -328,7 +328,7 @@ class Submission extends WebminController
 
         if ($this->role->hasRole('submission.decline')) {
 
-            $getSubmissiondetail = $this->M_submission->getSubmissiondetail($input['submission_id_decline'])->getRowArray();
+            $getSubmissiondetail = $this->M_submission->getSubmissiondetaildata($input['submission_id_decline'])->getRowArray();
 
             $submission_inv = $getSubmissiondetail['submission_inv'];
 

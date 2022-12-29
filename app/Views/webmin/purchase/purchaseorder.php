@@ -75,7 +75,9 @@ $assetsUrl = base_url('assets');
 
                                         <th data-priority="7">Status</th>
 
-                                        <th data-priority="8">Aksi</th>
+                                        <th data-priority="8">Status Barang</th>
+
+                                        <th data-priority="9">Aksi</th>
 
                                     </tr>
 
@@ -103,7 +105,41 @@ $assetsUrl = base_url('assets');
 
         </div><!-- /.container-fluid -->
 
-    </section>
+        <div class="modal fade" id="modal-updatestatus">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="title-frmupdatestatus"></h4>
+                        <button type="button" class="close close-modal-updatestatus">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="frmupdatestatus" class="form-horizontal">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                 <div class="form-group">
+                                     <label for="desc_status" class="col-sm-12">Keterangan Status Barang:</label>
+                                     <div class="col-sm-12">
+                                        <input type="hidden" id="purchase_order_id_status" name="purchase_order_id_status">
+                                        <textarea id="desc_item_status" name="desc_item_status" type="text" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button class="btn btn-danger close-modal-updatestatus"><i class="fas fa-times-circle"></i> Batal</button>
+                        <button id="btn_updatestatus" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+</section>
 
 </div>
 
@@ -449,57 +485,57 @@ $assetsUrl = base_url('assets');
 
                                 <template id="template_row_temp">
 
-                                 <tr>
+                                   <tr>
 
-                                     <td>{row}</td>
+                                       <td>{row}</td>
 
-                                     <td>{submission_invoice}</td>
+                                       <td>{submission_invoice}</td>
 
-                                     <td>{item_code}</td>
+                                       <td>{item_code}</td>
 
-                                     <td>{product_name}</td>
+                                       <td>{product_name}</td>
 
-                                     <td>{temp_price}</td>
+                                       <td>{temp_price}</td>
 
-                                     <td>{temp_qty}</td>
+                                       <td>{temp_qty}</td>
 
-                                     <td>{temp_disc}</td>
+                                       <td>{temp_disc}</td>
 
-                                     <td>{temp_ongkir}</td>
+                                       <td>{temp_ongkir}</td>
 
-                                     <td>{temp_ed}</td>
+                                       <td>{temp_ed}</td>
 
-                                     <td>{temp_total}</td>
+                                       <td>{temp_total}</td>
 
-                                     <td>
+                                       <td>
 
-                                         <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                           <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
-                                             <i class="fas fa-edit"></i>
+                                               <i class="fas fa-edit"></i>
 
-                                         </button>
+                                           </button>
 
-                                         &nbsp;
+                                           &nbsp;
 
-                                         <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+                                           <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
 
-                                             <i class="fas fa-minus"></i>
+                                               <i class="fas fa-minus"></i>
 
-                                         </button>
+                                           </button>
 
-                                     </td>
+                                       </td>
 
-                                 </tr>
+                                   </tr>
 
-                             </template>
+                               </template>
 
-                         </div>
+                           </div>
 
-                     </div>
+                       </div>
 
 
 
-                     <div class="row form-space">
+                       <div class="row form-space">
 
                         <div class="col-lg-6">
 
@@ -712,7 +748,11 @@ $assetsUrl = base_url('assets');
     <!-- /.modal-dialog -->
 </div>
 <!-- Footer Modal Discount -->
+
+
 </section>
+
+
 
 </div>
 
@@ -819,13 +859,13 @@ $assetsUrl = base_url('assets');
         // init component //
 
         function _initButton() {
-         $('#btnadd').prop('disabled', !hasRole('purchase_order.add'));
-         $('.btnedit').prop('disabled', !hasRole('purchase_order.edit'));
-         $('.btndelete').prop('disabled', !hasRole('purchase_order.delete'));
-         $('.btnprint').prop('disabled', !hasRole('purchase_order.print'));
-     }
+           $('#btnadd').prop('disabled', !hasRole('purchase_order.add'));
+           $('.btnedit').prop('disabled', !hasRole('purchase_order.edit'));
+           $('.btndelete').prop('disabled', !hasRole('purchase_order.delete'));
+           $('.btnprint').prop('disabled', !hasRole('purchase_order.print'));
+       }
 
-     let tblpurchaseorders = $("#tblpurchaseorders").DataTable({
+       let tblpurchaseorders = $("#tblpurchaseorders").DataTable({
         processing: true,
         select: true,
         serverSide: true,
@@ -852,7 +892,7 @@ $assetsUrl = base_url('assets');
             width: 100
         },
         {
-            targets: [0, 7],
+            targets: [0, 8],
             orderable: false,
             searchable: false,
         },
@@ -863,7 +903,7 @@ $assetsUrl = base_url('assets');
         ],
     });
 
-     $("#nosubmission").select2({
+       $("#nosubmission").select2({
         placeholder: '-- Pilih No Pengajuan --',
         width: "100%",
         allowClear: true,
@@ -887,8 +927,94 @@ $assetsUrl = base_url('assets');
     });
 
 
+       $("#tblpurchaseorders").on('click', '.btnstatus', function(e) {
+        e.preventDefault();
+        let id = $(this).attr('data-id');
+        let actUrl = base_url + '/webmin/purchase-order/getbyid/' + id;
+        ajax_get(actUrl, null, {
+            success: function(response) {
+                if (response.success) {
+                    if (response.result.exist){
+                        if(response.result.data.purchase_order_status == 'Pending'){
+                            updatestatus(response.result.data);
+                        }else{
+                            message.info('Pesanan yang sudah selesai atau dibatalkan tidak dapat di ubah lagi');
+                        }
+                    } else {
+                        message.error(response.result.message);
+                    }
+                }
+            }
+        })
 
-     $("#nosubmission").change(function(e) {
+    })
+
+       function updatestatus(data) {
+        let form = $('#frmupdatestatus');
+        $('#title-frmupdatestatus').html('Update Status Barang');
+        $('#purchase_order_id_status').val(htmlEntities.decode(data.purchase_order_id));
+        $('#desc_item_status').val(htmlEntities.decode(data.purchase_order_item_status))
+        $('#modal-updatestatus').modal(configModal);
+    }
+
+    $('#btn_updatestatus').click(function(e) {
+
+        e.preventDefault();
+
+        let form = $('#frmupdatestatus');
+
+        let btnSubmit = $('btn_updatestatus');
+
+        let actUrl = base_url + '/webmin/purchase-order/update-status-item';
+
+        let formValues = {
+
+            purchase_order_id_status: $('#purchase_order_id_status').val(),
+
+            purchase_order_item_status: $('#desc_item_status').val()
+
+        };
+
+        btnSubmit.prop('disabled', true);
+
+        ajax_post(actUrl, formValues, {
+
+            success: function(response) {
+
+                if (response.success) {
+
+                    if (response.result.success) {
+
+                        notification.success(response.result.message);
+                        updateTableHeader();
+                        $('#modal-updatestatus').modal('hide');
+
+                    } else {
+
+                        message.error(response.result.message);
+
+                    }
+
+                }
+
+                btnSubmit.prop('disabled', false);
+
+                updateTableHeader();
+
+            },
+
+            error: function(response) {
+
+                btnSubmit.prop('disabled', false);
+
+                updateTable();
+
+            }
+        });
+    })
+    
+
+    $("#nosubmission").change(function(e) {
 
         let id = $(this).val();
 
@@ -971,20 +1097,20 @@ $assetsUrl = base_url('assets');
     });
 
 
-     $('#btnadd').click(function(e) {
+    $('#btnadd').click(function(e) {
         e.preventDefault();
         let actUrl = base_url + '/webmin/purchase-order/get-po-temp';
         ajax_get(actUrl, null, {
             success: function(response) {   
                 if (response.result.success == 'TRUE') {
-                   let form = $('#frmpurchaseorder');
-                   let items = response.result.data;
-                   $('#title-frmpurchaseorder').html('Pengajuan Pesanan');
-                   formMode = 'add';
-                   setSelect2('#supplier_id', "", "");
-                   $('#supplier_id').prop("disabled", false);
-                   loadTempData(items);
-                   if(items.length != 0){
+                 let form = $('#frmpurchaseorder');
+                 let items = response.result.data;
+                 $('#title-frmpurchaseorder').html('Pengajuan Pesanan');
+                 formMode = 'add';
+                 setSelect2('#supplier_id', "", "");
+                 $('#supplier_id').prop("disabled", false);
+                 loadTempData(items);
+                 if(items.length != 0){
                     let supplier_ids = items[0].temp_po_supplier_id;
                     let supplier_names = items[0].temp_po_supplier_name;
                     setSelect2('#supplier_id', supplier_ids, supplier_names);
@@ -1001,7 +1127,7 @@ $assetsUrl = base_url('assets');
 
     })
 
-     function showInputPage(x) {
+    function showInputPage(x) {
 
         if (x) {
 
@@ -1068,13 +1194,13 @@ $assetsUrl = base_url('assets');
         }
 
         if(warehouse == null){
-         Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Silahkan Isi Gudang Terlebih Dahulu !'
-      })
+           Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Silahkan Isi Gudang Terlebih Dahulu !'
+          })
 
-     }else{
+       }else{
 
         message.question(question).then(function(answer) {
 
@@ -1179,138 +1305,138 @@ $assetsUrl = base_url('assets');
 
 $('#btnadd_temp').click(function(e) {
 
- e.preventDefault();
+   e.preventDefault();
 
- let price = parseFloat(temp_price.getNumericString());
+   let price = parseFloat(temp_price.getNumericString());
 
- let dpp = parseFloat(temp_dpp.getNumericString());
+   let dpp = parseFloat(temp_dpp.getNumericString());
 
- let tax = parseFloat(temp_tax.getNumericString());
+   let tax = parseFloat(temp_tax.getNumericString());
 
- let qty = parseFloat(temp_qty.getNumericString());
+   let qty = parseFloat(temp_qty.getNumericString());
 
- let ongkir = parseFloat(temp_ongkir.getNumericString());
+   let ongkir = parseFloat(temp_ongkir.getNumericString());
 
- let discount1 = parseFloat(edit_temp_discount1.getNumericString());
+   let discount1 = parseFloat(edit_temp_discount1.getNumericString());
 
- let discount2 = parseFloat(edit_temp_discount2.getNumericString());
+   let discount2 = parseFloat(edit_temp_discount2.getNumericString());
 
- let discount3 = parseFloat(edit_temp_discount3.getNumericString());
+   let discount3 = parseFloat(edit_temp_discount3.getNumericString());
 
- let discount_percentage1 = parseFloat(temp_discount_percentage1.getNumericString());
+   let discount_percentage1 = parseFloat(temp_discount_percentage1.getNumericString());
 
- let discount_percentage2 = parseFloat(temp_discount_percentage2.getNumericString());
+   let discount_percentage2 = parseFloat(temp_discount_percentage2.getNumericString());
 
- let discount_percentage3 = parseFloat(temp_discount_percentage3.getNumericString());
+   let discount_percentage3 = parseFloat(temp_discount_percentage3.getNumericString());
 
- let total_discount = parseFloat(total_temp_discount.getNumericString());
+   let total_discount = parseFloat(total_temp_discount.getNumericString());
 
- let total = parseFloat(temp_total.getNumericString());
+   let total = parseFloat(temp_total.getNumericString());
 
- let supplier_id = $('#supplier_id').val();
+   let supplier_id = $('#supplier_id').val();
 
- let supplier_name = $("#supplier_id option:selected" ).text();
+   let supplier_name = $("#supplier_id option:selected" ).text();
 
- let submission_id = $('#nosubmission').val();
+   let submission_id = $('#nosubmission').val();
 
- let submission_inv = $("#nosubmission option:selected" ).text();
+   let submission_inv = $("#nosubmission option:selected" ).text();
 
 
- let btnSubmit = $('#btnadd_temp');
+   let btnSubmit = $('#btnadd_temp');
 
- let form = $('#frmaddtemp');
+   let form = $('#frmaddtemp');
 
- form.parsley().validate();
+   form.parsley().validate();
 
- if (form.parsley().isValid()) {
+   if (form.parsley().isValid()) {
 
-     let actUrl = base_url + '/webmin/purchase-order/temp-add';
+       let actUrl = base_url + '/webmin/purchase-order/temp-add';
 
-     let formValues = {
+       let formValues = {
 
-         temp_po_id: $('#temp_po_id').val(),
+           temp_po_id: $('#temp_po_id').val(),
 
-         temp_po_submission_id: submission_id,
+           temp_po_submission_id: submission_id,
 
-         temp_po_submission_invoice: submission_inv,
+           temp_po_submission_invoice: submission_inv,
 
-         item_id: $('#item_id').val(),
+           item_id: $('#item_id').val(),
 
-         temp_price: price,
+           temp_price: price,
 
-         temp_dpp: dpp,
+           temp_dpp: dpp,
 
-         temp_tax: tax,
+           temp_tax: tax,
 
-         temp_qty: qty,
+           temp_qty: qty,
 
-         temp_ongkir: ongkir,
+           temp_ongkir: ongkir,
 
-         temp_discount1: discount1,
+           temp_discount1: discount1,
 
-         temp_discount_percentage1: discount_percentage1,
+           temp_discount_percentage1: discount_percentage1,
 
-         temp_discount2: discount2,
+           temp_discount2: discount2,
 
-         temp_discount_percentage2: discount_percentage2,
+           temp_discount_percentage2: discount_percentage2,
 
-         temp_discount3: discount3,
+           temp_discount3: discount3,
 
-         temp_discount_percentage3: discount_percentage3,
+           temp_discount_percentage3: discount_percentage3,
 
-         temp_po_suplier_id:supplier_id,
+           temp_po_suplier_id:supplier_id,
 
-         total_temp_discount:total_discount,
+           total_temp_discount:total_discount,
 
-         temp_po_suplier_name:supplier_name,
+           temp_po_suplier_name:supplier_name,
 
-         temp_ed_date: $('#temp_ed_date').val(),
+           temp_ed_date: $('#temp_ed_date').val(),
 
-         temp_total: total,
+           temp_total: total,
 
-     };
+       };
 
-     btnSubmit.prop('disabled', true);
+       btnSubmit.prop('disabled', true);
 
-     ajax_post(actUrl, formValues, {
+       ajax_post(actUrl, formValues, {
 
-         success: function(response) {
+           success: function(response) {
 
-             if (response.success) {
+               if (response.success) {
 
-                 if (response.result.success) {
+                   if (response.result.success) {
 
 
-                     $('#product_name').focus();
+                       $('#product_name').focus();
 
-                     setSelect2('#supplier_id', supplier_id, supplier_name);
+                       setSelect2('#supplier_id', supplier_id, supplier_name);
 
-                     $('#supplier_id').attr("disabled", true);
+                       $('#supplier_id').attr("disabled", true);
 
-                     notification.success(response.result.message);
+                       notification.success(response.result.message);
 
-                 } else {
+                   } else {
 
-                     message.error(response.result.message);
+                       message.error(response.result.message);
 
-                 }
+                   }
 
-                 clearItemInput();
-                 loadTempData(response.result.data);
+                   clearItemInput();
+                   loadTempData(response.result.data);
 
-             }
+               }
 
-             btnSubmit.prop('disabled', false);
+               btnSubmit.prop('disabled', false);
 
-         },
+           },
 
-         error: function(response) {
+           error: function(response) {
 
-             btnSubmit.prop('disabled', false);
+               btnSubmit.prop('disabled', false);
 
-         }
-     });
- }
+           }
+       });
+   }
 })
 
 Parsley.addMessages('id', {
@@ -1583,218 +1709,218 @@ $('#btncancel').click(function(e) {
 
 $("#tbltemp").on('click', '.btnedit', function(e) {
 
-   e.preventDefault();
+ e.preventDefault();
 
-   let json_data = $(this).attr('data-json');
+ let json_data = $(this).attr('data-json');
 
-   let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
+ let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
 
-   if (is_json) {
+ if (is_json) {
 
-        setSelect2('#nosubmission',json.temp_po_submission_id,json.temp_po_submission_invoice);
+    setSelect2('#nosubmission',json.temp_po_submission_id,json.temp_po_submission_invoice);
 
-       $('#submission_id').val(json.temp_po_submission_id);
+    $('#submission_id').val(json.temp_po_submission_id);
 
-        $('#submission_inv').val(json.temp_po_submission_invoice);
+    $('#submission_inv').val(json.temp_po_submission_invoice);
 
-       $('#nosubmission').prop("disabled", true);
+    $('#nosubmission').prop("disabled", true);
 
-       $('#item_id').val(json.temp_po_item_id);
+    $('#item_id').val(json.temp_po_item_id);
 
-       $('#product_name').val(json.product_name);
+    $('#product_name').val(json.product_name);
 
-      temp_price.set(json.temp_po_price);
+    temp_price.set(json.temp_po_price);
 
-      temp_qty.set(json.temp_po_qty);
+    temp_qty.set(json.temp_po_qty);
 
-       temp_ongkir.set(json.temp_po_ongkir);
+    temp_ongkir.set(json.temp_po_ongkir);
 
-       temp_discount1.set(json.temp_po_discount1);
+    temp_discount1.set(json.temp_po_discount1);
 
-       temp_discount2.set(json.temp_po_discount2);
+    temp_discount2.set(json.temp_po_discount2);
 
-       temp_discount3.set(json.temp_po_discount3);
+    temp_discount3.set(json.temp_po_discount3);
 
-       temp_discount_percentage1.set(json.temp_po_discount1_percentage);
+    temp_discount_percentage1.set(json.temp_po_discount1_percentage);
 
-       temp_discount_percentage2.set(json.temp_po_discount2_percentage);
+    temp_discount_percentage2.set(json.temp_po_discount2_percentage);
 
-       temp_discount_percentage3.set(json.temp_po_discount3_percentage);
+    temp_discount_percentage3.set(json.temp_po_discount3_percentage);
 
-       total_price.set(json.temp_po_qty * json.temp_po_price);
+    total_price.set(json.temp_po_qty * json.temp_po_price);
 
-       total_temp_discount.set(json.temp_po_discount_total);
+    total_temp_discount.set(json.temp_po_discount_total);
 
-       $('#temp_ed_date').val(json.temp_po_expire_date);
+    $('#temp_ed_date').val(json.temp_po_expire_date);
 
-       $('#temp_po_id').val(json.temp_po_id );
+    $('#temp_po_id').val(json.temp_po_id );
 
-       $('#temp_tax').val(json.temp_po_ppn);
+    $('#temp_tax').val(json.temp_po_ppn);
 
-       temp_total.set(json.temp_po_total);
+    temp_total.set(json.temp_po_total);
 
-       temp_dpp.set(json.temp_po_dpp);
+    temp_dpp.set(json.temp_po_dpp);
 
-       temp_tax.set(json.temp_po_ppn);
+    temp_tax.set(json.temp_po_ppn);
 
-       $('#temp_qty').focus();
+    $('#temp_qty').focus();
 
-       $('#supplier_id').attr("disabled", true);
+    $('#supplier_id').attr("disabled", true);
 
-   } else {
+} else {
 
-       getTemp();
+ getTemp();
 
-       message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
+ message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
 
-   }
+}
 
 })  
 
 
 function loadTempData(items) {
 
-   let template = $('#template_row_temp').html();
+ let template = $('#template_row_temp').html();
 
-   let tbody = '';
+ let tbody = '';
 
-   let row = 1;
+ let row = 1;
 
-   let temp_total_order = 0;
+ let temp_total_order = 0;
 
-   items.forEach((val, key) => {
+ items.forEach((val, key) => {
 
-       let item = template;
+     let item = template;
 
-       let data_json = htmlEntities.encode(JSON.stringify(val));
+     let data_json = htmlEntities.encode(JSON.stringify(val));
 
-       let temp_po_id  = val.temp_po_id;
+     let temp_po_id  = val.temp_po_id;
 
-       let temp_po_submission_invoice  = val.temp_po_submission_invoice;
+     let temp_po_submission_invoice  = val.temp_po_submission_invoice;
 
-       let temp_po_item_id = val.temp_po_item_id;
+     let temp_po_item_id = val.temp_po_item_id;
 
-       let item_code = val.item_code;
+     let item_code = val.item_code;
 
-       let product_name  = val.product_name+'('+val.unit_name+')';
+     let product_name  = val.product_name+'('+val.unit_name+')';
 
-       let temp_po_price  = val.temp_po_price;
+     let temp_po_price  = val.temp_po_price;
 
-       let temp_po_qty = parseFloat(val.temp_po_qty);
+     let temp_po_qty = parseFloat(val.temp_po_qty);
 
-       let temp_po_total_disc = val.temp_total_discount;
+     let temp_po_total_disc = val.temp_total_discount;
 
-       let temp_po_ongkir = val.temp_po_ongkir;
+     let temp_po_ongkir = val.temp_po_ongkir;
 
-       let temp_po_expire_date = val.temp_po_expire_date;
+     let temp_po_expire_date = val.temp_po_expire_date;
 
-       let temp_po_total = val.temp_po_total;
+     let temp_po_total = val.temp_po_total;
 
-       let has_tax = val.has_tax;
-
-
-
-       item = item.replaceAll('{row}', row)
-
-       .replaceAll('{submission_invoice}', temp_po_submission_invoice)
-
-       .replaceAll('{item_code}', item_code)
-
-       .replaceAll('{product_name}', product_name)
-
-       .replaceAll('{temp_price}', numberFormat(temp_po_price, true))
-
-       .replaceAll('{temp_qty}', numberFormat(temp_po_qty, true))
-
-       .replaceAll('{temp_disc}', numberFormat(temp_po_total_disc, true))
-
-       .replaceAll('{temp_ongkir}', numberFormat(temp_po_ongkir, true))
-
-       .replaceAll('{temp_ed}', temp_po_expire_date)
-
-       .replaceAll('{temp_total}', numberFormat(temp_po_total, true))
-
-       .replaceAll('{temp_id}', temp_po_id)
-
-       .replaceAll('{data_json}', data_json);
-
-       tbody += item;
-
-       row++;
-
-   });
-
-
-   if ($.fn.DataTable.isDataTable('#tbltemp')) {
-
-       $('#tbltemp').DataTable().destroy();
-
-   }
+     let has_tax = val.has_tax;
 
 
 
-   $('#tbltemp tbody').html('');
+     item = item.replaceAll('{row}', row)
 
-   $('#tbltemp tbody').html(tbody);
+     .replaceAll('{submission_invoice}', temp_po_submission_invoice)
 
-   tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+     .replaceAll('{item_code}', item_code)
 
-   setTax();
+     .replaceAll('{product_name}', product_name)
 
-   setfootervalue();
+     .replaceAll('{temp_price}', numberFormat(temp_po_price, true))
 
-   clearItemInput();
+     .replaceAll('{temp_qty}', numberFormat(temp_po_qty, true))
 
-   _initTooltip();
+     .replaceAll('{temp_disc}', numberFormat(temp_po_total_disc, true))
+
+     .replaceAll('{temp_ongkir}', numberFormat(temp_po_ongkir, true))
+
+     .replaceAll('{temp_ed}', temp_po_expire_date)
+
+     .replaceAll('{temp_total}', numberFormat(temp_po_total, true))
+
+     .replaceAll('{temp_id}', temp_po_id)
+
+     .replaceAll('{data_json}', data_json);
+
+     tbody += item;
+
+     row++;
+
+ });
+
+
+ if ($.fn.DataTable.isDataTable('#tbltemp')) {
+
+     $('#tbltemp').DataTable().destroy();
+
+ }
+
+
+
+ $('#tbltemp tbody').html('');
+
+ $('#tbltemp tbody').html(tbody);
+
+ tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+
+ setTax();
+
+ setfootervalue();
+
+ clearItemInput();
+
+ _initTooltip();
 
 }
 
 const config_tbltemp = {
 
- pageLength: 10,
+   pageLength: 10,
 
- autoWidth: false,
+   autoWidth: false,
 
- select: true,
+   select: true,
 
- responsive: true,
+   responsive: true,
 
- fixedColumns: true,
+   fixedColumns: true,
 
- order: [
+   order: [
 
- [0, 'desc']
+   [0, 'desc']
 
- ],
+   ],
 
- "language": {
+   "language": {
 
-     "url": lang_datatables,
+       "url": lang_datatables,
 
- },
- "columnDefs": [{
+   },
+   "columnDefs": [{
 
-     width: 100
+       width: 100
 
- },
- {
+   },
+   {
 
-     targets: [0,9],
+       targets: [0,9],
 
-     orderable: false,
+       orderable: false,
 
-     searchable: false,
+       searchable: false,
 
- },
- {
+   },
+   {
 
-     targets: [0, 2, 3, 4, 5, 6],
+       targets: [0, 2, 3, 4, 5, 6],
 
-     className: "text-right",
+       className: "text-right",
 
- }
+   }
 
- ]
+   ]
 
 };
 
@@ -1853,45 +1979,45 @@ $("#supplier_id").select2({
 
 $('#product_name').autocomplete({   
 
-   minLength: 2,
+ minLength: 2,
 
-   source: function(req, add) {
+ source: function(req, add) {
 
-       $.ajax({
+     $.ajax({
 
-           url: base_url + '/webmin/purchase-order/search-product-bysuplier?sup='+$('#supplier_id').val(),
+         url: base_url + '/webmin/purchase-order/search-product-bysuplier?sup='+$('#supplier_id').val(),
 
-           dataType: 'json',
+         dataType: 'json',
 
-           type: 'GET',
+         type: 'GET',
 
-           data: req,
+         data: req,
 
-           success: function(res) {
+         success: function(res) {
 
-               if (res.success == true) {
+             if (res.success == true) {
 
                 add(res.data);
 
             }else{
 
-             message.error(res.message);
+               message.error(res.message);
 
-             $('#product_name').val('');
+               $('#product_name').val('');
 
-         }
+           }
 
-     },
+       },
 
- });
+   });
 
-   },
+ },
 
-   select: function(event, ui) {
+ select: function(event, ui) {
 
-       $('#item_id').val(ui.item.item_id);
+     $('#item_id').val(ui.item.item_id);
 
-       temp_price.set(parseFloat(ui.item.purchase_price));
+     temp_price.set(parseFloat(ui.item.purchase_price));
 
            //temp_tax.set(0);
 
@@ -1985,6 +2111,16 @@ $('.close-modal-footer').click(function(e) {
     })
 })
 
+$('.close-modal-updatestatus').click(function(e) {
+    e.preventDefault();
+    message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
+        let yes = parseMessageResult(answer);
+        if (yes) {
+            $('#modal-updatestatus').modal('hide');
+        }
+    })
+})
+
 $('#temp_qty').on('change', function() {
     calculation_temp_total();
     cleardiscount();
@@ -2050,7 +2186,7 @@ $('#edit_temp_discount_percentage3').on('change', function() {
 });
 
 $('#edit_temp_discount3').on('change', function() {
- if(edit_temp_discount2.get() < 1){
+   if(edit_temp_discount2.get() < 1){
     Swal.fire({
       icon: 'error',
       title: 'Oops...',
@@ -2251,50 +2387,50 @@ $('#btndiscfooter').click(function(e) {
 
 function updateTableHeader() {
 
-   tblpurchaseorders.ajax.reload(null, false);
+ tblpurchaseorders.ajax.reload(null, false);
 
 }
 
 
 function clearItemInput() {
 
-   let form = $('#frmaddtemp');
+     let form = $('#frmaddtemp');
 
-   form.parsley().reset();
+     form.parsley().reset();
 
-   $('#item_id').val('');
+     $('#item_id').val('');
 
-   $('#product_name').val('');
+     $('#product_name').val('');
 
-   $('#temp_ed_date').val('');
+     $('#temp_ed_date').val('');
 
-   temp_qty.set('0.00');
+     temp_qty.set('0.00');
 
-   temp_ongkir.set(0);
+     temp_ongkir.set(0);
 
-   temp_price.set(0);
+     temp_price.set(0);
 
-   temp_total.set(0);
+     temp_total.set(0);
 
-   temp_tax.set(0);
+     temp_tax.set(0);
 
-   edit_temp_discount_percentage1.set('0.00%');
+     edit_temp_discount_percentage1.set('0.00%');
 
-   edit_temp_discount_percentage2.set('0.00%');
+     edit_temp_discount_percentage2.set('0.00%');
 
-   edit_temp_discount_percentage3.set('0.00%');
+     edit_temp_discount_percentage3.set('0.00%');
 
-   edit_temp_discount1.set(0);
+     edit_temp_discount1.set(0);
 
-   edit_temp_discount2.set(0);
+     edit_temp_discount2.set(0);
 
-   edit_temp_discount3.set(0);
+     edit_temp_discount3.set(0);
 
-   total_temp_discount.set(0);
+     total_temp_discount.set(0);
 
-   $('#temp_desc').val('');
+     $('#temp_desc').val('');
 
-   setSelect2('#nosubmission','','');
+     setSelect2('#nosubmission','','');
 
 }
 
@@ -2381,20 +2517,17 @@ function setfootervalue(){
     });
 }
 
-
-
-
 function setTax(){
     let actUrl = base_url + '/webmin/purchase-order/get-po-tax';
     ajax_get(actUrl, null, {
         success: function(response) {   
             if (response.result.success == 'TRUE') {
                 if(response.result.data.length > 0){
-                 $('#has_tax').val('Pajak');
-             }else{
-                 $('#has_tax').val('Non Pajak');
-             }
-         } else {
+                   $('#has_tax').val('Pajak');
+               }else{
+                   $('#has_tax').val('Non Pajak');
+               }
+           } else {
             message.error(response.result.message);
         }
     }

@@ -177,6 +177,7 @@ class MyApp extends BaseConfig
                 'edit'          => ['text' => 'Ubah'],
                 'delete'        => ['text' => 'Hapus'],
                 'print'         => ['text' => 'Cetak'],
+                'status'        => ['text' => 'status'],
                 'cancel_order'  => ['text' => 'Pembatalan Pesanan'],
             ]
         ],

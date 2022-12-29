@@ -35,7 +35,7 @@ class Purchase_order extends WebminController
             helper('datatable');
 
             $table = new \App\Libraries\Datatables('hd_purchase_order');
-            $table->db->select('purchase_order_id,purchase_order_invoice,purchase_order_date,supplier_name,purchase_order_total_ppn,purchase_order_total,purchase_order_status,');
+            $table->db->select('purchase_order_id,purchase_order_invoice,purchase_order_date,supplier_name,purchase_order_total_ppn,purchase_order_total,purchase_order_status,purchase_order_item_status');
             $table->db->join('ms_supplier', 'ms_supplier.supplier_id  = hd_purchase_order.purchase_order_supplier_id');
             $table->db->orderBy('hd_purchase_order.created_at', 'desc');
             $table->renderColumn(function ($row, $i) {
@@ -57,9 +57,12 @@ class Purchase_order extends WebminController
                 }else{
                     $column[] = '<span class="badge badge-danger">Batal</span>';
                 }
+
+                $column[] = esc($row['purchase_order_item_status']);
                 $btns = [];
                 $prop =  'data-id="' . $row['purchase_order_id'] . '" data-name="' . esc($row['purchase_order_invoice']) . '"';
                 $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/purchase-order/get-purchase-order-detail/'.$row['purchase_order_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
+                $btns[] = '<button data-id="'.$row['purchase_order_id'] .'" data-name="'. esc($row['purchase_order_invoice']) .'" class="margins btn btn-sm btn-primary mb-2 btnstatus" data-toggle="tooltip" data-placement="top" data-title="Status" data-original-title="" title=""><i class="fas fa-truck-loading"></i></button>';
                 $btns[] = button_edit($prop);
                 $btns[] = button_delete($prop);
                 $btns[] = button_print($prop);
@@ -183,6 +186,28 @@ class Purchase_order extends WebminController
 
     }
 
+    public function getbyid($purchase_order_id = '')
+    {
+        $this->validationRequest(TRUE);
+        $result = ['success' => FALSE, 'message' => 'Data PO tidak ditemukan'];
+        if ($this->role->hasRole('purchase_order.status')) {
+            if ($purchase_order_id != '') {
+                $find = $this->M_purchase_order->getOrder($purchase_order_id)->getRowArray();
+                if ($find == NULL) {
+                    $result = ['success' => TRUE, 'exist' => FALSE, 'message' => 'Data kategori tidak ditemukan'];
+                } else {
+                    $find_result = [];
+                    foreach ($find as $k => $v) {
+                        $find_result[$k] = esc($v);
+                    }
+                    $result = ['success' => TRUE, 'exist' => TRUE, 'data' => $find_result, 'message' => ''];
+                }
+            }
+        }
+
+        resultJSON($result);
+    }
+
     public function editOrder($purchase_order_id = '')
     {
 
@@ -258,7 +283,7 @@ class Purchase_order extends WebminController
 
         }
 
-    }
+    }   
 
     $result['csrfHash'] = csrf_hash();
     resultJSON($result);
@@ -558,6 +583,40 @@ public function save($type)
 
 }
 
+public function UpdateStatusItem()
+{
+    $this->validationRequest(TRUE, 'POST');
+
+    $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+    $validation =  \Config\Services::validation();
+
+    $input = [
+
+        'purchase_order_id_status'      => $this->request->getPost('purchase_order_id_status'),
+        'purchase_order_item_status'    => $this->request->getPost('purchase_order_item_status')
+    ];
+
+    if ($this->role->hasRole('purchase_order.status')) {
+
+        $getOrder = $this->M_purchase_order->getOrder($input['purchase_order_id_status'])->getRowArray();
+
+        if ($getOrder == NULL) {
+
+            $result = ['success' => FALSE, 'message' => 'Transaksi tidak ditemukan'];
+
+        } else {
+
+            $UpdateStatusItem = $this->M_purchase_order->UpdateStatusItem($input);
+
+            $result = ['success' => TRUE, 'message' => 'Update Status Berhasil'];
+
+        }
+    }
+
+    $result['csrfHash'] = csrf_hash();
+    resultJSON($result);
+}
 
 
 public function printinvoice($purchase_order_id = "")

@@ -44,7 +44,7 @@ class Consignment extends WebminController
                 $column[] = esc($row['purchase_order_consignment_invoice']);
                 $column[] = indo_short_date($row['purchase_order_consignment_date'], FALSE);
                 $column[] = esc($row['supplier_name']);
-                if($row['purchase_order_consignment_status'] == 'Selesai'){
+                if($row['purchase_order_consignment_status'] == 'Accept'){
                     $column[] = '<span class="badge badge-success">Selesai</span>';
                 }else if($row['purchase_order_consignment_status'] == 'Pending'){
                     $column[] = '<span class="badge badge-primary">Pending</span>';
@@ -395,14 +395,14 @@ class Consignment extends WebminController
 
             'purchase_order_consignment_supplier_id' => $this->request->getPost('supplier_id'),
             'purchase_order_consignment_date'        => $this->request->getPost('po_consignment_date'),
-            'purchase_order_consignment_store_id'    => $this->request->getPost('warehouse'),
+            'purchase_order_consignment_warehouse_id'    => $this->request->getPost('warehouse'),
             'purchase_order_consignment_remark'      => $this->request->getPost('po_consignment_remark'),
 
         ];
 
         $validation->setRules([
 
-            'purchase_order_consignment_store_id'    => ['rules' => 'required'],
+            'purchase_order_consignment_warehouse_id'    => ['rules' => 'required'],
             'purchase_order_consignment_date'        => ['rules' => 'required'],
             'purchase_order_consignment_remark'      => ['rules' => 'max_length[500]'],
         ]);
@@ -488,7 +488,7 @@ class Consignment extends WebminController
 
             'purchase_consignment_supplier_id' => $this->request->getPost('supplier_id'),
             'purchase_consignment_date'        => $this->request->getPost('purchase_consignment_date'),
-            'purchase_consignment_store_id'    => $this->request->getPost('warehouse'),
+            'purchase_consignment_warehouse_id'    => $this->request->getPost('warehouse'),
             'purchase_consignment_remark'      => $this->request->getPost('purchase_consignment_remark'),
             'purchase_consignment_po'          => $this->request->getPost('no_po_consignment'),
 
@@ -496,7 +496,7 @@ class Consignment extends WebminController
 
         $validation->setRules([
 
-            'purchase_consignment_store_id'    => ['rules' => 'required'],
+            'purchase_consignment_warehouse_id'    => ['rules' => 'required'],
             'purchase_consignment_date'        => ['rules' => 'required'],
             'purchase_consignment_remark'      => ['rules' => 'max_length[500]'],
         ]);

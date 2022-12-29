@@ -225,7 +225,7 @@ class M_consignment extends Model
 
         $saveQueries = NULL;
 
-        $maxCode = $this->db->table($this->table_hd_po_consignment)->select('max(purchase_order_consignment_invoice) as purchase_order_consignment_invoice')->get()->getRowArray();
+        $maxCode = $this->db->table($this->table_hd_po_consignment)->select('purchase_order_consignment_id, purchase_order_consignment_invoice')->orderBy('purchase_order_consignment_id', 'desc')->limit(1)->get()->getRowArray();
 
         $warehouse_code = $this->db->table($this->table_warehouse)->select('warehouse_code')->where('warehouse_id', $data['purchase_order_consignment_warehouse_id'])->get()->getRowArray();
 
@@ -325,9 +325,11 @@ class M_consignment extends Model
 
         $saveQueries = NULL;
 
-        $maxCode = $this->db->table($this->table_hd_purchase_consignment)->select('max(purchase_consignment_invoice) as purchase_consignment_invoice')->get()->getRowArray();
 
-        $warehouse_code = $this->db->table($this->table_warehouse)->select('warehouse_code')->where('warehouse_id', $data['purchase_consignment_store_id'])->get()->getRowArray();
+        
+        $maxCode = $this->db->table($this->table_hd_purchase_consignment)->select('purchase_consignment_id, purchase_consignment_invoice')->orderBy('purchase_consignment_id', 'desc')->limit(1)->get()->getRowArray();
+
+        $warehouse_code = $this->db->table($this->table_warehouse)->select('warehouse_code')->where('warehouse_id', $data['purchase_consignment_warehouse_id'])->get()->getRowArray();
 
         $invoice_date =  date_format(date_create($data['purchase_consignment_date']),"y/m");
 
@@ -388,7 +390,7 @@ class M_consignment extends Model
             $dt_consignment_expire_date   = $row['temp_consignment_expire_date'];
             $product_content              = $row['product_content'];
             $product_id                   = $row['product_id'];
-            $warehouse_id                 = $data['purchase_consignment_store_id'];
+            $warehouse_id                 = $data['purchase_consignment_warehouse_id'];
 
 
             $base_consignment_stock       = $dt_consignment_qty * $product_content;

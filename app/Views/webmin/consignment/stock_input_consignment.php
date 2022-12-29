@@ -1003,7 +1003,7 @@ $assetsUrl = base_url('assets');
 
                         btnSubmit.prop('disabled', false);
 
-                        updateTable();
+                        updateTableHeader();
 
                     }
 

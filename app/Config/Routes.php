@@ -468,6 +468,10 @@ $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static funct
 
     $routes->get('copy-submission/(:alphanum)', 'Webmin\Purchase_order::copySubmission/$1');
 
+    $routes->get('getbyid/(:num)', 'Webmin\Purchase_order::getById/$1');
+
+    $routes->post('update-status-item', 'Webmin\Purchase_order::UpdateStatusItem');
+
 });
 
 

@@ -67,6 +67,7 @@ class Receivable_repayment extends WebminController
             $table = new \App\Libraries\Datatables('hd_payment_receivable');
             $table->db->select('payment_receivable_id,payment_receivable_invoice, customer_name, payment_receivable_date, payment_receivable_method_name, payment_receivable_total_invoice, payment_receivable_total_pay');
             $table->db->join('ms_customer', 'ms_customer.customer_id  = hd_payment_receivable.payment_receivable_customer_id');
+            $table->db->orderBy('payment_receivable_id', 'desc');
             $table->renderColumn(function ($row, $i) {
                 $column = [];
                 $column[] = $i;

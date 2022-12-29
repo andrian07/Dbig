@@ -158,7 +158,7 @@ class M_debt_repayment extends Model
 
          $maxCode = $this->db->table($this->hd_payment_debt)->select('payment_debt_id, payment_debt_invoice')->orderBy('payment_debt_id', 'desc')->limit(1)->get()->getRowArray();
 
-         $invoice_date =  date_format(date_create($data['repayment_date']),"y/m/d");
+         $invoice_date =  date_format(date_create($data['payment_debt_date']),"y/m/d");
 
          if ($maxCode == NULL) {
 

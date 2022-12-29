@@ -388,6 +388,19 @@ public function clearUpdateDetail($purchase_order_id){
     ->delete();
 }
 
+public function UpdateStatusItem($input){
+        $this->db->query('LOCK TABLES hd_purchase_order WRITE');
+        $save = $this->db->table($this->table_hd_po)->update(['purchase_order_item_status' => $input['purchase_order_item_status']], ['purchase_order_id ' => $input['purchase_order_id_status']]);
+        $saveQueries = NULL;
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries = $this->db->getLastQuery()->getQuery();
+        }
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'UpdateStatusItem', $input['purchase_order_id_status']);
+        return $save;
+    }
+
 public function updateOrder($data)
 {
 
