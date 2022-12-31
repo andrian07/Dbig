@@ -68,6 +68,13 @@ $routes->set404Override();
 $routes->get('/', 'Home::index');
 
 
+$routes->group('api', static function ($routes) {
+
+    $routes->get('/', 'Api::index');
+
+    $routes->post('login', 'Api::login');
+    
+});
 
 $routes->group('devman', static function ($routes) {
 
