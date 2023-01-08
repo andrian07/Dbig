@@ -28,7 +28,7 @@ $assetsUrl = base_url('assets');
                     <h2 class="page-header">
                         Detail Opname
                         <small class="float-right">
-                            <?= indo_date('2022-09-03', false) ?>
+                            <?= indo_date($header['opname_date'], false) ?>
                         </small>
                     </h2>
                 </div>
@@ -48,11 +48,11 @@ $assetsUrl = base_url('assets');
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
-                    <b>#OP/KBR/22/09/000001</b><br>
+                    <b>#<?= esc($header['opname_code']) ?></b><br>
                     <br>
-                    <b>Kode Gudang:</b> KBR<br>
-                    <b>Nama Gudang:</b> CABANG KOTA BARUl<br>
-                    <b>Alamat:</b> Jalan Prof. M. Yamin No 5, Perempatan Jalan Ampera<br>
+                    <b>Kode Gudang:</b> <?= esc($header['warehouse_code']) ?><br>
+                    <b>Nama Gudang:</b> <?= esc($header['warehouse_name']) ?><br>
+                    <b>Alamat:</b> <?= esc($header['warehouse_address']) ?><br>
                 </div>
                 <!-- /.col -->
             </div>
@@ -70,43 +70,43 @@ $assetsUrl = base_url('assets');
                                     <tr>
                                         <th>Kode Produk</th>
                                         <th>Nama Produk</th>
-                                        <th>Satuan</th>
+                                        <th>Exp Date</th>
                                         <th class="text-right">HPP</th>
                                         <th class="text-right">Stok Fisik</th>
                                         <th class="text-right">Stok System</th>
-                                        <th>Selisih <small>Unit</small></th>
+                                        <th class="text-right">Selisih <small>Unit</small></th>
                                         <th>Keterangan</th>
-                                        <th>Selisih <small>Rp</small></th>
+                                        <th class="text-right">Selisih <small>Rp</small></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>P000001</td>
-                                        <td>Toto Gantungan Double Robe Hook (TX04AES)</td>
-                                        <td>PCS</td>
-                                        <td class="text-right">27,750.00</td>
-                                        <td class="text-right">240.00</td>
-                                        <td class="text-right">250.00</td>
-                                        <td class="text-right">-10.00</td>
-                                        <td>Hadiah Tukar Poin</td>
-                                        <td class="text-right">-277,500.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>P000002</td>
-                                        <td>Toto Floor Drain (TX1DA)</td>
-                                        <td>PCS</td>
-                                        <td class="text-right">25,000.00</td>
-                                        <td class="text-right">100.00</td>
-                                        <td class="text-right">105.00</td>
-                                        <td class="text-right">5.00</td>
-                                        <td>-</td>
-                                        <td class="text-right">125,000.00</td>
-                                    </tr>
+                                    <?php
+                                    foreach ($detail as $row) :
+                                        $base_cogs                  = floatval($row['base_cogs']);
+                                        $warehouse_stock            = floatval($row['warehouse_stock']);
+                                        $system_stock               = floatval($row['system_stock']);
+                                        $diff_stock                 = $warehouse_stock - $system_stock;
+                                        $opname_stock_difference    = floatval($row['opname_stock_difference']);
+                                    ?>
+                                        <tr>
+                                            <td><?= esc($row['product_code']) ?></td>
+                                            <td><?= esc($row['product_name']) ?></td>
+                                            <td><?= indo_short_date($row['exp_date']) ?></td>
+                                            <td class="text-right"><?= numberFormat($base_cogs, TRUE) ?></td>
+                                            <td class="text-right"><?= numberFormat($warehouse_stock, TRUE) ?></td>
+                                            <td class="text-right"><?= numberFormat($system_stock, TRUE) ?></td>
+                                            <td class="text-right"><?= numberFormat($diff_stock, TRUE) ?></td>
+                                            <td><?= esc($row['detail_remark']) ?></td>
+                                            <td class="text-right"><?= numberFormat($opname_stock_difference, TRUE) ?></td>
+                                        </tr>
+                                    <?php
+                                    endforeach;
+                                    ?>
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <th class="text-right" colspan="8">TOTAL</th>
-                                        <th class="text-right">-152,500.00</th>
+                                        <th class="text-right"><?= numberFormat($header['opname_total'], true) ?></th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -115,20 +115,17 @@ $assetsUrl = base_url('assets');
                     </div>
                 </div>
                 <div class="col-md-8 col-xs-12">
-                    <p>
-                        <b>Keterangan</b> : <br>
-                        -
-                    </p>
+
                 </div>
                 <div class="col-md-4 col-xs-12">
                     <table width="100%">
                         <tr>
                             <th class="text-right" width="50%">Diopname Oleh :</th>
-                            <td class="text-right" width="50%">Ani</td>
+                            <td class="text-right" width="50%"><?= esc($header['user_realname']) ?></td>
                         </tr>
                         <tr>
                             <th class="text-right">Pada :</th>
-                            <td class="text-right"><?= indo_short_date('2022-09-03 12:00:00', false) ?></td>
+                            <td class="text-right"><?= indo_short_date($header['created_at'], false) ?></td>
                         </tr>
                     </table>
                 </div>

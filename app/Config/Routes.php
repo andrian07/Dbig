@@ -384,6 +384,14 @@ $routes->group('webmin/voucher', ['filter' => 'webminauth'], static function ($r
 $routes->group('webmin/stock-opname', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('/', 'Webmin\StockOpname::index');
     $routes->post('table', 'Webmin\StockOpname::table');
+    $routes->post('opname-product', 'Webmin\StockOpname::opnameProduct');
+    $routes->get('temp/(:num)', 'Webmin\StockOpname::temp/$1');
+    $routes->get('temp-opname/(:num)/(:num)', 'Webmin\StockOpname::tempOpname/$1/$2');
+    $routes->post('temp-update/(:num)', 'Webmin\StockOpname::tempUpdate/$1');
+    $routes->get('temp-delete/(:num)', 'Webmin\StockOpname::tempDelete/$1');
+    $routes->post('save', 'Webmin\StockOpname::save');
+    $routes->get('detail/(:num)', 'Webmin\StockOpname::detail/$1');
+    $routes->get('report/(:num)', 'Webmin\StockOpname::report/$1');
 });
 
 
@@ -793,9 +801,11 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($routes) {
 
     $routes->get('store', 'Webmin\Select::store');
-
     $routes->get('user-group', 'Webmin\Select::userGroup');
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     $routes->get('user-account', 'Webmin\Select::userAccount');
 
     $routes->get('unit', 'Webmin\Select::unit');
@@ -834,7 +844,11 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
 
     $routes->get('payment-method', 'Webmin\Select::payment_method');
 
+<<<<<<< Updated upstream
 
+=======
+    $routes->get('salesman', 'Webmin\Select::salesman');
+>>>>>>> Stashed changes
 });
 
 /* END Select2 */
@@ -854,6 +868,7 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
 $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
 
 
+<<<<<<< Updated upstream
 
     //$routes->get('customer', 'Webmin\EricDemo::customer');
 
@@ -899,6 +914,8 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
 
     //$routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');
 
+=======
+>>>>>>> Stashed changes
     $routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');
 
     //$routes->get('debt-repayment/detail', 'Webmin\EricDemo::debtRepaymentDetail');
@@ -916,11 +933,6 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('consignment-repayment/invoice', 'Webmin\EricDemo::consignmentRepaymentInvoice');
 
     $routes->get('consignment-repayment/detail', 'Webmin\EricDemo::consignmentRepaymentDetail');
-
-
-
-
-
 
 
     $routes->get('report/product-sales-recap', 'Webmin\EricDemo::reportSalesProductRecap');

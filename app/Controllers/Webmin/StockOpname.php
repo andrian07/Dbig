@@ -3,7 +3,8 @@
 
 namespace App\Controllers\Webmin;
 
-use App\Models\M_warehouse;
+use Dompdf\Dompdf;
+use App\Models\M_stock_opname;
 use App\Controllers\Base\WebminController;
 
 class StockOpname extends WebminController
@@ -13,7 +14,7 @@ class StockOpname extends WebminController
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);
-        $this->M_stock_opname = new M_warehouse;
+        $this->M_stock_opname = new M_stock_opname;
     }
 
     public function index()
@@ -42,10 +43,12 @@ class StockOpname extends WebminController
                 $column[] = esc($row['warehouse_code'] . ' - ' . $row['warehouse_name']);
                 $column[] = numberFormat($row['opname_total'], TRUE);
                 $column[] = esc($row['user_realname']);
+
                 $btns = [];
-                $prop =  'data-id="' . $row['opname_id'] . '"';
-                $btns[] = button_edit($prop);
-                $btns[] = button_delete($prop);
+                $prop =  'data-id="' . $row['opname_id'] . '" data-code="' . esc($row['opname_code']) . '"';
+                $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="' . base_url() . '/webmin/stock-opname/detail/' . $row['opname_id'] . '" class="btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
+                $btns[] = '<button ' . $prop . ' class="btn btn-sm btn-default mb-2 btnprint" data-toggle="tooltip" data-placement="top" data-title="Print"><i class="fas fa-print"></i></button>';
+
                 $column[] = implode('&nbsp;', $btns);
                 return $column;
             });
@@ -56,70 +59,66 @@ class StockOpname extends WebminController
         }
     }
 
-    public function getById($warehouse_id = '')
+    public function detail($opname_id)
     {
-        $this->validationRequest(TRUE);
-        $result = ['success' => FALSE, 'message' => 'Data gudang tidak ditemukan'];
-        if ($this->role->hasRole('warehouse.view')) {
-            if ($warehouse_id != '') {
-                $find = $this->M_warehouse->getWarehouse($warehouse_id)->getRowArray();
-                if ($find == NULL) {
-                    $result = ['success' => TRUE, 'exist' => FALSE, 'message' => 'Data satuan tidak ditemukan'];
-                } else {
-                    $find_result = [];
-                    foreach ($find as $k => $v) {
-                        $find_result[$k] = esc($v);
-                    }
-                    $result = ['success' => TRUE, 'exist' => TRUE, 'data' => $find_result, 'message' => ''];
-                }
-            }
-        }
+        $find = $this->M_stock_opname->getOpname($opname_id)->getRowArray();
+        if ($find == NULL) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        } else {
+            $getDetail = $this->M_stock_opname->getDetailOpname($opname_id)->getResultArray();
 
-        resultJSON($result);
+            $data = [
+                'header' => $find,
+                'detail' => $getDetail
+            ];
+            return view('webmin/stock_opname/stock_opname_detail', $data);
+        }
     }
 
-    public function getByCode()
+    public function report($opname_id)
     {
-        $this->validationRequest(TRUE);
-        $result = ['success' => FALSE, 'message' => 'Data gudang tidak ditemukan'];
-        if ($this->role->hasRole('warehouse.view')) {
-            $warehouse_code = $this->request->getGet('warehouse_code');
-            if (!($warehouse_code == '' || $warehouse_code == NULL)) {
-                $find = $this->M_warehouse->getWarehouseByCode($warehouse_code, TRUE)->getRowArray();
-                if ($find == NULL) {
-                    $result = ['success' => TRUE, 'exist' => FALSE, 'message' => 'Data gudang tidak ditemukan'];
-                } else {
-                    $find_result = array();
-                    foreach ($find as $k => $v) {
-                        $find_result[$k] = esc($v);
-                    }
-                    $result = ['success' => TRUE, 'exist' => TRUE, 'data' => $find_result, 'message' => ''];
-                }
-            }
-        }
-        resultJSON($result);
-    }
+        $find = $this->M_stock_opname->getOpname($opname_id)->getRowArray();
+        if ($find == NULL) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        } else {
+            $getDetail = $this->M_stock_opname->getDetailOpname($opname_id)->getResultArray();
 
-    public function getByName()
-    {
-        $this->validationRequest(TRUE);
-        $result = ['success' => FALSE, 'message' => 'Data gudang tidak ditemukan'];
-        if ($this->role->hasRole('warehouse.view')) {
-            $warehouse_name = $this->request->getGet('warehouse_name');
-            if (!($warehouse_name == '' || $warehouse_name == NULL)) {
-                $find = $this->M_warehouse->getWarehouseByName($warehouse_name, TRUE)->getRowArray();
-                if ($find == NULL) {
-                    $result = ['success' => TRUE, 'exist' => FALSE, 'message' => 'Data gudang tidak ditemukan'];
-                } else {
-                    $find_result = array();
-                    foreach ($find as $k => $v) {
-                        $find_result[$k] = esc($v);
-                    }
-                    $result = ['success' => TRUE, 'exist' => TRUE, 'data' => $find_result, 'message' => ''];
+            $agent = $this->request->getUserAgent();
+            $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE; // param export
+            $fileType   = $this->request->getGet('file'); // jenis file pdf|xlsx 
+
+            if (!in_array($fileType, ['pdf'])) {
+                $fileType = 'pdf';
+            }
+
+            $max_item_page  = 9;
+            $paging_data    = array_chunk($getDetail, $max_item_page);
+            $max_page       = count($paging_data);
+
+
+            $data = [
+                'header'    => $find,
+                'page_data' => $paging_data,
+                'max_page'  => $max_page
+            ];
+
+
+            $htmlView   = $this->renderView('stock_opname/stock_opname_report', $data);
+
+
+            if ($agent->isMobile() && !$isDownload) {
+                return $htmlView;
+            } else {
+                if ($fileType == 'pdf') {
+                    $dompdf = new Dompdf();
+                    $dompdf->loadHtml($htmlView);
+                    $dompdf->setPaper('A4', 'landscape');
+                    $dompdf->render();
+                    $dompdf->stream('report.pdf', array("Attachment" => $isDownload));
+                    exit();
                 }
             }
         }
-        resultJSON($result);
     }
 
     public function opnameProduct()
@@ -137,18 +136,202 @@ class StockOpname extends WebminController
             'warehouse_id'              => ['rules' => 'required'],
             'product_id'                => ['rules' => 'required'],
         ]);
+        $warehouse_id   = $input['warehouse_id'];
+        if ($validation->run($input) === FALSE) {
+            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        } else {
+            if ($this->role->hasRole('stock_opname.add')) {
+                $product_id     = is_array($input['product_id']) ? $input['product_id'] : explode(',', $input['product_id']);
+                $result = $this->M_stock_opname->opnameProduct($warehouse_id, $product_id, $user_id);
+            } else {
+                $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menambah stok opname'];
+            }
+        }
+        $result['data'] = $this->getTemp($warehouse_id);
+        $result['csrfHash'] = csrf_hash();
+        resultJSON($result);
+    }
+
+    private function getTemp($warehouse_id)
+    {
+        $user_id    = $this->userLogin['user_id'];
+        $tempData   = [];
+        $getTemp    = $this->M_stock_opname->getTemp($warehouse_id, $user_id)->getResultArray();
+
+        foreach ($getTemp as $row) {
+            $pid = 'P' . $row['product_id'];
+            $product_id             = $row['product_id'];
+            $product_code           = $row['product_code'];
+            $product_name           = $row['product_name'];
+            $temp_base_cogs         = floatval($row['temp_base_cogs']);
+            $temp_warehouse_stock   = floatval($row['temp_warehouse_stock']);
+            $temp_system_stock      = floatval($row['temp_system_stock']);
+            $unit_name              = $row['unit_name'];
+
+            if (isset($tempData[$pid])) {
+                $tempData[$pid]['temp_warehouse_stock'] += $temp_warehouse_stock;
+                $tempData[$pid]['temp_system_stock']    += $temp_system_stock;
+            } else {
+                $tempData[$pid] = [
+                    'product_id'            => $product_id,
+                    'product_code'          => $product_code,
+                    'product_name'          => $product_name,
+                    'temp_base_cogs'        => $temp_base_cogs,
+                    'temp_warehouse_stock'  => $temp_warehouse_stock,
+                    'temp_system_stock'     => $temp_system_stock,
+                    'unit_name'             => $unit_name
+                ];
+            }
+        }
+
+        $jsonData = [];
+        foreach ($tempData  as $row) {
+            $jsonData[] = $row;
+        }
+
+        return $jsonData;
+    }
+
+    private function getTempOpname($product_id, $warehouse_id)
+    {
+        $user_id    = $this->userLogin['user_id'];
+        $tempData   = [];
+        $getTemp    = $this->M_stock_opname->getTempByProductId($product_id, $warehouse_id, $user_id)->getResultArray();
+        foreach ($getTemp as $row) {
+            $row['indo_exp_date'] = indo_short_date($row['temp_exp_date']);
+            $tempData[] = $row;
+        }
+
+        return  $tempData;
+    }
+
+    public function temp($warehouse_id)
+    {
+        $clear          = $this->request->getGet('clear');
+        $user_id        = $this->userLogin['user_id'];
+        $result         = [];
+        if ($clear == 'Y') {
+            $this->M_stock_opname->clearTemp($user_id);
+        }
+        $result['success'] = TRUE;
+        $result['data'] = $this->getTemp($warehouse_id);
+        resultJSON($result);
+    }
+
+    public function tempOpname($warehouse_id, $product_id)
+    {
+
+        $user_id        = $this->userLogin['user_id'];
+        $result         = [];
+        $result['success'] = TRUE;
+        $result['data'] = $this->getTempOpname($product_id, $warehouse_id);
+        resultJSON($result);
+    }
+
+    public function tempUpdate($warehouse_id)
+    {
+        $this->validationRequest(TRUE);
+        $user_id        = $this->userLogin['user_id'];
+
+        $result         = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        $validation     =  \Config\Services::validation();
+        $input = [
+            'product_key'               => $this->request->getPost('product_key'),
+            'product_id'                => $this->request->getPost('product_id'),
+            'warehouse_id'              => $warehouse_id,
+            'temp_warehouse_stock'      => $this->request->getPost('temp_warehouse_stock'),
+            'temp_system_stock'         => $this->request->getPost('temp_system_stock'),
+            'temp_base_cogs'            => $this->request->getPost('temp_base_cogs'),
+            'temp_stock_difference'     => $this->request->getPost('temp_stock_difference'),
+            'temp_exp_date'             => $this->request->getPost('temp_exp_date'),
+            'temp_detail_remark'        => $this->request->getPost('temp_detail_remark'),
+            'user_id'                   => $user_id
+        ];
+
+        $validation->setRules([
+            'product_id'               => ['rules' => 'required'],
+            'temp_warehouse_stock'     => ['rules' => 'required'],
+            'temp_system_stock'        => ['rules' => 'required'],
+            'temp_base_cogs'           => ['rules' => 'required'],
+            'temp_stock_difference'    => ['rules' => 'required'],
+        ]);
+
+        if ($validation->run($input) === FALSE) {
+            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        } else {
+            $save = $this->M_stock_opname->updateTemp($input);
+            if ($save) {
+                $result = ['success' => TRUE, 'message' => 'Data item berhasil ditambahkan'];
+            } else {
+                $result = ['success' => FALSE, 'message' => 'Data item gagal ditambahkan'];
+            }
+        }
+
+        $result['data'] = $this->getTempOpname($input['product_id'], $warehouse_id);
+        resultJSON($result);
+    }
+
+    public function tempDelete($warehouse_id = '')
+    {
+        $this->validationRequest(TRUE);
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        $product_id     = $this->request->getGet('product_id');
+        $product_key    = $this->request->getGet('product_key');
+        $user_id        = $this->userLogin['user_id'];
+
+        if ($warehouse_id == '' || ($product_id == NULL && $product_key == NULL)) {
+            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        } else {
+            $delete = 0;
+            if ($product_key == NULL) {
+                $delete  = $this->M_stock_opname->deleteTemp($product_id, $warehouse_id, $user_id, TRUE);
+            } else {
+                $delete  = $this->M_stock_opname->deleteTemp($product_key, $warehouse_id, $user_id, FALSE);
+            }
+
+            if ($delete) {
+                $result = ['success' => TRUE, 'message' => 'Data item berhasil dihapus'];
+            } else {
+                $result = ['success' => FALSE, 'message' => 'Data item gagal dihapus'];
+            }
+        }
+        if ($product_key == NULL) {
+            $result['data'] = $this->getTemp($warehouse_id);
+        } else {
+            $result['data'] = $this->getTempOpname($product_id, $warehouse_id);
+        }
+        resultJSON($result);
+    }
+
+    public function save()
+    {
+        $this->validationRequest(TRUE);
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        $validation =  \Config\Services::validation();
+        $input = [
+            'opname_date'               => $this->request->getPost('opname_date'),
+            'warehouse_id'              => $this->request->getPost('warehouse_id'),
+            'opname_total'              => $this->request->getPost('opname_total'),
+            'user_id'                   => $this->userLogin['user_id'],
+            'store_code'                => $this->userLogin['store_code'],
+            'store_id'                  => $this->userLogin['store_id'],
+        ];
+
+        $validation->setRules([
+            'opname_date'            => ['rules' => 'required'],
+            'warehouse_id'           => ['rules' => 'required'],
+            'opname_total'           => ['rules' => 'required'],
+        ]);
 
         if ($validation->run($input) === FALSE) {
             $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
         } else {
             if ($this->role->hasRole('stock_opname.add')) {
-                $warehouse_id   = $input['warehouse_id'];
-                $product_id     = is_array($input['product_id']) ? $input['product_id'] : explode(',', $input['product_id']);
-                $save = $this->M_stock_opname->opnameProduct($warehouse_id, $product_id, $user_id);
+                $save = $this->M_stock_opname->insertOpname($input);
                 if ($save) {
-                    $result = ['success' => TRUE, 'message' => 'Data gudang berhasil disimpan'];
+                    $result = ['success' => TRUE, 'message' => 'Data stok opname berhasil disimpan'];
                 } else {
-                    $result = ['success' => FALSE, 'message' => 'Data gudang gagal disimpan'];
+                    $result = ['success' => FALSE, 'message' => 'Data stok opname gagal disimpan'];
                 }
             } else {
                 $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menambah stok opname'];
@@ -160,84 +343,7 @@ class StockOpname extends WebminController
         resultJSON($result);
     }
 
-    public function save($type)
-    {
-        $this->validationRequest(TRUE);
-        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
-        $validation =  \Config\Services::validation();
-        $input = [
-            'warehouse_id'           => $this->request->getPost('warehouse_id'),
-            'warehouse_code'         => $this->request->getPost('warehouse_code'),
-            'warehouse_name'         => $this->request->getPost('warehouse_name'),
-            'store_id'               => $this->request->getPost('store_id'),
-            'warehouse_address'      => $this->request->getPost('warehouse_address'),
-        ];
 
-        $validation->setRules([
-            'warehouse_id'           => ['rules' => 'required'],
-            'warehouse_code'         => ['rules' => 'required|max_length[10]'],
-            'warehouse_name'         => ['rules' => 'required|max_length[200]'],
-            'store_id'               => ['rules' => 'required'],
-            'warehouse_address'      => ['rules' => 'max_length[500]']
-        ]);
-
-        if ($validation->run($input) === FALSE) {
-            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
-        } else {
-            if ($type == 'add') {
-                if ($this->role->hasRole('warehouse.add')) {
-                    unset($input['warehouse_id']);
-                    $save = $this->M_warehouse->insertWarehouse($input);
-                    if ($save) {
-                        $result = ['success' => TRUE, 'message' => 'Data gudang berhasil disimpan'];
-                    } else {
-                        $result = ['success' => FALSE, 'message' => 'Data gudang gagal disimpan'];
-                    }
-                } else {
-                    $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menambah gudang'];
-                }
-            } else if ($type == 'edit') {
-                if ($this->role->hasRole('warehouse.edit')) {
-                    $save = $this->M_warehouse->updateWarehouse($input);
-                    if ($save) {
-                        $result = ['success' => TRUE, 'message' => 'Data gudang berhasil diperbarui'];
-                    } else {
-                        $result = ['success' => FALSE, 'message' => 'Data gudang gagal diperbarui'];
-                    }
-                } else {
-                    $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk mengubah gudang'];
-                }
-            }
-        }
-
-
-        $result['csrfHash'] = csrf_hash();
-        resultJSON($result);
-    }
-
-    public function delete($warehouse_id = '')
-    {
-        $this->validationRequest(TRUE);
-        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
-        if ($this->role->hasRole('warehouse.delete')) {
-            if ($warehouse_id != '') {
-                $hasTransaction = $this->M_warehouse->hasTransaction($warehouse_id);
-                if ($hasTransaction) {
-                    $result = ['success' => FALSE, 'message' => 'Gudang tidak dapat dihapus'];
-                } else {
-                    $delete = $this->M_warehouse->deleteWarehouse($warehouse_id);
-                    if ($delete) {
-                        $result = ['success' => TRUE, 'message' => 'Data gudang berhasil dihapus'];
-                    } else {
-                        $result = ['success' => FALSE, 'message' => 'Data gudang gagal dihapus'];
-                    }
-                }
-            }
-        } else {
-            $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menghapus gudang'];
-        }
-        resultJSON($result);
-    }
 
     //--------------------------------------------------------------------
 

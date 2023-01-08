@@ -82,10 +82,15 @@ class Customer extends WebminController
                 return $column;
             });
 
-            $table->orderColumn  = ['', 'customer_code', 'customer_name', 'customer_address', 'customer_phone', 'customer_group', 'customer_point', 'exp_date', ''];
+            $table->orderColumn  = ['customer_id', 'customer_code', 'customer_name', 'customer_address', 'customer_phone', 'customer_group', 'customer_point', 'exp_date', ''];
             $table->searchColumn = ['customer_code', 'customer_name', 'customer_email', 'customer_phone'];
             $table->generate();
         }
+    }
+
+    public function detail($customer_id)
+    {
+        echo "Detail!";
     }
 
     public function getById($customer_id = '')
@@ -192,28 +197,48 @@ class Customer extends WebminController
         $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
         $validation =  \Config\Services::validation();
         $input = [
-            'customer_id'           => $this->request->getPost('customer_id'),
-            'customer_code'         => $this->request->getPost('customer_code'),
-            'customer_name'         => $this->request->getPost('customer_name'),
-            'customer_address'      => $this->request->getPost('customer_address'),
-            'customer_phone'        => $this->request->getPost('customer_phone'),
-            'customer_email'        => $this->request->getPost('customer_email'),
-            'customer_group'        => $this->request->getPost('customer_group'),
-            'mapping_id'            => $this->request->getPost('mapping_id'),
-            'exp_date'              => $this->request->getPost('exp_date'),
-            'active'                => $this->request->getPost('active'),
+            'customer_id'                   => $this->request->getPost('customer_id'),
+            'customer_code'                 => $this->request->getPost('customer_code'),
+            'customer_name'                 => $this->request->getPost('customer_name'),
+            'customer_address'              => $this->request->getPost('customer_address'),
+            'customer_phone'                => $this->request->getPost('customer_phone'),
+            'customer_email'                => $this->request->getPost('customer_email'),
+            'customer_group'                => $this->request->getPost('customer_group'),
+            'mapping_id'                    => $this->request->getPost('mapping_id'),
+            'exp_date'                      => $this->request->getPost('exp_date'),
+            'active'                        => $this->request->getPost('active'),
+
+            'customer_gender'               => $this->request->getPost('customer_gender'),
+            'customer_job'                  => $this->request->getPost('customer_job'),
+            'customer_birth_date'           => $this->request->getPost('customer_birth_date'),
+            'salesman_id'                   => $this->request->getPost('salesman_id'),
+            'customer_remark'               => $this->request->getPost('customer_remark'),
+            'customer_delivery_address'     => $this->request->getPost('customer_delivery_address'),
+            'customer_npwp'                 => $this->request->getPost('customer_npwp'),
+            'customer_nik'                  => $this->request->getPost('customer_nik'),
+            'customer_tax_invoice_name'     => $this->request->getPost('customer_tax_invoice_name'),
+            'customer_tax_invoice_address'  => $this->request->getPost('customer_tax_invoice_address'),
         ];
 
         $validation->setRules([
-            'customer_id'           => ['rules' => 'required'],
-            'customer_code'         => ['rules' => 'required|max_length[10]'],
-            'customer_name'         => ['rules' => 'required|max_length[200]'],
-            'customer_address'      => ['rules' => 'max_length[500]'],
-            'customer_phone'        => ['rules' => 'required|min_length[8]|max_length[15]'],
-            'customer_email'        => ['rules' => 'required|max_length[200]'],
-            'customer_group'        => ['rules' => 'required|in_list[G1,G2,G3,G4,G5,G6]'],
-            'exp_date'              => ['rules' => 'required'],
-            'active'                => ['rules' => 'required|in_list[Y,N]'],
+            'customer_id'                   => ['rules' => 'required'],
+            'customer_code'                 => ['rules' => 'required|max_length[10]'],
+            'customer_name'                 => ['rules' => 'required|max_length[200]'],
+            'customer_address'              => ['rules' => 'max_length[500]'],
+            'customer_phone'                => ['rules' => 'required|min_length[8]|max_length[15]'],
+            'customer_email'                => ['rules' => 'required|max_length[200]'],
+            'customer_group'                => ['rules' => 'required|in_list[G1,G2,G3,G4,G5,G6]'],
+            'exp_date'                      => ['rules' => 'required'],
+            'active'                        => ['rules' => 'required|in_list[Y,N]'],
+
+            'customer_gender'               => ['rules' => 'required|in_list[P,L]'],
+            'customer_job'                  => ['rules' => 'max_length[200]'],
+            'customer_remark'               => ['rules' => 'max_length[500]'],
+            'customer_delivery_address'     => ['rules' => 'max_length[500]'],
+            'customer_npwp'                 => ['rules' => 'max_length[50]'],
+            'customer_nik'                  => ['rules' => 'max_length[50]'],
+            'customer_tax_invoice_name'     => ['rules' => 'max_length[200]'],
+            'customer_tax_invoice_address'  => ['rules' => 'max_length[500]'],
         ]);
 
         if ($validation->run($input) === FALSE) {
@@ -221,6 +246,10 @@ class Customer extends WebminController
         } else {
             if ($input['mapping_id'] == NULL) {
                 $input['mapping_id'] = 0;
+            }
+
+            if ($input['salesman_id'] == NULL) {
+                $input['salesman_id'] = 0;
             }
 
             if ($type == 'add') {

@@ -128,7 +128,7 @@ $assetsUrl = base_url('assets');
             </div>
 
             <div class="modal fade" id="modal-voucher">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title" id="title-frmvoucher"></h4>
@@ -136,56 +136,92 @@ $assetsUrl = base_url('assets');
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form id="frmvoucher" class="form-horizontal">
-                            <div class="modal-body">
-                                <input type="hidden" id="voucher_group_id" name="voucher_group_id" value="0">
-                                <div class="form-group">
-                                    <label for="voucher_name" class="col-sm-12">Nama Voucher</label>
-                                    <div class="col-sm-12">
-                                        <input type="text" class="form-control" id="voucher_name" name="voucher_name" placeholder="Nama Voucher" value="" data-parsley-maxlength="200" required>
-                                    </div>
-                                </div>
 
-                                <div class="form-group">
-                                    <label for="voucher_value" class="col-sm-12">Nilai Voucher</label>
-                                    <div class="col-sm-12">
-                                        <input type="text" class="form-control" id="voucher_value" name="voucher_value" placeholder="Nilai Voucher" value="" data-parsley-vvouchervalue required>
-                                    </div>
-                                </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                    <form id="frmvoucher" class="form-horizontal">
+                                        <input type="hidden" id="voucher_group_id" name="voucher_group_id" value="0">
+                                        <input type="hidden" id="old_cover_image" name="old_cover_image" value="">
+                                        <input type="hidden" id="old_backcover_image" name="old_backcover_image" value="">
+                                        <div class="form-group">
+                                            <label for="voucher_name" class="col-sm-12">Nama Voucher</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control" id="voucher_name" name="voucher_name" placeholder="Nama Voucher" value="" data-parsley-maxlength="200" required>
+                                            </div>
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="voucher_remark" class="col-sm-12">Keterangan</label>
-                                    <div class="col-sm-12">
-                                        <textarea id="voucher_remark" name="voucher_remark" class="form-control" placeholder="Keterangan" data-parsley-maxlength="500" rows="3" required></textarea>
-                                    </div>
-                                </div>
+                                        <div class="form-group">
+                                            <label for="voucher_value" class="col-sm-12">Nilai Voucher</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control" id="voucher_value" name="voucher_value" placeholder="Nilai Voucher" value="" data-parsley-vvouchervalue required>
+                                            </div>
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="category_restriction" class="col-sm-12">Filter Kategori</label>
-                                    <div class="col-sm-12 sel2">
-                                        <select id="category_restriction" name="category_restriction[]" class="form-control" multiple="multiple"></select>
-                                    </div>
-                                </div>
+                                        <div class="form-group">
+                                            <label for="voucher_remark" class="col-sm-12">Keterangan</label>
+                                            <div class="col-sm-12">
+                                                <textarea id="voucher_remark" name="voucher_remark" class="form-control" placeholder="Keterangan" data-parsley-maxlength="500" rows="3" required></textarea>
+                                            </div>
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="brand_restriction" class="col-sm-12">Filter Brand</label>
-                                    <div class="col-sm-12 sel2">
-                                        <select id="brand_restriction" name="brand_restriction[]" class="form-control" multiple="multiple"></select>
-                                    </div>
-                                </div>
+                                        <div class="form-group">
+                                            <label for="category_restriction" class="col-sm-12">Filter Kategori</label>
+                                            <div class="col-sm-12 sel2">
+                                                <select id="category_restriction" name="category_restriction[]" class="form-control" multiple="multiple"></select>
+                                            </div>
+                                        </div>
 
-                                <div class="form-group">
-                                    <label for="exp_date" class="col-sm-12">Exp. Date</label>
-                                    <div class="col-sm-12">
-                                        <input type="date" class="form-control" id="exp_date" name="exp_date" placeholder="Exp. Date" value="" required>
+                                        <div class="form-group">
+                                            <label for="brand_restriction" class="col-sm-12">Filter Brand</label>
+                                            <div class="col-sm-12 sel2">
+                                                <select id="brand_restriction" name="brand_restriction[]" class="form-control" multiple="multiple"></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="exp_date" class="col-sm-12">Exp. Date</label>
+                                            <div class="col-sm-12">
+                                                <input type="date" class="form-control" id="exp_date" name="exp_date" placeholder="Exp. Date" value="" required>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-md-6 col-sm-12 col-xs-12">
+                                    <?php
+                                    $defaultImage = base_url('assets/images/no-image.PNG');
+                                    $allow_ext = [];
+                                    foreach ($upload_file_type['image'] as $ext) {
+                                        $allow_ext[] = '.' . $ext;
+                                    }
+                                    ?>
+                                    <div class="mb-3 border">
+                                        <p class="text-center"><b>Cover Voucher</b></p>
+                                        <img id="preview_image_cover" src="<?= $defaultImage ?>" width="100%" height="200px">
+
+                                        <input type="file" name="upload_image_cover" id="upload_image_cover" accept="<?= implode(',', $allow_ext) ?>" hidden>
+                                        <button id="btnuploadcover" class="btn btn-primary btn-block mt-0"><i class="fas fa-cloud-upload-alt"></i> Unggah Gambar</button>
                                     </div>
+
+                                    <div class="mb-3 border">
+                                        <p class="text-center"><b>Back Cover Voucher</b></p>
+                                        <img id="preview_image_backcover" src="<?= $defaultImage ?>" width="100%" height="200px">
+                                        <input type="file" name="upload_image_backcover" id="upload_image_backcover" accept="<?= implode(',', $allow_ext) ?>" hidden>
+                                        <button id="btnuploadbackcover" class="btn btn-primary btn-block mt-0"><i class="fas fa-cloud-upload-alt"></i> Unggah Gambar</button>
+
+                                    </div>
+
+
+
                                 </div>
                             </div>
-                            <div class="modal-footer justify-content-between">
-                                <button id="btncancel" class="btn btn-danger close-modal"><i class="fas fa-times-circle"></i> Batal</button>
-                                <button id="btnsave" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
-                            </div>
-                        </form>
+
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button id="btncancel" class="btn btn-danger close-modal"><i class="fas fa-times-circle"></i> Batal</button>
+                            <button id="btnsave" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
+                        </div>
+
                     </div>
                     <!-- /.modal-content -->
                 </div>
@@ -202,6 +238,8 @@ $assetsUrl = base_url('assets');
 <script>
     $(document).ready(function() {
         const default_date = '<?= date('Y-m-d') ?>';
+        const default_image = '<?= $defaultImage ?>';
+
         let formMode = '';
         let manage_voucher_group_id = 0;
 
@@ -262,7 +300,7 @@ $assetsUrl = base_url('assets');
             responsive: true,
             fixedColumns: true,
             order: [
-                [1, 'asc']
+                [0, 'desc']
             ],
             language: {
                 url: lang_datatables,
@@ -283,7 +321,7 @@ $assetsUrl = base_url('assets');
                     targets: 6
                 },
                 {
-                    targets: [0, 4, 6],
+                    targets: [4, 6],
                     orderable: false,
                     searchable: false,
                 },
@@ -310,7 +348,7 @@ $assetsUrl = base_url('assets');
             responsive: true,
             fixedColumns: true,
             order: [
-                [1, 'desc']
+                [0, 'desc']
             ],
             language: {
                 url: lang_datatables,
@@ -336,7 +374,7 @@ $assetsUrl = base_url('assets');
                     targets: 5
                 },
                 {
-                    targets: [0, 5],
+                    targets: [5],
                     orderable: false,
                     searchable: false,
                 },
@@ -395,6 +433,99 @@ $assetsUrl = base_url('assets');
             },
         });
 
+
+        function clearUploadCover() {
+            let file = $("#upload_image_cover");
+            file.wrap("<form>").closest("form").get(0).reset();
+            file.unwrap();
+            $('#preview_image_cover').attr('src', default_image);
+        }
+
+        function clearUploadBackCover() {
+            let file = $("#upload_image_backcover");
+            file.wrap("<form>").closest("form").get(0).reset();
+            file.unwrap();
+            $('#preview_image_backcover').attr('src', default_image);
+        }
+
+
+        function readUploadImageCover(file) {
+            if (file.files && file.files[0]) {
+                let img_name = file.files[0].name;
+                let img_ext = img_name.split(".").pop().toLowerCase();
+                let ext = upload_file_type.image;
+
+                if (jQuery.inArray(img_ext, ext) == -1) {
+                    let message_text = 'File wajib berekstensi ' + ext.join(", ");
+                    message.info(message_text);
+                    file.value = "";
+                } else {
+                    let img_size = file.files[0].size;
+                    let size = max_upload_size.b;
+                    if (img_size > size) {
+                        let message_text = 'Ukuran file maksimum ' + max_upload_size.mb + ' MB'
+                        message.info(message_text);
+                        file.value = "";
+                    } else {
+                        let reader = new FileReader();
+                        reader.onload = function(e) {
+                            $("#preview_image_cover").attr("src", e.target.result);
+                        };
+                        reader.readAsDataURL(file.files[0]);
+                    }
+                }
+            }
+        }
+
+        $("#upload_image_cover").change(function() {
+            readUploadImageCover(this);
+        });
+
+        $('#btnuploadcover').click(function(e) {
+            e.preventDefault();
+            $("#upload_image_cover").trigger('click');
+        })
+
+
+        function readUploadImageBackCover(file) {
+            if (file.files && file.files[0]) {
+                let img_name = file.files[0].name;
+                let img_ext = img_name.split(".").pop().toLowerCase();
+                let ext = upload_file_type.image;
+
+                if (jQuery.inArray(img_ext, ext) == -1) {
+                    let message_text = 'File wajib berekstensi ' + ext.join(", ");
+                    message.info(message_text);
+                    file.value = "";
+                } else {
+                    let img_size = file.files[0].size;
+                    let size = max_upload_size.b;
+                    if (img_size > size) {
+                        let message_text = 'Ukuran file maksimum ' + max_upload_size.mb + ' MB'
+                        message.info(message_text);
+                        file.value = "";
+                    } else {
+                        let reader = new FileReader();
+                        reader.onload = function(e) {
+                            $("#preview_image_backcover").attr("src", e.target.result);
+                        };
+                        reader.readAsDataURL(file.files[0]);
+                    }
+                }
+            }
+        }
+
+        $("#upload_image_backcover").change(function() {
+            readUploadImageBackCover(this);
+        });
+
+        $('#btnuploadbackcover').click(function(e) {
+            e.preventDefault();
+            $("#upload_image_backcover").trigger('click');
+        })
+
+
+
         function addMode() {
             let form = $('#frmvoucher');
             $('#title-frmvoucher').html('Tambah Voucher');
@@ -407,6 +538,12 @@ $assetsUrl = base_url('assets');
             setSelect2('#category_restriction');
             setSelect2('#brand_restriction');
             $('#exp_date').val(default_date);
+
+            clearUploadCover();
+            clearUploadBackCover();
+            $('#old_cover_image').val('');
+            $('#old_backcover_image').val('');
+
             $('#modal-voucher').modal(configModal);
         }
 
@@ -449,6 +586,13 @@ $assetsUrl = base_url('assets');
             } else {
                 setSelect2('#brand_restriction');
             }
+            clearUploadCover();
+            clearUploadBackCover();
+            $('#preview_image_cover').attr('src', data.voucher_image_cover_url);
+            $('#preview_image_backcover').attr('src', data.voucher_image_backcover_url);
+            $('#old_cover_image').val(data.voucher_image_cover);
+            $('#old_backcover_image').val(data.voucher_image_backcover);
+
 
 
             $('#exp_date').val(htmlEntities.decode(data.exp_date));
@@ -493,15 +637,29 @@ $assetsUrl = base_url('assets');
                 message.question(question).then(function(answer) {
                     let yes = parseMessageResult(answer);
                     if (yes) {
-                        let formValues = {
-                            voucher_group_id: $('#voucher_group_id').val(),
-                            voucher_name: $('#voucher_name').val(),
-                            voucher_value: parseFloat(voucher_value.getNumericString()),
-                            voucher_remark: $('#voucher_remark').val(),
-                            exp_date: $('#exp_date').val(),
-                            category_restriction: $("#category_restriction").val(),
-                            brand_restriction: $("#brand_restriction").val()
-                        };
+                        let fileCover = $('#upload_image_cover');
+                        let fileBackCover = $('#upload_image_backcover');
+
+                        let formValues = new FormData();
+                        formValues.append('voucher_group_id', $('#voucher_group_id').val());
+                        formValues.append('voucher_name', $('#voucher_name').val());
+                        formValues.append('voucher_value', parseFloat(voucher_value.getNumericString()));
+                        formValues.append('voucher_remark', $('#voucher_remark').val());
+                        formValues.append('exp_date', $('#exp_date').val());
+                        formValues.append('category_restriction', $("#category_restriction").val());
+                        formValues.append('brand_restriction', $("#brand_restriction").val());
+
+                        if (fileCover[0].files[0] != undefined) {
+                            formValues.append('upload_image_cover', fileCover[0].files[0]);
+                        }
+
+                        if (fileBackCover[0].files[0] != undefined) {
+                            formValues.append('upload_image_backcover', fileBackCover[0].files[0]);
+                        }
+
+                        formValues.append('old_cover_image', $('#old_cover_image').val());
+                        formValues.append('old_backcover_image', $('#old_backcover_image').val());
+
 
 
                         btnSubmit.prop('disabled', true);
@@ -523,7 +681,7 @@ $assetsUrl = base_url('assets');
                                 btnSubmit.prop('disabled', false);
                                 updateTable();
                             }
-                        });
+                        }, true, true);
                     }
 
                 })
@@ -622,11 +780,29 @@ $assetsUrl = base_url('assets');
 
         })
 
-        $("#tblvoucher").on('click', '.btnexportexcel', function(e) {
+        $("#tblvoucher").on('click', '.btndownload', function(e) {
             e.preventDefault();
             let id = $(this).attr('data-id');
-            let uri = base_url + '/webmin/voucher/export-voucher/' + id;
-            window.open(uri, '_blank');
+            Swal.fire({
+                title: "Download",
+                html: "Ingin <b>Export Excel</b> atau <b>Cetak Voucher</b>?",
+                icon: "question",
+                showCancelButton: true,
+                allowOutsideClick: false,
+                confirmButtonColor: "#28a745",
+                cancelButtonColor: "#007bff",
+                confirmButtonText: 'Export Excel',
+                cancelButtonText: 'Cetak Voucher',
+            }).then(function(answer) {
+                let yes = parseMessageResult(answer);
+                if (yes) {
+                    let uri = base_url + '/webmin/voucher/export-voucher/' + id;
+                    window.open(uri, '_blank');
+                } else {
+                    let uri = base_url + '/webmin/voucher/print-voucher/' + id;
+                    window.open(uri, '_blank');
+                }
+            })
         })
 
         $('#btngenerate').click(function(e) {

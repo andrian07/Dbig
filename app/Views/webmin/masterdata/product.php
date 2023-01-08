@@ -1578,7 +1578,7 @@ $assetsUrl = base_url('assets');
                     file.value = "";
                 } else {
                     let img_size = file.files[0].size;
-                    let size = max_upload_size.kb;
+                    let size = max_upload_size.b;
                     if (img_size > size) {
                         let message_text = 'Ukuran file maksimum ' + max_upload_size.mb + ' MB'
                         message.info(message_text);

@@ -47,7 +47,7 @@ class Voucher extends WebminController
 
                 $btns = [];
                 $prop =  'data-id="' . $row['voucher_group_id'] . '" data-name="' . esc($row['voucher_name']) . '"';
-                $btns[] = '<button ' . $prop . ' class="btn btn-sm btn-success btnexportexcel mb-2" data-toggle="tooltip" data-placement="top" data-title="Ekspor ke Excel"><i class="fas fa-file-excel"></i></button>';
+                $btns[] = '<button ' . $prop . ' class="btn btn-sm btn-default btndownload mb-2" data-toggle="tooltip" data-placement="top" data-title="Download"><i class="fas fa-download"></i></button>';
                 $btns[] = "&nbsp;";
                 $btns[] = '<button ' . $prop . ' class="btn btn-sm btn-default btnmanagevoucher mb-2" data-toggle="tooltip" data-placement="top" data-title="Pengaturan Voucher"><i class="fas fa-ticket-alt"></i></button>';
                 $btns[] = "<br>";
@@ -61,7 +61,7 @@ class Voucher extends WebminController
                 return $column;
             });
 
-            $table->orderColumn  = ['', 'ms_voucher_group.voucher_name', 'ms_voucher_group.voucher_remark', 'ms_voucher_group.voucher_value', '', 'ms_voucher_group.exp_date', ''];
+            $table->orderColumn  = ['ms_voucher_group.voucher_group_id', 'ms_voucher_group.voucher_name', 'ms_voucher_group.voucher_remark', 'ms_voucher_group.voucher_value', '', 'ms_voucher_group.exp_date', ''];
             $table->searchColumn = ['ms_voucher_group.voucher_name', 'ms_voucher_group.voucher_remark'];
             $table->generate();
         }
@@ -77,11 +77,23 @@ class Voucher extends WebminController
                 if ($find == NULL) {
                     $result = ['success' => TRUE, 'exist' => FALSE, 'message' => 'Data satuan tidak ditemukan'];
                 } else {
+                    $noImage  = base_url('assets/images/no-image.PNG');
+
                     $find_result = [];
                     foreach ($find as $k => $v) {
                         $find_result[$k] = esc($v);
                         if ($k == 'exp_date') {
                             $find_result['indo_exp_date'] = indo_short_date($v);
+                        }
+
+                        if ($k == 'voucher_image_cover') {
+                            $imageUrl = getImage($v, 'voucher', FALSE, $noImage);
+                            $find_result['voucher_image_cover_url'] = $imageUrl;
+                        }
+
+                        if ($k == 'voucher_image_backcover') {
+                            $imageUrl = getImage($v, 'voucher', FALSE, $noImage);
+                            $find_result['voucher_image_backcover_url'] = $imageUrl;
                         }
                     }
 
@@ -115,6 +127,11 @@ class Voucher extends WebminController
             'exp_date'                      => $this->request->getPost('exp_date'),
             'category_restriction'          => $this->request->getPost('category_restriction[]'),
             'brand_restriction'             => $this->request->getPost('brand_restriction[]'),
+
+            'upload_image_cover'            => $this->request->getFile('upload_image_cover'),
+            'upload_image_backcover'        => $this->request->getFile('upload_image_backcover'),
+            'old_cover_image'               => $this->request->getPost('old_cover_image'),
+            'old_backcover_image'           => $this->request->getPost('old_backcover_image'),
         ];
 
         $validation->setRules([
@@ -124,6 +141,21 @@ class Voucher extends WebminController
             'voucher_value'                 => ['rules' => 'required'],
             'exp_date'                      => ['rules' => 'required'],
         ]);
+
+        $maxUploadSize = $this->maxUploadSize['kb'];
+        $ext = implode(',', $this->myConfig->uploadFileType['image']);
+
+        if ($input['upload_image_cover'] != NULL) {
+            $validation->setRules([
+                'upload_image_cover' => ['rules' => 'max_size[upload_image_cover,' . $maxUploadSize . ']|ext_in[upload_image_cover,' . $ext . ']|is_image[upload_image_cover]'],
+            ]);
+        }
+
+        if ($input['upload_image_backcover'] != NULL) {
+            $validation->setRules([
+                'upload_image_backcover' => ['rules' => 'max_size[upload_image_backcover,' . $maxUploadSize . ']|ext_in[upload_image_backcover,' . $ext . ']|is_image[upload_image_backcover]'],
+            ]);
+        }
 
         if ($input['category_restriction'] == NULL) {
             $input['category_restriction'] = [];
@@ -136,11 +168,50 @@ class Voucher extends WebminController
         if ($validation->run($input) === FALSE) {
             $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
         } else {
+            $isUploadCover          = FALSE;
+            $isUploadBackCover      = FALSE;
+            $old_cover_image        = $input['old_cover_image'];
+            $old_backcover_image    = $input['old_backcover_image'];
+
+            helper(['upload', 'text']);
+            $base_upload_name = random_string('alnum', 10)  . date('dmyHis');
+
+            if ($input['upload_image_cover'] != NULL) {
+                $renameTo       = 'cover_' . $base_upload_name;
+                $uploadCover    = upload_image('upload_image_cover', $renameTo, 'voucher');
+                if ($uploadCover != '') {
+                    $isUploadCover                      = TRUE;
+                    $input['voucher_image_cover']       = $uploadCover;
+                }
+            }
+
+            if ($input['upload_image_backcover'] != NULL) {
+                $renameTo           = 'backcover_' . $base_upload_name;
+                $uploadBackCover    = upload_image('upload_image_backcover', $renameTo, 'voucher');
+                if ($uploadBackCover != '') {
+                    $isUploadBackCover                  = TRUE;
+                    $input['voucher_image_backcover']   = $uploadBackCover;
+                }
+            }
+
+
+            unset($input['upload_image_cover']);
+            unset($input['upload_image_backcover']);
+            unset($input['old_cover_image']);
+            unset($input['old_backcover_image']);
+
             if ($type == 'add') {
                 if ($this->role->hasRole('voucher.add')) {
                     unset($input['voucher_group_id']);
                     $save = $this->M_voucher->insertVoucherGroup($input);
                     if ($save) {
+                        if ($isUploadCover) {
+                            deleteImage($old_cover_image, 'voucher');
+                        }
+
+                        if ($isUploadBackCover) {
+                            deleteImage($old_backcover_image, 'voucher');
+                        }
                         $result = ['success' => TRUE, 'message' => 'Data voucher berhasil disimpan'];
                     } else {
                         $result = ['success' => FALSE, 'message' => 'Data voucher gagal disimpan'];
@@ -152,6 +223,13 @@ class Voucher extends WebminController
                 if ($this->role->hasRole('voucher.edit')) {
                     $save = $this->M_voucher->updateVoucherGroup($input);
                     if ($save) {
+                        if ($isUploadCover) {
+                            deleteImage($old_cover_image, 'voucher');
+                        }
+
+                        if ($isUploadBackCover) {
+                            deleteImage($old_backcover_image, 'voucher');
+                        }
                         $result = ['success' => TRUE, 'message' => 'Data voucher berhasil diperbarui'];
                     } else {
                         $result = ['success' => FALSE, 'message' => 'Data voucher gagal diperbarui'];
@@ -233,7 +311,7 @@ class Voucher extends WebminController
                 return $column;
             });
 
-            $table->orderColumn  = ['', 'ms_voucher.voucher_code', 'ms_voucher.voucher_status', 'ms_voucher.used_at', 'ms_voucher.used_by', ''];
+            $table->orderColumn  = ['ms_voucher.voucher_id', 'ms_voucher.voucher_status', 'ms_voucher.used_at', 'ms_voucher.used_by', ''];
             $table->searchColumn = ['ms_voucher.voucher_code'];
             $table->generate();
         }
@@ -371,57 +449,52 @@ class Voucher extends WebminController
 
     public function printVoucher($voucher_group_id = '')
     {
-        $item_code          = $this->request->getGet('item_code') != NULL ? $this->request->getGet('item_code') : '480528304523';
-        $print_count        = $this->request->getGet('print_count') != NULL ? intval($this->request->getGet('print_count')) : 1;
-
-        $demo_product = [
-            '480528304523' => ['item_code' => '480528304523', 'product_name' => 'Kopin Gelas Coffee Mug Kukuruyuk (KPM-03CM)', 'unit_name' => 'PCS', 'sales_price' => '15000'],
-            '480528304525' => ['item_code' => '480528304525', 'product_name' => ' Amstad Wastafel Studio 45 Wall Hung Lavatory White - paket', 'unit_name' => 'PCS', 'sales_price' => '18000'],
-        ];
-        $getProductUnit = isset($demo_product[$item_code]) ? $demo_product[$item_code] : NULL;
-
-        $agent = $this->request->getUserAgent();
-        $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE; // param export
-        $fileType   = $this->request->getGet('file'); // jenis file pdf|xlsx 
-
-
-        if (!in_array($fileType, ['pdf'])) {
-            $fileType = 'pdf';
-        }
-
-        if ($item_code == '') {
-            die('<h1>Harap Pilih Item Yang Akan Dicetak</h1>');
+        $find = $this->M_voucher->getVoucherGroup($voucher_group_id)->getRowArray();
+        if ($find == NULL) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         } else {
-            if ($getProductUnit == NULL) {
-                die("<h1>Item dengan barcode \" $item_code \" tidak ditemukan</h1>");
+            $uploadDir                  = isset($this->myConfig->uploadImage['voucher']['upload_dir']) ? $this->myConfig->uploadImage['voucher']['upload_dir'] : '';
+            $noImage                    = 'assets/images/no-image.PNG';
+            $cover_path                 = $find['voucher_image_cover'] != '' ? $uploadDir . $find['voucher_image_cover'] : $noImage;
+            $backcover_path             = $find['voucher_image_backcover'] != '' ? $uploadDir . $find['voucher_image_backcover'] : $noImage;
+
+            $getCover                   = file_get_contents($cover_path);
+            $cover_base64               = base64_encode($getCover);
+            $getBackCover               = file_get_contents($backcover_path);
+            $backcover_base64           = base64_encode($getBackCover);
+
+            $getVoucherList   = $this->M_voucher->getVoucher($voucher_group_id)->getResultArray();
+            $voucher_list     = array_chunk($getVoucherList, 6);
+
+            $agent = $this->request->getUserAgent();
+            $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE; // param export
+            $fileType   = $this->request->getGet('file'); // jenis file pdf|xlsx 
+
+            if (!in_array($fileType, ['pdf'])) {
+                $fileType = 'pdf';
+            }
+
+
+
+            $data = [
+                'title'             => 'Voucher',
+                'voucher_group'     => $find,
+                'voucher_list'      => $voucher_list,
+                'voucher_cover'     => $cover_base64,
+                'voucher_backcover' => $backcover_base64
+            ];
+            $htmlView   = $this->renderView('masterdata/voucher_print', $data);
+
+            if ($agent->isMobile() && !$isDownload) {
+                return $htmlView;
             } else {
-
-                $img_path = 'assets/images/voucher-cover.png';
-                $getImg = file_get_contents($img_path);
-                $img_base64 = base64_encode($getImg);
-                $data = [
-                    'title'         => 'Voucher',
-                    'product'       => $getProductUnit,
-                    'printCount'    => $print_count,
-                    'cover_background'  => $img_base64
-                ];
-                $htmlView   = $this->renderView('masterdata/voucher_print', $data);
-
-                //$agent->isMobile() && !$isDownload
-
-                if ($agent->isMobile() && !$isDownload) {
-                    return $htmlView;
-                } else {
-                    if ($fileType == 'pdf') {
-                        $dompdf = new Dompdf();
-                        $dompdf->loadHtml($htmlView);
-
-                        $dompdf->setPaper('f4');
-                        $dompdf->render();
-                        //$dompdf->stream('voucher.pdf', array("Attachment" => $isDownload));
-                        $dompdf->stream('voucher.pdf', array("Attachment" => FALSE));
-                        exit();
-                    }
+                if ($fileType == 'pdf') {
+                    $dompdf = new Dompdf();
+                    $dompdf->loadHtml($htmlView);
+                    $dompdf->setPaper('f4', 'landscape');
+                    $dompdf->render();
+                    $dompdf->stream('voucher.pdf', array("Attachment" => $isDownload));
+                    exit();
                 }
             }
         }

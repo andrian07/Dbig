@@ -110,7 +110,7 @@ $assetsUrl = base_url('assets');
             <!-- /.col -->
 
             <div class="modal fade" id="modal-customer">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title" id="title-frmcustomer"></h4>
@@ -120,80 +120,171 @@ $assetsUrl = base_url('assets');
                         </div>
                         <form id="frmcustomer" class="form-horizontal">
                             <div class="modal-body">
-                                <input id="customer_id" name="customer_id" value="0" type="hidden">
-                                <div class="form-group">
-                                    <label for="customer_code" class="col-sm-12">Kode Customer</label>
-                                    <div class="col-sm-12">
-                                        <input type="text" class="form-control" id="customer_code" name="customer_code" placeholder="Kode Customer" value="" data-parsley-maxlength="10" data-parsley-trigger-after-failure="focusout" data-parsley-vcustomercode required>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-12 border-right border-dark">
+                                        <input id="customer_id" name="customer_id" value="0" type="hidden">
+                                        <div class="form-group">
+                                            <label for="customer_code" class="col-sm-12">Kode Customer</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control" id="customer_code" name="customer_code" placeholder="Kode Customer" value="" data-parsley-maxlength="10" data-parsley-trigger-after-failure="focusout" data-parsley-vcustomercode required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="customer_name" class="col-sm-12">Nama Customer</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Nama Customer" value="" data-parsley-maxlength="200" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="customer_birth_date" class="col-sm-12">Tgl. Lahir</label>
+                                            <div class="col-sm-12">
+                                                <input type="date" class="form-control" id="customer_birth_date" name="customer_birth_date" placeholder="Tgl. Lahir" value="">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label for="customer_gender" class="col-sm-12">Jenis Kelamin</label>
+                                            <div class="col-sm-12">
+                                                <select id="customer_gender" name="customer_gender" class="form-control">
+                                                    <option value="P">Perempuan</option>
+                                                    <option value="L">Laki-Laki</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="customer_job" class="col-sm-12">Pekerjaan</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control" id="customer_job" name="customer_job" placeholder="Pekerjaan" value="" data-parsley-maxlength="200">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="salesman_id" class="col-sm-12">Salesman</label>
+                                            <div class="col-sm-12">
+                                                <select id="salesman_id" name="salesman_id" class="form-control"></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="customer_address" class="col-sm-12">Alamat</label>
+                                            <div class="col-sm-12">
+                                                <textarea id="customer_address" name="customer_address" class="form-control" placeholder="Alamat" data-parsley-maxlength="500" rows="3" required></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="customer_phone" class="col-sm-12">No Telp</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control" id="customer_phone" name="customer_phone" placeholder="No Telp" value="" data-parsley-pattern="^[0-9+ ]+$" data-parsley-minlength="8" data-parsley-maxlength="15" data-parsley-trigger-after-failure="focusout" data-parsley-vcustomerphone required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="customer_email" class="col-sm-12">Email</label>
+                                            <div class="col-sm-12">
+                                                <input type="email" class="form-control" id="customer_email" name="customer_email" placeholder="Email" value="" data-parsley-maxlength="200" data-parsley-trigger-after-failure="focusout" data-parsley-vcustomeremail required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="mapping_id" class="col-sm-12">Mapping Area</label>
+                                            <div class="col-sm-12">
+                                                <select id="mapping_id" name="mapping_id" class="form-control"></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="active" class="col-sm-12">Status</label>
+                                            <div class="col-sm-12">
+                                                <select id="active" name="active" class="form-control">
+                                                    <option value="Y">Aktif</option>
+                                                    <option value="N">Tidak Aktif</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                    <div class="col-md-6 col-xs-12">
+
+                                        <div class="form-group">
+                                            <label for="customer_delivery_address" class="col-sm-12">Alamat Delivery</label>
+                                            <div class="col-sm-12">
+                                                <textarea id="customer_delivery_address" name="customer_delivery_address" class="form-control" placeholder="Alamat Delivery" data-parsley-maxlength="500" rows="3"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <h6 class="text-center">Nama dan Alamat Faktur Pajak</h6>
+                                        <div class="form-group">
+                                            <label for="customer_tax_invoice_name" class="col-sm-12">Nama</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control" id="customer_tax_invoice_name" name="customer_tax_invoice_name" placeholder="Nama" value="" data-parsley-maxlength="200">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="customer_tax_invoice_address" class="col-sm-12">Alamat</label>
+                                            <div class="col-sm-12">
+                                                <textarea id="customer_tax_invoice_address" name="customer_tax_invoice_address" class="form-control" placeholder="Alamat" data-parsley-maxlength="500" rows="3"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="customer_npwp" class="col-sm-12">NPWP</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control" id="customer_npwp" name="customer_npwp" placeholder="NPWP" value="" data-parsley-maxlength="50">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="customer_nik" class="col-sm-12">NIK</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control" id="customer_nik" name="customer_nik" placeholder="Nama" value="" data-parsley-maxlength="50">
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label for="customer_remark" class="col-sm-12">Keterangan</label>
+                                            <div class="col-sm-12">
+                                                <textarea id="customer_remark" name="customer_remark" class="form-control" placeholder="Keterangan" data-parsley-maxlength="500" rows="3"></textarea>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label for="customer_group" class="col-sm-12">Grup</label>
+                                            <div class="col-sm-12">
+                                                <select id="customer_group" name="customer_group" class="form-control">
+                                                    <?php
+                                                    foreach ($customerGroup as $key => $val) {
+                                                    ?>
+                                                        <option value="<?= $key ?>"><?= $key ?> - <?= $val ?></option>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-group">
+                                            <label for="exp_date" class="col-sm-12">Exp. Date</label>
+                                            <div class="col-sm-12">
+                                                <input type="date" class="form-control" id="exp_date" name="exp_date" placeholder="Exp. Date" value="" required>
+                                            </div>
+                                        </div>
+
+
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="customer_name" class="col-sm-12">Nama Customer</label>
-                                    <div class="col-sm-12">
-                                        <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Nama Customer" value="" data-parsley-maxlength="200" required>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="customer_address" class="col-sm-12">Alamat</label>
-                                    <div class="col-sm-12">
-                                        <textarea id="customer_address" name="customer_address" class="form-control" placeholder="Alamat" data-parsley-maxlength="500" rows="3" required></textarea>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="customer_phone" class="col-sm-12">No Telp</label>
-                                    <div class="col-sm-12">
-                                        <input type="text" class="form-control" id="customer_phone" name="customer_phone" placeholder="No Telp" value="" data-parsley-pattern="^[0-9+ ]+$" data-parsley-minlength="8" data-parsley-maxlength="15" data-parsley-trigger-after-failure="focusout" data-parsley-vcustomerphone required>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="customer_email" class="col-sm-12">Email</label>
-                                    <div class="col-sm-12">
-                                        <input type="email" class="form-control" id="customer_email" name="customer_email" placeholder="Email" value="" data-parsley-maxlength="200" data-parsley-trigger-after-failure="focusout" data-parsley-vcustomeremail required>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="customer_group" class="col-sm-12">Grup</label>
-                                    <div class="col-sm-12">
-                                        <select id="customer_group" name="customer_group" class="form-control">
-                                            <?php
-                                            foreach ($customerGroup as $key => $val) {
-                                            ?>
-                                                <option value="<?= $key ?>"><?= $key ?> - <?= $val ?></option>
-                                            <?php
-                                            }
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="mapping_id" class="col-sm-12">Mapping Area</label>
-                                    <div class="col-sm-12">
-                                        <select id="mapping_id" name="mapping_id" class="form-control"></select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="exp_date" class="col-sm-12">Exp. Date</label>
-                                    <div class="col-sm-12">
-                                        <input type="date" class="form-control" id="exp_date" name="exp_date" placeholder="Exp. Date" value="" required>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="active" class="col-sm-12">Status</label>
-                                    <div class="col-sm-12">
-                                        <select id="active" name="active" class="form-control">
-                                            <option value="Y">Aktif</option>
-                                            <option value="N">Tidak Aktif</option>
-                                        </select>
-                                    </div>
-                                </div>
 
                             </div>
                             <div class="modal-footer justify-content-between">
@@ -241,7 +332,7 @@ $assetsUrl = base_url('assets');
             responsive: true,
             fixedColumns: true,
             order: [
-                [1, 'desc']
+                [0, 'desc']
             ],
             language: {
                 url: lang_datatables,
@@ -269,7 +360,7 @@ $assetsUrl = base_url('assets');
                     targets: 8
                 },
                 {
-                    targets: [0, 8],
+                    targets: [8],
                     orderable: false,
                     searchable: false,
                 },
@@ -328,6 +419,29 @@ $assetsUrl = base_url('assets');
                 delay: select2Delay,
                 data: function(params) {
                     return {
+                        search: params.term,
+                    };
+                },
+                processResults: function(data, page) {
+                    return {
+                        results: data,
+                    };
+                },
+            },
+        });
+
+        $("#salesman_id").select2({
+            placeholder: '-- Pilih Area --',
+            width: "100%",
+            allowClear: true,
+            ajax: {
+                url: base_url + "/webmin/select/salesman",
+                dataType: "json",
+                type: "GET",
+                delay: select2Delay,
+                data: function(params) {
+                    return {
+                        store_id: 1,
                         search: params.term,
                     };
                 },
@@ -461,6 +575,19 @@ $assetsUrl = base_url('assets');
             setSelect2('#mapping_id');
             $('#exp_date').val('2050-01-01');
             $('#active').val('Y');
+
+
+            $('#customer_birth_date').val('');
+            $('#customer_gender').val('L');
+            $('#customer_job').val('');
+            setSelect2('#salesman_id');
+            $('#customer_remark').val('');
+            $('#customer_delivery_address').val('');
+            $('#customer_npwp').val('');
+            $('#customer_nik').val('');
+            $('#customer_tax_invoice_name ').val('');
+            $('#customer_tax_invoice_address').val('');
+
             $('#modal-customer').modal(configModal);
         }
 
@@ -486,6 +613,26 @@ $assetsUrl = base_url('assets');
 
             $('#exp_date').val(data.exp_date);
             $('#active').val(data.active);
+
+            $('#customer_birth_date').val(data.customer_birth_date);
+            $('#customer_gender').val(data.customer_gender);
+            $('#customer_job').val(htmlEntities.decode(data.customer_job));
+
+            let salesman_id = parseFloat(data.salesman_id);
+            if (salesman_id == 0) {
+                setSelect2('#salesman_id');
+            } else {
+                let salesman_text = htmlEntities.decode(data.salesman_code + ' - ' + data.salesman_name);
+                setSelect2('#salesman_id', salesman_id, salesman_text);
+            }
+
+            $('#customer_remark').val(htmlEntities.decode(data.customer_remark));
+            $('#customer_delivery_address').val(htmlEntities.decode(data.customer_delivery_address));
+            $('#customer_npwp').val(htmlEntities.decode(data.customer_npwp));
+            $('#customer_nik').val(htmlEntities.decode(data.customer_nik));
+            $('#customer_tax_invoice_name').val(htmlEntities.decode(data.customer_tax_invoice_name));
+            $('#customer_tax_invoice_address').val(htmlEntities.decode(data.customer_tax_invoice_address));
+
             $('#modal-customer').modal(configModal);
         }
 
@@ -503,7 +650,6 @@ $assetsUrl = base_url('assets');
                 }
             })
         })
-
 
         $('#btnsave').click(function(e) {
             e.preventDefault();
@@ -567,7 +713,6 @@ $assetsUrl = base_url('assets');
 
         })
 
-
         $("#tblcustomer").on('click', '.btndelete', function(e) {
             e.preventDefault();
             let id = $(this).attr('data-id');
@@ -625,8 +770,6 @@ $assetsUrl = base_url('assets');
             })
         })
 
-
-
         $('#tblcustomer').on('click', '.btndetail', function(e) {
             e.preventDefault();
             message.success('Coming Soon');
@@ -634,7 +777,6 @@ $assetsUrl = base_url('assets');
 
         filter_point_value.set(0);
         //_initButton();
-
     })
 </script>
 <?= $this->endSection() ?>

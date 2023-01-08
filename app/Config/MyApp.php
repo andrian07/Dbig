@@ -301,8 +301,6 @@ class MyApp extends BaseConfig
             ]
         ],
 
-
-
         'user_account' => [
             'text'   => 'Akun Pengguna',
             'roles'   => [
@@ -400,6 +398,15 @@ class MyApp extends BaseConfig
             'thumb_height'  => 300,
             'upload_dir'    => 'contents/upload/reward/',
             'thumb_dir'     => 'contents/thumb/reward/',
+        ],
+        'voucher' => [
+            'width'         => 1000,
+            'height'        => 700,
+            'create_thumb'  => FALSE,
+            'thumb_width'   => 320,
+            'thumb_height'  => 150,
+            'upload_dir'    => 'contents/upload/voucher/',
+            'thumb_dir'     => 'contents/thumb/voucher/',
         ],
     ];
 }

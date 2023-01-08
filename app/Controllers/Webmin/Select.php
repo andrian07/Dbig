@@ -359,7 +359,6 @@ class Select extends WebminController
         $select2->generate();
     }
 
-
     public function warehouse()
     {
         $this->validationRequest(TRUE);
@@ -571,6 +570,7 @@ class Select extends WebminController
         $select2->generate();
     }
 
+<<<<<<< Updated upstream
 
     public function searchProduct()
     {
@@ -612,6 +612,37 @@ class Select extends WebminController
         resultJSON($result);
     }
     
+=======
+    public function salesman()
+    {
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('ms_salesman');
+        $select2->db->select('ms_salesman.salesman_id,ms_salesman.salesman_code,ms_salesman.salesman_name');
+
+        if ($this->request->getGet('store_id') != NULL) {
+            $store_id = $this->request->getGet('store_id');
+            $filter_store = explode(',', $store_id);
+            $select2->db->whereIn('store_id', $filter_store);
+        }
+
+        $select2->searchFields  = ['ms_salesman.salesman_code', 'ms_salesman.salesman_name'];
+        $select2->orderBy       = 'ms_salesman.salesman_code';
+        $select2->orderDir      = 'ASC';
+
+
+
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']               = $row['salesman_id'];
+            $result['text']             = $row['salesman_code'] . ' - ' . $row['salesman_name'];
+            $result['salesman_code']    = $row['salesman_code'];
+            $result['salesman_name']    = $row['salesman_name'];
+            return $result;
+        });
+
+        $select2->generate();
+    }
+>>>>>>> Stashed changes
 
     //--------------------------------------------------------------------
 

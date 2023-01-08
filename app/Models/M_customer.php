@@ -11,8 +11,9 @@ class M_customer extends Model
     public function getCustomer($customer_id = '', $show_deleted = FALSE)
     {
         $builder = $this->db->table($this->table);
-        $builder->select('ms_customer.*,ms_mapping_area.mapping_code,ms_mapping_area.mapping_address');
+        $builder->select('ms_customer.*,ms_mapping_area.mapping_code,ms_mapping_area.mapping_address,ms_salesman.salesman_code,ms_salesman.salesman_name');
         $builder->join('ms_mapping_area', 'ms_mapping_area.mapping_id=ms_customer.mapping_id', 'left');
+        $builder->join('ms_salesman', 'ms_salesman.salesman_id=ms_customer.salesman_id', 'left');
         if ($customer_id  != '') {
             $builder->where(['ms_customer.customer_id' => $customer_id]);
         }

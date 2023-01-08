@@ -341,7 +341,7 @@ class Product extends WebminController
         } else {
             if ($input['upload_image'] != NULL) {
                 helper(['upload', 'text']);
-                $renameTo       = random_string('alnum', 10)  . date('dmyHis');;
+                $renameTo       = random_string('alnum', 10)  . date('dmyHis');
                 $uploadImage    = upload_image('upload_image', $renameTo, 'product');
                 if ($uploadImage != '') {
                     $isUploadFile  = TRUE;
