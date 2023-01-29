@@ -196,6 +196,8 @@ $assetsUrl = base_url('assets');
 
                                     <input id="hd_transfer_stock_id" name="hd_transfer_stock_id" type="hidden" class="form-control">
 
+                                    <input id="hd_transfer_stock_no" name="hd_transfer_stock_no" type="text" class="form-control" value="AUTO" readonly>
+
                                 </div>
 
                                 <div class="col-md-4"></div>
