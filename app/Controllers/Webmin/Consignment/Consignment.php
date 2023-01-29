@@ -167,12 +167,14 @@ class Consignment extends WebminController
         $validation =  \Config\Services::validation();
 
         $input = [
-            'temp_po_consignment_id'            => $this->request->getPost('temp_po_consignment_id'),
-            'temp_po_consignment_item_id'       => $this->request->getPost('item_id'),
-            'temp_po_consignment_qty'           => $this->request->getPost('temp_qty'),
-            'temp_po_consignment_expire_date'   => $this->request->getPost('temp_ed_date'),
-            'temp_po_consignment_suplier_id'    => $this->request->getPost('temp_supplier_id'),
-            'temp_po_consignment_suplier_name'  => $this->request->getPost('temp_supplier_name'),
+            //'temp_po_consignment_id'                => $this->request->getPost('temp_po_consignment_id'),
+            'temp_po_consignment_item_id'           => $this->request->getPost('item_id'),
+            'temp_po_consignment_submission_id'     => $this->request->getPost('temp_po_consignment_submission_id'),
+            'temp_po_consignment_submission_invoice'=> $this->request->getPost('temp_po_consignment_submission_invoice'),
+            'temp_po_consignment_qty'               => $this->request->getPost('temp_qty'),
+            'temp_po_consignment_expire_date'       => $this->request->getPost('temp_ed_date'),
+            'temp_po_consignment_suplier_id'        => $this->request->getPost('temp_supplier_id'),
+            'temp_po_consignment_suplier_name'      => $this->request->getPost('temp_supplier_name'),
         ];
 
         $validation->setRules([
@@ -395,7 +397,7 @@ class Consignment extends WebminController
 
             'purchase_order_consignment_supplier_id' => $this->request->getPost('supplier_id'),
             'purchase_order_consignment_date'        => $this->request->getPost('po_consignment_date'),
-            'purchase_order_consignment_warehouse_id'    => $this->request->getPost('warehouse'),
+            'purchase_order_consignment_warehouse_id'=> $this->request->getPost('warehouse'),
             'purchase_order_consignment_remark'      => $this->request->getPost('po_consignment_remark'),
 
         ];

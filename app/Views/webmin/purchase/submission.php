@@ -146,6 +146,16 @@ $assetsUrl = base_url('assets');
                             </div>
 
                             <div class="form-group">
+                                <label for="submission_type" class="col-sm-1 col-form-label text-right">Tipe:</label>
+                                <div class="col-sm-12">
+                                    <select id="submission_type" type="text" class="form-control" data-parsley-vsubmissiontype required>
+                                        <option value="Pembelian">Pembelian</option>
+                                        <option value="Konsinyasi">Konsinyasi</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label for="salesman_id" class="col-sm-1 col-form-label text-right">Sales:</label>
                                 <div class="col-sm-12">
                                     <select id="salesman_id" type="text" class="form-control" data-parsley-vsalesman required></select>
@@ -165,8 +175,8 @@ $assetsUrl = base_url('assets');
 
 
                             <div class="form-group">
-                               <label for="temp_status" class="col-sm-12">Status:</label>
-                               <div class="col-sm-12">
+                             <label for="temp_status" class="col-sm-12">Status:</label>
+                             <div class="col-sm-12">
                                 <select id="temp_status" name="temp_status" class="form-control" data-parsley-vtempstatus required> 
                                     <option></option>
                                     <option value="Urgent">Urgent</option>
@@ -177,30 +187,30 @@ $assetsUrl = base_url('assets');
                         </div>
 
                         <div class="form-group">
-                           <label for="item_code" class="col-sm-12">Produk Code:</label>
-                           <div class="col-sm-12">
+                         <label for="item_code" class="col-sm-12">Produk Code:</label>
+                         <div class="col-sm-12">
                             <input id="item_id" name="item_id" class="form-control" type="hidden">
                             <input id="item_code" name="item_code" class="form-control" type="text" readonly>
                         </div>
                     </div>
 
                     <div class="form-group">
-                       <label for="product_name" class="col-sm-12">Produk:</label>
-                       <div class="col-sm-12">
+                     <label for="product_name" class="col-sm-12">Produk:</label>
+                     <div class="col-sm-12">
                         <input id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname required>
                     </div>
                 </div>
 
                 <div class="form-group">
-                   <label for="temp_qty" class="col-sm-12">Qty:</label>
-                   <div class="col-sm-12">
+                 <label for="temp_qty" class="col-sm-12">Qty:</label>
+                 <div class="col-sm-12">
                     <input id="temp_qty" name="temp_qty"  class="form-control" value="0" data-parsley-vqty required>
                 </div>
             </div>
 
             <div class="form-group">
-               <label for="desc" class="col-sm-12">Keterangan:</label>
-               <div class="col-sm-12">
+             <label for="desc" class="col-sm-12">Keterangan:</label>
+             <div class="col-sm-12">
                 <textarea id="desc" name="desc" type="text" class="form-control"></textarea>
             </div>
         </div>
@@ -236,9 +246,9 @@ $assetsUrl = base_url('assets');
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
-                           <div class="form-group">
-                               <label for="desc" class="col-sm-12">Keterangan:</label>
-                               <div class="col-sm-12">
+                         <div class="form-group">
+                             <label for="desc" class="col-sm-12">Keterangan:</label>
+                             <div class="col-sm-12">
                                 <input type="hidden" id="submission_id_decline" name="submission_id_decline">
                                 <textarea id="desc_decline" name="desc_decline" type="text" class="form-control"></textarea>
                             </div>
@@ -280,11 +290,11 @@ $assetsUrl = base_url('assets');
        // init component //
 
        function _initButton() {
-           $('#btnadd').prop('disabled', !hasRole('submission.add'));
-           $('.btnedit').prop('disabled', !hasRole('submission.edit'));
-           $('.btndelete').prop('disabled', !hasRole('submission.delete'));
-           $('.btndecline').prop('disabled', !hasRole('submission.decline'));
-       }
+         $('#btnadd').prop('disabled', !hasRole('submission.add'));
+         $('.btnedit').prop('disabled', !hasRole('submission.edit'));
+         $('.btndelete').prop('disabled', !hasRole('submission.delete'));
+         $('.btndecline').prop('disabled', !hasRole('submission.decline'));
+     }
 
         // select2 //
 
@@ -390,6 +400,7 @@ $assetsUrl = base_url('assets');
             setSelect2("#warehouse",htmlEntities.decode(data.submission_warehouse_id),htmlEntities.decode(data.warehouse_code)+' - '+htmlEntities.decode(data.warehouse_name));
             setSelect2("#salesman_id",htmlEntities.decode(data.submission_salesman_id),htmlEntities.decode(data.salesman_code)+' - '+htmlEntities.decode(data.salesman_name));
             $('#temp_status').val(htmlEntities.decode(data.submission_item_status));
+            $('#submission_type').val(htmlEntities.decode(data.submission_type));
             $('#item_code').val(htmlEntities.decode(data.item_code));
             $('#item_id').val(htmlEntities.decode(data.submission_item_id));
             $('#product_name').val(htmlEntities.decode(data.submission_product_name));
@@ -434,37 +445,37 @@ $assetsUrl = base_url('assets');
 
             source: function(req, add) {
 
-             $.ajax({
+               $.ajax({
 
-                 url: base_url + '/webmin/submission/search-product-submission',
+                   url: base_url + '/webmin/submission/search-product-submission',
 
-                 dataType: 'json',
+                   dataType: 'json',
 
-                 type: 'GET',
+                   type: 'GET',
 
-                 data: req,
+                   data: req,
 
-                 success: function(res) {
+                   success: function(res) {
 
-                     if (res.success == true) {
+                       if (res.success == true) {
 
                         add(res.data);
 
                     }else{
 
-                       message.error(res.message);
+                     message.error(res.message);
 
-                       $('#product_name').val('');
+                     $('#product_name').val('');
 
-                   }
+                 }
 
-               },
+             },
 
-           });
+         });
 
-         },
+           },
 
-         select: function(event, ui) {
+           select: function(event, ui) {
 
             $('#item_id').val(ui.item.item_id);
 
@@ -633,6 +644,8 @@ $assetsUrl = base_url('assets');
             },
         });
 
+        
+
         $('#btnsave_submission').click(function(e) {
 
             e.preventDefault();
@@ -674,6 +687,8 @@ $assetsUrl = base_url('assets');
                             submission_order_date: $('#submission_order_date').val(),
 
                             submission_warehouse_id: $('#warehouse').val(),
+
+                            submission_type: $('#submission_type').val(),
 
                             salesman_id: $('#salesman_id').val(),
 
@@ -747,6 +762,8 @@ $assetsUrl = base_url('assets');
 
             vwarehousecode: 'Gudang Harus Di Pilih',
 
+            vsubmissiontype: 'Jenis Pengajuan Harus Di Pilih',
+
             vsalesman: 'Salesman Harus Di Isi',
 
             vproductname: 'Harap pilih produk terlebih dahulu',
@@ -767,6 +784,23 @@ $assetsUrl = base_url('assets');
             validateString: function(value) {
 
                 if ($('#warehouse').val() == '') {
+
+                    return false;
+
+                } else {
+
+                    return true;
+
+                }
+            },
+
+        });
+
+        window.Parsley.addValidator("vsubmissiontype", {
+
+            validateString: function(value) {
+
+                if ($('#submissiontype').val() == '') {
 
                     return false;
 
@@ -874,38 +908,38 @@ $assetsUrl = base_url('assets');
 
         function updateTableHeader() {
 
-         tblhdsubmission.ajax.reload(null, false);
+           tblhdsubmission.ajax.reload(null, false);
 
-     }
+       }
 
-     function clearItemInput() {
+       function clearItemInput() {
 
-         let form = $('#frmaddsubmission');
+           let form = $('#frmaddsubmission');
 
-         form.parsley().reset();
+           form.parsley().reset();
 
-         setSelect2("#warehouse", '', '');
+           setSelect2("#warehouse", '', '');
 
-         setSelect2("#salesman_id", '', '');
+           setSelect2("#salesman_id", '', '');
 
-         $('#temp_status').val('');
+           $('#temp_status').val('');
 
-         $('#item_id').val('');
+           $('#item_id').val('');
 
-         $('#item_code').val('');
+           $('#item_code').val('');
 
-         $('#product_name').val('');
+           $('#product_name').val('');
 
-         temp_qty.set(0);
+           temp_qty.set(0);
 
-         $('#desc').val('');
+           $('#desc').val('');
 
-     }
+       }
 
 
-     _initButton();
+       _initButton();
 
- })
+   })
 
 </script>
 

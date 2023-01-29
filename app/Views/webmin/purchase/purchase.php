@@ -253,7 +253,7 @@ $assetsUrl = base_url('assets');
 
                         <div class="form-group row">
 
-                            <label for="payment_type" class="col-sm-1 col-form-label text-right">Pembayaran :</label>
+                            <label for="payment_type" class="col-sm-1 col-form-label text-right">Payment :</label>
 
                             <div class="col-sm-3">
 

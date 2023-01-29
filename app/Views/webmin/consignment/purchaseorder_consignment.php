@@ -253,6 +253,15 @@ $assetsUrl = base_url('assets');
 
                                 <input id="product_tax" name="product_tax" type="hidden" value="">
 
+                                <div class="col-sm-3">
+
+                                    <label>No Pengajuan:</label>
+
+                                    <select id="nosubmission" name="nosubmission" class="form-control"></select>
+
+                                    <input id="submission_id" type="hidden" name="submission_id">
+
+                                </div>
 
                                 <div class="col-sm-3">
 
@@ -336,15 +345,17 @@ $assetsUrl = base_url('assets');
 
                                             <th data-priority="1">#</th>
 
-                                            <th data-priority="2">Kode Item</th>
+                                            <th data-priority="2">No Pengajuan</th>
 
-                                            <th data-priority="3" width="50%;">Produk</th>
+                                            <th data-priority="3">Kode Item</th>
 
-                                            <th data-priority="4">Qty</th>
+                                            <th data-priority="4" width="40%;">Produk</th>
 
-                                            <th data-priority="5">E.D</th>
+                                            <th data-priority="5">Qty</th>
 
-                                            <th data-priority="6">Aksi</th>
+                                            <th data-priority="6">E.D</th>
+
+                                            <th data-priority="7">Aksi</th>
 
                                         </tr>
 
@@ -361,6 +372,8 @@ $assetsUrl = base_url('assets');
                                  <tr>
 
                                      <td>{row}</td>
+
+                                     <td>{submission_invoice}</td> 
 
                                      <td>{item_code}</td>
 
@@ -510,6 +523,106 @@ $assetsUrl = base_url('assets');
 });
 
 
+   $("#nosubmission").select2({
+    placeholder: '-- Pilih No Pengajuan --',
+    width: "100%",
+    allowClear: true,
+    ajax: {
+        url: base_url + "/webmin/select/no-submission-consignment",
+        dataType: "json",
+        type: "GET",
+        delay: select2Delay,
+        data: function(params) {
+            return {
+                search: params.term,
+            };
+        },
+        processResults: function(data, page) {
+            return {
+                results: data,
+            };
+        },
+
+    },
+});
+
+   $("#nosubmission").change(function(e) {
+
+    let id = $(this).val();
+
+    if (id != null) {
+
+        if ($("#supplier_id").val() == null) {
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Silahkan Pilih Suplier Terlebih Dahulu !'
+          })
+
+            setSelect2('#nosubmission','','');
+
+        }else{
+
+            let actUrl = base_url + '/webmin/purchase-order/get-submission-detail/' + id;
+
+            ajax_get(actUrl, null, {
+
+                success: function(response) {
+
+                    if (response.success) {
+
+                        if (response.result.success) {
+
+                            let header = response.result.header;
+
+                            let items = response.result.data;
+
+                            console.log(header);
+
+                            if (header.submission_status == 'Pending') {
+                                if(header.supplier_id != $('#supplier_id').val()){
+                                    Swal.fire({
+                                      icon: 'error',
+                                      title: 'Oops...',
+                                      text: 'Produk Dan Suplier Tidak Sesuai !'
+                                  })
+                                }else{
+                                    $('#item_id').val(header.submission_item_id);
+                                    $('#product_name').val(header.submission_product_name);
+                                    temp_qty.set(header.submission_qty);
+                                    $('#submission_id').val(header.submission_id);
+                                }
+                            } else {
+
+                                $('#supplier_id').prop('disabled', true);
+
+                            }
+
+                        } else {
+
+                            message.error(response.result.message);
+
+                            setSelect2("#purchase_order_id");
+
+                            $('#supplier_id').prop('disabled', false);
+
+                        }
+
+                    }
+
+                }
+
+            })
+        }
+    } else {
+
+        $('#supplier_id').prop('disabled', false);
+
+    }
+
+});
+
    $("#supplier_id").select2({
     placeholder: '-- Pilih Supplier --',
     width: "100%",
@@ -582,6 +695,10 @@ $assetsUrl = base_url('assets');
 
                item_id: $('#item_id').val(),
 
+               temp_po_consignment_submission_id: $('#nosubmission').val(),
+
+               temp_po_consignment_submission_invoice: $( "#nosubmission option:selected" ).text(),
+
                temp_qty: qty,
 
                temp_supplier_id: supplier_id,
@@ -638,146 +755,156 @@ $assetsUrl = base_url('assets');
 
    $("#tbltemp").on('click', '.btnedit', function(e) {
 
-         e.preventDefault();
+     e.preventDefault();
 
-         let json_data = $(this).attr('data-json');
+     let json_data = $(this).attr('data-json');
 
-         let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
+     let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
 
-         console.log(json);
+     console.log(json_data);
 
-         if (is_json) {
+     if (is_json) {
 
-             $('#temp_po_consignment_id').val(json.temp_po_consignment_id );
+         $('#temp_po_consignment_id').val(json.temp_po_consignment_id );
 
-             $('#product_name').val(json.product_name);
+         $('#product_name').val(json.product_name + '(' + json.unit_name +')'); 
 
-             $('#item_id').val(json.temp_po_consignment_item_id);
+         $('#item_id').val(json.temp_po_consignment_item_id);
 
-             temp_qty.set(json.temp_po_consignment_qty);
+         temp_qty.set(json.temp_po_consignment_qty);
 
-             $('#temp_qty').focus();
+         $('#temp_qty').focus();
 
-             $('#temp_ed_date').val(json.temp_po_consignment_expire_date);
+         $('#temp_ed_date').val(json.temp_po_consignment_expire_date);
 
-         } else {
+          setSelect2('#nosubmission',json.temp_po_consignment_submission_id,json.temp_po_consignment_submission_invoice);
 
-             getTemp();
+     } else {
 
-             message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
+         getTemp();
 
-         }
+         message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
 
-     })
+     }
+
+ })
 
    $("#tbltemp").on('click', '.btndelete', function(e) {
 
-        e.preventDefault();
+    e.preventDefault();
 
-        let id = $(this).attr('data-id');
+    let id = $(this).attr('data-id');
 
-        let actUrl = base_url + '/webmin/consignment/temp-delete/' + id;
+    let actUrl = base_url + '/webmin/consignment/temp-delete/' + id;
 
-        ajax_get(actUrl, null, {
+    ajax_get(actUrl, null, {
 
-            success: function(response) {
+        success: function(response) {
 
-                if (response.success) {
+            if (response.success) {
 
-                    if (response.result.success) {
+                if (response.result.success) {
 
-                        notification.success(response.result.message);
+                    notification.success(response.result.message);
 
-                    } else {
+                } else {
 
-                        message.error(response.result.message);
-
-                    }
-
-                    loadTempData(response.result.data);
+                    message.error(response.result.message);
 
                 }
 
-            },
-
-            error: function(response) {
-
-                getTemp();
+                loadTempData(response.result.data);
 
             }
 
-        })
+        },
+
+        error: function(response) {
+
+            getTemp();
+
+        }
 
     })
 
-    function loadTempData(items) {
+})
 
-           let template = $('#template_row_temp').html();
+   function loadTempData(items) {
 
-           let tbody = '';
+       let template = $('#template_row_temp').html();
 
-           let row = 1;
+       let tbody = '';
 
-           let temp_total_order = 0;
+       let row = 1;
 
-           items.forEach((val, key) => {
+       let temp_total_order = 0;
 
-
-               let item = template;
-
-               let data_json = htmlEntities.encode(JSON.stringify(val));
-
-               let temp_po_consignment_id = val.temp_po_consignment_id;
-
-               let item_id = val.item_id;
-
-               let product_name  = val.product_name+'('+val.unit_name+')';
-
-               let temp_po_consignment_qty = parseFloat(val.temp_po_consignment_qty);
-
-               let temp_po_consignment_expire_date = val.temp_po_consignment_expire_date;
+       items.forEach((val, key) => {
 
 
-               item = item.replaceAll('{row}', row)
+           let item = template;
 
-               .replaceAll('{item_code}', val.item_code)
+           let data_json = htmlEntities.encode(JSON.stringify(val));
 
-               .replaceAll('{product_name}', product_name)
+           let temp_po_consignment_id = val.temp_po_consignment_id;
 
-               .replaceAll('{temp_qty}', numberFormat(temp_po_consignment_qty, true))
+           let item_id = val.item_id;
 
-               .replaceAll('{temp_ed_date}', temp_po_consignment_expire_date)
+           let product_name  = val.product_name+'('+val.unit_name+')';
 
-               .replaceAll('{temp_id}', temp_po_consignment_id)
+           let temp_po_consignment_qty = parseFloat(val.temp_po_consignment_qty);
 
-               .replaceAll('{data_json}', data_json);
+           let temp_po_consignment_expire_date = val.temp_po_consignment_expire_date;
 
-               tbody += item;
+           let temp_po_consignment_submission_invoice = val.temp_po_consignment_submission_invoice;
 
-               row++;
-
-           });
+           let temp_po_consignment_submission_id = val.temp_po_consignment_submission_id;
 
 
-           if ($.fn.DataTable.isDataTable('#tbltemp')) {
+           item = item.replaceAll('{row}', row)
 
-               $('#tbltemp').DataTable().destroy();
+           .replaceAll('{item_code}', val.item_code)
 
-           }
+           .replaceAll('{product_name}', product_name)
+
+           .replaceAll('{temp_qty}', numberFormat(temp_po_consignment_qty, true))
+
+           .replaceAll('{temp_ed_date}', temp_po_consignment_expire_date)
+
+           .replaceAll('{temp_id}', temp_po_consignment_id)
+
+           .replaceAll('{submission_id}', temp_po_consignment_submission_id)
+
+           .replaceAll('{submission_invoice}', temp_po_consignment_submission_invoice)
+
+           .replaceAll('{data_json}', data_json);
+
+           tbody += item;
+
+           row++;
+
+       });
 
 
+       if ($.fn.DataTable.isDataTable('#tbltemp')) {
 
-           $('#tbltemp tbody').html('');
-
-           $('#tbltemp tbody').html(tbody);
-
-           tbltemp = $('#tbltemp').DataTable(config_tbltemp);
-
-           clearItemInput();
-
-           _initTooltip();
+           $('#tbltemp').DataTable().destroy();
 
        }
+
+
+
+       $('#tbltemp tbody').html('');
+
+       $('#tbltemp tbody').html(tbody);
+
+       tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+
+       clearItemInput();
+
+       _initTooltip();
+
+   }
         // select2 //
 
 
@@ -810,12 +937,10 @@ $assetsUrl = base_url('assets');
 
              width: 100,
 
-             targets: 4
-
          },
          {
 
-             targets: [4],
+             targets: [0, 6],
 
              orderable: false,
 
@@ -824,7 +949,7 @@ $assetsUrl = base_url('assets');
          },
          {
 
-             targets: [0, 3, 4],
+             targets: [0],
 
              className: "text-right",
 
@@ -869,6 +994,10 @@ $assetsUrl = base_url('assets');
                     po_consignment_date: $('#po_consignment_date').val(),
 
                     warehouse : $('#warehouse').val(),
+
+                    nosubmission : $('#nosubmission').val(),
+
+                    submission_id: $('#submission_id').val(),
 
                     po_consignment_remark : $('#po_consignment_remark').val(),
 
@@ -972,20 +1101,22 @@ $assetsUrl = base_url('assets');
        });
 
 
-    function clearItemInput() {
+     function clearItemInput() {
 
-             let form = $('#frmaddtemp');
+         let form = $('#frmaddtemp');
 
-             form.parsley().reset();
+         form.parsley().reset();
 
-             $('#item_id').val('');
+         $('#item_id').val('');
 
-             $('#product_name').val('');
+         $('#product_name').val('');
 
-             $('#temp_ed_date').val('');
+         $('#temp_ed_date').val('');
 
-             temp_qty.set('0.00');
-    }
+         temp_qty.set('0.00');
+
+          setSelect2('#nosubmission','','');
+     }
 
 
      function showInputPage(x) {
@@ -1016,52 +1147,52 @@ $assetsUrl = base_url('assets');
 
     $('#btnadd').click(function(e) {
 
-           e.preventDefault();
+       e.preventDefault();
 
-           let actUrl = base_url + '/webmin/consignment/get-consignment-temp';
+       let actUrl = base_url + '/webmin/consignment/get-consignment-temp';
 
-           ajax_get(actUrl, null, {
+       ajax_get(actUrl, null, {
 
-               success: function(response) {
+           success: function(response) {
 
-                if (response.result.success == 'TRUE') {
+            if (response.result.success == 'TRUE') {
 
-                   let form = $('#frm-purchase-order-consignment');
+               let form = $('#frm-purchase-order-consignment');
 
-                   let items = response.result.data;
+               let items = response.result.data;
 
-                   $('#title-frm-purchase-order-consignment').html('Pengajuan Pesanan Konsinyasi');
-                        setSelect2("#warehouse", '3', 'KNY - KONSINYASI');
-                        $('#warehouse').attr('disabled', true);
+               $('#title-frm-purchase-order-consignment').html('Pengajuan Pesanan Konsinyasi');
+               setSelect2("#warehouse", '3', 'KNY - KONSINYASI');
+               $('#warehouse').attr('disabled', true);
 
-                   formMode = 'add';
+               formMode = 'add';
 
-                   loadTempData(items);
+               loadTempData(items);
 
-                   if(items.length != 0){
-                        let supplier_ids = items[0].temp_po_consignment_suplier_id;
-                        let supplier_names = items[0].temp_po_consignment_suplier_name;
-                        setSelect2('#supplier_id', supplier_ids, supplier_names);
-                        $('#supplier_id').attr("disabled", true);
-                   
+               if(items.length != 0){
+                let supplier_ids = items[0].temp_po_consignment_suplier_id;
+                let supplier_names = items[0].temp_po_consignment_suplier_name;
+                setSelect2('#supplier_id', supplier_ids, supplier_names);
+                $('#supplier_id').attr("disabled", true);
 
-                   }
 
-                   clearItemInput();
+            }
 
-                   showInputPage(true);
+            clearItemInput();
 
-               } else {
+            showInputPage(true);
 
-                   message.error(response.result.message);
+        } else {
 
-               }
+           message.error(response.result.message);
 
-           }
+       }
 
-        })
+   }
 
-    })
+})
+
+   })
 
 
 

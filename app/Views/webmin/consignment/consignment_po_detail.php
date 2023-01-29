@@ -132,6 +132,9 @@ $assetsUrl = base_url('assets');
                         <thead>
 
                             <tr>
+
+                                <th>No Pengajuan</th>
+
                                 <th>Kode Produk</th>
 
                                 <th>Nama Produk</th>
@@ -152,6 +155,8 @@ $assetsUrl = base_url('assets');
                                 ?>
 
                                 <tr>
+
+                                    <th><?= esc($row['dt_po_consignment_submission_invoice']) ?></th>
 
                                     <th><?= esc($row['product_code']) ?></th>
 

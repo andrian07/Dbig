@@ -241,7 +241,7 @@ class Select extends WebminController
     }
 
 
-    public function salesman()
+    /*public function salesman()
     {
         $this->validationRequest(TRUE);
         $select2 = new \App\Libraries\Select2('ms_salesman');
@@ -262,7 +262,7 @@ class Select extends WebminController
         });
 
         $select2->generate();
-    }
+    }*/
 
 
     public function brand()
@@ -415,6 +415,30 @@ class Select extends WebminController
 
         $select2->db->select('submission_id, submission_inv');
         $select2->db->where('submission_status', 'Pending');
+        $select2->db->where('submission_type', 'Pembelian');
+
+        $select2->searchFields  = ['submission_inv'];
+        $select2->orderBy       = 'submission_inv';
+        $select2->orderDir      = 'ASC';
+
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = $row['submission_id'];
+            $result['text'] = $row['submission_inv'];
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
+    public function noSubmissionConsignment()
+    {
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('hd_submission');
+
+        $select2->db->select('submission_id, submission_inv');
+        $select2->db->where('submission_status', 'Pending');
+        $select2->db->where('submission_type', 'Konsinyasi');
 
         $select2->searchFields  = ['submission_inv'];
         $select2->orderBy       = 'submission_inv';
@@ -570,7 +594,6 @@ class Select extends WebminController
         $select2->generate();
     }
 
-<<<<<<< Updated upstream
 
     public function searchProduct()
     {
@@ -612,7 +635,7 @@ class Select extends WebminController
         resultJSON($result);
     }
     
-=======
+
     public function salesman()
     {
         $this->validationRequest(TRUE);
@@ -642,7 +665,6 @@ class Select extends WebminController
 
         $select2->generate();
     }
->>>>>>> Stashed changes
 
     //--------------------------------------------------------------------
 

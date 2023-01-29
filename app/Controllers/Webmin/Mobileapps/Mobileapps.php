@@ -88,8 +88,8 @@ class Mobileapps extends WebminController
             $column[] = $i;
             $column[] = esc($row['mobile_promo_title']);
             $caption = esc($row['mobile_promo_title']);
-            $imageUrl = base_url().'/contents/upload/banner/'. esc($row['mobile_promo_image']);
-            $thumbUrl = base_url().'/contents/thumb/banner/'.  esc($row['mobile_promo_image']);
+            $imageUrl = base_url().'/contents/upload/promo/'. esc($row['mobile_promo_image']);
+            $thumbUrl = base_url().'/contents/thumb/promo/'.  esc($row['mobile_promo_image']);
             $column[] = fancy_image($caption, $imageUrl, $thumbUrl, $imageClass = 'width="60px" height="80px"');
             $column[] = esc($row['mobile_promo_desc']);
             $column[] = esc($row['mobile_promo_start_date']);
@@ -161,7 +161,7 @@ class Mobileapps extends WebminController
             $maxUploadSize = $this->maxUploadSize['kb'];
             $ext = implode(',', $this->myConfig->uploadFileType['image']);
             $validation->setRules([
-                'upload_image' => ['label' => 'upload_image', 'rules' => 'max_size[upload_image,' . $maxUploadSize . ']|ext_in[upload_image,' . $ext . ']|is_image[upload_image]'],
+                'upload_image' => ['label' => 'upload_image', 'rules' => 'max_size[upload_image,' . $maxUploadSize . ']|is_image[upload_image]'],
             ]);
         }
 
@@ -243,7 +243,7 @@ class Mobileapps extends WebminController
             $maxUploadSize = $this->maxUploadSize['kb'];
             $ext = implode(',', $this->myConfig->uploadFileType['image']);
             $validation->setRules([
-                'upload_image' => ['label' => 'upload_image', 'rules' => 'max_size[upload_image,' . $maxUploadSize . ']|ext_in[upload_image,' . $ext . ']|is_image[upload_image]'],
+                'upload_image' => ['label' => 'upload_image', 'rules' => 'max_size[upload_image,' . $maxUploadSize . ']|is_image[upload_image]'],
             ]);
         }
 
@@ -253,7 +253,7 @@ class Mobileapps extends WebminController
             if ($input['upload_image'] != NULL) {
                 helper(['upload', 'text']);
                 $renameTo       = random_string('alnum', 10)  . date('dmyHis');;
-                $uploadImage    = upload_image('upload_image', $renameTo, 'banner');
+                $uploadImage    = upload_image('upload_image', $renameTo, 'promo');
                 if ($uploadImage != '') {
                     $isUploadFile  = TRUE;
                     $input['mobile_promo_image'] = $uploadImage;

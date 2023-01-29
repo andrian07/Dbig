@@ -73,6 +73,28 @@ $routes->group('api', static function ($routes) {
     $routes->get('/', 'Api::index');
 
     $routes->post('login', 'Api::login');
+
+    $routes->post('BannerList', 'Api::getbanner');
+
+    $routes->post('BannerListById', 'Api::getbannerbyid');
+
+    $routes->post('PromoList', 'Api::getpromo');
+
+    $routes->post('PromoListById', 'Api::getpromobyid');
+
+    $routes->post('ProductList', 'Api::getProduct');
+
+    $routes->post('ProductListById', 'Api::getproductbyid');
+
+    $routes->post('CategoryList', 'Api::getcategory');
+
+    $routes->post('BrandList', 'Api::getbrand');
+
+    $routes->post('searchProduct', 'Api::getproductbyname');
+
+    //$routes->post('itemPoint', 'Api::getitempoint');
+
+    
     
 });
 
@@ -695,6 +717,27 @@ $routes->group('webmin/mobileapps', ['filter' => 'webminauth'], static function 
 /* end Mobile*/
 
 
+/* Stock Transfer*/
+
+$routes->group('webmin/stock-transfer', ['filter' => 'webminauth'], static function ($routes) {
+
+    $routes->get('/', 'Webmin\Stocktransfer\Stocktransfer::index');
+
+    $routes->get('search-product-transfer', 'Webmin\Stocktransfer\Stocktransfer::searchProductTransfer');
+
+    $routes->post('temp-add', 'Webmin\Stocktransfer\Stocktransfer::tempadd');
+
+    $routes->get('get-transfer-temp', 'Webmin\Stocktransfer\Stocktransfer::getTransferTemp');
+
+    $routes->get('temp-delete/(:num)', 'Webmin\Stocktransfer\Stocktransfer::tempDelete/$1');
+
+    $routes->post('save/(:alpha)', 'Webmin\Stocktransfer\Stocktransfer::save/$1');
+
+    $routes->post('tblstocktransfer', 'Webmin\Stocktransfer\Stocktransfer::tblstocktransfer');
+});
+
+/* end Stock Transfer*/
+
 
 /* Report */
 
@@ -711,8 +754,6 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
     $routes->get('barcode-generate', 'Webmin\Report\Report::barcodeGenerate');
 
     $routes->get('price-tag', 'Webmin\Report\Report::priceTag');
-
-
 
     /* Section Customer */
 
@@ -801,11 +842,9 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($routes) {
 
     $routes->get('store', 'Webmin\Select::store');
+    
     $routes->get('user-group', 'Webmin\Select::userGroup');
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
     $routes->get('user-account', 'Webmin\Select::userAccount');
 
     $routes->get('unit', 'Webmin\Select::unit');
@@ -840,15 +879,13 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
 
     $routes->get('no-submission', 'Webmin\Select::noSubmission');
 
+    $routes->get('no-submission-consignment', 'Webmin\Select::noSubmissionConsignment');
+
     $routes->get('no-po-consignment', 'Webmin\Select::noPoConsignment');
 
     $routes->get('payment-method', 'Webmin\Select::payment_method');
-
-<<<<<<< Updated upstream
-
-=======
+    
     $routes->get('salesman', 'Webmin\Select::salesman');
->>>>>>> Stashed changes
 });
 
 /* END Select2 */
@@ -867,8 +904,6 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
 
 $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
 
-
-<<<<<<< Updated upstream
 
     //$routes->get('customer', 'Webmin\EricDemo::customer');
 
@@ -914,8 +949,6 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
 
     //$routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');
 
-=======
->>>>>>> Stashed changes
     $routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');
 
     //$routes->get('debt-repayment/detail', 'Webmin\EricDemo::debtRepaymentDetail');

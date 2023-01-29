@@ -889,7 +889,8 @@ $assetsUrl = base_url('assets');
             _initButton();
         },
         columnDefs: [{
-            width: 100
+            width: 180,
+            targets: [7]
         },
         {
             targets: [0, 8],

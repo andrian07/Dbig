@@ -287,9 +287,9 @@ $assetsUrl = base_url('assets');
 
                                 <div class="row well well-sm">
 
-                                   <input id="temp_sales_admin_id" name="temp_sales_admin_id" type="hidden" value="">
+                                 <input id="temp_sales_admin_id" name="temp_sales_admin_id" type="hidden" value="">
 
-                                   <div class="col-sm-3">
+                                 <div class="col-sm-3">
 
                                     <!-- text input -->
 
@@ -435,52 +435,52 @@ $assetsUrl = base_url('assets');
 
                                 <template id="template_row_temp">
 
-                                 <tr>
+                                   <tr>
 
-                                     <td>{row}</td>
+                                       <td>{row}</td>
 
-                                     <td>{item_code}</td>
+                                       <td>{item_code}</td>
 
-                                     <td>{product_name}</td>
+                                       <td>{product_name}</td>
 
-                                     <td>{temp_qty}</td>
+                                       <td>{temp_qty}</td>
 
-                                     <td>{temp_sales_price}</td>
+                                       <td>{temp_sales_price}</td>
 
-                                     <td>{discount}</td>
+                                       <td>{discount}</td>
 
-                                     <td>{total}</td>
+                                       <td>{total}</td>
 
-                                     <td>
+                                       <td>
 
-                                         <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                           <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
-                                             <i class="fas fa-edit"></i>
+                                               <i class="fas fa-edit"></i>
 
-                                         </button>
+                                           </button>
 
-                                         &nbsp;
+                                           &nbsp;
 
-                                         <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+                                           <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
 
-                                             <i class="fas fa-minus"></i>
+                                               <i class="fas fa-minus"></i>
 
-                                         </button>
+                                           </button>
 
-                                     </td>
+                                       </td>
 
-                                 </tr>
+                                   </tr>
 
-                             </template>
-
-
-                         </div>
-
-                     </div>
+                               </template>
 
 
+                           </div>
 
-                     <div class="row form-space">
+                       </div>
+
+
+
+                       <div class="row form-space">
 
                         <div class="col-lg-6">
 
@@ -523,52 +523,66 @@ $assetsUrl = base_url('assets');
                             </div>
 
                             <div class="form-group row">
-                                <label for="footer_total_invoice" class="col-sm-7 col-form-label text-right:">Total :</label>
-                                <div class="col-sm-5">
-                                    <input id="footer_total_invoice" name="footer_total_invoice" type="text" class="form-control text-right" value="0" readonly>
+                                <label for="footer_total_ppn" class="col-sm-7 col-form-label text-right:">PPN :</label>
+                                <div class="col-sm-4">
+                                    <input id="footer_total_ppn" name="footer_total_ppn" type="text" class="form-control text-right" value="0" readonly>
+                                </div>
+                                <div class="col-sm-1">
+                                  <div class="icheck-primary d-inline">
+                                    <input type="checkbox" id="ppn_check" style="width:25px; height:25px;">
+                                    <label for="ppn_check">
+                                    </label>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="form-group row">
-                                <label for="footer_dp" class="col-sm-7 col-form-label text-right:">Tunai/DP :</label>
-                                <div class="col-sm-5">
-                                    <input id="footer_dp" name="footer_dp" type="text" class="form-control text-right" value="0">
-                                </div>
+                        <div class="form-group row">
+                            <label for="footer_total_invoice" class="col-sm-7 col-form-label text-right:">Total :</label>
+                            <div class="col-sm-5">
+                                <input id="footer_total_invoice" name="footer_total_invoice" type="text" class="form-control text-right" value="0" readonly>
                             </div>
+                        </div>
 
-                            <div class="form-group row">
-                                <label for="footer_credit" class="col-sm-7 col-form-label text-right:">Kredit :</label>
-                                <div class="col-sm-5">
-                                    <input id="footer_credit" name="footer_credit" type="text" class="form-control text-right" value="0" readonly>
-                                </div>
+                        <div class="form-group row">
+                            <label for="footer_dp" class="col-sm-7 col-form-label text-right:">Tunai/DP :</label>
+                            <div class="col-sm-5">
+                                <input id="footer_dp" name="footer_dp" type="text" class="form-control text-right" value="0">
                             </div>
+                        </div>
 
-
-                            <div class="form-group row">
-                                <div class="col-sm-12">
-                                    <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
-                                    <button id="btnsave" class="btn btn-success button-header-custom-save"><i class="fas fa-save"></i> Simpan</button>
-                                </div>
+                        <div class="form-group row">
+                            <label for="footer_credit" class="col-sm-7 col-form-label text-right:">Kredit :</label>
+                            <div class="col-sm-5">
+                                <input id="footer_credit" name="footer_credit" type="text" class="form-control text-right" value="0" readonly>
                             </div>
-
                         </div>
 
 
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
+                                <button id="btnsave" class="btn btn-success button-header-custom-save"><i class="fas fa-save"></i> Simpan</button>
+                            </div>
+                        </div>
+
                     </div>
+
 
                 </div>
 
             </div>
 
-            <!-- /.card -->
-
         </div>
 
-        <!-- /.col -->
+        <!-- /.card -->
 
     </div>
 
-    <!-- /.row -->
+    <!-- /.col -->
+
+</div>
+
+<!-- /.row -->
 
 </div><!-- /.container-fluid -->
 
@@ -785,6 +799,8 @@ $assetsUrl = base_url('assets');
 
        let footer_total_invoice = new AutoNumeric('#footer_total_invoice', configRp);
 
+       let footer_total_ppn = new AutoNumeric('#footer_total_ppn', configRp);
+
        let footer_dp = new AutoNumeric('#footer_dp', configRp);
 
        let footer_credit = new AutoNumeric('#footer_credit', configRp);
@@ -896,41 +912,41 @@ $assetsUrl = base_url('assets');
 
         $('#product_name').autocomplete({   
 
-           minLength: 2,
+         minLength: 2,
 
-           source: function(req, add) {
+         source: function(req, add) {
 
-               $.ajax({
+             $.ajax({
 
-                   url: base_url + '/webmin/sales-admin/search-product',
+                 url: base_url + '/webmin/sales-admin/search-product',
 
-                   dataType: 'json',
+                 dataType: 'json',
 
-                   type: 'GET',
+                 type: 'GET',
 
-                   data: req,
+                 data: req,
 
-                   success: function(res) {
+                 success: function(res) {
 
-                       if (res.success == true) {
+                     if (res.success == true) {
 
                         add(res.data);
 
                     }else{
 
-                     message.error(res.message);
+                       message.error(res.message);
 
-                     $('#product_name').val('');
+                       $('#product_name').val('');
 
-                 }
+                   }
 
-             },
+               },
 
-         });
+           });
 
-           },
+         },
 
-           select: function(event, ui) {
+         select: function(event, ui) {
 
             $('#item_id').val(ui.item.item_id);   
 
@@ -988,54 +1004,54 @@ $assetsUrl = base_url('assets');
 
         const config_tbltemp = {
 
-         pageLength: 10,
+           pageLength: 10,
 
-         autoWidth: false,
+           autoWidth: false,
 
-         select: true,
+           select: true,
 
-         responsive: true,
+           responsive: true,
 
-         fixedColumns: true,
+           fixedColumns: true,
 
-         order: [
+           order: [
 
-         [0, 'desc']
+           [0, 'desc']
 
-         ],
+           ],
 
-         "language": {
+           "language": {
 
-             "url": lang_datatables,
+               "url": lang_datatables,
 
-         },
-         "columnDefs": [{
+           },
+           "columnDefs": [{
 
-             width: 100
+               width: 100
 
-         },
-         {
+           },
+           {
 
-             targets: [0,7],
+               targets: [0,7],
 
-             orderable: false,
+               orderable: false,
 
-             searchable: false,
+               searchable: false,
 
-         },
-         {
+           },
+           {
 
-             targets: [0, 2, 3, 4, 5, 6],
+               targets: [0, 2, 3, 4, 5, 6],
 
-             className: "text-right",
+               className: "text-right",
 
-         }
+           }
 
-         ]
+           ]
 
-     };
+       };
 
-     let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+       let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
 
         //End Table //
 
@@ -1093,103 +1109,103 @@ $assetsUrl = base_url('assets');
 
         function loadTempData(items) {
 
-         let template = $('#template_row_temp').html();
+           let template = $('#template_row_temp').html();
 
-         let tbody = '';
+           let tbody = '';
 
-         let row = 1;
+           let row = 1;
 
-         let temp_total_order = 0;
+           let temp_total_order = 0;
 
-         items.forEach((val, key) => {
+           items.forEach((val, key) => {
 
-             let item = template;
+               let item = template;
 
-             let data_json = htmlEntities.encode(JSON.stringify(val));
+               let data_json = htmlEntities.encode(JSON.stringify(val));
 
-             let temp_id = val.temp_sales_admin_id;
+               let temp_id = val.temp_sales_admin_id;
 
-             let item_id = val.item_id;
+               let item_id = val.item_id;
 
-             let item_code  = val.item_code;
+               let item_code  = val.item_code;
 
-             let temp_qty = parseFloat(val.temp_qty);
+               let temp_qty = parseFloat(val.temp_qty);
 
-             let product_name = val.product_name+'('+val.unit_name+')';
+               let product_name = val.product_name+'('+val.unit_name+')';
 
-             let temp_purchase_price = val.temp_purchase_price;
+               let temp_purchase_price = val.temp_purchase_price;
 
-             let temp_purchase_tax  = val.temp_purchase_tax;
+               let temp_purchase_tax  = val.temp_purchase_tax;
 
-             let temp_purchase_cogs  = val.temp_purchase_cogs;
+               let temp_purchase_cogs  = val.temp_purchase_cogs;
 
-             let temp_product_price  = val.temp_product_price;
+               let temp_product_price  = val.temp_product_price;
 
-             let temp_disc1 = val.temp_disc1;
+               let temp_disc1 = val.temp_disc1;
 
-             let temp_price_disc1_percentage = val.temp_price_disc1_percentage;
+               let temp_price_disc1_percentage = val.temp_price_disc1_percentage;
 
-             let temp_disc2 = val.temp_disc2;
+               let temp_disc2 = val.temp_disc2;
 
-             let temp_price_disc2_percentage = val.temp_price_disc2_percentage;
+               let temp_price_disc2_percentage = val.temp_price_disc2_percentage;
 
-             let temp_disc3 = val.temp_disc3;
+               let temp_disc3 = val.temp_disc3;
 
-             let temp_price_disc3_percentage = val.temp_price_disc3_percentage;
+               let temp_price_disc3_percentage = val.temp_price_disc3_percentage;
 
-             let temp_total_discount = val.temp_total_discount;
+               let temp_total_discount = val.temp_total_discount;
 
-             let temp_sales_price = val.temp_sales_price;
+               let temp_sales_price = val.temp_sales_price;
 
-             item = item.replaceAll('{row}', row)
+               item = item.replaceAll('{row}', row)
 
-             .replaceAll('{temp_id}', temp_id)
+               .replaceAll('{temp_id}', temp_id)
 
-             .replaceAll('{item_code}', item_code)
+               .replaceAll('{item_code}', item_code)
 
-             .replaceAll('{product_name}', product_name)
+               .replaceAll('{product_name}', product_name)
 
-             .replaceAll('{temp_qty}', numberFormat(temp_qty, true))
+               .replaceAll('{temp_qty}', numberFormat(temp_qty, true))
 
-             .replaceAll('{temp_sales_price}', numberFormat(temp_sales_price, true))
+               .replaceAll('{temp_sales_price}', numberFormat(temp_sales_price, true))
 
-             .replaceAll('{discount}', numberFormat(temp_total_discount, true))
+               .replaceAll('{discount}', numberFormat(temp_total_discount, true))
 
-             .replaceAll('{total}', numberFormat(temp_sales_price, true))
+               .replaceAll('{total}', numberFormat(temp_sales_price, true))
 
-             .replaceAll('{data_json}', data_json);
+               .replaceAll('{data_json}', data_json);
 
-             tbody += item;
+               tbody += item;
 
-             row++;
+               row++;
 
-         });
-
-
-         if ($.fn.DataTable.isDataTable('#tbltemp')) {
-
-             $('#tbltemp').DataTable().destroy();
-
-         }
+           });
 
 
+           if ($.fn.DataTable.isDataTable('#tbltemp')) {
 
-         $('#tbltemp tbody').html('');
+               $('#tbltemp').DataTable().destroy();
 
-         $('#tbltemp tbody').html(tbody);
-
-         tbltemp = $('#tbltemp').DataTable(config_tbltemp);
-
-         clearItemInput();
-
-         setfootervalue();
-
-         _initTooltip();
-
-     }
+           }
 
 
-     $('#total_temp_discount').click(function(e) {
+
+           $('#tbltemp tbody').html('');
+
+           $('#tbltemp tbody').html(tbody);
+
+           tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+
+           clearItemInput();
+
+           setfootervalue();
+
+           _initTooltip();
+
+       }
+
+
+       $('#total_temp_discount').click(function(e) {
         e.preventDefault();
         discountMode({
             temp_discount1: $('#temp_discount1').val(),
@@ -1202,7 +1218,7 @@ $assetsUrl = base_url('assets');
     })
 
 
-     $('#btnaddfooterdiscount').click(function(e) {
+       $('#btnaddfooterdiscount').click(function(e) {
         e.preventDefault();
         footerdiscountMode({
             temp_discount1: $('#temp_discount1').val(),
@@ -1217,7 +1233,7 @@ $assetsUrl = base_url('assets');
 
 
 
-     $('#btndisc').click(function(e) {
+       $('#btndisc').click(function(e) {
         e.preventDefault();
         message.question('Yakin untuk penambahan discount?').then(function(answer) {
             let yes = parseMessageResult(answer);
@@ -1249,7 +1265,7 @@ $assetsUrl = base_url('assets');
     })
 
 
-     $('#btndiscfooter').click(function(e) {
+       $('#btndiscfooter').click(function(e) {
         e.preventDefault();
         message.question('Yakin untuk penambahan discount?').then(function(answer) {
             let yes = parseMessageResult(answer);
@@ -1276,6 +1292,8 @@ $assetsUrl = base_url('assets');
 
                 footer_total_discount.set(Number(edit_footer_discount1) + Number(edit_footer_discount2) + Number(edit_footer_discount3));
                 footer_dp.set(0);
+                footer_total_ppn.set(0);
+                $('#ppn_check').prop('checked', false);
                 calculation_temp_total_footer();
             }
         })
@@ -1283,7 +1301,7 @@ $assetsUrl = base_url('assets');
 
 
 
-     function discountMode(data) {
+       function discountMode(data) {
         let form = $('#frmtempdiscount');
         $('#title-frmtempdiscount').html('Tambah Discount');
         edit_temp_discount1.set(data.temp_discount1);
@@ -1336,7 +1354,7 @@ $assetsUrl = base_url('assets');
         cleardiscount();
     });
 
-    $('#footer_dp').on('change', function() {
+    $('#footer_dp').on('input', function() {
         footer_credit.set(footer_total_invoice.get() - footer_dp.get());
     });
 
@@ -1347,7 +1365,7 @@ $assetsUrl = base_url('assets');
 
 
     $('#edit_temp_discount_percentage1').on('change', function() {
-     if(temp_qty.get() < 1){
+       if(temp_qty.get() < 1){
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -1417,7 +1435,7 @@ $assetsUrl = base_url('assets');
     });
 
     $('#edit_temp_discount3').on('change', function() {
-     if(edit_temp_discount2.get() < 1){
+       if(edit_temp_discount2.get() < 1){
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -1496,6 +1514,25 @@ $assetsUrl = base_url('assets');
         edit_footer_discount_percentage3.set(edit_footer_discount3_cal.toFixed(2));
     });
 
+
+    $(document).on('input', '#ppn_check', function(e) {
+        e.preventDefault();
+        if ($('#ppn_check').is(":checked"))
+        {
+          let footer_sub_total_cal = parseFloat(footer_sub_total.getNumericString());
+          let footer_total_discount_cal = parseFloat(footer_total_discount.getNumericString());
+          footer_total_ppn.set((footer_sub_total_cal - footer_total_discount_cal) * 0.11);
+          footer_dp.set(0);
+          footer_credit.set(footer_sub_total_cal - footer_total_discount_cal);
+      }else{
+          let footer_sub_total_cal = parseFloat(footer_sub_total.getNumericString());
+          let footer_total_discount_cal = parseFloat(footer_total_discount.getNumericString());
+          footer_total_ppn.set(0);
+          footer_dp.set(0);
+          footer_credit.set(footer_sub_total_cal - footer_total_discount_cal);
+      }
+    });
+
     function calculation_temp_total(){
         var price_calculation = AutoNumeric.getAutoNumericElement('#temp_price').get();
         let qty_calculation = parseFloat(temp_qty.getNumericString());
@@ -1505,7 +1542,7 @@ $assetsUrl = base_url('assets');
     }
 
     function calculation_temp_total_footer(){
-        footer_total_invoice.set(Number(footer_sub_total.get()) - Number(footer_total_discount.get()));
+        footer_total_invoice.set(Number(footer_sub_total.get()) - Number(footer_total_discount.get()) - Number(footer_total_ppn.get()));
         footer_credit.set(Number(footer_sub_total.get()) - Number(footer_total_discount.get()));
     }
 
@@ -1541,112 +1578,112 @@ $assetsUrl = base_url('assets');
 
     $('#btnadd_temp').click(function(e) {
 
-     e.preventDefault();
+       e.preventDefault();
 
-     let purchase_price = parseFloat(temp_purchase_price.getNumericString());
+       let purchase_price = parseFloat(temp_purchase_price.getNumericString());
 
-     let purchase_tax = parseFloat(temp_purchase_tax.getNumericString());
+       let purchase_tax = parseFloat(temp_purchase_tax.getNumericString());
 
-     let purchase_cogs = parseFloat(temp_purchase_cogs.getNumericString());
+       let purchase_cogs = parseFloat(temp_purchase_cogs.getNumericString());
 
-     let price = parseFloat(temp_price.getNumericString());
+       let price = parseFloat(temp_price.getNumericString());
 
-     let qty = parseFloat(temp_qty.getNumericString());
+       let qty = parseFloat(temp_qty.getNumericString());
 
-     let discount1 = parseFloat(temp_discount1.getNumericString());
+       let discount1 = parseFloat(temp_discount1.getNumericString());
 
-     let discount2 = parseFloat(temp_discount2.getNumericString());
+       let discount2 = parseFloat(temp_discount2.getNumericString());
 
-     let discount3 = parseFloat(temp_discount3.getNumericString());
+       let discount3 = parseFloat(temp_discount3.getNumericString());
 
-     let discount_percentage1 = parseFloat(temp_discount_percentage1.getNumericString());
+       let discount_percentage1 = parseFloat(temp_discount_percentage1.getNumericString());
 
-     let discount_percentage2 = parseFloat(temp_discount_percentage2.getNumericString());
+       let discount_percentage2 = parseFloat(temp_discount_percentage2.getNumericString());
 
-     let discount_percentage3 = parseFloat(temp_discount_percentage3.getNumericString());
+       let discount_percentage3 = parseFloat(temp_discount_percentage3.getNumericString());
 
-     let total_discount = parseFloat(total_temp_discount.getNumericString());
+       let total_discount = parseFloat(total_temp_discount.getNumericString());
 
-     let total = parseFloat(temp_total.getNumericString());
+       let total = parseFloat(temp_total.getNumericString());
 
-     let btnSubmit = $('#btnadd_temp');
+       let btnSubmit = $('#btnadd_temp');
 
-     let form = $('#frmaddtemp');
+       let form = $('#frmaddtemp');
 
-     form.parsley().validate();
+       form.parsley().validate();
 
-     if (form.parsley().isValid()) {
+       if (form.parsley().isValid()) {
 
-         let actUrl = base_url + '/webmin/sales-admin/temp-add';
+           let actUrl = base_url + '/webmin/sales-admin/temp-add';
 
-         let formValues = {
+           let formValues = {
 
-             temp_sales_admin_id: $('#temp_sales_admin_id').val(),
+               temp_sales_admin_id: $('#temp_sales_admin_id').val(),
 
-             item_id: $('#item_id').val(),
+               item_id: $('#item_id').val(),
 
-             temp_purchase_price: purchase_price,
+               temp_purchase_price: purchase_price,
 
-             temp_purchase_tax: purchase_tax,
+               temp_purchase_tax: purchase_tax,
 
-             temp_purchase_cogs: purchase_cogs,
+               temp_purchase_cogs: purchase_cogs,
 
-             temp_price: price,
+               temp_price: price,
 
-             temp_qty: qty,
+               temp_qty: qty,
 
-             temp_discount1: discount1,
+               temp_discount1: discount1,
 
-             temp_discount2: discount2,
+               temp_discount2: discount2,
 
-             temp_discount3: discount3,
+               temp_discount3: discount3,
 
-             temp_discount_percentage1: discount_percentage1,
+               temp_discount_percentage1: discount_percentage1,
 
-             temp_discount_percentage2: discount_percentage2,
+               temp_discount_percentage2: discount_percentage2,
 
-             temp_discount_percentage3: discount_percentage3,
+               temp_discount_percentage3: discount_percentage3,
 
-             total_temp_discount: total_discount,
+               total_temp_discount: total_discount,
 
-             temp_total: total
+               temp_total: total
 
-         };
+           };
 
-         btnSubmit.prop('disabled', true);
+           btnSubmit.prop('disabled', true);
 
-         ajax_post(actUrl, formValues, {
+           ajax_post(actUrl, formValues, {
 
-             success: function(response) {
+               success: function(response) {
 
-                 if (response.success) {
+                   if (response.success) {
 
-                     if (response.result.success) {
+                       if (response.result.success) {
 
-                         notification.success(response.result.message);
+                           notification.success(response.result.message);
 
-                     } else {
+                       } else {
 
-                         message.error(response.result.message);
+                           message.error(response.result.message);
 
-                     }
+                       }
 
-                     clearItemInput();
-                     loadTempData(response.result.data);
-                 }
+                       clearItemInput();
+                       loadTempData(response.result.data);
+                   }
 
-                 btnSubmit.prop('disabled', false);
+                   btnSubmit.prop('disabled', false);
 
-             },
+               },
 
-             error: function(response) {
+               error: function(response) {
 
-                 btnSubmit.prop('disabled', false);
+                   btnSubmit.prop('disabled', false);
 
-             }
-         });
-     }
- })
+               }
+           });
+       }
+   })
 
     Parsley.addMessages('id', {
 
@@ -1725,13 +1762,13 @@ $assetsUrl = base_url('assets');
     
     $("#tbltemp").on('click', '.btnedit', function(e) {
 
-     e.preventDefault();
+       e.preventDefault();
 
-     let json_data = $(this).attr('data-json');
+       let json_data = $(this).attr('data-json');
 
-     let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
+       let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
 
-     if (is_json) {
+       if (is_json) {
 
         $('#temp_sales_admin_id').val(json.temp_sales_admin_id);
         
@@ -1819,53 +1856,53 @@ $assetsUrl = base_url('assets');
 
     $('#btnadd').click(function(e) {
 
-     e.preventDefault();
-     let actUrl = base_url + '/webmin/sales-admin/get-salesadmin-temp';
-     ajax_get(actUrl, null, {
+       e.preventDefault();
+       let actUrl = base_url + '/webmin/sales-admin/get-salesadmin-temp';
+       ajax_get(actUrl, null, {
         success: function(response) {   
             if (response.result.success == 'TRUE') {
-               let form = $('#frmsalesadmin');
-               let items = response.result.data;
-               $('#title-frmsalesadmin').html('Penjualan Admin');
-               formMode = 'add';
-               loadTempData(items);
-               clearItemInput();
-               showInputPage(true);
-           } else {
+             let form = $('#frmsalesadmin');
+             let items = response.result.data;
+             $('#title-frmsalesadmin').html('Penjualan Admin');
+             formMode = 'add';
+             loadTempData(items);
+             clearItemInput();
+             showInputPage(true);
+         } else {
             message.error(response.result.message);
         }
 
     }
 })
- })
+   })
 
 
     function clearItemInput() {
 
-       let form = $('#frmaddtemp');
+     let form = $('#frmaddtemp');
 
-       form.parsley().reset();
+     form.parsley().reset();
 
-       $('#item_id').val('');
+     $('#item_id').val('');
 
-       $('#product_name').val('');
+     $('#product_name').val('');
 
-       temp_purchase_price.set(0);
+     temp_purchase_price.set(0);
 
-       temp_purchase_tax.set(0);
+     temp_purchase_tax.set(0);
 
-       temp_price.set(0);
+     temp_price.set(0);
 
-       temp_qty.set(0);
+     temp_qty.set(0);
 
-       temp_total.set(0);
+     temp_total.set(0);
 
-       cleardiscount();
+     cleardiscount();
 
-   }
+ }
 
 
-   function setfootervalue(){
+ function setfootervalue(){
     let actUrl = base_url + '/webmin/sales-admin/get-salesadmin-footer';
     ajax_get(actUrl, null, {
         success: function(response) { 
@@ -1920,6 +1957,8 @@ $('#btnsave').click(function(e) {
 
     let sales_order_total = parseFloat(footer_total_invoice.getNumericString());
 
+    let sales_ppn = parseFloat(footer_total_ppn.getNumericString());
+
     let customer_id = $('#customer_id').val();
 
     let payment_type = $('#payment_type').val();
@@ -1941,126 +1980,128 @@ $('#btnsave').click(function(e) {
           icon: 'error',
           title: 'Oops...',
           text: 'Silahkan Pilih Nama Customer Terlebih Dahulu !'
-        })
+      })
 
-   }else if(payment_type == null){
+    }else if(payment_type == null){
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: 'Silahkan Pilih Jenis Pembayaran Terlebih Dahulu !'
-        })
+      })
 
-   }else if(salesman_id == null){
+    }else if(salesman_id == null){
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: 'Silahkan Pilih Nama Sales Terlebih Dahulu !'
-        })
+      })
 
-   }else if(store_id == null){
+    }else if(store_id == null){
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: 'Silahkan Pilih Cabang Penjualan Terlebih Dahulu !'
-        })
+      })
 
-   }else{
+    }else{
 
-    message.question(question).then(function(answer) {
+        message.question(question).then(function(answer) {
 
-        let yes = parseMessageResult(answer);
+            let yes = parseMessageResult(answer);
 
-        if (yes) {
+            if (yes) {
 
-            let formValues = {
+                let formValues = {
 
-                sales_customer_id : customer_id,
+                    sales_customer_id : customer_id,
 
-                sales_salesman_id: salesman_id,
+                    sales_salesman_id: salesman_id,
 
-                sales_payment_type: payment_type,
+                    sales_payment_type: payment_type,
 
-                sales_due_date: due_date,
+                    sales_due_date: due_date,
 
-                sales_date: $('#sales_date').val(),
+                    sales_date: $('#sales_date').val(),
 
-                sales_store_id: store_id,
+                    sales_store_id: store_id,
 
-                sales_admin_remark: $('#sales_remark').val(),
+                    sales_admin_remark: $('#sales_remark').val(),
 
-                sales_admin_sub_total: sales_sub_total,
+                    sales_admin_sub_total: sales_sub_total,
 
-                sales_admin_discount1: sales_discount1,
+                    sales_admin_discount1: sales_discount1,
 
-                sales_admin_discount2: sales_discount2,
+                    sales_admin_discount2: sales_discount2,
 
-                sales_admin_discount3: sales_discount3,
+                    sales_admin_discount3: sales_discount3,
 
-                sales_admin_discount1_percentage: sales_discount_percentage1,
+                    sales_admin_discount1_percentage: sales_discount_percentage1,
 
-                sales_admin_discount2_percentage: sales_discount_percentage2,
+                    sales_admin_discount2_percentage: sales_discount_percentage2,
 
-                sales_admin_discount3_percentage: sales_discount_percentage3,
+                    sales_admin_discount3_percentage: sales_discount_percentage3,
 
-                sales_admin_total_discount: sales_total_discount,
+                    sales_admin_total_discount: sales_total_discount,
 
-                sales_admin_total:sales_order_total,
+                    sales_admin_ppn:sales_ppn,
 
-                sales_admin_down_payment:sales_admin_down_payment,
+                    sales_admin_total:sales_order_total,
 
-                sales_admin_remaining_payment:sales_admin_remaining_payment,
+                    sales_admin_down_payment:sales_admin_down_payment,
 
-            };
+                    sales_admin_remaining_payment:sales_admin_remaining_payment,
 
-            btnSubmit.prop('disabled', true);
+                };
 
-            ajax_post(actUrl, formValues, {
+                btnSubmit.prop('disabled', true);
 
-                success: function(response) {
+                ajax_post(actUrl, formValues, {
 
-                    if (response.success) {
+                    success: function(response) {
 
-                        if (response.result.success) {
+                        if (response.success) {
 
-                            form[0].reset();
+                            if (response.result.success) {
 
-                            notification.success(response.result.message);
+                                form[0].reset();
 
-                            form.parsley().reset();
+                                notification.success(response.result.message);
 
-                            showInputPage(false);
+                                form.parsley().reset();
 
-                            let invoice = response.result.purchase_order_id;
+                                showInputPage(false);
 
-                           } else {
+                                let invoice = response.result.purchase_order_id;
 
-                            message.error(response.result.message);
+                            } else {
+
+                                message.error(response.result.message);
+
+                            }
 
                         }
 
+                        btnSubmit.prop('disabled', false);
+
+                        updateTableHeader();
+
+                    },
+
+                    error: function(response) {
+
+                        btnSubmit.prop('disabled', false);
+
+                        updateTable();
+
                     }
 
-                    btnSubmit.prop('disabled', false);
+                });
 
-                    updateTableHeader();
+            }
 
-                },
+        })
 
-                error: function(response) {
-
-                    btnSubmit.prop('disabled', false);
-
-                    updateTable();
-
-                }
-
-            });
-
-        }
-
-    })
-
-}
+    }
 
 });
 

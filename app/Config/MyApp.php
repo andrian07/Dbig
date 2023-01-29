@@ -212,6 +212,16 @@ class MyApp extends BaseConfig
             ]
         ],
 
+
+        'transfer_stock' => [
+            'text'   => 'Transfer Stock',
+            'roles'   => [
+                'view'          => ['text' => 'Lihat'],
+                'add'           => ['text' => 'Tambah'],
+                'edit'          => ['text' => 'Ubah'],
+            ]
+        ],
+
         'input_consignment' => [
             'text'   => 'Input Pembelian Konsinyasi',
             'roles'   => [
@@ -389,6 +399,15 @@ class MyApp extends BaseConfig
             'thumb_height'  => 150,
             'upload_dir'    => 'contents/upload/banner/',
             'thumb_dir'     => 'contents/thumb/banner/',
+        ],
+        'promo' => [
+            'width'         => 500,
+            'height'        => 500,
+            'create_thumb'  => TRUE,
+            'thumb_width'   => 320,
+            'thumb_height'  => 150,
+            'upload_dir'    => 'contents/upload/promo/',
+            'thumb_dir'     => 'contents/thumb/promo/',
         ],
         'reward_point' => [
             'width'         => 1000,

@@ -288,6 +288,7 @@ public function save($type = '')
         'sales_admin_discount2_percentage'=> $this->request->getPost('sales_admin_discount2_percentage'),
         'sales_admin_discount3_percentage'=> $this->request->getPost('sales_admin_discount3_percentage'),
         'sales_admin_total_discount'      => $this->request->getPost('sales_admin_total_discount'),
+        'sales_admin_ppn'                 => $this->request->getPost('sales_admin_ppn'),
         'sales_admin_down_payment'        => $this->request->getPost('sales_admin_down_payment'),
         'sales_admin_remaining_payment'   => $this->request->getPost('sales_admin_remaining_payment'),
         'sales_admin_grand_total'         => $this->request->getPost('sales_admin_total')

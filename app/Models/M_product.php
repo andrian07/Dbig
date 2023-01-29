@@ -306,6 +306,28 @@ class M_product extends Model
         return  $builder->limit($limit)->get();
     }
 
+    public function searchProductBywarehouse($keyword, $warehouse_id = '', $isItemCode = FALSE, $limit = 10)
+    {
+        
+        $builder = $this->db->table('ms_product_unit');
+        $builder->select('ms_product_unit.*,ms_product.product_name,(ms_product.base_purchase_price*ms_product_unit.product_content) as purchase_price,(ms_product.base_purchase_tax*ms_product_unit.product_content) as purchase_tax,ms_unit.unit_name,ms_product.is_parcel,ms_product_stock.stock as warehouse_stock')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_product_stock', 'ms_product_stock.product_id = ms_product.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->where('ms_product.deleted', 'N')
+            ->where('ms_product.active', 'Y');
+        if ($isItemCode) {
+            $builder->where('ms_product_unit.item_code', $keyword);
+        } else {
+            $builder->groupStart();
+            $builder->Like('ms_product.product_name', $keyword);
+            $builder->Like('ms_product_stock.warehouse_id', $warehouse_id);
+            $builder->orLike('ms_product_unit.item_code', $keyword);
+            $builder->groupEnd();
+        }
+        return  $builder->limit($limit)->get();
+    }
+
     public function insertProductUnit($data)
     {
         $this->db->query('LOCK TABLES ms_product WRITE,ms_product_unit WRITE');

@@ -268,7 +268,7 @@ $(document).ready(function() {
                 file.value = "";
             } else {
                 let img_size = file.files[0].size;
-                let size = max_upload_size.kb;
+                let size = max_upload_size.b;
                 if (img_size > size) {
                     let message_text = 'Ukuran file maksimum ' + max_upload_size.mb + ' MB'
                     message.info(message_text);
@@ -308,7 +308,7 @@ $(document).ready(function() {
                     if (yes) {
                         let formValues = new FormData();
                         let file = $('#upload_image');
-                        formValues.append('banner_id', $('#banner_id').val());
+                        //formValues.append('banner_id', $('#banner_id').val());
                         formValues.append('mobile_promo_title', $('#mobile_promo_title').val());
                         formValues.append('mobile_promo_desc', $('#mobile_promo_desc').val());
                         formValues.append('mobile_promo_start_date', $('#mobile_promo_start_date').val());

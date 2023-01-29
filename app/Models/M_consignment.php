@@ -40,7 +40,7 @@ class M_consignment extends Model
     {
         $builder = $this->db->table($this->table_temp_po_consignment);
 
-        return $builder->select('ms_product.product_id, ms_product.product_code, ms_product.product_name, temp_purchase_order_consignment.temp_po_consignment_item_id, temp_purchase_order_consignment.temp_po_consignment_id, temp_purchase_order_consignment.temp_po_consignment_qty, temp_purchase_order_consignment.temp_po_consignment_expire_date, temp_purchase_order_consignment.temp_po_consignment_suplier_id, temp_purchase_order_consignment.temp_po_consignment_suplier_name, ms_unit.unit_name, ms_product_unit.item_code')
+        return $builder->select('ms_product.product_id, ms_product.product_code, ms_product.product_name, temp_purchase_order_consignment.temp_po_consignment_item_id, temp_purchase_order_consignment.temp_po_consignment_id, temp_purchase_order_consignment.temp_po_consignment_qty, temp_purchase_order_consignment.temp_po_consignment_expire_date, temp_purchase_order_consignment.temp_po_consignment_suplier_id, temp_purchase_order_consignment.temp_po_consignment_suplier_name,temp_purchase_order_consignment.temp_po_consignment_submission_id,temp_purchase_order_consignment.temp_po_consignment_submission_invoice, ms_unit.unit_name, ms_product_unit.item_code')
 
         ->join('ms_product_unit', 'ms_product_unit.item_id = temp_purchase_order_consignment.temp_po_consignment_item_id')
 
@@ -264,7 +264,7 @@ class M_consignment extends Model
 
 
 
-        $sqlDtOrder = "insert into dt_purchase_order_consignment(dt_po_consignment_invoice,dt_po_consignment_item_id,dt_po_consignment_qty,dt_po_consignment_expire_date) VALUES";
+        $sqlDtOrder = "insert into dt_purchase_order_consignment(dt_po_consignment_invoice,dt_po_consignment_submission_id,dt_po_consignment_submission_invoice,dt_po_consignment_item_id,dt_po_consignment_qty,dt_po_consignment_expire_date) VALUES";
 
         $sqlDtValues = [];
 
@@ -272,12 +272,14 @@ class M_consignment extends Model
 
         foreach ($getTemp->getResultArray() as $row) {
 
-            $dt_po_consignment_invoice          = $data['purchase_order_consignment_invoice'];
-            $dt_po_consignment_item_id       = $row['temp_po_consignment_item_id'];
-            $dt_po_consignment_qty              = $row['temp_po_consignment_qty'];
-            $dt_po_consignment_expire_date      = $row['temp_po_consignment_expire_date'];
+            $dt_po_consignment_invoice              = $data['purchase_order_consignment_invoice'];
+            $dt_po_consignment_submission_id        = $row['temp_po_consignment_submission_id'];
+            $dt_po_consignment_submission_invoice   = $row['temp_po_consignment_submission_invoice'];
+            $dt_po_consignment_item_id              = $row['temp_po_consignment_item_id'];
+            $dt_po_consignment_qty                  = $row['temp_po_consignment_qty'];
+            $dt_po_consignment_expire_date          = $row['temp_po_consignment_expire_date'];
 
-            $sqlDtValues[] = "('$dt_po_consignment_invoice','$dt_po_consignment_item_id','$dt_po_consignment_qty','$dt_po_consignment_expire_date')";
+            $sqlDtValues[] = "('$dt_po_consignment_invoice','$dt_po_consignment_submission_id','$dt_po_consignment_submission_invoice','$dt_po_consignment_item_id','$dt_po_consignment_qty','$dt_po_consignment_expire_date')";
 
         }
 

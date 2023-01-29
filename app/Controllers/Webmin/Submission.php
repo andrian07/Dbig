@@ -189,6 +189,7 @@ class Submission extends WebminController
 
             'submission_id'              => $this->request->getPost('submission_id'),
             'submission_warehouse_id'    => $this->request->getPost('submission_warehouse_id'),
+            'submission_type'            => $this->request->getPost('submission_type'),
             'submission_item_id'         => $this->request->getPost('item_id'),
             'submission_product_name'    => $this->request->getPost('product_name'),
             'submission_qty'             => $this->request->getPost('qty'),
@@ -199,7 +200,6 @@ class Submission extends WebminController
         ];
 
         $validation->setRules([
-
             'submission_warehouse_id'        => ['rules' => 'required'],
             'submission_desc'                => ['rules' => 'max_length[500]'],
             'submission_item_id'             => ['rules' => 'required'],
