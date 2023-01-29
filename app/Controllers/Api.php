@@ -39,13 +39,12 @@ class Api extends BaseController
     public function login()
     {
         $headers = apache_request_headers();
-        $input = [
-            'customer_phone'                      => $this->request->getPost('customer_phone'),
-            'customer_password'                   => $this->request->getPost('customer_password'),
-        ];
+        $data = json_decode(file_get_contents('php://input'), true);
+        $customer_phone = $data['customer_phone'];
+        $customer_password = $data['customer_password'];
         $checkOuth = $this->checkOuth($headers);
         if($checkOuth['err_code'] == '00'){
-            $getCustomerLogin = $this->M_api->getCustomerLogin($input['customer_phone'])->getRowArray();
+            $getCustomerLogin = $this->M_api->getCustomerLogin($customer_phone)->getRowArray();
             if ($getCustomerLogin != NULL) {
                 if ($getCustomerLogin['active'] == 'N') {
                     $result = ['err_code' => '01', 'message' => 'Akun anda berstatus tidak aktif harap hubungi administrator'];
@@ -55,8 +54,11 @@ class Api extends BaseController
                     $result = ['err_code' => '01', 'message' => 'Silahkan Cek Email Untuk Verifikasi Email'];
                     echo json_encode($result);die();
                 }
-                if (password_verify($input['customer_password'], $getCustomerLogin['customer_password'])) {
+                if (password_verify($customer_password, $getCustomerLogin['customer_password'])) {
                     echo json_encode($getCustomerLogin);die();
+                }else{
+                    $result = ['err_code' => '01', 'message' => 'Username atau password anda salah'];
+                    echo json_encode($result);die();
                 }
             } else {
                 $result = ['err_code' => '01', 'message' => 'Username atau password anda salah'];
@@ -284,9 +286,8 @@ class Api extends BaseController
     {
         $headers = apache_request_headers();
         $checkOuth = $this->checkOuth($headers);
-        $data = json_decode(file_get_contents('php://input'), true);
-        $perpage = $data['perpage'];
-        $start = $data['start'];
+        $perpage = $this->request->getPost('perpage');
+        $start = $this->request->getPost('start');
         if($checkOuth['err_code'] == '00'){
             $result['result'] = $this->M_api->getBrand($perpage, $start)->getResultArray();
             $total_rows['total_rows'] = $this->M_api->getBrand($perpage, $start)->getNumRows();
