@@ -36,6 +36,12 @@ $assetsUrl = base_url('assets');
                                     <th data-priority="1">#</th>
                                     <th data-priority="2">Nama Kategori</th>
                                     <th data-priority="4">Deskripsi</th>
+                                    <th data-priority="5">G1 <br> <?= isset($customer_group['G1']) ? $customer_group['G1'] : 'NO CONFIG' ?></th>
+                                    <th data-priority="6">G2 <br> <?= isset($customer_group['G2']) ? $customer_group['G2'] : 'NO CONFIG' ?></th>
+                                    <th data-priority="7">G3 <br> <?= isset($customer_group['G3']) ? $customer_group['G3'] : 'NO CONFIG' ?></th>
+                                    <th data-priority="8">G4 <br> <?= isset($customer_group['G4']) ? $customer_group['G4'] : 'NO CONFIG' ?></th>
+                                    <th data-priority="9">G5 <br> <?= isset($customer_group['G5']) ? $customer_group['G5'] : 'NO CONFIG' ?></th>
+                                    <th data-priority="10">G6 <br> <?= isset($customer_group['G6']) ? $customer_group['G6'] : 'NO CONFIG' ?></th>
                                     <th data-priority="3">Aksi</th>
                                 </tr>
                             </thead>
@@ -71,6 +77,55 @@ $assetsUrl = base_url('assets');
                                         <textarea id="category_description" name="category_description" class="form-control" placeholder="Deskripsi" data-parsley-maxlength="500" rows="3"></textarea>
                                     </div>
                                 </div>
+
+                                <p class="text-center"><b>Custom Point</b></p>
+
+                                <div class="form-group">
+                                    <label for="G1_custom_point" class="col-sm-12">G1 - <?= isset($customer_group['G1']) ? $customer_group['G1'] : 'NO CONFIG' ?></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="G1_custom_point" name="G1_custom_point" placeholder="Custom Point" value="" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="G2_custom_point" class="col-sm-12">G2 - <?= isset($customer_group['G2']) ? $customer_group['G2'] : 'NO CONFIG' ?></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="G2_custom_point" name="G2_custom_point" placeholder="Custom Point" value="" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="G3_custom_point" class="col-sm-12">G3 - <?= isset($customer_group['G3']) ? $customer_group['G3'] : 'NO CONFIG' ?></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="G3_custom_point" name="G3_custom_point" placeholder="Custom Point" value="" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="G4_custom_point" class="col-sm-12">G4 - <?= isset($customer_group['G4']) ? $customer_group['G4'] : 'NO CONFIG' ?></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="G4_custom_point" name="G4_custom_point" placeholder="Custom Point" value="" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="G5_custom_point" class="col-sm-12">G5 - <?= isset($customer_group['G5']) ? $customer_group['G5'] : 'NO CONFIG' ?></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="G5_custom_point" name="G5_custom_point" placeholder="Custom Point" value="" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="G6_custom_point" class="col-sm-12">G6 - <?= isset($customer_group['G6']) ? $customer_group['G6'] : 'NO CONFIG' ?></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="G6_custom_point" name="G6_custom_point" placeholder="Custom Point" value="" required>
+                                    </div>
+                                </div>
+
+
+
+
+
                             </div>
                             <div class="modal-footer justify-content-between">
                                 <button id="btncancel" class="btn btn-danger close-modal"><i class="fas fa-times-circle"></i> Batal</button>
@@ -94,6 +149,13 @@ $assetsUrl = base_url('assets');
     $(document).ready(function() {
         let formMode = '';
 
+        let G1_custom_point = new AutoNumeric('#G1_custom_point', configRp);
+        let G2_custom_point = new AutoNumeric('#G2_custom_point', configRp);
+        let G3_custom_point = new AutoNumeric('#G3_custom_point', configRp);
+        let G4_custom_point = new AutoNumeric('#G4_custom_point', configRp);
+        let G5_custom_point = new AutoNumeric('#G5_custom_point', configRp);
+        let G6_custom_point = new AutoNumeric('#G6_custom_point', configRp);
+
         function _initButton() {
             $('#btnadd').prop('disabled', !hasRole('category.add'));
             $('.btnedit').prop('disabled', !hasRole('category.edit'));
@@ -110,7 +172,7 @@ $assetsUrl = base_url('assets');
             responsive: true,
             fixedColumns: true,
             order: [
-                [1, 'asc']
+                [0, 'desc']
             ],
             language: {
                 url: lang_datatables,
@@ -128,15 +190,15 @@ $assetsUrl = base_url('assets');
             },
             columnDefs: [{
                     width: 100,
-                    targets: 3
+                    targets: [3, 4, 5, 6, 7, 8, 9]
                 },
                 {
-                    targets: [0, 3],
+                    targets: [9],
                     orderable: false,
                     searchable: false,
                 },
                 {
-                    targets: [0],
+                    targets: [0, 3, 4, 5, 6, 7, 8],
                     className: "text-right",
                 },
             ],
@@ -192,24 +254,37 @@ $assetsUrl = base_url('assets');
         function addMode() {
             let form = $('#frmcategory');
             $('#title-frmcategory').html('Tambah Kategori');
-            form[0].reset();
+
             form.parsley().reset();
             formMode = 'add';
             $('#category_id').val('0');
             $('#category_name').val('');
             $('#category_description').val('');
+            G1_custom_point.set(0);
+            G2_custom_point.set(0);
+            G3_custom_point.set(0);
+            G4_custom_point.set(0);
+            G5_custom_point.set(0);
+            G6_custom_point.set(0);
             $('#modal-category').modal(configModal);
         }
 
         function editMode(data) {
             let form = $('#frmcategory');
             $('#title-frmcategory').html('Ubah Kategori');
-            form[0].reset();
+
             form.parsley().reset();
             formMode = 'edit';
             $('#category_id').val(htmlEntities.decode(data.category_id));
             $('#category_name').val(htmlEntities.decode(data.category_name));
             $('#category_description').val(htmlEntities.decode(data.category_description));
+
+            G1_custom_point.set(parseFloat(data.G1_custom_point));
+            G2_custom_point.set(parseFloat(data.G2_custom_point));
+            G3_custom_point.set(parseFloat(data.G3_custom_point));
+            G4_custom_point.set(parseFloat(data.G4_custom_point));
+            G5_custom_point.set(parseFloat(data.G5_custom_point));
+            G6_custom_point.set(parseFloat(data.G6_custom_point));
             $('#modal-category').modal(configModal);
         }
 
@@ -245,7 +320,22 @@ $assetsUrl = base_url('assets');
                 message.question(question).then(function(answer) {
                     let yes = parseMessageResult(answer);
                     if (yes) {
-                        let formValues = form.serialize();
+
+                        let formValues = {
+                            category_id: $('#category_id').val(),
+                            category_name: $('#category_name').val(),
+                            category_description: $('#category_description').val(),
+                            G1_custom_point: parseFloat(G1_custom_point.getNumericString()),
+                            G2_custom_point: parseFloat(G2_custom_point.getNumericString()),
+                            G3_custom_point: parseFloat(G3_custom_point.getNumericString()),
+                            G4_custom_point: parseFloat(G4_custom_point.getNumericString()),
+                            G5_custom_point: parseFloat(G5_custom_point.getNumericString()),
+                            G6_custom_point: parseFloat(G6_custom_point.getNumericString()),
+                        };
+
+                        console.log(formValues);
+
+
                         btnSubmit.prop('disabled', true);
                         ajax_post(actUrl, formValues, {
                             success: function(response) {
@@ -318,6 +408,73 @@ $assetsUrl = base_url('assets');
                     })
                 }
             })
+        })
+
+        $('#G1_custom_point').on('change', function(e) {
+            let cp = G1_custom_point.getNumericString();
+            if (cp == null || cp == '') {
+                G1_custom_point.set(0);
+            } else {
+                if (parseFloat(cp) < 0) {
+                    G1_custom_point.set(0);
+                }
+            }
+        })
+
+        $('#G2_custom_point').on('change', function(e) {
+            let cp = G2_custom_point.getNumericString();
+            if (cp == null || cp == '') {
+                G2_custom_point.set(0);
+            } else {
+                if (parseFloat(cp) < 0) {
+                    G2_custom_point.set(0);
+                }
+            }
+        })
+
+
+        $('#G3_custom_point').on('change', function(e) {
+            let cp = G3_custom_point.getNumericString();
+            if (cp == null || cp == '') {
+                G3_custom_point.set(0);
+            } else {
+                if (parseFloat(cp) < 0) {
+                    G3_custom_point.set(0);
+                }
+            }
+        })
+
+        $('#G4_custom_point').on('change', function(e) {
+            let cp = G4_custom_point.getNumericString();
+            if (cp == null || cp == '') {
+                G4_custom_point.set(0);
+            } else {
+                if (parseFloat(cp) < 0) {
+                    G4_custom_point.set(0);
+                }
+            }
+        })
+
+        $('#G5_custom_point').on('change', function(e) {
+            let cp = G5_custom_point.getNumericString();
+            if (cp == null || cp == '') {
+                G5_custom_point.set(0);
+            } else {
+                if (parseFloat(cp) < 0) {
+                    G5_custom_point.set(0);
+                }
+            }
+        })
+
+        $('#G6_custom_point').on('change', function(e) {
+            let cp = G6_custom_point.getNumericString();
+            if (cp == null || cp == '') {
+                G6_custom_point.set(0);
+            } else {
+                if (parseFloat(cp) < 0) {
+                    G6_custom_point.set(0);
+                }
+            }
         })
 
         _initButton();

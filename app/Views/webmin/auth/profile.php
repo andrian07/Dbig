@@ -44,6 +44,9 @@ $assetsUrl = base_url('assets');
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
                             <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Ganti Password</a></li>
+                            <?php if ($has_password_control) : ?>
+                                <li class="nav-item"><a class="nav-link" href="#passwordcontrol" data-toggle="tab">Password Control</a></li>
+                            <?php endif; ?>
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
@@ -77,6 +80,39 @@ $assetsUrl = base_url('assets');
                                     </div>
                                 </form>
                             </div>
+
+                            <?php if ($has_password_control) : ?>
+                                <div class="tab-pane" id="passwordcontrol">
+                                    <form id="frmchangepin" class="form-horizontal">
+                                        <div class="form-group row">
+                                            <label for="fingerprint_status" class="col-sm-4 col-form-label">Fingerprint</label>
+                                            <div class="col-sm-8">
+                                                <?= $has_fingerprint ? '<span class="badge badge-success"><i class="fas fa-check-circle"></i></span>' : '<span class="badge badge-danger"><i class="fas fa-times-circle"></i></span>' ?>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label for="new_pin" class="col-sm-4 col-form-label">Pin baru</label>
+                                            <div class="col-sm-8">
+                                                <input type="password" class="form-control" id="new_pin" name="new_pin" placeholder="Pin Baru" value="" data-parsley-pattern="^[a-zA-Z0-9]+$" data-parsley-minlength="5" data-parsley-maxlength="100" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label for="repeat_pin" class="col-sm-4 col-form-label">Ulangi Pin</label>
+                                            <div class="col-sm-8">
+                                                <input type="password" class="form-control" id="repeat_pin" name="repeat_pin" placeholder="Ulangi Pin" value="" data-parsley-pattern="^[a-zA-Z0-9]+$" data-parsley-minlength="5" data-parsley-maxlength="100" data-parsley-equalto="#new_pin" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-12">
+                                                <button id="btnchangepin" class="btn btn-success float-right"><i class="fas fa-save"></i> Ubah Pin</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            <?php endif; ?>
                             <!-- /.tab-pane -->
                         </div>
                         <!-- /.tab-content -->
@@ -106,7 +142,7 @@ $assetsUrl = base_url('assets');
                     let yes = parseMessageResult(answer);
                     if (yes) {
                         let formValues = form.serialize();
-                        let actUrl = base_url + '/profile/update-password';
+                        let actUrl = base_url + '/webmin/profile/update-password';
                         btnSubmit.prop('disabled', true);
                         ajax_post(actUrl, formValues, {
                             success: function(response) {
@@ -132,6 +168,46 @@ $assetsUrl = base_url('assets');
 
             }
         })
+
+        <?php if ($has_password_control) : ?>
+            $('#btnchangepin').click(function(e) {
+                e.preventDefault();
+                let form = $('#frmchangepin');
+                form.parsley().validate();
+                if (form.parsley().isValid()) {
+                    let btnSubmit = $('#btnchangepin')
+                    let question = 'Yakin ingin menggganti pin anda?';
+                    message.question(question).then(answer => {
+                        let yes = parseMessageResult(answer);
+                        if (yes) {
+                            let formValues = form.serialize();
+                            let actUrl = base_url + '/webmin/profile/update-pin';
+                            btnSubmit.prop('disabled', true);
+                            ajax_post(actUrl, formValues, {
+                                success: function(response) {
+                                    if (response.success) {
+                                        if (response.result.success) {
+                                            form[0].reset();
+                                            notification.success(response.result.message);
+                                            form.parsley().reset();
+                                        } else {
+                                            message.error(response.result.message);
+                                        }
+                                    }
+                                    btnSubmit.prop('disabled', false);
+
+                                },
+                                error: function(response) {
+                                    btnSubmit.prop('disabled', false);
+                                }
+                            });
+
+                        }
+                    })
+
+                }
+            })
+        <?php endif; ?>
     })
 </script>
 <?= $this->endSection() ?>

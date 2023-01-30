@@ -618,22 +618,21 @@ class Select extends WebminController
 
                     'id'                  => $diplay_text,
 
-                    'value'               => $diplay_text.'('.$row['unit_name'].')',
+                    'value'               => $diplay_text . '(' . $row['unit_name'] . ')',
 
                     'item_id'             => $row['item_id'],
 
-                    'price'               => $row['G5_sales_price']  
+                    'price'               => $row['G5_sales_price']
 
                 ];
-
             }
 
             $result = ['success' => TRUE, 'num_product' => count($find_result), 'data' => $find_result, 'message' => ''];
-
         }
 
         resultJSON($result);
     }
+<<<<<<< Updated upstream
     
 
     public function salesman()
@@ -665,6 +664,10 @@ class Select extends WebminController
 
         $select2->generate();
     }
+=======
+
+
+>>>>>>> Stashed changes
 
     //--------------------------------------------------------------------
 

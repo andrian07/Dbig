@@ -1129,54 +1129,63 @@ $assetsUrl = base_url('assets');
                                     </div>
 
                                     <p class="text-center"><b>Detail Disc & Margin</b></p>
-                                    <table class="table table-striped table-hover table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Grup</th>
-                                                <th>Harga Diskon <small>(Rp)</small></th>
-                                                <th>Margin <small>(Rp)</small></th>
-                                                <th>Sisa Margin</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>G1&nbsp;-&nbsp;<?= isset($customer_group['G1']) ? $customer_group['G1'] : 'NO CONFIG' ?></td>
-                                                <td class="text-right" id="view_disc_G1">0.00</td>
-                                                <td class="text-right" id="view_margin_G1">0.00</td>
-                                                <td class="text-right" id="view_remain_margin_G1">0.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>G2&nbsp;-&nbsp;<?= isset($customer_group['G2']) ? $customer_group['G2'] : 'NO CONFIG' ?></td>
-                                                <td class="text-right" id="view_disc_G2">0.00</td>
-                                                <td class="text-right" id="view_margin_G2">0.00</td>
-                                                <td class="text-right" id="view_remain_margin_G2">0.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>G3&nbsp;-&nbsp;<?= isset($customer_group['G3']) ? $customer_group['G3'] : 'NO CONFIG' ?></td>
-                                                <td class="text-right" id="view_disc_G3">0.00</td>
-                                                <td class="text-right" id="view_margin_G3">0.00</td>
-                                                <td class="text-right" id="view_remain_margin_G3">0.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>G4&nbsp;-&nbsp;<?= isset($customer_group['G4']) ? $customer_group['G4'] : 'NO CONFIG' ?></td>
-                                                <td class="text-right" id="view_disc_G4">0.00</td>
-                                                <td class="text-right" id="view_margin_G4">0.00</td>
-                                                <td class="text-right" id="view_remain_margin_G4">0.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>G5&nbsp;-&nbsp;<?= isset($customer_group['G5']) ? $customer_group['G5'] : 'NO CONFIG' ?></td>
-                                                <td class="text-right" id="view_disc_G5">0.00</td>
-                                                <td class="text-right" id="view_margin_G5">0.00</td>
-                                                <td class="text-right" id="view_remain_margin_G5">0.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>G6&nbsp;-&nbsp;<?= isset($customer_group['G6']) ? $customer_group['G6'] : 'NO CONFIG' ?></td>
-                                                <td class="text-right" id="view_disc_G6">0.00</td>
-                                                <td class="text-right" id="view_margin_G6">0.00</td>
-                                                <td class="text-right" id="view_remain_margin_G6">0.00</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Grup</th>
+                                                    <th>Harga Diskon <small>(Rp)</small></th>
+                                                    <th>Margin <small>(Rp)</small></th>
+                                                    <th>Sisa Margin<small>(%)</small></th>
+                                                    <th>Alokasi Margin<small>(Rp)</small></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>G1&nbsp;-&nbsp;<?= isset($customer_group['G1']) ? $customer_group['G1'] : 'NO CONFIG' ?></td>
+                                                    <td class="text-right" id="view_disc_G1">0.00</td>
+                                                    <td class="text-right" id="view_margin_G1">0.00</td>
+                                                    <td class="text-right" id="view_remain_margin_G1">0.00</td>
+                                                    <td class="text-right" id="view_allocation_margin_G1">0.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>G2&nbsp;-&nbsp;<?= isset($customer_group['G2']) ? $customer_group['G2'] : 'NO CONFIG' ?></td>
+                                                    <td class="text-right" id="view_disc_G2">0.00</td>
+                                                    <td class="text-right" id="view_margin_G2">0.00</td>
+                                                    <td class="text-right" id="view_remain_margin_G2">0.00</td>
+                                                    <td class="text-right" id="view_allocation_margin_G2">0.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>G3&nbsp;-&nbsp;<?= isset($customer_group['G3']) ? $customer_group['G3'] : 'NO CONFIG' ?></td>
+                                                    <td class="text-right" id="view_disc_G3">0.00</td>
+                                                    <td class="text-right" id="view_margin_G3">0.00</td>
+                                                    <td class="text-right" id="view_remain_margin_G3">0.00</td>
+                                                    <td class="text-right" id="view_allocation_margin_G3">0.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>G4&nbsp;-&nbsp;<?= isset($customer_group['G4']) ? $customer_group['G4'] : 'NO CONFIG' ?></td>
+                                                    <td class="text-right" id="view_disc_G4">0.00</td>
+                                                    <td class="text-right" id="view_margin_G4">0.00</td>
+                                                    <td class="text-right" id="view_remain_margin_G4">0.00</td>
+                                                    <td class="text-right" id="view_allocation_margin_G4">0.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>G5&nbsp;-&nbsp;<?= isset($customer_group['G5']) ? $customer_group['G5'] : 'NO CONFIG' ?></td>
+                                                    <td class="text-right" id="view_disc_G5">0.00</td>
+                                                    <td class="text-right" id="view_margin_G5">0.00</td>
+                                                    <td class="text-right" id="view_remain_margin_G5">0.00</td>
+                                                    <td class="text-right" id="view_allocation_margin_G5">0.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>G6&nbsp;-&nbsp;<?= isset($customer_group['G6']) ? $customer_group['G6'] : 'NO CONFIG' ?></td>
+                                                    <td class="text-right" id="view_disc_G6">0.00</td>
+                                                    <td class="text-right" id="view_margin_G6">0.00</td>
+                                                    <td class="text-right" id="view_remain_margin_G6">0.00</td>
+                                                    <td class="text-right" id="view_allocation_margin_G6">0.00</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
 
                             </div>
@@ -1962,7 +1971,7 @@ $assetsUrl = base_url('assets');
             item_margin_rate_G6.set(mrG6);
         }
 
-        $('#product_content').on('change blur', function(e) {
+        $('#product_content').on('change', function(e) {
             let pc = 1;
             if (!(item_product_content.getNumericString() == '' || item_product_content.getNumericString() == null)) {
                 pc = parseFloat(item_product_content.getNumericString());
@@ -1983,7 +1992,7 @@ $assetsUrl = base_url('assets');
             reCalcMarginRate();
         })
 
-        $('#purchase_price').on('change blur', function(e) {
+        $('#purchase_price').on('change', function(e) {
             if (item_purchase_price.getNumericString() == '' || item_purchase_price.getNumericString() == null) {
                 item_purchase_price.set(0);
             }
@@ -1998,7 +2007,7 @@ $assetsUrl = base_url('assets');
             reCalcMarginRate();
         })
 
-        $('#margin_rate_G1').on('change blur', function(e) {
+        $('#margin_rate_G1').on('change', function(e) {
             let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
             let mr = 0;
             let ds = parseFloat(item_disc_seasonal.getNumericString());
@@ -2035,9 +2044,10 @@ $assetsUrl = base_url('assets');
 
             let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G1);
             $('#view_remain_margin_G1').html(numberFormat(remain_margin_rate, true) + '%');
+            $('#view_allocation_margin_G1').html(numberFormat(item_margin_alocation_G1, true));
         })
 
-        $('#margin_rate_G2').on('change blur', function(e) {
+        $('#margin_rate_G2').on('change', function(e) {
             let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
             let mr = 0;
             let ds = parseFloat(item_disc_seasonal.getNumericString());
@@ -2074,9 +2084,10 @@ $assetsUrl = base_url('assets');
 
             let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G2);
             $('#view_remain_margin_G2').html(numberFormat(remain_margin_rate, true) + '%');
+            $('#view_allocation_margin_G2').html(numberFormat(item_margin_alocation_G2, true));
         })
 
-        $('#margin_rate_G3').on('change blur', function(e) {
+        $('#margin_rate_G3').on('change', function(e) {
             let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
             let mr = 0;
             let ds = parseFloat(item_disc_seasonal.getNumericString());
@@ -2113,9 +2124,10 @@ $assetsUrl = base_url('assets');
 
             let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G3);
             $('#view_remain_margin_G3').html(numberFormat(remain_margin_rate, true) + '%');
+            $('#view_allocation_margin_G3').html(numberFormat(item_margin_alocation_G3, true));
         })
 
-        $('#margin_rate_G4').on('change blur', function(e) {
+        $('#margin_rate_G4').on('change', function(e) {
             let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
             let mr = 0;
             let ds = parseFloat(item_disc_seasonal.getNumericString());
@@ -2152,9 +2164,10 @@ $assetsUrl = base_url('assets');
 
             let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G4);
             $('#view_remain_margin_G4').html(numberFormat(remain_margin_rate, true) + '%');
+            $('#view_allocation_margin_G4').html(numberFormat(item_margin_alocation_G4, true));
         })
 
-        $('#margin_rate_G5').on('change blur', function(e) {
+        $('#margin_rate_G5').on('change', function(e) {
             let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
             let mr = 0;
             let ds = parseFloat(item_disc_seasonal.getNumericString());
@@ -2191,9 +2204,10 @@ $assetsUrl = base_url('assets');
 
             let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G5);
             $('#view_remain_margin_G5').html(numberFormat(remain_margin_rate, true) + '%');
+            $('#view_allocation_margin_G5').html(numberFormat(item_margin_alocation_G5, true));
         })
 
-        $('#margin_rate_G6').on('change blur', function(e) {
+        $('#margin_rate_G6').on('change', function(e) {
             let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
             let mr = 0;
             let ds = parseFloat(item_disc_seasonal.getNumericString());
@@ -2230,9 +2244,10 @@ $assetsUrl = base_url('assets');
 
             let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G6);
             $('#view_remain_margin_G6').html(numberFormat(remain_margin_rate, true) + '%');
+            $('#view_allocation_margin_G6').html(numberFormat(item_margin_alocation_G6, true));
         })
 
-        $('#sales_price_G1').on('change blur', function(e) {
+        $('#sales_price_G1').on('change', function(e) {
             let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
             let mr = 0;
             let sp = 0;
@@ -2268,11 +2283,10 @@ $assetsUrl = base_url('assets');
 
             let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G1);
             $('#view_remain_margin_G1').html(numberFormat(remain_margin_rate, true) + '%');
-
-
+            $('#view_allocation_margin_G1').html(numberFormat(item_margin_alocation_G1, true));
         })
 
-        $('#sales_price_G2').on('change blur', function(e) {
+        $('#sales_price_G2').on('change', function(e) {
             let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
             let mr = 0;
             let sp = 0;
@@ -2308,9 +2322,10 @@ $assetsUrl = base_url('assets');
 
             let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G2);
             $('#view_remain_margin_G2').html(numberFormat(remain_margin_rate, true) + '%');
+            $('#view_allocation_margin_G2').html(numberFormat(item_margin_alocation_G2, true));
         })
 
-        $('#sales_price_G3').on('change blur', function(e) {
+        $('#sales_price_G3').on('change', function(e) {
             let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
             let mr = 0;
             let sp = 0;
@@ -2346,9 +2361,10 @@ $assetsUrl = base_url('assets');
 
             let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G3);
             $('#view_remain_margin_G3').html(numberFormat(remain_margin_rate, true) + '%');
+            $('#view_allocation_margin_G3').html(numberFormat(item_margin_alocation_G3, true));
         })
 
-        $('#sales_price_G4').on('change blur', function(e) {
+        $('#sales_price_G4').on('change', function(e) {
             let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
             let mr = 0;
             let sp = 0;
@@ -2384,9 +2400,10 @@ $assetsUrl = base_url('assets');
 
             let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G4);
             $('#view_remain_margin_G4').html(numberFormat(remain_margin_rate, true) + '%');
+            $('#view_allocation_margin_G4').html(numberFormat(item_margin_alocation_G4, true));
         })
 
-        $('#sales_price_G5').on('change blur', function(e) {
+        $('#sales_price_G5').on('change', function(e) {
             let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
             let mr = 0;
             let sp = 0;
@@ -2422,9 +2439,10 @@ $assetsUrl = base_url('assets');
 
             let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G5);
             $('#view_remain_margin_G5').html(numberFormat(remain_margin_rate, true) + '%');
+            $('#view_allocation_margin_G5').html(numberFormat(item_margin_alocation_G5, true));
         })
 
-        $('#sales_price_G6').on('change blur', function(e) {
+        $('#sales_price_G6').on('change', function(e) {
             let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
             let mr = 0;
             let sp = 0;
@@ -2460,9 +2478,10 @@ $assetsUrl = base_url('assets');
 
             let remain_margin_rate = calcPercentRate(ppt, item_promo_price_G6);
             $('#view_remain_margin_G6').html(numberFormat(remain_margin_rate, true) + '%');
+            $('#view_allocation_margin_G6').html(numberFormat(item_margin_alocation_G6, true));
         })
 
-        $('#disc_seasonal').on('change blur', function(e) {
+        $('#disc_seasonal').on('change', function(e) {
             let ds = 0;
             let ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
             let ma = parseFloat(item_margin_allocation.getNumericString());
@@ -2555,29 +2574,35 @@ $assetsUrl = base_url('assets');
             $('#view_disc_G1').html(numberFormat(item_promo_price_G1, true));
             $('#view_margin_G1').html(numberFormat(item_remain_margin_G1, true));
             $('#view_remain_margin_G1').html(numberFormat(rmrG1, true) + '%');
+            $('#view_allocation_margin_G1').html(numberFormat(item_margin_alocation_G1, true));
 
             $('#view_disc_G2').html(numberFormat(item_promo_price_G2, true));
             $('#view_margin_G2').html(numberFormat(item_remain_margin_G2, true));
             $('#view_remain_margin_G2').html(numberFormat(rmrG2, true) + '%');
+            $('#view_allocation_margin_G2').html(numberFormat(item_margin_alocation_G2, true));
 
             $('#view_disc_G3').html(numberFormat(item_promo_price_G3, true));
             $('#view_margin_G3').html(numberFormat(item_remain_margin_G3, true));
             $('#view_remain_margin_G3').html(numberFormat(rmrG3, true) + '%');
+            $('#view_allocation_margin_G3').html(numberFormat(item_margin_alocation_G3, true));
 
             $('#view_disc_G4').html(numberFormat(item_promo_price_G4, true));
             $('#view_margin_G4').html(numberFormat(item_remain_margin_G4, true));
             $('#view_remain_margin_G4').html(numberFormat(rmrG4, true) + '%');
+            $('#view_allocation_margin_G4').html(numberFormat(item_margin_alocation_G4, true));
 
             $('#view_disc_G5').html(numberFormat(item_promo_price_G5, true));
             $('#view_margin_G5').html(numberFormat(item_remain_margin_G5, true));
             $('#view_remain_margin_G5').html(numberFormat(rmrG5, true) + '%');
+            $('#view_allocation_margin_G5').html(numberFormat(item_margin_alocation_G5, true));
 
             $('#view_disc_G6').html(numberFormat(item_promo_price_G6, true));
             $('#view_margin_G6').html(numberFormat(item_remain_margin_G6, true));
             $('#view_remain_margin_G6').html(numberFormat(rmrG6, true) + '%');
+            $('#view_allocation_margin_G6').html(numberFormat(item_margin_alocation_G6, true));
         })
 
-        $('#margin_allocation').on('change blur', function(e) {
+        $('#margin_allocation').on('change', function(e) {
             let ma = 0;
 
             if (item_margin_allocation.getNumericString() == '' || item_margin_allocation.getNumericString() == null) {
@@ -2602,6 +2627,13 @@ $assetsUrl = base_url('assets');
                 item_margin_alocation_G5 = 0;
                 item_margin_alocation_G6 = 0;
             }
+
+            $('#view_allocation_margin_G1').html(numberFormat(item_margin_alocation_G1, true));
+            $('#view_allocation_margin_G2').html(numberFormat(item_margin_alocation_G2, true));
+            $('#view_allocation_margin_G3').html(numberFormat(item_margin_alocation_G3, true));
+            $('#view_allocation_margin_G4').html(numberFormat(item_margin_alocation_G4, true));
+            $('#view_allocation_margin_G5').html(numberFormat(item_margin_alocation_G5, true));
+            $('#view_allocation_margin_G6').html(numberFormat(item_margin_alocation_G6, true));
         })
 
         function addItem() {
@@ -2673,26 +2705,32 @@ $assetsUrl = base_url('assets');
             $('#view_disc_G1').html('0.00');
             $('#view_margin_G1').html('0.00');
             $('#view_remain_margin_G1').html('0.00');
+            $('#view_allocation_margin_G1').html('0.00');
 
             $('#view_disc_G2').html('0.00');
             $('#view_margin_G2').html('0.00');
             $('#view_remain_margin_G2').html('0.00');
+            $('#view_allocation_margin_G2').html('0.00');
 
             $('#view_disc_G3').html('0.00');
             $('#view_margin_G3').html('0.00');
             $('#view_remain_margin_G3').html('0.00');
+            $('#view_allocation_margin_G3').html('0.00');
 
             $('#view_disc_G4').html('0.00');
             $('#view_margin_G4').html('0.00');
             $('#view_remain_margin_G4').html('0.00');
+            $('#view_allocation_margin_G4').html('0.00');
 
             $('#view_disc_G5').html('0.00');
             $('#view_margin_G5').html('0.00');
             $('#view_remain_margin_G5').html('0.00');
+            $('#view_allocation_margin_G5').html('0.00');
 
             $('#view_disc_G6').html('0.00');
             $('#view_margin_G6').html('0.00');
             $('#view_remain_margin_G6').html('0.00');
+            $('#view_allocation_margin_G6').html('0.00');
 
             $('#is_sale').prop('checked', true);
             $('#show_on_mobile_app').prop('checked', false);
@@ -2797,26 +2835,32 @@ $assetsUrl = base_url('assets');
             $('#view_disc_G1').html(numberFormat(item_promo_price_G1, true));
             $('#view_margin_G1').html(numberFormat(item_remain_margin_G1, true));
             $('#view_remain_margin_G1').html(numberFormat(rmG1, true) + '%');
+            $('#view_allocation_margin_G1').html(numberFormat(item_margin_alocation_G1, true));
 
             $('#view_disc_G2').html(numberFormat(item_promo_price_G2, true));
             $('#view_margin_G2').html(numberFormat(item_remain_margin_G2, true));
             $('#view_remain_margin_G2').html(numberFormat(rmG2, true) + '%');
+            $('#view_allocation_margin_G2').html(numberFormat(item_margin_alocation_G2, true));
 
             $('#view_disc_G3').html(numberFormat(item_promo_price_G3, true));
             $('#view_margin_G3').html(numberFormat(item_remain_margin_G3, true));
             $('#view_remain_margin_G3').html(numberFormat(rmG3, true) + '%');
+            $('#view_allocation_margin_G3').html(numberFormat(item_margin_alocation_G3, true));
 
             $('#view_disc_G4').html(numberFormat(item_promo_price_G4, true));
             $('#view_margin_G4').html(numberFormat(item_remain_margin_G4, true));
             $('#view_remain_margin_G4').html(numberFormat(rmG4, true) + '%');
+            $('#view_allocation_margin_G4').html(numberFormat(item_margin_alocation_G4, true));
 
             $('#view_disc_G5').html(numberFormat(item_promo_price_G5, true));
             $('#view_margin_G5').html(numberFormat(item_remain_margin_G5, true));
             $('#view_remain_margin_G5').html(numberFormat(rmG5, true) + '%');
+            $('#view_allocation_margin_G5').html(numberFormat(item_margin_alocation_G5, true));
 
             $('#view_disc_G6').html(numberFormat(item_promo_price_G6, true));
             $('#view_margin_G6').html(numberFormat(item_remain_margin_G6, true));
             $('#view_remain_margin_G6').html(numberFormat(rmG6, true) + '%');
+            $('#view_allocation_margin_G6').html(numberFormat(item_margin_alocation_G6, true));
 
             if (data.is_sale == 'Y') {
                 $('#is_sale').prop('checked', true);

@@ -116,4 +116,45 @@ class Devman extends BaseController
         }
         resultJSON($result);
     }
+
+    public function install()
+    {
+        $migration = $this->request->getGet('migration') == NULL ? FALSE : TRUE;
+
+        $configDir = $this->myConfig->uploadImage;
+        foreach ($configDir as $cfg) {
+            $upload_dir     = isset($cfg['upload_dir']) ? $cfg['upload_dir'] : NULL;
+            $thumb_dir      = isset($cfg['thumb_dir']) ? $cfg['thumb_dir'] : NULL;
+            if ($upload_dir != NULL) {
+                if (!file_exists($upload_dir)) {
+                    $run    = mkdir($upload_dir, 0777, true);
+                    $result = !$run ? 'FAILED' : 'SUCCESS';
+                    echo "CREATE DIR $upload_dir : $result </br>";
+                }
+            }
+
+            if ($thumb_dir != NULL) {
+                if (!file_exists($thumb_dir)) {
+                    $run    = mkdir($thumb_dir, 0777, true);
+                    $result = !$run ? 'FAILED' : 'SUCCESS';
+                    echo "CREATE DIR $thumb_dir : $result </br>";
+                }
+            }
+        }
+
+        if ($migration) {
+            $migrate = \Config\Services::migrations();
+            try {
+                $migrate->latest();
+                echo "Run Migration : SUCCESS </br>";
+            } catch (Throwable $e) {
+                echo "Run Migration : FAILED </br>";
+            }
+        }
+
+        // run seeder //
+        $seeder = \Config\Database::seeder();
+        echo "Run InitSeeder </br>";
+        $seeder->call('InitSeeder');
+    }
 }

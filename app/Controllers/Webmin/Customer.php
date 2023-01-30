@@ -57,7 +57,8 @@ class Customer extends WebminController
                 $table->db->where('customer_point' . $fp,  $point);
             }
 
-            $config_label_group = $this->appConfig->get('default', 'label_customer_group');
+
+            $config_label_group     = $this->appConfig->get('default', 'label_customer_group');
 
             $table->renderColumn(function ($row, $i) use ($config_label_group) {
                 $column = [];
@@ -72,6 +73,10 @@ class Customer extends WebminController
                 $column[] = indo_short_date($row['exp_date']);
                 $btns = [];
                 $prop =  'data-id="' . $row['customer_id'] . '" data-name="' . esc($row['customer_name']) . '"';
+                if ($row['customer_code'] == 'CASH') {
+                    $prop .= ' disabled';
+                }
+
                 $btns[] = '<button ' . $prop . ' class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></button>&nbsp;';
                 $btns[] = '<button ' . $prop . ' class="btn btn-sm btn-default btnresetpassword mb-2" data-toggle="tooltip" data-placement="top" data-title="Reset Kata Sandi"><i class="fas fa-key"></i></button><br>';
                 $btns[] = button_edit($prop);
