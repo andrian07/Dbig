@@ -3,27 +3,47 @@
 namespace App\Controllers\Webmin;
 
 use App\Models\Auth\M_user_account;
+use App\Models\M_password_control;
 use App\Controllers\Base\WebminController;
+
 
 class Profile extends WebminController
 {
     protected $M_user_account;
+    protected $M_password_control;
 
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);
         $this->M_user_account = new M_user_account;
+        $this->M_password_control = new M_password_control;
     }
 
     public function index()
     {
+        $user_id            = $this->userLogin['user_id'];
+        $getPasswordControl = $this->M_password_control->getPasswordControlByUserId($user_id)->getRowArray();
+        $hasPasswordControl = FALSE;
+        $hasFingerPrint     = FALSE;
+
+        if ($getPasswordControl != NULL) {
+            $hasPasswordControl = TRUE;
+
+            if (!empty($getPasswordControl['user_index_fingerprint'])) {
+                $hasFingerPrint = TRUE;
+            }
+        }
+
         $data = [
-            'title'     => 'Profil',
+            'title'                 => 'Profil',
+            'has_password_control'  => $hasPasswordControl,
+            'has_fingerprint'       => $hasFingerPrint
         ];
+
         return $this->renderView('auth/profile', $data);
     }
 
-    public function update_password()
+    public function updatePassword()
     {
         $this->validationRequest(TRUE);
         $validation =  \Config\Services::validation();
@@ -68,6 +88,45 @@ class Profile extends WebminController
         }
         resultJSON($result);
     }
+
+    public function updatePin()
+    {
+        $this->validationRequest(TRUE);
+        $validation =  \Config\Services::validation();
+
+        $input = [
+            'user_id'       => $this->userLogin['user_id'],
+            'new_pin'       => $this->request->getPost('new_pin'),
+            'repeat_pin'    => $this->request->getPost('repeat_pin'),
+        ];
+
+        $validation->setRules([
+            'new_pin'       => ['rules' => 'required|min_length[5]|max_length[100]'],
+            'repeat_pin'    => ['rules' => 'required|min_length[5]|max_length[100]|matches[new_pin]'],
+        ]);
+
+        if ($validation->run($input) === FALSE) {
+            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        } else {
+            $getPasswordControl = $this->M_password_control->getPasswordControlByUserId($input['user_id'])->getRowArray();
+            if ($getPasswordControl == NULL) {
+                $result = ['success' => FALSE, 'message' => 'User tidak ditemukan'];
+            } else {
+                $update_pin = [
+                    'password_control_id'       => $getPasswordControl['password_control_id'],
+                    'user_pin'                  => md5($input['new_pin']),
+                ];
+                $save = $this->M_password_control->updatePasswordControl($update_pin);
+                if ($save) {
+                    $result = ['success' => TRUE, 'message' => 'Pin berhasil diganti'];
+                } else {
+                    $result = ['success' => FALSE, 'message' => 'Pin gagal diganti'];
+                }
+            }
+        }
+        resultJSON($result);
+    }
+
 
 
 

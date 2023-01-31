@@ -31,12 +31,15 @@ class M_password_control extends Model
     public function getPasswordControlByUserId($user_id = '', $show_deleted = FALSE)
     {
         $builder = $this->db->table($this->table);
+        $builder->select('password_control.*,user_account.user_index_fingerprint');
+        $builder->join('user_account', 'user_account.user_id=password_control.user_id');
+
         if ($user_id  != '') {
-            $builder->where(['user_id' => $user_id]);
+            $builder->where(['password_control.user_id' => $user_id]);
         }
 
         if ($show_deleted == FALSE) {
-            $builder->where(['deleted' => 'N']);
+            $builder->where(['password_control.deleted' => 'N']);
         }
 
         return $builder->get();
@@ -58,7 +61,7 @@ class M_password_control extends Model
 
     public function insertPasswordControl($data)
     {
-        $this->db->query('LOCK TABLES password_control WRITE');
+        $this->db->query('LOCK TABLES password_control WRITE,user_account READ');
         $saveQueries = NULL;
         $user_id = $data['user_id'];
 

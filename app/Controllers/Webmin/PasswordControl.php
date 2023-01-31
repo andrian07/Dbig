@@ -107,7 +107,9 @@ class PasswordControl extends WebminController
         } else {
             if ($type == 'add') {
                 if ($this->role->hasRole('password_control.add')) {
+                    helper('text');
                     unset($input['password_control_id']);
+                    $input['user_pin'] = md5(random_string('numeric', 8));
                     $save = $this->M_password_control->insertPasswordControl($input);
                     if ($save) {
                         $result = ['success' => TRUE, 'message' => 'Data akun berhasil disimpan'];

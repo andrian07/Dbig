@@ -130,8 +130,12 @@ class Auth extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => '3',
             ],
-            'user_fingerprint' => [
-                'type' => 'BLOB',
+            'user_index_fingerprint' => [
+                'type' => 'LONGTEXT',
+                'null' => TRUE
+            ],
+            'user_middle_fingerprint' => [
+                'type' => 'LONGTEXT',
                 'null' => TRUE
             ],
             'active' => [

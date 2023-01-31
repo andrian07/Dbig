@@ -6,7 +6,7 @@ use CodeIgniter\Config\BaseConfig;
 
 class MyApp extends BaseConfig
 {
-    public $allowedHosts        = ['localhost','dbig.stoklogistiksks.com'];
+    public $allowedHosts        = ['localhost', 'dbig.stoklogistiksks.com'];
     public $uploadFileType      = [
         'image' => ['jpg', 'jpeg', 'png']
     ];

@@ -95,7 +95,6 @@ $routes->group('api', static function ($routes) {
     //$routes->post('itemPoint', 'Api::getitempoint');
 
     
-    
 });
 
 $routes->group('devman', static function ($routes) {
@@ -113,6 +112,8 @@ $routes->group('devman', static function ($routes) {
     $routes->post('log-queries-table', 'Devman::getLogQueries', ['filter' => 'devauth']);
 
     $routes->get('log-queries-detail/(:num)', 'Devman::getLogQueriesDetail/$1', ['filter' => 'devauth']);
+
+    $routes->get('install', 'Devman::install', ['filter' => 'devauth']);
 });
 
 
@@ -131,10 +132,9 @@ $routes->group('webmin', static function ($routes) {
 
 
 $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
-
     $routes->get('profile', 'Webmin\Profile::index');
-
-    $routes->get('profile/update-password', 'Webmin\Profile::update_password');
+    $routes->post('profile/update-password', 'Webmin\Profile::updatePassword');
+    $routes->post('profile/update-pin', 'Webmin\Profile::updatePin');
 });
 
 
@@ -508,7 +508,6 @@ $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static funct
     $routes->get('getbyid/(:num)', 'Webmin\Purchase_order::getById/$1');
 
     $routes->post('update-status-item', 'Webmin\Purchase_order::UpdateStatusItem');
-
 });
 
 
@@ -534,7 +533,6 @@ $routes->group('webmin/submission', ['filter' => 'webminauth'], static function 
     $routes->get('get-submission-detail/(:alphanum)', 'Webmin\Submission::getSubmissionDetail/$1');
 
     $routes->get('getbyid/(:num)', 'Webmin\Submission::getById/$1');
-    
 });
 
 
@@ -601,9 +599,6 @@ $routes->group('webmin/consignment', ['filter' => 'webminauth'], static function
 
     $routes->get('recap-consignment', 'Webmin\Consignment\Consignment::recapConsignment');
 
-    
-
-
 });
 
 /* end pembelian */
@@ -635,7 +630,6 @@ $routes->group('webmin/sales-admin', ['filter' => 'webminauth'], static function
     $routes->get('get-salesadmin-footer', 'Webmin\Sales_admin::getSalesadminFooter');
 
     $routes->post('save/(:alpha)', 'Webmin\Sales_admin::save/$1');
-
 });
 
 /* end penjualan admin */
@@ -683,12 +677,11 @@ $routes->group('webmin/payment', ['filter' => 'webminauth'], static function ($r
 
     $routes->post('tblreceivablehistory', 'Webmin\Payment\Receivable_repayment::tbl_receivablehistory');
 
-     
-     
-    
+
+
+
 
     /* End Pelunasan Piutang */
-
 });
 
 
@@ -845,7 +838,6 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 /* Select2 */
 
 $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($routes) {
-
     $routes->get('store', 'Webmin\Select::store');
     
     $routes->get('user-group', 'Webmin\Select::userGroup');
@@ -889,7 +881,7 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
     $routes->get('no-po-consignment', 'Webmin\Select::noPoConsignment');
 
     $routes->get('payment-method', 'Webmin\Select::payment_method');
-    
+
     $routes->get('salesman', 'Webmin\Select::salesman');
 });
 
@@ -953,6 +945,7 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
 
 
     //$routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');
+
 
     $routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');
 

@@ -20,7 +20,8 @@ class Category extends WebminController
     public function index()
     {
         $data = [
-            'title'         => 'Kategori'
+            'title'             => 'Kategori',
+            'customer_group'    => $this->appConfig->get('default', 'customer_group')
         ];
         return $this->renderView('masterdata/category', $data, 'category.view');
     }
@@ -31,7 +32,7 @@ class Category extends WebminController
         if ($this->role->hasRole('category.view')) {
             helper('datatable');
             $table = new \App\Libraries\Datatables('ms_category');
-            $table->db->select('category_id,category_name,category_description');
+            $table->db->select('category_id,category_name,category_description,G1_custom_point,G2_custom_point,G3_custom_point,G4_custom_point,G5_custom_point,G6_custom_point');
             $table->db->where('deleted', 'N');
 
             $table->renderColumn(function ($row, $i) {
@@ -40,7 +41,12 @@ class Category extends WebminController
                 $column[] = $i;
                 $column[] = esc($row['category_name']);
                 $column[] = esc($row['category_description']);
-
+                $column[] = numberFormat($row['G1_custom_point'], TRUE);
+                $column[] = numberFormat($row['G2_custom_point'], TRUE);
+                $column[] = numberFormat($row['G3_custom_point'], TRUE);
+                $column[] = numberFormat($row['G4_custom_point'], TRUE);
+                $column[] = numberFormat($row['G5_custom_point'], TRUE);
+                $column[] = numberFormat($row['G6_custom_point'], TRUE);
                 $btns = [];
                 $prop =  'data-id="' . $row['category_id'] . '" data-name="' . esc($row['category_name']) . '"';
                 $btns[] = button_edit($prop);
@@ -50,7 +56,7 @@ class Category extends WebminController
                 return $column;
             });
 
-            $table->orderColumn  = ['', 'category_name', 'category_description', ''];
+            $table->orderColumn  = ['created_at', 'category_name', 'category_description', 'G1_custom_point', 'G2_custom_point', 'G3_custom_point', 'G4_custom_point', 'G5_custom_point', 'G6_custom_point', ''];
             $table->searchColumn = ['category_name', 'category_description'];
             $table->generate();
         }
@@ -109,12 +115,24 @@ class Category extends WebminController
             'category_id'           => $this->request->getPost('category_id'),
             'category_name'         => $this->request->getPost('category_name'),
             'category_description'  => $this->request->getPost('category_description'),
+            'G1_custom_point'       => $this->request->getPost('G1_custom_point'),
+            'G2_custom_point'       => $this->request->getPost('G2_custom_point'),
+            'G3_custom_point'       => $this->request->getPost('G3_custom_point'),
+            'G4_custom_point'       => $this->request->getPost('G4_custom_point'),
+            'G5_custom_point'       => $this->request->getPost('G5_custom_point'),
+            'G6_custom_point'       => $this->request->getPost('G6_custom_point'),
         ];
 
         $validation->setRules([
             'category_id'           => ['rules' => 'required'],
             'category_name'         => ['rules' => 'required|max_length[200]|is_unique[ms_category.category_name,category_id,{category_id}]'],
-            'category_description'  => ['rules' => 'max_length[500]']
+            'category_description'  => ['rules' => 'max_length[500]'],
+            'G1_custom_point'       => ['rules' => 'required'],
+            'G2_custom_point'       => ['rules' => 'required'],
+            'G3_custom_point'       => ['rules' => 'required'],
+            'G4_custom_point'       => ['rules' => 'required'],
+            'G5_custom_point'       => ['rules' => 'required'],
+            'G6_custom_point'       => ['rules' => 'required'],
         ]);
 
 
