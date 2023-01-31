@@ -1521,14 +1521,17 @@ $assetsUrl = base_url('assets');
         {
           let footer_sub_total_cal = parseFloat(footer_sub_total.getNumericString());
           let footer_total_discount_cal = parseFloat(footer_total_discount.getNumericString());
-          footer_total_ppn.set((footer_sub_total_cal - footer_total_discount_cal) * 0.11);
+          let footer_total_ppn_cal = (footer_sub_total_cal - footer_total_discount_cal) * 0.11;
+          footer_total_ppn.set(footer_total_ppn_cal);
+          footer_total_invoice.set(footer_sub_total_cal - footer_total_discount_cal + footer_total_ppn_cal);
           footer_dp.set(0);
-          footer_credit.set(footer_sub_total_cal - footer_total_discount_cal);
+          footer_credit.set(footer_sub_total_cal - footer_total_discount_cal + footer_total_ppn_cal);
       }else{
           let footer_sub_total_cal = parseFloat(footer_sub_total.getNumericString());
           let footer_total_discount_cal = parseFloat(footer_total_discount.getNumericString());
           footer_total_ppn.set(0);
           footer_dp.set(0);
+          footer_total_invoice.set(footer_sub_total_cal - footer_total_discount_cal);
           footer_credit.set(footer_sub_total_cal - footer_total_discount_cal);
       }
     });
@@ -2083,7 +2086,7 @@ $('#btnsave').click(function(e) {
 
                         btnSubmit.prop('disabled', false);
 
-                        updateTableHeader();
+                        updateTable();
 
                     },
 
@@ -2104,6 +2107,12 @@ $('#btnsave').click(function(e) {
     }
 
 });
+
+function updateTable() {
+
+   tblpurchaseorders.ajax.reload(null, false);
+
+}
 
 _initButton();
 

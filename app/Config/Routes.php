@@ -597,8 +597,11 @@ $routes->group('webmin/consignment', ['filter' => 'webminauth'], static function
 
     $routes->get('copy-purchase-order-consignment/(:alphanum)', 'Webmin\Consignment\Consignment::copyPurchaseOrderConsignment/$1');
 
-
     $routes->get('get-consignment-po-detail/(:alphanum)', 'Webmin\Consignment\Consignment::getConsignmentPoDetail/$1');
+
+    $routes->get('recap-consignment', 'Webmin\Consignment\Consignment::recapConsignment');
+
+    
 
 
 });
@@ -734,6 +737,8 @@ $routes->group('webmin/stock-transfer', ['filter' => 'webminauth'], static funct
     $routes->post('save/(:alpha)', 'Webmin\Stocktransfer\Stocktransfer::save/$1');
 
     $routes->post('tblstocktransfer', 'Webmin\Stocktransfer\Stocktransfer::tblstocktransfer');
+
+    $routes->get('get-stock-transfer-detail/(:alphanum)', 'Webmin\Stocktransfer\Stocktransfer::getStockTransferDetail/$1');
 });
 
 /* end Stock Transfer*/

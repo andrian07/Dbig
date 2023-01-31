@@ -12,6 +12,7 @@ class M_consignment extends Model
     protected $table_temp_consignment = 'temp_purchase_consignment';
     protected $table_warehouse = 'ms_warehouse';
     protected $table_hd_purchase_consignment = 'hd_purchase_consignment';
+    protected $table_hd_submission = 'hd_submission';
 
 
     public function getDtConsignmentPoDetail($purchase_order_consignment_invoice = '')
@@ -281,7 +282,12 @@ class M_consignment extends Model
 
             $sqlDtValues[] = "('$dt_po_consignment_invoice','$dt_po_consignment_submission_id','$dt_po_consignment_submission_invoice','$dt_po_consignment_item_id','$dt_po_consignment_qty','$dt_po_consignment_expire_date')";
 
+            if($purchase_order_consignment_id != null){
+                $updateStatus =  $this->db->table($this->table_hd_submission)->where('submission_id ', $dt_po_consignment_submission_id)->update(['submission_status' => 'Accept']);
+            }
+
         }
+
 
         $sqlDtOrder .= implode(',', $sqlDtValues);
 

@@ -28,6 +28,14 @@ class Consignment extends WebminController
         return $this->renderView('consignment/purchaseorder_consignment', $data);
     }
 
+    public function recapConsignment()
+    {
+        $data = [
+            'title'         => 'Rekap Konsinyasi'
+        ];
+        return $this->renderView('consignment/recap_consignment', $data);
+    }
+
     public function tblhdPoConsignment()
     {
         $this->validationRequest(TRUE);

@@ -79,7 +79,7 @@ $assetsUrl = base_url('assets');
 
                                 <tbody>
 
-                                
+
 
                                 </tbody>
 
@@ -118,9 +118,9 @@ $assetsUrl = base_url('assets');
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                 <div class="form-group">
-                                     <label for="desc_status" class="col-sm-12">Keterangan Status Barang:</label>
-                                     <div class="col-sm-12">
+                                   <div class="form-group">
+                                       <label for="desc_status" class="col-sm-12">Keterangan Status Barang:</label>
+                                       <div class="col-sm-12">
                                         <input type="hidden" id="purchase_order_id_status" name="purchase_order_id_status">
                                         <textarea id="desc_item_status" name="desc_item_status" type="text" class="form-control"></textarea>
                                     </div>
@@ -245,7 +245,21 @@ $assetsUrl = base_url('assets');
 
                                 </div>
 
-                                <div class="col-md-4"></div>
+                                <div class="col-sm-3">
+
+                                </div>
+
+                                <label for="is_consignment" class="col-sm-2 col-form-label text-right">Stock Konsinyasi :</label>
+
+                                <div class="col-md-3">
+
+                                    <select id="is_consignment" name="is_consignment" class="form-control">
+                                        <option></option>
+                                        <option value="Y">Ya</option>
+                                        <option value="N">Tidak</option>
+                                    </select>
+
+                                </div>
 
                             </div>
 
@@ -390,43 +404,43 @@ $assetsUrl = base_url('assets');
 
                                 <template id="template_row_temp">
 
-                                   <tr>
+                                 <tr>
 
-                                       <td>{row}</td>
+                                     <td>{row}</td>
 
-                                       <td>{item_code}</td>
+                                     <td>{item_code}</td>
 
-                                       <td>{product_name}</td>
+                                     <td>{product_name}</td>
 
-                                       <td>{temp_qty}</td>
+                                     <td>{temp_qty}</td>
 
-                                       <td>
+                                     <td>
 
-                                           <button  data-id="{item_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                         <button  data-id="{item_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
-                                               <i class="fas fa-edit"></i>
+                                             <i class="fas fa-edit"></i>
 
-                                           </button>
+                                         </button>
 
-                                           <button  data-id="{item_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+                                         <button  data-id="{item_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
 
-                                               <i class="fas fa-minus"></i>
+                                             <i class="fas fa-minus"></i>
 
-                                           </button>
+                                         </button>
 
-                                       </td>
+                                     </td>
 
-                                   </tr>
+                                 </tr>
 
-                               </template>
+                             </template>
 
-                           </div>
+                         </div>
 
-                       </div>
+                     </div>
 
 
 
-                       <div class="row form-space">
+                     <div class="row form-space">
 
                         <div class="col-lg-6">
 
@@ -491,18 +505,18 @@ $assetsUrl = base_url('assets');
 
     $(document).ready(function() {
 
-       let temp_qty = new AutoNumeric('#temp_qty', configQty);
+     let temp_qty = new AutoNumeric('#temp_qty', configQty);
 
-       let temp_warehouse_stock = new AutoNumeric('#temp_warehouse_stock', configQty);
+     let temp_warehouse_stock = new AutoNumeric('#temp_warehouse_stock', configQty);
 
-       function _initButton() {
-           $('#btnadd').prop('disabled', !hasRole('purchase_order.add'));
-           $('.btnedit').prop('disabled', !hasRole('purchase_order.edit'));
-           $('.btndelete').prop('disabled', !hasRole('purchase_order.delete'));
-           $('.btnprint').prop('disabled', !hasRole('purchase_order.print'));
-       }
+     function _initButton() {
+         $('#btnadd').prop('disabled', !hasRole('purchase_order.add'));
+         $('.btnedit').prop('disabled', !hasRole('purchase_order.edit'));
+         $('.btndelete').prop('disabled', !hasRole('purchase_order.delete'));
+         $('.btnprint').prop('disabled', !hasRole('purchase_order.print'));
+     }
 
-       function showInputPage(x) {
+     function showInputPage(x) {
 
         if (x) {
 
@@ -527,19 +541,22 @@ $assetsUrl = base_url('assets');
         ajax_get(actUrl, null, {
             success: function(response) {   
                 if (response.result.success == 'TRUE') {
-                   let form = $('#frmtransferstock');
-                   let items = response.result.data;
-                   $('#title-frmtransferstock').html('Transfer Stock');
-                   formMode = 'add';
-                   loadTempData(items);
-                   if(items.length != 0){
-                    let item_warehouse_from_ids = items[0].item_warehouse_from_id;
-                    let item_warehouse_from_texts = items[0].item_warehouse_from_text;
-                    setSelect2('#warehouse_from', item_warehouse_from_ids, item_warehouse_from_texts);
-                    let item_warehouse_destination_ids = items[0].item_warehouse_destination_id;
-                    let item_warehouse_destination_texts = items[0].item_warehouse_destination_text;
-                    setSelect2('#warehouse_tp', item_warehouse_destination_ids, item_warehouse_destination_texts);
-                }
+                 let form = $('#frmtransferstock');
+                 let items = response.result.data;
+                 $('#title-frmtransferstock').html('Transfer Stock');
+                 formMode = 'add';
+                 loadTempData(items);
+                    if(items.length != 0){
+                        let item_warehouse_from_ids = items[0].item_warehouse_from_id;
+                        let item_warehouse_from_texts = items[0].item_warehouse_from_text;
+                        setSelect2('#warehouse_from', item_warehouse_from_ids, item_warehouse_from_texts);
+                        let item_warehouse_destination_ids = items[0].item_warehouse_destination_id;
+                        let item_warehouse_destination_texts = items[0].item_warehouse_destination_text;
+                        setSelect2('#warehouse_to', item_warehouse_destination_ids, item_warehouse_destination_texts);
+                    }else{
+                    setSelect2('#warehouse_from', '', '');
+                    setSelect2('#warehouse_to', '', '');
+                    }
                 clearItemInput();
                 showInputPage(true);
             } else {
@@ -597,78 +614,78 @@ $assetsUrl = base_url('assets');
 
     $('#btnadd_temp').click(function(e) {
 
-       e.preventDefault();
+     e.preventDefault();
 
-       let qty = parseFloat(temp_qty.getNumericString());
+     let qty = parseFloat(temp_qty.getNumericString());
 
-       let last_stock_val = parseFloat(temp_warehouse_stock.getNumericString());
+     let last_stock_val = parseFloat(temp_warehouse_stock.getNumericString());
 
-       let btnSubmit = $('#btnadd_temp');
+     let btnSubmit = $('#btnadd_temp');
 
-       let form = $('#frmaddtemp');
+     let form = $('#frmaddtemp');
 
-       form.parsley().validate();
+     form.parsley().validate();
 
-       if (form.parsley().isValid()) {
+     if (form.parsley().isValid()) {
 
-           let actUrl = base_url + '/webmin/stock-transfer/temp-add';
+         let actUrl = base_url + '/webmin/stock-transfer/temp-add';
 
-           let formValues = {
+         let formValues = {
 
-               item_id: $('#item_id').val(),
+             item_id: $('#item_id').val(),
 
-               temp_qty: qty,
+             temp_qty: qty,
 
-               last_stock: last_stock_val,
+             last_stock: last_stock_val,
 
-               warehouse_from: $('#warehouse_from').val(),
+             warehouse_from: $('#warehouse_from').val(),
 
-               warehouse_from_text: $("#warehouse_from option:selected").text(),
+             warehouse_from_text: $("#warehouse_from option:selected").text(),
 
-               warehouse_to: $('#warehouse_to').val(),
+             warehouse_to: $('#warehouse_to').val(),
 
-               warehouse_to_text: $("#warehouse_to option:selected").text(),
-           };
+             warehouse_to_text: $("#warehouse_to option:selected").text(),
+         };
 
-           btnSubmit.prop('disabled', true);
+         btnSubmit.prop('disabled', true);
 
-           ajax_post(actUrl, formValues, {
+         ajax_post(actUrl, formValues, {
 
-               success: function(response) {
+             success: function(response) {
 
-                   if (response.success) {
+                 if (response.success) {
 
 
-                       if (response.result.success) {
+                     if (response.result.success) {
 
-                           $('#product_name').focus();
+                         $('#product_name').focus();
 
-                           notification.success(response.result.message);
+                         notification.success(response.result.message);
 
-                       } else {
+                     } else {
 
-                           message.error(response.result.message);
+                         message.error(response.result.message);
 
-                       }
+                     }
 
-                       clearItemInput();
+                     clearItemInput();
 
-                       loadTempData(response.result.data);
+                     loadTempData(response.result.data);
 
-                   }
+                 }
 
-                   btnSubmit.prop('disabled', false);
+                 btnSubmit.prop('disabled', false);
 
-               },
+             },
 
-               error: function(response) {
+             error: function(response) {
 
-                   btnSubmit.prop('disabled', false);
+                 btnSubmit.prop('disabled', false);
 
-               }
-           });
-       }
-   })
+             }
+         });
+     }
+ })
 
 
     Parsley.addMessages('id', {
@@ -809,6 +826,8 @@ $assetsUrl = base_url('assets');
 
         let transfer_remark = $('#transfer_remark').val();
 
+        let is_consignment = $('#is_consignment').val();
+
         let question = 'Yakin ingin menyimpan data Transfer Stock?';
 
         let actUrl = base_url + '/webmin/stock-transfer/save/add';
@@ -822,81 +841,88 @@ $assetsUrl = base_url('assets');
         }
 
         if(warehouse_to == null || warehouse_from == null){
-           Swal.fire({
+         Swal.fire({
             icon: 'error',
             title: 'Oops...',
             text: 'Silahkan Isi Gudang Terlebih Dahulu !'
         })
+     }else if(is_consignment == ''){
+       Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Silahkan Isi Jenis Stock !'
+    })
+   }else{
 
-       }else{
+    message.question(question).then(function(answer) {
 
-        message.question(question).then(function(answer) {
+        let yes = parseMessageResult(answer);
 
-            let yes = parseMessageResult(answer);
+        if (yes) {
 
-            if (yes) {
+            let formValues = {
 
-                let formValues = {
+                hd_transfer_stock_id: $('#hd_transfer_stock_id').val(),
 
-                    hd_transfer_stock_id: $('#hd_transfer_stock_id').val(),
+                hd_transfer_stock_warehose_from: warehouse_from,
 
-                    hd_transfer_stock_warehose_from: warehouse_from,
+                hd_transfer_stock_warehose_to: warehouse_to,
 
-                    hd_transfer_stock_warehose_to: warehouse_to,
+                hd_transfer_stock_date:transfer_date,
 
-                    hd_transfer_stock_date:transfer_date,
+                is_consignment :is_consignment,
 
-                    hd_transfer_stock_remark: transfer_remark
+                hd_transfer_stock_remark: transfer_remark
 
-                };
+            };
 
-                btnSubmit.prop('disabled', true);
+            btnSubmit.prop('disabled', true);
 
-                ajax_post(actUrl, formValues, {
+            ajax_post(actUrl, formValues, {
 
-                    success: function(response) {
+                success: function(response) {
 
-                        if (response.success) {
+                    if (response.success) {
 
-                            if (response.result.success) {
+                        if (response.result.success) {
 
-                                form[0].reset();
+                            form[0].reset();
 
-                                notification.success(response.result.message);
+                            notification.success(response.result.message);
 
-                                form.parsley().reset();
+                            form.parsley().reset();
 
-                                showInputPage(false);
+                            showInputPage(false);
 
-                            } else {
+                        } else {
 
-                                message.error(response.result.message);
-
-                            }
+                            message.error(response.result.message);
 
                         }
 
-                        btnSubmit.prop('disabled', false);
-
-                        updateTableHeader();
-
-                    },
-
-                    error: function(response) {
-
-                        btnSubmit.prop('disabled', false);
-
-                        updateTableHeader();
-
                     }
 
-                });
+                    btnSubmit.prop('disabled', false);
 
-            }
+                    updateTableHeader();
 
-        })
+                },
 
-    }
+                error: function(response) {
+
+                    btnSubmit.prop('disabled', false);
+
+                    updateTableHeader();
+
+                }
+
+            });
+
+        }
+
+    })
+
+}
 
 });
 
@@ -941,66 +967,66 @@ $assetsUrl = base_url('assets');
 
     function updateTableHeader() {
 
-       tblstocktransfer.ajax.reload(null, false);
+     tblstocktransfer.ajax.reload(null, false);
+
+ }
+
+ function loadTempData(items) {
+
+   let template = $('#template_row_temp').html();
+
+   let tbody = '';
+
+   let row = 1;
+
+   let temp_total_order = 0;
+
+   items.forEach((val, key) => {
+
+       let item = template;
+
+       let data_json = htmlEntities.encode(JSON.stringify(val));
+
+       let item_code = val.item_code;
+
+       let item_id = val.item_id;
+
+       let product_name  = val.product_name+'('+val.unit_name+')';
+
+       let temp_qty = parseFloat(val.item_qty);
+
+       item = item.replaceAll('{row}', row)
+
+       .replaceAll('{item_id}', item_id)
+
+       .replaceAll('{item_code}', item_code)
+
+       .replaceAll('{product_name}', product_name)
+
+       .replaceAll('{temp_qty}', numberFormat(temp_qty, true))
+
+       .replaceAll('{data_json}', data_json);
+
+       tbody += item;
+
+       row++;
+
+   });
+
+
+   if ($.fn.DataTable.isDataTable('#tbltemp')) {
+
+       $('#tbltemp').DataTable().destroy();
 
    }
 
-   function loadTempData(items) {
-
-     let template = $('#template_row_temp').html();
-
-     let tbody = '';
-
-     let row = 1;
-
-     let temp_total_order = 0;
-
-     items.forEach((val, key) => {
-
-         let item = template;
-
-         let data_json = htmlEntities.encode(JSON.stringify(val));
-
-         let item_code = val.item_code;
-
-         let item_id = val.item_id;
-
-         let product_name  = val.product_name+'('+val.unit_name+')';
-
-         let temp_qty = parseFloat(val.item_qty);
-
-         item = item.replaceAll('{row}', row)
-
-         .replaceAll('{item_id}', item_id)
-
-         .replaceAll('{item_code}', item_code)
-
-         .replaceAll('{product_name}', product_name)
-
-         .replaceAll('{temp_qty}', numberFormat(temp_qty, true))
-
-         .replaceAll('{data_json}', data_json);
-
-         tbody += item;
-
-         row++;
-
-     });
 
 
-     if ($.fn.DataTable.isDataTable('#tbltemp')) {
+   $('#tbltemp tbody').html('');
 
-         $('#tbltemp').DataTable().destroy();
+   $('#tbltemp tbody').html(tbody);
 
-     }
-
-
-
-     $('#tbltemp tbody').html('');
-
-     $('#tbltemp tbody').html(tbody);
-
-     tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+   tbltemp = $('#tbltemp').DataTable(config_tbltemp);
 
 
 
@@ -1012,56 +1038,56 @@ $assetsUrl = base_url('assets');
 
    const config_tbltemp = {
 
-       pageLength: 10,
+     pageLength: 10,
 
-       autoWidth: false,
+     autoWidth: false,
 
-       select: true,
+     select: true,
 
-       responsive: true,
+     responsive: true,
 
-       fixedColumns: true,
+     fixedColumns: true,
 
-       order: [
+     order: [
 
-       [0, 'desc']
+     [0, 'desc']
 
-       ],
+     ],
 
-       "language": {
+     "language": {
 
-           "url": lang_datatables,
+         "url": lang_datatables,
 
-       },
-       "columnDefs": [{
+     },
+     "columnDefs": [{
 
-           width: 100
+         width: 100
 
-       },
-       {
+     },
+     {
 
-           targets: [0, 4],
+         targets: [0, 4],
 
-           orderable: false,
+         orderable: false,
 
-           searchable: false,
+         searchable: false,
 
-       },
-       {
+     },
+     {
 
-           targets: [0],
+         targets: [0],
 
-           className: "text-right",
+         className: "text-right",
 
-       }
+     }
 
-       ]
+     ]
 
-   };
+ };
 
-   let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+ let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
 
-   $(".warehouse").select2({
+ $(".warehouse").select2({
     placeholder: '-- Pilih Gudang --',
     width: "100%",
     allowClear: true,
@@ -1084,24 +1110,24 @@ $assetsUrl = base_url('assets');
 });
 
 
-   function clearItemInput() {
+ function clearItemInput() {
 
-       let form = $('#frmaddtemp');
+     let form = $('#frmaddtemp');
 
-       form.parsley().reset();
+     form.parsley().reset();
 
-       $('#product_name').val('');
+     $('#product_name').val('');
 
-       temp_qty.set('0.00');
+     temp_qty.set('0.00');
 
-       temp_warehouse_stock.set('0.00');
-   }
+     temp_warehouse_stock.set('0.00');
+ }
 
 
 
-   _initButton();
+ _initButton();
 
-   showInputPage(false);
+ showInputPage(false);
 
 })
 

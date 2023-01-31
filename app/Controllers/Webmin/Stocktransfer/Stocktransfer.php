@@ -43,7 +43,7 @@ class Stocktransfer extends WebminController
                 $column[] = esc($row['warehouse_to']);
                 $btns = [];
                 $prop =  'data-id="' . $row['hd_transfer_stock_id'] . '" data-name="' . esc($row['hd_transfer_stock_no']) . '"';
-                $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/purchase-order/get-purchase-order-detail/'.$row['hd_transfer_stock_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
+                $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/stock-transfer/get-stock-transfer-detail/'.$row['hd_transfer_stock_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
                 $column[] = implode('&nbsp;', $btns);
                 return $column;
             });
@@ -273,12 +273,14 @@ class Stocktransfer extends WebminController
             'hd_transfer_stock_warehose_to'           => $this->request->getPost('hd_transfer_stock_warehose_to'),
             'hd_transfer_stock_remark'                => $this->request->getPost('hd_transfer_stock_remark'),
             'hd_transfer_stock_date'                  => $this->request->getPost('hd_transfer_stock_date'),
+            'is_consignment'                          => $this->request->getPost('is_consignment'),
         ];
 
         $validation->setRules([
             'hd_transfer_stock_warehose_from'      => ['rules' => 'required'],
             'hd_transfer_stock_warehose_to'        => ['rules' => 'required'],
             'hd_transfer_stock_date'               => ['rules' => 'required'],
+            'is_consignment'                       => ['rules' => 'required'],
             'hd_transfer_stock_remark'             => ['rules' => 'max_length[500]']
         ]);
 
@@ -289,6 +291,10 @@ class Stocktransfer extends WebminController
         } else {
 
             if ($this->role->hasRole('transfer_stock.add')) {
+
+                if($input['is_consignment'] == 'Y'){
+                    $input['hd_transfer_stock_consignment_status'] = 'Pending';
+                }
 
                 $input['user_id']= $this->userLogin['user_id'];
 
@@ -315,6 +321,41 @@ class Stocktransfer extends WebminController
         $result['csrfHash'] = csrf_hash();
 
         resultJSON($result);
+
+    }
+
+    public function getStockTransferDetail($hd_transfer_stock_id = '')
+    {
+
+        if ($hd_transfer_stock_id == '') {
+
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+
+        } else {
+
+            $getOrder =  $this->M_stock_transfer->getHdTransferStockdetail($hd_transfer_stock_id)->getRowArray();
+
+            $getDtOrder =  $this->M_stock_transfer->getDtTransferStockdetail($hd_transfer_stock_id)->getResultArray();
+
+            if ($getOrder == NULL) {
+
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+
+            } else {
+
+                $data = [
+
+                    'hdTransfer' => $getOrder,
+
+                    'dtTransfer' => $getDtOrder
+
+                ];
+
+                return view('webmin/stock_transfer/stock_transfer_detail', $data);
+
+            }
+
+        }
 
     }
 

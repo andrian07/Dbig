@@ -11,6 +11,8 @@ class M_stock_transfer extends Model
 
 	protected $table_hd_transfer_stock = 'hd_transfer_stock';
 
+	protected $table_dt_transfer_stock = 'dt_transfer_stock';
+
 	protected $table_warehouse = 'ms_warehouse';
 
 	public function insertTemp($data)
@@ -223,6 +225,40 @@ class M_stock_transfer extends Model
 		return $save;
 
 	}
+
+	public function getHdTransferStockdetail($hd_transfer_stock_id){
+
+        $builder = $this->db->table($this->table_hd_transfer_stock);
+
+        return $builder->select('*, a1.warehouse_name AS warehouse_from_name, a1.warehouse_code AS warehouse_from_code, a1.warehouse_address AS warehouse_from_address, a2.warehouse_name AS warehouse_to_name, a2.warehouse_code AS warehouse_to_code, a2.warehouse_address AS warehouse_to_address, hd_transfer_stock.created_at as created_at')
+
+        ->join('ms_warehouse a1', 'hd_transfer_stock.hd_transfer_stock_warehose_from=a1.warehouse_id', 'left')
+
+        ->join('ms_warehouse a2', 'hd_transfer_stock.hd_transfer_stock_warehose_to=a2.warehouse_id', 'left')
+
+        ->join('user_account', 'user_account.user_id = hd_transfer_stock.user_id')
+
+        ->where('hd_transfer_stock_id', $hd_transfer_stock_id)
+
+        ->get();
+    }
+
+    public function getDtTransferStockdetail($hd_transfer_stock_id){
+
+        $builder = $this->db->table($this->table_dt_transfer_stock);
+
+        return $builder->select('*')
+
+        ->join('ms_product_unit', 'ms_product_unit.item_id=dt_transfer_stock.item_id')
+
+        ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+
+        ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+
+        ->where('hd_transfer_stock_id', $hd_transfer_stock_id)
+
+        ->get();
+    }
 
 	
 
