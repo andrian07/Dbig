@@ -12,7 +12,7 @@ use App\Controllers\Base\WebminController;
 class Sales_admin extends WebminController
 {
 
- protected $M_salesmanadmin;
+   protected $M_salesmanadmin;
 
    public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
    {
@@ -48,17 +48,19 @@ public function tblsalesadmin()
             $column[] = esc($row['customer_name']);
             $column[] = 'Rp. '.esc(number_format($row['sales_admin_grand_total']));
             if($row['sales_admin_remaining_payment'] < 0){
-                 $column[] = '<span class="badge badge-success">Lunas</span>';
-            }else{
-                 $column[] = '<span class="badge badge-danger">Belum Lunas</span>';
-            }
-            $column[] = 'Rp. '.esc(number_format($row['sales_admin_remaining_payment']));
-            $btns = [];
-            $prop =  'data-id="' . $row['sales_admin_id'] . '" data-name="' . esc($row['sales_admin_id']) . '"';
-            $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/sales-admin/get-sales-admin-detail/'.$row['sales_admin_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
-            $column[] = implode('&nbsp;', $btns);
-            return $column;
-        });
+               $column[] = '<span class="badge badge-success">Lunas</span>';
+           }else{
+               $column[] = '<span class="badge badge-danger">Belum Lunas</span>';
+           }
+           $column[] = 'Rp. '.esc(number_format($row['sales_admin_remaining_payment']));
+           $btns = [];
+           $prop =  'data-id="' . $row['sales_admin_id'] . '" data-name="' . esc($row['sales_admin_id']) . '"';
+           $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/sales-admin/get-sales-admin-detail/'.$row['sales_admin_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
+
+           $btns[] = button_print($prop);
+           $column[] = implode('&nbsp;', $btns);
+           return $column;
+       });
 
         $table->orderColumn  = ['', 'sales_admin_invoice', 'sales_date','',''];
         $table->searchColumn = ['sales_admin_invoice', ''];
@@ -201,16 +203,16 @@ public function deleteTemp($temp_sales_admin_id  = '')
         if ($temp_sales_admin_id != '') {
             $delete = $this->M_salesmanadmin->deletetemp($temp_sales_admin_id );
             if ($delete) {
-               $getTemp = $this->M_salesmanadmin->getTemp($this->userLogin['user_id'])->getResultArray();
-               $find_result = [];
-               foreach ($getTemp as $k => $v) {
-                   $find_result[$k] = esc($v);
-               }
-               $result['data'] = $find_result;
-               $result['csrfHash'] = csrf_hash();
-               $result['success'] = 'TRUE';
-               $result['message'] = 'Data Berhasil Di Hapus';
-           } else {
+             $getTemp = $this->M_salesmanadmin->getTemp($this->userLogin['user_id'])->getResultArray();
+             $find_result = [];
+             foreach ($getTemp as $k => $v) {
+                 $find_result[$k] = esc($v);
+             }
+             $result['data'] = $find_result;
+             $result['csrfHash'] = csrf_hash();
+             $result['success'] = 'TRUE';
+             $result['message'] = 'Data Berhasil Di Hapus';
+         } else {
             $result = ['success' => FALSE, 'message' => 'Data Gagal Di Hapus'];
         }
     }
@@ -245,103 +247,132 @@ public function getSalesadminTemp()
 
 public function getSalesadminFooter()
 {
-     $getTemp = $this->M_salesmanadmin->getSalesadminFooter($this->userLogin['user_id'])->getResultArray();
+   $getTemp = $this->M_salesmanadmin->getSalesadminFooter($this->userLogin['user_id'])->getResultArray();
 
-    $find_result = [];
+   $find_result = [];
 
-    foreach ($getTemp as $k => $v) {
+   foreach ($getTemp as $k => $v) {
 
-        $find_result[$k] = esc($v);
+    $find_result[$k] = esc($v);
 
-    }
+}
 
-    $result['data'] = $find_result;
+$result['data'] = $find_result;
 
-    $result['csrfHash'] = csrf_hash();
+$result['csrfHash'] = csrf_hash();
 
-    $result['success'] = 'TRUE';
+$result['success'] = 'TRUE';
 
-    resultJSON($result);
+resultJSON($result);
 }
 
 public function save($type = '')
 {
-   $this->validationRequest(TRUE, 'POST');
+ $this->validationRequest(TRUE, 'POST');
+
+ $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+ $validation =  \Config\Services::validation();
+
+ $input = [
+    'sales_customer_id'               => $this->request->getPost('sales_customer_id'),
+    'sales_salesman_id'               => $this->request->getPost('sales_salesman_id'),
+    'sales_payment_type'              => $this->request->getPost('sales_payment_type'),
+    'sales_due_date'                  => $this->request->getPost('sales_due_date'),
+    'sales_date'                      => $this->request->getPost('sales_date'),
+    'sales_store_id'                  => $this->request->getPost('sales_store_id'),
+    'sales_admin_remark'              => $this->request->getPost('sales_admin_remark'),
+    'sales_admin_subtotal'            => $this->request->getPost('sales_admin_sub_total'),
+    'sales_admin_discount1'           => $this->request->getPost('sales_admin_discount1'),
+    'sales_admin_discount2'           => $this->request->getPost('sales_admin_discount2'),
+    'sales_admin_discount3'           => $this->request->getPost('sales_admin_discount3'),
+    'sales_admin_discount1_percentage'=> $this->request->getPost('sales_admin_discount1_percentage'),
+    'sales_admin_discount2_percentage'=> $this->request->getPost('sales_admin_discount2_percentage'),
+    'sales_admin_discount3_percentage'=> $this->request->getPost('sales_admin_discount3_percentage'),
+    'sales_admin_total_discount'      => $this->request->getPost('sales_admin_total_discount'),
+    'sales_admin_ppn'                 => $this->request->getPost('sales_admin_ppn'),
+    'sales_admin_down_payment'        => $this->request->getPost('sales_admin_down_payment'),
+    'sales_admin_remaining_payment'   => $this->request->getPost('sales_admin_remaining_payment'),
+    'sales_admin_grand_total'         => $this->request->getPost('sales_admin_total')
+];
+
+$validation->setRules([
+    'sales_admin_remark'          => ['rules' => 'max_length[500]']
+]);
+
+if ($validation->run($input) === FALSE) {
 
     $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
 
-    $validation =  \Config\Services::validation();
+} else {
 
-    $input = [
-        'sales_customer_id'               => $this->request->getPost('sales_customer_id'),
-        'sales_salesman_id'               => $this->request->getPost('sales_salesman_id'),
-        'sales_payment_type'              => $this->request->getPost('sales_payment_type'),
-        'sales_due_date'                  => $this->request->getPost('sales_due_date'),
-        'sales_date'                      => $this->request->getPost('sales_date'),
-        'sales_store_id'                  => $this->request->getPost('sales_store_id'),
-        'sales_admin_remark'              => $this->request->getPost('sales_admin_remark'),
-        'sales_admin_subtotal'            => $this->request->getPost('sales_admin_sub_total'),
-        'sales_admin_discount1'           => $this->request->getPost('sales_admin_discount1'),
-        'sales_admin_discount2'           => $this->request->getPost('sales_admin_discount2'),
-        'sales_admin_discount3'           => $this->request->getPost('sales_admin_discount3'),
-        'sales_admin_discount1_percentage'=> $this->request->getPost('sales_admin_discount1_percentage'),
-        'sales_admin_discount2_percentage'=> $this->request->getPost('sales_admin_discount2_percentage'),
-        'sales_admin_discount3_percentage'=> $this->request->getPost('sales_admin_discount3_percentage'),
-        'sales_admin_total_discount'      => $this->request->getPost('sales_admin_total_discount'),
-        'sales_admin_ppn'                 => $this->request->getPost('sales_admin_ppn'),
-        'sales_admin_down_payment'        => $this->request->getPost('sales_admin_down_payment'),
-        'sales_admin_remaining_payment'   => $this->request->getPost('sales_admin_remaining_payment'),
-        'sales_admin_grand_total'         => $this->request->getPost('sales_admin_total')
-    ];
+    if ($type == 'add') {
 
-    $validation->setRules([
-        'sales_admin_remark'          => ['rules' => 'max_length[500]']
-    ]);
+        if ($this->role->hasRole('sales_admin.add')) {
 
-    if ($validation->run($input) === FALSE) {
+            $input['user_id']= $this->userLogin['user_id'];
 
-        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+            $save = $this->M_salesmanadmin->insertsalesadmin($input);
 
-    } else {
+            if ($save['success']) {
 
-        if ($type == 'add') {
-
-            if ($this->role->hasRole('sales_admin.add')) {
-
-                $input['user_id']= $this->userLogin['user_id'];
-
-                $save = $this->M_salesmanadmin->insertsalesadmin($input);
-
-                if ($save['success']) {
-
-                    $result = ['success' => TRUE, 'message' => 'Data Penjualan berhasil disimpan', 'sales_admin_id ' => $save['sales_admin_id']];
-
-                } else {
-
-                    $result = ['success' => FALSE, 'message' => 'Data Penjualan gagal disimpan'];
-
-                }
+                $result = ['success' => TRUE, 'message' => 'Data Penjualan berhasil disimpan', 'sales_admin_id ' => $save['sales_admin_id']];
 
             } else {
 
-                $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menambah Penjualan'];
+                $result = ['success' => FALSE, 'message' => 'Data Penjualan gagal disimpan'];
 
             }
 
+        } else {
+
+            $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menambah Penjualan'];
+
         }
+
     }
-
-    $result['csrfHash'] = csrf_hash();
-
-    resultJSON($result);
 }
 
-public function printinvoice()
+$result['csrfHash'] = csrf_hash();
+
+resultJSON($result);
+}
+
+public function getSalesAdminDetail($sales_admin_id)
+{
+    if ($sales_admin_id == '') {
+
+        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+
+    } else {
+
+        $getOrder =  $this->M_salesmanadmin->getOrder($sales_admin_id)->getRowArray();
+
+        if ($getOrder == NULL) {
+
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+
+        } else {
+
+            $data = [
+
+                'hdSales' => $getOrder,
+
+                'dtSales' => $this->M_salesmanadmin->getDtSalesmanOrder($sales_admin_id)->getResultArray(),
+
+            ]; 
+
+            return view('webmin/sales/salesmanadmin_detail', $data);
+
+        }
+
+    }
+}
+
+public function printinvoice($sales_admin_id)
 {
     $export = $this->request->getGet('export');
     if ($export == 'pdf') {
-
-
         $htmlView   = $this->renderView('sales/salesadmin_invoice');
         $dompdf = new Dompdf();
         $dompdf->loadHtml($htmlView);
@@ -350,13 +381,65 @@ public function printinvoice()
         $dompdf->stream('invoice.pdf', array("Attachment" => false));
         exit();
     } else {
-        return $this->renderView('sales/salesadmin_invoice');
+        if ($sales_admin_id == '') {
+
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+
+        } else {
+
+            $getOrder =  $this->M_salesmanadmin->getOrder($sales_admin_id)->getRowArray();
+
+            if ($getOrder == NULL) {
+
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+
+            } else {
+
+                $data = [
+
+                    'hdSales' => $getOrder,
+
+                    'dtSales' => $this->M_salesmanadmin->getDtSalesmanOrder($sales_admin_id)->getResultArray(),
+
+                ]; 
+
+                return view('webmin/sales/salesadmin_invoice', $data);
+
+            }
+
+        }
     }
 }
 
-public function printdispatch()
+public function printdispatch($sales_admin_id)
 {
-    return $this->renderView('sales/salesadmin_dispatch');
+   if ($sales_admin_id == '') {
+
+    throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+
+} else {
+
+    $getOrder =  $this->M_salesmanadmin->getOrder($sales_admin_id)->getRowArray();
+
+    if ($getOrder == NULL) {
+
+        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+
+    } else {
+
+        $data = [
+
+            'hdSales' => $getOrder,
+
+            'dtSales' => $this->M_salesmanadmin->getDtSalesmanOrder($sales_admin_id)->getResultArray(),
+
+        ]; 
+
+        return view('webmin/sales/salesadmin_dispatch', $data);
+
+    }
+
+}
 }
     //--------------------------------------------------------------------
 

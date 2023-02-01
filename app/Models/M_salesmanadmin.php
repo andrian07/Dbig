@@ -8,6 +8,7 @@ class M_salesmanadmin extends Model
 {
     protected $table_temp_sales_admin = 'temp_sales_admin';
     protected $table_hd_sales_admin = 'hd_sales_admin';
+    protected $table_dt_sales_admin = 'dt_sales_admin';
     protected $table_ms_store = 'ms_store';
     protected $table_ms_warehouse = 'ms_warehouse';
     protected $table_ms_warehouse_stock = 'ms_warehouse_stock';
@@ -66,215 +67,270 @@ class M_salesmanadmin extends Model
 
     public function getSalesadminFooter($user_id)
     {
-       $builder = $this->db->table($this->table_temp_sales_admin);
+        $builder = $this->db->table($this->table_temp_sales_admin);
 
-       return $builder->select('sum(temp_sales_price) as total_footer_price')
+        return $builder->select('sum(temp_sales_price) as total_footer_price')
 
-       ->where('temp_sales_admin.user_id', $user_id)
+        ->where('temp_sales_admin.user_id', $user_id)
 
-       ->get();
-   }
-
-   public function deletetemp($temp_sales_admin_id ){
-    $this->db->query('LOCK TABLES temp_sales_admin WRITE');
-    $save = $this->db->table($this->table_temp_sales_admin)->delete(['temp_sales_admin_id' => $temp_sales_admin_id ]);
-    $saveQueries = NULL;
-    if ($this->db->affectedRows() > 0) {
-        $saveQueries = $this->db->getLastQuery()->getQuery();
-    }
-    $this->db->query('UNLOCK TABLES');
-        //saveQueries($saveQueries, 'deletetemp', $temp_submission_id, 'Hapus Temp');
-    return $save;
-}
-
-public function clearTemp($user_id)
-{
-    return $this->db->table($this->table_temp_sales_admin)
-    ->where('user_id', $user_id)
-    ->delete();
-}
-
-public function insertsalesadmin($data)
-{
-
-    $this->db->query('LOCK TABLES hd_sales_admin WRITE');
-
-    $this->db->transBegin();
-
-    $saveQueries = NULL;
-
-    $maxCode = $this->db->table($this->table_hd_sales_admin)->select('sales_admin_id, sales_admin_invoice')->orderBy('sales_admin_id', 'desc')->limit(1)->get()->getRowArray();
-
-    $store_code = $this->db->table($this->table_ms_store)->select('store_code')->where('store_id', $data['sales_store_id'])->get()->getRowArray();
-
-    $invoice_date =  date_format(date_create($data['sales_date']),"y/m/d");
-
-    if ($maxCode == NULL) {
-
-        $data['sales_admin_invoice'] = 'J/'.$store_code['store_code'].'/'.$invoice_date.'/'.'0000000001';
-
-    } else {
-
-        $invoice = substr($maxCode['sales_admin_invoice'], -10);
-
-        $data['sales_admin_invoice '] = 'J/'.$store_code['store_code'].'/'.$invoice_date.'/'.substr('000000000' . strval(floatval($invoice) + 1), -10);
-
+        ->get();
     }
 
-    $this->db->table($this->table_hd_sales_admin)->insert($data);
+    public function deletetemp($temp_sales_admin_id )
+    {
+        $this->db->query('LOCK TABLES temp_sales_admin WRITE');
 
-    $sales_admin_id  = $this->db->insertID();
+        $save = $this->db->table($this->table_temp_sales_admin)->delete(['temp_sales_admin_id' => $temp_sales_admin_id ]);
 
+        $saveQueries = NULL;
 
-    if ($this->db->affectedRows() > 0) {
+        if ($this->db->affectedRows() > 0) {
 
-        $saveQueries[] = [
+            $saveQueries = $this->db->getLastQuery()->getQuery();
 
-            'query_text'    => $this->db->getLastQuery()->getQuery(),
+        }
 
-            'ref_id'        => $sales_admin_id 
+        $this->db->query('UNLOCK TABLES');
 
-        ];
-
+        return $save;
     }
 
+    public function getOrder($sales_admin_id = '')
+    {
 
+        $builder = $this->db->table($this->table_hd_sales_admin);
 
-    $sqlDtSalesAdmin = "insert into dt_sales_admin(sales_admin_id,dt_item_id,dt_temp_qty,dt_purchase_price,dt_purchase_tax,dt_purchase_cogs,dt_product_price,dt_disc1,dt_price_disc1_percentage,dt_disc2,dt_price_disc2_percentage,dt_disc3,dt_price_disc3_percentage,dt_sales_price,user_id) VALUES";
+        $builder->select('hd_sales_admin.*,dt_sales_admin.*,customer_name,customer_address,customer_phone,store_code,store_name,user_account.user_realname, ms_salesman.salesman_name, ms_salesman.salesman_code, hd_sales_admin.created_at as created_at');
 
-    $sqlUpdateStock = "insert into ms_product_stock (product_id  , warehouse_id  , stock) VALUES";
+        $builder->join('dt_sales_admin', 'dt_sales_admin.sales_admin_id = hd_sales_admin.sales_admin_id');
 
-    $sqlUpdateWarehouse = "insert into ms_warehouse_stock (stock_id,product_id , warehouse_id , purchase_id , exp_date, stock) VALUES";
+        $builder->join('user_account', 'user_account.user_id = hd_sales_admin.user_id');
 
-    $sqlDtValues = [];
-    $vUpdateStock = [];
-    $vUpdateWarehouse = [];
+        $builder->join('ms_customer', 'ms_customer.customer_id  = hd_sales_admin.sales_customer_id');
 
+        $builder->join('ms_salesman', 'ms_salesman.salesman_id  = hd_sales_admin.sales_salesman_id');
 
+        $builder->join('ms_store', 'ms_store.store_id  = hd_sales_admin.sales_store_id');
 
-    $getTemp =  $this->getTemp($data['user_id']);
+        if ($sales_admin_id  != '') {
 
-    foreach ($getTemp->getResultArray() as $row) {
+            $builder->where(['hd_sales_admin.sales_admin_id' => $sales_admin_id ]);
 
-        $dt_item_id                 = $row['item_id'];
-        $dt_temp_qty                = $row['temp_qty'];
-        $dt_purchase_price          = $row['temp_purchase_price'];
-        $dt_purchase_tax            = $row['temp_purchase_tax'];
-        $dt_purchase_cogs           = $row['temp_purchase_cogs'];
-        $dt_product_price           = $row['temp_product_price'];
-        $dt_disc1                   = $row['temp_disc1'];
-        $dt_price_disc1_percentage  = $row['temp_price_disc1_percentage'];
-        $dt_disc2                   = $row['temp_disc2'];
-        $dt_price_disc2_percentage  = $row['temp_price_disc2_percentage'];
-        $dt_disc3                   = $row['temp_disc3'];
-        $dt_price_disc3_percentage  = $row['temp_price_disc3_percentage'];
-        $dt_sales_price             = $row['temp_sales_price'];
-        $user_id                    = $row['user_id'];
+        }
 
-        $product_id                 = $row['product_id'];
-        $base_purchase_stock        = $dt_temp_qty * $row['product_content'];
-
-
-        $getWarehouse = $this->db->table($this->table_ms_warehouse)->select('warehouse_id')->where('store_id', $data['sales_store_id'])->get()->getRowArray();
-
-        $warehouse_id =  $getWarehouse['warehouse_id'];
-
-        $getLastEd = $this->db->table($this->table_ms_warehouse_stock)->select('*')->where('product_id', $product_id)->orderBy('exp_date', 'asc')->limit(1)->get()->getRowArray();
-
-        $stock_id_ed     = $getLastEd['stock_id'];
-        $product_id_ed   = $getLastEd['product_id'];
-        $warehouse_id_ed = $getLastEd['warehouse_id'];
-        $purchase_id_ed  = $getLastEd['purchase_id'];
-        $exp_date_ed     = $getLastEd['exp_date'];
-        $stock_ed        = $getLastEd['stock'];
-
-        $sqlDtValues[] = "('$sales_admin_id','$dt_item_id','$dt_temp_qty','$dt_purchase_price','$dt_purchase_tax','$dt_purchase_cogs','$dt_product_price','$dt_disc1','$dt_price_disc1_percentage','$dt_disc2','$dt_price_disc2_percentage','$dt_disc3','$dt_price_disc3_percentage','$dt_sales_price','$user_id')";
-
-        $vUpdateStock[] = "('$product_id', '$warehouse_id', '$base_purchase_stock')";
-
-        $vUpdateWarehouse[] = "('$stock_id_ed', '$product_id_ed', '$warehouse_id_ed', '$purchase_id_ed', '$exp_date_ed', '$stock_ed')";
+        return $builder->get();
     }
 
-    $sqlDtSalesAdmin .= implode(',', $sqlDtValues);
+    public function getDtSalesmanOrder($sales_admin_id)
+    {
+        $builder = $this->db->table($this->table_dt_sales_admin);
 
-    $sqlUpdateStock .= implode(',', $vUpdateStock). " ON DUPLICATE KEY UPDATE stock=stock-VALUES(stock)";
+        return $builder->select('*')
 
-    $sqlUpdateWarehouse .= implode(',', $vUpdateWarehouse). " ON DUPLICATE KEY UPDATE stock_id=VALUES(stock_id),stock=stock-VALUES(stock)";
+        ->join('ms_product_unit', 'ms_product_unit.item_id = dt_sales_admin.dt_item_id')
 
+        ->join('ms_product', 'ms_product.product_id = ms_product_unit.product_id')
 
-    $this->db->query($sqlDtSalesAdmin);
-    if ($this->db->affectedRows() > 0) {
+        ->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id')
 
-        $saveQueries[] = [
+        ->where('sales_admin_id', $sales_admin_id)
 
-            'query_text'    => $this->db->getLastQuery()->getQuery(),
-
-            'ref_id'        => $sales_admin_id
-
-        ];
-
+        ->get();
     }
 
 
-    $this->db->query($sqlUpdateStock);
 
-    if ($this->db->affectedRows() > 0) {
+    public function clearTemp($user_id)
+    {
+        return $this->db->table($this->table_temp_sales_admin)
 
-        $saveQueries[] = [
+        ->where('user_id', $user_id)
 
-            'query_text'    => $this->db->getLastQuery()->getQuery(),
-
-            'ref_id'        => $sales_admin_id
-
-        ];
-
+        ->delete();
     }
 
-    $this->db->query($sqlUpdateWarehouse);
+    public function insertsalesadmin($data)
+    {
 
-    if ($this->db->affectedRows() > 0) {
+        $this->db->query('LOCK TABLES hd_sales_admin WRITE');
 
-        $saveQueries[] = [
+        $this->db->transBegin();
 
-            'query_text'    => $this->db->getLastQuery()->getQuery(),
+        $saveQueries = NULL;
 
-            'ref_id'        => $sales_admin_id
+        $maxCode = $this->db->table($this->table_hd_sales_admin)->select('sales_admin_id, sales_admin_invoice')->orderBy('sales_admin_id', 'desc')->limit(1)->get()->getRowArray();
 
-        ];
+        $store_code = $this->db->table($this->table_ms_store)->select('store_code')->where('store_id', $data['sales_store_id'])->get()->getRowArray();
+
+        $invoice_date =  date_format(date_create($data['sales_date']),"y/m/d");
+
+        if ($maxCode == NULL) {
+
+            $data['sales_admin_invoice'] = 'J/'.$store_code['store_code'].'/'.$invoice_date.'/'.'0000000001';
+
+        } else {
+
+            $invoice = substr($maxCode['sales_admin_invoice'], -10);
+
+            $data['sales_admin_invoice '] = 'J/'.$store_code['store_code'].'/'.$invoice_date.'/'.substr('000000000' . strval(floatval($invoice) + 1), -10);
+
+        }
+
+        $this->db->table($this->table_hd_sales_admin)->insert($data);
+
+        $sales_admin_id  = $this->db->insertID();
+
+
+        if ($this->db->affectedRows() > 0) {
+
+            $saveQueries[] = [
+
+                'query_text'    => $this->db->getLastQuery()->getQuery(),
+
+                'ref_id'        => $sales_admin_id 
+
+            ];
+
+        }
+
+
+
+        $sqlDtSalesAdmin = "insert into dt_sales_admin(sales_admin_id,dt_item_id,dt_temp_qty,dt_purchase_price,dt_purchase_tax,dt_purchase_cogs,dt_product_price,dt_disc1,dt_price_disc1_percentage,dt_disc2,dt_price_disc2_percentage,dt_disc3,dt_price_disc3_percentage,dt_sales_price,user_id) VALUES";
+
+        $sqlUpdateStock = "insert into ms_product_stock (product_id  , warehouse_id  , stock) VALUES";
+
+        $sqlUpdateWarehouse = "insert into ms_warehouse_stock (stock_id,product_id , warehouse_id , purchase_id , exp_date, stock) VALUES";
+
+        $sqlDtValues = [];
+        $vUpdateStock = [];
+        $vUpdateWarehouse = [];
+
+
+
+        $getTemp =  $this->getTemp($data['user_id']);
+
+        foreach ($getTemp->getResultArray() as $row) {
+
+            $dt_item_id                 = $row['item_id'];
+            $dt_temp_qty                = $row['temp_qty'];
+            $dt_purchase_price          = $row['temp_purchase_price'];
+            $dt_purchase_tax            = $row['temp_purchase_tax'];
+            $dt_purchase_cogs           = $row['temp_purchase_cogs'];
+            $dt_product_price           = $row['temp_product_price'];
+            $dt_disc1                   = $row['temp_disc1'];
+            $dt_price_disc1_percentage  = $row['temp_price_disc1_percentage'];
+            $dt_disc2                   = $row['temp_disc2'];
+            $dt_price_disc2_percentage  = $row['temp_price_disc2_percentage'];
+            $dt_disc3                   = $row['temp_disc3'];
+            $dt_price_disc3_percentage  = $row['temp_price_disc3_percentage'];
+            $dt_sales_price             = $row['temp_sales_price'];
+            $user_id                    = $row['user_id'];
+
+            $product_id                 = $row['product_id'];
+            $base_purchase_stock        = $dt_temp_qty * $row['product_content'];
+
+
+            $getWarehouse = $this->db->table($this->table_ms_warehouse)->select('warehouse_id')->where('store_id', $data['sales_store_id'])->get()->getRowArray();
+
+            $warehouse_id =  $getWarehouse['warehouse_id'];
+
+            $getLastEd = $this->db->table($this->table_ms_warehouse_stock)->select('*')->where('product_id', $product_id)->orderBy('exp_date', 'asc')->limit(1)->get()->getRowArray();
+
+            $stock_id_ed     = $getLastEd['stock_id'];
+            $product_id_ed   = $getLastEd['product_id'];
+            $warehouse_id_ed = $getLastEd['warehouse_id'];
+            $purchase_id_ed  = $getLastEd['purchase_id'];
+            $exp_date_ed     = $getLastEd['exp_date'];
+            $stock_ed        = $getLastEd['stock'];
+
+            $sqlDtValues[] = "('$sales_admin_id','$dt_item_id','$dt_temp_qty','$dt_purchase_price','$dt_purchase_tax','$dt_purchase_cogs','$dt_product_price','$dt_disc1','$dt_price_disc1_percentage','$dt_disc2','$dt_price_disc2_percentage','$dt_disc3','$dt_price_disc3_percentage','$dt_sales_price','$user_id')";
+
+            $vUpdateStock[] = "('$product_id', '$warehouse_id', '$base_purchase_stock')";
+
+            $vUpdateWarehouse[] = "('$stock_id_ed', '$product_id_ed', '$warehouse_id_ed', '$purchase_id_ed', '$exp_date_ed', '$stock_ed')";
+        }
+
+        $sqlDtSalesAdmin .= implode(',', $sqlDtValues);
+
+        $sqlUpdateStock .= implode(',', $vUpdateStock). " ON DUPLICATE KEY UPDATE stock=stock-VALUES(stock)";
+
+        $sqlUpdateWarehouse .= implode(',', $vUpdateWarehouse). " ON DUPLICATE KEY UPDATE stock_id=VALUES(stock_id),stock=stock-VALUES(stock)";
+
+
+        $this->db->query($sqlDtSalesAdmin);
+        if ($this->db->affectedRows() > 0) {
+
+            $saveQueries[] = [
+
+                'query_text'    => $this->db->getLastQuery()->getQuery(),
+
+                'ref_id'        => $sales_admin_id
+
+            ];
+
+        }
+
+
+        $this->db->query($sqlUpdateStock);
+
+        if ($this->db->affectedRows() > 0) {
+
+            $saveQueries[] = [
+
+                'query_text'    => $this->db->getLastQuery()->getQuery(),
+
+                'ref_id'        => $sales_admin_id
+
+            ];
+
+        }
+
+        $this->db->query($sqlUpdateWarehouse);
+
+        if ($this->db->affectedRows() > 0) {
+
+            $saveQueries[] = [
+
+                'query_text'    => $this->db->getLastQuery()->getQuery(),
+
+                'ref_id'        => $sales_admin_id
+
+            ];
+
+        }
+
+
+
+        if ($this->db->transStatus() === false) {
+
+            $saveQueries[] = NULL;
+
+            $this->db->transRollback();
+
+            $save = ['success' => FALSE, 'sales_admin_id' => 0];
+
+        } else {
+
+            $this->db->transCommit();
+
+            $this->clearTemp($data['user_id']);
+
+            $save = ['success' => TRUE, 'sales_admin_id' => $sales_admin_id ];
+
+        }
+
+
+        $this->db->query('UNLOCK TABLES');
+
+        foreach($saveQueries as $rowQuery){
+
+            saveQueries($rowQuery['query_text'], 'salesadmin', $sales_admin_id);
+
+        }
+
+        return $save;
 
     }
-
-
-    if ($this->db->transStatus() === false) {
-
-        $saveQueries[] = NULL;
-
-        $this->db->transRollback();
-
-        $save = ['success' => FALSE, 'sales_admin_id' => 0];
-
-    } else {
-
-        $this->db->transCommit();
-
-        $this->clearTemp($data['user_id']);
-
-        $save = ['success' => TRUE, 'sales_admin_id' => $sales_admin_id ];
-
-    }
-
-
-    $this->db->query('UNLOCK TABLES');
-
-    foreach($saveQueries as $rowQuery){
-
-        saveQueries($rowQuery['query_text'], 'salesadmin', $sales_admin_id);
-
-    }
-
-    return $save;
-
-}
 
 
 }

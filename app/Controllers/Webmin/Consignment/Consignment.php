@@ -527,6 +527,7 @@ class Consignment extends WebminController
 
                     $save = $this->M_consignment->insertInputConsignment($input);
 
+
                     if ($save['success']) {
 
                         $result = ['success' => TRUE, 'message' => 'Data Penginputan Konsinyasi berhasil disimpan', 'purchase_consignment_id' => $save['purchase_consignment_id']];

@@ -617,9 +617,9 @@ $routes->group('webmin/sales-admin', ['filter' => 'webminauth'], static function
 
     $routes->get('search-product', 'Webmin\Sales_admin::searchProduct');
 
-    $routes->get('printinvoice', 'Webmin\Sales_admin::printinvoice');
+    $routes->get('print-invoice/(:alphanum)', 'Webmin\Sales_admin::printinvoice/$1');
 
-    $routes->get('printdispatch', 'Webmin\Sales_admin::printdispatch');
+    $routes->get('printdispatch/(:alphanum)', 'Webmin\Sales_admin::printdispatch/$1');
 
     $routes->post('temp-add', 'Webmin\Sales_admin::tempadd');
 
@@ -628,6 +628,8 @@ $routes->group('webmin/sales-admin', ['filter' => 'webminauth'], static function
     $routes->get('get-salesadmin-temp', 'Webmin\Sales_admin::getSalesadminTemp');
 
     $routes->get('get-salesadmin-footer', 'Webmin\Sales_admin::getSalesadminFooter');
+
+    $routes->get('get-sales-admin-detail/(:alphanum)', 'Webmin\Sales_admin::getSalesAdminDetail/$1');
 
     $routes->post('save/(:alpha)', 'Webmin\Sales_admin::save/$1');
 });

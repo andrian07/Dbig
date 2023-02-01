@@ -216,7 +216,7 @@ $assetsUrl = base_url('assets');
 
 	</style>
 
-	<title>test</title>
+	<title>Faktur Penjualan</title>
 
 </head>
 
@@ -226,8 +226,6 @@ $assetsUrl = base_url('assets');
 
 	<div class="faktur-print">
 
-
-
 		<table class="header-invoice" width="100%">
 
 			<tr>
@@ -236,7 +234,7 @@ $assetsUrl = base_url('assets');
 
 				<td width="2%">:</td>
 
-				<td width="20%">15/09/2012</td>
+				<td width="20%"><?= indo_date($hdSales['sales_date']) ?></td>
 
 				<td rowspan="5" class="text-center title-faktur" width="25%">FAKTUR</td>
 
@@ -250,9 +248,9 @@ $assetsUrl = base_url('assets');
 
 				<td>:</td>
 
-				<td>J/22/09/00003211</td>
+				<td><?= $hdSales['sales_admin_invoice'] ?></td>
 
-				<td>Bpk Budi Sulaiman</td>
+				<td><?= $hdSales['customer_name'] ?></td>
 
 			</tr>
 
@@ -262,9 +260,9 @@ $assetsUrl = base_url('assets');
 
 				<td>:</td>
 
-				<td>Hendri</td>
+				<td><?= $hdSales['salesman_name'] ?> (<?= $hdSales['salesman_code'] ?>)</td>
 
-				<td rowspan="2">Jl. Sei Raya Dalam GG. Dango 1 No A.32 PONTIANAK Kalimantan Barat</td>
+				<td><?= $hdSales['customer_address'] ?></td>
 
 			</tr>
 
@@ -274,18 +272,13 @@ $assetsUrl = base_url('assets');
 
 				<td>:</td>
 
-				<td>30/10/2022</td>
+				<td><?= indo_date($hdSales['sales_due_date']) ?></td>
+
+				<td>Telp:<?= $hdSales['customer_phone'] ?></td>
 
 			</tr>
 
-			<tr>
-
-				<td colspan="3"></td>
-
-				<td>Telp:</td>
-
-			</tr>
-
+			
 		</table>
 
 
@@ -315,60 +308,36 @@ $assetsUrl = base_url('assets');
 					<th width="1%"></th>
 
 				</tr>
+				<?php $i = 1; ?>
+				<?php foreach ($dtSales as $row) : 
 
-				<tr>
+					$detail_product_price = floatval($row['dt_product_price']);
+					$detail_sales_qty = floatval($row['dt_temp_qty']);
+					$detail_sales_discount = floatval($row['dt_disc1'] + $row['dt_disc2'] + $row['dt_disc3']);
+					$detail_sales_price= floatval($row['dt_sales_price']);
 
-					<td>1</td>
+					?>
 
-					<td>0002312</td>
 
-					<td>DULUX CAT BASE CATYLAC INTERIOR BASE T911AY</td>
+					<tr>
 
-					<td>6</td>
+						<td><?= $i; ?></td>
 
-					<td>704,400</td>
+						<td><?= esc($row['product_code']) ?></td>
 
-					<td></td>
+						<td><?= esc($row['product_name']) ?></td>
 
-					<td>4,226,400</td>
+						<td class="text-center"><?= $detail_sales_qty ?></td>
 
-				</tr>
+						<td>Rp. <?= numberFormat($detail_product_price) ?></td>
 
-				<tr>
+						<td>Rp. <?= numberFormat($detail_sales_discount) ?></td>
 
-					<td>2</td>
+						<td>Rp. <?= numberFormat($detail_sales_price) ?></td>
 
-					<td>000231</td>
-
-					<td>123456789101234567891012345678910123456789101234567891012345678910 12345678910123456789101234567891012345678910</td>
-
-					<td>2</td>
-
-					<td>500,000</td>
-
-					<td>200,000</td>
-
-					<td>480,000</td>
-
-				</tr>
-
-				<tr>
-
-					<td>1</td>
-
-					<td>0002312</td>
-
-					<td>DULUX CAT BASE CATYLAC INTERIOR BASE T911AY</td>
-
-					<td>6</td>
-
-					<td>704,400</td>
-
-					<td></td>
-
-					<td>4,226,400</td>
-
-				</tr>
+					</tr>
+					<?php $i++ ?>
+				<?php endforeach;  ?>
 
 			</tbody>
 
@@ -398,7 +367,7 @@ $assetsUrl = base_url('assets');
 
 				<td class="text-right">Subtotal:</td>
 
-				<td class="text-right">4.226.400</td>
+				<td class="text-right">Rp. <?= numberFormat($hdSales['sales_admin_subtotal']) ?></td>
 
 			</tr>
 
@@ -406,19 +375,9 @@ $assetsUrl = base_url('assets');
 
 				<td colspan="3"></td>
 
-				<td class="text-right">Disc: 0,00%</td>
+				<td class="text-right">Disc: <?= floatval($hdSales['sales_admin_discount1_percentage']) ?>%</td>
 
-				<td class="text-right">0</td>
-
-			</tr>
-
-			<tr>
-
-				<td colspan="3"></td>
-
-				<td class="text-right">Disc: 0,00%</td>
-
-				<td class="text-right">0</td>
+				<td class="text-right">Rp. <?= numberFormat($hdSales['sales_admin_discount1']) ?></td>
 
 			</tr>
 
@@ -430,9 +389,30 @@ $assetsUrl = base_url('assets');
 
 				<td width="20%" class="text-center">Gudang,</td>
 
-				<td class="text-right">Disc: 0,00%</td>
+				<td class="text-right">Disc: <?= floatval($hdSales['sales_admin_discount2_percentage']) ?>%</td>
 
-				<td class="text-right">0</td>
+				<td class="text-right">Rp. <?= numberFormat($hdSales['sales_admin_discount2']) ?></td>
+
+			</tr>
+
+			<tr>
+
+				<td colspan="3"></td>
+
+				<td class="text-right">Disc: <?= floatval($hdSales['sales_admin_discount3_percentage']) ?>%</td>
+
+				<td class="text-right">Rp. <?= numberFormat($hdSales['sales_admin_discount3']) ?></td>
+
+			</tr>
+
+
+
+			<tr>
+				<td colspan="3"></td>
+
+				<td class="text-right">PPN 11%</td>
+
+				<td class="text-right">Rp. <?= numberFormat($hdSales['sales_admin_ppn']) ?></td>
 
 			</tr>
 
@@ -444,7 +424,7 @@ $assetsUrl = base_url('assets');
 
 				<td class="footer-ttd text-center">--------------------------</td>
 
-				<td colspan="3" class="text-center total-all">TOTAL: 4.226.400</td>
+				<td colspan="3" class="text-center total-all">TOTAL: Rp. <?= numberFormat($hdSales['sales_admin_grand_total']) ?></td>
 
 			</tr>
 

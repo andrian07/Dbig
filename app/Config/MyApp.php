@@ -266,6 +266,7 @@ class MyApp extends BaseConfig
                 'add'       => ['text' => 'Tambah'],
                 'edit'      => ['text' => 'Ubah'],
                 'delete'    => ['text' => 'hapus'],
+                'print'     => ['text' => 'cetak'],
             ]
         ],
 
