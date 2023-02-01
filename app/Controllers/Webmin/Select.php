@@ -632,8 +632,7 @@ class Select extends WebminController
 
         resultJSON($result);
     }
-<<<<<<< Updated upstream
-    
+
 
     public function salesman()
     {
@@ -664,10 +663,6 @@ class Select extends WebminController
 
         $select2->generate();
     }
-=======
-
-
->>>>>>> Stashed changes
 
     //--------------------------------------------------------------------
 

@@ -73,7 +73,6 @@ $routes->group('api', static function ($routes) {
     $routes->get('/', 'Api::index');
 
     $routes->post('login', 'Api::login');
-<<<<<<< Updated upstream
 
     $routes->post('BannerList', 'Api::getbanner');
 
@@ -95,10 +94,8 @@ $routes->group('api', static function ($routes) {
 
     //$routes->post('itemPoint', 'Api::getitempoint');
 
-    
-    
-=======
->>>>>>> Stashed changes
+
+
 });
 
 $routes->group('devman', static function ($routes) {
@@ -296,17 +293,15 @@ $routes->group('webmin/salesman', ['filter' => 'webminauth'], static function ($
 
     $routes->get('/', 'Webmin\Salesman::index');
 
-    $routes->post('table', 'Webmin\Supplier::table');
+    $routes->post('table', 'Webmin\Salesman::table');
 
-    $routes->get('getbyid/(:num)', 'Webmin\Supplier::getById/$1');
+    $routes->get('getbyid/(:num)', 'Webmin\Salesman::getById/$1');
 
-    $routes->get('getbycode', 'Webmin\Supplier::getByCode');
+    $routes->get('getbycode', 'Webmin\Salesman::getByCode');
 
-    $routes->get('getbyname', 'Webmin\Supplier::getByName');
+    $routes->post('save/(:alpha)', 'Webmin\Salesman::save/$1');
 
-    $routes->post('save/(:alpha)', 'Webmin\Supplier::save/$1');
-
-    $routes->get('delete/(:num)', 'Webmin\Supplier::delete/$1');
+    $routes->get('delete/(:num)', 'Webmin\Salesman::delete/$1');
 });
 
 
@@ -839,12 +834,8 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 
 $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('store', 'Webmin\Select::store');
-    
-    $routes->get('user-group', 'Webmin\Select::userGroup');
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
+    $routes->get('user-group', 'Webmin\Select::userGroup');
     $routes->get('user-account', 'Webmin\Select::userAccount');
 
     $routes->get('unit', 'Webmin\Select::unit');
@@ -884,12 +875,6 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
     $routes->get('no-po-consignment', 'Webmin\Select::noPoConsignment');
 
     $routes->get('payment-method', 'Webmin\Select::payment_method');
-<<<<<<< Updated upstream
-    
-=======
-
->>>>>>> Stashed changes
-    $routes->get('salesman', 'Webmin\Select::salesman');
 });
 
 /* END Select2 */
@@ -908,63 +893,9 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
 
 $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
 
-<<<<<<< Updated upstream
 
-    //$routes->get('customer', 'Webmin\EricDemo::customer');
-
-
-
-    //$routes->get('supplier', 'Webmin\EricDemo::supplier');
-
-    //$routes->get('product', 'Webmin\EricDemo::product');
-
-    //$routes->get('product/detail', 'Webmin\EricDemo::productDetail');
-
-    //$routes->get('product/parcel-detail', 'Webmin\EricDemo::parcelDetail');
-
-
-
-
-    $routes->get('point-reward', 'Webmin\EricDemo::pointReward');
-
-    $routes->get('exchange-point', 'Webmin\EricDemo::exchangePoint');
-
-    $routes->get('exchange-point/v2', 'Webmin\EricDemo::exchangePointV2');
-
-    $routes->get('exchange-point/detail', 'Webmin\EricDemo::exchangePointDetail');
-
-
-    //$routes->get('password-control', 'Webmin\EricDemo::passwordControl');
-
-    //$routes->get('password-control/logs', 'Webmin\EricDemo::passwordControlLogs');
-
-
-    // $routes->get('point-reward', 'Webmin\EricDemo::pointReward');
-    // $routes->get('exchange-point', 'Webmin\EricDemo::exchangePoint');
-    // $routes->get('exchange-point/v2', 'Webmin\EricDemo::exchangePointV2');
-    // $routes->get('exchange-point/detail', 'Webmin\EricDemo::exchangePointDetail');
-
-    //$routes->get('password-control', 'Webmin\EricDemo::passwordControl');
-    //$routes->get('password-control/logs', 'Webmin\EricDemo::passwordControlLogs');
-    //$routes->get('voucher', 'Webmin\EricDemo::voucher');
-
-
-
-
-
-    //$routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');
-
-=======
->>>>>>> Stashed changes
     $routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');
 
-    //$routes->get('debt-repayment/detail', 'Webmin\EricDemo::debtRepaymentDetail');
-
-
-
-    //$routes->get('receivable-repayment', 'Webmin\EricDemo::receivableRepayment');
-
-    //$routes->get('receivable-repayment/detail', 'Webmin\EricDemo::receivableRepaymentDetail');
 
 
 
