@@ -43,7 +43,7 @@ class InitSeeder extends Seeder
             'user_id'       => 1,
             'store_id'      => 1,
             'user_code'     => 'U000',
-            'user_name'     => 'dbig23',
+            'user_name'     => 'dbig22',
             'user_realname' => 'Owner',
             'user_password' => password_hash('12345678', PASSWORD_BCRYPT),
             'user_group'    => 'L00',

@@ -682,29 +682,21 @@ $routes->group('webmin/payment', ['filter' => 'webminauth'], static function ($r
 });
 
 
-/* Mobile*/
+/* Mobile Apps */
+$routes->group('webmin/mobileapps/banner', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\MobileApps\Banner::index');
+    $routes->post('table', 'Webmin\MobileApps\Banner::table');
+    $routes->get('getbyid/(:num)', 'Webmin\MobileApps\Banner::getById/$1');
+    $routes->post('save/(:alpha)', 'Webmin\MobileApps\Banner::save/$1');
+    $routes->get('delete/(:num)', 'Webmin\MobileApps\Banner::delete/$1');
+});
 
-$routes->group('webmin/mobileapps', ['filter' => 'webminauth'], static function ($routes) {
-
-    $routes->get('/', 'Webmin\Mobileapps\Mobileapps::index');
-
-    $routes->post('tablebanner', 'Webmin\Mobileapps\Mobileapps::tablebanner');
-
-    $routes->post('tablepromo', 'Webmin\Mobileapps\Mobileapps::tablepromo');
-
-    $routes->get('mobileapps-banner', 'Webmin\Mobileapps\Mobileapps::mobileappsBanner');
-
-    $routes->get('mobileapps-promo', 'Webmin\Mobileapps\Mobileapps::mobileappsPromo');
-
-    $routes->post('savebanner/(:alpha)', 'Webmin\Mobileapps\Mobileapps::savebanner/$1');
-
-    $routes->post('savepromo/(:alpha)', 'Webmin\Mobileapps\Mobileapps::savepromo/$1');
-
-    $routes->get('getbyid/(:num)', 'Webmin\Mobileapps\Mobileapps::getById/$1');
-
-    $routes->get('deletebanner/(:num)', 'Webmin\Mobileapps\Mobileapps::deletebanner/$1');
-
-    $routes->get('deletepromo/(:num)', 'Webmin\Mobileapps\Mobileapps::deletepromo/$1');
+$routes->group('webmin/mobileapps/promo', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\MobileApps\Promo::index');
+    $routes->post('table', 'Webmin\MobileApps\Promo::table');
+    $routes->get('getbyid/(:num)', 'Webmin\MobileApps\Promo::getById/$1');
+    $routes->post('save/(:alpha)', 'Webmin\MobileApps\Promo::save/$1');
+    $routes->get('delete/(:num)', 'Webmin\MobileApps\Promo::delete/$1');
 });
 
 /* end Mobile*/

@@ -293,7 +293,7 @@
 					</a>
 					<ul class="nav nav-treeview">
 						<li class="nav-item">
-							<a href="<?= base_url('webmin/mobileapps/mobileapps-banner') ?>" class="nav-link">
+							<a href="<?= base_url('webmin/mobileapps/banner') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>Banner Slider</p>
 							</a>
@@ -301,7 +301,7 @@
 					</ul>
 					<ul class="nav nav-treeview">
 						<li class="nav-item">
-							<a href="<?= base_url('webmin/mobileapps/mobileapps-promo') ?>" class="nav-link">
+							<a href="<?= base_url('webmin/mobileapps/promo') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>Mobile Promo</p>
 							</a>
