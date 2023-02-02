@@ -103,7 +103,7 @@ class M_point_reward extends Model
 
     public function updateReward($data)
     {
-        $this->db->query('LOCK TABLES ms_reward_point WRITE');
+        $this->db->query('LOCK TABLES ms_point_reward WRITE');
         $save = $this->db->table($this->table)->update($data, ['reward_id' => $data['reward_id']]);
         $saveQueries = NULL;
         if ($this->db->affectedRows() > 0) {
@@ -117,7 +117,7 @@ class M_point_reward extends Model
 
     public function deleteReward($reward_id)
     {
-        $this->db->query('LOCK TABLES ms_reward WRITE');
+        $this->db->query('LOCK TABLES ms_point_reward WRITE');
         $data = ['deleted' => 'Y'];
         $save = $this->db->table($this->table)->update($data, ['reward_id' => $reward_id]);
         $saveQueries = NULL;

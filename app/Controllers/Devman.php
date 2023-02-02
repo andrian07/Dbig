@@ -119,8 +119,8 @@ class Devman extends BaseController
 
     public function install()
     {
-        $migration = $this->request->getGet('migration') == NULL ? FALSE : TRUE;
-
+        $migration  = $this->request->getGet('migration') == NULL ? FALSE : TRUE;
+        $demo       = $this->request->getGet('demo') == NULL ? FALSE : TRUE;
         $configDir = $this->myConfig->uploadImage;
         foreach ($configDir as $cfg) {
             $upload_dir     = isset($cfg['upload_dir']) ? $cfg['upload_dir'] : NULL;
@@ -156,5 +156,10 @@ class Devman extends BaseController
         $seeder = \Config\Database::seeder();
         echo "Run InitSeeder </br>";
         $seeder->call('InitSeeder');
+
+        if ($demo) {
+            echo "Run DemoSeeder </br>";
+            $seeder->call('DemoSeeder');
+        }
     }
 }
