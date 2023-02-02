@@ -59,6 +59,16 @@ class MyApp extends BaseConfig
             ]
         ],
 
+        'salesman' => [
+            'text'   => 'Salesman',
+            'roles'   => [
+                'view'      => ['text' => 'Lihat'],
+                'add'       => ['text' => 'Tambah'],
+                'edit'      => ['text' => 'Ubah'],
+                'delete'    => ['text' => 'Hapus'],
+            ]
+        ],
+
         'mobilebanner' => [
             'text'   => 'Mobile Banner',
             'roles'   => [

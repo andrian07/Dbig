@@ -93,8 +93,6 @@ $routes->group('api', static function ($routes) {
     $routes->post('searchProduct', 'Api::getproductbyname');
 
     //$routes->post('itemPoint', 'Api::getitempoint');
-
-    
 });
 
 $routes->group('devman', static function ($routes) {
@@ -292,17 +290,15 @@ $routes->group('webmin/salesman', ['filter' => 'webminauth'], static function ($
 
     $routes->get('/', 'Webmin\Salesman::index');
 
-    $routes->post('table', 'Webmin\Supplier::table');
+    $routes->post('table', 'Webmin\Salesman::table');
 
-    $routes->get('getbyid/(:num)', 'Webmin\Supplier::getById/$1');
+    $routes->get('getbyid/(:num)', 'Webmin\Salesman::getById/$1');
 
-    $routes->get('getbycode', 'Webmin\Supplier::getByCode');
+    $routes->get('getbycode', 'Webmin\Salesman::getByCode');
 
-    $routes->get('getbyname', 'Webmin\Supplier::getByName');
+    $routes->post('save/(:alpha)', 'Webmin\Salesman::save/$1');
 
-    $routes->post('save/(:alpha)', 'Webmin\Supplier::save/$1');
-
-    $routes->get('delete/(:num)', 'Webmin\Supplier::delete/$1');
+    $routes->get('delete/(:num)', 'Webmin\Salesman::delete/$1');
 });
 
 
@@ -885,6 +881,7 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
     $routes->get('payment-method', 'Webmin\Select::payment_method');
 
     $routes->get('salesman', 'Webmin\Select::salesman');
+
 });
 
 /* END Select2 */
@@ -902,7 +899,6 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
 /* Eric Demo */
 
 $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
-
 
     //$routes->get('customer', 'Webmin\EricDemo::customer');
 
@@ -948,16 +944,8 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
 
     //$routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');
 
-
     $routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');
 
-    //$routes->get('debt-repayment/detail', 'Webmin\EricDemo::debtRepaymentDetail');
-
-
-
-    //$routes->get('receivable-repayment', 'Webmin\EricDemo::receivableRepayment');
-
-    //$routes->get('receivable-repayment/detail', 'Webmin\EricDemo::receivableRepaymentDetail');
 
 
 

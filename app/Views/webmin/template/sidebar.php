@@ -101,6 +101,13 @@
 								<p>Mapping Area</p>
 							</a>
 						</li>
+
+						<li class="nav-item">
+							<a href="<?= base_url('webmin/salesman') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Salesman</p>
+							</a>
+						</li>
 					</ul>
 				</li>
 
