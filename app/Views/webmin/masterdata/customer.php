@@ -310,6 +310,16 @@ $assetsUrl = base_url('assets');
         let formMode = '';
         let filter_point_value = new AutoNumeric('#filter_point_value', configQty);
 
+        function _initButton() {
+            $('#btnadd').prop('disabled', !hasRole('customer.add'));
+            if (!hasRole('customer.edit')) {
+                $('.btnedit').prop('disabled', false);
+            }
+
+            if (!hasRole('customer.delete')) {
+                $('.btndelete').prop('disabled', false);
+            }
+        }
 
         const randomString = (length = 8) => {
             // Declare all characters
@@ -353,7 +363,7 @@ $assetsUrl = base_url('assets');
             },
             drawCallback: function(settings) {
                 _initTooltip();
-                //_initButton();
+                _initButton();
             },
             columnDefs: [{
                     width: 100,
@@ -770,13 +780,10 @@ $assetsUrl = base_url('assets');
             })
         })
 
-        $('#tblcustomer').on('click', '.btndetail', function(e) {
-            e.preventDefault();
-            message.success('Coming Soon');
-        })
+
 
         filter_point_value.set(0);
-        //_initButton();
+        _initButton();
     })
 </script>
 <?= $this->endSection() ?>

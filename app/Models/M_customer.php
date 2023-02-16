@@ -165,4 +165,45 @@ class M_customer extends Model
         saveQueries($saveQueries, 'customer', $customer_id, 'delete');
         return $save;
     }
+
+
+    public function verificationEmail($customer_id)
+    {
+        $this->db->query('LOCK TABLES ms_customer WRITE,ms_mapping_area READ,ms_salesman READ');
+        $saveQueries = NULL;
+
+        $result = ['success' => false, 'message' => 'Verifikasi gagal', 'customer_data' => null];
+        $getCustomer = $this->getCustomer($customer_id)->getRowArray();
+
+        if ($getCustomer == NULL) {
+            $result = ['success' => false, 'message' => 'Akun tidak ditemukan', 'customer_data' => null];
+        } else {
+            $isVerif = $getCustomer['verification_email'] == 'Y' ? true : false;
+            if ($isVerif) {
+                $result = ['success' => true, 'message' => 'Halo <b>' . $getCustomer['customer_name'] . '</b>,<br>Verifikasi akun anda berhasil', 'customer_data' => $getCustomer];
+            } else {
+                $this->db->transBegin();
+                $this->db->table($this->table)->update(['verification_email' => 'Y'], ['customer_id' => $customer_id]);
+                if ($this->db->affectedRows() > 0) {
+                    $saveQueries[]  = $this->db->getLastQuery()->getQuery();
+                }
+
+                // check referal code //
+
+
+                if ($this->db->transStatus() === false) {
+                    $this->db->transRollback();
+                    $saveQueries = NULL;
+                    $result = ['success' => false, 'message' => 'Verifikasi akun gagal', 'customer_data' => $getCustomer];
+                } else {
+                    $this->db->transCommit();
+                    $result = ['success' => true, 'message' => 'Halo <b>' . $getCustomer['customer_name'] . '</b>,<br>Verifikasi akun anda berhasil', 'customer_data' => $getCustomer];
+                }
+            }
+        }
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'customer', $customer_id, 'verification');
+        return  $result;
+    }
 }

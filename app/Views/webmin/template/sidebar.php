@@ -218,7 +218,14 @@
 						<li class="nav-item">
 							<a href="<?= base_url('webmin/sales-admin') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
-								<p>Penjualan</p>
+								<p>Penjualan Admin</p>
+								<span class="right badge badge-danger"></span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="<?= base_url('webmin/sales-pos') ?>" class="nav-link">
+								<i class="far fa-circle nav-icon"></i>
+								<p>Penjualan Pos</p>
 								<span class="right badge badge-danger"></span>
 							</a>
 						</li>

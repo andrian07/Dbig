@@ -280,6 +280,15 @@ class MyApp extends BaseConfig
             ]
         ],
 
+        'sales_pos' => [
+            'text'   => 'Penjualan POS',
+            'roles'   => [
+                'view'      => ['text' => 'Lihat'],
+                'edit'      => ['text' => 'Ubah']
+            ]
+        ],
+
+
         'sales_return' => [
             'text'   => 'Retur Penjualan',
             'roles'   => [
@@ -438,5 +447,18 @@ class MyApp extends BaseConfig
             'upload_dir'    => 'contents/upload/voucher/',
             'thumb_dir'     => 'contents/thumb/voucher/',
         ],
+    ];
+
+    public $email = [
+        'default' => [
+            'protocol'      => 'smtp',
+            'host'          => 'mail.borneoeternityswiftlet.co.id',
+            'port'          => 465,
+            'SMTPAuth'      => true,
+            'senderName'    => 'DBIG',
+            'username'      => 'admin@borneoeternityswiftlet.co.id',
+            'password'      => 'cI+D+fgBXmEh',
+            'SMTPSecure'    => 'ssl'
+        ]
     ];
 }

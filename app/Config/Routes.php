@@ -66,6 +66,8 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 
 $routes->get('/', 'Home::index');
+$routes->get('verification/(:any)', 'Home::verificationAccount/$1');
+$routes->get('reset-password/(:any)', 'Home::resetPassword/$1');
 
 
 $routes->group('api', static function ($routes) {
@@ -108,10 +110,9 @@ $routes->group('devman', static function ($routes) {
     $routes->get('log-queries', 'Devman::logQueries', ['filter' => 'devauth']);
 
     $routes->post('log-queries-table', 'Devman::getLogQueries', ['filter' => 'devauth']);
-
     $routes->get('log-queries-detail/(:num)', 'Devman::getLogQueriesDetail/$1', ['filter' => 'devauth']);
-
     $routes->get('install', 'Devman::install', ['filter' => 'devauth']);
+    $routes->get('test-email', 'Devman::testEmail', ['filter' => 'devauth']);
 });
 
 
@@ -307,6 +308,8 @@ $routes->group('webmin/customer', ['filter' => 'webminauth'], static function ($
     $routes->get('/', 'Webmin\Customer::index');
 
     $routes->post('table', 'Webmin\Customer::table');
+
+    $routes->get('detail/(:num)', 'Webmin\Customer::detail/$1');
 
     $routes->get('getbyid/(:num)', 'Webmin\Customer::getById/$1');
 
@@ -594,7 +597,6 @@ $routes->group('webmin/consignment', ['filter' => 'webminauth'], static function
     $routes->get('get-consignment-po-detail/(:alphanum)', 'Webmin\Consignment\Consignment::getConsignmentPoDetail/$1');
 
     $routes->get('recap-consignment', 'Webmin\Consignment\Consignment::recapConsignment');
-
 });
 
 /* end pembelian */
@@ -631,6 +633,17 @@ $routes->group('webmin/sales-admin', ['filter' => 'webminauth'], static function
 });
 
 /* end penjualan admin */
+
+/* penjualan pos */
+$routes->group('webmin/sales-pos', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('/', 'Webmin\SalesPos::index');
+    $routes->get('getbyid/(:num)', 'Webmin\SalesPos::getById/$1');
+    $routes->get('getdetailbyid/(:num)', 'Webmin\SalesPos::getDetailById/$1');
+    $routes->post('table', 'Webmin\SalesPos::table');
+    $routes->post('table-detail-sales', 'Webmin\SalesPos::tableDetailSales');
+    $routes->post('change-salesman/(:num)/(:num)', 'Webmin\SalesPos::changeSalesman/$1/$2');
+});
+/* end penjualan pos */
 
 
 
@@ -829,7 +842,7 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 
 $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('store', 'Webmin\Select::store');
-    
+
     $routes->get('user-group', 'Webmin\Select::userGroup');
 
     $routes->get('user-account', 'Webmin\Select::userAccount');
@@ -873,7 +886,6 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
     $routes->get('payment-method', 'Webmin\Select::payment_method');
 
     $routes->get('salesman', 'Webmin\Select::salesman');
-
 });
 
 /* END Select2 */
@@ -882,78 +894,8 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
 
 
 
-/* END POS */
 
 
-
-
-
-/* Eric Demo */
-
-$routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
-
-    //$routes->get('customer', 'Webmin\EricDemo::customer');
-
-
-
-    //$routes->get('supplier', 'Webmin\EricDemo::supplier');
-
-    //$routes->get('product', 'Webmin\EricDemo::product');
-
-    //$routes->get('product/detail', 'Webmin\EricDemo::productDetail');
-
-    //$routes->get('product/parcel-detail', 'Webmin\EricDemo::parcelDetail');
-
-
-
-
-    $routes->get('point-reward', 'Webmin\EricDemo::pointReward');
-
-    $routes->get('exchange-point', 'Webmin\EricDemo::exchangePoint');
-
-    $routes->get('exchange-point/v2', 'Webmin\EricDemo::exchangePointV2');
-
-    $routes->get('exchange-point/detail', 'Webmin\EricDemo::exchangePointDetail');
-
-
-    //$routes->get('password-control', 'Webmin\EricDemo::passwordControl');
-
-    //$routes->get('password-control/logs', 'Webmin\EricDemo::passwordControlLogs');
-
-
-    // $routes->get('point-reward', 'Webmin\EricDemo::pointReward');
-    // $routes->get('exchange-point', 'Webmin\EricDemo::exchangePoint');
-    // $routes->get('exchange-point/v2', 'Webmin\EricDemo::exchangePointV2');
-    // $routes->get('exchange-point/detail', 'Webmin\EricDemo::exchangePointDetail');
-
-    //$routes->get('password-control', 'Webmin\EricDemo::passwordControl');
-    //$routes->get('password-control/logs', 'Webmin\EricDemo::passwordControlLogs');
-    //$routes->get('voucher', 'Webmin\EricDemo::voucher');
-
-
-
-
-
-    //$routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');
-
-    $routes->get('debt-repayment', 'Webmin\EricDemo::debtRepayment');
-
-
-
-
-    $routes->get('consignment-repayment', 'Webmin\EricDemo::consignmentRepayment');
-
-    $routes->get('consignment-repayment/invoice', 'Webmin\EricDemo::consignmentRepaymentInvoice');
-
-    $routes->get('consignment-repayment/detail', 'Webmin\EricDemo::consignmentRepaymentDetail');
-
-
-    $routes->get('report/product-sales-recap', 'Webmin\EricDemo::reportSalesProductRecap');
-
-    $routes->get('report/view-product-sales-recap', 'Webmin\EricDemo::viewReportSalesProductRecap');
-});
-
-/* End Eric Demo */
 
 
 

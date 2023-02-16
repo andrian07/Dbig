@@ -75,9 +75,12 @@ class Customer extends WebminController
                 $prop =  'data-id="' . $row['customer_id'] . '" data-name="' . esc($row['customer_name']) . '"';
                 if ($row['customer_code'] == 'CASH') {
                     $prop .= ' disabled';
+                    $detailBtn = '<button ' . $prop . ' class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></button>&nbsp;';
+                } else {
+                    $detailBtn = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="' . base_url('webmin/customer/detail/' . $row['customer_id']) . '" class="btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>&nbsp;';
                 }
 
-                $btns[] = '<button ' . $prop . ' class="btn btn-sm btn-default btndetail mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></button>&nbsp;';
+                $btns[] = $detailBtn;
                 $btns[] = '<button ' . $prop . ' class="btn btn-sm btn-default btnresetpassword mb-2" data-toggle="tooltip" data-placement="top" data-title="Reset Kata Sandi"><i class="fas fa-key"></i></button><br>';
                 $btns[] = button_edit($prop);
                 $btns[] = '&nbsp;';
@@ -93,10 +96,37 @@ class Customer extends WebminController
         }
     }
 
-    public function detail($customer_id)
+    public function detail($customer_id = '')
     {
-        echo "Detail!";
+        if ($this->role->hasRole('customer.view')) {
+            if ($customer_id == '') {
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            } else {
+
+                $find = $this->M_customer->getCustomer($customer_id)->getRowArray();
+                if ($find == NULL) {
+                    throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+                } else {
+                    $config_label_group     = $this->appConfig->get('default', 'label_customer_group');
+                    $member_group_label     = isset($config_label_group[$find['customer_group']]) ? $config_label_group[$find['customer_group']] : 'ERROR';
+                    $invite_by_referral_code = $find['invite_by_referral_code'];
+                    $invite_by_user          = NULL;
+                    if (!empty($invite_by_referral_code)) {
+                        $invite_by_user = $this->M_customer->getCustomerByReferralCode($invite_by_referral_code)->getRowArray();
+                    }
+                    $data = [
+                        'customer'              => $find,
+                        'invite_by'             => $invite_by_user,
+                        'member_group_label'    =>  $member_group_label
+                    ];
+                    return view('webmin/masterdata/customer_detail', $data);
+                }
+            }
+        } else {
+            die('<h1>ANDA TIDAK MEMILIKI AKSES KE LAMAN INI</h1>');
+        }
     }
+
 
     public function getById($customer_id = '')
     {
