@@ -197,7 +197,7 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="<?= base_url('webmin/purchase/retur-purchase') ?>" class="nav-link">
+							<a href="<?= base_url('webmin/retur') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>Retur Pembelian</p>
 								<span class="right badge badge-danger"></span>
@@ -248,13 +248,13 @@
 								<span class="right badge badge-danger"></span>
 							</a>
 						</li>
-						<li class="nav-item">
+						<?php /*<li class="nav-item">
 							<a href="<?= base_url('webmin/consignment/recap-consignment') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>Rekap Konsinyasi</p>
 								<span class="right badge badge-danger"></span>
 							</a>
-						</li>
+						</li> */ ?>
 					</ul>
 				</li>
 
@@ -280,13 +280,14 @@
 								<p>Pelunasan Piutang</p>
 							</a>
 						</li>
-
+						<?php /*
 						<li class="nav-item">
 							<a href="<?= base_url('webmin/payment/consignment-repayment') ?>" class="nav-link">
 								<i class="far fa-circle nav-icon"></i>
 								<p>Pelunasan Konsinyasi</p>
 							</a>
 						</li>
+						*/ ?>
 					</ul>
 				</li>
 

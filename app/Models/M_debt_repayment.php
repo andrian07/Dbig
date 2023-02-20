@@ -85,7 +85,7 @@ class M_debt_repayment extends Model
 
         ->where('purchase_supplier_id', $supplierid)
 
-        ->orderBy('created_at', 'ASC')
+        ->orderBy('temp_payment_debt.created_at', 'ASC')
 
         ->get();
     }
@@ -183,20 +183,16 @@ class M_debt_repayment extends Model
 
         if ($this->db->affectedRows() > 0) {
 
-            $saveQueries[] = [
-
-                'query_text'    => $this->db->getLastQuery()->getQuery(),
-
-                'ref_id'        => $payment_debt_id 
-
-            ];
-
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
         }
 
 
         $sqlDtOrder = "insert into dt_payment_debt(payment_debt_id,dt_payment_debt_purchase_id,dt_payment_debt_discount,dt_payment_debt_desc,dt_payment_debt_nominal) VALUES ";
 
+        $sqlUpdatePurchase = "insert into hd_purchase (purchase_id, purchase_invoice, purchase_po_invoice, purchase_suplier_no, purchase_date, purchase_faktur_date, purchase_supplier_id, purchase_user_id, purchase_warehouse_id, purchase_remark, purchase_sub_total, purchase_discount1, purchase_discount1_percentage, purchase_discount2, purchase_discount2_percentage, purchase_discount3, purchase_discount3_percentage, purchase_total_discount, purchase_total_dpp, purchase_total_ppn, purchase_total_ongkir, purchase_total, purchase_due_date, purchase_payment_method_id, purchase_down_payment, purchase_remaining_debt, purchase_retur_nominal) VALUES ";
+
         $sqlDtValues = [];
+        $sqlPurchaseValues = [];
 
         $getTemp =  $this->db->table($this->table_temp_payment_debt)->where('temp_payment_debt_user_id', $data['user_id'])->where('temp_payment_isedit', 'Y')->get();
 
@@ -206,23 +202,66 @@ class M_debt_repayment extends Model
             $dt_payment_debt_discount         = $row['temp_payment_debt_discount'];
             $dt_payment_debt_nominal          = $row['temp_payment_debt_nominal'];
             $dt_payment_debt_desc             = $row['temp_payment_debt_desc'];
+            $purchase_retur_nominal           = $row['temp_payment_debt_retur'];
             $dt_new_remaining_debt            = $row['temp_purchase_nominal'] - $row['temp_payment_debt_nominal'] - $row['temp_payment_debt_discount'];
+
+            $getPurchase =  $this->db->table($this->table_hd_purchase)->where('purchase_id', $dt_payment_debt_purchase_id)->get()->getRowArray();
+
+            $purchase_id_hd = $getPurchase['purchase_id'];
+            $purchase_invoice_hd = $getPurchase['purchase_invoice'];
+            $purchase_po_invoice_hd = $getPurchase['purchase_po_invoice'];
+            $purchase_suplier_no_hd = $getPurchase['purchase_suplier_no'];
+            $purchase_date_hd = $getPurchase['purchase_date'];
+            $purchase_faktur_date_hd = $getPurchase['purchase_faktur_date'];
+            $purchase_supplier_id_hd = $getPurchase['purchase_supplier_id'];
+            $purchase_user_id_hd = $getPurchase['purchase_user_id'];
+            $purchase_warehouse_id_hd = $getPurchase['purchase_warehouse_id'];
+            $purchase_remark_hd = $getPurchase['purchase_remark'];
+            $purchase_sub_total_hd = $getPurchase['purchase_sub_total'];
+            $purchase_discount1_hd = $getPurchase['purchase_discount1'];
+            $purchase_discount1_percentage_hd = $getPurchase['purchase_discount1_percentage'];
+            $purchase_discount2_hd = $getPurchase['purchase_discount2'];
+            $purchase_discount2_percentage_hd = $getPurchase['purchase_discount2_percentage'];
+            $purchase_discount3_hd = $getPurchase['purchase_discount3'];
+            $purchase_discount3_percentage_hd = $getPurchase['purchase_discount3_percentage'];
+            $purchase_total_discount_hd = $getPurchase['purchase_total_discount'];
+            $purchase_total_dpp_hd = $getPurchase['purchase_total_dpp'];
+            $purchase_total_ppn_hd = $getPurchase['purchase_total_ppn'];
+            $purchase_total_ongkir_hd = $getPurchase['purchase_total_ongkir'];
+            $purchase_total_hd = $getPurchase['purchase_total'];
+            $purchase_due_date_hd = $getPurchase['purchase_due_date'];
+            $purchase_payment_method_id_hd = $getPurchase['purchase_payment_method_id'];
+            $purchase_down_payment_hd = $getPurchase['purchase_down_payment'];
+            $purchase_remaining_debt_hd = $dt_new_remaining_debt;
+            $purchase_retur_nominal_hd = $purchase_retur_nominal;
+
 
             $sqlDtValues[] = "('$payment_debt_id','$dt_payment_debt_purchase_id','$dt_payment_debt_discount','$dt_payment_debt_desc','$dt_payment_debt_nominal')";
 
-            $update_remaining_debt =  $this->db->table($this->table_hd_purchase)->where('purchase_id', $dt_payment_debt_purchase_id)->update(['purchase_remaining_debt' => $dt_new_remaining_debt]);
+            $sqlPurchaseValues[] = "('$purchase_id_hd','$purchase_invoice_hd','$purchase_po_invoice_hd','$purchase_suplier_no_hd','$purchase_date_hd','$purchase_faktur_date_hd','$purchase_supplier_id_hd','$purchase_user_id_hd','$purchase_warehouse_id_hd','$purchase_remark_hd','$purchase_sub_total_hd','$purchase_discount1_hd','$purchase_discount1_percentage_hd','$purchase_discount2_hd','$purchase_discount2_percentage_hd','$purchase_discount3_hd','$purchase_discount3_percentage_hd','$purchase_total_discount_hd','$purchase_total_dpp_hd','$purchase_total_ppn_hd','$purchase_total_ongkir_hd','$purchase_total_hd','$purchase_due_date_hd','$purchase_payment_method_id_hd','$purchase_down_payment_hd', '$purchase_remaining_debt_hd','$purchase_retur_nominal_hd')";
 
-
+            //$update_remaining_debt =  $this->db->table($this->table_hd_purchase)->where('purchase_id', $dt_payment_debt_purchase_id)->update(['purchase_remaining_debt' => $dt_new_remaining_debt]);
 
         }
 
         $sqlDtOrder .= implode(',', $sqlDtValues);
 
+        $sqlUpdatePurchase .= implode(',', $sqlPurchaseValues). " ON DUPLICATE KEY UPDATE purchase_remaining_debt=purchase_remaining_debt-VALUES(purchase_remaining_debt), purchase_retur_nominal=purchase_retur_nominal-VALUES(purchase_retur_nominal)";
+
+       
+
         $this->db->query($sqlDtOrder);
 
         if ($this->db->affectedRows() > 0) {
-            $saveQueries = $this->db->getLastQuery()->getQuery();
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
         }
+
+        $this->db->query($sqlUpdatePurchase);
+
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        }
+
 
         if ($this->db->transStatus() === false) {
 

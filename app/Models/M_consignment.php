@@ -13,6 +13,7 @@ class M_consignment extends Model
     protected $table_warehouse = 'ms_warehouse';
     protected $table_hd_purchase_consignment = 'hd_purchase_consignment';
     protected $table_hd_submission = 'hd_submission';
+    protected $table_log = 'hd_log_queries';
 
 
     public function getDtConsignmentPoDetail($purchase_order_consignment_invoice = '')
@@ -98,6 +99,41 @@ class M_consignment extends Model
         return $builder->get();
     }
 
+    public function getLogUpdatePO($purchase_order_consignment_id)
+    {
+        $builder = $this->db->table($this->table_log);
+
+        $builder->select('*, hd_log_queries.created_at as created_at');
+
+        $builder->join('user_account', 'user_account.user_id = hd_log_queries.user_id');
+
+        $builder->where(['log_remark' => 'Update PO konsinyasi']);
+
+        return $builder->get();
+    }
+
+    public function copyDtOrderPoToTemp($datacopy)
+    {
+        $user_id                            = $datacopy['temp_po_consignment_user_id'];
+        $supplier_id                        = $datacopy['temp_po_consignment_suplier_id'];
+        $supplier_name                      = $datacopy['temp_po_consignment_suplier_name'];
+        $purchase_order_consignment_invoice = $datacopy['purchase_order_consignment_invoice'];
+
+        $this->clearTemp($user_id);
+
+        $sqlText = "INSERT INTO temp_purchase_order_consignment(temp_po_consignment_submission_id,temp_po_consignment_submission_invoice,temp_po_consignment_item_id,temp_po_consignment_qty,temp_po_consignment_expire_date,temp_po_consignment_suplier_id,temp_po_consignment_suplier_name,temp_po_consignment_user_id) ";
+
+
+        $sqlText .= "SELECT dt_po_consignment_submission_id,dt_po_consignment_submission_invoice,dt_po_consignment_item_id, dt_po_consignment_qty, dt_po_consignment_expire_date, '".$supplier_id."' as dt_po_consignment_supplier_id, '".$supplier_name."' as dt_po_consignment_supplier_name, '".$user_id."' as dt_po_consignment_user_id";
+
+        $sqlText .= " FROM dt_purchase_order_consignment WHERE dt_po_consignment_invoice = '$purchase_order_consignment_invoice'";
+
+
+        $this->db->query($sqlText);
+
+        return $this->getTemp($user_id);
+    }
+
     public function copyDtOrderToTemp($datacopy)
     {
         $user_id = $datacopy['user_id'];
@@ -124,16 +160,16 @@ class M_consignment extends Model
 
         $exist = $this->db->table($this->table_temp_po_consignment)
 
-            ->where('temp_po_consignment_item_id', $data['temp_po_consignment_item_id'])
+        ->where('temp_po_consignment_item_id', $data['temp_po_consignment_item_id'])
 
-            ->where('temp_po_consignment_user_id', $data['temp_po_consignment_user_id'])
+        ->where('temp_po_consignment_user_id', $data['temp_po_consignment_user_id'])
 
-            ->countAllResults();
+        ->countAllResults();
 
         if ($exist > 0) {
 
             return $this->db->table($this->table_temp_po_consignment)
-                
+
             ->where('temp_po_consignment_item_id', $data['temp_po_consignment_item_id'])
 
             ->where('temp_po_consignment_user_id', $data['temp_po_consignment_user_id'])
@@ -153,16 +189,16 @@ class M_consignment extends Model
 
         $exist = $this->db->table($this->table_temp_consignment)
 
-            ->where('temp_consignment_item_id', $data['temp_consignment_item_id'])
+        ->where('temp_consignment_item_id', $data['temp_consignment_item_id'])
 
-            ->where('temp_consignment_user_id', $data['temp_consignment_user_id'])
+        ->where('temp_consignment_user_id', $data['temp_consignment_user_id'])
 
-            ->countAllResults();
+        ->countAllResults();
 
         if ($exist > 0) {
 
             return $this->db->table($this->table_temp_consignment)
-                
+
             ->where('temp_consignment_item_id', $data['temp_consignment_item_id'])
 
             ->where('temp_consignment_user_id', $data['temp_consignment_user_id'])
@@ -232,16 +268,15 @@ class M_consignment extends Model
 
         $invoice_date =  date_format(date_create($data['purchase_order_consignment_date']),"y/m");
 
+        if ($maxCode == NULL) {
 
-        if ($maxCode['purchase_order_consignment_invoice'] == NULL) {
-
-            $data['purchase_order_consignment_invoice'] = 'POK/'.$invoice_date.'/'.'0000000001';
+            $data['purchase_order_consignment_invoice'] = 'POK/'.$warehouse_code['warehouse_code'].'/'.$invoice_date.'/'.'0000000001';
 
         } else {
 
             $invoice = substr($maxCode['purchase_order_consignment_invoice'], -10);
 
-            $data['purchase_order_consignment_invoice'] = 'LBM/'.$invoice_date.'/'.substr('000000000' . strval(floatval($invoice) + 1), -10);
+            $data['purchase_order_consignment_invoice'] = 'POK/'.$warehouse_code['warehouse_code'].'/'.$invoice_date.'/'.substr('000000000' . strval(floatval($invoice) + 1), -10);
 
         }
 
@@ -252,18 +287,8 @@ class M_consignment extends Model
 
 
         if ($this->db->affectedRows() > 0) {
-
-            $saveQueries[] = [
-
-                'query_text'    => $this->db->getLastQuery()->getQuery(),
-
-                'ref_id'        => $purchase_order_consignment_id
-
-            ];
-
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
         }
-
-
 
         $sqlDtOrder = "insert into dt_purchase_order_consignment(dt_po_consignment_invoice,dt_po_consignment_submission_id,dt_po_consignment_submission_invoice,dt_po_consignment_item_id,dt_po_consignment_qty,dt_po_consignment_expire_date) VALUES";
 
@@ -291,17 +316,15 @@ class M_consignment extends Model
 
         $sqlDtOrder .= implode(',', $sqlDtValues);
 
-
-
         $this->db->query($sqlDtOrder);
 
         if ($this->db->affectedRows() > 0) {
-                $saveQueries = $this->db->getLastQuery()->getQuery();
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
         }
 
         if ($this->db->transStatus() === false) {
 
-            $saveQueries = NULL;
+            $saveQueries[] = NULL;
 
             $this->db->transRollback();
 
@@ -316,10 +339,11 @@ class M_consignment extends Model
             $save = ['success' => TRUE, 'purchase_order_consignment_id' => $purchase_order_consignment_id ];
 
         }
-
+        
         $this->db->query('UNLOCK TABLES');
 
-        saveQueries($saveQueries, 'insertConsignment', $purchase_order_consignment_id);
+        saveQueries($saveQueries, 'PO Konsinyasi', $purchase_order_consignment_id, 'Input PO Konsinyasi');
+
         return $save;
 
     }
@@ -327,21 +351,21 @@ class M_consignment extends Model
     public function insertInputConsignment($data)
     {
 
-         $this->db->query('LOCK TABLES hd_purchase_consignment WRITE,dt_purchase_consignment WRITE, ms_warehouse_stock WRITE, ms_product_stock WRITE');
+        $this->db->query('LOCK TABLES hd_purchase_consignment WRITE,dt_purchase_consignment WRITE, ms_warehouse_stock WRITE, ms_product_stock WRITE');
 
         $this->db->transBegin();
 
         $saveQueries = NULL;
 
 
-        
+
         $maxCode = $this->db->table($this->table_hd_purchase_consignment)->select('purchase_consignment_id, purchase_consignment_invoice')->orderBy('purchase_consignment_id', 'desc')->limit(1)->get()->getRowArray();
 
         $warehouse_code = $this->db->table($this->table_warehouse)->select('warehouse_code')->where('warehouse_id', $data['purchase_consignment_warehouse_id'])->get()->getRowArray();
 
         $invoice_date =  date_format(date_create($data['purchase_consignment_date']),"y/m");
 
-        if ($maxCode['purchase_consignment_invoice'] == NULL) {
+        if ($maxCode == NULL) {
 
             $data['purchase_consignment_invoice'] = 'IC/'.$invoice_date.'/'.'0000000001';
 
@@ -357,23 +381,16 @@ class M_consignment extends Model
 
         $purchase_consignment_id = $this->db->insertID();
 
-         if($data['purchase_consignment_po'] != null){
-          $updateStatus =  $this->db->table($this->table_hd_po_consignment)->where('purchase_order_consignment_invoice', $data['purchase_consignment_po'])->update(['purchase_order_consignment_status' => 'Accept']);
+        if($data['purchase_consignment_po'] != null){
+            $updateStatus =  $this->db->table($this->table_hd_po_consignment)->where('purchase_order_consignment_invoice', $data['purchase_consignment_po'])->update(['purchase_order_consignment_status' => 'Selesai']);
         }
 
 
         if ($this->db->affectedRows() > 0) {
 
-            $saveQueries[] = [
-
-                'query_text'    => $this->db->getLastQuery()->getQuery(),
-
-                'ref_id'        => $purchase_consignment_id
-
-            ];
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
 
         }
-
 
 
         $sqlDtOrder = "insert into dt_purchase_consignment(dt_consignment_invoice,dt_consignment_item_id,dt_consignment_qty,dt_consignment_expire_date) VALUES ";
@@ -387,10 +404,10 @@ class M_consignment extends Model
 
         $getTempInputConsignment =  $this->getTempInputConsignment($data['purchase_consignment_user_id']);
 
-        
+
         foreach ($getTempInputConsignment->getResultArray() as $row) {
 
-           
+
 
             $dt_consignment_invoice       = $data['purchase_consignment_invoice'];
             $dt_consignment_item_id       = $row['temp_consignment_item_id'];
@@ -420,43 +437,28 @@ class M_consignment extends Model
         $this->db->query($sqlDtOrder);
         if ($this->db->affectedRows() > 0) {
 
-                $saveQueries[] = [
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
 
-                    'query_text'    => $this->db->getLastQuery()->getQuery(),
+        }
 
-                    'ref_id'        => $purchase_consignment_id
-
-                ];
-
-            }
 
         $this->db->query($sqlUpdateStock);
 
         if ($this->db->affectedRows() > 0) {
 
-                $saveQueries[] = [
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
 
-                    'query_text'    => $this->db->getLastQuery()->getQuery(),
+        }
 
-                    'ref_id'        => $purchase_consignment_id
-
-                ];
-
-            }
 
         $this->db->query($sqlUpdateWarehouse);
 
         if ($this->db->affectedRows() > 0) {
 
-                $saveQueries[] = [
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
 
-                    'query_text'    => $this->db->getLastQuery()->getQuery(),
+        }
 
-                    'ref_id'        => $purchase_consignment_id
-
-                ];
-
-            }
 
 
         if ($this->db->transStatus() === false) {
@@ -479,12 +481,138 @@ class M_consignment extends Model
 
         $this->db->query('UNLOCK TABLES');
 
-        foreach($saveQueries as $rowQuery){
-        saveQueries($rowQuery['query_text'], 'insertConsignment', $purchase_consignment_id);
-        }
+        //print_r("asdas");die();
+
+        saveQueries($saveQueries, 'Stock Konsinyasi', $purchase_consignment_id, 'Insert PO Konsinyasi');
 
         return $save;
 
+    }
+
+
+    public function cancelPoOrder($purchase_order_consignment_id){
+
+        $this->db->query('LOCK TABLES hd_purchase_order_consignment WRITE');
+
+        $save = $this->db->table($this->table_hd_po_consignment)->update(['purchase_order_consignment_status' => 'Cancel'], ['purchase_order_consignment_id ' => $purchase_order_consignment_id]);
+
+        $saveQueries = NULL;
+
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries = $this->db->getLastQuery()->getQuery();
+        }
+
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'PO Konsinyasi', $purchase_order_consignment_id, 'Cancel PO Konsinyasi');
+
+        return $save;
+    }
+
+    public function updateOrder($data)
+    {
+
+        $this->db->query('LOCK TABLES hd_purchase_order_consignment WRITE, hd_purchase_consignment WRITE, dt_purchase_consignment WRITE, temp_purchase_order_consignment WRITE,ms_supplier READ, ms_warehouse READ, user_account READ');
+
+        $purchase_order_consignment_id = $data['purchase_order_consignment_id'];
+
+        $save = ['success' => FALSE, 'purchase_order_id' => 0];
+
+        $getOrder = $this->getOrderPoConsignment($purchase_order_consignment_id)->getRowArray();
+
+        if ($getOrder != NULL) {
+
+            if ($getOrder['purchase_order_consignment_status'] == 'Pending') {
+
+                $this->db->transBegin();
+
+                $saveQueries = NULL;
+
+                $user_id = $data['purchase_order_consignment_user_id'];
+
+                unset($data['user_id']);
+
+                $sqlDtOrder = "INSERT INTO dt_purchase_order_consignment(dt_po_consignment_invoice,dt_po_consignment_submission_id,dt_po_consignment_submission_invoice,dt_po_consignment_item_id,dt_po_consignment_qty,dt_po_consignment_expire_date) VALUES ";
+
+                $sqlDtValues = [];
+
+                $getTemp =  $this->db->table($this->table_temp_po_consignment)->where('temp_po_consignment_user_id', $user_id)->get();
+
+                foreach ($getTemp->getResultArray() as $row) {
+
+
+                    $purchase_order_consignment_id              = $data['purchase_order_consignment_id'];
+
+                    $dt_po_consignment_invoice                  = $data['purchase_order_consignment_invoice'];
+
+                    $dt_po_consignment_submission_id            = $row['temp_po_consignment_submission_id'];
+
+                    $dt_po_consignment_submission_invoice       = $row['temp_po_consignment_submission_invoice'];
+
+                    $dt_po_consignment_item_id                  = $row['temp_po_consignment_item_id'];
+
+                    $dt_po_consignment_qty                      = $row['temp_po_consignment_qty'];
+
+                    $dt_po_consignment_expire_date              = $row['temp_po_consignment_expire_date'];
+
+
+                    $sqlDtValues[] = "('$dt_po_consignment_invoice','$dt_po_consignment_submission_id','$dt_po_consignment_submission_invoice','$dt_po_consignment_item_id','$dt_po_consignment_qty','$dt_po_consignment_expire_date')";
+                }
+
+                $sqlDtOrder .= implode(',', $sqlDtValues);
+
+
+                $this->db->table($this->table_hd_po_consignment)->where('purchase_order_consignment_invoice', $data['purchase_order_consignment_invoice'])->update($data);
+
+
+                $this->clearUpdateDetail($data['purchase_order_consignment_invoice']);
+
+                $this->db->query($sqlDtOrder);
+
+                if ($this->db->affectedRows() > 0) {
+
+                    $saveQueries[] = $this->db->getLastQuery()->getQuery();
+
+                }
+
+                if ($this->db->transStatus() === false) {
+
+                    $saveQueries[] = NULL;
+
+                    $this->db->transRollback();
+
+                    $save = ['success' => FALSE, 'purchase_order_consignment_id' => 0];
+
+                } else {
+
+                    $this->db->transCommit();
+
+                    $this->clearTemp($user_id);
+
+                    $save = ['success' => TRUE, 'purchase_order_consignment_id' => $purchase_order_consignment_id];
+
+                }
+
+                $this->db->query('UNLOCK TABLES');
+
+                saveQueries($saveQueries, 'PO Konsinyasi', $purchase_order_consignment_id, 'Update PO konsinyasi');
+
+                return $save;
+
+            }
+
+            return $save;
+        }
+
+    }
+
+    public function clearUpdateDetail($purchase_order_consignment_invoice){
+
+        return $this->db->table($this->table_dt_po_consignment)
+
+        ->where('dt_po_consignment_invoice', $purchase_order_consignment_invoice)
+
+        ->delete();
     }
 
     public function clearTemp($user_id)
@@ -492,20 +620,20 @@ class M_consignment extends Model
 
         return $this->db->table($this->table_temp_po_consignment)
 
-            ->where('temp_po_consignment_user_id', $user_id)
+        ->where('temp_po_consignment_user_id', $user_id)
 
-            ->delete();
+        ->delete();
 
     }
 
-     public function clearTempInput($user_id)
+    public function clearTempInput($user_id)
     {
 
         return $this->db->table($this->table_temp_consignment)
 
-            ->where('temp_consignment_user_id', $user_id)
+        ->where('temp_consignment_user_id', $user_id)
 
-            ->delete();
+        ->delete();
 
     }
 

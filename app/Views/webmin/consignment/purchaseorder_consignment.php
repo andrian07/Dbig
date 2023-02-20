@@ -152,7 +152,9 @@ $assetsUrl = base_url('assets');
 
                                 <div class="col-sm-3">
 
-                                    <input id="purchase_order_invoice" name="purchase_order_invoice" type="text" class="form-control" value="AUTO" readonly>
+                                    <input id="purchase_order_consignment_id" name="purchase_order_consignment_id" type="hidden" class="form-control" readonly>
+
+                                    <input id="purchase_order_consignment_invoice" name="purchase_order_consignment_invoice" type="text" class="form-control" value="AUTO" readonly>
 
                                 </div>
 
@@ -369,50 +371,50 @@ $assetsUrl = base_url('assets');
 
                                 <template id="template_row_temp">
 
-                                 <tr>
+                                   <tr>
 
-                                     <td>{row}</td>
+                                       <td>{row}</td>
 
-                                     <td>{submission_invoice}</td> 
+                                       <td>{submission_invoice}</td> 
 
-                                     <td>{item_code}</td>
+                                       <td>{item_code}</td>
 
-                                     <td>{product_name}</td>
+                                       <td>{product_name}</td>
 
-                                     <td>{temp_qty}</td>
+                                       <td>{temp_qty}</td>
 
-                                     <td>{temp_ed_date}</td>
+                                       <td>{temp_ed_date}</td>
 
-                                     <td>
+                                       <td>
 
-                                         <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                           <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
-                                             <i class="fas fa-edit"></i>
+                                               <i class="fas fa-edit"></i>
 
-                                         </button>
+                                           </button>
 
-                                         &nbsp;
+                                           &nbsp;
 
-                                         <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+                                           <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
 
-                                             <i class="fas fa-minus"></i>
+                                               <i class="fas fa-minus"></i>
 
-                                         </button>
+                                           </button>
 
-                                     </td>
+                                       </td>
 
-                                 </tr>
+                                   </tr>
 
-                             </template>
-
-
-                         </div>
-
-                     </div>
+                               </template>
 
 
+                           </div>
 
-                     <div class="row form-space">
+                       </div>
+
+
+
+                       <div class="row form-space">
 
                         <div class="col-lg-6">
 
@@ -476,95 +478,328 @@ $assetsUrl = base_url('assets');
 
     $(document).ready(function() {
 
-     let temp_qty = new AutoNumeric('#temp_qty', configQty);
+        let temp_qty = new AutoNumeric('#temp_qty', configQty);
 
-     function _initButton() {
-       $('#btnadd').prop('disabled', !hasRole('purchase_order_consignment.add'));
-       $('.btnedit').prop('disabled', !hasRole('purchase_order_consignment.edit'));
-       $('.btndelete').prop('disabled', !hasRole('purchase_order_consignment.delete'));
-   }
+        function _initButton() {
+            $('#btnadd').prop('disabled', !hasRole('purchase_order_consignment.add'));
+            $('.btnedit').prop('disabled', !hasRole('purchase_order_consignment.edit'));
+            $('.btndelete').prop('disabled', !hasRole('purchase_order_consignment.cancel_order'));
+        }
 
-   let tblpurchaseordersconsignment = $("#tblpurchaseordersconsignment").DataTable({
-    processing: true,
-    select: true,
-    serverSide: true,
-    responsive: true,
-    fixedColumns: true,
-    order: [
-    [1, 'asc']
-    ],
-    language: {
-        url: lang_datatables,
-    },
-    ajax: {
-        url: base_url + '/webmin/consignment/tblhdpoconsignment',
-        type: "POST",
-        error: function() {
-            notification.danger('Gagal memuat table, harap coba lagi');
-        },
-    },
-    drawCallback: function(settings) {
-        _initTooltip();
-        _initButton();
-    },
-    columnDefs: [{
-        width: 100
-    },
-    {
-        targets: [0, 3, 5],
-        orderable: false,
-        searchable: false,
-    },
-    {
-        targets: [0],
-        className: "text-right",
-    },
-    ],
-});
+        let tblpurchaseordersconsignment = $("#tblpurchaseordersconsignment").DataTable({
+            processing: true,
+            select: true,
+            serverSide: true,
+            responsive: true,
+            fixedColumns: true,
+            order: [
+            [1, 'asc']
+            ],
+            language: {
+                url: lang_datatables,
+            },
+            ajax: {
+                url: base_url + '/webmin/consignment/tblhdpoconsignment',
+                type: "POST",
+                error: function() {
+                    notification.danger('Gagal memuat table, harap coba lagi');
+                },
+            },
+            drawCallback: function(settings) {
+                _initTooltip();
+                _initButton();
+            },
+            columnDefs: [{
+                width: 100
+            },
+            {
+                targets: [0, 3, 5],
+                orderable: false,
+                searchable: false,
+            },
+            {
+                targets: [0],
+                className: "text-right",
+            },
+            ],
+        });
 
 
-   $("#nosubmission").select2({
-    placeholder: '-- Pilih No Pengajuan --',
-    width: "100%",
-    allowClear: true,
-    ajax: {
-        url: base_url + "/webmin/select/no-submission-consignment",
-        dataType: "json",
-        type: "GET",
-        delay: select2Delay,
-        data: function(params) {
-            return {
-                search: params.term,
-            };
-        },
-        processResults: function(data, page) {
-            return {
-                results: data,
-            };
-        },
+        $("#nosubmission").select2({
+            placeholder: '-- Pilih No Pengajuan --',
+            width: "100%",
+            allowClear: true,
+            ajax: {
+                url: base_url + "/webmin/select/no-submission-consignment",
+                dataType: "json",
+                type: "GET",
+                delay: select2Delay,
+                data: function(params) {
+                    return {
+                        search: params.term,
+                    };
+                },
+                processResults: function(data, page) {
+                    return {
+                        results: data,
+                    };
+                },
 
-    },
-});
+            },
+        });
 
-   $("#nosubmission").change(function(e) {
+        $("#nosubmission").change(function(e) {
 
-    let id = $(this).val();
+            let id = $(this).val();
 
-    if (id != null) {
+            if (id != null) {
 
-        if ($("#supplier_id").val() == null) {
+                if ($("#supplier_id").val() == null) {
 
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Silahkan Pilih Suplier Terlebih Dahulu !'
-          })
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Oops...',
+                      text: 'Silahkan Pilih Suplier Terlebih Dahulu !'
+                  })
 
-            setSelect2('#nosubmission','','');
+                    setSelect2('#nosubmission','','');
 
-        }else{
+                }else{
 
-            let actUrl = base_url + '/webmin/purchase-order/get-submission-detail/' + id;
+                    let actUrl = base_url + '/webmin/purchase-order/get-submission-detail/' + id;
+
+                    ajax_get(actUrl, null, {
+
+                        success: function(response) {
+
+                            if (response.success) {
+
+                                if (response.result.success) {
+
+                                    let header = response.result.header;
+
+                                    let items = response.result.data;
+
+                                    console.log(header);
+
+                                    if (header.submission_status == 'Pending') {
+                                        if(header.supplier_id != $('#supplier_id').val()){
+                                            Swal.fire({
+                                              icon: 'error',
+                                              title: 'Oops...',
+                                              text: 'Produk Dan Suplier Tidak Sesuai !'
+                                          })
+                                        }else{
+                                            $('#item_id').val(header.submission_item_id);
+                                            $('#product_name').val(header.submission_product_name);
+                                            temp_qty.set(header.submission_qty);
+                                            $('#submission_id').val(header.submission_id);
+                                        }
+                                    } else {
+
+                                        $('#supplier_id').prop('disabled', true);
+
+                                    }
+
+                                } else {
+
+                                    message.error(response.result.message);
+
+                                    setSelect2("#purchase_order_id");
+
+                                    $('#supplier_id').prop('disabled', false);
+
+                                }
+
+                            }
+
+                        }
+
+                    })
+                }
+            } else {
+
+                $('#supplier_id').prop('disabled', false);
+
+            }
+
+        });
+
+        $("#supplier_id").select2({
+            placeholder: '-- Pilih Supplier --',
+            width: "100%",
+            allowClear: true,
+            ajax: {
+                url: base_url + "/webmin/select/supplier",
+                dataType: "json",
+                type: "GET",
+                delay: select2Delay,
+                data: function(params) {
+                    return {
+                        search: params.term,
+                    };
+                },
+                processResults: function(data, page) {
+                    return {
+                        results: data,
+                    };
+                },
+            },
+        });
+
+
+        $("#warehouse").select2({
+            placeholder: '-- Pilih Gudang --',
+            width: "100%",
+            allowClear: true,
+            ajax: {
+                url: base_url + "/webmin/select/warehouse",
+                dataType: "json",
+                type: "GET",
+                delay: select2Delay,
+                data: function(params) {
+                    return {
+                        search: params.term,
+                    };
+                },
+                processResults: function(data, page) {
+                    return {
+                        results: data,
+                    };
+                },
+            },
+        });
+
+
+        $('#btnadd_temp').click(function(e) {
+
+         e.preventDefault();
+
+         let qty = parseFloat(temp_qty.getNumericString());
+
+         let supplier_id = $('#supplier_id').val();
+
+         let supplier_name = $( "#supplier_id option:selected" ).text();
+
+         let btnSubmit = $('#btnadd_temp');
+
+         let form = $('#frmaddtemp');
+
+         form.parsley().validate();
+
+         if (form.parsley().isValid()) {
+
+             let actUrl = base_url + '/webmin/consignment/temp-add';
+
+             let formValues = {
+
+                 temp_po_consignment_id: $('#temp_po_consignment_id').val(),
+
+                 item_id: $('#item_id').val(),
+
+                 temp_po_consignment_submission_id: $('#nosubmission').val(),
+
+                 temp_po_consignment_submission_invoice: $( "#nosubmission option:selected" ).text(),
+
+                 temp_qty: qty,
+
+                 temp_supplier_id: supplier_id,
+
+                 temp_supplier_name: supplier_name,
+
+                 temp_ed_date: $('#temp_ed_date').val()
+
+             };
+
+             btnSubmit.prop('disabled', true);
+
+             ajax_post(actUrl, formValues, {
+
+                 success: function(response) {
+
+                     if (response.success) {
+
+                         if (response.result.success) {
+
+                             clearItemInput();
+
+                             $('#product_name').focus();
+
+                             setSelect2('#supplier_id', supplier_id, supplier_name);
+
+                             $('#supplier_id').attr("disabled", true);
+
+                             notification.success(response.result.message);
+
+                         } else {
+
+                             message.error(response.result.message);
+
+                         }
+
+                         loadTempData(response.result.data);
+
+                     }
+
+                     btnSubmit.prop('disabled', false);
+
+                 },
+
+                 error: function(response) {
+
+                     btnSubmit.prop('disabled', false);
+
+                 }
+             });
+         }
+     })
+
+
+
+
+        $("#tbltemp").on('click', '.btnedit', function(e) {
+
+            e.preventDefault();
+
+            let json_data = $(this).attr('data-json');
+
+            let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
+
+            if (is_json) {
+
+                $('#temp_po_consignment_id').val(json.temp_po_consignment_id );
+
+                $('#product_name').val(json.product_name + '(' + json.unit_name +')'); 
+
+                $('#item_id').val(json.temp_po_consignment_item_id);
+
+                temp_qty.set(json.temp_po_consignment_qty);
+
+                $('#temp_qty').focus();
+
+                $('#temp_ed_date').val(json.temp_po_consignment_expire_date);
+
+                setSelect2('#nosubmission',json.temp_po_consignment_submission_id,json.temp_po_consignment_submission_invoice);
+
+            } else {
+
+                getTemp();
+
+                message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
+
+            }
+
+        })
+
+
+
+        $("#tbltemp").on('click', '.btndelete', function(e) {
+
+            e.preventDefault();
+
+            let id = $(this).attr('data-id');
+
+            let actUrl = base_url + '/webmin/consignment/temp-delete/' + id;
 
             ajax_get(actUrl, null, {
 
@@ -574,337 +809,107 @@ $assetsUrl = base_url('assets');
 
                         if (response.result.success) {
 
-                            let header = response.result.header;
-
-                            let items = response.result.data;
-
-                            console.log(header);
-
-                            if (header.submission_status == 'Pending') {
-                                if(header.supplier_id != $('#supplier_id').val()){
-                                    Swal.fire({
-                                      icon: 'error',
-                                      title: 'Oops...',
-                                      text: 'Produk Dan Suplier Tidak Sesuai !'
-                                  })
-                                }else{
-                                    $('#item_id').val(header.submission_item_id);
-                                    $('#product_name').val(header.submission_product_name);
-                                    temp_qty.set(header.submission_qty);
-                                    $('#submission_id').val(header.submission_id);
-                                }
-                            } else {
-
-                                $('#supplier_id').prop('disabled', true);
-
-                            }
+                            notification.success(response.result.message);
 
                         } else {
 
                             message.error(response.result.message);
 
-                            setSelect2("#purchase_order_id");
-
-                            $('#supplier_id').prop('disabled', false);
-
                         }
 
+                        loadTempData(response.result.data);
+
                     }
+
+                },
+
+                error: function(response) {
+
+                    getTemp();
 
                 }
 
             })
-        }
-    } else {
 
-        $('#supplier_id').prop('disabled', false);
+        })
 
-    }
 
-});
+        function loadTempData(items) {
 
-   $("#supplier_id").select2({
-    placeholder: '-- Pilih Supplier --',
-    width: "100%",
-    allowClear: true,
-    ajax: {
-        url: base_url + "/webmin/select/supplier",
-        dataType: "json",
-        type: "GET",
-        delay: select2Delay,
-        data: function(params) {
-            return {
-                search: params.term,
-            };
-        },
-        processResults: function(data, page) {
-            return {
-                results: data,
-            };
-        },
-    },
-});
+            let template = $('#template_row_temp').html();
 
+            let tbody = '';
 
-   $("#warehouse").select2({
-    placeholder: '-- Pilih Gudang --',
-    width: "100%",
-    allowClear: true,
-    ajax: {
-        url: base_url + "/webmin/select/warehouse",
-        dataType: "json",
-        type: "GET",
-        delay: select2Delay,
-        data: function(params) {
-            return {
-                search: params.term,
-            };
-        },
-        processResults: function(data, page) {
-            return {
-                results: data,
-            };
-        },
-    },
-});
+            let row = 1;
 
+            let temp_total_order = 0;
 
-   $('#btnadd_temp').click(function(e) {
+            items.forEach((val, key) => {
 
-       e.preventDefault();
 
-       let qty = parseFloat(temp_qty.getNumericString());
+             let item = template;
 
-       let supplier_id = $('#supplier_id').val();
+             let data_json = htmlEntities.encode(JSON.stringify(val));
 
-       let supplier_name = $( "#supplier_id option:selected" ).text();
+             let temp_po_consignment_id = val.temp_po_consignment_id;
 
-       let btnSubmit = $('#btnadd_temp');
+             let item_id = val.item_id;
 
-       let form = $('#frmaddtemp');
+             let product_name  = val.product_name+'('+val.unit_name+')';
 
-       form.parsley().validate();
+             let temp_po_consignment_qty = parseFloat(val.temp_po_consignment_qty);
 
-       if (form.parsley().isValid()) {
+             let temp_po_consignment_expire_date = val.temp_po_consignment_expire_date;
 
-           let actUrl = base_url + '/webmin/consignment/temp-add';
+             let temp_po_consignment_submission_invoice = val.temp_po_consignment_submission_invoice;
 
-           let formValues = {
+             let temp_po_consignment_submission_id = val.temp_po_consignment_submission_id;
 
-               temp_po_consignment_id: $('#temp_po_consignment_id').val(),
 
-               item_id: $('#item_id').val(),
+             item = item.replaceAll('{row}', row)
 
-               temp_po_consignment_submission_id: $('#nosubmission').val(),
+             .replaceAll('{item_code}', val.item_code)
 
-               temp_po_consignment_submission_invoice: $( "#nosubmission option:selected" ).text(),
+             .replaceAll('{product_name}', product_name)
 
-               temp_qty: qty,
+             .replaceAll('{temp_qty}', numberFormat(temp_po_consignment_qty, true))
 
-               temp_supplier_id: supplier_id,
+             .replaceAll('{temp_ed_date}', temp_po_consignment_expire_date)
 
-               temp_supplier_name: supplier_name,
+             .replaceAll('{temp_id}', temp_po_consignment_id)
 
-               temp_ed_date: $('#temp_ed_date').val()
+             .replaceAll('{submission_id}', temp_po_consignment_submission_id)
 
-           };
+             .replaceAll('{submission_invoice}', temp_po_consignment_submission_invoice)
 
-           btnSubmit.prop('disabled', true);
+             .replaceAll('{data_json}', data_json);
 
-           ajax_post(actUrl, formValues, {
+             tbody += item;
 
-               success: function(response) {
+             row++;
 
-                   if (response.success) {
+         });
 
-                       if (response.result.success) {
 
-                           clearItemInput();
+            if ($.fn.DataTable.isDataTable('#tbltemp')) {
 
-                           $('#product_name').focus();
+             $('#tbltemp').DataTable().destroy();
 
-                           setSelect2('#supplier_id', supplier_id, supplier_name);
+         }
 
-                           $('#supplier_id').attr("disabled", true);
 
-                           notification.success(response.result.message);
 
-                       } else {
+         $('#tbltemp tbody').html('');
 
-                           message.error(response.result.message);
+         $('#tbltemp tbody').html(tbody);
 
-                       }
+         tbltemp = $('#tbltemp').DataTable(config_tbltemp);
 
-                       loadTempData(response.result.data);
+         clearItemInput();
 
-                   }
-
-                   btnSubmit.prop('disabled', false);
-
-               },
-
-               error: function(response) {
-
-                   btnSubmit.prop('disabled', false);
-
-               }
-           });
-       }
-   })
-
-
-   $("#tbltemp").on('click', '.btnedit', function(e) {
-
-     e.preventDefault();
-
-     let json_data = $(this).attr('data-json');
-
-     let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
-
-     console.log(json_data);
-
-     if (is_json) {
-
-         $('#temp_po_consignment_id').val(json.temp_po_consignment_id );
-
-         $('#product_name').val(json.product_name + '(' + json.unit_name +')'); 
-
-         $('#item_id').val(json.temp_po_consignment_item_id);
-
-         temp_qty.set(json.temp_po_consignment_qty);
-
-         $('#temp_qty').focus();
-
-         $('#temp_ed_date').val(json.temp_po_consignment_expire_date);
-
-          setSelect2('#nosubmission',json.temp_po_consignment_submission_id,json.temp_po_consignment_submission_invoice);
-
-     } else {
-
-         getTemp();
-
-         message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
+         _initTooltip();
 
      }
-
- })
-
-   $("#tbltemp").on('click', '.btndelete', function(e) {
-
-    e.preventDefault();
-
-    let id = $(this).attr('data-id');
-
-    let actUrl = base_url + '/webmin/consignment/temp-delete/' + id;
-
-    ajax_get(actUrl, null, {
-
-        success: function(response) {
-
-            if (response.success) {
-
-                if (response.result.success) {
-
-                    notification.success(response.result.message);
-
-                } else {
-
-                    message.error(response.result.message);
-
-                }
-
-                loadTempData(response.result.data);
-
-            }
-
-        },
-
-        error: function(response) {
-
-            getTemp();
-
-        }
-
-    })
-
-})
-
-   function loadTempData(items) {
-
-       let template = $('#template_row_temp').html();
-
-       let tbody = '';
-
-       let row = 1;
-
-       let temp_total_order = 0;
-
-       items.forEach((val, key) => {
-
-
-           let item = template;
-
-           let data_json = htmlEntities.encode(JSON.stringify(val));
-
-           let temp_po_consignment_id = val.temp_po_consignment_id;
-
-           let item_id = val.item_id;
-
-           let product_name  = val.product_name+'('+val.unit_name+')';
-
-           let temp_po_consignment_qty = parseFloat(val.temp_po_consignment_qty);
-
-           let temp_po_consignment_expire_date = val.temp_po_consignment_expire_date;
-
-           let temp_po_consignment_submission_invoice = val.temp_po_consignment_submission_invoice;
-
-           let temp_po_consignment_submission_id = val.temp_po_consignment_submission_id;
-
-
-           item = item.replaceAll('{row}', row)
-
-           .replaceAll('{item_code}', val.item_code)
-
-           .replaceAll('{product_name}', product_name)
-
-           .replaceAll('{temp_qty}', numberFormat(temp_po_consignment_qty, true))
-
-           .replaceAll('{temp_ed_date}', temp_po_consignment_expire_date)
-
-           .replaceAll('{temp_id}', temp_po_consignment_id)
-
-           .replaceAll('{submission_id}', temp_po_consignment_submission_id)
-
-           .replaceAll('{submission_invoice}', temp_po_consignment_submission_invoice)
-
-           .replaceAll('{data_json}', data_json);
-
-           tbody += item;
-
-           row++;
-
-       });
-
-
-       if ($.fn.DataTable.isDataTable('#tbltemp')) {
-
-           $('#tbltemp').DataTable().destroy();
-
-       }
-
-
-
-       $('#tbltemp tbody').html('');
-
-       $('#tbltemp tbody').html(tbody);
-
-       tbltemp = $('#tbltemp').DataTable(config_tbltemp);
-
-       clearItemInput();
-
-       _initTooltip();
-
-   }
         // select2 //
 
 
@@ -912,295 +917,421 @@ $assetsUrl = base_url('assets');
 
         const config_tbltemp = {
 
-         pageLength: 10,
+            pageLength: 10,
 
-         autoWidth: false,
+            autoWidth: false,
 
-         select: true,
+            select: true,
 
-         responsive: true,
+            responsive: true,
 
-         fixedColumns: true,
+            fixedColumns: true,
 
-         order: [
+            order: [
 
-         [0, 'desc']
+            [0, 'desc']
 
-         ],
+            ],
 
-         "language": {
+            "language": {
 
-             "url": lang_datatables,
+                "url": lang_datatables,
+            },
 
-         },
-         "columnDefs": [{
+            "columnDefs": [{
 
-             width: 100,
+                width: 100,
 
-         },
-         {
+            },
+            {
 
-             targets: [0, 6],
+                targets: [0, 6],
 
-             orderable: false,
+                orderable: false,
 
-             searchable: false,
+                searchable: false,
 
-         },
-         {
+            },
+            {
 
-             targets: [0],
+                targets: [0],
 
-             className: "text-right",
+                className: "text-right",
 
-         },
-         ]
+            },
+            ]
 
-     };
-
-     let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+        };
 
 
-     $('#btnsave').click(function(e) {
+        let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
 
-        e.preventDefault();
 
-        let form = $('#frmaddtemp');
+        $('#btnsave').click(function(e) {
 
-        let btnSubmit = $('#btnsave');
+            e.preventDefault();
 
-        let question = 'Yakin ingin menyimpan data PO Konsinyasi?';
+            let form = $('#frmaddtemp');
 
-        let actUrl = base_url + '/webmin/consignment/save/add';
+            let btnSubmit = $('#btnsave');
 
-        if (formMode == 'edit') {
+            let question = 'Yakin ingin menyimpan data PO Konsinyasi?';
 
-            question = 'Yakin ingin memperbarui data PO Konsinyasi?';
+            let actUrl = base_url + '/webmin/consignment/save/add';
 
-            actUrl = base_url + '/webmin/consignment/save/edit';
+            if (formMode == 'edit') {
+
+                question = 'Yakin ingin memperbarui data PO Konsinyasi?';
+
+                actUrl = base_url + '/webmin/consignment/save/edit';
+
+            }
+
+            message.question(question).then(function(answer) {
+
+                let yes = parseMessageResult(answer);
+
+                if (yes) {
+
+                    let formValues = {
+
+                        purchase_order_consignment_id : $('#purchase_order_consignment_id').val(),
+
+                        purchase_order_consignment_invoice: $('#purchase_order_consignment_invoice').val(),
+
+                        supplier_id: $('#supplier_id').val(),
+
+                        po_consignment_date: $('#po_consignment_date').val(),
+
+                        warehouse : $('#warehouse').val(),
+
+                        nosubmission : $('#nosubmission').val(),
+
+                        submission_id: $('#submission_id').val(),
+
+                        po_consignment_remark : $('#po_consignment_remark').val(),
+
+                    };
+
+                    btnSubmit.prop('disabled', true);
+
+                    ajax_post(actUrl, formValues, {
+
+                        success: function(response) {
+
+                            if (response.success) {
+
+                                if (response.result.success) {
+
+                                    form[0].reset();
+
+                                    notification.success(response.result.message);
+
+                                    form.parsley().reset();
+
+                                    showInputPage(false);
+
+                                    let invoice = response.result.purchase_order_id;
+
+                                } else {
+
+                                    message.error(response.result.message);
+
+                                }
+
+                            }
+
+                            btnSubmit.prop('disabled', false);
+
+                            updateTableHeader();
+
+                        },
+
+                        error: function(response) {
+
+                            btnSubmit.prop('disabled', false);
+
+                            updateTable();
+
+                        }
+
+                    });
+
+                }
+
+            })
+
+        });
+
+
+        $('#product_name').autocomplete({   
+
+            minLength: 2,
+
+            source: function(req, add) {
+
+                $.ajax({
+
+                    url: base_url + '/webmin/purchase-order/search-product-bysuplier?sup='+$('#supplier_id').val(),
+
+                    dataType: 'json',
+
+                    type: 'GET',
+
+                    data: req,
+
+                    success: function(res) {
+
+                        if (res.success == true) {
+
+                            add(res.data);
+
+                        }else{
+
+                            message.error(res.message);
+
+                            $('#product_name').val('');
+
+                        }
+
+                    },
+
+                });
+
+            },
+
+            select: function(event, ui) {
+
+                $('#item_id').val(ui.item.item_id);
+
+            },
+
+        });
+
+
+        function clearItemInput() {
+
+            let form = $('#frmaddtemp');
+
+            form.parsley().reset();
+
+            $('#item_id').val('');
+
+            $('#product_name').val('');
+
+            $('#temp_ed_date').val('');
+
+            temp_qty.set('0.00');
+
+            setSelect2('#nosubmission','','');
+        }
+
+
+        function showInputPage(x) {
+
+            if (x) {
+
+                $('#po_list').hide();
+
+                $('#po_input').show();
+
+
+
+            } else {
+
+                $('#po_list').show();
+
+                $('#po_input').hide();
+
+            }
 
         }
 
-        message.question(question).then(function(answer) {
+        function updateTableHeader() {
 
-            let yes = parseMessageResult(answer);
+            tblpurchaseordersconsignment.ajax.reload(null, false);
 
-            if (yes) {
+        }
 
-                let formValues = {
+        $('#btnadd').click(function(e) {
 
-                    supplier_id: $('#supplier_id').val(),
+            e.preventDefault();
 
-                    po_consignment_date: $('#po_consignment_date').val(),
+            let actUrl = base_url + '/webmin/consignment/get-consignment-temp';
 
-                    warehouse : $('#warehouse').val(),
+            ajax_get(actUrl, null, {
 
-                    nosubmission : $('#nosubmission').val(),
+                success: function(response) {
 
-                    submission_id: $('#submission_id').val(),
+                    if (response.result.success == 'TRUE') {
 
-                    po_consignment_remark : $('#po_consignment_remark').val(),
+                        let form = $('#frm-purchase-order-consignment');
 
-                };
+                        let items = response.result.data;
 
-                btnSubmit.prop('disabled', true);
+                        $('#title-frm-purchase-order-consignment').html('Pengajuan Pesanan Konsinyasi');
+                        setSelect2("#warehouse", '3', 'KNY - KONSINYASI');
+                        $('#warehouse').attr('disabled', true);
 
-                ajax_post(actUrl, formValues, {
+                        formMode = 'add';
 
-                    success: function(response) {
+                        loadTempData(items);
 
-                        if (response.success) {
+                        if(items.length != 0){
+                            let supplier_ids = items[0].temp_po_consignment_suplier_id;
+                            let supplier_names = items[0].temp_po_consignment_suplier_name;
+                            setSelect2('#supplier_id', supplier_ids, supplier_names);
+                            $('#supplier_id').attr("disabled", true);
 
-                            if (response.result.success) {
 
-                                form[0].reset();
+                        }
 
-                                notification.success(response.result.message);
+                        clearItemInput();
 
-                                form.parsley().reset();
+                        showInputPage(true);
 
-                                showInputPage(false);
+                    } else {
 
-                                let invoice = response.result.purchase_order_id;
+                        message.error(response.result.message);
+
+                    }
+
+                }
+
+            })
+
+        })
+
+
+        $("#tblpurchaseordersconsignment").on('click', '.btnedit', function(e) {
+
+            e.preventDefault();
+
+            let id = $(this).attr('data-id');
+
+            let actUrl = base_url + '/webmin/consignment/edit-po-consignment/' + id;
+
+            ajax_get(actUrl, null, {
+
+                success: function(response) {
+
+                    if (response.success) {
+
+                        if (response.result.success) {
+
+                            let form = $('#frm-purchase-order-consignment');
+
+                            let items = response.result.data;
+
+                            let header = response.result.header;
+
+                            let supplier_id = header.purchase_order_consignment_supplier_id;
+
+                            let supplier_name = header.supplier_name;
+
+                            let warehouse_id = header.purchase_order_consignment_warehouse_id;
+
+                            let warehouse_name  = header.warehouse_name;
+
+                            let purchase_order_consignment_invoice = header.purchase_order_consignment_invoice;
+
+                            let purchase_order_consignment_id = header.purchase_order_consignment_id;
+
+                            if (header.purchase_order_consignment_status == 'Pending') {
+
+                                $('#title-frm-purchase-order-consignment').html('Ubah Pengajuan Pesanan');
+
+                                formMode = 'edit';
+
+                                setSelect2('#supplier_id', supplier_id, supplier_name);
+
+                                $('#supplier_id').prop("disabled", true);
+
+                                setSelect2('#warehouse', warehouse_id, warehouse_name);
+
+                                $('#warehouse').prop("disabled", true);
+
+                                $('#purchase_order_consignment_invoice').val(purchase_order_consignment_invoice);
+
+                                $('#purchase_order_consignment_id').val(purchase_order_consignment_id);
+
+                                loadTempData(items);
+
+                                showInputPage(true);
 
                             } else {
 
-                                message.error(response.result.message);
+                                message.info('Pesanan yang sudah selesai atau dibatalkan tidak dapat di ubah lagi');
+
+                            }
+
+                        } else {
+
+                            message.error(response.result.message);
+
+                        }
+
+                        updateTableHeader();
+
+                    }
+
+                }
+
+            })
+        })
+
+
+        $("#tblpurchaseordersconsignment").on('click', '.btndelete', function(e) {
+
+            e.preventDefault();
+
+            let id = $(this).attr('data-id');
+
+            message.question('Yakin ingin membatalkan PO?').then(function(answer) {
+
+                let yes = parseMessageResult(answer);
+
+                if (yes) {
+
+                    let actUrl = base_url + '/webmin/consignment/cancel-po-order/' + id;
+
+                    ajax_get(actUrl, null, {
+
+                        success: function(response) {
+
+                            if (response.success) {
+
+                                if (response.result.success) {
+
+                                    notification.success(response.result.message);
+
+                                } else {
+
+                                    message.error(response.result.message);
+
+                                }
+
+                                updateTableHeader();
 
                             }
 
                         }
 
-                        btnSubmit.prop('disabled', false);
+                    })
 
-                        updateTableHeader();
+                }
 
-                    },
-
-                    error: function(response) {
-
-                        btnSubmit.prop('disabled', false);
-
-                        updateTable();
-
-                    }
-
-                });
-
-            }
+            })
 
         })
 
-    });
 
 
-     $('#product_name').autocomplete({   
+        _initButton();
 
-         minLength: 2,
+        showInputPage(false);
 
-         source: function(req, add) {
-
-             $.ajax({
-
-                 url: base_url + '/webmin/purchase-order/search-product-bysuplier?sup='+$('#supplier_id').val(),
-
-                 dataType: 'json',
-
-                 type: 'GET',
-
-                 data: req,
-
-                 success: function(res) {
-
-                     if (res.success == true) {
-
-                        add(res.data);
-
-                    }else{
-
-                       message.error(res.message);
-
-                       $('#product_name').val('');
-
-                   }
-
-               },
-
-           });
-
-         },
-
-         select: function(event, ui) {
-
-           $('#item_id').val(ui.item.item_id);
-
-               //temp_price.set(parseFloat(ui.item.base_purchase_price));\
-
-           },
-
-       });
-
-
-     function clearItemInput() {
-
-         let form = $('#frmaddtemp');
-
-         form.parsley().reset();
-
-         $('#item_id').val('');
-
-         $('#product_name').val('');
-
-         $('#temp_ed_date').val('');
-
-         temp_qty.set('0.00');
-
-          setSelect2('#nosubmission','','');
-     }
-
-
-     function showInputPage(x) {
-
-        if (x) {
-
-            $('#po_list').hide();
-
-            $('#po_input').show();
-
-
-
-        } else {
-
-            $('#po_list').show();
-
-            $('#po_input').hide();
-
-        }
-
-    }
-
-    function updateTableHeader() {
-
-        tblpurchaseordersconsignment.ajax.reload(null, false);
-
-    }
-
-    $('#btnadd').click(function(e) {
-
-       e.preventDefault();
-
-       let actUrl = base_url + '/webmin/consignment/get-consignment-temp';
-
-       ajax_get(actUrl, null, {
-
-           success: function(response) {
-
-            if (response.result.success == 'TRUE') {
-
-               let form = $('#frm-purchase-order-consignment');
-
-               let items = response.result.data;
-
-               $('#title-frm-purchase-order-consignment').html('Pengajuan Pesanan Konsinyasi');
-               setSelect2("#warehouse", '3', 'KNY - KONSINYASI');
-               $('#warehouse').attr('disabled', true);
-
-               formMode = 'add';
-
-               loadTempData(items);
-
-               if(items.length != 0){
-                let supplier_ids = items[0].temp_po_consignment_suplier_id;
-                let supplier_names = items[0].temp_po_consignment_suplier_name;
-                setSelect2('#supplier_id', supplier_ids, supplier_names);
-                $('#supplier_id').attr("disabled", true);
-
-
-            }
-
-            clearItemInput();
-
-            showInputPage(true);
-
-        } else {
-
-           message.error(response.result.message);
-
-       }
-
-   }
-
-})
-
-   })
-
-
-
-    _initButton();
-
-    showInputPage(false);
-
-})
+    })
 
 </script>
 

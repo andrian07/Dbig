@@ -52,7 +52,7 @@ class Consignment extends WebminController
                 $column[] = esc($row['purchase_order_consignment_invoice']);
                 $column[] = indo_short_date($row['purchase_order_consignment_date'], FALSE);
                 $column[] = esc($row['supplier_name']);
-                if($row['purchase_order_consignment_status'] == 'Accept'){
+                if($row['purchase_order_consignment_status'] == 'Selesai'){
                     $column[] = '<span class="badge badge-success">Selesai</span>';
                 }else if($row['purchase_order_consignment_status'] == 'Pending'){
                     $column[] = '<span class="badge badge-primary">Pending</span>';
@@ -128,6 +128,8 @@ class Consignment extends WebminController
                     'hdConsignment' => $getOrder,
 
                     'dtConsignment' => $this->M_consignment->getDtConsignmentPoDetail($purchase_order_consignment_invoice)->getResultArray(),
+
+                    'logupdate'     => $this->M_consignment->getLogUpdatePO($purchase_order_consignment_id)->getResultArray(),
 
                 ];
 
@@ -390,7 +392,85 @@ class Consignment extends WebminController
     }
 
     
+    public function editPoConsignment($purchase_order_consignment_id = '')
+    {
 
+        $this->validationRequest(TRUE, 'GET');
+
+        $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk mengubah pesanan pembelian'];
+
+        if ($this->role->hasRole('purchase_order_consignment.edit')) {
+
+            $getOrder = $this->M_consignment->getOrderPoConsignment($purchase_order_consignment_id)->getRowArray();
+
+            if ($getOrder == NULL) {
+
+                $result = ['success' => FALSE, 'message' => 'Transaksi tidak ditemukan'];
+
+            } else {
+
+                $datacopy = [
+                    'purchase_order_consignment_invoice'           => $getOrder['purchase_order_consignment_invoice'],
+                    'temp_po_consignment_user_id'                  => $this->userLogin['user_id'],
+                    'temp_po_consignment_suplier_id'               => $getOrder['purchase_order_consignment_supplier_id'],
+                    'temp_po_consignment_suplier_name'             => $getOrder['supplier_name']
+                ];
+
+                $getTemp = $this->M_consignment->copyDtOrderPoToTemp($datacopy)->getResultArray();
+
+
+                $find_result = [];
+
+                foreach ($getTemp as $k => $v) {
+
+                    $find_result[$k] = esc($v);
+
+                }
+
+                $result = ['success' => TRUE, 'header' => $getOrder, 'data' => $find_result, 'message' => ''];
+
+
+            }
+
+        }
+        $result['csrfHash'] = csrf_hash();
+        
+        resultJSON($result);
+    }
+
+    public function cancelPoOrder($purchase_order_consignment_id = '')
+    {
+        $this->validationRequest(TRUE, 'GET');
+
+        $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk Membatalkan PO'];
+
+        if ($this->role->hasRole('purchase_order_consignment.cancel_order')) {
+
+            $getOrder = $this->M_consignment->getOrderPoConsignment($purchase_order_consignment_id)->getRowArray();
+
+            if ($getOrder == NULL) {
+
+                $result = ['success' => FALSE, 'message' => 'Transaksi tidak ditemukan'];
+
+            } else if ($getOrder['purchase_order_consignment_status'] != 'Pending'){
+
+                $result = ['success' => FALSE, 'message' => 'Transaksi Sudah Selesai Tidak Bisa Di Hapus'];
+
+            }else {
+
+                $user_id = $this->userLogin['user_id'];
+
+                $cancelOrder = $this->M_consignment->cancelPoOrder($purchase_order_consignment_id);
+
+                $result = ['success' => TRUE, 'message' => 'Pengajuan Berhasil Di Batalkan'];
+
+            }
+
+        }   
+
+        $result['csrfHash'] = csrf_hash();
+        resultJSON($result);
+    }
 
     public function save($type)
     {
@@ -457,7 +537,11 @@ class Consignment extends WebminController
 
                     $input['purchase_order_consignment_user_id']   = $this->userLogin['user_id'];
 
-                    $save = $this->M_purchase_order->updateOrder($input);
+                    $input['purchase_order_consignment_id']        = $this->request->getPost('purchase_order_consignment_id');
+
+                    $input['purchase_order_consignment_invoice']   = $this->request->getPost('purchase_order_consignment_invoice');
+
+                    $save = $this->M_consignment->updateOrder($input);
 
                     if ($save['success']) {
 

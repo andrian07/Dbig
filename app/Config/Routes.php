@@ -92,7 +92,20 @@ $routes->group('api', static function ($routes) {
 
     $routes->post('searchProduct', 'Api::getproductbyname');
 
-    //$routes->post('itemPoint', 'Api::getitempoint');
+    $routes->post('DataUser', 'Api::getdataCustomer');
+
+    $routes->post('ItemPoint', 'Api::getitempoint');
+
+    $routes->post('HistoryPoint', 'Api::historyPoint');
+
+    $routes->post('ExchangePoint', 'Api::exchangePoint');
+
+    $routes->post('ExchangePointProcess', 'Api::exchangePointProcess');
+
+    $routes->post('Register/(:alpha)', 'Api::registerCustomer/$1'); 
+
+    $routes->post('ChangePass', 'Api::changePass');
+    
 });
 
 $routes->group('devman', static function ($routes) {
@@ -532,12 +545,9 @@ $routes->group('webmin/submission', ['filter' => 'webminauth'], static function 
 });
 
 
-
 $routes->group('webmin/purchase', ['filter' => 'webminauth'], static function ($routes) {
 
     $routes->get('/', 'Webmin\Purchase::index');
-
-    $routes->get('retur-purchase', 'Webmin\Purchase::returpurchase');
 
     $routes->get('get-no-po', 'Webmin\Purchase::getNoPo');
 
@@ -546,6 +556,8 @@ $routes->group('webmin/purchase', ['filter' => 'webminauth'], static function ($
     $routes->post('tblpurchase', 'Webmin\Purchase::tblpurchase');
 
     $routes->post('temp-add', 'Webmin\Purchase::tempadd');
+
+    $routes->get('clear-temp', 'Webmin\Purchase::clearTemp');
 
     $routes->get('temp-delete/(:alphanum)', 'Webmin\Purchase::deleteTemp/$1');
 
@@ -558,6 +570,38 @@ $routes->group('webmin/purchase', ['filter' => 'webminauth'], static function ($
     $routes->get('get-purchase-tax', 'Webmin\Purchase::getTax');
 
     $routes->post('save/(:alpha)', 'Webmin\Purchase::save/$1');
+});
+
+$routes->group('webmin/retur', ['filter' => 'webminauth'], static function ($routes) {
+
+    $routes->get('/', 'Webmin\Retur\Retur::index');
+
+    $routes->get('get-no-purchase', 'Webmin\Retur\Retur::searchPurchaseBysuplier');
+
+    $routes->get('search-product-noinvoice', 'Webmin\Retur\Retur::searchProductByInvoice');
+
+    $routes->post('temp-add', 'Webmin\Retur\Retur::tempadd');
+
+    $routes->get('get-retur-temp', 'Webmin\Retur\Retur::getReturTemp');
+
+    $routes->get('temp-delete/(:alphanum)', 'Webmin\Retur\Retur::deleteTemp/$1');
+
+    $routes->get('get-retur-footer', 'Webmin\Retur\Retur::getReturFooter');
+
+    $routes->post('save/(:alpha)', 'Webmin\Retur\Retur::save/$1');
+
+    $routes->post('tblreturpurchase', 'Webmin\Retur\Retur::tblreturpurchase');
+
+    $routes->get('get-retur-detail/(:alphanum)', 'Webmin\Retur\Retur::getReturDetail/$1');
+
+    $routes->get('edit-retur-purchase/(:alphanum)', 'Webmin\Retur\Retur::editReturPurchase/$1');
+
+    $routes->get('getByid/(:alphanum)', 'Webmin\Retur\Retur::getByid/$1');
+
+    $routes->post('savepayment', 'Webmin\Retur\Retur::savepayment');
+
+    $routes->get('cancel-retur/(:alphanum)', 'Webmin\Retur\Retur::cancelRetur/$1');
+
 });
 
 
@@ -594,6 +638,10 @@ $routes->group('webmin/consignment', ['filter' => 'webminauth'], static function
     $routes->get('get-consignment-po-detail/(:alphanum)', 'Webmin\Consignment\Consignment::getConsignmentPoDetail/$1');
 
     $routes->get('recap-consignment', 'Webmin\Consignment\Consignment::recapConsignment');
+
+    $routes->get('edit-po-consignment/(:alphanum)', 'Webmin\Consignment\Consignment::editPoConsignment/$1');
+
+    $routes->get('cancel-po-order/(:alphanum)', 'Webmin\Consignment\Consignment::cancelPoOrder/$1');
 
 });
 
@@ -869,6 +917,8 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
     $routes->get('no-submission-consignment', 'Webmin\Select::noSubmissionConsignment');
 
     $routes->get('no-po-consignment', 'Webmin\Select::noPoConsignment');
+
+    $routes->get('no-purchase', 'Webmin\Select::noPurchase');
 
     $routes->get('payment-method', 'Webmin\Select::payment_method');
 

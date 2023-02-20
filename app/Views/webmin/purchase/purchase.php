@@ -212,13 +212,13 @@ $assetsUrl = base_url('assets');
 
                                 <div class="col-sm-2">
 
-                                   <select id="warehouse" type="text" class="form-control"></select>
+                                 <select id="warehouse" type="text" class="form-control"></select>
 
-                               </div>
-                           </div>
+                             </div>
+                         </div>
 
 
-                           <div class="form-group row">
+                         <div class="form-group row">
 
                             <label for="supplier_id" class="col-sm-1 col-form-label text-right">Supplier :</label>
 
@@ -314,7 +314,7 @@ $assetsUrl = base_url('assets');
 
                 <div class="card-body">
 
-                 <form id="frmaddtemp" class="mb-2">
+                   <form id="frmaddtemp" class="mb-2">
 
                     <div class="row well well-sm">
 
@@ -411,7 +411,7 @@ $assetsUrl = base_url('assets');
 
                                 <label>Expire Date</label>
 
-                                <input id="temp_ed_date" name="temp_ed_date" type="date" class="form-control" value="0" required>
+                                <input id="temp_ed_date" name="temp_ed_date" type="date" class="form-control" value="0">
 
                             </div>
 
@@ -472,11 +472,11 @@ $assetsUrl = base_url('assets');
 
                                     <th data-priority="3" width="25%;">Produk</th>
 
-                                    <th data-priority="4">Harga Satuan</th>
+                                    <th data-priority="4">Harga</th>
 
                                     <th data-priority="5">Qty</th>
 
-                                    <th data-priority="6">Diskon</th>
+                                    <th data-priority="6">Discount</th>
 
                                     <th data-priority="7">Ongkir</th>
 
@@ -494,55 +494,55 @@ $assetsUrl = base_url('assets');
 
                         <template id="template_row_temp">
 
-                           <tr>
+                         <tr>
 
-                               <td>{row}</td>
+                             <td>{row}</td>
 
-                               <td>{item_code}</td>
+                             <td>{item_code}</td>
 
-                               <td>{product_name}</td>
+                             <td>{product_name}</td>
 
-                               <td>{temp_price}</td>
+                             <td>{temp_price}</td>
 
-                               <td>{temp_qty}</td>
+                             <td>{temp_qty}</td>
 
-                               <td>{temp_disc}</td>
+                             <td>{temp_disc}</td>
 
-                               <td>{temp_ongkir}</td>
+                             <td>{temp_ongkir}</td>
 
-                               <td>{temp_ed}</td>
+                             <td>{temp_ed}</td>
 
-                               <td>{temp_total}</td>
+                             <td>{temp_total}</td>
 
-                               <td>
+                             <td>
 
-                                   <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                 <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
-                                       <i class="fas fa-edit"></i>
+                                     <i class="fas fa-edit"></i>
 
-                                   </button>
+                                 </button>
 
-                                   &nbsp;
+                                 &nbsp;
 
-                                   <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+                                 <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
 
-                                       <i class="fas fa-minus"></i>
+                                     <i class="fas fa-minus"></i>
 
-                                   </button>
+                                 </button>
 
-                               </td>
+                             </td>
 
-                           </tr>
+                         </tr>
 
-                       </template>
+                     </template>
 
-                   </div>
+                 </div>
 
-               </div>
+             </div>
 
 
 
-               <div class="row form-space">
+             <div class="row form-space">
 
                 <div class="col-lg-6">
 
@@ -698,7 +698,7 @@ $assetsUrl = base_url('assets');
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <button id="btncancel" class="btn btn-danger close-modal-temp"><i class="fas fa-times-circle"></i> Batal</button>
+                    <button class="btn btn-danger close-modal-temp"><i class="fas fa-times-circle"></i> Batal</button>
                     <button id="btndisc" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
                 </div>
             </form>
@@ -756,7 +756,7 @@ $assetsUrl = base_url('assets');
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <button id="btncancel" class="btn btn-danger close-modal-footer"><i class="fas fa-times-circle"></i> Batal</button>
+                    <button class="btn btn-danger close-modal-footer"><i class="fas fa-times-circle"></i> Batal</button>
                     <button id="btndiscfooter" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
                 </div>
             </form>
@@ -871,753 +871,177 @@ $assetsUrl = base_url('assets');
 
 
         function _initButton() {
-         $('#btnadd').prop('disabled', !hasRole('purchase.add'));
-     }
-
-
-     calculation_temp_total_footer();
-
-
-     $('#btnadd').click(function(e) {
-        e.preventDefault();
-        let actUrl = base_url + '/webmin/purchase/get-purchase-temp';
-        ajax_get(actUrl, null, {
-            success: function(response) {   
-                if (response.result.success == 'TRUE') {
-                 let form = $('#frmpurchaseorder');
-                 let items = response.result.data;
-                 $('#title-frmpurchaseorder').html('Pengajuan Pesanan');
-                 formMode = 'add';
-                 setSelect2('#supplier_id', "", "");
-                 $('#supplier_id').prop("disabled", false);
-                 loadTempData(items);
-                 if(items.length != 0){
-                    let supplier_ids = items[0].temp_purchase_supplier_id;
-                    let supplier_names = items[0].temp_purchase_supplier_name;
-                    setSelect2('#supplier_id', supplier_ids, supplier_names);
-                    $('#supplier_id').attr("disabled", true);
-
-                    let submission_ids = items[0].temp_purchase_submission_id;
-                    let submission_invs = items[0].temp_purchase_submission_invoice;
-                    setSelect2('#nosubmission', submission_ids, submission_invs);
-                }
-                clearItemInput();
-                showInputPage(true);
-            } else {
-                message.error(response.result.message);
-            }
-
-        }
-    })
-
-    })
-
-     let tblhdpurchase = $("#tblhdpurchase").DataTable({
-        processing: true,
-        select: true,
-        serverSide: true,
-        responsive: true,
-        fixedColumns: true,
-        order: [
-        [1, 'asc']
-        ],
-        language: {
-            url: lang_datatables,
-        },
-        ajax: {
-            url: base_url + '/webmin/purchase/tblpurchase',
-            type: "POST",
-            error: function() {
-                notification.danger('Gagal memuat table, harap coba lagi');
-            },
-        },
-        drawCallback: function(settings) {
-            _initTooltip();
-            _initButton();
-        },
-        columnDefs: [{
-            width: 100
-        },
-        {
-            targets: [0, 3, 5],
-            orderable: false,
-            searchable: false,
-        },
-        {
-            targets: [0],
-            className: "text-right",
-        },
-        ],
-    });
-
-     $('#btnadd_temp').click(function(e) {
-
-       e.preventDefault();
-
-       let price = parseFloat(temp_price.getNumericString());
-
-       let dpp = parseFloat(temp_dpp.getNumericString());
-
-       let tax = parseFloat(temp_tax.getNumericString());
-
-       let qty = parseFloat(temp_qty.getNumericString());
-
-       let ongkir = parseFloat(temp_ongkir.getNumericString());
-
-       let discount1 = parseFloat(edit_temp_discount1.getNumericString());
-
-       let discount2 = parseFloat(edit_temp_discount2.getNumericString());
-
-       let discount3 = parseFloat(edit_temp_discount3.getNumericString());
-
-       let discount_percentage1 = parseFloat(temp_discount_percentage1.getNumericString());
-
-       let discount_percentage2 = parseFloat(temp_discount_percentage2.getNumericString());
-
-       let discount_percentage3 = parseFloat(temp_discount_percentage3.getNumericString());
-
-       let total_discount = parseFloat(total_temp_discount.getNumericString());
-
-       let total = parseFloat(temp_total.getNumericString());
-
-       let supplier_id = $('#supplier_id').val();
-
-       let supplier_name = $("#supplier_id option:selected" ).text();
-
-       let po_id = $('#no_po_purchase').val();
-
-       let po_inv = $("#no_po_purchase option:selected" ).text();
-
-       let btnSubmit = $('#btnadd_temp');
-
-       let form = $('#frmaddtemp');
-
-       form.parsley().validate();
-
-       if (form.parsley().isValid()) {
-
-           let actUrl = base_url + '/webmin/purchase/temp-add';
-
-           let formValues = {
-
-               temp_purchase_id: $('#temp_purchase_id').val(),
-
-               temp_purchase_po_id: po_id,
-
-               temp_purchase_po_inv: po_inv,
-
-               item_id: $('#item_id').val(),
-
-               temp_price: price,
-
-               temp_dpp: dpp,
-
-               temp_tax: tax,
-
-               temp_qty: qty,
-
-               temp_ongkir: ongkir,
-
-               temp_discount1: discount1,
-
-               temp_discount_percentage1: discount_percentage1,
-
-               temp_discount2: discount2,
-
-               temp_discount_percentage2: discount_percentage2,
-
-               temp_discount3: discount3,
-
-               temp_discount_percentage3: discount_percentage3,
-
-               temp_purchase_suplier_id:supplier_id,
-
-               total_temp_discount:total_discount,
-
-               temp_purchase_suplier_name:supplier_name,
-
-               temp_ed_date: $('#temp_ed_date').val(),
-
-               temp_total: total,
-
-           };
-
-           btnSubmit.prop('disabled', true);
-
-           ajax_post(actUrl, formValues, {
-
-               success: function(response) {
-
-                   if (response.success) {
-
-
-                       if (response.result.success) {
-
-                           $('#product_name').focus();
-
-                           setSelect2('#supplier_id', supplier_id, supplier_name);
-
-                           $('#supplier_id').attr("disabled", true);
-
-                           notification.success(response.result.message);
-
-                       } else {
-
-                           message.error(response.result.message);
-
-                       }
-
-                       clearItemInput();
-                       loadTempData(response.result.data);
-
-                   }
-
-                   btnSubmit.prop('disabled', false);
-
-               },
-
-               error: function(response) {
-
-                   btnSubmit.prop('disabled', false);
-
-               }
-           });
-       }
-   })
-
-
-     $("#tbltemp").on('click', '.btnedit', function(e) {
-
-         e.preventDefault();
-
-         let json_data = $(this).attr('data-json');
-
-         let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
-
-         console.log(json);
-
-         if (is_json) {
-
-             $('#temp_purchase_id').val(json.temp_purchase_id);
-
-             $('#item_id').val(json.temp_purchase_item_id);
-
-             $('#product_name').val(json.product_name);
-
-             temp_price.set(json.temp_purchase_price);
-
-             temp_qty.set(json.temp_purchase_qty);
-
-             temp_ongkir.set(json.temp_purchase_ongkir);
-
-             temp_discount1.set(json.temp_purchase_discount1);
-
-             temp_discount2.set(json.temp_purchase_discount2);
-
-             temp_discount3.set(json.temp_purchase_discount3);
-
-             temp_discount_percentage1.set(json.temp_purchase_discount1_percentage);
-
-             temp_discount_percentage2.set(json.temp_purchase_discount2_percentage);
-
-             temp_discount_percentage3.set(json.temp_purchase_discount3_percentage);
-
-             total_price.set(json.temp_purchase_qty * json.temp_purchase_price);
-
-             total_temp_discount.set(json.temp_purchase_discount_total);
-
-             $('#temp_ed_date').val(json.temp_purchase_expire_date);
-
-             $('#temp_po_id').val(json.temp_purchase_id );
-
-             $('#temp_tax').val(json.temp_purchase_ppn);
-
-             temp_total.set(json.temp_purchase_total);
-
-             temp_dpp.set(json.temp_purchase_dpp);
-
-             temp_tax.set(json.temp_purchase_ppn);
-
-             $('#temp_qty').focus();
-
-             $('#supplier_id').attr("disabled", true);
-
-         } else {
-
-             getTemp();
-
-             message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
-
-         }
-
-     })  
-
-
-
-     Parsley.addMessages('id', {
-
-        vproductname: 'Harap pilih produk terlebih dahulu',
-
-        vprice: 'Harga beli wajib diatas Rp 0',
-
-        vqty: 'Qty wajib diatas Rp 0',
-
-    });
-
-
-
-     Parsley.setLocale('id');
-
-
-
-     window.Parsley.addValidator("vproductname", {
-
-        validateString: function(value) {
-
-            if ($('#item_id').val() == '' || $('#item_id').val() == '0') {
-
-                return false;
-
-            } else {
-
-                return true;
-
-            }
-
-        },
-
-    });
-
-
-     window.Parsley.addValidator("vprice", {
-
-        validateString: function(value) {
-
-            let vprice = parseFloat(temp_price.getNumericString());
-
-            if (vprice <= 0) {
-
-                return false;
-
-            } else {
-
-                return true;
-
-            }
-        },
-
-    });
-
-
-     window.Parsley.addValidator("vqty", {
-
-        validateString: function(value) {
-
-            let vqty = parseFloat(temp_qty.getNumericString());
-
-            if (vqty <= 0) {
-
-                return false;
-
-            } else {
-
-                return true;
-
-            }
-
-        },
-
-    });
-
-     function loadTempData(items) {
-
-       let template = $('#template_row_temp').html();
-
-       let tbody = '';
-
-       let row = 1;
-
-       let temp_total_order = 0;
-
-       items.forEach((val, key) => {
-
-           let item = template;
-
-           let data_json = htmlEntities.encode(JSON.stringify(val));
-
-           let temp_purchase_id  = val.temp_purchase_id;
-
-           let temp_purchase_item_id = val.temp_purchase_item_id;
-
-           let item_code = val.item_code;
-
-           let product_name  = val.product_name+'('+val.unit_name+')';
-
-           let temp_purchase_price  = val.base_purchase_price;
-
-           let temp_purchase_qty = parseFloat(val.temp_purchase_qty);
-
-           let temp_purchase_total_disc = val.temp_total_discount;
-
-           let temp_purchase_ongkir = val.temp_purchase_ongkir;
-
-           let temp_purchase_expire_date = val.temp_purchase_expire_date;
-
-           let temp_purchase_total = val.temp_purchase_total;
-
-           let has_tax = val.has_tax;
-
-
-
-           item = item.replaceAll('{row}', row)
-
-           .replaceAll('{item_code}', val.item_code)
-
-           .replaceAll('{product_name}', product_name)
-
-           .replaceAll('{temp_price}', numberFormat(temp_purchase_price, true))
-
-           .replaceAll('{temp_qty}', numberFormat(temp_purchase_qty, true))
-
-           .replaceAll('{temp_disc}', numberFormat(temp_purchase_total_disc, true))
-
-           .replaceAll('{temp_ongkir}', numberFormat(temp_purchase_ongkir, true))
-
-           .replaceAll('{temp_ed}', temp_purchase_expire_date)
-
-           .replaceAll('{temp_total}', numberFormat(temp_purchase_total, true))
-
-           .replaceAll('{temp_id}', temp_purchase_id)
-
-           .replaceAll('{data_json}', data_json);
-
-           tbody += item;
-
-           row++;
-
-       });
-
-
-       if ($.fn.DataTable.isDataTable('#tbltemp')) {
-
-           $('#tbltemp').DataTable().destroy();
-
-       }
-
-
-
-       $('#tbltemp tbody').html('');
-
-       $('#tbltemp tbody').html(tbody);
-
-       tbltemp = $('#tbltemp').DataTable(config_tbltemp);
-
-       setTax();
-
-       setfootervalue();
-
-       clearItemInput();
-
-       _initTooltip();
-
-   }
-
-   $("#tbltemp").on('click', '.btndelete', function(e) {
-
-    e.preventDefault();
-
-    let id = $(this).attr('data-id');
-
-    let actUrl = base_url + '/webmin/purchase/temp-delete/' + id;
-
-    ajax_get(actUrl, null, {
-
-        success: function(response) {
-
-            if (response.success) {
-
-                if (response.result.success) {
-
-                    notification.success(response.result.message);
-
-                } else {
-
-                    message.error(response.result.message);
-
-                }
-
-                setfootervalue();
-
-                loadTempData(response.result.data);
-
-            }
-
-        },
-
-        error: function(response) {
-
-            getTemp();
-
+            $('#btnadd').prop('disabled', !hasRole('purchase.add'));
         }
 
-    })
 
-})
+        calculation_temp_total_footer();
 
 
-   function clearItemInput() {
+        $('#btnadd').click(function(e) {
+            e.preventDefault();
+            let actUrl = base_url + '/webmin/purchase/get-purchase-temp';
+            ajax_get(actUrl, null, {
+                success: function(response) {   
+                    if (response.result.success == 'TRUE') {
+                        let form = $('#frmpurchaseorder');
+                        let items = response.result.data;
+                        $('#title-frmpurchaseorder').html('Pengajuan Pesanan');
+                        formMode = 'add';
+                        setSelect2('#supplier_id', "", "");
+                        $('#supplier_id').prop("disabled", false);
+                        loadTempData(items);
+                        if(items.length != 0){
+                            let supplier_ids = items[0].temp_purchase_supplier_id;
+                            let supplier_names = items[0].temp_purchase_supplier_name;
+                            setSelect2('#supplier_id', supplier_ids, supplier_names);
+                            $('#supplier_id').attr("disabled", true);
 
-       let form = $('#frmaddtemp');
-
-       form.parsley().reset();
-
-       $('#item_id').val('');
-
-       $('#product_name').val('');
-
-       $('#temp_ed_date').val('');
-
-       temp_qty.set('0.00');
-
-       temp_ongkir.set(0);
-
-       temp_price.set(0);
-
-       temp_total.set(0);
-
-       temp_tax.set(0);
-
-       edit_temp_discount_percentage1.set('0.00%');
-
-       edit_temp_discount_percentage2.set('0.00%');
-
-       edit_temp_discount_percentage3.set('0.00%');
-
-       edit_temp_discount1.set(0);
-
-       edit_temp_discount2.set(0);
-
-       edit_temp_discount3.set(0);
-
-       total_temp_discount.set(0);
-
-       $('#temp_desc').val('');
-
-   }
-
-   function cleardiscount() {
-    temp_discount1.set(0);
-    temp_discount2.set(0);
-    temp_discount3.set(0);
-    temp_discount_percentage1.set('0.00%');
-    temp_discount_percentage2.set('0.00%');
-    temp_discount_percentage3.set('0.00%');
-    edit_temp_discount_percentage1.set('0.00%');
-    edit_temp_discount_percentage2.set('0.00%');
-    edit_temp_discount_percentage3.set('0.00%');
-    edit_temp_discount1.set(0);
-    edit_temp_discount2.set(0);
-    edit_temp_discount3.set(0);
-    total_temp_discount.set(0);
-}
-
-function cleardiscountfooter() {
-    footer_discount1.set(0);
-    footer_discount2.set(0);
-    footer_discount3.set(0);
-    edit_footer_discount_percentage1.set('0.00%');
-    edit_footer_discount_percentage2.set('0.00%');
-    edit_footer_discount_percentage3.set('0.00%');
-    edit_footer_discount1.set(0);
-    edit_footer_discount2.set(0);
-    edit_footer_discount3.set(0);
-    footer_total_discount.set(0);
-}
-
-function setfootervalue(){
-    let actUrl = base_url + '/webmin/purchase/get-purchase-footer';
-    ajax_get(actUrl, null, {
-        success: function(response) {   
-            if (response.result.success == 'TRUE') {
-                if(response.result.data.length > 0){
-                    if(response.result.data[0].subTotal == null){
-                        footer_sub_total.set(0);
-                        footer_total_ongkir.set(0);
-                    }else{
-                        footer_sub_total.set(response.result.data[0].subTotal);
-                        footer_total_ongkir.set(response.result.data[0].totalOngkir);
-
+                            let po_ids = items[0].temp_purchase_po_id;
+                            let po_invs = items[0].temp_purchase_po_invoice;
+                            setSelect2('#no_po_purchase', po_ids, po_invs);
+                        }else{
+                            clearHeader();
+                            cleardiscountfooter();
+                        }
+                        clearItemInput();
+                        showInputPage(true);
+                    } else {
+                        message.error(response.result.message);
                     }
-                    calculation_temp_total_footer();
+
                 }
-            } else {
-                message.error(response.result.message);
-            }
-        }
-    });
-}
+            })
 
-function setTax(){
-    let actUrl = base_url + '/webmin/purchase/get-purchase-tax';
-    ajax_get(actUrl, null, {
-        success: function(response) { 
-
-            if (response.result.success == 'TRUE') {
-                if(response.result.data.length > 0){
-                 $('#has_tax').val('Pajak');
-             }else{
-                 $('#has_tax').val('Non Pajak');
-             }
-         } else {
-            message.error(response.result.message);
-        }
-    }
-});
-}
-
-function calculation_temp_total_footer(){
-    footer_dpp.set(Number(footer_sub_total.get()) - Number(footer_total_discount.get()));
-
-    if($('#has_tax').val() == 'Pajak'){
-
-     footer_total_ppn.set(Number(footer_dpp.get() * 0.11));
- }else{
-    footer_total_ppn.set(0);   
-}
-footer_total_invoice.set(Number(footer_dpp.get()) + Number(footer_total_ppn.get()) + Number(footer_total_ongkir.get()));
-footer_total_credit.set(Number(footer_dpp.get()) + Number(footer_total_ppn.get()) + Number(footer_total_ongkir.get()));
-
-
-}
-
-$('#btnsave').click(function(e) {
-
-    e.preventDefault();
-
-    let form = $('#frmaddtemp');
-
-    let btnSubmit = $('#btnsave');
-
-    let purchase_sub_total = parseFloat(footer_sub_total.getNumericString());
-
-    let purchase_discount1 = parseFloat(footer_discount1.getNumericString());
-
-    let purchase_discount1_percentage = parseFloat(footer_discount_percentage1.getNumericString());
-
-    let purchase_discount2 = parseFloat(footer_discount2.getNumericString());
-
-    let purchase_discount2_percentage = parseFloat(footer_discount_percentage2.getNumericString());
-
-    let purchase_discount3 = parseFloat(footer_discount3.getNumericString());
-
-    let purchase_discount3_percentage = parseFloat(footer_discount_percentage3.getNumericString());
-
-    let purchase_total_discount = parseFloat(footer_total_discount.getNumericString());
-
-    let purchase_dpp = parseFloat(footer_dpp.getNumericString());
-
-    let purchase_total_ppn = parseFloat(footer_total_ppn.getNumericString());
-
-    let purchase_total_ongkir = parseFloat(footer_total_ongkir.getNumericString());
-
-    let purchase_total = parseFloat(footer_total_invoice.getNumericString());
-
-    let purchase_dp = parseFloat(footer_dp.getNumericString());
-
-    let purchase_credit = parseFloat(footer_total_credit.getNumericString());
-
-    let purchase_down_payment = parseFloat(footer_dp.getNumericString());
-
-    let purchase_remaining_debt = parseFloat(footer_total_credit.getNumericString());
-
-    let no_po_purchase = $('#no_po_purchase').val();
-
-    let warehouse = $('#warehouse').val();
-
-    let payment_type = $('#payment_type').val();
-
-    let faktur_date = $('#faktur_date').val();
-
-    let question = 'Yakin ingin menyimpan data Pembelian?';
-
-    let actUrl = base_url + '/webmin/purchase/save/add';
-
-    if(warehouse == null){
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Silahkan Isi Gudang Terlebih Dahulu !'
         })
 
-    }else if(payment_type == null){
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Silahkan Isi Metode Pembayaran !'
-        })
+        let tblhdpurchase = $("#tblhdpurchase").DataTable({
+            processing: true,
+            select: true,
+            serverSide: true,
+            responsive: true,
+            fixedColumns: true,
+            order: [
+            [1, 'asc']
+            ],
+            language: {
+                url: lang_datatables,
+            },
+            ajax: {
+                url: base_url + '/webmin/purchase/tblpurchase',
+                type: "POST",
+                error: function() {
+                    notification.danger('Gagal memuat table, harap coba lagi');
+                },
+            },
+            drawCallback: function(settings) {
+                _initTooltip();
+                _initButton();
+            },
+            columnDefs: [{
+                width: 100
+            },
+            {
+                targets: [0, 3, 5],
+                orderable: false,
+                searchable: false,
+            },
+            {
+                targets: [0],
+                className: "text-right",
+            },
+            ],
+        });
 
-    }else if(faktur_date == 0){
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Silahkan Isi Tanggal Faktur !'
-        })
+        $('#btnadd_temp').click(function(e) {
 
-    }else{
+            e.preventDefault();
 
-        message.question(question).then(function(answer) {
+            let price = parseFloat(temp_price.getNumericString());
 
-            let yes = parseMessageResult(answer);
+            let dpp = parseFloat(temp_dpp.getNumericString());
 
-            if (yes) {
+            let tax = parseFloat(temp_tax.getNumericString());
+
+            let qty = parseFloat(temp_qty.getNumericString());
+
+            let ongkir = parseFloat(temp_ongkir.getNumericString());
+
+            let discount1 = parseFloat(edit_temp_discount1.getNumericString());
+
+            let discount2 = parseFloat(edit_temp_discount2.getNumericString());
+
+            let discount3 = parseFloat(edit_temp_discount3.getNumericString());
+
+            let discount_percentage1 = parseFloat(temp_discount_percentage1.getNumericString());
+
+            let discount_percentage2 = parseFloat(temp_discount_percentage2.getNumericString());
+
+            let discount_percentage3 = parseFloat(temp_discount_percentage3.getNumericString());
+
+            let total_discount = parseFloat(total_temp_discount.getNumericString());
+
+            let total = parseFloat(temp_total.getNumericString());
+
+            let supplier_id = $('#supplier_id').val();
+
+            let supplier_name = $("#supplier_id option:selected" ).text();
+
+            let po_id = $('#no_po_purchase').val();
+
+            let po_inv = $("#no_po_purchase option:selected" ).text();
+
+            let btnSubmit = $('#btnadd_temp');
+
+            let form = $('#frmaddtemp');
+
+            form.parsley().validate();
+
+            if (form.parsley().isValid()) {
+
+                let actUrl = base_url + '/webmin/purchase/temp-add';
 
                 let formValues = {
 
-                    purchase_po_invoice: $("#no_po_purchase option:selected").text(),
+                    temp_purchase_id: $('#temp_purchase_id').val(),
 
-                    purchase_date: $('#purchase_order_date').val(),
+                    temp_purchase_po_id: po_id,
 
-                    purchase_faktur_date: $('#faktur_date').val(),
+                    temp_purchase_po_inv: po_inv,
 
-                    purchase_supplier_id: $('#supplier_id').val(),
+                    item_id: $('#item_id').val(),
 
-                    purchase_due_date: $('#due_date').val(),
+                    temp_price: price,
 
-                    purchase_warehouse_id: $('#warehouse').val(),
+                    temp_dpp: dpp,
 
-                    purchase_remark: $('#purchase_remark').val(),
+                    temp_tax: tax,
 
-                    purchase_suplier_no: $('#no_invoice_suplier').val(),
+                    temp_qty: qty,
 
-                    purchase_sub_total: purchase_sub_total,
+                    temp_ongkir: ongkir,
 
-                    purchase_discount1: purchase_discount1,
+                    temp_discount1: discount1,
 
-                    purchase_discount1_percentage: purchase_discount1_percentage,
+                    temp_discount_percentage1: discount_percentage1,
 
-                    purchase_discount2: purchase_discount2,
+                    temp_discount2: discount2,
 
-                    purchase_discount2_percentage: purchase_discount2_percentage,
+                    temp_discount_percentage2: discount_percentage2,
 
-                    purchase_discount3: purchase_discount3,
+                    temp_discount3: discount3,
 
-                    purchase_discount3_percentage: purchase_discount3_percentage,
+                    temp_discount_percentage3: discount_percentage3,
 
-                    purchase_total_discount : purchase_total_discount,
+                    temp_purchase_suplier_id:supplier_id,
 
-                    purchase_total_dpp: purchase_dpp,
+                    total_temp_discount:total_discount,
 
-                    purchase_total_ppn: purchase_total_ppn,
+                    temp_purchase_suplier_name:supplier_name,
 
-                    purchase_total_ongkir:purchase_total_ongkir,
+                    temp_ed_date: $('#temp_ed_date').val(),
 
-                    purchase_total: purchase_total,
-
-                    purchase_payment_method_id : $('#payment_type').val(),
-
-                    purchase_down_payment: purchase_down_payment,
-
-                    purchase_remaining_debt : purchase_remaining_debt,
+                    temp_total: total,
 
                 };
 
@@ -1625,19 +1049,662 @@ $('#btnsave').click(function(e) {
 
                 ajax_post(actUrl, formValues, {
 
-                    success: function(response) {
+                 success: function(response) {
 
-                        if (response.success) {
+                     if (response.success) {
 
-                            if (response.result.success) {
 
-                                form[0].reset();
+                         if (response.result.success) {
 
-                                notification.success(response.result.message);
+                             $('#product_name').focus();
 
-                                form.parsley().reset();
+                             setSelect2('#supplier_id', supplier_id, supplier_name);
 
-                                showInputPage(false);
+                             $('#supplier_id').attr("disabled", true);
+
+                             notification.success(response.result.message);
+
+                         } else {
+
+                             message.error(response.result.message);
+
+                         }
+
+                         clearItemInput();
+                         loadTempData(response.result.data);
+
+                     }
+
+                     btnSubmit.prop('disabled', false);
+
+                 },
+
+                 error: function(response) {
+
+                     btnSubmit.prop('disabled', false);
+
+                 }
+             });
+            }
+        })
+
+
+        $("#tbltemp").on('click', '.btnedit', function(e) {
+
+           e.preventDefault();
+
+           let json_data = $(this).attr('data-json');
+
+           let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
+
+           if (is_json) {
+
+               $('#temp_purchase_id').val(json.temp_purchase_id);
+
+               $('#item_id').val(json.temp_purchase_item_id);
+
+               $('#product_name').val(json.product_name);
+
+               temp_price.set(json.temp_purchase_price);
+
+               temp_qty.set(json.temp_purchase_qty);
+
+               temp_ongkir.set(json.temp_purchase_ongkir);
+
+               temp_discount1.set(json.temp_purchase_discount1);
+
+               temp_discount2.set(json.temp_purchase_discount2);
+
+               temp_discount3.set(json.temp_purchase_discount3);
+
+               temp_discount_percentage1.set(json.temp_purchase_discount1_percentage);
+
+               temp_discount_percentage2.set(json.temp_purchase_discount2_percentage);
+
+               temp_discount_percentage3.set(json.temp_purchase_discount3_percentage);
+
+               total_price.set(json.temp_purchase_qty * json.temp_purchase_price);
+
+               total_temp_discount.set(json.temp_purchase_discount_total);
+
+               $('#temp_ed_date').val(json.temp_purchase_expire_date);
+
+               $('#temp_po_id').val(json.temp_purchase_id );
+
+               $('#temp_tax').val(json.temp_purchase_ppn);
+
+               temp_total.set(json.temp_purchase_total);
+
+               temp_dpp.set(json.temp_purchase_dpp);
+
+               temp_tax.set(json.temp_purchase_ppn);
+
+               $('#temp_qty').focus();
+
+               $('#supplier_id').attr("disabled", true);
+
+           } else {
+
+               getTemp();
+
+               message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
+
+           }
+
+       })  
+
+
+
+        Parsley.addMessages('id', {
+
+            vproductname: 'Harap pilih produk terlebih dahulu',
+
+            vprice: 'Harga beli wajib diatas Rp 0',
+
+            vqty: 'Qty wajib diatas Rp 0',
+
+        });
+
+
+
+        Parsley.setLocale('id');
+
+
+
+        window.Parsley.addValidator("vproductname", {
+
+            validateString: function(value) {
+
+                if ($('#item_id').val() == '' || $('#item_id').val() == '0') {
+
+                    return false;
+
+                } else {
+
+                    return true;
+
+                }
+
+            },
+
+        });
+
+
+        window.Parsley.addValidator("vprice", {
+
+            validateString: function(value) {
+
+                let vprice = parseFloat(temp_price.getNumericString());
+
+                if (vprice <= 0) {
+
+                    return false;
+
+                } else {
+
+                    return true;
+
+                }
+            },
+
+        });
+
+
+        window.Parsley.addValidator("vqty", {
+
+            validateString: function(value) {
+
+                let vqty = parseFloat(temp_qty.getNumericString());
+
+                if (vqty <= 0) {
+
+                    return false;
+
+                } else {
+
+                    return true;
+
+                }
+
+            },
+
+        });
+
+        function loadTempData(items) {
+
+            let template = $('#template_row_temp').html();
+
+            let tbody = '';
+
+            let row = 1;
+
+            let temp_total_order = 0;
+
+            items.forEach((val, key) => {
+
+                let item = template;
+
+                let data_json = htmlEntities.encode(JSON.stringify(val));
+
+                let temp_purchase_id  = val.temp_purchase_id;
+
+                let temp_purchase_item_id = val.temp_purchase_item_id;
+
+                let item_code = val.item_code;
+
+                let product_name  = val.product_name+'('+val.unit_name+')';
+
+                let temp_purchase_price  = val.temp_purchase_price;
+
+                let temp_purchase_qty = parseFloat(val.temp_purchase_qty);
+
+                let temp_purchase_total_disc = val.temp_total_discount;
+
+                let temp_purchase_ongkir = val.temp_purchase_ongkir;
+
+                let temp_purchase_expire_date = val.temp_purchase_expire_date;
+
+                let temp_purchase_total = val.temp_purchase_total;
+
+                let has_tax = val.has_tax;
+
+
+
+                item = item.replaceAll('{row}', row)
+
+                .replaceAll('{item_code}', val.item_code)
+
+                .replaceAll('{product_name}', product_name)
+
+                .replaceAll('{temp_price}', numberFormat(temp_purchase_price, true))
+
+                .replaceAll('{temp_qty}', numberFormat(temp_purchase_qty, true))
+
+                .replaceAll('{temp_disc}', numberFormat(temp_purchase_total_disc, true))
+
+                .replaceAll('{temp_ongkir}', numberFormat(temp_purchase_ongkir, true))
+
+                .replaceAll('{temp_ed}', temp_purchase_expire_date)
+
+                .replaceAll('{temp_total}', numberFormat(temp_purchase_total, true))
+
+                .replaceAll('{temp_id}', temp_purchase_id)
+
+                .replaceAll('{data_json}', data_json);
+
+                tbody += item;
+
+                row++;
+
+            });
+
+
+            if ($.fn.DataTable.isDataTable('#tbltemp')) {
+
+                $('#tbltemp').DataTable().destroy();
+
+            }
+
+
+
+            $('#tbltemp tbody').html('');
+
+            $('#tbltemp tbody').html(tbody);
+
+            tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+
+            setTax();
+
+            setfootervalue();
+
+            clearItemInput();
+
+            _initTooltip();
+
+        }
+
+        $("#tbltemp").on('click', '.btndelete', function(e) {
+
+            e.preventDefault();
+
+            let id = $(this).attr('data-id');
+
+            let actUrl = base_url + '/webmin/purchase/temp-delete/' + id;
+
+            ajax_get(actUrl, null, {
+
+                success: function(response) {
+
+                    if (response.success) {
+
+                        if (response.result.success) {
+
+                            notification.success(response.result.message);
+
+                        } else {
+
+                            message.error(response.result.message);
+
+                        }
+
+                        setfootervalue();
+
+                        loadTempData(response.result.data);
+
+                    }
+
+                },
+
+                error: function(response) {
+
+                    getTemp();
+
+                }
+
+            })
+
+        })
+
+
+        function clearTemp() {
+
+            let actUrl = base_url + '/webmin/purchase/clear-temp';
+
+            ajax_get(actUrl, null, {
+
+                success: function(response) {
+
+                    console.log(response);
+
+                    if (response.success) {
+
+                        if (response.result.success) {
+
+                            clearItemInput();
+
+                            location.reload();
+
+                        } else {
+
+                            message.error(response.result.message);
+
+                        }
+
+                    }
+
+                },
+
+                error: function(response) {
+
+                    getTemp();
+
+                }
+
+            })
+        }
+
+
+
+        function clearItemInput() {
+
+            let form = $('#frmaddtemp');
+
+            form.parsley().reset();
+
+            $('#item_id').val('');
+
+            $('#product_name').val('');
+
+            $('#temp_ed_date').val('');
+
+            temp_qty.set('0.00');
+
+            temp_ongkir.set(0);
+
+            temp_price.set(0);
+
+            temp_total.set(0);
+
+            temp_tax.set(0);
+
+            cleardiscount();
+
+            $('#temp_desc').val('');
+
+        }
+
+        function clearHeader()
+        {
+           setSelect2("#no_po_purchase", '','');
+
+           setSelect2("#supplier_id", '','');
+
+           setSelect2("#payment_type", '','');
+
+           setSelect2("#warehouse", '', '');
+
+           $("#due_date").val("");
+
+           $("#faktur_date").val("");
+
+           $("#no_invoice_suplier").val("");
+       }
+
+       function cleardiscount() {
+        temp_discount1.set(0);
+        temp_discount2.set(0);
+        temp_discount3.set(0);
+        temp_discount_percentage1.set('0.00%');
+        temp_discount_percentage2.set('0.00%');
+        temp_discount_percentage3.set('0.00%');
+        edit_temp_discount_percentage1.set('0.00%');
+        edit_temp_discount_percentage2.set('0.00%');
+        edit_temp_discount_percentage3.set('0.00%');
+        edit_temp_discount1.set(0);
+        edit_temp_discount2.set(0);
+        edit_temp_discount3.set(0);
+        total_temp_discount.set(0);
+    }
+
+    function cleardiscountfooter() {
+        footer_discount1.set(0);
+        footer_discount2.set(0);
+        footer_discount3.set(0);
+        edit_footer_discount_percentage1.set('0.00%');
+        edit_footer_discount_percentage2.set('0.00%');
+        edit_footer_discount_percentage3.set('0.00%');
+        edit_footer_discount1.set(0);
+        edit_footer_discount2.set(0);
+        edit_footer_discount3.set(0);
+        footer_total_discount.set(0);
+    }
+
+    function setfootervalue(){
+        let actUrl = base_url + '/webmin/purchase/get-purchase-footer';
+        ajax_get(actUrl, null, {
+            success: function(response) {   
+                if (response.result.success == 'TRUE') {
+                    if(response.result.data.length > 0){
+                        if(response.result.data[0].subTotal == null){
+                            footer_sub_total.set(0);
+                            footer_total_ongkir.set(0);
+                        }else{
+                            footer_sub_total.set(response.result.data[0].subTotal);
+                            footer_total_ongkir.set(response.result.data[0].totalOngkir);
+
+                        }
+                        calculation_temp_total_footer();
+                    }
+                } else {
+                    message.error(response.result.message);
+                }
+            }
+        });
+    }
+
+    function setTax(){
+        let actUrl = base_url + '/webmin/purchase/get-purchase-tax';
+        ajax_get(actUrl, null, {
+            success: function(response) { 
+
+                if (response.result.success == 'TRUE') {
+                    if(response.result.data.length > 0){
+                       $('#has_tax').val('Pajak');
+                   }else{
+                       $('#has_tax').val('Non Pajak');
+                   }
+               } else {
+                message.error(response.result.message);
+            }
+        }
+    });
+    }
+
+    function calculation_temp_total_footer(){
+        footer_dpp.set(Number(footer_sub_total.get()) - Number(footer_total_discount.get()));
+
+        if($('#has_tax').val() == 'Pajak'){
+
+            footer_total_ppn.set(Number(footer_dpp.get() * 0.11));
+        }else{
+            footer_total_ppn.set(0);   
+        }
+        footer_total_invoice.set(Number(footer_dpp.get()) + Number(footer_total_ppn.get()) + Number(footer_total_ongkir.get()));
+        footer_total_credit.set(Number(footer_dpp.get()) + Number(footer_total_ppn.get()) + Number(footer_total_ongkir.get()));
+
+
+    }
+
+    $('#btncancel').click(function(e) {
+
+        e.preventDefault();
+
+        message.question('Yakin ingin menutup halaman ini dan menghapus data input ?').then(function(answer) {
+
+            let yes = parseMessageResult(answer);
+
+            if (yes) {
+
+                clearItemInput();
+
+                clearTemp();
+
+                showInputPage(false);
+
+            }
+
+        })
+
+    })
+
+    $('#btnsave').click(function(e) {
+
+        e.preventDefault();
+
+        let form = $('#frmaddtemp');
+
+        let btnSubmit = $('#btnsave');
+
+        let purchase_sub_total = parseFloat(footer_sub_total.getNumericString());
+
+        let purchase_discount1 = parseFloat(footer_discount1.getNumericString());
+
+        let purchase_discount1_percentage = parseFloat(footer_discount_percentage1.getNumericString());
+
+        let purchase_discount2 = parseFloat(footer_discount2.getNumericString());
+
+        let purchase_discount2_percentage = parseFloat(footer_discount_percentage2.getNumericString());
+
+        let purchase_discount3 = parseFloat(footer_discount3.getNumericString());
+
+        let purchase_discount3_percentage = parseFloat(footer_discount_percentage3.getNumericString());
+
+        let purchase_total_discount = parseFloat(footer_total_discount.getNumericString());
+
+        let purchase_dpp = parseFloat(footer_dpp.getNumericString());
+
+        let purchase_total_ppn = parseFloat(footer_total_ppn.getNumericString());
+
+        let purchase_total_ongkir = parseFloat(footer_total_ongkir.getNumericString());
+
+        let purchase_total = parseFloat(footer_total_invoice.getNumericString());
+
+        let purchase_dp = parseFloat(footer_dp.getNumericString());
+
+        let purchase_credit = parseFloat(footer_total_credit.getNumericString());
+
+        let purchase_down_payment = parseFloat(footer_dp.getNumericString());
+
+        let purchase_remaining_debt = parseFloat(footer_total_credit.getNumericString());
+
+        let no_po_purchase = $('#no_po_purchase').val();
+
+        let warehouse = $('#warehouse').val();
+
+        let payment_type = $('#payment_type').val();
+
+        let faktur_date = $('#faktur_date').val();
+
+        let question = 'Yakin ingin menyimpan data Pembelian?';
+
+        let actUrl = base_url + '/webmin/purchase/save/add';
+
+        if(warehouse == null){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Silahkan Isi Gudang Terlebih Dahulu !'
+            })
+
+        }else if(payment_type == null){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Silahkan Isi Metode Pembayaran !'
+            })
+
+        }else if(faktur_date == 0){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Silahkan Isi Tanggal Faktur !'
+            })
+
+        }else{
+
+            message.question(question).then(function(answer) {
+
+                let yes = parseMessageResult(answer);
+
+                if (yes) {
+
+                    let formValues = {
+
+                        purchase_po_invoice: $("#no_po_purchase option:selected").text(),
+
+                        purchase_date: $('#purchase_order_date').val(),
+
+                        purchase_faktur_date: $('#faktur_date').val(),
+
+                        purchase_supplier_id: $('#supplier_id').val(),
+
+                        purchase_due_date: $('#due_date').val(),
+
+                        purchase_warehouse_id: $('#warehouse').val(),
+
+                        purchase_remark: $('#purchase_remark').val(),
+
+                        purchase_suplier_no: $('#no_invoice_suplier').val(),
+
+                        purchase_sub_total: purchase_sub_total,
+
+                        purchase_discount1: purchase_discount1,
+
+                        purchase_discount1_percentage: purchase_discount1_percentage,
+
+                        purchase_discount2: purchase_discount2,
+
+                        purchase_discount2_percentage: purchase_discount2_percentage,
+
+                        purchase_discount3: purchase_discount3,
+
+                        purchase_discount3_percentage: purchase_discount3_percentage,
+
+                        purchase_total_discount : purchase_total_discount,
+
+                        purchase_total_dpp: purchase_dpp,
+
+                        purchase_total_ppn: purchase_total_ppn,
+
+                        purchase_total_ongkir:purchase_total_ongkir,
+
+                        purchase_total: purchase_total,
+
+                        purchase_payment_method_id : $('#payment_type').val(),
+
+                        purchase_down_payment: purchase_down_payment,
+
+                        purchase_remaining_debt : purchase_remaining_debt,
+
+                    };
+
+                    btnSubmit.prop('disabled', true);
+
+                    ajax_post(actUrl, formValues, {
+
+                        success: function(response) {
+
+                            if (response.success) {
+
+                                if (response.result.success) {
+
+                                    form[0].reset();
+
+                                    notification.success(response.result.message);
+
+                                    form.parsley().reset();
+
+                                    showInputPage(false);
 
                                // let invoice = response.result.purchase_order_id;
 
@@ -1669,34 +1736,14 @@ $('#btnsave').click(function(e) {
 
             });
 
-            }
+                }
 
-        })
-
-    }
-
-});
-
-
-$('#btncancel').click(function(e) {
-
-    e.preventDefault();
-
-    message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
-
-        let yes = parseMessageResult(answer);
-
-        if (yes) {
-
-            showInputPage(false);
-
-            clearItemInput();
+            })
 
         }
 
-    })
+    });
 
-})
 
         // select2 //
 
@@ -1799,9 +1846,25 @@ $('#btncancel').click(function(e) {
 
                                     setSelect2("#warehouse", header.purchase_order_warehouse_id, header.warehouse_name);
 
+                                    footer_discount_percentage1.set(header.purchase_order_discount1_percentage);
+
+                                    footer_discount_percentage2.set(header.purchase_order_discount2_percentage);
+
+                                    footer_discount_percentage3.set(header.purchase_order_discount3_percentage);
+
+                                    footer_total_discount.set(header.purchase_order_total_discount);
+
+                                    footer_discount1.set(header.purchase_order_discount1);
+
+                                    footer_discount2.set(header.purchase_order_discount2);
+
+                                    footer_discount3.set(header.purchase_order_discount3);
+
                                 } else {
 
                                     $('#supplier_id').prop('disabled', true);
+
+                                      cleardiscountfooter();
 
                                 }
 
@@ -1811,7 +1874,7 @@ $('#btncancel').click(function(e) {
 
                                 clearItemInput();
 
-                                cleardiscountfooter();
+                              
 
                             } else {
 
@@ -1864,49 +1927,49 @@ $('#btncancel').click(function(e) {
 
         $('#product_name').autocomplete({   
 
-         minLength: 2,
+            minLength: 2,
 
-         source: function(req, add) {
+            source: function(req, add) {
 
-             $.ajax({
+                $.ajax({
 
-                 url: base_url + '/webmin/purchase-order/search-product-bysuplier?sup='+$('#supplier_id').val(),
+                    url: base_url + '/webmin/purchase-order/search-product-bysuplier?sup='+$('#supplier_id').val(),
 
-                 dataType: 'json',
+                    dataType: 'json',
 
-                 type: 'GET',
+                    type: 'GET',
 
-                 data: req,
+                    data: req,
 
-                 success: function(res) {
+                    success: function(res) {
 
-                     if (res.success == true) {
+                       if (res.success == true) {
 
                         add(res.data);
 
                     }else{
 
-                       message.error(res.message);
+                        message.error(res.message);
 
-                       $('#product_name').val('');
+                        $('#product_name').val('');
 
-                   }
+                    }
 
-               },
+                },
 
-           });
+            });
 
-         },
+            },
 
-         select: function(event, ui) {
+            select: function(event, ui) {
 
-            $('#item_id').val(ui.item.item_id);   
+                $('#item_id').val(ui.item.item_id);   
 
-            temp_price.set(parseFloat(ui.item.purchase_price));
+                temp_price.set(parseFloat(ui.item.purchase_price));
 
-        },
+            },
 
-    });
+        });
         // Table //
 
 
@@ -1920,8 +1983,6 @@ $('#btncancel').click(function(e) {
                 $('#purchase_list').hide();
 
                 $('#purchase_input').show();
-
-
 
             } else {
 
@@ -1972,12 +2033,12 @@ $('#btncancel').click(function(e) {
         function discountFooterMode(data) {
             let form = $('#frmfooterdiscount');
             $('#title-frmfooterdiscount').html('Tambah Discount Nota');
-            $('#edit_footer_discount1').val(data.footer_discount1);
-            $('#edit_footer_discount2').val(data.footer_discount2);
-            $('#edit_footer_discount3').val(data.footer_discount3);
-            $('#edit_footer_discount_percentage1').val(data.footer_discount_percentage1);
-            $('#edit_footer_discount_percentage2').val(data.footer_discount_percentage2);
-            $('#edit_footer_discount_percentage3').val(data.footer_discount_percentage3);
+            edit_footer_discount1.set(data.footer_discount1);
+            edit_footer_discount2.set(data.footer_discount2);
+            edit_footer_discount3.set(data.footer_discount3);
+            edit_footer_discount_percentage1.set(data.footer_discount_percentage1);
+            edit_footer_discount_percentage2.set(data.footer_discount_percentage2);
+            edit_footer_discount_percentage3.set(data.footer_discount_percentage3);
             $('#modal-footerdiscount').modal(configModal);
         }
 
@@ -1987,13 +2048,7 @@ $('#btncancel').click(function(e) {
             message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
                 let yes = parseMessageResult(answer);
                 if (yes) {
-                    edit_temp_discount_percentage1.set('0.00%');
-                    edit_temp_discount_percentage2.set('0.00%');
-                    edit_temp_discount_percentage3.set('0.00%');
-                    edit_temp_discount1.set(0);
-                    edit_temp_discount2.set(0);
-                    edit_temp_discount3.set(0);
-                    total_temp_discount.set(0);
+
                     $('#modal-tempdiscount').modal('hide');
                 }
             })
@@ -2004,13 +2059,13 @@ $('#btncancel').click(function(e) {
             message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
                 let yes = parseMessageResult(answer);
                 if (yes) {
-                    edit_footer_discount_percentage1.set('0.00%');
+                    /*edit_footer_discount_percentage1.set('0.00%');
                     edit_footer_discount_percentage2.set('0.00%');
                     edit_footer_discount_percentage3.set('0.00%');
                     edit_footer_discount1.set(0);
                     edit_footer_discount2.set(0);
                     edit_footer_discount3.set(0);
-                    footer_total_discount.set(0);
+                    footer_total_discount.set(0);*/
                     $('#modal-footerdiscount').modal('hide');
                 }
             })
@@ -2033,13 +2088,13 @@ $('#btncancel').click(function(e) {
                 let footer_total_credit_cal = footer_total_invoice.get() - footer_dp.get();
                 footer_total_credit.set(footer_total_credit_cal.toFixed(2));
             }else{
-             Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Grand Total Masih 0 !'
-          })
-         }
-     });
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Grand Total Masih 0 !'
+              })
+            }
+        });
 
         $('#edit_temp_discount_percentage1').on('change', function() {
             let edit_temp_discount1_cal = total_price.get() * (edit_temp_discount_percentage1.get()/100);
@@ -2094,18 +2149,18 @@ $('#btncancel').click(function(e) {
         });
 
         $('#edit_temp_discount3').on('change', function() {
-           if(edit_temp_discount2.get() < 1){
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Discount 2 Tidak Boleh Kosong!'
-          })
-            edit_temp_discount_percentage3.set('0.00%');
-            edit_temp_discount3.set(0);
-        }
-        let edit_temp_discount3_cal = edit_temp_discount3.get() / (total_price.get() - edit_temp_discount1.get() - edit_temp_discount2.get()) *  100;
-        edit_temp_discount_percentage3.set(edit_temp_discount3_cal.toFixed(2));
-    });
+            if(edit_temp_discount2.get() < 1){
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Discount 2 Tidak Boleh Kosong!'
+              })
+                edit_temp_discount_percentage3.set('0.00%');
+                edit_temp_discount3.set(0);
+            }
+            let edit_temp_discount3_cal = edit_temp_discount3.get() / (total_price.get() - edit_temp_discount1.get() - edit_temp_discount2.get()) *  100;
+            edit_temp_discount_percentage3.set(edit_temp_discount3_cal.toFixed(2));
+        });
 
 
         $('#edit_footer_discount_percentage1').on('change', function() {
@@ -2203,7 +2258,7 @@ $('#btncancel').click(function(e) {
 
         function calculation_temp_total(){
             var price_calculation = AutoNumeric.getAutoNumericElement('#temp_price').get();
-            let ppn = price_calculation - (price_calculation * 0.11);
+            let ppn = price_calculation - (price_calculation - (price_calculation * 0.11));
             let dpp = price_calculation - ppn;
             let qty_calculation = parseFloat(temp_qty.getNumericString());
             let subtotal_calculation = price_calculation * qty_calculation;
@@ -2282,62 +2337,62 @@ $('#btncancel').click(function(e) {
 
         const config_tbltemp = {
 
-         pageLength: 10,
+           pageLength: 10,
 
-         autoWidth: false,
+           autoWidth: false,
 
-         select: true,
+           select: true,
 
-         responsive: true,
+           responsive: true,
 
-         fixedColumns: true,
+           fixedColumns: true,
 
-         order: [
+           order: [
 
-         [0, 'desc']
+           [0, 'desc']
 
-         ],
+           ],
 
-         "language": {
+           "language": {
 
-             "url": lang_datatables,
+               "url": lang_datatables,
 
-         },
-         "columnDefs": [{
+           },
+           "columnDefs": [{
 
-             width: 100,
+               width: 100,
 
-             targets: 6
+               targets: 6
 
-         },
-         {
+           },
+           {
 
-             targets: [8],
+               targets: [8],
 
-             orderable: false,
+               orderable: false,
 
-             searchable: false,
+               searchable: false,
 
-         },
-         {
+           },
+           {
 
-             targets: [0, 2, 3, 4, 5, 6],
+               targets: [0, 2, 3, 4, 5, 6],
 
-             className: "text-right",
+               className: "text-right",
 
-         }
+           }
 
-         ]
+           ]
 
-     };
+       };
 
-     let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+       let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
 
-     _initButton();
+       _initButton();
 
-     showInputPage(false);
+       showInputPage(false);
 
- })
+   })
 
 </script>
 

@@ -14,7 +14,6 @@ class M_purchase_order extends Model
     protected $table_warehouse       = 'ms_warehouse';
 
 
-
     public function getOrder($purchase_order_id = '')
     {
 
@@ -424,7 +423,7 @@ public function updateOrder($data)
 
             unset($data['user_id']);
 
-            $sqlDtOrder = "INSERT INTO dt_purchase_order(detail_purchase_order_id,purchase_order_id,detail_submission_id,detail_submission_invoice,detail_purchase_po_item_id,detail_purchase_po_qty,detail_purchase_po_ppn,detail_purchase_po_dpp,detail_purchase_po_price,detail_purchase_po_discount1,detail_purchase_po_discount1_percentage,detail_purchase_po_discount2,detail_purchase_po_discount2_percentage,detail_purchase_po_discount3,detail_purchase_po_discount3_percentage,detail_purchase_po_total_discount,detail_purchase_po_ongkir,detail_purchase_po_expire_date,detail_purchase_po_total) VALUES ";
+            $sqlDtOrder = "INSERT INTO dt_purchase_order(purchase_order_id,detail_submission_id,detail_submission_invoice,detail_purchase_po_item_id,detail_purchase_po_qty,detail_purchase_po_ppn,detail_purchase_po_dpp,detail_purchase_po_price,detail_purchase_po_discount1,detail_purchase_po_discount1_percentage,detail_purchase_po_discount2,detail_purchase_po_discount2_percentage,detail_purchase_po_discount3,detail_purchase_po_discount3_percentage,detail_purchase_po_total_discount,detail_purchase_po_ongkir,detail_purchase_po_expire_date,detail_purchase_po_total) VALUES ";
 
             $sqlDtValues = [];
 
@@ -434,9 +433,7 @@ public function updateOrder($data)
 
             foreach ($getTemp->getResultArray() as $row) {
 
-                $detail_purchase_order_id                   = $getOrder['detail_purchase_order_id'];
-
-                $purchase_order_id                         = $purchase_order_id;
+                $purchase_order_id                          = $purchase_order_id;
 
                 $detail_submission_id                       = $row['temp_po_submission_id'];
 
@@ -472,12 +469,16 @@ public function updateOrder($data)
 
                 $detail_purchase_po_total                   = $row['temp_po_total'];
 
-                $sqlDtValues[] = "('$detail_purchase_order_id','$purchase_order_id','$detail_submission_id','$detail_submission_invoice','$detail_purchase_po_item_id','$detail_purchase_po_qty','$detail_purchase_po_ppn','$detail_purchase_po_dpp','$detail_purchase_po_price','$detail_purchase_po_discount1','$detail_purchase_po_discount1_percentage','$detail_purchase_po_discount2','$detail_purchase_po_discount2_percentage','$detail_purchase_po_discount3','$detail_purchase_po_discount3_percentage','$detail_purchase_po_total_discount','$detail_purchase_po_ongkir','$detail_purchase_po_expire_date','$detail_purchase_po_total')";
+                $sqlDtValues[] = "('$purchase_order_id','$detail_submission_id','$detail_submission_invoice','$detail_purchase_po_item_id','$detail_purchase_po_qty','$detail_purchase_po_ppn','$detail_purchase_po_dpp','$detail_purchase_po_price','$detail_purchase_po_discount1','$detail_purchase_po_discount1_percentage','$detail_purchase_po_discount2','$detail_purchase_po_discount2_percentage','$detail_purchase_po_discount3','$detail_purchase_po_discount3_percentage','$detail_purchase_po_total_discount','$detail_purchase_po_ongkir','$detail_purchase_po_expire_date','$detail_purchase_po_total')";
             }
 
             $sqlDtOrder .= implode(',', $sqlDtValues);
 
-            //$sqlDtOrder .= " ON DUPLICATE KEY UPDATE detail_submission_order_qty = VALUES(detail_submission_order_qty)";
+
+            //$sqlDtOrder .= " ON DUPLICATE KEY UPDATE detail_purchase_order_id = VALUES(detail_purchase_order_id)";
+
+            //print_r($sqlDtOrder);die();
+
 
             $this->db->table($this->table_hd_po)->where('purchase_order_id', $purchase_order_id)->update($data);
 

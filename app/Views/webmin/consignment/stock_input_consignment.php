@@ -945,7 +945,16 @@ $assetsUrl = base_url('assets');
 
         let actUrl = base_url + '/webmin/consignment/save-input/add';
 
-        message.question(question).then(function(answer) {
+            if($('#warehouse').val() == null)
+            {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Silahkan Isi Gudang Terlebih Dahulu !'
+                })
+            }else{
+
+                message.question(question).then(function(answer) {
 
             let yes = parseMessageResult(answer);
 
@@ -1011,7 +1020,9 @@ $assetsUrl = base_url('assets');
 
             }
 
-        })
+            })
+
+        }
 
     });
 

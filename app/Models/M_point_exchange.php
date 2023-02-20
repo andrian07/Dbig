@@ -22,6 +22,7 @@ class M_point_exchange extends Model
 
     public function exchangeReward($data)
     {
+
         $sqlUpdateLastNumber    = NULL;
         $saveQueries            = NULL;
         $this->db->query('LOCK TABLES ms_point_reward WRITE,last_record_number WRITE,customer_history_point WRITE,ms_customer WRITE,exchange_point WRITE');
@@ -39,6 +40,7 @@ class M_point_exchange extends Model
                 $getReward = $this->db->table('ms_point_reward')->where('reward_id', $reward_id)->get()->getRowArray();
 
                 $reward_stock = floatval($getReward['reward_stock']);
+
                 if ($reward_stock > 0) {
                     $record_period = date('mY');
                     $getLastNumber = $this->db->table('last_record_number')
@@ -72,6 +74,7 @@ class M_point_exchange extends Model
                     $this->db->transBegin();
                     $this->db->table($this->table)->insert($data);
                     $exchange_id = 0;
+
                     if ($this->db->affectedRows() > 0) {
                         $saveQueries[]  = $this->db->getLastQuery()->getQuery();
                         $exchange_id    = $this->db->insertID();

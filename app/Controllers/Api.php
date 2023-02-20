@@ -72,6 +72,180 @@ class Api extends BaseController
     }
 
 
+
+
+    public function registerCustomer($type)
+    {
+        $headers = apache_request_headers();
+        $data = json_decode(file_get_contents('php://input'), true);
+        $checkOuth = $this->checkOuth($headers);
+        if($checkOuth['err_code'] == '00'){
+
+
+            if($type == 'add'){
+                $input = [
+                    'customer_code'                 => $data['customer_code'],
+                    'customer_name'                 => $data['customer_name'],
+                    'customer_address'              => $data['customer_address'],
+                    'customer_phone'                => $data['customer_phone'],
+                    'customer_email'                => $data['customer_email'],
+                    'customer_nik'                  => $data['customer_nik'],
+                    'customer_group'                => $data['customer_group'],
+                    'customer_gender'               => $data['customer_gender'],
+                    'customer_job'                  => $data['customer_job'],
+                    'customer_birth_date'           => $data['customer_birth_date'],
+                    'customer_password'             => $data['customer_password'],
+                    'invite_by_referral_code'       => $data['invite_by_referral_code'],
+                ];
+
+                if($input['customer_group'] == 'G3' || $input['customer_group'] == 'G4'){
+                    $input['active']           = 'N';
+                }else{
+                    $input['active']           = 'Y';
+                }
+
+                $input['customer_remark']           = $data['customer_remark'].'By APPS';
+
+            }else{
+                $input = [
+                    'customer_id'                   => $data['customer_id'],
+                    'customer_name'                 => $data['customer_name'],
+                    'customer_address'              => $data['customer_address'],
+                    'customer_phone'                => $data['customer_phone'],
+                ];  
+            }
+
+            $input['mapping_id']                          = 0;
+            $input['salesman_id']                         = 0;
+            $input['customer_delivery_address']           = $input['customer_address'];
+
+            $M_customer = model('M_customer');
+
+
+
+
+            if ($type == 'add') {
+                helper('text');
+                unset($input['customer_id']);
+
+                $check_email = $this->M_api->check_email($input['customer_email'])->getRowArray();
+
+                if($check_email != null){
+                    $result = ['err_code' => '01', 'message' => 'Email Sudah Terdaftar'];
+                    echo json_encode($result);die();
+                }
+
+                $check_phone = $this->M_api->check_phone($input['customer_phone'])->getRowArray();
+
+                if($check_phone != null){
+                    $result = ['err_code' => '01', 'message' => 'No Telepon Sudah Terdaftar'];
+                    echo json_encode($result);die();
+                }
+
+
+                $check_referalcode = $this->M_api->check_referalcode($input['invite_by_referral_code'])->getRowArray();
+
+                if($check_referalcode == null){
+                    $result = ['err_code' => '01', 'message' => 'Referal Code Tidak Di Temukan'];
+                    echo json_encode($result);die();
+                }
+
+                $customer_password = $input['customer_password'];
+                $input['customer_password'] = password_hash($customer_password, PASSWORD_BCRYPT);
+                
+                $isFound        = FALSE;
+                $referral_code  = '';
+                while ($isFound == FALSE) {
+                    $referral_code = strtoupper(random_string('alnum', 6));
+                    $check = $M_customer->getCustomerByReferralCode($referral_code, TRUE)->getRowArray();
+                    if ($check == NULL) {
+                        $isFound = TRUE;
+                    }
+                }
+
+                $input['referral_code'] = $referral_code;
+
+                $save = $M_customer->insertCustomer($input);
+                if ($save) {
+                    $result = ['err_code' => '00', 'message' => 'Data customer berhasil disimpan'];
+                }else {
+                    $result = ['err_code' => '01', 'message' => 'Data customer gagal disimpan'];
+                }
+
+            } else if ($type == 'edit') {
+
+                $check_pass = $this->M_api->check_pass($input['customer_id'])->getRowArray();
+                $input['customer_id'] = $data['customer_id'];
+                $save = $this->M_api->updateCustomer($input);
+                if ($save) {
+                    $result = ['err_code' => '00', 'message' => 'Data customer berhasil diperbarui'];
+                } else {
+                    $result = ['err_code' => '01', 'message' => 'Data customer gagal diperbarui'];
+                }
+                
+            }
+        }else{
+            $result = ['err_code' => '01', 'message' => 'Token Tidak Sesuai'];
+        }
+        echo json_encode($result);die();
+    }
+
+    public function changePass()
+    {
+        $headers = apache_request_headers();
+        $checkOuth = $this->checkOuth($headers);
+        $data = json_decode(file_get_contents('php://input'), true);
+        $customer_id = $data['customer_id'];
+        $old_pass = $data['old_pass'];
+        $new_pass = password_hash($data['new_pass'], PASSWORD_BCRYPT);
+        if($checkOuth['err_code'] == '00'){
+            $getCustomerLogin = $this->M_api->getCustomerResetPass($customer_id)->getRowArray();
+            if (password_verify($old_pass, $getCustomerLogin['customer_password'])) {
+                $input = [
+                    'customer_password'  => $new_pass,
+                ];  
+                $save = $this->M_api->updatePass($customer_id, $input);
+                if ($save) {
+                    $result = ['err_code' => '00', 'message' => 'Reset Password Berhasil'];
+                    echo json_encode($result);die();
+                } else {
+                    $result = ['err_code' => '01', 'message' => 'Gagal Reset Password'];
+                    echo json_encode($result);die();
+                }
+            }else{
+                $result = ['err_code' => '01', 'message' => 'Password Lama Tidak Sesuai'];
+            echo json_encode($result);die();
+            }
+        }else{
+            $result = ['err_code' => '01', 'message' => 'Token Tidak Sesuai'];
+            echo json_encode($result);die();
+        }
+    }
+
+    public function getdataCustomer()
+    {
+        $headers = apache_request_headers();
+        $checkOuth = $this->checkOuth($headers);
+        $data = json_decode(file_get_contents('php://input'), true);
+        $customer_phone = $data['customer_phone'];
+        if($checkOuth['err_code'] == '00'){
+            $result['result'] = $this->M_api->getCustomerByPhone($customer_phone)->getResultArray();
+            $total_rows['total_rows'] = $this->M_api->getCustomerByPhone($customer_phone)->getNumRows();
+            $err_code['err_code'] = '00';
+            $data = array_merge($result, $total_rows, $err_code);
+            if ($result['result'] != NULL) {
+                echo json_encode($data);die();
+            } else {
+                $result = ['err_code' => '01', 'message' => 'Data User Di Temukan'];
+                echo json_encode($result);die();
+            }
+        }else{
+            $result = ['err_code' => '01', 'message' => 'Token Tidak Sesuai'];
+            echo json_encode($result);die();
+        }
+    }
+
+
     public function getbanner()
     {
         $headers = apache_request_headers();
@@ -286,8 +460,9 @@ class Api extends BaseController
     {
         $headers = apache_request_headers();
         $checkOuth = $this->checkOuth($headers);
-        $perpage = $this->request->getPost('perpage');
-        $start = $this->request->getPost('start');
+        $data = json_decode(file_get_contents('php://input'), true);
+        $perpage = $data['perpage'];
+        $start = $data['start'];
         if($checkOuth['err_code'] == '00'){
             $result['result'] = $this->M_api->getBrand($perpage, $start)->getResultArray();
             $total_rows['total_rows'] = $this->M_api->getBrand($perpage, $start)->getNumRows();
@@ -306,15 +481,16 @@ class Api extends BaseController
     }
 
 
-    /*public function getitempoint()
+    public function getitempoint()
     {
         $headers = apache_request_headers();
         $checkOuth = $this->checkOuth($headers);
-        $search = $this->request->getPost('search');
+        $data = json_decode(file_get_contents('php://input'), true);
+        $perpage = $data['perpage'];
+        $start = $data['start'];
         if($checkOuth['err_code'] == '00'){
-
-            $result['result'] = $this->M_api->getitempoint($search)->getResultArray();
-            $total_rows['total_rows'] = $this->M_api->getitempoint($search)->getNumRows();
+            $result['result'] = $this->M_api->getitempoint($perpage, $start)->getResultArray();
+            $total_rows['total_rows'] = $this->M_api->getitempoint($perpage, $start)->getNumRows();
             $err_code['err_code'] = '00';
             $data = array_merge($result, $total_rows, $err_code);
             if ($result['result'] != NULL) {
@@ -328,9 +504,82 @@ class Api extends BaseController
             echo json_encode($result);die();
         }
 
-    }*/
+    }
+
+    public function historyPoint()
+    {
+        $headers = apache_request_headers();
+        $checkOuth = $this->checkOuth($headers);
+        $data = json_decode(file_get_contents('php://input'), true);
+        $perpage = $data['perpage'];
+        $start = $data['start'];
+        $customer_id = $data['customer_id'];
+        if($checkOuth['err_code'] == '00'){
+            $result['result'] = $this->M_api->getHistoryPoint($perpage, $start, $customer_id)->getResultArray();
+            $total_rows['total_rows'] = $this->M_api->getHistoryPoint($perpage, $start, $customer_id)->getNumRows();
+            $err_code['err_code'] = '00';
+            $data = array_merge($result, $total_rows, $err_code);
+            if ($result['result'] != NULL) {
+                echo json_encode($data);die();
+            } else {
+                $result = ['err_code' => '01', 'message' => 'Data History Point Tidak Di Temukan'];
+                echo json_encode($result);die();
+            }
+        }else{
+            $result = ['err_code' => '01', 'message' => 'Token Tidak Sesuai'];
+            echo json_encode($result);die();
+        }
+    }
 
 
+    public function exchangePoint()
+    {
+        $headers = apache_request_headers();
+        $checkOuth = $this->checkOuth($headers);
+        $data = json_decode(file_get_contents('php://input'), true);
+        $perpage = $data['perpage'];
+        $start = $data['start'];
+        $customer_id = $data['customer_id'];
+        if($checkOuth['err_code'] == '00'){
+            $result['result'] = $this->M_api->getHistoryPoint($perpage, $start, $customer_id)->getResultArray();
+            $total_rows['total_rows'] = $this->M_api->getHistoryPoint($perpage, $start, $customer_id)->getNumRows();
+            $err_code['err_code'] = '00';
+            $data = array_merge($result, $total_rows, $err_code);
+            if ($result['result'] != NULL) {
+                echo json_encode($data);die();
+            } else {
+                $result = ['err_code' => '01', 'message' => 'Data  Point Tidak Di Temukan'];
+                echo json_encode($result);die();
+            }
+        }else{
+            $result = ['err_code' => '01', 'message' => 'Token Tidak Sesuai'];
+            echo json_encode($result);die();
+        }
+    }
 
+
+    public function exchangePointProcess()
+    {
+        $headers = apache_request_headers();
+        $checkOuth = $this->checkOuth($headers);
+        $data = json_decode(file_get_contents('php://input'), true);
+        $customer_phone = $data['customer_phone'];
+        $input = [
+            'customer_id'           => $data['customer_id'],
+            'reward_id'             => $data['reward_id'],
+            'reward_point'          => $data['reward_point'],
+            'exchange_date'         => date('Y-m-d'),
+            'exchange_status'       => 'pending',
+            'store_id'              => 0,
+            'user_id'               => 0,
+        ];
+
+        $M_point_exchange = model('M_point_exchange');
+        $result['result'] = $M_point_exchange->exchangeReward($input);
+        $resultdata = $this->M_api->getCustomerByPhone($customer_phone)->getResultArray();
+        $point_remaining['point_remaining'] = $resultdata[0]['customer_point'];
+        $data = array_merge($result, $point_remaining);
+        echo json_encode($data);die();
+    }
 }
 

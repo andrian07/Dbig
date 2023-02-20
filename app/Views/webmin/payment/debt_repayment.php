@@ -247,7 +247,15 @@ $assetsUrl = base_url('assets');
                                         </div>
                                     </div>   
 
-                                    <div class="col-sm-12 col-md-4">
+                                    <div class="col-sm-12 col-md-2">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>Pot. Nota</label>
+                                            <input id="purchase_retur_nominal" name="purchase_retur_nominal" type="text" class="form-control text-right" value="0" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12 col-md-2">
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Sisa Hutang</label>
@@ -399,7 +407,7 @@ $assetsUrl = base_url('assets');
     let supplier_total_debt = new AutoNumeric('#supplier_total_debt', configRp);
     let footer_invoice_total = new AutoNumeric('#footer_invoice_total', configRp);
     let footer_total_pay = new AutoNumeric('#footer_total_pay', configQty);
-
+    let purchase_retur_nominal = new AutoNumeric('#purchase_retur_nominal', configRp);
 
 
     function loadTempData(items) {
@@ -432,7 +440,11 @@ $assetsUrl = base_url('assets');
 
            let temp_payment_debt_discount = val.temp_payment_debt_discount;
 
+           let purchase_retur_nominal = val.purchase_retur_nominal;
+
            let temp_payment_remaining  = val.purchase_remaining_debt - val.temp_payment_debt_nominal;
+
+
 
 
            item = item.replaceAll('{row}', row)
@@ -452,6 +464,8 @@ $assetsUrl = base_url('assets');
            .replaceAll('{temp_payment_debt_nominal}', numberFormat(temp_payment_debt_nominal, true))
 
            .replaceAll('{temp_payment_remaining}', numberFormat(temp_payment_remaining, true))
+
+           .replaceAll('{purchase_retur_nominal}', numberFormat(purchase_retur_nominal, true))
 
            .replaceAll('{data_json}', data_json);
 
@@ -669,6 +683,7 @@ $assetsUrl = base_url('assets');
             repayment_disc.set(0);
             repayment_total.set(0);
             new_remaining_debt.set(0);
+            purchase_retur_nominal.set(0);
             $('#repayment_remark').val('');
         }
 
@@ -802,6 +817,7 @@ $assetsUrl = base_url('assets');
 
         function calcRepayment() {
             let rdebt = parseFloat(remaining_debt.getNumericString());
+            let retur_nominal = parseFloat(purchase_retur_nominal.getNumericString());
 
             let rpdisc = 0;
             if (repayment_disc.getNumericString() == '') {
@@ -853,14 +869,15 @@ $assetsUrl = base_url('assets');
 
             $('#invoice_number').val(json.purchase_suplier_no);
 
-
             $('#purchase_date').val(json.purchase_faktur_date);
 
             repayment_total.set(json.temp_payment_debt_nominal);
 
-            remaining_debt.set(json.purchase_remaining_debt);
+            remaining_debt.set(json.purchase_remaining_debt - json.purchase_retur_nominal);
 
-            new_remaining_debt.set(json.purchase_remaining_debt - json.temp_payment_debt_nominal);
+            purchase_retur_nominal.set(json.purchase_retur_nominal);
+
+            new_remaining_debt.set(json.purchase_remaining_debt - json.temp_payment_debt_nominal - json.purchase_retur_nominal);
 
             $('#repayment_total').focus();
 
@@ -872,44 +889,46 @@ $assetsUrl = base_url('assets');
 
          message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
 
-        }
-        })
+     }
+ })
 
         $('#btnadd_temp').click(function(e) {
 
-           e.preventDefault();
+            e.preventDefault();
 
-           let temp_key = $("#temp_key").val();
+            let temp_key = $("#temp_key").val();
 
-           let purchase_id = $("#purchase_id").val();
+            let purchase_id = $("#purchase_id").val();
 
-           let purchase_invoice = $("#purchase_invoice").val();
+            let purchase_invoice = $("#purchase_invoice").val();
 
-           let supplier_id = $("#supplier_id").val();
+            let supplier_id = $("#supplier_id").val();
 
-           let invoice_number = $("#invoice_number").text();
+            let invoice_number = $("#invoice_number").text();
 
-           let purchase_date = $("#purchase_date").val();
+            let purchase_date = $("#purchase_date").val();
 
-           let repayment_remark = $("#repayment_remark").val();
+            let repayment_remark = $("#repayment_remark").val();
 
-           let repayment_total_input = parseFloat(repayment_total.getNumericString());
+            let repayment_total_input = parseFloat(repayment_total.getNumericString());
 
-           let repayment_disc_input = parseFloat(repayment_disc.getNumericString());
+            let repayment_disc_input = parseFloat(repayment_disc.getNumericString());
 
-           let new_remaining_debt_input = parseFloat(new_remaining_debt.getNumericString());
+            let repayment_debt_retur  = parseFloat(purchase_retur_nominal.getNumericString());
 
-           let btnSubmit = $('#btnadd_temp');
+            let new_remaining_debt_input = parseFloat(new_remaining_debt.getNumericString());
 
-           let form = $('#formtemp');
+            let btnSubmit = $('#btnadd_temp');
 
-           form.parsley().validate();
+            let form = $('#formtemp');
 
-           if (form.parsley().isValid()) {
+            form.parsley().validate();
 
-               let actUrl = base_url + '/webmin/payment/temp-add';
+            if (form.parsley().isValid()) {
 
-               let formValues = {
+                let actUrl = base_url + '/webmin/payment/temp-add';
+
+                let formValues = {
 
                    temp_payment_debt_id : temp_key,
 
@@ -920,6 +939,8 @@ $assetsUrl = base_url('assets');
                    temp_payment_debt_nominal: repayment_total_input,
 
                    temp_payment_debt_desc: repayment_remark,
+
+                   temp_payment_debt_retur: repayment_debt_retur,
 
                    supplier_id:supplier_id,
 

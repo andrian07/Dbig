@@ -192,6 +192,18 @@ class MyApp extends BaseConfig
             ]
         ],
 
+        'retur_purchase' => [
+            'text'   => 'Retur Pembelian',
+            'roles'   => [
+                'view'          => ['text' => 'Lihat'],
+                'add'           => ['text' => 'Tambah'],
+                'edit'          => ['text' => 'Ubah'],
+                'delete'        => ['text' => 'Hapus'],
+                'print'         => ['text' => 'Cetak'],
+                'update_payment'=> ['text' => 'Update Pembayaran'],
+            ]
+        ],
+        
         'debt_repayment' => [
             'text'   => 'Pelunasan Hutang',
             'roles'   => [
@@ -403,20 +415,20 @@ class MyApp extends BaseConfig
             'thumb_dir'     => 'contents/thumb/product/',
         ],
         'banner' => [
-            'width'         => 1000,
-            'height'        => 700,
+            //'width'         => 1000,
+            //'height'        => 700,
             'create_thumb'  => TRUE,
-            'thumb_width'   => 320,
-            'thumb_height'  => 150,
+            //'thumb_width'   => 320,
+            //'thumb_height'  => 150,
             'upload_dir'    => 'contents/upload/banner/',
             'thumb_dir'     => 'contents/thumb/banner/',
         ],
         'promo' => [
-            'width'         => 500,
-            'height'        => 500,
+            //'width'         => 500,
+            //'height'        => 500,
             'create_thumb'  => TRUE,
-            'thumb_width'   => 320,
-            'thumb_height'  => 150,
+            //'thumb_width'   => 320,
+            //'thumb_height'  => 150,
             'upload_dir'    => 'contents/upload/promo/',
             'thumb_dir'     => 'contents/thumb/promo/',
         ],

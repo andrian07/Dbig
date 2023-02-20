@@ -186,8 +186,10 @@ class Debt_repayment extends WebminController
             'temp_payment_debt_discount'        => $this->request->getPost('temp_payment_debt_discount'),
             'temp_payment_debt_nominal'         => $this->request->getPost('temp_payment_debt_nominal'),
             'temp_payment_debt_desc'            => $this->request->getPost('temp_payment_debt_desc'),
+            'temp_payment_debt_retur'           => $this->request->getPost('temp_payment_debt_retur'),
             'temp_payment_isedit'               => 'Y'
         ];
+
 
         $validation->setRules([
             'temp_payment_debt_nominal'    => ['rules' => 'required']

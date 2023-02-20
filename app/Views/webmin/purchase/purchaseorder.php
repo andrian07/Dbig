@@ -1227,7 +1227,7 @@ $assetsUrl = base_url('assets');
 
                     purchase_order_discount2: purchase_order_discount2,
 
-                    purchase_order_discount3: purchase_order_discount1,
+                    purchase_order_discount3: purchase_order_discount3,
 
                     purchase_order_discount1_percentage: purchase_order_discount1_percentage,
 
@@ -2083,13 +2083,13 @@ $('.close-modal-temp').click(function(e) {
     message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
         let yes = parseMessageResult(answer);
         if (yes) {
-            edit_temp_discount_percentage1.set('0.00%');
+            /*edit_temp_discount_percentage1.set('0.00%');
             edit_temp_discount_percentage2.set('0.00%');
             edit_temp_discount_percentage3.set('0.00%');
             edit_temp_discount1.set(0);
             edit_temp_discount2.set(0);
             edit_temp_discount3.set(0);
-            total_temp_discount.set(0);
+            total_temp_discount.set(0);*/
             $('#modal-tempdiscount').modal('hide');
         }
     })
@@ -2100,13 +2100,13 @@ $('.close-modal-footer').click(function(e) {
     message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
         let yes = parseMessageResult(answer);
         if (yes) {
-            edit_footer_discount_percentage1.set('0.00%');
+            /*edit_footer_discount_percentage1.set('0.00%');
             edit_footer_discount_percentage2.set('0.00%');
             edit_footer_discount_percentage3.set('0.00%');
             edit_footer_discount1.set(0);
             edit_footer_discount2.set(0);
             edit_footer_discount3.set(0);
-            footer_total_discount.set(0);
+            footer_total_discount.set(0);*/
             $('#modal-footerdiscount').modal('hide');
         }
     })

@@ -7,7 +7,6 @@ use Dompdf\Dompdf;
 use App\Models\M_purchase;
 use App\Controllers\Base\WebminController;
 
-
 class Purchase extends WebminController
 {
 
@@ -196,10 +195,8 @@ class Purchase extends WebminController
             'temp_purchase_supplier_name'           => $this->request->getPost('temp_purchase_suplier_name')
         ];
 
-
-
         $validation->setRules([
-            'temp_purchase_item_id'    => ['rules' => 'required'],
+            'temp_purchase_item_id'       => ['rules' => 'required'],
             'temp_purchase_qty'           => ['rules' => 'required|greater_than[0]'],
             'temp_purchase_price'         => ['rules' => 'required|greater_than[0]'],
             'temp_purchase_ppn'           => ['rules' => 'required'],
@@ -208,6 +205,7 @@ class Purchase extends WebminController
             'temp_purchase_ongkir'        => ['rules' => 'required'],
             'temp_purchase_total'         => ['rules' => 'required'],
         ]);
+
 
         if ($validation->run($input) === FALSE) {
 
@@ -295,7 +293,7 @@ class Purchase extends WebminController
         $validation->setRules([
             'purchase_faktur_date'            => ['rules' => 'required'],
             'purchase_supplier_id'            => ['rules' => 'required'],
-            'purchase_warehouse_id'               => ['rules' => 'required'],
+            'purchase_warehouse_id'           => ['rules' => 'required'],
             'purchase_remark'                 => ['rules' => 'max_length[500]']
         ]);
 
@@ -312,17 +310,17 @@ class Purchase extends WebminController
                 //$checkEd = $this->M_purchase->checkEd($this->userLogin['user_id'])->getResultArray();
 
 
-                    $save = $this->M_purchase->insertPurchase($input);
+                $save = $this->M_purchase->insertPurchase($input);
 
-                    if ($save['success']) {
+                if ($save['success']) {
 
-                        $result = ['success' => TRUE, 'message' => 'Data Pembelian berhasil disimpan', 'purchase_id ' => $save['purchase_id']];
+                    $result = ['success' => TRUE, 'message' => 'Data Pembelian berhasil disimpan', 'purchase_id ' => $save['purchase_id']];
 
-                    } else {
+                } else {
 
-                        $result = ['success' => FALSE, 'message' => 'Data Pembelian gagal disimpan'];
+                    $result = ['success' => FALSE, 'message' => 'Data Pembelian gagal disimpan'];
 
-                    }
+                }
 
             } else {
 
@@ -343,94 +341,226 @@ class Purchase extends WebminController
     {
         //$this->validationRequest(TRUE);
         $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
         if ($this->role->hasRole('purchase.delete')) {
+
             if ($temp_purchase_id != '') {
+
                 $delete = $this->M_purchase->deletetemp($temp_purchase_id);
+
                 if ($delete) {
-                 $getTemp = $this->M_purchase->getTemp($this->userLogin['user_id'])->getResultArray();
-                 $find_result = [];
-                 foreach ($getTemp as $k => $v) {
-                     $find_result[$k] = esc($v);
-                 }
-                 $result['data'] = $find_result;
-                 $result['csrfHash'] = csrf_hash();
-                 $result['success'] = 'TRUE';
-                 $result['message'] = 'Data Berhasil Di Hapus';
-             } else {
-                $result = ['success' => FALSE, 'message' => 'Data Gagal Di Hapus'];
+
+                    $getTemp = $this->M_purchase->getTemp($this->userLogin['user_id'])->getResultArray();
+
+                    $find_result = [];
+
+                    foreach ($getTemp as $k => $v) {
+
+                        $find_result[$k] = esc($v);
+
+                    }
+
+                    $result['data'] = $find_result;
+
+                    $result['csrfHash'] = csrf_hash();
+
+                    $result['success'] = 'TRUE';
+
+                    $result['message'] = 'Data Berhasil Di Hapus';
+
+                } else {
+                    $result = ['success' => FALSE, 'message' => 'Data Gagal Di Hapus'];
+                }
+            }
+        } else {
+            $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menghapus data ini'];
+        }
+        resultJSON($result);
+    }
+
+    public function clearTemp()
+    {
+        $this->M_purchase->clearTemp($this->userLogin['user_id']);
+
+        $result['csrfHash'] = csrf_hash();
+
+        $result['success'] = 'TRUE';
+
+        resultJSON($result);
+    }
+
+    public function getPurchaseTemp(){
+
+        $getTemp = $this->M_purchase->getTemp($this->userLogin['user_id'])->getResultArray();
+
+        $find_result = [];
+
+        foreach ($getTemp as $k => $v) {
+
+            $find_result[$k] = esc($v);
+
+        }
+
+        $result['data'] = $find_result;
+
+        $result['csrfHash'] = csrf_hash();
+
+        $result['success'] = 'TRUE';
+
+        resultJSON($result);
+
+    }
+
+    public function getPurchaseFooter(){
+
+        $getFooter = $this->M_purchase->getFooter($this->userLogin['user_id'])->getResultArray();
+
+        $find_result = [];
+
+        foreach ($getFooter as $k => $v) {
+
+            $find_result[$k] = esc($v);
+
+        }
+
+        $result['data'] = $find_result;
+
+        $result['csrfHash'] = csrf_hash();
+
+        $result['success'] = 'TRUE';
+
+        resultJSON($result);
+
+    }
+
+    public function getTax(){
+
+        $getTax = $this->M_purchase->getTax($this->userLogin['user_id'])->getResultArray();
+
+        $find_result = [];
+
+        foreach ($getTax as $k => $v) {
+
+            $find_result[$k] = esc($v);
+
+        }
+
+        $result['data'] = $find_result;
+
+        $result['csrfHash'] = csrf_hash();
+
+        $result['success'] = 'TRUE';
+
+        resultJSON($result);
+
+    }
+
+    public function searchPurchaseBysuplier()
+    {
+
+        $this->validationRequest(TRUE, 'GET');
+
+        $supplier = $this->request->getGet('sup');
+
+        $keyword = $this->request->getGet('term');
+
+        if($supplier == 'null'){
+
+            $result = ['success' => FALSE, 'num_product' => 0, 'data' => [], 'message' => 'Silahkan Isi Nama Supplier Terlebih Dahulu'];
+
+        }else{
+
+            $result = ['success' => FALSE, 'num_product' => 0, 'data' => [], 'message' => ''];
+
+            if (!($keyword == '' || $keyword == NULL)) {
+
+                $find = $this->M_purchase->searchPurchaseBysuplier($keyword, $supplier)->getResultArray(); 
+
+                $find_result = [];
+
+                foreach ($find as $row) {
+
+                    $diplay_text = $row['purchase_id'];
+
+                    $find_result[] = [
+
+                        'id'                  => $diplay_text,
+
+                        'value'               => $row['purchase_invoice']
+
+                    ];
+
+                }
+
+                $result = ['success' => TRUE, 'num_product' => count($find_result), 'data' => $find_result, 'message' => ''];
+
             }
         }
-    } else {
-        $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menghapus data ini'];
-    }
-    resultJSON($result);
-}
 
-public function getPurchaseTemp(){
-
-    $getTemp = $this->M_purchase->getTemp($this->userLogin['user_id'])->getResultArray();
-
-    $find_result = [];
-
-    foreach ($getTemp as $k => $v) {
-
-        $find_result[$k] = esc($v);
-
+        resultJSON($result);
     }
 
-    $result['data'] = $find_result;
+    public function searchProductByInvoice()
+    {
 
-    $result['csrfHash'] = csrf_hash();
+        $this->validationRequest(TRUE, 'GET');
 
-    $result['success'] = 'TRUE';
+        $purchaseno = $this->request->getGet('purchase_no');
 
-    resultJSON($result);
+        $keyword = $this->request->getGet('term');
 
-}
+        if($purchaseno == 'null'){
 
-public function getPurchaseFooter(){
+            $result = ['success' => FALSE, 'num_product' => 0, 'data' => [], 'message' => 'Silahkan Isi No Invoice Pembelian Terlebih Dahulu'];
 
-    $getFooter = $this->M_purchase->getFooter($this->userLogin['user_id'])->getResultArray();
+        }else{
 
-    $find_result = [];
+            $result = ['success' => FALSE, 'num_product' => 0, 'data' => [], 'message' => ''];
 
-    foreach ($getFooter as $k => $v) {
+            if (!($keyword == '' || $keyword == NULL)) {
 
-        $find_result[$k] = esc($v);
+                $find = $this->M_purchase->searchProductByInvoice($keyword, $purchaseno)->getResultArray(); 
 
+                $find_result = [];
+
+                foreach ($find as $row) {
+
+                    $diplay_text = $row['product_name'];
+
+                    $find_result[] = [
+
+                        'id'                  => $diplay_text,
+
+                        'value'               => $diplay_text.'('.$row['unit_name'].')',
+
+                        'item_id'             => $row['item_id'],
+
+                        'purchase_qty'        => $row['dt_purchase_qty'],
+
+                        'purchase_price'      => $row['dt_purchase_price'],
+
+                        'purchase_total'      => $row['dt_purchase_total'],
+
+                        'purchase_ppn'        => $row['dt_purchase_ppn'],
+
+                        'dt_purchase_qty'     => $row['dt_purchase_qty'],
+
+                        'warehouse_id'        => $row['warehouse_id'],
+
+                        'warehouse_name'      => $row['warehouse_name'],
+
+                    ];
+
+                }
+
+                $result = ['success' => TRUE, 'num_product' => count($find_result), 'data' => $find_result, 'message' => ''];
+
+            }
+        }
+
+        resultJSON($result);
     }
 
-    $result['data'] = $find_result;
-
-    $result['csrfHash'] = csrf_hash();
-
-    $result['success'] = 'TRUE';
-
-    resultJSON($result);
-
-}
-
-public function getTax(){
-
-    $getTax = $this->M_purchase->getTax($this->userLogin['user_id'])->getResultArray();
-
-    $find_result = [];
-
-    foreach ($getTax as $k => $v) {
-
-        $find_result[$k] = esc($v);
-
-    }
-
-    $result['data'] = $find_result;
-
-    $result['csrfHash'] = csrf_hash();
-
-    $result['success'] = 'TRUE';
-
-    resultJSON($result);
-
-}
 
     //--------------------------------------------------------------------
 

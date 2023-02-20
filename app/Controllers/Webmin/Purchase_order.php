@@ -7,7 +7,6 @@ use Dompdf\Dompdf;
 use App\Models\M_purchase_order;
 use App\Controllers\Base\WebminController;
 
-
 class Purchase_order extends WebminController
 {
 
@@ -254,159 +253,158 @@ class Purchase_order extends WebminController
         $result['csrfHash'] = csrf_hash();
         
         resultJSON($result);
-
     }
 
     public function cancelOrder($purchase_order_id = '')
     {
-       $this->validationRequest(TRUE, 'GET');
+        $this->validationRequest(TRUE, 'GET');
 
-       $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk Membatalkan PO'];
+        $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk Membatalkan PO'];
 
-       if ($this->role->hasRole('purchase_order.delete')) {
+        if ($this->role->hasRole('purchase_order.delete')) {
 
-        $getOrder = $this->M_purchase_order->getOrder($purchase_order_id)->getRowArray();
+            $getOrder = $this->M_purchase_order->getOrder($purchase_order_id)->getRowArray();
 
-        if ($getOrder == NULL) {
+            if ($getOrder == NULL) {
 
-            $result = ['success' => FALSE, 'message' => 'Transaksi dengan No invoice <b>' . $purchase_order_id . '</b> tidak ditemukan'];
+                $result = ['success' => FALSE, 'message' => 'Transaksi dengan No invoice <b>' . $purchase_order_id . '</b> tidak ditemukan'];
 
-        } else {
+            } else {
 
-            $user_id = $this->userLogin['user_id'];
+                $user_id = $this->userLogin['user_id'];
 
-            $purchase_order_invoice = $getOrder['purchase_order_invoice'];
+                $purchase_order_invoice = $getOrder['purchase_order_invoice'];
 
-            $cancelOrder = $this->M_purchase_order->cancelOrder($purchase_order_invoice, $purchase_order_id);
+                $cancelOrder = $this->M_purchase_order->cancelOrder($purchase_order_invoice, $purchase_order_id);
 
-            $result = ['success' => TRUE, 'message' => 'Pengajuan Berhasil Di Batalkan'];
-
-        }
-
-    }   
-
-    $result['csrfHash'] = csrf_hash();
-    resultJSON($result);
-}
-
-public function tempadd(){
-
-    $this->validationRequest(TRUE, 'POST');
-
-    $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
-
-    $validation =  \Config\Services::validation();
-
-    $input = [
-        'temp_po_id'                        => $this->request->getPost('temp_po_id'),
-        'temp_po_submission_id'             => $this->request->getPost('temp_po_submission_id'),
-        'temp_po_submission_invoice'        => $this->request->getPost('temp_po_submission_invoice'),
-        'temp_po_item_id'                   => $this->request->getPost('item_id'),
-        'temp_po_qty'                       => $this->request->getPost('temp_qty'),
-        'temp_po_ppn'                       => $this->request->getPost('temp_tax'),
-        'temp_po_dpp'                       => $this->request->getPost('temp_dpp'),
-        'temp_po_price'                     => $this->request->getPost('temp_price'),
-        'temp_po_discount1'                 => $this->request->getPost('temp_discount1'),
-        'temp_po_discount1_percentage'      => $this->request->getPost('temp_discount_percentage1'),
-        'temp_po_discount2'                 => $this->request->getPost('temp_discount2'),
-        'temp_po_discount2_percentage'      => $this->request->getPost('temp_discount_percentage2'),
-        'temp_po_discount3'                 => $this->request->getPost('temp_discount3'),
-        'temp_po_discount3_percentage'      => $this->request->getPost('temp_discount_percentage3'),
-        'temp_po_ongkir'                    => $this->request->getPost('temp_ongkir'),
-        'temp_po_expire_date'               => $this->request->getPost('temp_ed_date'),
-        'temp_po_total'                     => $this->request->getPost('temp_total'),
-        'temp_po_supplier_id'               => $this->request->getPost('temp_po_suplier_id'),
-        'temp_po_supplier_name'             => $this->request->getPost('temp_po_suplier_name'),
-        'temp_po_discount_total'            => $this->request->getPost('total_temp_discount'),
-
-    ];
-
-
-
-    $validation->setRules([
-        'temp_po_item_id'    => ['rules' => 'required'],
-        'temp_po_qty'           => ['rules' => 'required|greater_than[0]'],
-        'temp_po_price'         => ['rules' => 'required|greater_than[0]'],
-        'temp_po_ppn'           => ['rules' => 'required'],
-        'temp_po_dpp'           => ['rules' => 'required'],
-        'temp_po_price'         => ['rules' => 'required'],
-        'temp_po_ongkir'        => ['rules' => 'required'],
-        'temp_po_total'         => ['rules' => 'required'],
-    ]);
-
-    if ($validation->run($input) === FALSE) {
-
-        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
-
-    } else {
-
-        $input['temp_po_user_id'] = $this->userLogin['user_id'];
-
-        $save = $this->M_purchase_order->insertTemp($input);
-
-
-        if ($save) {
-
-            if($this->request->getPost('temp_po_id') == null){
-
-                $result = ['success' => TRUE, 'message' => 'Data item berhasil ditambahkan'];
-
-            }else{
-
-                $result = ['success' => TRUE, 'message' => 'Data item berhasil Diubah'];
+                $result = ['success' => TRUE, 'message' => 'Pengajuan Berhasil Di Batalkan'];
 
             }
 
+        }   
+
+        $result['csrfHash'] = csrf_hash();
+        resultJSON($result);
+    }
+
+    public function tempadd(){
+
+        $this->validationRequest(TRUE, 'POST');
+
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+        $validation =  \Config\Services::validation();
+
+        $input = [
+            'temp_po_id'                        => $this->request->getPost('temp_po_id'),
+            'temp_po_submission_id'             => $this->request->getPost('temp_po_submission_id'),
+            'temp_po_submission_invoice'        => $this->request->getPost('temp_po_submission_invoice'),
+            'temp_po_item_id'                   => $this->request->getPost('item_id'),
+            'temp_po_qty'                       => $this->request->getPost('temp_qty'),
+            'temp_po_ppn'                       => $this->request->getPost('temp_tax'),
+            'temp_po_dpp'                       => $this->request->getPost('temp_dpp'),
+            'temp_po_price'                     => $this->request->getPost('temp_price'),
+            'temp_po_discount1'                 => $this->request->getPost('temp_discount1'),
+            'temp_po_discount1_percentage'      => $this->request->getPost('temp_discount_percentage1'),
+            'temp_po_discount2'                 => $this->request->getPost('temp_discount2'),
+            'temp_po_discount2_percentage'      => $this->request->getPost('temp_discount_percentage2'),
+            'temp_po_discount3'                 => $this->request->getPost('temp_discount3'),
+            'temp_po_discount3_percentage'      => $this->request->getPost('temp_discount_percentage3'),
+            'temp_po_ongkir'                    => $this->request->getPost('temp_ongkir'),
+            'temp_po_expire_date'               => $this->request->getPost('temp_ed_date'),
+            'temp_po_total'                     => $this->request->getPost('temp_total'),
+            'temp_po_supplier_id'               => $this->request->getPost('temp_po_suplier_id'),
+            'temp_po_supplier_name'             => $this->request->getPost('temp_po_suplier_name'),
+            'temp_po_discount_total'            => $this->request->getPost('total_temp_discount'),
+
+        ];
+
+
+
+        $validation->setRules([
+            'temp_po_item_id'    => ['rules' => 'required'],
+            'temp_po_qty'           => ['rules' => 'required|greater_than[0]'],
+            'temp_po_price'         => ['rules' => 'required|greater_than[0]'],
+            'temp_po_ppn'           => ['rules' => 'required'],
+            'temp_po_dpp'           => ['rules' => 'required'],
+            'temp_po_price'         => ['rules' => 'required'],
+            'temp_po_ongkir'        => ['rules' => 'required'],
+            'temp_po_total'         => ['rules' => 'required'],
+        ]);
+
+        if ($validation->run($input) === FALSE) {
+
+            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
         } else {
 
-            $result = ['success' => FALSE, 'message' => 'Data item gagal ditambahkan'];
+            $input['temp_po_user_id'] = $this->userLogin['user_id'];
+
+            $save = $this->M_purchase_order->insertTemp($input);
+
+
+            if ($save) {
+
+                if($this->request->getPost('temp_po_id') == null){
+
+                    $result = ['success' => TRUE, 'message' => 'Data item berhasil ditambahkan'];
+
+                }else{
+
+                    $result = ['success' => TRUE, 'message' => 'Data item berhasil Diubah'];
+
+                }
+
+            } else {
+
+                $result = ['success' => FALSE, 'message' => 'Data item gagal ditambahkan'];
+
+            }
 
         }
 
+        $getTemp = $this->M_purchase_order->getTemp($this->userLogin['user_id'])->getResultArray();
+
+        $find_result = [];
+
+        foreach ($getTemp as $k => $v) {
+
+            $find_result[$k] = esc($v);
+
+        }
+
+        $result['data'] = $find_result;
+
+        $result['csrfHash'] = csrf_hash();
+
+        resultJSON($result);
     }
 
-    $getTemp = $this->M_purchase_order->getTemp($this->userLogin['user_id'])->getResultArray();
-
-    $find_result = [];
-
-    foreach ($getTemp as $k => $v) {
-
-        $find_result[$k] = esc($v);
-
-    }
-
-    $result['data'] = $find_result;
-
-    $result['csrfHash'] = csrf_hash();
-
-    resultJSON($result);
-}
-
-public function deleteTemp($temp_po_id = '')
-{
+    public function deleteTemp($temp_po_id = '')
+    {
         //$this->validationRequest(TRUE);
-    $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
-    if ($this->role->hasRole('purchase_order.delete')) {
-        if ($temp_po_id != '') {
-            $delete = $this->M_purchase_order->deletetemp($temp_po_id);
-            if ($delete) {
-               $getTemp = $this->M_purchase_order->getTemp($this->userLogin['user_id'])->getResultArray();
-               $find_result = [];
-               foreach ($getTemp as $k => $v) {
-                   $find_result[$k] = esc($v);
-               }
-               $result['data'] = $find_result;
-               $result['csrfHash'] = csrf_hash();
-               $result['success'] = 'TRUE';
-               $result['message'] = 'Data Berhasil Di Hapus';
-           } else {
-            $result = ['success' => FALSE, 'message' => 'Data Gagal Di Hapus'];
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        if ($this->role->hasRole('purchase_order.delete')) {
+            if ($temp_po_id != '') {
+                $delete = $this->M_purchase_order->deletetemp($temp_po_id);
+                if ($delete) {
+                 $getTemp = $this->M_purchase_order->getTemp($this->userLogin['user_id'])->getResultArray();
+                 $find_result = [];
+                 foreach ($getTemp as $k => $v) {
+                     $find_result[$k] = esc($v);
+                 }
+                 $result['data'] = $find_result;
+                 $result['csrfHash'] = csrf_hash();
+                 $result['success'] = 'TRUE';
+                 $result['message'] = 'Data Berhasil Di Hapus';
+             } else {
+                $result = ['success' => FALSE, 'message' => 'Data Gagal Di Hapus'];
+            }
         }
+    } else {
+        $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menghapus data ini'];
     }
-} else {
-    $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menghapus data ini'];
-}
-resultJSON($result);
+    resultJSON($result);
 }
 
 
@@ -538,6 +536,7 @@ public function save($type)
 
                     $result = ['success' => FALSE, 'message' => 'Data pengajuan gagal disimpan'];
 
+                    
                 }
 
             } else {
@@ -638,7 +637,7 @@ public function printinvoice($purchase_order_id = "")
         $dompdf->stream('invoice');
     } else {
     */
-     if ($purchase_order_id == '') {
+       if ($purchase_order_id == '') {
 
         throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 

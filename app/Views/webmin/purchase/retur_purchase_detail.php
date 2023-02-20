@@ -18,7 +18,7 @@ $assetsUrl = base_url('assets');
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Detail PO Konsinyasi</title>
+    <title>Detail Retur Pembelian</title>
 
 
 
@@ -56,7 +56,7 @@ $assetsUrl = base_url('assets');
 
                         Detail Transaksi
 
-                        <small class="float-right"><?= COMPANY_REGION ?>, <?= indo_date($hdConsignment['purchase_order_consignment_date'], FALSE) ?></small>
+                        <small class="float-right"><?= COMPANY_REGION ?>, <?= indo_date($hdRetur['hd_retur_date'], FALSE) ?></small>
 
                     </h2>
 
@@ -87,27 +87,15 @@ $assetsUrl = base_url('assets');
                 <div class="col-sm-4 invoice-col">
 
                     <p>Supplier:<br />
-                    <b><?= esc($hdConsignment['supplier_name']) ?></b><br>
-                       <?= esc($hdConsignment['supplier_address']) ?><br>
-                       <?= esc($hdConsignment['supplier_phone']) ?>
+                    <b><?= esc($hdRetur['supplier_name']) ?></b><br>
+                       <?= esc($hdRetur['supplier_address']) ?><br>
+                       <?= esc($hdRetur['supplier_phone']) ?>
                    </p>
 
                 </div>
 
                 <div class="col-sm-4 invoice-col">
-                    <p><b><?= esc($hdConsignment['purchase_order_consignment_invoice']) ?></b><br>
-                       Status :
-                        <?php if($hdConsignment['purchase_order_consignment_status'] == 'Pending'){ ?>
-                        <span class="badge badge-primary">Pending</span>
-                        <?php } ?>
-                        <?php if($hdConsignment['purchase_order_consignment_status'] == 'Selesai'){ ?>
-                        <span class="badge badge-success">Selesai</span>
-                        <?php } ?>
-                        <?php if($hdConsignment['purchase_order_consignment_status'] == 'Cancel'){ ?>
-                        <span class="badge badge-danger">Cancel </span>
-                        <?php } ?>
-                        <br>
-                        Gudang : <b><?= esc($hdConsignment['warehouse_code']) ?>/<?= esc($hdConsignment['warehouse_name']) ?></b>
+                    <p><b><?= esc($hdRetur['hd_retur_purchase_invoice']) ?></b><br>
                     </p>
                 </div>
 
@@ -132,14 +120,21 @@ $assetsUrl = base_url('assets');
                         <thead>
 
                             <tr>
-
-                                <th>No Pengajuan</th>
+                                <th>No Pembelian</th>
 
                                 <th>Kode Produk</th>
 
                                 <th>Nama Produk</th>
 
+                                <th class="text-right">Harga</th>
+
+                                <th class="text-right">Gudang</th>
+
                                 <th class="text-right">Qty</th>
+
+                                <th class="text-right">PPN</th>=
+
+                                <th class="text-right">Total</th>
 
                             </tr>
 
@@ -149,20 +144,31 @@ $assetsUrl = base_url('assets');
 
                             <?php
 
-                            foreach ($dtConsignment as $row) :
+                            foreach ($dtRetur as $row) :
 
-                                $dt_po_consignment_qty = floatval($row['dt_po_consignment_qty']);
+            
+                                $retur_price = floatval($row['dt_retur_price']);
+                                $retur_qty = floatval($row['dt_retur_qty']);
+                                $retur_ppn = floatval($row['dt_retur_ppn']);
+                                $retur_total = floatval($row['dt_retur_total']);
                                 ?>
 
                                 <tr>
-
-                                    <th><?= esc($row['dt_po_consignment_submission_invoice']) ?></th>
+                                    <th><?= esc($row['dt_retur_purchase_invoice']) ?></th>
 
                                     <th><?= esc($row['product_code']) ?></th>
 
                                     <th><?= esc($row['product_name']) ?>(<?= esc($row['unit_name']) ?>)</th>
 
-                                    <th class="text-right"><?= numberFormat($dt_po_consignment_qty, TRUE) ?></th>
+                                    <th class="text-right">Rp <?= numberFormat($retur_price, TRUE) ?></th>
+
+                                    <th><?= esc($row['product_name']) ?>(<?= esc($row['warehouse_name']) ?>)</th>
+
+                                    <th class="text-right"><?= numberFormat($retur_qty, TRUE) ?></th>
+
+                                    <th class="text-right">Rp <?= numberFormat($retur_ppn, TRUE) ?></th>
+
+                                    <th class="text-right">Rp <?= numberFormat($retur_total, TRUE) ?></th>
 
                                 </tr>
 
@@ -198,6 +204,14 @@ $assetsUrl = base_url('assets');
 
                         <table class="table">
 
+                            <tr>
+
+                                <th>Total:</th>
+
+                                <td class="text-right">Rp. <?= numberFormat($hdRetur['hd_retur_total_transaction']) ?></td>
+
+                            </tr>
+
                         </table>
 
                     </div>
@@ -229,33 +243,33 @@ $assetsUrl = base_url('assets');
 
                                 <th style="width:10%">Created</th>
 
-                                <td><?= esc($hdConsignment['user_realname']) ?></td>
+                                <td><?= esc($hdRetur['user_realname']) ?></td>
 
-                                <td><?= indo_date($hdConsignment['created_at']) ?></td>
+                                <td><?= indo_date($hdRetur['created_at']) ?></td>
 
                             </tr>
 
-
+                            <?php /*
                             <?php foreach ($logupdate as $log) : ?>
 
                                 <tr>
 
                                     <th>Edit</th>
 
-                                    <td><?= esc($log['user_realname']) ?></td>
+                                    <td><?= esc($hdRetur['user_realname']) ?></td>
 
-                                    <td><?= indo_date($log['created_at']) ?></td>
+                                    <td><?= indo_date($hdRetur['created_at']) ?></td>
 
                                 </tr>
 
                             <?php endforeach;  ?>
 
-
+                            */ ?>
                             <tr>
 
                                 <th>Catatan:</th>
 
-                                <td colspan="2"><?= esc($hdConsignment['purchase_order_consignment_remark']) ?></td>
+                                <td colspan="2"><?= esc($hdRetur['hd_retur_desc']) ?></td>
 
                             </tr>
 
