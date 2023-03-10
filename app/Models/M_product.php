@@ -167,13 +167,18 @@ class M_product extends Model
             $saveQueries[] = $this->db->getLastQuery()->getQuery();
         }
 
+        $margin_allocation = 0;
+        if ($data['has_tax'] == 'Y') {
+            $margin_allocation = 50;
+        }
+
         $data_unit = [
             'item_code'             => $product_id,
             'product_id'            => $product_id,
             'unit_id'               => $unit_id,
             'base_unit'             => 'Y',
             'product_content'       => 1,
-            'margin_allocation'     => 50,
+            'margin_allocation'     => $margin_allocation,
             'is_sale'               => 'N',
             'show_on_mobile_app'    => 'N',
             'allow_change_price'    => 'N',
@@ -284,7 +289,7 @@ class M_product extends Model
 
     public function searchProductBysuplier($keyword, $supplier_id = '', $isItemCode = FALSE, $limit = 10)
     {
-        
+
         $builder = $this->db->table('ms_product_unit');
         $builder->select('ms_product_unit.*,ms_product.product_name,(ms_product.base_purchase_price*ms_product_unit.product_content) as purchase_price,(ms_product.base_purchase_tax*ms_product_unit.product_content) as purchase_tax,ms_unit.unit_name,ms_product.is_parcel')
             ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
@@ -308,7 +313,7 @@ class M_product extends Model
 
     public function searchProductBywarehouse($keyword, $warehouse_id = '', $isItemCode = FALSE, $limit = 10)
     {
-        
+
         $builder = $this->db->table('ms_product_unit');
         $builder->select('ms_product_unit.*,ms_product.product_name,(ms_product.base_purchase_price*ms_product_unit.product_content) as purchase_price,(ms_product.base_purchase_tax*ms_product_unit.product_content) as purchase_tax,ms_unit.unit_name,ms_product.is_parcel,ms_product_stock.stock as warehouse_stock')
             ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')

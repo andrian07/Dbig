@@ -2682,8 +2682,12 @@ $assetsUrl = base_url('assets');
             item_disc_price_G6 = 0;
             item_promo_price_G6 = 0;
 
+            if (item_has_tax == 'Y') {
+                item_margin_allocation.set(default_allocation_margin);
+            } else {
+                item_margin_allocation.set(0);
+            }
 
-            item_margin_allocation.set(default_allocation_margin);
             item_margin_alocation_G1 = 0;
             item_margin_alocation_G2 = 0;
             item_margin_alocation_G3 = 0;
@@ -2773,6 +2777,31 @@ $assetsUrl = base_url('assets');
             let mrG5 = calcPercentRate(ppt, spG5);
             let mrG6 = calcPercentRate(ppt, spG6);
 
+
+            if (mrG1 > 999) {
+                mrG1 = 999;
+            }
+
+            if (mrG2 > 999) {
+                mrG2 = 999;
+            }
+
+            if (mrG3 > 999) {
+                mrG3 = 999;
+            }
+
+            if (mrG4 > 999) {
+                mrG4 = 999;
+            }
+
+            if (mrG5 > 999) {
+                mrG5 = 999;
+            }
+
+            if (mrG6 > 999) {
+                mrG6 = 999;
+            }
+
             let ds = parseFloat(data.disc_seasonal);
             let ma = parseFloat(data.margin_allocation);
 
@@ -2831,6 +2860,30 @@ $assetsUrl = base_url('assets');
             let rmG4 = calcPercentRate(ppt, item_promo_price_G4);
             let rmG5 = calcPercentRate(ppt, item_promo_price_G5);
             let rmG6 = calcPercentRate(ppt, item_promo_price_G6);
+
+            if (rmG1 > 999) {
+                rmG1 = 999;
+            }
+
+            if (rmG2 > 999) {
+                rmG2 = 999;
+            }
+
+            if (rmG3 > 999) {
+                rmG3 = 999;
+            }
+
+            if (rmG4 > 999) {
+                rmG4 = 999;
+            }
+
+            if (rmG5 > 999) {
+                rmG5 = 999;
+            }
+
+            if (rmG6 > 999) {
+                rmG6 = 999;
+            }
 
             $('#view_disc_G1').html(numberFormat(item_promo_price_G1, true));
             $('#view_margin_G1').html(numberFormat(item_remain_margin_G1, true));

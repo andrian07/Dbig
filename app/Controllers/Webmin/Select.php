@@ -55,7 +55,7 @@ class Select extends WebminController
         $select2->renderResult(function ($row, $i) {
             $result = [];
             $result['id']   = esc($row['group_code']);
-            $result['text'] = esc($row['group_name']);
+            $result['text'] = $row['group_name'];
             return $result;
         });
 
@@ -109,7 +109,7 @@ class Select extends WebminController
         $select2->renderResult(function ($row, $i) {
             $result = [];
             $result['id']   = esc($row['prov_id']);
-            $result['text'] = esc($row['prov_name']);
+            $result['text'] = $row['prov_name'];
             return $result;
         });
 
@@ -137,9 +137,9 @@ class Select extends WebminController
         $select2->renderResult(function ($row, $i) {
             $result = [];
             $result['id']           = esc($row['city_id']);
-            $result['text']         = esc($row['city_name']);
-            $result['prov_id']      = esc($row['city_id']);
-            $result['prov_name']    = esc($row['prov_name']);
+            $result['text']         = $row['city_name'];
+            $result['prov_id']      = $row['city_id'];
+            $result['prov_name']    = $row['prov_name'];
             return $result;
         });
 
@@ -168,11 +168,11 @@ class Select extends WebminController
         $select2->renderResult(function ($row, $i) {
             $result = [];
             $result['id']           = esc($row['dis_id']);
-            $result['text']         = esc($row['dis_name']);
-            $result['city_id']      = esc($row['city_id']);
-            $result['city_name']    = esc($row['city_name']);
-            $result['prov_id']      = esc($row['city_id']);
-            $result['prov_name']    = esc($row['prov_name']);
+            $result['text']         = $row['dis_name'];
+            $result['city_id']      = $row['city_id'];
+            $result['city_name']    = $row['city_name'];
+            $result['prov_id']      = $row['city_id'];
+            $result['prov_name']    = $row['prov_name'];
             return $result;
         });
 
@@ -203,14 +203,14 @@ class Select extends WebminController
         $select2->renderResult(function ($row, $i) {
             $result = [];
             $result['id']           = esc($row['subdis_id']);
-            $result['text']         = esc($row['subdis_name']);
-            $result['dis_id']       = esc($row['dis_id']);
-            $result['dis_name']     = esc($row['dis_name']);
-            $result['city_id']      = esc($row['city_id']);
-            $result['city_name']    = esc($row['city_name']);
-            $result['prov_id']      = esc($row['city_id']);
-            $result['prov_name']    = esc($row['prov_name']);
-            $result['postal_code']  = esc($row['postal_code']);
+            $result['text']         = $row['subdis_name'];
+            $result['dis_id']       = $row['dis_id'];
+            $result['dis_name']     = $row['dis_name'];
+            $result['city_id']      = $row['city_id'];
+            $result['city_name']    = $row['city_name'];
+            $result['prov_id']      = $row['city_id'];
+            $result['prov_name']    = $row['prov_name'];
+            $result['postal_code']  = $row['postal_code'];
             return $result;
         });
 
@@ -233,7 +233,7 @@ class Select extends WebminController
         $select2->renderResult(function ($row, $i) {
             $result = [];
             $result['id']   = esc($row['unit_id']);
-            $result['text'] = esc($row['unit_name']);
+            $result['text'] = $row['unit_name'];
             return $result;
         });
 
@@ -281,7 +281,7 @@ class Select extends WebminController
         $select2->renderResult(function ($row, $i) {
             $result = [];
             $result['id']   = esc($row['brand_id']);
-            $result['text'] = esc($row['brand_name']);
+            $result['text'] = $row['brand_name'];
             return $result;
         });
 
@@ -304,7 +304,7 @@ class Select extends WebminController
         $select2->renderResult(function ($row, $i) {
             $result = [];
             $result['id']   = esc($row['category_id']);
-            $result['text'] = esc($row['category_name']);
+            $result['text'] = $row['category_name'];
             return $result;
         });
 

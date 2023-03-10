@@ -893,8 +893,15 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
 
 
 
-
-
+/* api pos */
+$routes->group('api-pos', static function ($routes) {
+    $routes->get('/', 'ApiPos::index');
+    $routes->get('get-datetime', 'ApiPos::getUpdateTime');
+    $routes->post('save-update-time/(:alphanum)', 'ApiPos::saveUpdateTime/$1');
+    $routes->post('download/(:alphanum)', 'ApiPos::downloadData/$1');
+    $routes->post('upload/(:alphanum)', 'ApiPos::uploadData/$1');
+});
+/* end api pos */
 
 
 

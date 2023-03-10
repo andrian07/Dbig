@@ -189,7 +189,7 @@ class Devman extends BaseController
         $message = view('email/verification', $data);
         /* end sample verification email */
 
-        $mail = new \App\Libraries\Mail();
+        $mail = new \App\Libraries\Mail('default', 3);
         $mail->setTo($customer_email);
         $mail->setSubject($subject);
         $mail->setMessage($message);
