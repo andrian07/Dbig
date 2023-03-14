@@ -226,7 +226,7 @@ class PurchaseOrder extends Migration
         $this->forge->addField('detail_purchase_po_update_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
 
         $this->forge->addKey('detail_purchase_order_id', TRUE);
-        $this->forge->addForeignKey('purchase_order_id', 'hd_pos_sales_return', 'pos_sales_return_id');
+        $this->forge->addForeignKey('purchase_order_id', 'hd_purchase_order', 'purchase_order_id');
         $this->forge->addForeignKey('detail_purchase_po_item_id', 'ms_product_unit', 'item_id');
         $this->forge->createTable('dt_purchase_order');
 

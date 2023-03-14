@@ -5,6 +5,8 @@
     #sample {
         color: red;
     }
+
+    font-family:
 </style>
 <?= $this->endSection() ?>
 
@@ -57,7 +59,7 @@ foreach ($pages as $customerData) :
 
             <div id="content" class="text-center">
                 <!-- HEADER -->
-                <table width="1100px">
+                <table width="100%">
                     <tbody>
                         <tr>
                             <td colspan="3" align="center">

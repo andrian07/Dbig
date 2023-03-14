@@ -162,4 +162,45 @@ class Devman extends BaseController
             $seeder->call('DemoSeeder');
         }
     }
+
+    public function testEmail()
+    {
+        helper('encrypter');
+        $customer_id    = 2;
+        $customer_name  = 'Eric Tandra';
+        $customer_email = 'andrian.chen@yahoo.com';
+
+        /* sample verification email */
+        // url valid for 1 days (60 seconds * 60 minutes * 24 hours)
+        $params = [
+            'customer_id'       => $customer_id,
+            'customer_code'     => 'C022300001',
+            'exp_time'          => time() + (60 * 60 * 24)
+        ];
+        $toJson = json_encode($params);
+        $strEncode = strEncode($toJson);
+        $verificationUrl = base_url('verification/' . $strEncode) . '?cid=' . $customer_id;
+
+        $subject = 'Verifikasi Email';
+        $data = [
+            'customer_name'    => $customer_name,
+            'verification_url' => $verificationUrl,
+        ];
+        $message = view('email/verification', $data);
+        /* end sample verification email */
+
+        $mail = new \App\Libraries\Mail();
+        $mail->setTo($customer_email);
+        $mail->setSubject($subject);
+        $mail->setMessage($message);
+
+        if ($mail->send()) {
+            echo "Berhasil Terkirim";
+        } else {
+            ob_start();
+            $mail->get_debugger_messages();
+            $error = ob_end_clean();
+            $errors[] = $error;
+        }
+    }
 }

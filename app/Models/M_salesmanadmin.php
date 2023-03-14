@@ -183,13 +183,7 @@ class M_salesmanadmin extends Model
 
         if ($this->db->affectedRows() > 0) {
 
-            $saveQueries[] = [
-
-                'query_text'    => $this->db->getLastQuery()->getQuery(),
-
-                'ref_id'        => $sales_admin_id 
-
-            ];
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
 
         }
 
@@ -236,37 +230,36 @@ class M_salesmanadmin extends Model
 
             $getLastEd = $this->db->table($this->table_ms_warehouse_stock)->select('*')->where('product_id', $product_id)->orderBy('exp_date', 'asc')->limit(1)->get()->getRowArray();
 
-            $stock_id_ed     = $getLastEd['stock_id'];
-            $product_id_ed   = $getLastEd['product_id'];
-            $warehouse_id_ed = $getLastEd['warehouse_id'];
-            $purchase_id_ed  = $getLastEd['purchase_id'];
-            $exp_date_ed     = $getLastEd['exp_date'];
-            $stock_ed        = $getLastEd['stock'];
-
+            if($getLastEd != null){
+                $stock_id_ed     = $getLastEd['stock_id'];
+                $product_id_ed   = $getLastEd['product_id'];
+                $warehouse_id_ed = $getLastEd['warehouse_id'];
+                $purchase_id_ed  = $getLastEd['purchase_id'];
+                $exp_date_ed     = $getLastEd['exp_date'];
+                $stock_ed        = $getLastEd['stock'];
+            }
             $sqlDtValues[] = "('$sales_admin_id','$dt_item_id','$dt_temp_qty','$dt_purchase_price','$dt_purchase_tax','$dt_purchase_cogs','$dt_product_price','$dt_disc1','$dt_price_disc1_percentage','$dt_disc2','$dt_price_disc2_percentage','$dt_disc3','$dt_price_disc3_percentage','$dt_sales_price','$user_id')";
 
             $vUpdateStock[] = "('$product_id', '$warehouse_id', '$base_purchase_stock')";
 
-            $vUpdateWarehouse[] = "('$stock_id_ed', '$product_id_ed', '$warehouse_id_ed', '$purchase_id_ed', '$exp_date_ed', '$stock_ed')";
+            if($getLastEd != null){
+                $vUpdateWarehouse[] = "('$stock_id_ed', '$product_id_ed', '$warehouse_id_ed', '$purchase_id_ed', '$exp_date_ed', '$stock_ed')";
+            }
         }
 
         $sqlDtSalesAdmin .= implode(',', $sqlDtValues);
 
         $sqlUpdateStock .= implode(',', $vUpdateStock). " ON DUPLICATE KEY UPDATE stock=stock-VALUES(stock)";
 
-        $sqlUpdateWarehouse .= implode(',', $vUpdateWarehouse). " ON DUPLICATE KEY UPDATE stock_id=VALUES(stock_id),stock=stock-VALUES(stock)";
+        if($getLastEd != null){
+            $sqlUpdateWarehouse .= implode(',', $vUpdateWarehouse). " ON DUPLICATE KEY UPDATE stock_id=VALUES(stock_id),stock=stock-VALUES(stock)";
+        }
 
 
         $this->db->query($sqlDtSalesAdmin);
         if ($this->db->affectedRows() > 0) {
 
-            $saveQueries[] = [
-
-                'query_text'    => $this->db->getLastQuery()->getQuery(),
-
-                'ref_id'        => $sales_admin_id
-
-            ];
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
 
         }
 
@@ -275,28 +268,18 @@ class M_salesmanadmin extends Model
 
         if ($this->db->affectedRows() > 0) {
 
-            $saveQueries[] = [
-
-                'query_text'    => $this->db->getLastQuery()->getQuery(),
-
-                'ref_id'        => $sales_admin_id
-
-            ];
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
 
         }
 
-        $this->db->query($sqlUpdateWarehouse);
+        if($getLastEd != null){
+            $this->db->query($sqlUpdateWarehouse);
 
-        if ($this->db->affectedRows() > 0) {
+            if ($this->db->affectedRows() > 0) {
 
-            $saveQueries[] = [
+                $saveQueries[] = $this->db->getLastQuery()->getQuery();
 
-                'query_text'    => $this->db->getLastQuery()->getQuery(),
-
-                'ref_id'        => $sales_admin_id
-
-            ];
-
+            }
         }
 
 
@@ -322,11 +305,7 @@ class M_salesmanadmin extends Model
 
         $this->db->query('UNLOCK TABLES');
 
-        foreach($saveQueries as $rowQuery){
-
-            saveQueries($rowQuery['query_text'], 'salesadmin', $sales_admin_id);
-
-        }
+        saveQueries($saveQueries, 'sales_admin', $sales_admin_id, 'insertsalesadmin');
 
         return $save;
 

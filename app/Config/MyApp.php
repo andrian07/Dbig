@@ -292,6 +292,15 @@ class MyApp extends BaseConfig
             ]
         ],
 
+        'sales_pos' => [
+            'text'   => 'Penjualan POS',
+            'roles'   => [
+                'view'      => ['text' => 'Lihat'],
+                'edit'      => ['text' => 'Ubah']
+            ]
+        ],
+
+
         'sales_return' => [
             'text'   => 'Retur Penjualan',
             'roles'   => [
@@ -414,21 +423,21 @@ class MyApp extends BaseConfig
             'upload_dir'    => 'contents/upload/product/',
             'thumb_dir'     => 'contents/thumb/product/',
         ],
-        'banner' => [
-            //'width'         => 1000,
-            //'height'        => 700,
+         'banner' => [
+            'width'         => 1200,
+            'height'        => 500,
             'create_thumb'  => TRUE,
-            //'thumb_width'   => 320,
-            //'thumb_height'  => 150,
+            'thumb_width'   => 1200,
+            'thumb_height'  => 500,
             'upload_dir'    => 'contents/upload/banner/',
             'thumb_dir'     => 'contents/thumb/banner/',
         ],
         'promo' => [
-            //'width'         => 500,
-            //'height'        => 500,
+            'width'         => 600,
+            'height'        => 1000,
             'create_thumb'  => TRUE,
-            //'thumb_width'   => 320,
-            //'thumb_height'  => 150,
+            'thumb_width'   => 600,
+            'thumb_height'  => 1000,
             'upload_dir'    => 'contents/upload/promo/',
             'thumb_dir'     => 'contents/thumb/promo/',
         ],
@@ -450,5 +459,18 @@ class MyApp extends BaseConfig
             'upload_dir'    => 'contents/upload/voucher/',
             'thumb_dir'     => 'contents/thumb/voucher/',
         ],
+    ];
+
+    public $email = [
+        'default' => [
+            'protocol'      => 'smtp',
+            'host'          => 'mail.borneoeternityswiftlet.co.id',
+            'port'          => 465,
+            'SMTPAuth'      => true,
+            'senderName'    => 'DBIG',
+            'username'      => 'admin@borneoeternityswiftlet.co.id',
+            'password'      => 'cI+D+fgBXmEh',
+            'SMTPSecure'    => 'ssl'
+        ]
     ];
 }

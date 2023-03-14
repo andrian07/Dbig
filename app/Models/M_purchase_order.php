@@ -108,13 +108,7 @@ class M_purchase_order extends Model
 
         if ($this->db->affectedRows() > 0) {
 
-            $saveQueries[] = [
-
-                'query_text'    => $this->db->getLastQuery()->getQuery(),
-
-                'ref_id'        => $purchase_order_id 
-
-            ];
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
 
         }
 
@@ -162,7 +156,7 @@ class M_purchase_order extends Model
         $this->db->query($sqlDtOrder);
 
         if ($this->db->affectedRows() > 0) {
-            $saveQueries = $this->db->getLastQuery()->getQuery();
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
         }
 
         if ($this->db->transStatus() === false) {
@@ -185,7 +179,8 @@ class M_purchase_order extends Model
 
         $this->db->query('UNLOCK TABLES');
 
-        saveQueries($saveQueries, 'inserPurchaseOrder', $purchase_order_id);
+        saveQueries($saveQueries, 'purchase_order', $purchase_order_id, 'inserPurchaseOrder');
+        
         return $save;
 
     }

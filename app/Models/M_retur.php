@@ -141,6 +141,18 @@ class M_retur extends Model
 
         ->get();
     }
+
+    public function getTempReturPPNandDPP($user_id)
+    {
+        $builder = $this->db->table($this->table_temp_retur_purchase);
+
+        return $builder->select('sum(retur_ppn) as total_retur_ppn, sum(retur_dpp) as total_retur_dpp')
+        
+        ->where('temp_retur_purchase.retur_user_id', $user_id)
+
+        ->get();
+    }
+
     public function updateRetur($input)
     {
         $this->db->query('LOCK TABLES hd_retur_purchase WRITE, dt_retur_purchase READ');
@@ -342,6 +354,14 @@ class M_retur extends Model
             $data['hd_retur_purchase_invoice'] = 'RTR/'.$invoice_date.'/'.substr('000000000' . strval(floatval($invoice) + 1), -10);
         }
 
+        $getTempReturPPNandDPP =  $this->getTempReturPPNandDPP($data['created_by'])->getResultArray();
+
+   
+
+        $data['hd_retur_total_dpp'] = $getTempReturPPNandDPP[0]['total_retur_dpp'];
+
+        $data['hd_retur_total_ppn'] = $getTempReturPPNandDPP[0]['total_retur_ppn'];
+
         $this->db->table($this->table_hd_retur)->insert($data);
 
         $hd_retur_purchase_id  = $this->db->insertID();
@@ -482,8 +502,6 @@ class M_retur extends Model
         ->join('ms_warehouse', 'ms_warehouse.warehouse_id = dt_retur_purchase.dt_retur_warehouse')
 
         ->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id')
-
-        ->join('ms_product_stock', 'ms_product_stock.product_id = ms_product.product_id')
 
         ->where('hd_retur_purchase_id', $hd_retur_purchase_id)
 

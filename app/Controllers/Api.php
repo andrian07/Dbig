@@ -76,6 +76,7 @@ class Api extends BaseController
 
     public function registerCustomer($type)
     {
+         helper('text');
         $headers = apache_request_headers();
         $data = json_decode(file_get_contents('php://input'), true);
         $checkOuth = $this->checkOuth($headers);
@@ -121,15 +122,12 @@ class Api extends BaseController
 
             $M_customer = model('M_customer');
 
-
-
-
             if ($type == 'add') {
                 helper('text');
                 unset($input['customer_id']);
 
                 $check_email = $this->M_api->check_email($input['customer_email'])->getRowArray();
-
+                
                 if($check_email != null){
                     $result = ['err_code' => '01', 'message' => 'Email Sudah Terdaftar'];
                     echo json_encode($result);die();
@@ -165,9 +163,39 @@ class Api extends BaseController
 
                 $input['referral_code'] = $referral_code;
 
-                $save = $M_customer->insertCustomer($input);
+                $save = $this->M_api->insertCustomer($input);
                 if ($save) {
-                    $result = ['err_code' => '00', 'message' => 'Data customer berhasil disimpan'];
+                    helper('encrypter');
+                    $customer_id    = $save['customer_id'];
+                    $customer_name  = $data['customer_name'];
+                    $customer_email = $data['customer_email'];
+                    $get_customer_code = $this->M_api->get_customer_code($customer_id)->getRowArray();
+                    $params = [
+                        'customer_id'       => $customer_id,
+                        'customer_code'     => $get_customer_code['customer_code'],
+                        'exp_time'          => time() + (60 * 60 * 24)
+                    ];
+                    $toJson = json_encode($params);
+                    $strEncode = strEncode($toJson);
+                    $verificationUrl = base_url('verification/' . $strEncode) . '?cid=' . $customer_id;
+                    $subject = 'Verifikasi Email';
+                    $data = [
+                        'customer_name'    => $customer_name,
+                        'verification_url' => $verificationUrl,
+                    ];
+                    $message = view('email/verification', $data);
+                    /* end sample verification email */
+
+                    $mail = new \App\Libraries\Mail();
+                    $mail->setTo($customer_email);
+                    $mail->setSubject($subject);
+                    $mail->setMessage($message);
+
+                    if ($mail->send()) {
+                        $result = ['err_code' => '00', 'message' => 'Data customer berhasil disimpan'];
+                    } else {
+                        $result = ['err_code' => '01', 'message' => 'Data customer gagal disimpan'];
+                    }          
                 }else {
                     $result = ['err_code' => '01', 'message' => 'Data customer gagal disimpan'];
                 }
@@ -214,12 +242,64 @@ class Api extends BaseController
                 }
             }else{
                 $result = ['err_code' => '01', 'message' => 'Password Lama Tidak Sesuai'];
-            echo json_encode($result);die();
+                echo json_encode($result);die();
             }
         }else{
             $result = ['err_code' => '01', 'message' => 'Token Tidak Sesuai'];
             echo json_encode($result);die();
         }
+    }
+
+    public function resetPass()
+    {
+         helper('text');
+        $headers = apache_request_headers();
+        $checkOuth = $this->checkOuth($headers);
+        $data = json_decode(file_get_contents('php://input'), true);
+        $customer_email = $data['customer_email'];
+        $customer_password_rand = strtoupper(random_string('alnum', 8));
+        $customer_password = password_hash($customer_password_rand, PASSWORD_BCRYPT);
+        $input = [
+            'customer_password'  => $customer_password,
+        ];
+        $getCustomerIdByEmail = $this->M_api->getCustomerIdByEmail($customer_email)->getRowArray();
+        if($getCustomerIdByEmail != null){
+            $customer_id = $getCustomerIdByEmail['customer_id'];
+            $save = $this->M_api->updatePass($customer_id, $input);
+            helper('encrypter');
+            $customer_name  = $getCustomerIdByEmail['customer_name'];
+            $get_customer_code = $this->M_api->get_customer_code($customer_id)->getRowArray();
+            $params = [
+                'customer_id'       => $customer_id,
+                'customer_code'     => $get_customer_code['customer_code'],
+                'exp_time'          => time() + (60 * 60 * 24)
+            ];
+            $toJson = json_encode($params);
+            $strEncode = strEncode($toJson);
+            $verificationUrl = base_url('verification/' . $strEncode) . '?cid=' . $customer_id;
+            $subject = 'Lupa Password';
+            $data = [
+                'customer_name'     => $customer_name,
+                'customer_password' => $customer_password_rand,
+            ];
+            $message = view('email/forgetpass', $data);
+            /* end sample verification email */
+
+            $mail = new \App\Libraries\Mail();
+            $mail->setTo($customer_email);
+            $mail->setSubject($subject);
+            $mail->setMessage($message);
+
+            if ($mail->send()) {
+                $result = ['err_code' => '00', 'message' => 'Cek Email Untuk Password Anda'];die();
+            } else {
+                $result = ['err_code' => '01', 'message' => 'Email Tidak Terdaftar'];die();
+            }
+        }else{
+            $result = ['err_code' => '01', 'message' => 'Email Tidak Terdaftar'];
+            echo json_encode($result);die();
+        }
+        
     }
 
     public function getdataCustomer()

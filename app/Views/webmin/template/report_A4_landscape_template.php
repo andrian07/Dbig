@@ -38,7 +38,7 @@
 
 		body {
 			font-size: 11pt;
-			font-family: 'Times New Roman', Times, serif;
+			
 		}
 
 		.header1 {

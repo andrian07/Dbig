@@ -21,7 +21,7 @@ class M_receivable_repayment extends Model
 
         ->where('sales_admin_remaining_payment >', '0')
 
-        ->where('sales_salesman_id', $customerid)
+        ->where('sales_customer_id', $customerid)
 
         ->orderBy('created_at', 'ASC')
 
@@ -71,7 +71,7 @@ class M_receivable_repayment extends Model
 
         ->where('sales_customer_id', $customerid)
 
-        ->orderBy('created_at', 'ASC')
+        ->orderBy('temp_payment_receivable.created_at', 'ASC')
 
         ->get();
     }

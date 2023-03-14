@@ -139,7 +139,7 @@ class Product extends WebminController
                 return $column;
             });
 
-            $table->orderColumn  = ['', 'ms_product.product_name', 'ms_brand.brand_name', 'ms_category.category_name', '', 'ms_product.is_parcel', 'ms_product.has_tax', 'ms_product.active', '', ''];
+            $table->orderColumn  = ['ms_product.product_id', 'ms_product.product_name', 'ms_brand.brand_name', 'ms_category.category_name', '', 'ms_product.is_parcel', 'ms_product.has_tax', 'ms_product.active', '', ''];
             $table->searchColumn = ['ms_product.product_code', 'ms_product.product_name'];
             $table->generate();
         }

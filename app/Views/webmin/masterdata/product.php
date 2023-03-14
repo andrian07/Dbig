@@ -1247,7 +1247,7 @@ $assetsUrl = base_url('assets');
             responsive: true,
             fixedColumns: true,
             order: [
-                [1, 'asc']
+                [0, 'desc']
             ],
             language: {
                 url: lang_datatables,
@@ -1276,7 +1276,7 @@ $assetsUrl = base_url('assets');
                     targets: 9
                 },
                 {
-                    targets: [0, 4, 8, 9],
+                    targets: [4, 8, 9],
                     orderable: false,
                     searchable: false,
                 },
