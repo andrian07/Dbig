@@ -7,6 +7,11 @@ use App\Controllers\Base\BaseController;
 class ApiPos extends BaseController
 {
     private $db;
+    private $storageSessionID = [];
+    private $storageSalesID = [];
+    private $storageSalesReturnID = [];
+    private $logs = [];
+    private $logQueries = null;
 
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
@@ -18,6 +23,125 @@ class ApiPos extends BaseController
     public function index()
     {
         echo "DBIG API POS VER 1.0";
+    }
+
+    private function addLog($sss)
+    {
+    }
+
+    private function table(array $tbody, array $thead = [])
+    {
+        // All the rows in the table will be here until the end
+        $tableRows = [];
+
+        // We need only indexes and not keys
+        if (!empty($thead)) {
+            $tableRows[] = array_values($thead);
+        }
+
+        foreach ($tbody as $tr) {
+            $tableRows[] = array_values($tr);
+        }
+
+        // Yes, it really is necessary to know this count
+        $totalRows = count($tableRows);
+
+        // Store all columns lengths
+        // $all_cols_lengths[row][column] = length
+        $allColsLengths = [];
+
+        // Store maximum lengths by column
+        // $max_cols_lengths[column] = length
+        $maxColsLengths = [];
+
+        // Read row by row and define the longest columns
+        for ($row = 0; $row < $totalRows; $row++) {
+            $column = 0; // Current column index
+
+            foreach ($tableRows[$row] as $col) {
+                // Sets the size of this column in the current row
+                $allColsLengths[$row][$column] = mb_strwidth($col);
+
+                // If the current column does not have a value among the larger ones
+                // or the value of this is greater than the existing one
+                // then, now, this assumes the maximum length
+                if (!isset($maxColsLengths[$column]) || $allColsLengths[$row][$column] > $maxColsLengths[$column]) {
+                    $maxColsLengths[$column] = $allColsLengths[$row][$column];
+                }
+
+                // We can go check the size of the next column...
+                $column++;
+            }
+        }
+
+        // Read row by row and add spaces at the end of the columns
+        // to match the exact column length
+        for ($row = 0; $row < $totalRows; $row++) {
+            $column = 0;
+
+            foreach ($tableRows[$row] as $col) {
+                $diff = $maxColsLengths[$column] - mb_strwidth($col);
+
+                if ($diff) {
+                    $tableRows[$row][$column] = $tableRows[$row][$column] . str_repeat(' ', $diff);
+                }
+
+                $column++;
+            }
+        }
+
+        $table = '';
+
+        // Joins columns and append the well formatted rows to the table
+        for ($row = 0; $row < $totalRows; $row++) {
+            // Set the table border-top
+            if ($row === 0) {
+                $cols = '+';
+
+                foreach ($tableRows[$row] as $col) {
+                    $cols .= str_repeat('-', mb_strwidth($col) + 2) . '+';
+                }
+                $table .= $cols . PHP_EOL;
+            }
+
+            // Set the columns borders
+            $table .= '| ' . implode(' | ', $tableRows[$row]) . ' |' . PHP_EOL;
+
+            // Set the thead and table borders-bottom
+            if (isset($cols) && (($row === 0 && !empty($thead)) || ($row + 1 === $totalRows))) {
+                $table .= $cols . PHP_EOL;
+            }
+        }
+
+        $this->logs[] = $table;
+    }
+
+
+    private function create_upsert_query($table = '', $fieldData = [])
+    {
+        $fields = [];
+        $values = [];
+        $onDuplicateKeyUpdate = [];
+
+        foreach ($fieldData as $rows) {
+            $fields                 = [];
+            $rowValues              = [];
+            $onDuplicateKeyUpdate   = [];
+
+            foreach ($rows as $field_name => $field_value) {
+                $fields[]               = $field_name;
+                $onDuplicateKeyUpdate[] = "$field_name=VALUES($field_name)";
+                if ($field_value == null) {
+                    $rowValues[]            = "''";
+                } else {
+                    $rowValues[]            = "'" . $this->db->escapeString($field_value) . "'";
+                }
+            }
+
+            $values[] = "(" . implode(',', $rowValues) . ")";
+        }
+
+        return "INSERT INTO " . $table . "(" . implode(',', $fields) . ") VALUES" . implode(',', $values) . " ON DUPLICATE KEY UPDATE " . implode(',', $onDuplicateKeyUpdate);
     }
 
     public function getUpdateTime()
@@ -287,7 +411,17 @@ class ApiPos extends BaseController
             $getUpdateData->where('updated_at>CAST("' . $last_update . '" AS DATETIME)');
         }
         $getUpdateData->where('updated_at<=CAST("' . $update_to . '" AS DATETIME)');
-        $updateData['ms_product'] = $getUpdateData->get()->getResultArray();
+        $getProduct  = $getUpdateData->get()->getResultArray();
+        $listProduct = [];
+
+        foreach ($getProduct as $productData) {
+            $noImage  = base_url('assets/images/no-image.PNG');
+            $productData['thumb_url'] = getImage($productData['product_image'], 'product', TRUE, $noImage);
+            $productData['image_url'] = getImage($productData['product_image'], 'product', FALSE, $noImage);
+            $listProduct[] = $productData;
+        }
+
+        $updateData['ms_product'] = $listProduct;
 
 
         $getProductUnit = $this->db->table('ms_product_unit');
@@ -356,6 +490,7 @@ class ApiPos extends BaseController
     // end download data //
 
 
+
     public function uploadData($store_key)
     {
         $getStore = $this->db->table('ms_store')->where('store_api_key', $store_key)->get()->getRowArray();
@@ -366,25 +501,231 @@ class ApiPos extends BaseController
             $store_code     = $getStore['store_code'];
 
             //get update data//
-            $updateData['hd_pos_session']               = $this->request->getPost('hd_pos_session') == null ? [] : $this->request->getPost('hd_pos_session');
-            $updateData['dt_pos_session_cash']          = $this->request->getPost('dt_pos_session_cash') == null ? [] : $this->request->getPost('dt_pos_session_cash');
-            $updateData['dt_pos_session_transaction']   = $this->request->getPost('dt_pos_session_transaction') == null ? [] : $this->request->getPost('dt_pos_session_transaction');
+            $sessionData['hd_pos_session']              = $this->request->getPost('hd_pos_session') == null ? [] : $this->request->getPost('hd_pos_session');
+            $sessionData['dt_pos_session_cash']         = $this->request->getPost('dt_pos_session_cash') == null ? [] : $this->request->getPost('dt_pos_session_cash');
+            $sessionData['dt_pos_session_transaction']  = $this->request->getPost('dt_pos_session_transaction') == null ? [] : $this->request->getPost('dt_pos_session_transaction');
 
-            $updateData['hd_pos_sales']                 = $this->request->getPost('hd_pos_sales') == null ? [] : $this->request->getPost('hd_pos_sales');
-            $updateData['dt_pos_sales']                 = $this->request->getPost('dt_pos_sales') == null ? [] : $this->request->getPost('dt_pos_sales');
-            $updateData['dt_pos_sales_payment']         = $this->request->getPost('dt_pos_sales_payment') == null ? [] : $this->request->getPost('dt_pos_sales_payment');
+            $salesData['hd_pos_sales']                  = $this->request->getPost('hd_pos_sales') == null ? [] : $this->request->getPost('hd_pos_sales');
+            $salesData['dt_pos_sales']                  = $this->request->getPost('dt_pos_sales') == null ? [] : $this->request->getPost('dt_pos_sales');
+            $salesData['dt_pos_sales_payment']          = $this->request->getPost('dt_pos_sales_payment') == null ? [] : $this->request->getPost('dt_pos_sales_payment');
 
 
-            $updateData['hd_pos_sales_return']          = $this->request->getPost('hd_pos_sales_return') == null ? [] : $this->request->getPost('hd_pos_sales_return');
-            $updateData['dt_pos_sales_return']          = $this->request->getPost('dt_pos_sales_return') == null ? [] : $this->request->getPost('dt_pos_sales_return');
+            $salesReturnData['hd_pos_sales_return']     = $this->request->getPost('hd_pos_sales_return') == null ? [] : $this->request->getPost('hd_pos_sales_return');
+            $salesReturnData['dt_pos_sales_return']     = $this->request->getPost('dt_pos_sales_return') == null ? [] : $this->request->getPost('dt_pos_sales_return');
 
             $updateData['log_password_control']         = $this->request->getPost('log_password_control') == null ? [] : $this->request->getPost('log_password_control');
             $updateData['last_record_number']           = $this->request->getPost('last_record_number') == null ? [] : $this->request->getPost('last_record_number');
 
+
+            $this->_update_pos_sales($salesData);
+            $this->_update_pos_session($sessionData);
             //$result = ['success' => true, 'message' => 'berhasil'];
+
+            $file_path = WRITEPATH . 'api_logs/' . date('Y-m-d_His') . 'api_post.txt';
+            $logger = new \App\Libraries\Logger($file_path);
+
+            $logger->AddRow('session_data');
+            $logger->AddRow(json_encode($sessionData));
+            $logger->AddRow('sales_data');
+            $logger->AddRow(json_encode($salesData));
+            $logger->AddRow('sales_return_data');
+            $logger->AddRow(json_encode($salesReturnData));
+            $logger->AddRow('update_data');
+            $logger->AddRow(json_encode($updateData));
+
+            $logger->Commit();
             $result = $updateData;
         }
-        echo var_dump($result);
-        //resultJSON($result);
+        resultJSON($result);
+    }
+
+    private function _get_session_id($session_key)
+    {
+        $session_id = 0;
+        if (isset($this->storageSessionID[$session_key])) {
+            $session_id = $this->storageSessionID[$session_key];
+        } else {
+            $getSessionID = $this->db->table('hd_pos_session')->select('session_id')->where('session_key', $session_key)->get()->getRowArray();
+            if ($getSessionID != null) {
+                $session_id                             = intval($getSessionID['session_id']);
+                $this->storageSessionID[$session_key]   = $session_id;
+            }
+        }
+
+        return $session_id;
+    }
+
+    private function _get_sales_id($pos_sales_invoice)
+    {
+
+        $sales_id = 0;
+        if (isset($this->storageSalesID[$pos_sales_invoice])) {
+            $sales_id = $this->storageSalesID[$pos_sales_invoice];
+        } else {
+            $getSalesID = $this->db->table('hd_pos_sales')->select('pos_sales_id')->where('pos_sales_invoice', $pos_sales_invoice)->get()->getRowArray();
+            if ($getSalesID != null) {
+                $sales_id                                   = intval($getSalesID['pos_sales_id']);
+                $this->storageSalesID[$pos_sales_invoice]   = $sales_id;
+            }
+        }
+
+        return $sales_id;
+    }
+
+    private function _get_sales_return_id($pos_sales_return_invoice)
+    {
+        $sales_return_id = 0;
+        if (isset($this->storageSalesReturnID[$pos_sales_return_invoice])) {
+            $sales_return_id = $this->storageSalesReturnID[$pos_sales_return_invoice];
+        } else {
+            $getSalesReturnID = $this->db->table('hd_pos_sales_return')->select('pos_sales_return_id')->where('pos_sales_return_invoice', $pos_sales_return_invoice)->get()->getRowArray();
+            if ($getSalesReturnID != null) {
+                $sales_return_id                                            = intval($getSalesReturnID['pos_sales_return_id']);
+                $this->storageSalesReturnID[$pos_sales_return_invoice]      = $sales_return_id;
+            }
+        }
+
+        return $sales_return_id;
+    }
+
+    private function _update_pos_session($sessionData)
+    {
+        // hd_pos_session
+        $hdPosSessionData = [];
+        foreach ($sessionData['hd_pos_session'] as $row) {
+            $sessionData = [
+                'session_key'       => $row['session_key'],
+                'store_id'          => $row['store_id'],
+                'open_balance'      => $row['open_balance'],
+                'close_balance'     => $row['close_balance'],
+                'close_at'          => $row['close_at'],
+                'closed'            => $row['closed'],
+                'session_remark'    => $row['session_remark'],
+                'user_id'           => $row['user_id'],
+                'created_at'        => $row['created_at'],
+                'updated_at'        => $row['updated_at'],
+            ];
+            $hdPosSessionData[] = $sessionData;
+        }
+        $qUpdateHdPosSession = $this->create_upsert_query('hd_pos_session', $hdPosSessionData);
+        $this->db->query($qUpdateHdPosSession);
+
+        // dt_pos_session_cash
+        $dtCashSessionData = [];
+        foreach ($sessionData['dt_pos_session_cash'] as $row) {
+            $session_key    = $row['session_key'];
+            $session_id     = $this->_get_session_id($session_key);
+
+            $dtCashSessionData[] = [
+                'session_id'    => $session_id,
+                'cash_balance'  => $row['cash_balance'],
+                'cash_type'     => $row['cash_type'],
+                'cash_remark'   => $row['cash_remark'],
+                'created_at'    => $row['created_at'],
+            ];
+        }
+
+        $qUpdateDtPosSessionCash = $this->create_upsert_query('dt_pos_session_cash', $dtCashSessionData);
+        $this->db->query($qUpdateDtPosSessionCash);
+
+
+        // dt_pos_session_transaction
+        $dtTransSessionData = [];
+        foreach ($sessionData['dt_pos_session_transaction'] as $row) {
+            $session_key        = $row['session_key'];
+            $session_id         = $this->_get_session_id($session_key);
+
+            $transaction_code   = $row['transaction_code'];
+            $transaction_id     = $row['transaction_type'] == 'SI' ? $this->_get_sales_id($transaction_code) : $this->_get_sales_return_id($transaction_code);
+
+            $dtTransSessionData[] = [
+                'session_id'        => $session_id,
+                'transaction_id'    => $transaction_id,
+                'transaction_type'  => $row['transaction_type'],
+                'created_at'        => $row['created_at']
+            ];
+        }
+        $qUpdateDtPosSessionTrans = $this->create_upsert_query('dt_pos_session_transaction', $dtTransSessionData);
+        $this->db->query($qUpdateDtPosSessionTrans);
+    }
+
+    private function _update_pos_sales($salesData)
+    {
+        foreach ($salesData['hd_pos_sales'] as $row) {
+            $pos_sales_invoice = $row['pos_sales_invoice'];
+            $hdSalesData = [
+                'pos_sales_invoice'             => $row['pos_sales_invoice'],
+                'pos_sales_date'                => $row['pos_sales_date'],
+                'pos_sales_type'                => $row['pos_sales_type'],
+                'customer_id'                   => $row['customer_id'],
+                'customer_group'                => $row['customer_group'],
+                'store_id'                      => $row['store_id'],
+                'pos_sales_remark'              => $row['pos_sales_remark'],
+                'pos_sales_total'               => $row['pos_sales_total'],
+                'pos_total_payment'             => $row['pos_total_payment'],
+                'pos_total_margin_allocation'   => $row['pos_total_margin_allocation'],
+                'customer_initial_point'        => $row['customer_initial_point'],
+                'customer_add_point'            => $row['customer_add_point'],
+                'user_id'                       => $row['user_id'],
+                'has_sales_return'              => $row['has_sales_return'],
+                'pos_sales_cancel'              => $row['pos_sales_cancel'],
+                'created_at'                    => $row['created_at'],
+                'updated_at'                    => $row['updated_at'],
+            ];
+
+            $getSales =  $this->db->table('hd_pos_sales')->where('pos_sales_invoice', $pos_sales_invoice)->get()->getRowArray();
+            if ($getSales == null) {
+                // insert to sales and update point //
+                $this->db->table('hd_pos_sales')->insert($hdSalesData);
+                if ($this->db->affectedRows() > 0) {
+                    $this->logQueries[] = $this->db->getLastQuery()->getQuery();
+                }
+                $pos_sales_id       = $this->db->insertID();
+                $this->storageSalesID[$pos_sales_invoice]   = $pos_sales_id;
+
+                $customer_add_point = floatval($row['customer_add_point']);
+                if ($customer_add_point > 0) {
+                    $this->db->table('ms_customer')->set('customer_point', 'customer_point+' . $customer_add_point, false)->where('customer_id', $row['customer_id'])->update();
+                    if ($this->db->affectedRows() > 0) {
+                        $this->logQueries[] = $this->db->getLastQuery()->getQuery();
+                    }
+
+                    $history_point = [
+                        'customer_id'       => $row['customer_id'],
+                        'log_point_remark'  => 'Belanja Rp ' . numberFormat($row['pos_sales_total']),
+                        'customer_point'    => $customer_add_point
+
+                    ];
+                    $this->db->table('customer_history_point')->insert($history_point);
+                    if ($this->db->affectedRows() > 0) {
+                        $this->logQueries[] = $this->db->getLastQuery()->getQuery();
+                    }
+                }
+            } else {
+                $pos_sales_id                               = intval($getSales['pos_sales_id']);
+                $this->storageSalesID[$pos_sales_invoice]   = $pos_sales_id;
+
+                $this->db->table('hd_pos_sales')->where('pos_sales_id', $pos_sales_id)->update($hdSalesData);
+                if ($this->db->affectedRows() > 0) {
+                    $this->logQueries[] = $this->db->getLastQuery()->getQuery();
+                }
+            }
+        }
+
+
+        foreach ($salesData['dt_pos_sales'] as $row) {
+            $pos_sales_id   = $this->_get_sales_id($row['pos_sales_invoice']);
+            $item_id        = $row['item_id'];
+            $getDetail      = $this->db->table('dt_pos_sales')
+                ->select('detail_id')
+                ->where('pos_sales_id', $pos_sales_id)
+                ->where('item_id', $item_id)
+                ->get()
+                ->getRowArray();
+
+            if ($getDetail == null) {
+                $detailData = [];
+            }
+        }
     }
 }

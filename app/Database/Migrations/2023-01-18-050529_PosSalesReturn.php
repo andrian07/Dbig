@@ -66,11 +66,6 @@ class PosSalesReturn extends Migration
                 'constraint' => ['Y', 'N'],
                 'default' => 'N'
             ],
-            'posted' => [
-                'type' => 'ENUM',
-                'constraint' => ['Y', 'N'],
-                'default' => 'N'
-            ],
         ]);
         $this->forge->addField('created_at DATETIME DEFAULT CURRENT_TIMESTAMP');
         $this->forge->addField('updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
@@ -136,6 +131,8 @@ class PosSalesReturn extends Migration
                 'default' => 0.00
             ],
         ]);
+        $this->forge->addField('created_at DATETIME DEFAULT CURRENT_TIMESTAMP');
+
 
         $this->forge->addKey('detail_id', TRUE);
         $this->forge->addKey(['pos_sales_return_id', 'item_id'], FALSE, TRUE);

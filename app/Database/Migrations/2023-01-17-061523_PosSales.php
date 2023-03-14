@@ -87,11 +87,6 @@ class PosSales extends Migration
                 'constraint' => ['Y', 'N'],
                 'default' => 'N'
             ],
-            'posted' => [
-                'type' => 'ENUM',
-                'constraint' => ['Y', 'N'],
-                'default' => 'N'
-            ],
         ]);
         $this->forge->addField('created_at DATETIME DEFAULT CURRENT_TIMESTAMP');
         $this->forge->addField('updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
@@ -138,6 +133,8 @@ class PosSales extends Migration
                 'constraint' => '500',
             ],
         ]);
+        $this->forge->addField('created_at DATETIME DEFAULT CURRENT_TIMESTAMP');
+
         $this->forge->addKey('detail_id',  TRUE);
         $this->forge->createTable('dt_pos_sales_payment');
 
@@ -206,13 +203,12 @@ class PosSales extends Migration
                 'unsigned'       => true,
             ],
         ]);
-        $this->forge->addField('updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
+        $this->forge->addField('created_at DATETIME DEFAULT CURRENT_TIMESTAMP');
 
         $this->forge->addKey('detail_id', TRUE);
         $this->forge->addKey(['pos_sales_id', 'item_id'], FALSE, TRUE);
         $this->forge->addForeignKey('pos_sales_id', 'hd_pos_sales', 'pos_sales_id');
         $this->forge->addForeignKey('item_id', 'ms_product_unit', 'item_id');
-        $this->forge->addForeignKey('salesman_id', 'ms_salesman', 'salesman_id');
         $this->forge->createTable('dt_pos_sales');
 
         // Create temp_pos_sales table //
