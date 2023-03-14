@@ -96,7 +96,6 @@ class PaymentReceivable extends Migration
         //$this->forge->addField('updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP');
         $this->forge->addKey('dt_payment_receivablet_id', TRUE);
         $this->forge->addForeignKey('payment_receivable_id', 'hd_payment_receivable', 'payment_receivable_id');
-        $this->forge->addForeignKey('dt_payment_receivable_sales_id', 'ms_salesman', 'salesman_id');
         $this->forge->createTable('dt_payment_receivable');
 
 

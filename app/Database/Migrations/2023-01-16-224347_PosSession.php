@@ -86,12 +86,8 @@ class PosSession extends Migration
                 'constraint' => ['SI', 'SR'],
                 'default' => 'SI'
             ],
-            'posted' => [
-                'type' => 'ENUM',
-                'constraint' => ['Y', 'N'],
-                'default' => 'N'
-            ],
         ]);
+        $this->forge->addField('created_at DATETIME DEFAULT CURRENT_TIMESTAMP');
 
         $this->forge->addKey('detail_id', TRUE);
         $this->forge->addForeignKey('session_id', 'hd_pos_session', 'session_id');
@@ -123,11 +119,6 @@ class PosSession extends Migration
             'cash_remark' => [
                 'type' => 'TEXT',
                 'constraint' => '500',
-            ],
-            'posted' => [
-                'type' => 'ENUM',
-                'constraint' => ['Y', 'N'],
-                'default' => 'N'
             ],
         ]);
 

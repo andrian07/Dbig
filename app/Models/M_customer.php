@@ -169,7 +169,7 @@ class M_customer extends Model
 
     public function verificationEmail($customer_id)
     {
-        $this->db->query('LOCK TABLES ms_customer WRITE,ms_mapping_area READ,ms_salesman READ');
+        $this->db->query('LOCK TABLES ms_customer WRITE,ms_mapping_area READ,ms_salesman READ,ms_config READ,customer_history_point WRITE');
         $saveQueries = NULL;
 
         $result = ['success' => false, 'message' => 'Verifikasi gagal', 'customer_data' => null];
@@ -189,7 +189,66 @@ class M_customer extends Model
                 }
 
                 // check referal code //
+                if ($getCustomer['invite_by_referral_code'] != '') {
+                    $allowedCustomerGroup = ['G3', 'G4']; //G3=GOLD G4=PLATINUM
+                    //check registered user group//
+                    if (in_array($getCustomer['customer_group'], $allowedCustomerGroup)) {
+                        $getInviteUser = $this->getCustomerByReferralCode($getCustomer['invite_by_referral_code'])->getRowArray();
+                        if ($getInviteUser != NULL) {
+                            //check inviter user group//
+                            if (in_array($getInviteUser['customer_group'], $allowedCustomerGroup)) {
+                                $getConfigPoint = $this->db->table('ms_config')
+                                    ->select('config_value')
+                                    ->where('config_group', 'default')
+                                    ->where('config_subgroup', 'customer_group')
+                                    ->where('config_name', 'referral_point')
+                                    ->get()->getRowArray();
+                                $add_point = $getConfigPoint == NULL ? 0 : floatval($getConfigPoint['config_value']);
 
+                                $customer_point     = floatval($getCustomer['customer_point']);
+                                $new_customer_point = $customer_point + $add_point;
+
+                                $inviter_id         = intval($getInviteUser['customer_id']);
+                                $inviter_point      = floatval($getInviteUser['customer_point']);
+                                $new_inviter_point  = $inviter_point + $add_point;
+
+                                // update batch  point //
+                                $updatePoint = [];
+                                $updatePoint[] = [
+                                    'customer_id'       => $customer_id,
+                                    'customer_point'    => $new_customer_point
+                                ];
+
+                                $updatePoint[] = [
+                                    'customer_id'       => $inviter_id,
+                                    'customer_point'    => $new_inviter_point
+                                ];
+                                $this->db->table('ms_customer')->updateBatch($updatePoint, 'customer_id');
+                                if ($this->db->affectedRows() > 0) {
+                                    $saveQueries[]  = $this->db->getLastQuery()->getQuery();
+                                }
+
+                                // insert log history point //
+                                $historyData = [];
+                                $historyData[] = [
+                                    'customer_id'       => $customer_id,
+                                    'log_point_remark'  => 'Bonus referral code',
+                                    'customer_point'    =>  $add_point
+                                ];
+                                $historyData[] = [
+                                    'customer_id'       => $inviter_id,
+                                    'log_point_remark'  => 'Bonus referral code',
+                                    'customer_point'    =>  $add_point
+                                ];
+                                $this->db->table('customer_history_point')->insertBatch($historyData);
+                                if ($this->db->affectedRows() > 0) {
+                                    $saveQueries[]  = $this->db->getLastQuery()->getQuery();
+                                }
+                            }
+                        }
+                    }
+                }
+                // end check referal code //
 
                 if ($this->db->transStatus() === false) {
                     $this->db->transRollback();

@@ -188,6 +188,11 @@ class Purchase extends Migration
                 'constraint' => '25,2',
                 'default' => 0.00
             ],
+            'dt_purchase_dicount_nota' => [
+                'type' => 'DECIMAL',
+                'constraint' => '25,2',
+                'default' => 0.00
+            ],
             'dt_purchase_dpp' => [
                 'type' => 'DECIMAL',
                 'constraint' => '25,2',

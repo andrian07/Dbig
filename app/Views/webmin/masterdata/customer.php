@@ -310,6 +310,14 @@ $assetsUrl = base_url('assets');
         let formMode = '';
         let filter_point_value = new AutoNumeric('#filter_point_value', configQty);
 
+        function getExpDate(add_year) {
+            let curDate = new Date();
+            let curYear = curDate.getFullYear();
+            let newYear = curDate.getFullYear() + add_year;
+            let newDate = new Date(newYear, 12, 0);
+            return newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate()
+        }
+
         function _initButton() {
             $('#btnadd').prop('disabled', !hasRole('customer.add'));
             if (!hasRole('customer.edit')) {
@@ -649,6 +657,17 @@ $assetsUrl = base_url('assets');
         $('#btnadd').click(function(e) {
             e.preventDefault();
             addMode();
+        })
+
+        $('#customer_group').on('change', function() {
+            let opt = $(this).val();
+            if (formMode == 'add') {
+                if (opt == 'G2' || opt == 'G3' || opt == 'G4') {
+                    $('#exp_date').val(getExpDate(2));
+                } else {
+                    $('#exp_date').val('2050-01-01');
+                }
+            }
         })
 
         $('.close-modal').click(function(e) {

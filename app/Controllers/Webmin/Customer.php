@@ -292,7 +292,7 @@ class Customer extends WebminController
                     helper('text');
                     unset($input['customer_id']);
 
-                    $customer_password = strtoupper(random_string('alnum', 8));
+                    $customer_password = 'dbig1234';
                     $input['customer_password'] = password_hash($customer_password, PASSWORD_BCRYPT);
 
                     $isFound        = FALSE;

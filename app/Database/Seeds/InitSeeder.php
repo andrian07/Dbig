@@ -352,6 +352,13 @@ class InitSeeder extends Seeder
             'config_value'      => '3'
         ];
 
+        $cfg[] = [
+            'config_group'      => 'default',
+            'config_subgroup'   => 'customer_group',
+            'config_name'       => 'referral_point',
+            'config_value'      => '20'
+        ];
+
         $this->db->table('ms_config')->ignore(true)->insertBatch($cfg);
     }
 }
