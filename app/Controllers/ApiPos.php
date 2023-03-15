@@ -516,7 +516,7 @@ class ApiPos extends BaseController
             $updateData['log_password_control']         = $this->request->getPost('log_password_control') == null ? [] : $this->request->getPost('log_password_control');
             $updateData['last_record_number']           = $this->request->getPost('last_record_number') == null ? [] : $this->request->getPost('last_record_number');
 
-
+            $this->_update_data($updateData);
             $this->_update_pos_sales($salesData);
             $this->_update_pos_session($sessionData);
             //$result = ['success' => true, 'message' => 'berhasil'];
@@ -609,6 +609,9 @@ class ApiPos extends BaseController
         }
         $qUpdateHdPosSession = $this->create_upsert_query('hd_pos_session', $hdPosSessionData);
         $this->db->query($qUpdateHdPosSession);
+        if ($this->db->affectedRows() > 0) {
+            $this->logQueries[] = $this->db->getLastQuery()->getQuery();
+        }
 
         // dt_pos_session_cash
         $dtCashSessionData = [];
@@ -627,6 +630,9 @@ class ApiPos extends BaseController
 
         $qUpdateDtPosSessionCash = $this->create_upsert_query('dt_pos_session_cash', $dtCashSessionData);
         $this->db->query($qUpdateDtPosSessionCash);
+        if ($this->db->affectedRows() > 0) {
+            $this->logQueries[] = $this->db->getLastQuery()->getQuery();
+        }
 
 
         // dt_pos_session_transaction
@@ -647,10 +653,16 @@ class ApiPos extends BaseController
         }
         $qUpdateDtPosSessionTrans = $this->create_upsert_query('dt_pos_session_transaction', $dtTransSessionData);
         $this->db->query($qUpdateDtPosSessionTrans);
+        if ($this->db->affectedRows() > 0) {
+            $this->logQueries[] = $this->db->getLastQuery()->getQuery();
+        }
     }
 
     private function _update_pos_sales($salesData)
     {
+        $warehouse_id       = 1;
+        $voucher_payment_id = 2;
+
         foreach ($salesData['hd_pos_sales'] as $row) {
             $pos_sales_invoice = $row['pos_sales_invoice'];
             $hdSalesData = [
@@ -712,10 +724,25 @@ class ApiPos extends BaseController
             }
         }
 
+        $reduceStock = [];
+        // $reduceStock = [
+        //     'P0001' => ['product_id' => 1 ,'stock'=>10],
+        //     'P0002' => ['product_id' => 2 ,'stock'=>100]
+        // ];
 
         foreach ($salesData['dt_pos_sales'] as $row) {
-            $pos_sales_id   = $this->_get_sales_id($row['pos_sales_invoice']);
-            $item_id        = $row['item_id'];
+            $pos_sales_id       = $this->_get_sales_id($row['pos_sales_invoice']);
+            $item_id            = $row['item_id'];
+            $sales_qty          = floatval($row['sales_qty']);
+            $product_cogs       = floatval($row['product_cogs']);
+            $purchase_price     = floatval($row['purchase_price']);
+            $product_price      = floatval($row['product_price']);
+            $disc               = floatval($row['disc']);
+            $price_disc         = floatval($row['price_disc']);
+            $sales_price        = floatval($row['sales_price']);
+            $margin_allocation  = floatval($row['margin_allocation']);
+            $salesman_id        = $row['salesman_id'];
+
             $getDetail      = $this->db->table('dt_pos_sales')
                 ->select('detail_id')
                 ->where('pos_sales_id', $pos_sales_id)
@@ -724,8 +751,130 @@ class ApiPos extends BaseController
                 ->getRowArray();
 
             if ($getDetail == null) {
-                $detailData = [];
+                $getProduct = $this->db->table('ms_product_unit')
+                    ->select('ms_product.product_code,ms_product_unit.product_id,ms_product_unit.product_content,ms_product.is_parcel')
+                    ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+                    ->where('ms_product_unit.item_id', $item_id)
+                    ->get()
+                    ->getRowArray();
+
+                $product_code       = $getProduct['product_code'];
+                $product_id         = $getProduct['product_id'];
+                $product_content    = floatval($getProduct['product_content']);
+                if ($getProduct['is_parcel'] == 'N') {
+                    $stock = $sales_qty * $product_content;
+                    if (isset($reduceStock[$product_code])) {
+                        $reduceStock[$product_code]['stock'] += $stock;
+                    } else {
+                        $reduceStock[$product_code] = [
+                            'product_id'    => $product_id,
+                            'stock'         => $stock,
+                        ];
+                    }
+                } else {
+                    $getParcelItem = $this->db->table('ms_product_parcel')
+                        ->select('ms_product_parcel.product_id as parcel_id,ms_product.product_code,ms_product_unit.product_id,ms_product_unit.product_content,ms_product_parcel.item_qty')
+                        ->join('ms_product_unit', 'ms_product_unit.item_id=ms_product_parcel.item_id')
+                        ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+                        ->where('ms_product_parcel.product_id', $product_id)
+                        ->get()
+                        ->getResultArray();
+                    foreach ($getParcelItem as $parcelItem) {
+                        $item_product_id        = $parcelItem['product_id'];
+                        $item_product_code      = $parcelItem['product_code'];
+                        $item_product_content   = floatval($parcelItem['product_content']);
+                        $item_qty               = $parcelItem['item_qty'];
+                        $stock                  = $sales_qty * ($item_product_content * $item_qty);
+                        if (isset($reduceStock[$item_product_code])) {
+                            $reduceStock[$item_product_code]['stock'] += $stock;
+                        } else {
+                            $reduceStock[$item_product_code] = [
+                                'product_id'    => $item_product_id,
+                                'stock'         => $stock,
+                            ];
+                        }
+                    }
+                }
+
+                $detailData = [
+                    'pos_sales_id'      => $pos_sales_id,
+                    'item_id'           => $item_id,
+                    'sales_qty'         => $sales_qty,
+                    'product_cogs'      => $product_cogs,
+                    'purchase_price'    => $purchase_price,
+                    'product_price'     => $product_price,
+                    'disc'              => $disc,
+                    'price_disc'        => $price_disc,
+                    'sales_price'       => $sales_price,
+                    'margin_allocation' => $margin_allocation,
+                    'salesman_id'       => $salesman_id
+                ];
+
+                $this->db->table('dt_pos_sales')->insert($detailData);
+                if ($this->db->affectedRows() > 0) {
+                    $this->logQueries[] = $this->db->getLastQuery()->getQuery();
+                }
             }
+        }
+
+        if (count($reduceStock) > 0) {
+            // update ms_product_stock //
+            $qUpdateStock = "INSERT INTO ms_product_stock(product_id,warehouse_id,stock) VALUES";
+            $vUpdateStock = [];
+            foreach ($reduceStock as $row) {
+                $product_id     = $row['product_id'];
+                $reduce_stock   = (-1 * $row['stock']);
+                $vUpdateStock[] = "('$product_id','$warehouse_id',$reduce_stock)";
+            }
+            $qUpdateStock .= implode(',', $vUpdateStock) . " ON DUPLICATE KEY UPDATE stock=stock+VALUES(stock)";
+
+            $this->db->query($qUpdateStock);
+            if ($this->db->affectedRows() > 0) {
+                $this->logQueries[] = $this->db->getLastQuery()->getQuery();
+            }
+        }
+
+        foreach ($salesData['dt_pos_sales_payment'] as $row) {
+            $pos_sales_id       = $this->_get_sales_id($row['pos_sales_invoice']);
+            $payment_method_id  = intval($row['payment_method_id']);
+            $dataPayment = [
+                'pos_sales_id'          => $pos_sales_id,
+                'payment_method_id'     => $payment_method_id,
+                'payment_card_number'   => $row['payment_card_number'],
+                'payment_appr_code'     => $row['payment_appr_code'],
+                'payment_balance'       => $row['payment_balance'],
+                'payment_remark'        => $row['payment_remark'],
+            ];
+
+            $this->db->table('dt_pos_sales_payment')->insert($dataPayment);
+            if ($this->db->affectedRows() > 0) {
+                $this->logQueries[] = $this->db->getLastQuery()->getQuery();
+            }
+
+            if ($payment_method_id == $voucher_payment_id) {
+                $customer_id            = $row['customer_id'];
+                $voucher_code           = $row['payment_card_number'];
+                $update_voucher_data    = [
+                    'voucher_status'    => 'used',
+                    'used_by'           => $customer_id,
+                    'used_at'           => $row['created_at']
+                ];
+                $this->db->table('ms_voucher')->set($update_voucher_data)->where('voucher_code', $voucher_code)->update();
+                if ($this->db->affectedRows() > 0) {
+                    $this->logQueries[] = $this->db->getLastQuery()->getQuery();
+                }
+            }
+        }
+    }
+
+    private function _update_data($updateData)
+    {
+        foreach ($updateData['log_password_control'] as $passwordControl) {
+            $pcData = [
+                'password_control_id' => $passwordControl['password_control_id'],
+
+            ];
+            $this->db->table('log_password_control')->insert($pcData);
         }
     }
 }
