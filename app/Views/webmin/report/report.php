@@ -103,9 +103,12 @@ $report_role = $user_role['report'];
                     <!-- /.card-header -->
                     <div class="card-body">
                         <ul class="list-group">
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-list') ?>" class="text-primary">Laporan Pengajuan</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-card') ?>" class="text-primary">Laporan Purchase Order</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-card') ?>" class="text-primary">Laporan Purchase</a></li>
+                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-list') ?>" class="text-primary">Laporan PO</a></li>
+                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-card') ?>" class="text-primary">Laporan Pembelian</a></li>
+                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-card') ?>" class="text-primary">Laporan Pembelian Rinci</a></li>
+                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-card') ?>" class="text-primary">Laporan Pembelian Per Supplier</a></li>
+                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-card') ?>" class="text-primary">Laporan Pembelian Per Merek</a></li>
+                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-card') ?>" class="text-primary">Laporan Pembelian Per Kategori</a></li>
                         </ul>
                     </div>
                     <!-- /.card-body -->

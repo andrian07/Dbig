@@ -31,6 +31,7 @@ class M_api_accounting extends Model
         $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id=hd_purchase.purchase_warehouse_id');
         $builder->join('ms_store', 'ms_store.store_id=ms_warehouse.store_id');
         $builder->where('purchase_id >=', $api_last_record_id);
+        $builder->orderBy('purchase_id', 'ASC');
         return $builder->get();
     }
 
@@ -40,6 +41,7 @@ class M_api_accounting extends Model
         $builder->select('*');
         $builder->join('ms_supplier', 'ms_supplier.supplier_id=hd_payment_debt.payment_debt_supplier_id');
         $builder->where('payment_debt_id >=', $api_last_record_id);
+         $builder->orderBy('payment_debt_id', 'ASC');
         return $builder->get();
     }
 
@@ -50,6 +52,7 @@ class M_api_accounting extends Model
         $builder->join('ms_supplier', 'ms_supplier.supplier_id=hd_retur_purchase.hd_retur_supplier_id');
         $builder->where('hd_retur_status', 'Selesai');
         $builder->where('hd_retur_purchase_id >=', $api_last_record_id);
+        $builder->orderBy('hd_retur_purchase_id', 'ASC');
         return $builder->get();
     }
 
@@ -60,6 +63,7 @@ class M_api_accounting extends Model
         $builder->join('ms_customer', 'ms_customer.customer_id=hd_sales_admin.sales_customer_id');
         $builder->join('ms_store', 'ms_store.store_id=hd_sales_admin.sales_store_id');
         $builder->where('sales_admin_id >=', $api_last_record_id);
+        $builder->orderBy('sales_admin_id', 'ASC');
         return $builder->get();
     }
 
@@ -70,6 +74,7 @@ class M_api_accounting extends Model
         $builder->select('*');
         $builder->join('ms_customer', 'ms_customer.customer_id=hd_payment_receivable.payment_receivable_customer_id');
         $builder->where('payment_receivable_id >=', $api_last_record_id);
+        $builder->orderBy('payment_receivable_id', 'ASC');
         return $builder->get();
     }
 

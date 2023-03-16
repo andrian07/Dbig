@@ -6,7 +6,7 @@ use CodeIgniter\Config\BaseConfig;
 
 class MyApp extends BaseConfig
 {
-    public $allowedHosts        = ['localhost', 'dbig.stoklogistiksks.com'];
+     public $allowedHosts        = ['localhost', 'dbig.stoklogistiksks.com','dbig.borneoeternityswiftlet.co.id'];
     public $uploadFileType      = [
         'image' => ['jpg', 'jpeg', 'png']
     ];
@@ -423,41 +423,27 @@ class MyApp extends BaseConfig
             'upload_dir'    => 'contents/upload/product/',
             'thumb_dir'     => 'contents/thumb/product/',
         ],
-<<<<<<< HEAD
-         'banner' => [
-            'width'         => 1200,
-            'height'        => 500,
-            'create_thumb'  => TRUE,
-            'thumb_width'   => 1200,
-            'thumb_height'  => 500,
-=======
+        
         'banner' => [
             'width'         => 1900,
             'height'        => 600,
             'create_thumb'  => TRUE,
             'thumb_width'   => 950,
             'thumb_height'  => 300,
->>>>>>> a5e17f227f9d58d432f30a114fd19fcc5c66593c
             'upload_dir'    => 'contents/upload/banner/',
             'thumb_dir'     => 'contents/thumb/banner/',
         ],
+
         'promo' => [
-<<<<<<< HEAD
-            'width'         => 600,
-            'height'        => 1000,
-            'create_thumb'  => TRUE,
-            'thumb_width'   => 600,
-            'thumb_height'  => 1000,
-=======
             'width'         => 1448,
             'height'        => 2048,
             'create_thumb'  => TRUE,
             'thumb_width'   => 905,
             'thumb_height'  => 1280,
->>>>>>> a5e17f227f9d58d432f30a114fd19fcc5c66593c
             'upload_dir'    => 'contents/upload/promo/',
             'thumb_dir'     => 'contents/thumb/promo/',
         ],
+
         'reward_point' => [
             'width'         => 800,
             'height'        => 800,
