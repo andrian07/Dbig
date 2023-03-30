@@ -6,7 +6,7 @@ use CodeIgniter\Config\BaseConfig;
 
 class MyApp extends BaseConfig
 {
-     public $allowedHosts        = ['localhost', 'dbig.stoklogistiksks.com','dbig.borneoeternityswiftlet.co.id'];
+    public $allowedHosts        = ['localhost', 'dbig.stoklogistiksks.com', 'dbig.borneoeternityswiftlet.co.id'];
     public $uploadFileType      = [
         'image' => ['jpg', 'jpeg', 'png']
     ];
@@ -200,10 +200,10 @@ class MyApp extends BaseConfig
                 'edit'          => ['text' => 'Ubah'],
                 'delete'        => ['text' => 'Hapus'],
                 'print'         => ['text' => 'Cetak'],
-                'update_payment'=> ['text' => 'Update Pembayaran'],
+                'update_payment' => ['text' => 'Update Pembayaran'],
             ]
         ],
-        
+
         'debt_repayment' => [
             'text'   => 'Pelunasan Hutang',
             'roles'   => [
@@ -423,7 +423,6 @@ class MyApp extends BaseConfig
             'upload_dir'    => 'contents/upload/product/',
             'thumb_dir'     => 'contents/thumb/product/',
         ],
-        
         'banner' => [
             'width'         => 1900,
             'height'        => 600,

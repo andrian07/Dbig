@@ -104,12 +104,11 @@ $routes->group('api', static function ($routes) {
 
     $routes->post('ExchangePointProcess', 'Api::exchangePointProcess');
 
-    $routes->post('Register/(:alpha)', 'Api::registerCustomer/$1'); 
+    $routes->post('Register/(:alpha)', 'Api::registerCustomer/$1');
 
     $routes->post('ChangePass', 'Api::changePass');
 
     $routes->post('ForgetPass', 'Api::resetPass');
-    
 });
 
 
@@ -126,7 +125,6 @@ $routes->group('api-accounting', static function ($routes) {
     $routes->post('post-accounting-sales-admin', 'ApiAccounting::post_accounting_sales_admin');
 
     $routes->post('post-accounting-receivable-repayment', 'ApiAccounting::post_accounting_receivable_repayment');
-    
 });
 
 
@@ -147,7 +145,7 @@ $routes->group('devman', static function ($routes) {
     $routes->get('log-queries-detail/(:num)', 'Devman::getLogQueriesDetail/$1', ['filter' => 'devauth']);
 
     $routes->get('install', 'Devman::install', ['filter' => 'devauth']);
-    
+
     $routes->get('test-email', 'Devman::testEmail', ['filter' => 'devauth']);
 });
 
@@ -627,7 +625,6 @@ $routes->group('webmin/retur', ['filter' => 'webminauth'], static function ($rou
     $routes->post('savepayment', 'Webmin\Retur\Retur::savepayment');
 
     $routes->get('cancel-retur/(:alphanum)', 'Webmin\Retur\Retur::cancelRetur/$1');
-
 });
 
 
@@ -881,9 +878,10 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 
     /* Section Sales */
 
-    $routes->get('view-sales-list', 'Webmin\Report\ReportSales::index');
+    $routes->get('view-sales-list', 'Webmin\Report\ReportPos::index');
 
-    $routes->get('sales-list', 'Webmin\Report\ReportSales::salesList');
+    $routes->get('sales-list', 'Webmin\Report\ReportPos::salesList');
+    $routes->get('detail-sales-list', 'Webmin\Report\ReportPos::detailSalesList');
 
     $routes->get('view-sales-list-group-salesman', 'Webmin\Report\ReportSales::viewSalesListGroupSalesman');
 
@@ -969,10 +967,11 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
 /* api pos */
 $routes->group('api-pos', static function ($routes) {
     $routes->get('/', 'ApiPos::index');
-    $routes->get('get-datetime', 'ApiPos::getUpdateTime');
+    $routes->get('get-datetime/(:alphanum)', 'ApiPos::getUpdateTime/$1');
     $routes->post('save-update-time/(:alphanum)', 'ApiPos::saveUpdateTime/$1');
     $routes->post('download/(:alphanum)', 'ApiPos::downloadData/$1');
     $routes->post('upload/(:alphanum)', 'ApiPos::uploadData/$1');
+    $routes->get('post-to-accounting', 'ApiPos::postToAccounting');
 });
 /* end api pos */
 

@@ -56,6 +56,14 @@ class PosSalesReturn extends Migration
                 'constraint' => '8,2',
                 'default' => 0.00
             ],
+            'payment_list' => [
+                'type'          => 'VARCHAR',
+                'constraint'    => '255'
+            ],
+            'payment_remark' => [
+                'type'          => 'VARCHAR',
+                'constraint'    => '255'
+            ],
             'user_id'          => [
                 'type'           => 'INT',
                 'constraint'     => 11,
@@ -130,6 +138,26 @@ class PosSalesReturn extends Migration
                 'constraint' => '25,2',
                 'default' => 0.00
             ],
+            'sales_return_dpp' => [
+                'type' => 'DECIMAL',
+                'constraint' => '25,2',
+                'default' => 0.00
+            ],
+            'sales_return_ppn' => [
+                'type' => 'DECIMAL',
+                'constraint' => '25,2',
+                'default' => 0.00
+            ],
+            'margin_allocation' => [
+                'type' => 'DECIMAL',
+                'constraint' => '25,2',
+                'default' => 0.00
+            ],
+            'salesman_id'        => [
+                'type'           => 'INT',
+                'constraint'     => 11,
+                'unsigned'       => true,
+            ],
         ]);
         $this->forge->addField('created_at DATETIME DEFAULT CURRENT_TIMESTAMP');
 
@@ -187,6 +215,26 @@ class PosSalesReturn extends Migration
                 'type' => 'DECIMAL',
                 'constraint' => '25,2',
                 'default' => 0.00
+            ],
+            'temp_dpp' => [
+                'type' => 'DECIMAL',
+                'constraint' => '25,2',
+                'default' => 0.00
+            ],
+            'temp_ppn' => [
+                'type' => 'DECIMAL',
+                'constraint' => '25,2',
+                'default' => 0.00
+            ],
+            'margin_allocation' => [
+                'type' => 'DECIMAL',
+                'constraint' => '25,2',
+                'default' => 0.00
+            ],
+            'salesman_id'        => [
+                'type'           => 'INT',
+                'constraint'     => 11,
+                'unsigned'       => true,
             ],
             'user_id'          => [
                 'type'           => 'INT',

@@ -61,4 +61,69 @@ class M_sales_pos extends Model
         saveQueries($saveQueries, 'sales_pos', $detail_id, 'Edit_Salesman');
         return $save;
     }
+
+    /* Report Section */
+    public function getReportSalesList($start_date, $end_date, $store_id = '', $user_id = '', $product_tax = '')
+    {
+        // get sales //
+        $querySales = $this->db->table('dt_pos_sales');
+        $querySales->select('hd_pos_sales.pos_sales_invoice,hd_pos_sales.pos_sales_date,hd_pos_sales.payment_list,ms_store.store_code,user_account.user_realname,sum(dt_pos_sales.sales_dpp*dt_pos_sales.sales_qty) as sales_dpp,sum(dt_pos_sales.sales_ppn*dt_pos_sales.sales_qty) as sales_ppn,hd_pos_sales.created_at')
+            ->join('hd_pos_sales', 'hd_pos_sales.pos_sales_id=dt_pos_sales.pos_sales_id')
+            ->join('ms_store', 'ms_store.store_id=hd_pos_sales.store_id')
+            ->join('user_account', 'user_account.user_id=hd_pos_sales.user_id')
+            ->where("(hd_pos_sales.pos_sales_date BETWEEN '$start_date' AND '$end_date')");
+
+        if ($store_id != '') {
+            $querySales->where('hd_pos_sales.store_id', $store_id);
+        }
+
+        if ($user_id != '') {
+            $querySales->where('hd_pos_sales.user_id', $user_id);
+        }
+
+        if ($product_tax != '') {
+            if ($product_tax == 'Y') {
+                $querySales->where('dt_pos_sales.sales_ppn>0');
+            } else {
+                $querySales->where('dt_pos_sales.sales_ppn=0');
+            }
+        }
+
+        $querySales->groupBy('dt_pos_sales.pos_sales_id');
+
+
+
+        // get sales return //
+        $querySalesReturn = $this->db->table('dt_pos_sales_return');
+        $querySalesReturn->select('hd_pos_sales_return.pos_sales_return_invoice as pos_sales_invoice,hd_pos_sales_return.pos_sales_return_date as pos_sales_date,hd_pos_sales_return.payment_list,ms_store.store_code,user_account.user_realname,(sum(dt_pos_sales_return.sales_return_dpp*dt_pos_sales_return.sales_return_qty)*-1) as sales_dpp,(sum(dt_pos_sales_return.sales_return_ppn*dt_pos_sales_return.sales_return_qty)*-1) as sales_ppn,hd_pos_sales_return.created_at')
+            ->join('hd_pos_sales_return', 'hd_pos_sales_return.pos_sales_return_id=dt_pos_sales_return.pos_sales_return_id')
+            ->join('ms_store', 'ms_store.store_id=hd_pos_sales_return.store_id')
+            ->join('user_account', 'user_account.user_id=hd_pos_sales_return.user_id')
+            ->where("(hd_pos_sales_return.pos_sales_return_date BETWEEN '$start_date' AND '$end_date')");
+
+        if ($store_id != '') {
+            $querySalesReturn->where('hd_pos_sales_return.store_id', $store_id);
+        }
+
+        if ($user_id != '') {
+            $querySalesReturn->where('hd_pos_sales_return.user_id', $user_id);
+        }
+
+        if ($product_tax != '') {
+            if ($product_tax == 'Y') {
+                $querySalesReturn->where('hd_pos_sales_return.sales_return_ppn>0');
+            } else {
+                $querySalesReturn->where('hd_pos_sales_return.sales_return_ppn=0');
+            }
+        }
+
+        $querySalesReturn->groupBy('dt_pos_sales_return.pos_sales_return_id');
+
+        $qSI = $querySales->getCompiledSelect();
+        $qSR = $querySalesReturn->getCompiledSelect();
+
+        $sqlText = "$qSI UNION ALL $qSR ORDER BY created_at ASC";
+        $getResult = $this->db->query($sqlText)->getResultArray();
+        return $getResult;
+    }
 }
