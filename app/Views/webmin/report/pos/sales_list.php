@@ -75,11 +75,11 @@ foreach ($pages as $page) :
                                         </tr>
                                         <tr align="left">
                                             <td class="loseborder">User</td>
-                                            <td class="loseborder">: <?= $user_id ?></td>
+                                            <td class="loseborder">: <?= $user_realname ?></td>
                                         </tr>
                                         <tr align="left">
                                             <td class="loseborder">Toko</td>
-                                            <td class="loseborder">: <?= $store_id ?></td>
+                                            <td class="loseborder">: <?= $store_name ?></td>
                                         </tr>
                                     </tbody>
                                 </table>

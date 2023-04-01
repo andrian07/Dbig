@@ -141,15 +141,31 @@ $assetsUrl = base_url('assets');
 <script>
     $(document).ready(function() {
         function reportUrl(params = '') {
+            let selUser = $('#user_id').select2('data');
+            let selStore = $('#store_id').select2('data');
+
             let detail = $('#show_detail').prop('checked');
             let user_id = $('#user_id').val();
             if (user_id == null) {
                 user_id = '';
             }
+
+            let user_realname = '';
+            if (selUser[0]) {
+                user_realname = selUser[0].text;
+            }
+
             let store_id = $('#store_id').val();
             if (store_id == null) {
                 store_id = '';
             }
+
+            let store_name = '';
+            if (selStore[0]) {
+                store_name = selStore[0].text;
+            }
+
+
             let product_tax = $('#product_tax').val();
 
             let reportUrl = base_url + '/webmin/report/sales-list?';
@@ -160,14 +176,15 @@ $assetsUrl = base_url('assets');
             reportUrl += 'start_date=' + $('#start_date').val();
             reportUrl += '&end_date=' + $('#end_date').val();
             reportUrl += '&user_id=' + user_id;
+            reportUrl += '&user_realname=' + user_realname;
             reportUrl += '&store_id=' + store_id;
+            reportUrl += '&store_name=' + store_name;
             reportUrl += '&product_tax=' + product_tax;
 
             if (params != '') {
                 reportUrl += '&' + params;
             }
 
-            console.log('reportUrl : ' + reportUrl);
             return reportUrl;
         }
 
@@ -220,6 +237,15 @@ $assetsUrl = base_url('assets');
             $('#preview').attr('src', reportUrl());
         })
 
+        $('#btnexportpdf').click(function(e) {
+            e.preventDefault();
+            window.open(reportUrl('download=Y'));
+        })
+
+        $('#btnexportexcel').click(function(e) {
+            e.preventDefault();
+            window.open(reportUrl('file=xls'));
+        })
     })
 </script>
 <?= $this->endSection() ?>
