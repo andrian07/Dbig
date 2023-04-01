@@ -111,9 +111,9 @@ class M_sales_pos extends Model
 
         if ($product_tax != '') {
             if ($product_tax == 'Y') {
-                $querySalesReturn->where('hd_pos_sales_return.sales_return_ppn>0');
+                $querySalesReturn->where('dt_pos_sales_return.sales_return_ppn>0');
             } else {
-                $querySalesReturn->where('hd_pos_sales_return.sales_return_ppn=0');
+                $querySalesReturn->where('dt_pos_sales_return.sales_return_ppn=0');
             }
         }
 
@@ -185,9 +185,9 @@ class M_sales_pos extends Model
 
         if ($product_tax != '') {
             if ($product_tax == 'Y') {
-                $querySalesReturn->where('hd_pos_sales_return.sales_return_ppn>0');
+                $querySalesReturn->where('dt_pos_sales_return.sales_return_ppn>0');
             } else {
-                $querySalesReturn->where('hd_pos_sales_return.sales_return_ppn=0');
+                $querySalesReturn->where('dt_pos_sales_return.sales_return_ppn=0');
             }
         }
 
