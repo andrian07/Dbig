@@ -934,6 +934,7 @@ class ApiPos extends BaseController
         $warehouse_id       = 1;
         $voucher_payment_id = 2;
 
+
         foreach ($dsHdPosSales as $row) {
             $pos_sales_invoice = $row['pos_sales_invoice'];
             $hdSalesData = [
@@ -1136,7 +1137,6 @@ class ApiPos extends BaseController
                 }
             }
 
-            $qUpdateWarehouseStock = $this->create_upsert_query('ms_warehouse_stock', $warehouseStockData);
             $qUpdateStock .= implode(',', $vUpdateStock) . " ON DUPLICATE KEY UPDATE stock=stock+VALUES(stock)";
 
             $this->db->query($qUpdateStock);
@@ -1144,12 +1144,15 @@ class ApiPos extends BaseController
                 $this->logQueries[] = $this->db->getLastQuery()->getQuery();
             }
 
-            $this->db->query($qUpdateWarehouseStock);
-            if ($this->db->affectedRows() > 0) {
-                $this->logQueries[] = $this->db->getLastQuery()->getQuery();
+            if (count($warehouseStockData) > 0) {
+                $qUpdateWarehouseStock = $this->create_upsert_query('ms_warehouse_stock', $warehouseStockData);
+
+                $this->db->query($qUpdateWarehouseStock);
+                if ($this->db->affectedRows() > 0) {
+                    $this->logQueries[] = $this->db->getLastQuery()->getQuery();
+                }
             }
         }
-
         foreach ($dsDtPosSalesPayment as $row) {
             $pos_sales_id       = $this->_get_sales_id($row['pos_sales_invoice']);
             $payment_method_id  = intval($row['payment_method_id']);

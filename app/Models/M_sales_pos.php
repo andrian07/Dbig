@@ -336,4 +336,53 @@ class M_sales_pos extends Model
         $getResult = $this->db->query($sqlText)->getResultArray();
         return $getResult;
     }
+
+    public function getReportSalesListByPayment($start_date, $end_date, $store_id = '', $payment_method_id = '')
+    {
+        // get sales //
+
+        $querySales = $this->db->table('dt_pos_sales_payment');
+        $querySales->select('hd_pos_sales.pos_sales_invoice,hd_pos_sales.pos_sales_date,hd_pos_sales.payment_list,hd_pos_sales.payment_remark,ms_store.store_code,user_account.user_realname,dt_pos_sales_payment.payment_balance,hd_pos_sales.created_at,dt_pos_sales_payment.payment_method_id,ms_payment_method.payment_method_name,ms_payment_method.bank_account_name')
+            ->join('hd_pos_sales', 'hd_pos_sales.pos_sales_id=dt_pos_sales_payment.pos_sales_id')
+            ->join('ms_payment_method', 'ms_payment_method.payment_method_id=dt_pos_sales_payment.payment_method_id')
+            ->join('ms_store', 'ms_store.store_id=hd_pos_sales.store_id')
+            ->join('user_account', 'user_account.user_id=hd_pos_sales.user_id')
+            ->where("(hd_pos_sales.pos_sales_date BETWEEN '$start_date' AND '$end_date')");
+
+        if ($store_id != '') {
+            $querySales->where('hd_pos_sales.store_id', $store_id);
+        }
+
+        if ($payment_method_id != '') {
+            $querySales->where('dt_pos_sales_payment.payment_method_id', $payment_method_id);
+        }
+
+
+
+        // get sales return //
+        $payment_cash_id = 1;
+
+        $querySalesReturn = $this->db->table('hd_pos_sales_return');
+        $querySalesReturn->select("hd_pos_sales_return.pos_sales_return_invoice as pos_sales_invoice,hd_pos_sales_return.pos_sales_return_date as pos_sales_date,hd_pos_sales_return.payment_list,hd_pos_sales_return.payment_remark,ms_store.store_code,user_account.user_realname,(hd_pos_sales_return.pos_sales_return_total*-1) as payment_balance,hd_pos_sales_return.created_at,1 as payment_method_id,'CASH' as payment_method_name,'' as bank_account_name")
+            ->join('ms_store', 'ms_store.store_id=hd_pos_sales_return.store_id')
+            ->join('user_account', 'user_account.user_id=hd_pos_sales_return.user_id')
+            ->where("(hd_pos_sales_return.pos_sales_return_date BETWEEN '$start_date' AND '$end_date')");
+
+        if ($store_id != '') {
+            $querySalesReturn->where('hd_pos_sales_return.store_id', $store_id);
+        }
+
+        if ($payment_method_id != '') {
+            if ($payment_method_id != $payment_cash_id) {
+                $querySalesReturn->where('hd_pos_sales_return.pos_sales_return_invoice', 'cash');
+            }
+        }
+
+        $qSI = $querySales->getCompiledSelect();
+        $qSR = $querySalesReturn->getCompiledSelect();
+
+        $sqlText = "$qSI UNION ALL $qSR ORDER BY payment_method_id,created_at ASC";
+        $getResult = $this->db->query($sqlText)->getResultArray();
+        return $getResult;
+    }
 }

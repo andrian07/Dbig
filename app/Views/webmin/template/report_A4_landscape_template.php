@@ -38,17 +38,15 @@
 
 		body {
 			font-size: 11pt;
-			
+
 		}
 
 		.header1 {
-			font-family: 'Times New Roman', Times, serif;
 			font-size: 14pt;
 			font-weight: bold;
 		}
 
 		.header2 {
-			font-family: 'Times New Roman', Times, serif;
 			font-size: 12pt;
 			font-weight: bold;
 		}

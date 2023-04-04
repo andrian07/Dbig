@@ -1412,191 +1412,370 @@ class ReportPos extends WebminController
         }
     }
 
-
-
     public function viewSalesListGroupPayment()
     {
         $data = [
             'title'     => 'Laporan Penjualan Per Jenis Pembayaran',
         ];
-        return $this->renderView('report/sales/view_sales_list_group_payment', $data);
+        return $this->renderView('report/pos/view_sales_list_group_payment', $data);
     }
 
     public function salesListGroupPayment()
     {
-        $data = [
-            'title'         => 'Laporan Penjualan Per Jenis Pembayaran',
-            'userLogin'     => $this->userLogin
-        ];
+        $payment_method_id    = $this->request->getGet('payment_method_id') != null ? $this->request->getGet('payment_method_id') : '';
+        $payment_method_name  = $this->request->getGet('payment_method_name') != null ? $this->request->getGet('payment_method_name') : '-';
+        $store_id             = $this->request->getGet('store_id') != null ? $this->request->getGet('store_id') : '';
+        $store_name           = $this->request->getGet('store_name') != null ? $this->request->getGet('store_name') : '-';
+        $start_date           = $this->request->getGet('start_date') != null ? $this->request->getGet('start_date') : date('Y-m-d');
+        $end_date             = $this->request->getGet('end_date') != null ? $this->request->getGet('end_date') : date('Y-m-d');
+
 
         $agent = $this->request->getUserAgent();
         $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
         $fileType   = $this->request->getGet('file');
 
-        if (!in_array($fileType, ['pdf', 'xlsx'])) {
+        if (!in_array($fileType, ['pdf', 'xls'])) {
             $fileType = 'pdf';
         }
 
-        $htmlView = $this->renderView('report/sales/sales_list_group_payment', $data);
+        $data = [
+            'title'                 => 'Laporan Penjualan',
+            'userLogin'             => $this->userLogin,
+            'payment_method_id'     => $payment_method_id,
+            'payment_method_name'   => $payment_method_name,
+            'store_id'              => $store_id,
+            'store_name'            => $store_name,
+            'start_date'            => $start_date,
+            'end_date'              => $end_date,
+        ];
 
-        if ($agent->isMobile() && !$isDownload) {
-            return $htmlView;
-        } else {
-            if ($fileType == 'pdf') {
+        $M_sales_pos        = model('M_sales_pos');
+        $getData            = $M_sales_pos->getReportSalesListByPayment($start_date, $end_date, $store_id, $payment_method_id);
+        //dd($getData);
+
+
+        if ($fileType == 'pdf') {
+            $tables_rows = [];
+            $sample_tables_rows = [
+                [
+                    ['text' => 'header', 'colspan' => '7', 'class' => 'text-left']
+                ],
+                [
+                    ['text' => '#', 'class' => 'text-right'],
+                    ['text' => 'CABANG', 'class' => 'text-left'],
+                    ['text' => 'KASIR',  'class' => 'text-left'],
+                    ['text' => 'INVOICE', 'class' => 'text-left'],
+                    ['text' => 'TGL',  'class' => 'text-left'],
+                    ['text' => 'total', 'class' => 'text-right'],
+                    ['text' => 'METODE PEMBAYARAN', 'class' => 'col-fixed text-left'],
+
+                ],
+                [
+                    ['text' => 'total', 'colspan' => '5', 'class' => 'text-left'],
+                    ['text' => 'total', 'class' => 'text-right'],
+                ],
+            ];
+
+            $last_payment_id = '';
+            $num_row = 1;
+            $total_payment = 0;
+
+            foreach ($getData as $row) {
+                $payment_balance = floatval($row['payment_balance']);
+                $class_payment = $payment_balance < 0 ? 'text-red' : '';
+
+                if ($row['payment_method_id'] != $last_payment_id) {
+                    if ($last_payment_id != '') {
+                        // buat summary total //
+                        $tables_rows[] = [
+                            ['text' => '<b>TOTAL</b>', 'colspan' => '6', 'class' => 'text-right'],
+                            ['text' => numberFormat($total_payment, true), 'class' => 'text-right'],
+
+                        ];
+                    }
+
+                    // buat header group //
+                    $header = !empty($row['bank_account_name']) ? $row['payment_method_name'] . ' - ' . $row['bank_account_name'] : $row['payment_method_name'];
+                    $tables_rows[] = [
+                        ['text' => '<b>' . $header . '</b>', 'colspan' => '7', 'class' => 'text-left']
+                    ];
+
+                    // reset total //
+                    $num_row = 1;
+                    $total_payment = 0;
+                }
+
+                $tables_rows[] = [
+                    ['text' => $num_row, 'class' => 'text-right'],
+                    ['text' => $row['store_code'], 'class' => 'text-left'],
+                    ['text' => $row['user_realname'],  'class' => 'text-left'],
+                    ['text' => $row['pos_sales_invoice'], 'class' => 'text-left'],
+                    ['text' => indo_short_date($row['pos_sales_date']),  'class' => 'text-left'],
+                    ['text' => $row['payment_remark'], 'class' => 'col-fixed text-left'],
+                    ['text' => numberFormat($payment_balance, true), 'class' => 'text-right ' . $class_payment],
+                ];
+
+                $total_payment  += $payment_balance;
+                $last_payment_id = $row['payment_method_id'];
+                $num_row++;
+            }
+
+            if ($last_payment_id != '') {
+                // buat summary total //
+                $tables_rows[] = [
+                    ['text' => '<b>TOTAL</b>', 'colspan' => '6', 'class' => 'text-right'],
+                    ['text' => numberFormat($total_payment, true), 'class' => 'text-right'],
+
+                ];
+            }
+
+            $max_report_size    = 14;
+            $pages              = array_chunk($tables_rows, $max_report_size);
+            $data['pages']      = $pages;
+            $data['max_page']   = count($pages);
+            //dd($data);
+
+            $htmlView = $this->renderView('report/pos/sales_list_group_payment', $data);
+            if ($agent->isMobile() && !$isDownload) {
+                return $htmlView;
+            } else {
                 $dompdf = new Dompdf();
                 $dompdf->loadHtml($htmlView);
                 $dompdf->setPaper('A4', 'landscape');
                 $dompdf->render();
-                $dompdf->stream('laporan_penjualan_ddmmyyyyy_hhiiss.pdf', array("Attachment" => $isDownload));
+                $dompdf->stream('laporan_penjualan_retail_per_salesman.pdf', array("Attachment" => $isDownload));
                 exit();
-            } else {
-                die('Export Excel Script');
             }
-        }
-    }
-
-
-    public function viewProjectSalesList()
-    {
-        $data = [
-            'title'     => 'Laporan Penjualan Proyek',
-        ];
-        return $this->renderView('report/sales/view_project_sales_list', $data);
-    }
-
-    public function projectSalesList()
-    {
-        $data = [
-            'title'         => 'Laporan Penjualan Proyek',
-            'userLogin'     => $this->userLogin
-        ];
-
-        $agent = $this->request->getUserAgent();
-        $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
-        $fileType   = $this->request->getGet('file');
-        $detail     = $this->request->getGet('detail') == NULL ? 'N' : $this->request->getGet('detail');
-
-        if (!in_array($fileType, ['pdf', 'xlsx'])) {
-            $fileType = 'pdf';
-        }
-
-        //$detail = 'Y';
-        if ($detail == 'Y') {
-            $htmlView = $this->renderView('report/sales/project_sales_list_detail', $data);
         } else {
-            $htmlView = $this->renderView('report/sales/project_sales_list', $data);
-        }
+            $header_format = [
+                'fill' => [
+                    'fillType' =>  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => [
+                        'argb' => 'A5A5A5'
+                    ]
+                ],
+                'font' => [
+                    'bold' => true,
+                ],
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
 
-        if ($agent->isMobile() && !$isDownload) {
-            return $htmlView;
-        } else {
-            if ($fileType == 'pdf') {
-                $dompdf = new Dompdf();
-                $dompdf->loadHtml($htmlView);
-                $dompdf->setPaper('A4', 'landscape');
-                $dompdf->render();
-                $dompdf->stream('laporan_penjualan_ddmmyyyyy_hhiiss.pdf', array("Attachment" => $isDownload));
-                exit();
-            } else {
-                die('Export Excel Script');
+                    ],
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                ],
+            ];
+            $total_format = [
+                'font' => [
+                    'bold' => true,
+                ],
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $font_bold = [
+                'font' => [
+                    'bold' => true,
+                ],
+            ];
+
+            $border_left_right = [
+                'borders' => [
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $border_full = [
+                'borders' => [
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $template = WRITEPATH . '/template/report/template_report.xlsx';
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+
+            $sheet = $spreadsheet->setActiveSheetIndex(0);
+
+            //make header //
+            $iRow = 7;
+            $sheet->getCell('A' . $iRow)->setValue('CABANG');
+            $sheet->getCell('B' . $iRow)->setValue('KASIR');
+            $sheet->getCell('C' . $iRow)->setValue('NO INVOICE');
+            $sheet->getCell('D' . $iRow)->setValue('TANGGAL TRANSAKSI');
+            $sheet->getCell('E' . $iRow)->setValue('KETERANGAN');
+            $sheet->getCell('F' . $iRow)->setValue('TOTAL');
+
+
+            $sheet->getStyle('A' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('B' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('C' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('D' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('E' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('F' . $iRow)->applyFromArray($header_format);
+            $iRow++;
+
+
+
+            $last_payment_id = '';
+            $num_row = 1;
+            $total_payment = 0;
+
+            foreach ($getData as $row) {
+                $payment_balance = floatval($row['payment_balance']);
+                $class_payment = $payment_balance < 0 ? 'text-red' : '';
+
+                if ($row['payment_method_id'] != $last_payment_id) {
+                    if ($last_payment_id != '') {
+                        // buat summary total //
+                        $sheet->getCell('A' . $iRow)->setValue('TOTAL');
+                        $sheet->getCell('F' . $iRow)->setValue($total_payment);
+                        $sheet->mergeCells('A' . $iRow . ':E' . $iRow);
+                        $sheet->getStyle('A' . $iRow . ':E' . $iRow)->getAlignment()->setHorizontal('right');
+                        $sheet->getStyle('A' . $iRow . ':E' . $iRow)->applyFromArray($total_format);
+                        $sheet->getStyle('F' . $iRow)->applyFromArray($total_format);
+                        $iRow++;
+                    }
+
+                    // buat header group //
+                    $header = !empty($row['bank_account_name']) ? $row['payment_method_name'] . ' - ' . $row['bank_account_name'] : $row['payment_method_name'];
+                    $sheet->getCell('A' . $iRow)->setValue($header);
+                    $sheet->mergeCells('A' . $iRow . ':F' . $iRow);
+                    $sheet->getStyle('A' . $iRow . ':F' . $iRow)->applyFromArray($font_bold);
+                    $sheet->getStyle('A' . $iRow . ':F' . $iRow)->applyFromArray($border_full);
+                    $iRow++;
+
+                    // reset total //
+                    $num_row = 1;
+                    $total_payment = 0;
+                }
+
+                $sheet->getCell('A' . $iRow)->setValue($row['store_code']);
+                $sheet->getCell('B' . $iRow)->setValue($row['user_realname']);
+                $sheet->getCell('C' . $iRow)->setValue($row['pos_sales_invoice']);
+                $sheet->getCell('D' . $iRow)->setValue(indo_short_date($row['pos_sales_date']));
+                $sheet->getCell('E' . $iRow)->setValue($row['payment_remark']);
+                $sheet->getCell('F' . $iRow)->setValue($payment_balance);
+
+                $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('F' . $iRow)->applyFromArray($border_left_right);
+                $iRow++;
+
+                $total_payment  += $payment_balance;
+                $last_payment_id = $row['payment_method_id'];
+                $num_row++;
             }
-        }
-    }
 
+            if ($last_payment_id != '') {
+                // buat summary total //
 
-    public function viewProjectSalesListGroupCustomer()
-    {
-        $data = [
-            'title'     => 'Laporan Penjualan Proyek Per Customer',
-        ];
-        return $this->renderView('report/sales/view_project_sales_list_group_customer', $data);
-    }
-
-    public function projectSalesListGroupCustomer()
-    {
-        $data = [
-            'title'         => 'Laporan Penjualan Proyek Per Customer',
-            'userLogin'     => $this->userLogin
-        ];
-
-        $agent = $this->request->getUserAgent();
-        $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
-        $fileType   = $this->request->getGet('file');
-        $detail     = $this->request->getGet('detail') == NULL ? 'N' : $this->request->getGet('detail');
-
-        if (!in_array($fileType, ['pdf', 'xlsx'])) {
-            $fileType = 'pdf';
-        }
-        //$detail = 'Y';
-        if ($detail == 'Y') {
-            $htmlView = $this->renderView('report/sales/project_sales_list_group_customer_detail', $data);
-        } else {
-            $htmlView = $this->renderView('report/sales/project_sales_list_group_customer', $data);
-        }
-
-        if ($agent->isMobile() && !$isDownload) {
-            return $htmlView;
-        } else {
-            if ($fileType == 'pdf') {
-                $dompdf = new Dompdf();
-                $dompdf->loadHtml($htmlView);
-                $dompdf->setPaper('A4', 'landscape');
-                $dompdf->render();
-                $dompdf->stream('laporan_penjualan_ddmmyyyyy_hhiiss.pdf', array("Attachment" => $isDownload));
-                exit();
-            } else {
-                die('Export Excel Script');
+                $sheet->getCell('A' . $iRow)->setValue('TOTAL');
+                $sheet->getCell('F' . $iRow)->setValue($total_payment);
+                $sheet->mergeCells('A' . $iRow . ':E' . $iRow);
+                $sheet->getStyle('A' . $iRow . ':E' . $iRow)->getAlignment()->setHorizontal('right');
+                $sheet->getStyle('A' . $iRow . ':E' . $iRow)->applyFromArray($total_format);
+                $sheet->getStyle('F' . $iRow)->applyFromArray($total_format);
+                $iRow++;
             }
+
+
+
+            //setting periode
+            $periode_text = indo_short_date($start_date) . ' s.d ' . indo_short_date($end_date);
+            $sheet->getCell('A5')->setValue('Periode');
+            $sheet->getStyle('A5')->applyFromArray($font_bold);
+            $sheet->getCell('B5')->setValue($periode_text);
+
+            $sheet->getCell('A6')->setValue('Filter');
+            $sheet->getStyle('A6')->applyFromArray($font_bold);
+            $filterText = "TOKO = $store_name;PAYMENT = $payment_method_name";
+            $sheet->getCell('B6')->setValue($filterText);
+            $sheet->mergeCells('B6:F6');
+
+            //setting excel header//
+            // A4-G4 = Store Phone
+            // A3-G3 = Store Address
+            // A2-G2 = Store Name
+            // A1-G1 = Print By
+            $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
+            $sheet->getCell('A4')->setValue(COMPANY_PHONE);
+            $sheet->getCell('A3')->setValue(COMPANY_ADDRESS);
+            $sheet->getCell('A2')->setValue(COMPANY_NAME);
+            $sheet->getCell('A1')->setValue($reportInfo);
+
+            $sheet->mergeCells('A4:F4');
+            $sheet->mergeCells('A3:F3');
+            $sheet->mergeCells('A2:F2');
+            $sheet->mergeCells('A1:F1');
+
+            $sheet->getStyle('A4:F4')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A3:F3')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A2:F2')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A1:F1')->getAlignment()->setHorizontal('right');
+
+            $sheet->getStyle('A4:F4')->applyFromArray($font_bold);
+            $sheet->getStyle('A3:F3')->applyFromArray($font_bold);
+            $sheet->getStyle('A2:F2')->applyFromArray($font_bold);
+
+            $sheet->getColumnDimension('A')->setAutoSize(true);
+            $sheet->getColumnDimension('B')->setAutoSize(true);
+            $sheet->getColumnDimension('C')->setAutoSize(true);
+            $sheet->getColumnDimension('D')->setAutoSize(true);
+            $sheet->getColumnDimension('E')->setAutoSize(true);
+            $sheet->getColumnDimension('F')->setAutoSize(true);
+
+
+            $filename = 'laporan_penjualan_retail_per_payment';
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+            header('Cache-Control: max-age=0');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save('php://output');
+            exit();
         }
     }
-
-    public function viewProjectSalesListGroupSalesman()
-    {
-        $data = [
-            'title'     => 'Laporan Penjualan Proyek Per Salesman',
-        ];
-        return $this->renderView('report/sales/view_project_sales_list_group_salesman', $data);
-    }
-
-    public function projectSalesListGroupSalesman()
-    {
-        $data = [
-            'title'         => 'Laporan Penjualan Proyek Per Salesman',
-            'userLogin'     => $this->userLogin
-        ];
-
-        $agent = $this->request->getUserAgent();
-        $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
-        $fileType   = $this->request->getGet('file');
-        $detail     = $this->request->getGet('detail') == NULL ? 'N' : $this->request->getGet('detail');
-
-        if (!in_array($fileType, ['pdf', 'xlsx'])) {
-            $fileType = 'pdf';
-        }
-        //$detail = 'Y';
-        if ($detail == 'Y') {
-            $htmlView = $this->renderView('report/sales/project_sales_list_group_salesman_detail', $data);
-        } else {
-            $htmlView = $this->renderView('report/sales/project_sales_list_group_salesman', $data);
-        }
-
-        if ($agent->isMobile() && !$isDownload) {
-            return $htmlView;
-        } else {
-            if ($fileType == 'pdf') {
-                $dompdf = new Dompdf();
-                $dompdf->loadHtml($htmlView);
-                $dompdf->setPaper('A4', 'landscape');
-                $dompdf->render();
-                $dompdf->stream('laporan_penjualan_ddmmyyyyy_hhiiss.pdf', array("Attachment" => $isDownload));
-                exit();
-            } else {
-                die('Export Excel Script');
-            }
-        }
-    }
-
-
 
 
 

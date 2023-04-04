@@ -56,15 +56,8 @@ $assetsUrl = base_url('assets');
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Jumlah:</label>
-                                            <select id="print_count" name="print_count" class="form-control">
-                                                <?php
-                                                for ($i = 1; $i <= 12; $i++) {
-                                                ?>
-                                                    <option value="<?= $i ?>"><?= $i ?> Baris</option>
-                                                <?php
-                                                }
-                                                ?>
-                                            </select>
+                                            <input type="number" id="print_count" name="print_count" class="form-control" value="1" />
+
                                         </div>
                                     </div>
                                     <div class="col-sm-2">
@@ -141,6 +134,16 @@ $assetsUrl = base_url('assets');
                 },
             },
         });
+
+        $('#print_count').change(function() {
+            let val = $(this).val();
+
+            if (val == '') {
+                $('#print_count').val(1);
+            } else if (parseFloat(val) <= 0) {
+                $('#print_count').val(1);
+            }
+        })
 
         $('#btnsearch').click(function(e) {
             e.preventDefault();

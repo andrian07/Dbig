@@ -887,9 +887,8 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
     $routes->get('sales-list-group-salesman', 'Webmin\Report\ReportPos::salesListGroupSalesman');
     $routes->get('detail-sales-list-group-salesman', 'Webmin\Report\ReportPos::detailSalesListGroupSalesman');
 
-    $routes->get('view-sales-list-group-payment', 'Webmin\Report\ReportSales::viewSalesListGroupPayment');
-
-    $routes->get('sales-list-group-payment', 'Webmin\Report\ReportSales::salesListGroupPayment');
+    $routes->get('view-sales-list-group-payment', 'Webmin\Report\ReportPos::viewSalesListGroupPayment');
+    $routes->get('sales-list-group-payment', 'Webmin\Report\ReportPos::salesListGroupPayment');
 
 
     $routes->get('view-project-sales-list', 'Webmin\Report\ReportSales::viewProjectSalesList');
