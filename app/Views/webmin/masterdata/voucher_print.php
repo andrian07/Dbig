@@ -9,16 +9,10 @@
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-        font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
     }
 
-    .font-primary {
-        font-family: Arial, Helvetica, sans-serif;
-    }
 
-    .font-secondary {
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    }
+
 
     .voucher-list tr {
         margin: 0px;
@@ -44,7 +38,6 @@
 
     .voucher-code {
         padding: 0px 10px;
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         vertical-align: top;
         text-align: right;
         font-size: 20;
@@ -52,7 +45,6 @@
 
     .voucher-exp-date {
         padding: 0px 0px;
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         vertical-align: bottom;
         text-align: left;
         font-size: 20;
