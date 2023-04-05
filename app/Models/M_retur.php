@@ -669,5 +669,34 @@ class M_retur extends Model
         ->delete();
     }
 
+    public function getReportHeaderData($start_date, $end_date, $supplier_id)
+    {
+        $builder = $this->db->table('hd_retur_purchase')->select("*");
+        $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_retur_purchase.hd_retur_supplier_id');
+        $builder->where("(hd_retur_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        if ($supplier_id != null) {
+            $builder->where('hd_retur_supplier_id', $supplier_id);
+        }
+        return $builder->orderBy('hd_retur_purchase.created_at', 'ASC')->get();
+    }
+
+    public function getReportData($start_date, $end_date, $supplier_id)
+    {
+        $builder = $this->db->table('hd_retur_purchase')->select("hd_retur_total_dpp, hd_retur_total_ppn, hd_retur_total_transaction, hd_retur_purchase_invoice, hd_retur_date, supplier_code, supplier_name, hd_retur_purchase_invoice, dt_retur_purchase_invoice, hd_retur_date, item_code, product_name, brand_name, category_name, dt_retur_qty, unit_name, dt_retur_price, dt_retur_dpp, dt_retur_ppn, dt_retur_total, warehouse_name");
+        $builder->join('dt_retur_purchase', 'dt_retur_purchase.hd_retur_purchase_id = hd_retur_purchase.hd_retur_purchase_id');
+        $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = dt_retur_purchase.dt_retur_warehouse');
+        $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_retur_purchase.hd_retur_supplier_id');
+        $builder->join('ms_product_unit', 'ms_product_unit.item_id = dt_retur_purchase.dt_retur_item_id');
+        $builder->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id');
+        $builder->join('ms_product', 'ms_product.product_id = ms_product_unit.product_id');
+        $builder->join('ms_category', 'ms_category.category_id = ms_product.category_id');
+        $builder->join('ms_brand', 'ms_brand.brand_id = ms_product.brand_id');  
+        $builder->where("(hd_retur_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        if ($supplier_id != null) {
+            $builder->where('hd_retur_supplier_id', $supplier_id);
+        }
+        return $builder->orderBy('hd_retur_purchase.created_at', 'ASC')->get();
+    }
+
 
 }

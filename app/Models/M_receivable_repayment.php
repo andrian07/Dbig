@@ -10,7 +10,7 @@ class M_receivable_repayment extends Model
     protected $table_hd_sales_admin = 'hd_sales_admin';
     protected $table_temp_payment_receivable = 'temp_payment_receivable';
     protected $table_hd_payment_receivable = 'hd_payment_receivable';
-
+    protected $table_dt_payment_receivable = 'dt_payment_receivable';
 
 
     public function getSaleseData($customerid)
@@ -123,127 +123,164 @@ class M_receivable_repayment extends Model
     public function insertPayment($data)
     {
 
-       $this->db->query('LOCK TABLES hd_sales_admin WRITE, hd_payment_receivable WRITE, dt_payment_receivable WRITE');
+        $this->db->query('LOCK TABLES hd_sales_admin WRITE, hd_payment_receivable WRITE, dt_payment_receivable WRITE');
 
-       $this->db->transBegin();
-
-       $saveQueries = NULL;
-
-       $maxCode = $this->db->table($this->table_hd_payment_receivable)->select('payment_receivable_id, payment_receivable_invoice')->orderBy('payment_receivable_id', 'desc')->limit(1)->get()->getRowArray();
-
-       $invoice_date =  date_format(date_create($data['payment_receivable_date']),"y/m/d");
-
-       if ($maxCode == NULL) {
-
-        $data['payment_receivable_invoice'] = 'PP/'.$invoice_date.'/'.'0000000001';
-
-    } else {
-
-        $invoice = substr($maxCode['payment_receivable_invoice'], -10);
-
-        $data['payment_receivable_invoice'] = 'PP/'.$invoice_date.'/'.substr('000000000' . strval(floatval($invoice) + 1), -10);
-
-    }
-
-    $count_invoice =  $this->count_invoice($data['user_id'])->getResultArray();
-
-    $data['payment_receivable_total_invoice'] = $count_invoice[0]['total_invoice_pay'];
-
-    $this->db->table($this->table_hd_payment_receivable)->insert($data);
-
-    $payment_receivable_id   = $this->db->insertID();
-
-
-    if ($this->db->affectedRows() > 0) {
-
-        $saveQueries[] = [
-
-            'query_text'    => $this->db->getLastQuery()->getQuery(),
-
-            'ref_id'        => $payment_receivable_id  
-
-        ];
-
-    }
-
-
-    $sqlDtOrder = "insert into dt_payment_receivable(payment_receivable_id,dt_payment_receivable_sales_id,dt_payment_receivable_discount,dt_payment_receivable_desc,dt_payment_receivable_nominal) VALUES ";
-
-    $sqlDtValues = [];
-
-    $getTemp =  $this->db->table($this->table_temp_payment_receivable)->where('temp_payment_receivable_user_id', $data['user_id'])->where('temp_payment_isedit', 'Y')->get();
-
-    foreach ($getTemp->getResultArray() as $row) {
-
-        $dt_payment_receivable_sales_id         = $row['temp_payment_receivable_sales_id'];
-        $dt_payment_receivable_discount         = $row['temp_payment_receivable_discount'];
-        $dt_payment_receivable_nominal          = $row['temp_payment_receivable_nominal'];
-        $dt_payment_receivable_desc             = $row['temp_payment_receivable_desc'];
-        $dt_new_remaining_receivable            = $row['temp_sales_nominal'] - $row['temp_payment_receivable_nominal'] - $row['temp_payment_receivable_discount'];
-
-        $sqlDtValues[] = "('$payment_receivable_id','$dt_payment_receivable_sales_id','$dt_payment_receivable_discount','$dt_payment_receivable_desc','$dt_payment_receivable_nominal')";
-
-        $update_remaining_debt =  $this->db->table($this->table_hd_sales_admin)->where('sales_admin_id', $dt_payment_receivable_sales_id)->update(['sales_admin_remaining_payment' => $dt_new_remaining_receivable]);
-    }
-
-    $sqlDtOrder .= implode(',', $sqlDtValues);
-
-    $this->db->query($sqlDtOrder);
-
-    if ($this->db->affectedRows() > 0) {
-        $saveQueries = $this->db->getLastQuery()->getQuery();
-    }
-
-    if ($this->db->transStatus() === false) {
+        $this->db->transBegin();
 
         $saveQueries = NULL;
 
-        $this->db->transRollback();
+        $maxCode = $this->db->table($this->table_hd_payment_receivable)->select('payment_receivable_id, payment_receivable_invoice')->orderBy('payment_receivable_id', 'desc')->limit(1)->get()->getRowArray();
 
-        $save = ['success' => FALSE, 'payment_receivable_id' => 0];
+        $invoice_date =  date_format(date_create($data['payment_receivable_date']),"y/m/d");
 
-    } else {
+        if ($maxCode == NULL) {
 
-        $this->db->transCommit();
+            $data['payment_receivable_invoice'] = 'PP/'.$invoice_date.'/'.'0000000001';
 
-        $this->clearTemp($data['user_id']);
+        } else {
 
-        $save = ['success' => TRUE, 'payment_receivable_id' => $payment_receivable_id ];
+            $invoice = substr($maxCode['payment_receivable_invoice'], -10);
 
+            $data['payment_receivable_invoice'] = 'PP/'.$invoice_date.'/'.substr('000000000' . strval(floatval($invoice) + 1), -10);
+
+        }
+
+        $count_invoice =  $this->count_invoice($data['user_id'])->getResultArray();
+
+        $data['payment_receivable_total_invoice'] = $count_invoice[0]['total_invoice_pay'];
+
+        $this->db->table($this->table_hd_payment_receivable)->insert($data);
+
+        $payment_receivable_id   = $this->db->insertID();
+
+
+        if ($this->db->affectedRows() > 0) {
+
+            $saveQueries[] = [
+
+                'query_text'    => $this->db->getLastQuery()->getQuery(),
+
+                'ref_id'        => $payment_receivable_id  
+
+            ];
+
+        }
+
+
+        $sqlDtOrder = "insert into dt_payment_receivable(payment_receivable_id,dt_payment_receivable_sales_id,dt_payment_receivable_discount,dt_payment_receivable_desc,dt_payment_receivable_nominal) VALUES ";
+
+        $sqlDtValues = [];
+
+        $getTemp =  $this->db->table($this->table_temp_payment_receivable)->where('temp_payment_receivable_user_id', $data['user_id'])->where('temp_payment_isedit', 'Y')->get();
+
+        foreach ($getTemp->getResultArray() as $row) {
+
+            $dt_payment_receivable_sales_id         = $row['temp_payment_receivable_sales_id'];
+            $dt_payment_receivable_discount         = $row['temp_payment_receivable_discount'];
+            $dt_payment_receivable_nominal          = $row['temp_payment_receivable_nominal'];
+            $dt_payment_receivable_desc             = $row['temp_payment_receivable_desc'];
+            $dt_new_remaining_receivable            = $row['temp_sales_nominal'] - $row['temp_payment_receivable_nominal'] - $row['temp_payment_receivable_discount'];
+
+            $sqlDtValues[] = "('$payment_receivable_id','$dt_payment_receivable_sales_id','$dt_payment_receivable_discount','$dt_payment_receivable_desc','$dt_payment_receivable_nominal')";
+
+            $update_remaining_debt =  $this->db->table($this->table_hd_sales_admin)->where('sales_admin_id', $dt_payment_receivable_sales_id)->update(['sales_admin_remaining_payment' => $dt_new_remaining_receivable]);
+        }
+
+        $sqlDtOrder .= implode(',', $sqlDtValues);
+
+        $this->db->query($sqlDtOrder);
+
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries = $this->db->getLastQuery()->getQuery();
+        }
+
+        if ($this->db->transStatus() === false) {
+
+            $saveQueries = NULL;
+
+            $this->db->transRollback();
+
+            $save = ['success' => FALSE, 'payment_receivable_id' => 0];
+
+        } else {
+
+            $this->db->transCommit();
+
+            $this->clearTemp($data['user_id']);
+
+            $save = ['success' => TRUE, 'payment_receivable_id' => $payment_receivable_id ];
+
+        }
+
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'paymentreceivable', $payment_receivable_id);
+
+        return $save;
     }
 
-    $this->db->query('UNLOCK TABLES');
 
-    saveQueries($saveQueries, 'paymentreceivable', $payment_receivable_id);
-    
-    return $save;
-}
+    public function count_invoice($userid)
+    {
+        $builder = $this->db->table($this->table_temp_payment_receivable);
+
+        return $builder->select('count(*) as total_invoice_pay')
+
+        ->where('temp_payment_receivable_user_id', $userid)
+
+        ->where('temp_payment_isedit', 'Y')
+
+        ->get();
+    }
+
+    public function getReceivableFooter($userid)
+    {
+        $builder = $this->db->table($this->table_temp_payment_receivable);
+
+        return $builder->select('sum(temp_payment_receivable_nominal) as subTotal, count(*) as temp_payment_isedit')
+
+        ->where('temp_payment_receivable_user_id', $userid)
+
+        ->where('temp_payment_isedit', 'Y')
+
+        ->get();
+    }
+
+    public function getHdReceivabledetail($payment_receivable_id)
+    {
+        $builder = $this->db->table($this->table_hd_payment_receivable);
+
+        $builder->select('hd_payment_receivable.*,ms_customer.* ,user_account.user_realname,hd_payment_receivable.create_at as created_at');
+
+        $builder->join('user_account', 'user_account.user_id = hd_payment_receivable.user_id');
+
+        $builder->join('ms_customer', 'ms_customer.customer_id  = hd_payment_receivable.payment_receivable_customer_id');
+
+        if ($payment_receivable_id  != '') {
+
+            $builder->where(['hd_payment_receivable.payment_receivable_id' => $payment_receivable_id]);
+
+        }
+
+        return $builder->get();
+    }
+
+    public function getDtReceivabledetail($payment_receivable_id)
+    {
+        $builder = $this->db->table($this->table_dt_payment_receivable);
+
+        $builder->select('*');
+
+        $builder->join('hd_sales_admin', 'hd_sales_admin.sales_admin_id  = dt_payment_receivable.dt_payment_receivable_sales_id');
+
+        if ($payment_receivable_id  != '') {
+
+            $builder->where(['dt_payment_receivable.payment_receivable_id' => $payment_receivable_id]);
+        }
+
+        return $builder->get();
+    }
 
 
-public function count_invoice($userid)
-{
-    $builder = $this->db->table($this->table_temp_payment_receivable);
-
-    return $builder->select('count(*) as total_invoice_pay')
-
-    ->where('temp_payment_receivable_user_id', $userid)
-
-    ->where('temp_payment_isedit', 'Y')
-
-    ->get();
-}
-
-public function getReceivableFooter($userid)
-{
-    $builder = $this->db->table($this->table_temp_payment_receivable);
-
-    return $builder->select('sum(temp_payment_receivable_nominal) as subTotal, count(*) as temp_payment_isedit')
-
-    ->where('temp_payment_receivable_user_id', $userid)
-
-    ->where('temp_payment_isedit', 'Y')
-
-    ->get();
-}
 
 }

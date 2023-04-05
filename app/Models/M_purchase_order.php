@@ -21,7 +21,7 @@ class M_purchase_order extends Model
 
         $builder->select('hd_purchase_order.*,dt_purchase_order.*,supplier_name ,user_account.user_realname, warehouse_name, hd_purchase_order.created_at as created_at');
 
-         $builder->join('dt_purchase_order', 'dt_purchase_order.purchase_order_id = hd_purchase_order.purchase_order_id');
+        $builder->join('dt_purchase_order', 'dt_purchase_order.purchase_order_id = hd_purchase_order.purchase_order_id');
 
         $builder->join('user_account', 'user_account.user_id = hd_purchase_order.purchase_order_user_id');
 
@@ -383,17 +383,17 @@ public function clearUpdateDetail($purchase_order_id){
 }
 
 public function UpdateStatusItem($input){
-        $this->db->query('LOCK TABLES hd_purchase_order WRITE');
-        $save = $this->db->table($this->table_hd_po)->update(['purchase_order_item_status' => $input['purchase_order_item_status']], ['purchase_order_id ' => $input['purchase_order_id_status']]);
-        $saveQueries = NULL;
-        if ($this->db->affectedRows() > 0) {
-            $saveQueries = $this->db->getLastQuery()->getQuery();
-        }
-        $this->db->query('UNLOCK TABLES');
-
-        saveQueries($saveQueries, 'UpdateStatusItem', $input['purchase_order_id_status']);
-        return $save;
+    $this->db->query('LOCK TABLES hd_purchase_order WRITE');
+    $save = $this->db->table($this->table_hd_po)->update(['purchase_order_item_status' => $input['purchase_order_item_status']], ['purchase_order_id ' => $input['purchase_order_id_status']]);
+    $saveQueries = NULL;
+    if ($this->db->affectedRows() > 0) {
+        $saveQueries = $this->db->getLastQuery()->getQuery();
     }
+    $this->db->query('UNLOCK TABLES');
+
+    saveQueries($saveQueries, 'UpdateStatusItem', $input['purchase_order_id_status']);
+    return $save;
+}
 
 public function updateOrder($data)
 {
@@ -528,7 +528,36 @@ public function updateOrder($data)
 
         return $save;
     }
+}
 
+public function getReportData($start_date, $end_date, $warehouse, $product_tax, $supplier_id, $status_po)
+{
+    $builder = $this->db->table('hd_purchase_order')->select("purchase_order_invoice, purchase_order_date, product_code, ,item_code, product_name, has_tax, supplier_code, supplier_name, detail_purchase_po_price, detail_purchase_po_dpp, detail_purchase_po_ppn, detail_purchase_po_ongkir, detail_purchase_po_qty, detail_purchase_po_recive, purchase_order_total_ppn, unit_name, warehouse_name, hd_purchase_order.created_at");
+    $builder->join('dt_purchase_order', 'dt_purchase_order.purchase_order_id = hd_purchase_order.purchase_order_id');
+    $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_purchase_order.purchase_order_supplier_id');
+    $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_purchase_order.purchase_order_warehouse_id');
+    $builder->join('ms_product_unit', 'ms_product_unit.item_id = dt_purchase_order.detail_purchase_po_item_id');
+    $builder->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id');
+    $builder->join('ms_product', 'ms_product.product_id = ms_product_unit.product_id');
+    $builder->where("(purchase_order_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+
+    if ($warehouse != null) {
+        $builder->where('purchase_order_warehouse_id', $warehouse);
+    }
+    if ($product_tax != null) {
+        if($product_tax == 'Y'){
+            $builder->where('purchase_order_total_ppn >', '0');
+        }else{
+            $builder->where('purchase_order_total_ppn <', '0');
+        }
+    }
+    if ($supplier_id != null) {
+        $builder->where('purchase_order_supplier_id', $supplier_id);
+    }
+    if ($status_po != null) {
+        $builder->where('purchase_order_status', $status_po);
+    }
+    return $builder->orderBy('created_at', 'ASC')->get();
 }
 
 }

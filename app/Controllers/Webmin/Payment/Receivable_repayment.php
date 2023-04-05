@@ -78,7 +78,8 @@ class Receivable_repayment extends WebminController
                 $column[] = esc($row['payment_receivable_total_invoice']);
                 $column[] = 'Rp. '.esc(number_format($row['payment_receivable_total_pay']));
                 $btns = [];
-                 $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/purchase-order/get-purchase-order-detail/'.$row['payment_receivable_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
+
+                 $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/payment/get-receivable-history-detail/'.$row['payment_receivable_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
                 $column[] = implode('&nbsp;', $btns);
                 return $column;
             });
@@ -270,6 +271,42 @@ class Receivable_repayment extends WebminController
 
         resultJSON($result);
     }
+
+    public function getReceivableHistoryDetail($payment_receivable_id = '')
+    {
+        if ($payment_receivable_id == '') {
+
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+
+        } else {
+
+            $getHdReceivabledetail =  $this->M_receivable_repayment->getHdReceivabledetail($payment_receivable_id)->getRowArray();
+
+            if ($getHdReceivabledetail == NULL) {
+
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+
+            } else {
+
+                $data = [
+
+                    'hdReceivable' => $getHdReceivabledetail,
+
+                    'dtReceivable' => $this->M_receivable_repayment->getDtReceivabledetail($payment_receivable_id)->getResultArray(),
+
+                    //'log' => $this->M_debt_repayment->getLog($purchase_order_id)->getResultArray()
+
+                ];
+
+                return view('webmin/payment/receivable_repayment_detail', $data);
+
+            }
+
+        }
+
+    }
+
+ 
 
 
 }

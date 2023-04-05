@@ -359,7 +359,7 @@ $assetsUrl = base_url('assets');
 
                             <div class="form-group">
 
-                                <label>Qty</label>
+                                <label>Qty Terima</label>
 
                                 <input id="temp_qty" name="temp_qty" type="text" class="form-control text-right" value="0" data-parsley-vqty required>
                                 <input id="total_price" name="total_price" type="hidden" class="form-control text-right" value="0" required>
@@ -474,7 +474,7 @@ $assetsUrl = base_url('assets');
 
                                     <th data-priority="4">Harga</th>
 
-                                    <th data-priority="5">Qty</th>
+                                    <th data-priority="5">Qty Terima</th>
 
                                     <th data-priority="6">Discount</th>
 

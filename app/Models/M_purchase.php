@@ -10,6 +10,7 @@ class M_purchase extends Model
     protected $table_hd_purchase        = 'hd_purchase';
     protected $table_warehouse          = 'ms_warehouse';
     protected $table_hd_po              = 'hd_purchase_order';
+    protected $table_dt_po              = 'dt_purchase_order';
     protected $table_dt_purchase        = 'dt_purchase';
     protected $table_ms_product_stock   = 'ms_product_stock';
     protected $table_ms_product         = 'ms_product';
@@ -248,7 +249,7 @@ class M_purchase extends Model
             $data['purchase_invoice'] = 'LBM/'.$warehouse_code.'/'.$invoice_date.'/'.substr('000000000' . strval(floatval($invoice) + 1), -10);
         }
 
-    
+
         $this->db->table($this->table_hd_purchase)->insert($data);
 
         $purchase_id  = $this->db->insertID();
@@ -262,7 +263,7 @@ class M_purchase extends Model
 
         }
 
-      
+
         $sqlDtOrder = "insert into dt_purchase(dt_purchase_po_id,dt_purchase_po_invoice,dt_purchase_invoice,dt_purchase_item_id,dt_purchase_qty,dt_purchase_ppn,dt_purchase_dicount_nota,dt_purchase_dpp,dt_purchase_price,dt_purchase_discount1,dt_purchase_discount1_percentage,dt_purchase_discount2,dt_purchase_discount2_percentage,dt_purchase_discount3,dt_purchase_discount3_percentage,dt_purchase_discount_total,dt_purchase_ongkir,dt_purchase_expire_date,dt_purchase_total,dt_purchase_supplier_id,dt_purchase_supplier_name,dt_purchase_user_id) VALUES";
 
         $sqlUpdateProduct = "insert into ms_product (product_id, product_code, product_name, category_id, brand_id, base_purchase_price, base_purchase_tax, base_cogs, product_description, product_image, min_stock, has_tax, is_parcel, active, deleted) VALUES";
@@ -308,6 +309,9 @@ class M_purchase extends Model
             $price                                 = $temp_purchase_qty - $temp_purchase_discount_total;
             //End Detail Purchase Data
 
+                //print_r($temp_purchase_po_id);die();
+            $updateQtyPO =  $this->db->table($this->table_dt_po)->where('purchase_order_id', $temp_purchase_po_id)->where('detail_purchase_po_item_id', $temp_purchase_item_id)->update(['detail_purchase_po_recive' => $temp_purchase_qty]);
+
             $getTotalItemPurchase = $this->db->table($this->table_temp_purchase)->select('sum(temp_purchase_qty * product_content) as qty')->join('ms_product_unit', 'ms_product_unit.item_id = temp_purchase.temp_purchase_item_id')->where('temp_purchase_user_id', $data['purchase_user_id'])->get()->getRowArray();
 
             $product_id             = $row['product_id'];
@@ -331,6 +335,8 @@ class M_purchase extends Model
             }else{
                 $stock              = $getStock['stock'];    
             }
+
+
 
             $get_price = $this->db->table($this->table_ms_product)->select('base_purchase_price')->where('product_id', $product_id)->get()->getRowArray();
             $product_content        = floatval($row['product_content']);
@@ -392,7 +398,7 @@ class M_purchase extends Model
 
 
         if($data['purchase_po_invoice'] != null){
-           $updateStatus =  $this->db->table($this->table_hd_po)->where('purchase_order_invoice', $data['purchase_po_invoice'])->update(['purchase_order_status' => 'Selesai']);
+            $updateStatus =  $this->db->table($this->table_hd_po)->where('purchase_order_invoice', $data['purchase_po_invoice'])->update(['purchase_order_status' => 'Selesai']);
         }
 
         $this->db->query($sqlDtOrder);
@@ -440,6 +446,91 @@ class M_purchase extends Model
 
         return $save;
 
+    }
+
+    public function getReportData($start_date, $end_date, $warehouse, $product_tax, $supplier_id, $category_id, $brand_id)
+    {
+        $builder = $this->db->table('hd_purchase')->select("*");
+        $builder->join('dt_purchase', 'dt_purchase.dt_purchase_invoice = hd_purchase.purchase_invoice');
+        $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_purchase.purchase_supplier_id');
+        $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_purchase.purchase_warehouse_id');
+        $builder->join('ms_product_unit', 'ms_product_unit.item_id = dt_purchase.dt_purchase_item_id');
+        $builder->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id');
+        $builder->join('ms_product', 'ms_product.product_id = ms_product_unit.product_id');
+        $builder->join('ms_category', 'ms_category.category_id = ms_product.category_id');
+        $builder->join('ms_brand', 'ms_brand.brand_id = ms_product.brand_id');  
+        $builder->where("(purchase_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+
+        if ($warehouse != null) {
+            $builder->where('purchase_warehouse_id', $warehouse);
+        }
+        if ($product_tax != null) {
+            if($product_tax == 'Y'){
+                $builder->where('purchase_total_ppn >', '0');
+            }else{
+                $builder->where('purchase_total_ppn <', '0');
+            }
+        }
+        if ($supplier_id != null) {
+            $builder->where('purchase_supplier_id', $supplier_id);
+        }
+        if ($category_id != null) {
+            $builder->where('ms_product.category_id', $category_id);
+        }
+        if ($brand_id != null) {
+            $builder->where('ms_product.brand_id', $brand_id);
+        }
+        return $builder->orderBy('hd_purchase.created_at', 'ASC')->get();
+    }
+
+    public function getReportDataPurchaseHeader($start_date, $end_date, $warehouse, $product_tax, $supplier_id)
+    {
+
+        $builder = $this->db->table('hd_purchase')->select("supplier_code, supplier_name, purchase_invoice, purchase_date, purchase_due_date, purchase_total_dpp, purchase_total_ppn, purchase_total_ongkir, purchase_total, warehouse_name");
+        $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_purchase.purchase_supplier_id');
+        $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_purchase.purchase_warehouse_id');
+        $builder->where("(purchase_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+
+        if ($warehouse != null) {
+            $builder->where('purchase_warehouse_id', $warehouse);
+        }
+        if ($product_tax != null) {
+            if($product_tax == 'Y'){
+                $builder->where('purchase_total_ppn >', '0');
+            }else{
+                $builder->where('purchase_total_ppn <', '0');
+            }
+        }
+        if ($supplier_id != null) {
+            $builder->where('purchase_supplier_id', $supplier_id);
+        }
+        return $builder->orderBy('hd_purchase.created_at', 'ASC')->get();
+    }
+
+    public function getDebtPending($start_date, $end_date, $supplier_id)
+    {
+        $builder = $this->db->table('hd_purchase')->select("purchase_invoice, purchase_date, purchase_due_date, purchase_total, purchase_remaining_debt, purchase_down_payment");
+        $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_purchase.purchase_supplier_id');
+        $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_purchase.purchase_warehouse_id');
+        $builder->where("purchase_remaining_debt > 0");
+        $builder->where("(purchase_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        if ($supplier_id != null) {
+            $builder->where('purchase_supplier_id', $supplier_id);
+        }
+        return $builder->orderBy('hd_purchase.created_at', 'ASC')->get();
+    }
+
+    public function getDebtDueDate($start_date, $end_date, $supplier_id)
+    {
+        $builder = $this->db->table('hd_purchase')->select("purchase_invoice, purchase_date, purchase_due_date, purchase_total, purchase_remaining_debt, purchase_down_payment");
+        $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_purchase.purchase_supplier_id');
+        $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_purchase.purchase_warehouse_id');
+        $builder->where("purchase_remaining_debt > 0");
+        $builder->where("(purchase_due_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        if ($supplier_id != null) {
+            $builder->where('purchase_supplier_id', $supplier_id);
+        }
+        return $builder->orderBy('hd_purchase.created_at', 'ASC')->get();
     }
 
 

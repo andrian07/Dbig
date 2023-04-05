@@ -518,6 +518,27 @@ class Select extends WebminController
         $select2->generate();
     }
 
+    public function noPurchaseReport()
+    {
+        $id = $this->request->getGet('id');
+        $this->validationRequest(TRUE);
+        $select2 = new \App\Libraries\Select2('hd_purchase');
+        $select2->db->select('purchase_id, purchase_invoice, purchase_date');
+        $select2->searchFields  = ['purchase_invoice'];
+        $select2->orderBy       = 'purchase_date';
+        $select2->orderDir      = 'DESC';
+
+
+        $select2->renderResult(function ($row, $i) {
+            $result = [];
+            $result['id']   = $row['purchase_id'];
+            $result['text'] = $row['purchase_invoice'];
+            return $result;
+        });
+
+        $select2->generate();
+    }
+
     public function mappingArea()
     {
         $this->validationRequest(TRUE);

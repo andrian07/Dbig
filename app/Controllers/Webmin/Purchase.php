@@ -171,11 +171,11 @@ class Purchase extends WebminController
         $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
 
         $validation =  \Config\Services::validation();
-
+        
         $input = [
             'temp_purchase_id'                      => $this->request->getPost('temp_purchase_id'),
-            'temp_purchase_po_id'                   => $this->request->getPost('temp_po_submission_id'),
-            'temp_purchase_po_invoice'              => $this->request->getPost('temp_po_submission_id'),
+            'temp_purchase_po_id'                   => $this->request->getPost('temp_purchase_po_id'),
+            'temp_purchase_po_invoice'              => $this->request->getPost('temp_purchase_po_inv'),
             'temp_purchase_item_id'                 => $this->request->getPost('item_id'),
             'temp_purchase_qty'                     => $this->request->getPost('temp_qty'),
             'temp_purchase_ppn'                     => $this->request->getPost('temp_tax'),

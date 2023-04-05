@@ -628,6 +628,8 @@ $routes->group('webmin/retur', ['filter' => 'webminauth'], static function ($rou
 
     $routes->get('cancel-retur/(:alphanum)', 'Webmin\Retur\Retur::cancelRetur/$1');
 
+    $routes->get('printinvoice/(:alphanum)', 'Webmin\Retur\Retur::printInvoice/$1');
+
 });
 
 
@@ -740,6 +742,9 @@ $routes->group('webmin/payment', ['filter' => 'webminauth'], static function ($r
     $routes->post('save/(:alpha)', 'Webmin\Payment\Debt_repayment::save/$1');
 
     $routes->get('get-debt-history-detail/(:alphanum)', 'Webmin\Payment\Debt_repayment::getDebtHistoryDetail/$1');
+
+    $routes->get('get-receivable-history-detail/(:alphanum)', 'Webmin\Payment\Receivable_repayment::getReceivableHistoryDetail/$1');
+    
 
     /* End Pelunasan Hutang */
 
@@ -876,8 +881,62 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
     $routes->get('exp-stock-list', 'Webmin\Report\ReportInventory::expStockList');
 
 
+    /* section purchase */
+
+    $routes->get('view-po-list', 'Webmin\Report\ReportPurchase::viewPOList');
+
+    $routes->get('po-list', 'Webmin\Report\ReportPurchase::POList');
+
+    $routes->get('view-purchase-list', 'Webmin\Report\ReportPurchase::viewPurchaseList');
+
+    $routes->get('purchase-list', 'Webmin\Report\ReportPurchase::PurchaseList');
 
 
+    /* end section purchase */
+
+    /* section Konsinyasi */
+
+    $routes->get('view-po-consignment-list', 'Webmin\Report\ReportPurchase::viewPOConsignmentList');
+
+    $routes->get('po-consignment-list', 'Webmin\Report\ReportPurchase::POConsignmentList');
+
+    $routes->get('view-consignment-stockin', 'Webmin\Report\ReportPurchase::viewConsignmentStockin');
+
+    $routes->get('consignment-stockin', 'Webmin\Report\ReportPurchase::ConsignmentStockin');
+
+
+    /* end section Konsinyasi */
+
+    /* section Retur Purchase */
+
+    $routes->get('view-retur-purchase-list', 'Webmin\Report\ReportPurchase::viewReturPurchaseList');
+
+    $routes->get('retur-purchase-list', 'Webmin\Report\ReportPurchase::returPurchaseList');
+
+    /* end section Retur Purchase */
+
+
+    /* section debt */
+
+    //$routes->get('view-debt-balance-list', 'Webmin\Report\ReportDebt::viewDebtBalanceList');
+
+    $routes->get('view-debt-card-list', 'Webmin\Report\ReportDebt::viewDebtCardList');
+
+    $routes->get('cart-debt-list', 'Webmin\Report\ReportDebt::cartDebtList');
+
+    $routes->get('view-debt-pending-list', 'Webmin\Report\ReportDebt::viewDebtPendingList');
+
+    $routes->get('debt-pending-list', 'Webmin\Report\ReportDebt::debtPendingList');
+
+    $routes->get('view-debt-duedate-list', 'Webmin\Report\ReportDebt::viewDebtDuedateList');
+
+    $routes->get('debt-duedate-list', 'Webmin\Report\ReportDebt::debtDuedateList');
+
+    $routes->get('view-debt-list', 'Webmin\Report\ReportDebt::viewDebtList');
+
+    $routes->get('debt-list', 'Webmin\Report\ReportDebt::debtList');
+
+    /* end section debt */
 
     /* Section Sales */
 
@@ -955,6 +1014,8 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
     $routes->get('no-po-consignment', 'Webmin\Select::noPoConsignment');
 
     $routes->get('no-purchase', 'Webmin\Select::noPurchase');
+
+    $routes->get('no-purchase-report', 'Webmin\Select::noPurchaseReport');
 
     $routes->get('payment-method', 'Webmin\Select::payment_method');
 

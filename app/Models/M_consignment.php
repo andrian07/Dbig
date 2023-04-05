@@ -637,4 +637,31 @@ class M_consignment extends Model
 
     }
 
+    public function getReportData($start_date, $end_date, $supplier_id, $category_id, $brand_id, $status_po)
+    {
+        $builder = $this->db->table('hd_purchase_order_consignment')->select("*");
+        $builder->join('dt_purchase_order_consignment', 'dt_purchase_order_consignment.dt_po_consignment_invoice = hd_purchase_order_consignment.purchase_order_consignment_invoice');
+        $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_purchase_order_consignment.purchase_order_consignment_supplier_id');
+        $builder->join('ms_product_unit', 'ms_product_unit.item_id = dt_purchase_order_consignment.dt_po_consignment_item_id');
+        $builder->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id');
+        $builder->join('ms_product', 'ms_product.product_id = ms_product_unit.product_id');
+        $builder->join('ms_category', 'ms_category.category_id = ms_product.category_id');
+        $builder->join('ms_brand', 'ms_brand.brand_id = ms_product.brand_id');  
+        $builder->where("(purchase_order_consignment_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+
+        if ($supplier_id != null) {
+            $builder->where('purchase_supplier_id', $supplier_id);
+        }
+        if ($category_id != null) {
+            $builder->where('ms_product.category_id', $category_id);
+        }
+        if ($brand_id != null) {
+            $builder->where('ms_product.brand_id', $brand_id);
+        }
+        if ($status_po != null) {
+            $builder->where('purchase_order_consignment_status', $status_po);
+        }
+        return $builder->orderBy('hd_purchase_order_consignment.created_at', 'ASC')->get();
+    }
+
 }

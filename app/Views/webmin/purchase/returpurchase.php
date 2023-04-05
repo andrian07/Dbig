@@ -536,32 +536,32 @@ $assetsUrl = base_url('assets');
 
                                             <button data-id="{item_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
-                                             <i class="fas fa-edit"></i>
+                                               <i class="fas fa-edit"></i>
 
-                                         </button>
+                                           </button>
 
-                                         &nbsp;
+                                           &nbsp;
 
-                                         <button data-id="{item_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+                                           <button data-id="{item_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
 
-                                             <i class="fas fa-minus"></i>
+                                               <i class="fas fa-minus"></i>
 
-                                         </button>
+                                           </button>
 
-                                     </td>
+                                       </td>
 
-                                 </tr>
+                                   </tr>
 
-                             </template>
-
-
-                         </div>
-
-                     </div>
+                               </template>
 
 
+                           </div>
 
-                     <div class="row form-space">
+                       </div>
+
+
+
+                       <div class="row form-space">
 
                         <div class="col-lg-6">
 
@@ -818,15 +818,15 @@ $assetsUrl = base_url('assets');
 
                         }else{
 
-                           message.error(res.message);
+                         message.error(res.message);
 
-                           $('#purchase_no').val('');
+                         $('#purchase_no').val('');
 
-                       }
+                     }
 
-                   },
+                 },
 
-               });
+             });
 
             }
 
@@ -858,15 +858,15 @@ $assetsUrl = base_url('assets');
 
                         }else{
 
-                           message.error(res.message);
+                         message.error(res.message);
 
-                           $('#product_name').val('');
+                         $('#product_name').val('');
 
-                       }
+                     }
 
-                   },
+                 },
 
-               });
+             });
 
             },
 
@@ -1311,20 +1311,20 @@ $assetsUrl = base_url('assets');
 
                             } else {
 
-                               message.error(response.result.message);
+                             message.error(response.result.message);
 
-                           }
+                         }
 
-                           clearItemInput();
-                           loadTempData(response.result.data);
+                         clearItemInput();
+                         loadTempData(response.result.data);
 
-                       }
+                     }
 
-                       btnSubmit.prop('disabled', false);
+                     btnSubmit.prop('disabled', false);
 
-                   },
+                 },
 
-                   error: function(response) {
+                 error: function(response) {
 
                     btnSubmit.prop('disabled', false);
 
@@ -1757,6 +1757,18 @@ $assetsUrl = base_url('assets');
             setSelect2('#warehouse', '', '');
 
         }
+
+        $("#tblreturpurcase").on('click', '.btnprint', function(e) {
+
+            e.preventDefault();
+
+            let id = $(this).attr('data-id');
+
+            let actUrl = base_url + '/webmin/retur/printinvoice/' + id;
+
+            window.open(actUrl, '_blank').focus();
+
+        })
 
 
         $('#btnadd').click(function(e) {

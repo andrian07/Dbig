@@ -240,13 +240,13 @@ class M_debt_repayment extends Model
 
             $sqlPurchaseValues[] = "('$purchase_id_hd','$purchase_invoice_hd','$purchase_po_invoice_hd','$purchase_suplier_no_hd','$purchase_date_hd','$purchase_faktur_date_hd','$purchase_supplier_id_hd','$purchase_user_id_hd','$purchase_warehouse_id_hd','$purchase_remark_hd','$purchase_sub_total_hd','$purchase_discount1_hd','$purchase_discount1_percentage_hd','$purchase_discount2_hd','$purchase_discount2_percentage_hd','$purchase_discount3_hd','$purchase_discount3_percentage_hd','$purchase_total_discount_hd','$purchase_total_dpp_hd','$purchase_total_ppn_hd','$purchase_total_ongkir_hd','$purchase_total_hd','$purchase_due_date_hd','$purchase_payment_method_id_hd','$purchase_down_payment_hd', '$purchase_remaining_debt_hd','$purchase_retur_nominal_hd')";
 
-            //$update_remaining_debt =  $this->db->table($this->table_hd_purchase)->where('purchase_id', $dt_payment_debt_purchase_id)->update(['purchase_remaining_debt' => $dt_new_remaining_debt]);
+            $update_remaining_debt =  $this->db->table($this->table_hd_purchase)->where('purchase_id', $dt_payment_debt_purchase_id)->update(['purchase_remaining_debt' => $dt_new_remaining_debt]);
 
         }
 
         $sqlDtOrder .= implode(',', $sqlDtValues);
 
-        $sqlUpdatePurchase .= implode(',', $sqlPurchaseValues). " ON DUPLICATE KEY UPDATE purchase_remaining_debt=purchase_remaining_debt-VALUES(purchase_remaining_debt), purchase_retur_nominal=purchase_retur_nominal-VALUES(purchase_retur_nominal)";
+        $sqlUpdatePurchase .= implode(',', $sqlPurchaseValues). " ON DUPLICATE KEY UPDATE purchase_retur_nominal=purchase_retur_nominal-VALUES(purchase_retur_nominal)";
 
        
 
@@ -318,8 +318,47 @@ class M_debt_repayment extends Model
          if ($payment_debt_id  != '') {
 
             $builder->where(['dt_payment_debt.payment_debt_id' => $payment_debt_id]);
-
             }
+
+        return $builder->get();
+    }
+
+    public function getReportData($start_date, $end_date, $supplier_id)
+    {
+        $builder = $this->db->table('hd_payment_debt')->select("payment_debt_date as date_inv, payment_debt_invoice as invoice, CONCAT('Pembayaran ', purchase_invoice) AS ket, dt_payment_debt_nominal as debit,'0' as credit, sp1.supplier_name as supplier_name");
+        $builder->join('dt_payment_debt', 'dt_payment_debt.payment_debt_id = hd_payment_debt.payment_debt_id');
+        $builder->join('hd_purchase', 'hd_purchase.purchase_id = dt_payment_debt.dt_payment_debt_purchase_id');
+        $builder->join('ms_supplier sp1', 'sp1.supplier_id = hd_payment_debt.payment_debt_supplier_id');
+        $builder->where("(payment_debt_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        if ($supplier_id != null) {
+            $builder->where('purchase_supplier_id', $supplier_id);
+        }
+
+        $union   = $this->db->table('hd_purchase')->select("purchase_date as date_inv, purchase_invoice as invoice, CONCAT('PEMBELIAN ', purchase_invoice) AS ket, '0' as debit, purchase_total as credit, sp2.supplier_name as supplier_name");
+        $union->join('ms_supplier sp2', 'sp2.supplier_id = hd_purchase.purchase_supplier_id');
+        $union->where("(purchase_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        if ($supplier_id != null) {
+            $union->where('purchase_supplier_id', $supplier_id);
+        }
+
+        $builder->union($union);
+
+        return $this->db->newQuery()->fromSubquery($builder, 'q')->orderBy('date_inv', 'ASC')->get();
+    }
+
+    public function getDebt($purchase_invoice, $start_date, $end_date, $supplier_id)
+    {
+        $builder = $this->db->table('hd_payment_debt')->select("purchase_invoice, payment_debt_invoice, payment_debt_date, supplier_name, purchase_total, dt_payment_debt_discount, dt_payment_debt_nominal");
+        $builder->join('dt_payment_debt', 'dt_payment_debt.payment_debt_id = hd_payment_debt.payment_debt_id');
+        $builder->join('hd_purchase', 'hd_purchase.purchase_id = dt_payment_debt.dt_payment_debt_purchase_id');
+        $builder->join('ms_supplier sp1', 'sp1.supplier_id = hd_payment_debt.payment_debt_supplier_id');
+        $builder->where("(payment_debt_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        if ($supplier_id != null) {
+            $builder->where('purchase_supplier_id', $supplier_id);
+        }
+        if ($purchase_invoice != null) {
+            $builder->where('dt_payment_debt_purchase_id', $purchase_invoice);
+        }
 
         return $builder->get();
     }

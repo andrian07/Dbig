@@ -54,6 +54,7 @@ class Retur extends WebminController
                 $btns[] = '<button ' . $prop2 . ' class="btn btn-sm btn-success btnrepayment" data-toggle="tooltip" data-placement="top" data-title="Payment"><i class="fas fa-money-bill-wave"></i></button>';
                 $btns[] = button_edit($prop);
                 $btns[] = button_delete($prop);
+                $btns[] = button_print($prop);
                 $column[] = implode('&nbsp;', $btns);
                 return $column;
             });
@@ -641,6 +642,41 @@ class Retur extends WebminController
 
         $result['csrfHash'] = csrf_hash();
         resultJSON($result);
+    }
+
+    public function printInvoice($hd_retur_purchase_id = "")
+    {
+        if ($hd_retur_purchase_id == '') {
+
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+
+        } else {
+
+            $getOrder = $this->M_retur->getRetur($hd_retur_purchase_id)->getRowArray();
+
+            if ($getOrder == NULL) {
+
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+
+            } else {
+
+                $invoice_num = $getOrder['hd_retur_purchase_invoice'];
+
+                $data = [
+
+                    'hdRetur' => $getOrder,
+
+                    'dtRetur' => $this->M_retur->getDtRetur($hd_retur_purchase_id)->getResultArray(),
+
+                ];
+
+                return $this->renderView('purchase/purchaseretur_invoice', $data);
+            }
+
+        }
+
+
+
     }
 
     //--------------------------------------------------------------------

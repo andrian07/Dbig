@@ -364,12 +364,16 @@ class MyApp extends BaseConfig
                 'stock_opname_list'         => ['text' => 'Daftar Stok Opname'],
                 'customer_point_history_chart' => ['text' => 'Grafik Histori Poin Customer'],
 
+                'po_list'                   => ['text' => 'Daftar PO'],
+                'retur_list'                => ['text' => 'Daftar Retur'],
                 'purchase_list'             => ['text' => 'Daftar Pembelian'],
                 'supplier_purchase_list'    => ['text' => 'Daftar Pembelian Per Supplier'],
                 'purchase_repayment_list'   => ['text' => 'Daftar Pelunasan Pembelian'],
                 'purchase_debt_due_list'    => ['text' => 'Daftar Tagihan Jatuh Tempo'],
                 'product_purchase_recap'    => ['text' => 'Rekap Pembelian Produk'],
                 'product_purchase_history'  => ['text' => 'Histori Pembelian Produk'],
+
+                'debt_list'                 => ['text' => 'Daftar Hutang'],
 
                 'purchase_return_list'             => ['text' => 'Daftar Retur Pembelian'],
                 'product_purchase_return_recap'    => ['text' => 'Rekap Retur Pembelian Produk'],

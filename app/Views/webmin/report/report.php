@@ -56,7 +56,7 @@ $report_role = $user_role['report'];
 
 
             <div class="col-md-4">
-                <div class="card card-primary">
+                <div class="card card-danger">
                     <div class="card-header">
                         <h3 class="card-title">Inventory</h3>
 
@@ -103,12 +103,10 @@ $report_role = $user_role['report'];
                     <!-- /.card-header -->
                     <div class="card-body">
                         <ul class="list-group">
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-list') ?>" class="text-primary">Laporan PO</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-card') ?>" class="text-primary">Laporan Pembelian</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-card') ?>" class="text-primary">Laporan Pembelian Rinci</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-card') ?>" class="text-primary">Laporan Pembelian Per Supplier</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-card') ?>" class="text-primary">Laporan Pembelian Per Merek</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-card') ?>" class="text-primary">Laporan Pembelian Per Kategori</a></li>
+                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-po-list') ?>" class="text-primary">Laporan PO</a></li>
+                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-purchase-list') ?>" class="text-primary">Laporan Pembelian</a></li>
+                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-po-consignment-list') ?>" class="text-primary">Laporan PO Konsinyasi</a></li>
+                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-retur-purchase-list') ?>" class="text-primary">Laporan Retur Pembelian</a></li>
                         </ul>
                     </div>
                     <!-- /.card-body -->
@@ -116,30 +114,7 @@ $report_role = $user_role['report'];
                 <!-- /.card -->
             </div>
 
-            <div class="col-md-4">
-                <div class="card card-danger">
-                    <div class="card-header">
-                        <h3 class="card-title">Laporan Retur Pembelian</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
-                        <!-- /.card-tools -->
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <ul class="list-group">
-                                <!--
-                                <li class="list-group-item"><a href="<?= base_url('report/view-purchase-return-list') ?>" class="text-primary">Daftar Retur Pembelian</a></li>
-                                <li class="list-group-item"><a href="<?= base_url('report/view-product-purchase-return-recap') ?>" class="text-primary">Rekap Retur Pembelian Produk</a></li>
-                            -->
-                        </ul>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
+          
 
 
 
@@ -165,6 +140,34 @@ $report_role = $user_role['report'];
                             <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-sales-list') ?>" class="text-primary">Laporan Penjualan Proyek </a></li>
                             <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-sales-list-group-salesman') ?>" class="text-primary">Laporan Penjualan Proyek Per Salesman</a></li>
                             <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-sales-list-group-customer') ?>" class="text-primary">Laporan Penjualan Proyek Per Customer</a></li>
+                        </ul>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="card card-danger">
+                    <div class="card-header">
+                        <h3 class="card-title">Laporan Hutang</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                        <!-- /.card-tools -->
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <!-- <li class="list-group-item"><a href="<?= base_url('webmin/report/view-debt-balance-list') ?>" class="text-primary">Laporan Saldo Hutang</a></li> -->
+                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-debt-card-list') ?>" class="text-primary">Laporan Kartu Hutang</a></li>
+                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-debt-pending-list') ?>" class="text-primary">Laporan Sisa Hutang Belum Lunas</a></li>
+                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-debt-duedate-list') ?>" class="text-primary">Laporan Hutang Jatuh Tempo</a></li>
+                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-debt-list') ?>" class="text-primary">Laporan Pembayaran Hutang</a></li>
                         </ul>
                     </div>
                     <!-- /.card-body -->

@@ -388,16 +388,16 @@ class Purchase_order extends WebminController
             if ($temp_po_id != '') {
                 $delete = $this->M_purchase_order->deletetemp($temp_po_id);
                 if ($delete) {
-                 $getTemp = $this->M_purchase_order->getTemp($this->userLogin['user_id'])->getResultArray();
-                 $find_result = [];
-                 foreach ($getTemp as $k => $v) {
-                     $find_result[$k] = esc($v);
-                 }
-                 $result['data'] = $find_result;
-                 $result['csrfHash'] = csrf_hash();
-                 $result['success'] = 'TRUE';
-                 $result['message'] = 'Data Berhasil Di Hapus';
-             } else {
+                   $getTemp = $this->M_purchase_order->getTemp($this->userLogin['user_id'])->getResultArray();
+                   $find_result = [];
+                   foreach ($getTemp as $k => $v) {
+                       $find_result[$k] = esc($v);
+                   }
+                   $result['data'] = $find_result;
+                   $result['csrfHash'] = csrf_hash();
+                   $result['success'] = 'TRUE';
+                   $result['message'] = 'Data Berhasil Di Hapus';
+               } else {
                 $result = ['success' => FALSE, 'message' => 'Data Gagal Di Hapus'];
             }
         }
@@ -637,7 +637,7 @@ public function printinvoice($purchase_order_id = "")
         $dompdf->stream('invoice');
     } else {
     */
-       if ($purchase_order_id == '') {
+     if ($purchase_order_id == '') {
 
         throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 
