@@ -248,4 +248,30 @@ class M_point_exchange extends Model
         saveQueries($saveQueries, 'exchange_point', $exchange_id, 'success');
         return $save;
     }
+
+
+    // report section //
+    public function getReportExchangeList($start_date, $end_date, $status = '', $customer_id = '')
+    {
+        $builder = $this->db->table('exchange_point');
+
+        $builder->select('exchange_point.*,ms_point_reward.reward_code,ms_point_reward.reward_name,ms_customer.customer_code,ms_customer.customer_name,ms_store.store_name,user_account.user_realname')
+            ->join('ms_point_reward', 'ms_point_reward.reward_id=exchange_point.reward_id')
+            ->join('ms_customer', 'ms_customer.customer_id=exchange_point.customer_id')
+            ->join('ms_store', 'ms_store.store_id=exchange_point.store_id', 'left')
+            ->join('user_account', 'user_account.user_id=exchange_point.completed_by', 'left')
+            ->where("(exchange_point.exchange_date BETWEEN '$start_date' AND '$end_date')");
+
+        if ($customer_id != '') {
+            $builder->where('exchange_point.customer_id', $customer_id);
+        }
+
+        if ($status != '') {
+            $builder->where('exchange_point.exchange_status', $status);
+        }
+
+        $builder->orderBy('exchange_point.exchange_date', 'asc');
+
+        return $builder->get();
+    }
 }
