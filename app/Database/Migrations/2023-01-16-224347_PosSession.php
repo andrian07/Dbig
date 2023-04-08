@@ -52,7 +52,12 @@ class PosSession extends Migration
                 'type'           => 'INT',
                 'constraint'     => 11,
                 'unsigned'       => true,
-            ]
+            ],
+            'posted' => [
+                'type' => 'ENUM',
+                'constraint' => ['Y', 'N'],
+                'default' => 'N'
+            ],
         ]);
 
         $this->forge->addField('created_at DATETIME DEFAULT CURRENT_TIMESTAMP');

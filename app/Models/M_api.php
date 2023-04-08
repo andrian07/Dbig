@@ -166,7 +166,7 @@ class M_api extends Model
         $builder->where('active ', 'Y');
         $builder->where('deleted ', 'N');
         if($perpage == '' || $start == ''){
-        return $builder->get();
+        return $builder->get($perpage, $start);
         }else{
         return $builder->get($perpage, $start);
         }
@@ -180,7 +180,7 @@ class M_api extends Model
         $builder->where('deleted ','N');
         $builder->where('mobile_promo_end_date >=', $date);
          if($perpage == '' || $start == ''){
-        return $builder->get();
+        return $builder->get($perpage, $start);
         }else{
         return $builder->get($perpage, $start);
         }
@@ -191,7 +191,7 @@ class M_api extends Model
         $builder = $this->db->table($this->table_category);
         $builder->where('deleted ', 'N');
         if($perpage == '' || $start == ''){
-        return $builder->get();
+        return $builder->get($perpage, $start);
         }else{
         return $builder->get($perpage, $start);
         }
@@ -202,7 +202,7 @@ class M_api extends Model
         $builder = $this->db->table($this->table_brand);
         $builder->where('deleted ', 'N');
         if($perpage == '' || $start == ''){
-        return $builder->get();
+        return $builder->get($perpage, $start);
         }else{
         return $builder->get($perpage, $start);
         }
@@ -234,7 +234,7 @@ class M_api extends Model
         }else{
         $builder->orderBy('ms_product.created_at','desc' );
         }
-        if($perpage == '' || $start == ''){
+        if($perpage == null || $start == null){
         return $builder->get();
         }else{
         return $builder->get($perpage, $start);
@@ -323,7 +323,7 @@ class M_api extends Model
         $builder->where(['active' => 'Y' ]);
         $builder->where(['deleted' => 'N' ]);
         if($perpage == '' || $start == ''){
-        return $builder->get();
+        return $builder->get($perpage, $start);
         }else{
         return $builder->get($perpage, $start);
         }
@@ -335,7 +335,7 @@ class M_api extends Model
         $builder->where(['customer_id' => $customer_id]);
         $builder->orderBy('created_at','desc' );
         if($perpage == '' || $start == ''){
-        return $builder->get();
+        return $builder->get($perpage, $start);
         }else{
         return $builder->get($perpage, $start);
         }

@@ -72,6 +72,14 @@ class PosSales extends Migration
                 'constraint' => '25,2',
                 'default' => 0.00
             ],
+            'payment_list' => [
+                'type'          => 'VARCHAR',
+                'constraint'    => '255'
+            ],
+            'payment_remark' => [
+                'type'          => 'VARCHAR',
+                'constraint'    => '255'
+            ],
             'user_id'          => [
                 'type'           => 'INT',
                 'constraint'     => 11,
@@ -192,6 +200,16 @@ class PosSales extends Migration
                 'constraint' => '25,2',
                 'default' => 0.00
             ],
+            'sales_dpp' => [
+                'type' => 'DECIMAL',
+                'constraint' => '25,2',
+                'default' => 0.00
+            ],
+            'sales_ppn' => [
+                'type' => 'DECIMAL',
+                'constraint' => '25,2',
+                'default' => 0.00
+            ],
             'margin_allocation' => [
                 'type' => 'DECIMAL',
                 'constraint' => '25,2',
@@ -253,6 +271,16 @@ class PosSales extends Migration
                 'default' => 0.00
             ],
             'temp_sales_price' => [
+                'type' => 'DECIMAL',
+                'constraint' => '25,2',
+                'default' => 0.00
+            ],
+            'temp_sales_dpp' => [
+                'type' => 'DECIMAL',
+                'constraint' => '25,2',
+                'default' => 0.00
+            ],
+            'temp_sales_ppn' => [
                 'type' => 'DECIMAL',
                 'constraint' => '25,2',
                 'default' => 0.00

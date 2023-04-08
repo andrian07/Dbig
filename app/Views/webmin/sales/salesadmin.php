@@ -164,421 +164,423 @@ $assetsUrl = base_url('assets');
 
                                     <div class="col-sm-3">
 
-                                        <input id="purchase_order_invoice" name="purchase_order_invoice" type="text" class="form-control" value="AUTO" readonly>
+                                       <input id="sales_admin_id" name="sales_admin_id" type="hidden" class="form-control">
 
-                                    </div>
+                                       <input id="sales_admin_invoice" name="sales_admin_invoice" type="text" class="form-control" value="AUTO" readonly>
 
-                                    <div class="col-md-1">
+                                   </div>
 
-                                    </div>
+                                   <div class="col-md-1">
 
-                                    <label for="due_date" class="col-sm-1 col-form-label text-right">Tempo :</label>
+                                   </div>
 
-                                    <div class="col-sm-3">
-                                        <input id="due_date" name="due_date" type="date" class="form-control">
-
-                                    </div>
-
-                                    <label for="tanggal" class="col-sm-1 col-form-label text-right">Tanggal :</label>
-
-                                    <div class="col-sm-2">
-
-                                        <input id="sales_date" name="sales_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>" readonly>
-
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-
-                                    <label for="customer_id" class="col-sm-1 col-form-label text-right">Customer :</label>
-
-                                    <div class="col-sm-3">
-
-                                        <select id="customer_id" name="customer_id" class="form-control"></select>
-
-                                    </div>
-
-                                    <div class="col-sm-1">
-
-
-
-                                    </div>
-
-                                    <label for="Sales" class="col-sm-1 col-form-label text-right">Sales :</label>
-
-                                    <div class="col-md-3">
-
-                                        <select id="salesman_id" name="salesman_id" class="form-control select-salesman fs-20"></select>
-
-                                    </div>               
-
-                                    <label for="cabang" class="col-sm-1 col-form-label text-right">Cabang :</label>
-
-                                    <div class="col-sm-2">
-
-                                        <select id="store_id" name="store_id" class="form-control"></select>
-
-                                    </div>
-                                </div>
-
-
-                                <div class="form-group row">
-
-                                    <label for="suplier" class="col-sm-1 col-form-label text-right">Payment :</label>
-
-                                    <div class="col-sm-3">
-
-                                        <select id="payment_type" name="payment_type" class="form-control"></select>
-
-                                    </div>
-
-                                    <div class="col-md-5">
-
-                                    </div>  
-
-
-                                    <label for="user" class="col-sm-1 col-form-label text-right">User :</label>
-
-                                    <div class="col-sm-2">
-
-                                        <input id="display_user" type="text" class="form-control" value="<?= $user['user_realname'] ?>" readonly>
-
-                                    </div>
-
-
-                                </div>
-
-                            </form>
-
-
-                        </div><!-- /.card-body -->
-
-                    </div>
-
-                    <!-- /.card -->
-
-                </div>
-
-                <!-- /.col -->
-
-            </div>
-
-            <!-- /.row -->
-
-        </div><!-- /.container-fluid -->
-
-
-
-
-
-        <div class="container-fluid">
-
-            <div class="row">
-
-                <!-- /.col -->
-
-                <div class="col-md-12">
-
-                    <div class="card">
-
-                        <div class="card-body">
-
-                            <form id="frmaddtemp" class="mb-2">
-
-                                <div class="row well well-sm">
-
-                                   <input id="temp_sales_admin_id" name="temp_sales_admin_id" type="hidden" value="">
+                                   <label for="due_date" class="col-sm-1 col-form-label text-right">Tempo :</label>
 
                                    <div class="col-sm-3">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Produk</label>
-
-                                        <input id="item_id" name="item_id" type="hidden" value="">
-
-                                        <input id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname required>
-
-                                    </div>
+                                    <input id="due_date" name="due_date" type="date" class="form-control">
 
                                 </div>
 
+                                <label for="tanggal" class="col-sm-1 col-form-label text-right">Tanggal :</label>
+
                                 <div class="col-sm-2">
 
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Harga Jual Per Unit</label>
-
-                                        <input id="temp_purchase_price" name="temp_purchase_price" type="hidden" class="form-control text-right">
-
-                                        <input id="temp_purchase_tax" name="temp_purchase_tax" type="hidden" class="form-control text-right">
-
-                                        <input id="temp_purchase_cogs" name="temp_purchase_cogs" type="hidden" class="form-control text-right">
-
-                                        <input id="temp_price" name="temp_price" type="text" class="form-control text-right" value="0" data-parsley-vprice required>
-
-                                    </div>
+                                    <input id="sales_date" name="sales_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>" readonly>
 
                                 </div>
+                            </div>
 
-                                <div class="col-sm-2">
+                            <div class="form-group row">
 
-                                    <!-- text input -->
+                                <label for="customer_id" class="col-sm-1 col-form-label text-right">Customer :</label>
 
-                                    <div class="form-group">
+                                <div class="col-sm-3">
 
-                                        <label>Qty</label>
-
-                                        <input id="temp_qty" name="temp_qty" type="text" class="form-control text-right" value="0" data-parsley-vqty required>
-                                        <input id="total_price" name="total_price" type="hidden" class="form-control text-right" value="0" data-parsley-vqty required>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Discount</label>
-
-                                        <input id="temp_discount1" name="temp_discount1" type="hidden" class="form-control text-right" value="0" readonly>
-                                        <input id="temp_discount2" name="temp_discount2" type="hidden" class="form-control text-right" value="0" readonly>
-                                        <input id="temp_discount3" name="temp_discount3" type="hidden" class="form-control text-right" value="0" readonly>
-                                        <input id="temp_discount_percentage1" name="temp_discount_percentage1" type="hidden" class="form-control text-right" value="0" readonly>
-                                        <input id="temp_discount_percentage2" name="temp_discount_percentage2" type="hidden" class="form-control text-right" value="0" readonly>
-                                        <input id="temp_discount_percentage3" name="temp_discount_percentage3" type="hidden" class="form-control text-right" value="0" readonly>
-                                        <input id="total_temp_discount" name="total_temp_discount" type="text" class="form-control text-right" value="0"readonly>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Total</label>
-
-                                        <input id="temp_total" name="temp_total" type="text" class="form-control text-right" value="0" readonly>
-
-                                    </div>
+                                    <select id="customer_id" name="customer_id" class="form-control"></select>
 
                                 </div>
 
                                 <div class="col-sm-1">
 
-                                    <!-- text input -->
 
-                                    <label>&nbsp;</label>
-
-                                    <div class="form-group">
-
-                                        <div class="col-12">
-
-                                            <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle float-right" style="margin-left: 2px;"><i class="fas fa-plus"></i></button>
-
-                                        </div>
-
-                                    </div>
 
                                 </div>
+
+                                <label for="Sales" class="col-sm-1 col-form-label text-right">Sales :</label>
+
+                                <div class="col-md-3">
+
+                                    <select id="salesman_id" name="salesman_id" class="form-control select-salesman fs-20"></select>
+
+                                </div>               
+
+                                <label for="cabang" class="col-sm-1 col-form-label text-right">Cabang :</label>
+
+                                <div class="col-sm-2">
+
+                                    <select id="store_id" name="store_id" class="form-control"></select>
+
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+
+                                <label for="suplier" class="col-sm-1 col-form-label text-right">Payment :</label>
+
+                                <div class="col-sm-3">
+
+                                    <select id="payment_type" name="payment_type" class="form-control"></select>
+
+                                </div>
+
+                                <div class="col-md-5">
+
+                                </div>  
+
+
+                                <label for="user" class="col-sm-1 col-form-label text-right">User :</label>
+
+                                <div class="col-sm-2">
+
+                                    <input id="display_user" type="text" class="form-control" value="<?= $user['user_realname'] ?>" readonly>
+
+                                </div>
+
 
                             </div>
 
                         </form>
 
 
+                    </div><!-- /.card-body -->
 
-                        <div class="row mb-2">
+                </div>
 
-                            <div class="col-12">
+                <!-- /.card -->
 
-                                <table id="tbltemp" class="table table-bordered table-hover" width="100%">
+            </div>
 
-                                    <thead>
+            <!-- /.col -->
 
-                                        <tr>
+        </div>
 
-                                            <th data-priority="1">#</th>
+        <!-- /.row -->
 
-                                            <th data-priority="2">Kode Produk</th>
-
-                                            <th data-priority="3">Produk</th>
-
-                                            <th data-priority="4">Qty</th>
-
-                                            <th data-priority="5">Harga Satuan</th>
-
-                                            <th data-priority="6">Discount</th>
-
-                                            <th data-priority="7">Total</th>
-
-                                            <th data-priority="8">Aksi</th>
-
-                                        </tr>
-
-                                    </thead>
-
-                                    <tbody></tbody>
-
-                                </table>
+    </div><!-- /.container-fluid -->
 
 
-                                <template id="template_row_temp">
-
-                                 <tr>
-
-                                     <td>{row}</td>
-
-                                     <td>{item_code}</td>
-
-                                     <td>{product_name}</td>
-
-                                     <td>{temp_qty}</td>
-
-                                     <td>{temp_sales_price}</td>
-
-                                     <td>{discount}</td>
-
-                                     <td>{total}</td>
-
-                                     <td>
-
-                                         <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
-
-                                             <i class="fas fa-edit"></i>
-
-                                         </button>
-
-                                         &nbsp;
-
-                                         <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
-
-                                             <i class="fas fa-minus"></i>
-
-                                         </button>
-
-                                     </td>
-
-                                 </tr>
-
-                             </template>
 
 
-                         </div>
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <!-- /.col -->
+
+            <div class="col-md-12">
+
+                <div class="card">
+
+                    <div class="card-body">
+
+                        <form id="frmaddtemp" class="mb-2">
+
+                            <div class="row well well-sm">
+
+                               <input id="temp_sales_admin_id" name="temp_sales_admin_id" type="hidden" value="">
+
+                               <div class="col-sm-3">
+
+                                <!-- text input -->
+
+                                <div class="form-group">
+
+                                    <label>Produk</label>
+
+                                    <input id="item_id" name="item_id" type="hidden" value="">
+
+                                    <input id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname required>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-2">
+
+                                <!-- text input -->
+
+                                <div class="form-group">
+
+                                    <label>Harga Jual Per Unit</label>
+
+                                    <input id="temp_purchase_price" name="temp_purchase_price" type="hidden" class="form-control text-right">
+
+                                    <input id="temp_purchase_tax" name="temp_purchase_tax" type="hidden" class="form-control text-right">
+
+                                    <input id="temp_purchase_cogs" name="temp_purchase_cogs" type="hidden" class="form-control text-right">
+
+                                    <input id="temp_price" name="temp_price" type="text" class="form-control text-right" value="0" data-parsley-vprice required>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-2">
+
+                                <!-- text input -->
+
+                                <div class="form-group">
+
+                                    <label>Qty</label>
+
+                                    <input id="temp_qty" name="temp_qty" type="text" class="form-control text-right" value="0" data-parsley-vqty required>
+                                    <input id="total_price" name="total_price" type="hidden" class="form-control text-right" value="0" data-parsley-vqty required>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-2">
+
+                                <!-- text input -->
+
+                                <div class="form-group">
+
+                                    <label>Discount</label>
+
+                                    <input id="temp_discount1" name="temp_discount1" type="hidden" class="form-control text-right" value="0" readonly>
+                                    <input id="temp_discount2" name="temp_discount2" type="hidden" class="form-control text-right" value="0" readonly>
+                                    <input id="temp_discount3" name="temp_discount3" type="hidden" class="form-control text-right" value="0" readonly>
+                                    <input id="temp_discount_percentage1" name="temp_discount_percentage1" type="hidden" class="form-control text-right" value="0" readonly>
+                                    <input id="temp_discount_percentage2" name="temp_discount_percentage2" type="hidden" class="form-control text-right" value="0" readonly>
+                                    <input id="temp_discount_percentage3" name="temp_discount_percentage3" type="hidden" class="form-control text-right" value="0" readonly>
+                                    <input id="total_temp_discount" name="total_temp_discount" type="text" class="form-control text-right" value="0"readonly>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-2">
+
+                                <!-- text input -->
+
+                                <div class="form-group">
+
+                                    <label>Total</label>
+
+                                    <input id="temp_total" name="temp_total" type="text" class="form-control text-right" value="0" readonly>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-1">
+
+                                <!-- text input -->
+
+                                <label>&nbsp;</label>
+
+                                <div class="form-group">
+
+                                    <div class="col-12">
+
+                                        <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle float-right" style="margin-left: 2px;"><i class="fas fa-plus"></i></button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+
+
+                    <div class="row mb-2">
+
+                        <div class="col-12">
+
+                            <table id="tbltemp" class="table table-bordered table-hover" width="100%">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th data-priority="1">#</th>
+
+                                        <th data-priority="2">Kode Produk</th>
+
+                                        <th data-priority="3">Produk</th>
+
+                                        <th data-priority="4">Qty</th>
+
+                                        <th data-priority="5">Harga Satuan</th>
+
+                                        <th data-priority="6">Discount</th>
+
+                                        <th data-priority="7">Total</th>
+
+                                        <th data-priority="8">Aksi</th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody></tbody>
+
+                            </table>
+
+
+                            <template id="template_row_temp">
+
+                             <tr>
+
+                                 <td>{row}</td>
+
+                                 <td>{item_code}</td>
+
+                                 <td>{product_name}</td>
+
+                                 <td>{temp_qty}</td>
+
+                                 <td>{temp_sales_price}</td>
+
+                                 <td>{discount}</td>
+
+                                 <td>{total}</td>
+
+                                 <td>
+
+                                     <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+
+                                         <i class="fas fa-edit"></i>
+
+                                     </button>
+
+                                     &nbsp;
+
+                                     <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+
+                                         <i class="fas fa-minus"></i>
+
+                                     </button>
+
+                                 </td>
+
+                             </tr>
+
+                         </template>
+
 
                      </div>
 
+                 </div>
 
 
-                     <div class="row form-space">
 
-                        <div class="col-lg-6">
+                 <div class="row form-space">
 
-                            <div class="form-group">
+                    <div class="col-lg-6">
 
-                                <div class="col-sm-12">
+                        <div class="form-group">
 
-                                    <textarea id="sales_remark" name="sales_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="3"></textarea>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="col-lg-6 text-right">
-
-                            <div class="form-group row">
-                                <label for="footer_sub_total" class="col-sm-7 col-form-label text-right:">Sub Total:</label>
-                                <div class="col-sm-5">
-                                    <input id="footer_sub_total" name="footer_sub_total" type="text" class="form-control text-right" value="0" readonly>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="footer_total_discount" class="col-sm-7 col-form-label text-right:">Discount :</label>
-                                <div class="col-sm-4">
-                                    <input id="footer_discount1" name="footer_discount1" type="hidden" class="form-control text-right" value="0" readonly>
-                                    <input id="footer_discount2" name="footer_discount2" type="hidden" class="form-control text-right" value="0" readonly>
-                                    <input id="footer_discount3" name="footer_discount3" type="hidden" class="form-control text-right" value="0" readonly>
-                                    
-                                    <input id="footer_discount_percentage1" name="footer_discount_percentage1" type="hidden" class="form-control text-right" value="0" readonly>
-                                    <input id="footer_discount_percentage2" name="footer_discount_percentage2" type="hidden" class="form-control text-right" value="0" readonly>
-                                    <input id="footer_discount_percentage3" name="footer_discount_percentage3" type="hidden" class="form-control text-right" value="0" readonly>
-                                    <input id="footer_total_discount" name="footer_total_discount" type="text" class="form-control text-right" value="0" readonly>
-                                </div>
-                                <div class="col-sm-1">
-                                    <button id="btnaddfooterdiscount" class="btn btn-warning"><i class="fas fa-tags"></i></button>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="footer_total_ppn" class="col-sm-7 col-form-label text-right:">PPN :</label>
-                                <div class="col-sm-4">
-                                    <input id="footer_total_ppn" name="footer_total_ppn" type="text" class="form-control text-right" value="0" readonly>
-                                </div>
-                                <div class="col-sm-1">
-                                  <div class="icheck-primary d-inline">
-                                    <input type="checkbox" id="ppn_check" style="width:25px; height:25px;">
-                                    <label for="ppn_check">
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="footer_total_invoice" class="col-sm-7 col-form-label text-right:">Total :</label>
-                            <div class="col-sm-5">
-                                <input id="footer_total_invoice" name="footer_total_invoice" type="text" class="form-control text-right" value="0" readonly>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="footer_dp" class="col-sm-7 col-form-label text-right:">Tunai/DP :</label>
-                            <div class="col-sm-5">
-                                <input id="footer_dp" name="footer_dp" type="text" class="form-control text-right" value="0">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="footer_credit" class="col-sm-7 col-form-label text-right:">Kredit :</label>
-                            <div class="col-sm-5">
-                                <input id="footer_credit" name="footer_credit" type="text" class="form-control text-right" value="0" readonly>
-                            </div>
-                        </div>
-
-
-                        <div class="form-group row">
                             <div class="col-sm-12">
-                                <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
-                                <button id="btnsave" class="btn btn-success button-header-custom-save"><i class="fas fa-save"></i> Simpan</button>
+
+                                <textarea id="sales_remark" name="sales_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="3"></textarea>
+
                             </div>
+
                         </div>
 
                     </div>
 
+                    <div class="col-lg-6 text-right">
+
+                        <div class="form-group row">
+                            <label for="footer_sub_total" class="col-sm-7 col-form-label text-right:">Sub Total:</label>
+                            <div class="col-sm-5">
+                                <input id="footer_sub_total" name="footer_sub_total" type="text" class="form-control text-right" value="0" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="footer_total_discount" class="col-sm-7 col-form-label text-right:">Discount :</label>
+                            <div class="col-sm-4">
+                                <input id="footer_discount1" name="footer_discount1" type="hidden" class="form-control text-right" value="0" readonly>
+                                <input id="footer_discount2" name="footer_discount2" type="hidden" class="form-control text-right" value="0" readonly>
+                                <input id="footer_discount3" name="footer_discount3" type="hidden" class="form-control text-right" value="0" readonly>
+
+                                <input id="footer_discount_percentage1" name="footer_discount_percentage1" type="hidden" class="form-control text-right" value="0" readonly>
+                                <input id="footer_discount_percentage2" name="footer_discount_percentage2" type="hidden" class="form-control text-right" value="0" readonly>
+                                <input id="footer_discount_percentage3" name="footer_discount_percentage3" type="hidden" class="form-control text-right" value="0" readonly>
+                                <input id="footer_total_discount" name="footer_total_discount" type="text" class="form-control text-right" value="0" readonly>
+                            </div>
+                            <div class="col-sm-1">
+                                <button id="btnaddfooterdiscount" class="btn btn-warning"><i class="fas fa-tags"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="footer_total_ppn" class="col-sm-7 col-form-label text-right:">PPN :</label>
+                            <div class="col-sm-4">
+                                <input id="footer_total_ppn" name="footer_total_ppn" type="text" class="form-control text-right" value="0" readonly>
+                            </div>
+                            <div class="col-sm-1">
+                              <div class="icheck-primary d-inline">
+                                <input type="checkbox" id="ppn_check" style="width:25px; height:25px;">
+                                <label for="ppn_check">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="footer_total_invoice" class="col-sm-7 col-form-label text-right:">Total :</label>
+                        <div class="col-sm-5">
+                            <input id="footer_total_invoice" name="footer_total_invoice" type="text" class="form-control text-right" value="0" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="footer_dp" class="col-sm-7 col-form-label text-right:">Tunai/DP :</label>
+                        <div class="col-sm-5">
+                            <input id="footer_dp" name="footer_dp" type="text" class="form-control text-right" value="0">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="footer_credit" class="col-sm-7 col-form-label text-right:">Kredit :</label>
+                        <div class="col-sm-5">
+                            <input id="footer_credit" name="footer_credit" type="text" class="form-control text-right" value="0" readonly>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
+                            <button id="btnsave" class="btn btn-success button-header-custom-save"><i class="fas fa-save"></i> Simpan</button>
+                        </div>
+                    </div>
 
                 </div>
+
 
             </div>
 
         </div>
 
-        <!-- /.card -->
-
     </div>
 
-    <!-- /.col -->
+    <!-- /.card -->
+
+</div>
+
+<!-- /.col -->
 
 </div>
 
@@ -1084,294 +1086,443 @@ $assetsUrl = base_url('assets');
 
 
 
-        
+        $("#tblsalesadmin").on('click', '.btnedit', function(e) {
 
-        $("#tblsalesadmin").on('click', '.btnprint', function(e) {
             e.preventDefault();
 
-            
             let id = $(this).attr('data-id');
-            Swal.fire({
-                title: "Cetak",
-                html: "Ingin cetak <b>Faktur Penjualan</b> atau <b>Surat Jalan</b>?",
-                icon: "question",
-                showCancelButton: true,
-                allowOutsideClick: false,
-                confirmButtonColor: "#007bff",
-                cancelButtonColor: "#28a745",
-                confirmButtonText: 'Faktur Penjualan',
-                cancelButtonText: 'Surat Jalan',
-            }).then(function(answer) {
-                let yes = parseMessageResult(answer);
-                if (yes) {
-                    let invUrl = base_url + '/webmin/sales-admin/print-invoice/'+id;
-                    window.open(invUrl, '_blank');
-                } else {
-                    let invUrl = base_url + '/webmin/sales-admin/printdispatch/'+id;
-                    window.open(invUrl, '_blank');
+
+            let actUrl = base_url + '/webmin/sales-admin/edit-salesadmin/' + id;
+
+            ajax_get(actUrl, null, {
+
+                success: function(response) {
+
+                    if (response.success) {
+
+                        if (response.result.success) {
+
+                            let form = $('#frmsalesadmin');
+
+                            let items = response.result.data;
+
+                            $('#title-frmsalesadmin').html('Ubah Penjualan Admin');
+
+                            let header = response.result.header;
+
+                            let customer_id = header.sales_customer_id;
+
+                            let customer_name = header.customer_name;
+
+                            let payment_id = header.sales_payment_type;
+
+                            let payment_name  = header.payment_method_name+'-'+header.bank_account_name;
+
+                            let sales_id = header.sales_salesman_id;
+
+                            let sales_name = header.salesman_code+'-'+header.salesman_name;
+
+                            let store_id = header.sales_store_id;
+
+                            let store_name = header.store_code+'-'+header.store_name;
+
+
+                            let sales_admin_invoice = String(header.purchase_order_submission_inv);
+
+                            let footer_discount1_val  = header.sales_admin_discount1;
+
+                            let footer_discount2_val  = header.sales_admin_discount2;
+
+                            let footer_discount3_val  = header.sales_admin_discount3;
+
+                            let footer_discount1_percentage_val  = header.sales_admin_discount1_percentage;
+
+                            let footer_discount2_percentage_val  = header.sales_admin_discount2_percentage;
+
+                            let footer_discount3_percentage_val  = header.sales_admin_discount3_percentage;
+
+                            let footer_total_discount_val  = header.sales_admin_total_discount;
+
+                            let footer_sub_total_val  = header.sales_admin_subtotal;
+
+                            let footer_total_ppn_val  = header.sales_admin_ppn;
+
+                            let footer_total_dp_val  = header.sales_admin_down_payment;
+
+                            let footer_credit_cal = header.sales_admin_remaining_payment;
+
+                            /*
+
+                            let footer_total_ongkir_Val  = header.purchase_order_total_ongkir;
+
+                            let footer_total_invoice_val  = header.purchase_order_total;*/
+
+                            $('#title-frmsalesadmin').html('Ubah Penjualan Admin');
+
+                            formMode = 'edit';
+
+                            setSelect2('#customer_id', customer_id, customer_name);
+
+                            setSelect2('#payment_type', payment_id, payment_name);
+
+                            setSelect2('#salesman_id', salesman_id, sales_name);
+
+                            setSelect2('#store_id', store_id, store_name);
+
+                            $('#store_id').prop("disabled", true);
+
+                            $('#sales_admin_invoice').val(header.sales_admin_invoice);
+
+                            $('#sales_admin_id').val(header.sales_admin_id);
+
+                            $('#due_date').val(header.sales_due_date);
+
+                            footer_sub_total.set(footer_sub_total_val);
+
+                            footer_discount1.set(footer_discount1_val);
+
+                            footer_discount2.set(footer_discount2_val);
+
+                            footer_discount3.set(footer_discount3_val);
+
+                            footer_discount_percentage1.set(footer_discount1_percentage_val);
+
+                            footer_discount_percentage2.set(footer_discount2_percentage_val);
+
+                            footer_discount_percentage3.set(footer_discount3_percentage_val);
+
+                            footer_total_discount.set(footer_total_discount_val);
+
+                            footer_total_ppn.set(footer_total_ppn_val);
+
+                            if(footer_total_ppn_val > 0){
+                                $('#ppn_check').prop('checked', true);
+                            }
+
+                            footer_total_invoice.set(Number(footer_sub_total_val) - Number(footer_total_discount_val) + Number(footer_total_ppn_val));
+
+                            footer_dp.set(footer_total_dp_val);
+
+                            footer_credit.set(footer_credit_cal);
+
+                            loadTempData(items);
+
+                            showInputPage(true);
+
+                        } else {
+
+                            message.error(response.result.message);
+
+                        }
+
+                    }
+
                 }
+
             })
-        })
+})
 
-        function loadTempData(items) {
-
-         let template = $('#template_row_temp').html();
-
-         let tbody = '';
-
-         let row = 1;
-
-         let temp_total_order = 0;
-
-         items.forEach((val, key) => {
-
-             let item = template;
-
-             let data_json = htmlEntities.encode(JSON.stringify(val));
-
-             let temp_id = val.temp_sales_admin_id;
-
-             let item_id = val.item_id;
-
-             let item_code  = val.item_code;
-
-             let temp_qty = parseFloat(val.temp_qty);
-
-             let product_name = val.product_name+'('+val.unit_name+')';
-
-             let temp_purchase_price = val.temp_purchase_price;
-
-             let temp_purchase_tax  = val.temp_purchase_tax;
-
-             let temp_purchase_cogs  = val.temp_purchase_cogs;
-
-             let temp_product_price  = val.temp_product_price;
-
-             let temp_disc1 = val.temp_disc1;
-
-             let temp_price_disc1_percentage = val.temp_price_disc1_percentage;
-
-             let temp_disc2 = val.temp_disc2;
-
-             let temp_price_disc2_percentage = val.temp_price_disc2_percentage;
-
-             let temp_disc3 = val.temp_disc3;
-
-             let temp_price_disc3_percentage = val.temp_price_disc3_percentage;
-
-             let temp_total_discount = val.temp_total_discount;
-
-             let temp_sales_price = val.temp_sales_price;
-
-             item = item.replaceAll('{row}', row)
-
-             .replaceAll('{temp_id}', temp_id)
-
-             .replaceAll('{item_code}', item_code)
-
-             .replaceAll('{product_name}', product_name)
-
-             .replaceAll('{temp_qty}', numberFormat(temp_qty, true))
-
-             .replaceAll('{temp_sales_price}', numberFormat(temp_sales_price, true))
-
-             .replaceAll('{discount}', numberFormat(temp_total_discount, true))
-
-             .replaceAll('{total}', numberFormat(temp_sales_price, true))
-
-             .replaceAll('{data_json}', data_json);
-
-             tbody += item;
-
-             row++;
-
-         });
+$("#tblsalesadmin").on('click', '.btnprint', function(e) {
+    e.preventDefault();
 
 
-         if ($.fn.DataTable.isDataTable('#tbltemp')) {
-
-             $('#tbltemp').DataTable().destroy();
-
-         }
-
-
-
-         $('#tbltemp tbody').html('');
-
-         $('#tbltemp tbody').html(tbody);
-
-         tbltemp = $('#tbltemp').DataTable(config_tbltemp);
-
-         clearItemInput();
-
-         setfootervalue();
-
-         _initTooltip();
-
-     }
-
-
-     $('#total_temp_discount').click(function(e) {
-        e.preventDefault();
-        discountMode({
-            temp_discount1: $('#temp_discount1').val(),
-            temp_discount2: $('#temp_discount2').val(),
-            temp_discount3: $('#temp_discount3').val(),
-            temp_discount_percentage1: $('#temp_discount_percentage1').val(),
-            temp_discount_percentage2: $('#temp_discount_percentage2').val(),
-            temp_discount_percentage3: $('#temp_discount_percentage3').val(),
-        });
+    let id = $(this).attr('data-id');
+    Swal.fire({
+        title: "Cetak",
+        html: "Ingin cetak <b>Faktur Penjualan</b> atau <b>Surat Jalan</b>?",
+        icon: "question",
+        showCancelButton: true,
+        allowOutsideClick: false,
+        confirmButtonColor: "#007bff",
+        cancelButtonColor: "#28a745",
+        confirmButtonText: 'Faktur Penjualan',
+        cancelButtonText: 'Surat Jalan',
+    }).then(function(answer) {
+        let yes = parseMessageResult(answer);
+        if (yes) {
+            let invUrl = base_url + '/webmin/sales-admin/print-invoice/'+id;
+            window.open(invUrl, '_blank');
+        } else {
+            let invUrl = base_url + '/webmin/sales-admin/printdispatch/'+id;
+            window.open(invUrl, '_blank');
+        }
     })
+})
+
+function loadTempData(items) {
+
+ let template = $('#template_row_temp').html();
+
+ let tbody = '';
+
+ let row = 1;
+
+ let temp_total_order = 0;
+
+ items.forEach((val, key) => {
+
+     let item = template;
+
+     let data_json = htmlEntities.encode(JSON.stringify(val));
+
+     let temp_id = val.temp_sales_admin_id;
+
+     let item_id = val.item_id;
+
+     let item_code  = val.item_code;
+
+     let temp_qty = parseFloat(val.temp_qty);
+
+     let product_name = val.product_name+'('+val.unit_name+')';
+
+     let temp_purchase_price = val.temp_purchase_price;
+
+     let temp_purchase_tax  = val.temp_purchase_tax;
+
+     let temp_purchase_cogs  = val.temp_purchase_cogs;
+
+     let temp_product_price  = val.temp_product_price;
+
+     let temp_disc1 = val.temp_disc1;
+
+     let temp_price_disc1_percentage = val.temp_price_disc1_percentage;
+
+     let temp_disc2 = val.temp_disc2;
+
+     let temp_price_disc2_percentage = val.temp_price_disc2_percentage;
+
+     let temp_disc3 = val.temp_disc3;
+
+     let temp_price_disc3_percentage = val.temp_price_disc3_percentage;
+
+     let temp_total_discount = val.temp_total_discount;
+
+     let temp_sales_price = val.temp_sales_price;
+
+     item = item.replaceAll('{row}', row)
+
+     .replaceAll('{temp_id}', temp_id)
+
+     .replaceAll('{item_code}', item_code)
+
+     .replaceAll('{product_name}', product_name)
+
+     .replaceAll('{temp_qty}', numberFormat(temp_qty, true))
+
+     .replaceAll('{temp_sales_price}', numberFormat(temp_sales_price, true))
+
+     .replaceAll('{discount}', numberFormat(temp_total_discount, true))
+
+     .replaceAll('{total}', numberFormat(temp_sales_price, true))
+
+     .replaceAll('{data_json}', data_json);
+
+     tbody += item;
+
+     row++;
+
+ });
 
 
-     $('#btnaddfooterdiscount').click(function(e) {
-        e.preventDefault();
-        footerdiscountMode({
-            temp_discount1: $('#temp_discount1').val(),
-            temp_discount2: $('#temp_discount2').val(),
-            temp_discount3: $('#temp_discount3').val(),
-            temp_discount_percentage1: $('#temp_discount_percentage1').val(),
-            temp_discount_percentage2: $('#temp_discount_percentage2').val(),
-            temp_discount_percentage3: $('#temp_discount_percentage3').val(),
-        });
+ if ($.fn.DataTable.isDataTable('#tbltemp')) {
+
+     $('#tbltemp').DataTable().destroy();
+
+ }
+
+
+
+ $('#tbltemp tbody').html('');
+
+ $('#tbltemp tbody').html(tbody);
+
+ tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+
+ clearItemInput();
+
+ if(formMode == 'add'){
+
+     setfootervalue();
+
+ }
+
+ _initTooltip();
+
+}
+
+
+$('#total_temp_discount').click(function(e) {
+    e.preventDefault();
+    discountMode({
+        temp_discount1: $('#temp_discount1').val(),
+        temp_discount2: $('#temp_discount2').val(),
+        temp_discount3: $('#temp_discount3').val(),
+        temp_discount_percentage1: $('#temp_discount_percentage1').val(),
+        temp_discount_percentage2: $('#temp_discount_percentage2').val(),
+        temp_discount_percentage3: $('#temp_discount_percentage3').val(),
+    });
+})
+
+
+$('#btnaddfooterdiscount').click(function(e) {
+    e.preventDefault();
+    footerdiscountMode({
+        temp_discount1: $('#temp_discount1').val(),
+        temp_discount2: $('#temp_discount2').val(),
+        temp_discount3: $('#temp_discount3').val(),
+        temp_discount_percentage1: $('#temp_discount_percentage1').val(),
+        temp_discount_percentage2: $('#temp_discount_percentage2').val(),
+        temp_discount_percentage3: $('#temp_discount_percentage3').val(),
+    });
+})
+
+$('#btndisc').click(function(e) {
+    e.preventDefault();
+    message.question('Yakin untuk penambahan discount?').then(function(answer) {
+        let yes = parseMessageResult(answer);
+        if (yes) {
+            $('#modal-tempdiscount').modal('hide');
+
+            let edit_temp_discount1 =  AutoNumeric.getAutoNumericElement('#edit_temp_discount1').get();
+            temp_discount1.set(edit_temp_discount1);
+
+            let edit_temp_discount2 =  AutoNumeric.getAutoNumericElement('#edit_temp_discount2').get();
+            temp_discount2.set(edit_temp_discount2);
+
+            let edit_temp_discount3 =  AutoNumeric.getAutoNumericElement('#edit_temp_discount3').get();
+            temp_discount3.set(edit_temp_discount3);
+
+            let edit_temp_discount_percentage1 =  AutoNumeric.getAutoNumericElement('#edit_temp_discount_percentage1').get();
+            temp_discount_percentage1.set(edit_temp_discount_percentage1);
+
+            let edit_temp_discount_percentage2 =  AutoNumeric.getAutoNumericElement('#edit_temp_discount_percentage2').get();
+            temp_discount_percentage2.set(edit_temp_discount_percentage2);
+
+            let edit_temp_discount_percentage3 =  AutoNumeric.getAutoNumericElement('#edit_temp_discount_percentage3').get();
+            temp_discount_percentage3.set(edit_temp_discount_percentage3);
+
+            total_temp_discount.set(Number(edit_temp_discount1) + Number(edit_temp_discount2) + Number(edit_temp_discount3));
+            calculation_temp_total();
+        }
     })
+})
 
 
+$('#btndiscfooter').click(function(e) {
+    e.preventDefault();
+    message.question('Yakin untuk penambahan discount?').then(function(answer) {
+        let yes = parseMessageResult(answer);
+        if (yes) {
+            $('#modal-footerdiscount').modal('hide');
 
+            let edit_footer_discount1 =  AutoNumeric.getAutoNumericElement('#edit_footer_discount1').get();
+            footer_discount1.set(edit_footer_discount1);
 
-     $('#btndisc').click(function(e) {
-        e.preventDefault();
-        message.question('Yakin untuk penambahan discount?').then(function(answer) {
-            let yes = parseMessageResult(answer);
-            if (yes) {
-                $('#modal-tempdiscount').modal('hide');
+            let edit_footer_discount2 =  AutoNumeric.getAutoNumericElement('#edit_footer_discount2').get();
+            footer_discount2.set(edit_footer_discount2);
 
-                let edit_temp_discount1 =  AutoNumeric.getAutoNumericElement('#edit_temp_discount1').get();
-                temp_discount1.set(edit_temp_discount1);
+            let edit_footer_discount3 =  AutoNumeric.getAutoNumericElement('#edit_footer_discount3').get();
+            footer_discount3.set(edit_footer_discount3);
 
-                let edit_temp_discount2 =  AutoNumeric.getAutoNumericElement('#edit_temp_discount2').get();
-                temp_discount2.set(edit_temp_discount2);
+            let edit_footer_discount_percentage1 =  AutoNumeric.getAutoNumericElement('#edit_footer_discount_percentage1').get();
+            footer_discount_percentage1.set(edit_footer_discount_percentage1);
 
-                let edit_temp_discount3 =  AutoNumeric.getAutoNumericElement('#edit_temp_discount3').get();
-                temp_discount3.set(edit_temp_discount3);
+            let edit_footer_discount_percentage2 =  AutoNumeric.getAutoNumericElement('#edit_footer_discount_percentage2').get();
+            footer_discount_percentage2.set(edit_footer_discount_percentage2);
 
-                let edit_temp_discount_percentage1 =  AutoNumeric.getAutoNumericElement('#edit_temp_discount_percentage1').get();
-                temp_discount_percentage1.set(edit_temp_discount_percentage1);
+            let edit_footer_discount_percentage3 =  AutoNumeric.getAutoNumericElement('#edit_footer_discount_percentage3').get();
+            footer_discount_percentage3.set(edit_footer_discount_percentage3);
 
-                let edit_temp_discount_percentage2 =  AutoNumeric.getAutoNumericElement('#edit_temp_discount_percentage2').get();
-                temp_discount_percentage2.set(edit_temp_discount_percentage2);
-
-                let edit_temp_discount_percentage3 =  AutoNumeric.getAutoNumericElement('#edit_temp_discount_percentage3').get();
-                temp_discount_percentage3.set(edit_temp_discount_percentage3);
-
-                total_temp_discount.set(Number(edit_temp_discount1) + Number(edit_temp_discount2) + Number(edit_temp_discount3));
-                calculation_temp_total();
-            }
-        })
+            footer_total_discount.set(Number(edit_footer_discount1) + Number(edit_footer_discount2) + Number(edit_footer_discount3));
+            footer_dp.set(0);
+            footer_total_ppn.set(0);
+            $('#ppn_check').prop('checked', false);
+            calculation_temp_total_footer();
+        }
     })
-
-
-     $('#btndiscfooter').click(function(e) {
-        e.preventDefault();
-        message.question('Yakin untuk penambahan discount?').then(function(answer) {
-            let yes = parseMessageResult(answer);
-            if (yes) {
-                $('#modal-footerdiscount').modal('hide');
-
-                let edit_footer_discount1 =  AutoNumeric.getAutoNumericElement('#edit_footer_discount1').get();
-                footer_discount1.set(edit_footer_discount1);
-
-                let edit_footer_discount2 =  AutoNumeric.getAutoNumericElement('#edit_footer_discount2').get();
-                footer_discount2.set(edit_footer_discount2);
-
-                let edit_footer_discount3 =  AutoNumeric.getAutoNumericElement('#edit_footer_discount3').get();
-                footer_discount3.set(edit_footer_discount3);
-
-                let edit_footer_discount_percentage1 =  AutoNumeric.getAutoNumericElement('#edit_footer_discount_percentage1').get();
-                footer_discount_percentage1.set(edit_footer_discount_percentage1);
-
-                let edit_footer_discount_percentage2 =  AutoNumeric.getAutoNumericElement('#edit_footer_discount_percentage2').get();
-                footer_discount_percentage2.set(edit_footer_discount_percentage2);
-
-                let edit_footer_discount_percentage3 =  AutoNumeric.getAutoNumericElement('#edit_footer_discount_percentage3').get();
-                footer_discount_percentage3.set(edit_footer_discount_percentage3);
-
-                footer_total_discount.set(Number(edit_footer_discount1) + Number(edit_footer_discount2) + Number(edit_footer_discount3));
-                footer_dp.set(0);
-                footer_total_ppn.set(0);
-                $('#ppn_check').prop('checked', false);
-                calculation_temp_total_footer();
-            }
-        })
-    })
+})
 
 
 
-     function discountMode(data) {
-        let form = $('#frmtempdiscount');
-        $('#title-frmtempdiscount').html('Tambah Discount');
-        edit_temp_discount1.set(data.temp_discount1);
-        edit_temp_discount2.set(data.temp_discount2);
-        edit_temp_discount3.set(data.temp_discount3);
-        edit_temp_discount_percentage1.set(data.temp_discount_percentage1);
-        edit_temp_discount_percentage2.set(data.temp_discount_percentage2);
-        edit_temp_discount_percentage3.set(data.temp_discount_percentage3);
-        $('#modal-tempdiscount').modal(configModal);
-    }
+function discountMode(data) {
+    let form = $('#frmtempdiscount');
+    $('#title-frmtempdiscount').html('Tambah Discount');
+    edit_temp_discount1.set(data.temp_discount1);
+    edit_temp_discount2.set(data.temp_discount2);
+    edit_temp_discount3.set(data.temp_discount3);
+    edit_temp_discount_percentage1.set(data.temp_discount_percentage1);
+    edit_temp_discount_percentage2.set(data.temp_discount_percentage2);
+    edit_temp_discount_percentage3.set(data.temp_discount_percentage3);
+    $('#modal-tempdiscount').modal(configModal);
+}
 
-    function footerdiscountMode(data) {
-        let form = $('#frmfooterdiscount');
-        $('#title-frmfooterdiscount').html('Tambah Discount Nota');
-        edit_footer_discount1.set(data.footer_discount1);
-        edit_footer_discount2.set(data.footer_discount2);
-        edit_footer_discount3.set(data.footer_discount3);
-        edit_footer_discount_percentage1.set(data.footer_discount_percentage1);
-        edit_footer_discount_percentage2.set(data.footer_discount_percentage2);
-        edit_footer_discount_percentage3.set(data.footer_discount_percentage3);
-        $('#modal-footerdiscount').modal(configModal);
-    }
+function footerdiscountMode(data) {
+    let form = $('#frmfooterdiscount');
+    $('#title-frmfooterdiscount').html('Tambah Discount Nota');
+    edit_footer_discount1.set(data.footer_discount1);
+    edit_footer_discount2.set(data.footer_discount2);
+    edit_footer_discount3.set(data.footer_discount3);
+    edit_footer_discount_percentage1.set(data.footer_discount_percentage1);
+    edit_footer_discount_percentage2.set(data.footer_discount_percentage2);
+    edit_footer_discount_percentage3.set(data.footer_discount_percentage3);
+    $('#modal-footerdiscount').modal(configModal);
+}
 
 
-    $('.close-modal-temp').click(function(e) {
-        e.preventDefault();
-        message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
-            let yes = parseMessageResult(answer);
-            if (yes) {
+$('.close-modal-temp').click(function(e) {
+    e.preventDefault();
+    message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
+        let yes = parseMessageResult(answer);
+        if (yes) {
                 //cleardiscount();
                 $('#modal-tempdiscount').modal('hide');
             }
         })
-    })
+})
 
-    $('.close-modal-footer').click(function(e) {
-        e.preventDefault();
-        message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
-            let yes = parseMessageResult(answer);
-            if (yes) {
+$('.close-modal-footer').click(function(e) {
+    e.preventDefault();
+    message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
+        let yes = parseMessageResult(answer);
+        if (yes) {
                 //cleardiscount();
                 $('#modal-footerdiscount').modal('hide');
             }
         })
-    })
+})
 
 
-    $('#temp_qty').on('change', function() {
-        calculation_temp_total();
-        cleardiscount();
-    });
+$('#temp_qty').on('change', function() {
+    calculation_temp_total();
+    cleardiscount();
+});
 
-    $('#footer_dp').on('input', function() {
-        footer_credit.set(footer_total_invoice.get() - footer_dp.get());
-    });
+$('#footer_dp').on('input', function() {
+    footer_credit.set(footer_total_invoice.get() - footer_dp.get());
+});
 
-    $('#temp_price').on('change', function() {
-        calculation_temp_total();
-        cleardiscount();
-    });
+$('#temp_price').on('change', function() {
+    calculation_temp_total();
+    cleardiscount();
+});
 
 
-    $('#edit_temp_discount_percentage1').on('change', function() {
-     if(temp_qty.get() < 1){
+$('#edit_temp_discount_percentage1').on('change', function() {
+ if(temp_qty.get() < 1){
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Slahkan Isi Qty Terlebih Dahulu'
+  })
+    edit_temp_discount_percentage1.set('0.00%');
+    edit_temp_discount1.set(0);
+}
+let edit_temp_discount1_cal = total_price.get() * (edit_temp_discount_percentage1.get()/100);
+edit_temp_discount1.set(edit_temp_discount1_cal.toFixed(2));
+});
+
+$('#edit_temp_discount1').on('change', function() {
+    if(temp_qty.get() < 1){
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -1380,68 +1531,40 @@ $assetsUrl = base_url('assets');
         edit_temp_discount_percentage1.set('0.00%');
         edit_temp_discount1.set(0);
     }
-    let edit_temp_discount1_cal = total_price.get() * (edit_temp_discount_percentage1.get()/100);
-    edit_temp_discount1.set(edit_temp_discount1_cal.toFixed(2));
+    let edit_temp_discount1_cal = edit_temp_discount1.get() / total_price.get() *  100;
+    edit_temp_discount_percentage1.set(edit_temp_discount1_cal);
 });
 
-    $('#edit_temp_discount1').on('change', function() {
-        if(temp_qty.get() < 1){
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Slahkan Isi Qty Terlebih Dahulu'
-          })
-            edit_temp_discount_percentage1.set('0.00%');
-            edit_temp_discount1.set(0);
-        }
-        let edit_temp_discount1_cal = edit_temp_discount1.get() / total_price.get() *  100;
-        edit_temp_discount_percentage1.set(edit_temp_discount1_cal);
-    });
+$('#edit_temp_discount_percentage2').on('change', function() {
+    if(edit_temp_discount1.get() < 1){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Discount 1 Tidak Boleh Kosong!'
+      })
+        edit_temp_discount_percentage2.set('0.00%');
+        edit_temp_discount2.set(0);
+    }
+    let edit_temp_discount2_cal = (total_price.get() - edit_temp_discount1.get()) * (edit_temp_discount_percentage2.get()/100);
+    edit_temp_discount2.set(edit_temp_discount2_cal.toFixed(2));
+});
 
-    $('#edit_temp_discount_percentage2').on('change', function() {
-        if(edit_temp_discount1.get() < 1){
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Discount 1 Tidak Boleh Kosong!'
-          })
-            edit_temp_discount_percentage2.set('0.00%');
-            edit_temp_discount2.set(0);
-        }
-        let edit_temp_discount2_cal = (total_price.get() - edit_temp_discount1.get()) * (edit_temp_discount_percentage2.get()/100);
-        edit_temp_discount2.set(edit_temp_discount2_cal.toFixed(2));
-    });
+$('#edit_temp_discount2').on('change', function() {
+    if(edit_temp_discount1.get() < 1){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Discount 1 Tidak Boleh Kosong!'
+      })
+        edit_temp_discount_percentage2.set('0.00%');
+        edit_temp_discount2.set(0);
+    }
+    let edit_temp_discount2_cal = edit_temp_discount2.get() / (total_price.get() - edit_temp_discount1.get()) *  100;
+    edit_temp_discount_percentage2.set(edit_temp_discount2_cal.toFixed(2));
+});
 
-    $('#edit_temp_discount2').on('change', function() {
-        if(edit_temp_discount1.get() < 1){
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Discount 1 Tidak Boleh Kosong!'
-          })
-            edit_temp_discount_percentage2.set('0.00%');
-            edit_temp_discount2.set(0);
-        }
-        let edit_temp_discount2_cal = edit_temp_discount2.get() / (total_price.get() - edit_temp_discount1.get()) *  100;
-        edit_temp_discount_percentage2.set(edit_temp_discount2_cal.toFixed(2));
-    });
-
-    $('#edit_temp_discount_percentage3').on('change', function() {
-        if(edit_temp_discount2.get() < 1){
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Discount 2 Tidak Boleh Kosong!'
-          })
-            edit_temp_discount_percentage3.set('0.00%');
-            edit_temp_discount3.set(0);
-        }
-        let edit_temp_discount3_cal = (total_price.get() - edit_temp_discount1.get() - edit_temp_discount2.get()) * (edit_temp_discount_percentage3.get()/100);
-        edit_temp_discount3.set(edit_temp_discount3_cal.toFixed(2));
-    });
-
-    $('#edit_temp_discount3').on('change', function() {
-     if(edit_temp_discount2.get() < 1){
+$('#edit_temp_discount_percentage3').on('change', function() {
+    if(edit_temp_discount2.get() < 1){
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
@@ -1450,368 +1573,384 @@ $assetsUrl = base_url('assets');
         edit_temp_discount_percentage3.set('0.00%');
         edit_temp_discount3.set(0);
     }
-    let edit_temp_discount3_cal = edit_temp_discount3.get() / (total_price.get() - edit_temp_discount1.get() - edit_temp_discount2.get()) *  100;
-    edit_temp_discount_percentage3.set(edit_temp_discount3_cal.toFixed(2));
+    let edit_temp_discount3_cal = (total_price.get() - edit_temp_discount1.get() - edit_temp_discount2.get()) * (edit_temp_discount_percentage3.get()/100);
+    edit_temp_discount3.set(edit_temp_discount3_cal.toFixed(2));
 });
 
-    $('#edit_footer_discount_percentage1').on('change', function() {
-        let edit_footer_discount1_cal = footer_sub_total.get() * (edit_footer_discount_percentage1.get()/100);
-        edit_footer_discount1.set(edit_footer_discount1_cal.toFixed(2));
-    });
+$('#edit_temp_discount3').on('change', function() {
+ if(edit_temp_discount2.get() < 1){
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Discount 2 Tidak Boleh Kosong!'
+  })
+    edit_temp_discount_percentage3.set('0.00%');
+    edit_temp_discount3.set(0);
+}
+let edit_temp_discount3_cal = edit_temp_discount3.get() / (total_price.get() - edit_temp_discount1.get() - edit_temp_discount2.get()) *  100;
+edit_temp_discount_percentage3.set(edit_temp_discount3_cal.toFixed(2));
+});
 
-    $('#edit_footer_discount1').on('change', function() {
-        let edit_footer_discount1_cal = edit_footer_discount1.get() / footer_sub_total.get() *  100;
-        edit_footer_discount_percentage1.set(edit_footer_discount1_cal);
-    });
+$('#edit_footer_discount_percentage1').on('change', function() {
+    let edit_footer_discount1_cal = footer_sub_total.get() * (edit_footer_discount_percentage1.get()/100);
+    edit_footer_discount1.set(edit_footer_discount1_cal.toFixed(2));
+});
 
-    $('#edit_footer_discount_percentage2').on('change', function() {
-        if(edit_footer_discount1.get() < 1){
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Discount 1 Tidak Boleh Kosong!'
-          })
-            edit_footer_discount_percentage2.set('0.00%');
-            edit_footer_discount2.set(0);
-        }
-        let edit_footer_discount2_cal = (footer_sub_total.get() - edit_footer_discount1.get()) * (edit_footer_discount_percentage2.get()/100);
-        edit_footer_discount2.set(edit_footer_discount2_cal.toFixed(2));
-    });
+$('#edit_footer_discount1').on('change', function() {
+    let edit_footer_discount1_cal = edit_footer_discount1.get() / footer_sub_total.get() *  100;
+    edit_footer_discount_percentage1.set(edit_footer_discount1_cal);
+});
 
-    $('#edit_footer_discount2').on('change', function() {
-        if(edit_footer_discount1.get() < 1){
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Discount 1 Tidak Boleh Kosong!'
-          })
-            edit_footer_discount_percentage2.set('0.00%');
-            edit_footer_discount2.set(0);
-        }
-        let edit_footer_discount2_cal = edit_footer_discount2.get() / (footer_sub_total.get() - edit_footer_discount1.get()) *  100;
-        edit_footer_discount_percentage2.set(edit_footer_discount2_cal.toFixed(2));
-    });
-
-    $('#edit_footer_discount_percentage3').on('change', function() {
-        if(edit_footer_discount2.get() < 1){
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Discount 2 Tidak Boleh Kosong!'
-          })
-            edit_footer_discount_percentage3.set('0.00%');
-            edit_footer_discount3.set(0);
-        }
-        let edit_footer_discount3_cal = (footer_sub_total.get() - edit_footer_discount1.get() - edit_footer_discount2.get()) * (edit_footer_discount_percentage3.get()/100);
-        edit_footer_discount3.set(edit_footer_discount3_cal.toFixed(2));
-    });
-
-    $('#edit_footer_discount3').on('change', function() {
-        if(edit_footer_discount2.get() < 1){
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Discount 2 Tidak Boleh Kosong!'
-          })
-            edit_footer_discount_percentage3.set('0.00%');
-            edit_footer_discount3.set(0);
-        }
-        let edit_footer_discount3_cal = edit_footer_discount3.get() / (footer_sub_total.get() - edit_footer_discount1.get() - edit_footer_discount2.get()) *  100;
-        edit_footer_discount_percentage3.set(edit_footer_discount3_cal.toFixed(2));
-    });
-
-
-    $(document).on('input', '#ppn_check', function(e) {
-        e.preventDefault();
-        if ($('#ppn_check').is(":checked"))
-        {
-          let footer_sub_total_cal = parseFloat(footer_sub_total.getNumericString());
-          let footer_total_discount_cal = parseFloat(footer_total_discount.getNumericString());
-          let footer_total_ppn_cal = (footer_sub_total_cal - footer_total_discount_cal) * 0.11;
-          footer_total_ppn.set(footer_total_ppn_cal);
-          footer_total_invoice.set(footer_sub_total_cal - footer_total_discount_cal + footer_total_ppn_cal);
-          footer_dp.set(0);
-          footer_credit.set(footer_sub_total_cal - footer_total_discount_cal + footer_total_ppn_cal);
-      }else{
-          let footer_sub_total_cal = parseFloat(footer_sub_total.getNumericString());
-          let footer_total_discount_cal = parseFloat(footer_total_discount.getNumericString());
-          footer_total_ppn.set(0);
-          footer_dp.set(0);
-          footer_total_invoice.set(footer_sub_total_cal - footer_total_discount_cal);
-          footer_credit.set(footer_sub_total_cal - footer_total_discount_cal);
-      }
-  });
-
-    function calculation_temp_total(){
-        var price_calculation = AutoNumeric.getAutoNumericElement('#temp_price').get();
-        let qty_calculation = parseFloat(temp_qty.getNumericString());
-        let subtotal_calculation = price_calculation * qty_calculation;
-        total_price.set(subtotal_calculation);
-        temp_total.set(total_price.get() - total_temp_discount.get());
-    }
-
-    function calculation_temp_total_footer(){
-        footer_total_invoice.set(Number(footer_sub_total.get()) - Number(footer_total_discount.get()) - Number(footer_total_ppn.get()));
-        footer_credit.set(Number(footer_sub_total.get()) - Number(footer_total_discount.get()));
-    }
-
-
-    function cleardiscount() {
-        temp_discount1.set(0);
-        temp_discount2.set(0);
-        temp_discount3.set(0);
-        temp_discount_percentage1.set('0.00%');
-        temp_discount_percentage2.set('0.00%');
-        temp_discount_percentage3.set('0.00%');
-        edit_temp_discount_percentage1.set('0.00%');
-        edit_temp_discount_percentage2.set('0.00%');
-        edit_temp_discount_percentage3.set('0.00%');
-        edit_temp_discount1.set(0);
-        edit_temp_discount2.set(0);
-        edit_temp_discount3.set(0);
-        total_temp_discount.set(0);
-    }
-
-    function cleardiscountfooter() {
-        footer_discount1.set(0);
-        footer_discount2.set(0);
-        footer_discount3.set(0);
-        edit_footer_discount_percentage1.set('0.00%');
+$('#edit_footer_discount_percentage2').on('change', function() {
+    if(edit_footer_discount1.get() < 1){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Discount 1 Tidak Boleh Kosong!'
+      })
         edit_footer_discount_percentage2.set('0.00%');
-        edit_footer_discount_percentage3.set('0.00%');
-        edit_footer_discount1.set(0);
         edit_footer_discount2.set(0);
+    }
+    let edit_footer_discount2_cal = (footer_sub_total.get() - edit_footer_discount1.get()) * (edit_footer_discount_percentage2.get()/100);
+    edit_footer_discount2.set(edit_footer_discount2_cal.toFixed(2));
+});
+
+$('#edit_footer_discount2').on('change', function() {
+    if(edit_footer_discount1.get() < 1){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Discount 1 Tidak Boleh Kosong!'
+      })
+        edit_footer_discount_percentage2.set('0.00%');
+        edit_footer_discount2.set(0);
+    }
+    let edit_footer_discount2_cal = edit_footer_discount2.get() / (footer_sub_total.get() - edit_footer_discount1.get()) *  100;
+    edit_footer_discount_percentage2.set(edit_footer_discount2_cal.toFixed(2));
+});
+
+$('#edit_footer_discount_percentage3').on('change', function() {
+    if(edit_footer_discount2.get() < 1){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Discount 2 Tidak Boleh Kosong!'
+      })
+        edit_footer_discount_percentage3.set('0.00%');
         edit_footer_discount3.set(0);
     }
+    let edit_footer_discount3_cal = (footer_sub_total.get() - edit_footer_discount1.get() - edit_footer_discount2.get()) * (edit_footer_discount_percentage3.get()/100);
+    edit_footer_discount3.set(edit_footer_discount3_cal.toFixed(2));
+});
+
+$('#edit_footer_discount3').on('change', function() {
+    if(edit_footer_discount2.get() < 1){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Discount 2 Tidak Boleh Kosong!'
+      })
+        edit_footer_discount_percentage3.set('0.00%');
+        edit_footer_discount3.set(0);
+    }
+    let edit_footer_discount3_cal = edit_footer_discount3.get() / (footer_sub_total.get() - edit_footer_discount1.get() - edit_footer_discount2.get()) *  100;
+    edit_footer_discount_percentage3.set(edit_footer_discount3_cal.toFixed(2));
+});
 
 
-    $('#btnadd_temp').click(function(e) {
+$(document).on('input', '#ppn_check', function(e) {
+    e.preventDefault();
+    if ($('#ppn_check').is(":checked"))
+    {
+      let footer_sub_total_cal = parseFloat(footer_sub_total.getNumericString());
+      let footer_total_discount_cal = parseFloat(footer_total_discount.getNumericString());
+      let footer_total_ppn_cal = (footer_sub_total_cal - footer_total_discount_cal) * 0.11;
+      footer_total_ppn.set(footer_total_ppn_cal);
+      footer_total_invoice.set(footer_sub_total_cal - footer_total_discount_cal + footer_total_ppn_cal);
+      footer_dp.set(0);
+      footer_credit.set(footer_sub_total_cal - footer_total_discount_cal + footer_total_ppn_cal);
+  }else{
+      let footer_sub_total_cal = parseFloat(footer_sub_total.getNumericString());
+      let footer_total_discount_cal = parseFloat(footer_total_discount.getNumericString());
+      footer_total_ppn.set(0);
+      footer_dp.set(0);
+      footer_total_invoice.set(footer_sub_total_cal - footer_total_discount_cal);
+      footer_credit.set(footer_sub_total_cal - footer_total_discount_cal);
+  }
+});
 
-     e.preventDefault();
+function calculation_temp_total(){
+    var price_calculation = AutoNumeric.getAutoNumericElement('#temp_price').get();
+    let qty_calculation = parseFloat(temp_qty.getNumericString());
+    let subtotal_calculation = price_calculation * qty_calculation;
+    total_price.set(subtotal_calculation);
+    temp_total.set(total_price.get() - total_temp_discount.get());
+}
 
-     let purchase_price = parseFloat(temp_purchase_price.getNumericString());
+function calculation_temp_total_footer(){
+    footer_total_invoice.set(Number(footer_sub_total.get()) - Number(footer_total_discount.get()) - Number(footer_total_ppn.get()));
+    footer_credit.set(Number(footer_sub_total.get()) - Number(footer_total_discount.get()));
+}
 
-     let purchase_tax = parseFloat(temp_purchase_tax.getNumericString());
 
-     let purchase_cogs = parseFloat(temp_purchase_cogs.getNumericString());
+function cleardiscount() {
+    temp_discount1.set(0);
+    temp_discount2.set(0);
+    temp_discount3.set(0);
+    temp_discount_percentage1.set('0.00%');
+    temp_discount_percentage2.set('0.00%');
+    temp_discount_percentage3.set('0.00%');
+    edit_temp_discount_percentage1.set('0.00%');
+    edit_temp_discount_percentage2.set('0.00%');
+    edit_temp_discount_percentage3.set('0.00%');
+    edit_temp_discount1.set(0);
+    edit_temp_discount2.set(0);
+    edit_temp_discount3.set(0);
+    total_temp_discount.set(0);
+}
 
-     let price = parseFloat(temp_price.getNumericString());
+function cleardiscountfooter() {
+    footer_discount1.set(0);
+    footer_discount2.set(0);
+    footer_discount3.set(0);
+    edit_footer_discount_percentage1.set('0.00%');
+    edit_footer_discount_percentage2.set('0.00%');
+    edit_footer_discount_percentage3.set('0.00%');
+    edit_footer_discount1.set(0);
+    edit_footer_discount2.set(0);
+    edit_footer_discount3.set(0);
+}
 
-     let qty = parseFloat(temp_qty.getNumericString());
 
-     let discount1 = parseFloat(temp_discount1.getNumericString());
+$('#btnadd_temp').click(function(e) {
 
-     let discount2 = parseFloat(temp_discount2.getNumericString());
+ e.preventDefault();
 
-     let discount3 = parseFloat(temp_discount3.getNumericString());
+ let purchase_price = parseFloat(temp_purchase_price.getNumericString());
 
-     let discount_percentage1 = parseFloat(temp_discount_percentage1.getNumericString());
+ let purchase_tax = parseFloat(temp_purchase_tax.getNumericString());
 
-     let discount_percentage2 = parseFloat(temp_discount_percentage2.getNumericString());
+ let purchase_cogs = parseFloat(temp_purchase_cogs.getNumericString());
 
-     let discount_percentage3 = parseFloat(temp_discount_percentage3.getNumericString());
+ let price = parseFloat(temp_price.getNumericString());
 
-     let total_discount = parseFloat(total_temp_discount.getNumericString());
+ let qty = parseFloat(temp_qty.getNumericString());
 
-     let total = parseFloat(temp_total.getNumericString());
+ let discount1 = parseFloat(temp_discount1.getNumericString());
 
-     let btnSubmit = $('#btnadd_temp');
+ let discount2 = parseFloat(temp_discount2.getNumericString());
 
-     let form = $('#frmaddtemp');
+ let discount3 = parseFloat(temp_discount3.getNumericString());
 
-     form.parsley().validate();
+ let discount_percentage1 = parseFloat(temp_discount_percentage1.getNumericString());
 
-     if (form.parsley().isValid()) {
+ let discount_percentage2 = parseFloat(temp_discount_percentage2.getNumericString());
 
-         let actUrl = base_url + '/webmin/sales-admin/temp-add';
+ let discount_percentage3 = parseFloat(temp_discount_percentage3.getNumericString());
 
-         let formValues = {
+ let total_discount = parseFloat(total_temp_discount.getNumericString());
 
-             temp_sales_admin_id: $('#temp_sales_admin_id').val(),
+ let total = parseFloat(temp_total.getNumericString());
 
-             item_id: $('#item_id').val(),
+ let btnSubmit = $('#btnadd_temp');
 
-             temp_purchase_price: purchase_price,
+ let form = $('#frmaddtemp');
 
-             temp_purchase_tax: purchase_tax,
+ form.parsley().validate();
 
-             temp_purchase_cogs: purchase_cogs,
+ if (form.parsley().isValid()) {
 
-             temp_price: price,
+     let actUrl = base_url + '/webmin/sales-admin/temp-add';
 
-             temp_qty: qty,
+     let formValues = {
 
-             temp_discount1: discount1,
+         temp_sales_admin_id: $('#temp_sales_admin_id').val(),
 
-             temp_discount2: discount2,
+         item_id: $('#item_id').val(),
 
-             temp_discount3: discount3,
+         temp_purchase_price: purchase_price,
 
-             temp_discount_percentage1: discount_percentage1,
+         temp_purchase_tax: purchase_tax,
 
-             temp_discount_percentage2: discount_percentage2,
+         temp_purchase_cogs: purchase_cogs,
 
-             temp_discount_percentage3: discount_percentage3,
+         temp_price: price,
 
-             total_temp_discount: total_discount,
+         temp_qty: qty,
 
-             temp_total: total
+         temp_discount1: discount1,
 
-         };
+         temp_discount2: discount2,
 
-         btnSubmit.prop('disabled', true);
+         temp_discount3: discount3,
 
-         ajax_post(actUrl, formValues, {
+         temp_discount_percentage1: discount_percentage1,
 
-             success: function(response) {
+         temp_discount_percentage2: discount_percentage2,
 
-                 if (response.success) {
+         temp_discount_percentage3: discount_percentage3,
 
-                     if (response.result.success) {
+         total_temp_discount: total_discount,
 
-                         notification.success(response.result.message);
+         temp_total: total
 
-                     } else {
+     };
 
-                         message.error(response.result.message);
+     btnSubmit.prop('disabled', true);
 
-                     }
+     ajax_post(actUrl, formValues, {
 
-                     clearItemInput();
-                     loadTempData(response.result.data);
+         success: function(response) {
+
+             if (response.success) {
+
+                 if (response.result.success) {
+
+                     notification.success(response.result.message);
+
+                 } else {
+
+                     message.error(response.result.message);
+
                  }
 
-                 btnSubmit.prop('disabled', false);
-
-             },
-
-             error: function(response) {
-
-                 btnSubmit.prop('disabled', false);
-
+                 clearItemInput();
+                 loadTempData(response.result.data);
              }
-         });
-     }
- })
 
-    Parsley.addMessages('id', {
+             btnSubmit.prop('disabled', false);
 
-        vproductname: 'Harap pilih produk terlebih dahulu',
+         },
 
-        vprice: 'Harga Jual wajib diatas Rp 0',
+         error: function(response) {
 
-        vqty: 'Qty wajib diatas Rp 0',
+             btnSubmit.prop('disabled', false);
 
-    });
+         }
+     });
+ }
+})
 
+Parsley.addMessages('id', {
 
+    vproductname: 'Harap pilih produk terlebih dahulu',
 
-    Parsley.setLocale('id');
+    vprice: 'Harga Jual wajib diatas Rp 0',
 
+    vqty: 'Qty wajib diatas Rp 0',
 
-
-    window.Parsley.addValidator("vproductname", {
-
-        validateString: function(value) {
-
-            if ($('#item_id').val() == '' || $('#item_id').val() == '0') {
-
-                return false;
-
-            } else {
-
-                return true;
-
-            }
-
-        },
-
-    });
+});
 
 
-    window.Parsley.addValidator("vprice", {
 
-        validateString: function(value) {
-
-            let vprice = parseFloat(temp_price.getNumericString());
-
-            if (vprice <= 0) {
-
-                return false;
-
-            } else {
-
-                return true;
-
-            }
-        },
-
-    });
+Parsley.setLocale('id');
 
 
-    window.Parsley.addValidator("vqty", {
 
-        validateString: function(value) {
+window.Parsley.addValidator("vproductname", {
 
-            let vqty = parseFloat(temp_qty.getNumericString());
+    validateString: function(value) {
 
-            if (vqty <= 0) {
+        if ($('#item_id').val() == '' || $('#item_id').val() == '0') {
 
-                return false;
+            return false;
 
-            } else {
+        } else {
 
-                return true;
+            return true;
 
-            }
+        }
 
-        },
+    },
 
-    });
-    
-    $("#tbltemp").on('click', '.btnedit', function(e) {
+});
 
-     e.preventDefault();
 
-     let json_data = $(this).attr('data-json');
+window.Parsley.addValidator("vprice", {
 
-     let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
+    validateString: function(value) {
 
-     if (is_json) {
+        let vprice = parseFloat(temp_price.getNumericString());
 
-        $('#temp_sales_admin_id').val(json.temp_sales_admin_id);
-        
-        $('#item_id').val(json.item_id);
+        if (vprice <= 0) {
 
-        $('#product_name').val(json.product_name);
+            return false;
 
-        temp_purchase_price.set(json.temp_purchase_price);
+        } else {
 
-        temp_purchase_tax.set(json.temp_purchase_tax);
+            return true;
 
-        temp_price.set(json.temp_sales_price);
+        }
+    },
 
-        temp_qty.set(json.temp_qty);
+});
 
-        temp_discount1.set(json.temp_disc1);
 
-        temp_discount2.set(json.temp_disc2);
+window.Parsley.addValidator("vqty", {
 
-        temp_discount3.set(json.temp_disc3);
+    validateString: function(value) {
 
-        temp_discount_percentage1.set(json.temp_price_disc1_percentage);
+        let vqty = parseFloat(temp_qty.getNumericString());
 
-        temp_discount_percentage2.set(json.temp_price_disc2_percentage);
+        if (vqty <= 0) {
 
-        temp_discount_percentage3.set(json.temp_price_disc3_percentage);
+            return false;
 
-        total_temp_discount.set(json.temp_total_discount);
+        } else {
 
-        temp_total.set(json.temp_sales_price);
+            return true;
 
-        $('#temp_qty').focus();
+        }
 
-    } else {
+    },
+
+});
+
+
+
+$("#tbltemp").on('click', '.btnedit', function(e) {
+
+ e.preventDefault();
+
+ let json_data = $(this).attr('data-json');
+
+ let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
+
+ if (is_json) {
+
+    $('#temp_sales_admin_id').val(json.temp_sales_admin_id);
+
+    $('#item_id').val(json.item_id);
+
+    $('#product_name').val(json.product_name);
+
+    temp_purchase_price.set(json.temp_purchase_price);
+
+    temp_purchase_tax.set(json.temp_purchase_tax);
+
+    temp_price.set(json.temp_sales_price);
+
+    temp_qty.set(json.temp_qty);
+
+    temp_discount1.set(json.temp_disc1);
+
+    temp_discount2.set(json.temp_disc2);
+
+    temp_discount3.set(json.temp_disc3);
+
+    temp_discount_percentage1.set(json.temp_price_disc1_percentage);
+
+    temp_discount_percentage2.set(json.temp_price_disc2_percentage);
+
+    temp_discount_percentage3.set(json.temp_price_disc3_percentage);
+
+    total_temp_discount.set(json.temp_total_discount);
+
+    temp_total.set(json.temp_sales_price);
+
+    $('#temp_qty').focus();
+
+} else {
 
         //getTemp();
 
@@ -1821,97 +1960,98 @@ $assetsUrl = base_url('assets');
 
 })  
 
-    $("#tbltemp").on('click', '.btndelete', function(e) {
+$("#tbltemp").on('click', '.btndelete', function(e) {
 
-        e.preventDefault();
+    e.preventDefault();
 
-        let id = $(this).attr('data-id');
+    let id = $(this).attr('data-id');
 
-        let actUrl = base_url + '/webmin/sales-admin/temp-delete/' + id;
+    let actUrl = base_url + '/webmin/sales-admin/temp-delete/' + id;
 
-        ajax_get(actUrl, null, {
+    ajax_get(actUrl, null, {
 
-            success: function(response) {
+        success: function(response) {
 
-                if (response.success) {
+            if (response.success) {
 
-                    if (response.result.success) {
+                if (response.result.success) {
 
-                        notification.success(response.result.message);
+                    notification.success(response.result.message);
 
-                    } else {
+                } else {
 
-                        message.error(response.result.message);
-
-                    }
-
-                    setfootervalue();
-
-                    loadTempData(response.result.data);
+                    message.error(response.result.message);
 
                 }
 
-            },
+                setfootervalue();
 
-            error: function(response) {
-
-                getTemp();
+                loadTempData(response.result.data);
 
             }
 
-        })
+        },
 
-    }) 
+        error: function(response) {
 
-    $('#btnadd').click(function(e) {
+            getTemp();
 
-     e.preventDefault();
-     let actUrl = base_url + '/webmin/sales-admin/get-salesadmin-temp';
-     ajax_get(actUrl, null, {
-        success: function(response) {   
-            if (response.result.success == 'TRUE') {
-               let form = $('#frmsalesadmin');
-               let items = response.result.data;
-               $('#title-frmsalesadmin').html('Penjualan Admin');
-               formMode = 'add';
-               loadTempData(items);
-               clearItemInput();
-               showInputPage(true);
-           } else {
-            message.error(response.result.message);
         }
 
+    })
+
+}) 
+
+$('#btnadd').click(function(e) {
+
+ e.preventDefault();
+ let actUrl = base_url + '/webmin/sales-admin/get-salesadmin-temp';
+ ajax_get(actUrl, null, {
+    success: function(response) {   
+        if (response.result.success == 'TRUE') {
+           let form = $('#frmsalesadmin');
+           let items = response.result.data;
+           $('#title-frmsalesadmin').html('Penjualan Admin');
+           formMode = 'add';
+           loadTempData(items);
+           clearItemInput();
+           showInputPage(true);
+       } else {
+        message.error(response.result.message);
     }
+
+}
 })
- })
+})
 
 
-    function clearItemInput() {
+function clearItemInput() {
 
-       let form = $('#frmaddtemp');
+   let form = $('#frmaddtemp');
 
-       form.parsley().reset();
+   form.parsley().reset();
 
-       $('#item_id').val('');
+   $('#item_id').val('');
 
-       $('#product_name').val('');
+   $('#product_name').val('');
 
-       temp_purchase_price.set(0);
+   temp_purchase_price.set(0);
 
-       temp_purchase_tax.set(0);
+   temp_purchase_tax.set(0);
 
-       temp_price.set(0);
+   temp_price.set(0);
 
-       temp_qty.set(0);
+   temp_qty.set(0);
 
-       temp_total.set(0);
+   temp_total.set(0);
 
-       cleardiscount();
+   cleardiscount();
 
-   }
+}
 
 
-   function setfootervalue(){
+function setfootervalue(){
+
     let actUrl = base_url + '/webmin/sales-admin/get-salesadmin-footer';
     ajax_get(actUrl, null, {
         success: function(response) { 
@@ -1984,6 +2124,14 @@ $('#btnsave').click(function(e) {
 
     let actUrl = base_url + '/webmin/sales-admin/save/add';
 
+    if (formMode == 'edit') {
+
+        question = 'Yakin ingin mengubah data penjualan?';
+
+        actUrl = base_url + '/webmin/sales-admin/save/edit';
+
+    }
+
     if(customer_id == null){
         Swal.fire({
           icon: 'error',
@@ -2021,6 +2169,8 @@ $('#btnsave').click(function(e) {
             if (yes) {
 
                 let formValues = {
+
+                    sales_admin_id: $('#sales_admin_id').val(),
 
                     sales_customer_id : customer_id,
 
