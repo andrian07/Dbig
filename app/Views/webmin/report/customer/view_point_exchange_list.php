@@ -32,24 +32,21 @@ $assetsUrl = base_url('assets');
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Customer:</label>
-                                            <select id="customer_id" name="customer_id" class="form-control">
-                                                <option value="1">Samsul (0896-7899-8899)</option>
-                                                <option value="2">Udin (0896-7899-5555)</option>
-                                            </select>
+                                            <select id="customer_id" name="customer_id" class="form-control"></select>
                                         </div>
                                     </div>
                                     <div class="col-sm-2">
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Dari Tanggal:</label>
-                                            <input id="date_from" name="date_from" type="date" class="form-control" value="<?= date('Y-m') ?>-01">
+                                            <input id="start_date" name="start_date" type="date" class="form-control" value="<?= date('Y-m') ?>-01">
                                         </div>
                                     </div>
                                     <div class="col-sm-2">
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Sampai Tanggal:</label>
-                                            <input id="date_until" name="date_until" type="date" class="form-control" value="<?= date('Y-m-d') ?>">
+                                            <input id="end_date" name="end_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>">
                                         </div>
                                     </div>
                                     <div class="col-sm-2">
@@ -57,10 +54,10 @@ $assetsUrl = base_url('assets');
                                         <div class="form-group">
                                             <label>Status:</label>
                                             <select id="status" name="status" class="form-control">
-                                                <option value="0">SEMUA</option>
-                                                <option value="1">Selesai</option>
-                                                <option value="2">Proses</option>
-                                                <option value="2">Cancel</option>
+                                                <option value="success">Selesai</option>
+                                                <option value="pending">Proses</option>
+                                                <option value="cancel">Cancel</option>
+                                                <option value="">SEMUA</option>
                                             </select>
                                         </div>
                                     </div>
@@ -70,7 +67,7 @@ $assetsUrl = base_url('assets');
                                             <label>&nbsp;</label>
                                             <div class="form-group">
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-default"><i class="fas fa-search"></i> Cari</button>
+                                                    <button id="btnsearch" type="button" class="btn btn-default"><i class="fas fa-search"></i> Cari</button>
                                                     <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                                         <span class="sr-only">Toggle Dropdown</span>
                                                     </button>
@@ -117,28 +114,74 @@ $assetsUrl = base_url('assets');
 <?= $this->section('js') ?>
 <script>
     $(document).ready(function() {
-        // $("#customer_id").select2({
-        //     placeholder: '-- Semua --',
-        //     width: "100%",
-        //     allowClear: true,
-        //     ajax: {
-        //         url: base_url + "/select/member",
-        //         dataType: "json",
-        //         type: "POST",
-        //         delay: select2Delay,
-        //         data: function(params) {
-        //             return {
-        //                 search: params.term,
-        //             };
-        //         },
-        //         processResults: function(data, page) {
-        //             return {
-        //                 results: data,
-        //             };
-        //         },
-        //     },
-        // });
+        function reportUrl(params = '') {
+            let selCustomer = $('#customer_id').select2('data');
 
+            let customer_id = $('#customer_id').val();
+            if (customer_id == null) {
+                customer_id = '';
+            }
+
+            let customer_name = '';
+            if (selCustomer[0]) {
+                customer_name = selCustomer[0].text;
+            }
+
+            let status = $('#status').val();
+            let start_date = $('#start_date').val();
+            let end_date = $('#end_date').val();
+
+            let reportUrl = base_url + '/webmin/report/point-exchange-list?';
+            reportUrl += 'start_date=' + start_date;
+            reportUrl += '&end_date=' + end_date;
+            reportUrl += '&customer_id=' + customer_id;
+            reportUrl += '&customer_name=' + customer_name;
+            reportUrl += '&status=' + status;
+
+            if (params != '') {
+                reportUrl += '&' + params;
+            }
+
+            return reportUrl;
+        }
+
+        $("#customer_id").select2({
+            placeholder: '-- Semua --',
+            width: "100%",
+            allowClear: true,
+            ajax: {
+                url: base_url + "/webmin/select/customer",
+                dataType: "json",
+                type: "GET",
+                delay: select2Delay,
+                data: function(params) {
+                    return {
+                        search: params.term,
+                    };
+                },
+                processResults: function(data, page) {
+                    return {
+                        results: data,
+                    };
+                },
+            },
+        });
+
+
+        $('#btnsearch').click(function(e) {
+            e.preventDefault();
+            $('#preview').attr('src', reportUrl());
+        })
+
+        $('#btnexportpdf').click(function(e) {
+            e.preventDefault();
+            window.open(reportUrl('download=Y'));
+        })
+
+        $('#btnexportexcel').click(function(e) {
+            e.preventDefault();
+            window.open(reportUrl('file=xls'));
+        })
 
     })
 </script>

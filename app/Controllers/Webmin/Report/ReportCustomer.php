@@ -251,34 +251,262 @@ class ReportCustomer extends WebminController
 
     public function pointExchangeList()
     {
-        $data = [
-            'title'         => 'Daftar Penukaran Poin',
-            'userLogin'     => $this->userLogin
+        $customer_id    = $this->request->getGet('customer_id') != null ? $this->request->getGet('customer_id') : '';
+        $customer_name  = $this->request->getGet('customer_name') != null ? $this->request->getGet('customer_name') : '-';
+        $status         = $this->request->getGet('status') != null ? $this->request->getGet('status') : '';
+        $start_date     = $this->request->getGet('start_date') != null ? $this->request->getGet('start_date') : date('Y-m-d');
+        $end_date       = $this->request->getGet('end_date') != null ? $this->request->getGet('end_date') : date('Y-m-d');
+
+        $list_status = [
+            ''          => '-',
+            'success'   => 'Selesai',
+            'pending'   => 'Proses',
+            'cancel'    => 'Dibatalkan'
         ];
 
-        $htmlView   = view('webmin/report/customer/point_exchange_list', $data);
+        $status_text    = isset($list_status[$status]) ? $list_status[$status] : '-';
+
+        $agent = $this->request->getUserAgent();
         $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
         $fileType   = $this->request->getGet('file');
-        $agent      = $this->request->getUserAgent();
-        if (!in_array($fileType, ['pdf'])) {
+
+        if (!in_array($fileType, ['pdf', 'xls'])) {
             $fileType = 'pdf';
         }
-        if ($agent->isMobile() && !$isDownload) {
-            return $htmlView;
-        } else {
-            if ($fileType == 'pdf') {
+
+        $data = [
+            'title'             => 'Laporan Penjualan',
+            'userLogin'         => $this->userLogin,
+            'customer_id'       => $customer_id,
+            'customer_name'     => $customer_name,
+            'status'            => $status,
+            'status_text'       => $status_text,
+            'list_status'       => $list_status,
+            'start_date'        => $start_date,
+            'end_date'          => $end_date,
+        ];
+
+        $M_point_exchange       = model('M_point_exchange');
+        $getData                = $M_point_exchange->getReportExchangeList($start_date, $end_date, $status, $customer_id)->getResultArray();
+
+        if ($fileType == 'pdf') {
+            $max_report_size    = 14;
+            $pages              = array_chunk($getData, $max_report_size);
+            $data['pages']      = $pages;
+            $data['max_page']   = count($pages);
+
+            $htmlView = $this->renderView('report/customer/point_exchange_list', $data);
+            if ($agent->isMobile() && !$isDownload) {
+                return $htmlView;
+            } else {
                 $dompdf = new Dompdf();
                 $dompdf->loadHtml($htmlView);
                 $dompdf->setPaper('A4', 'landscape');
                 $dompdf->render();
-                $dompdf->stream('daftar_penukaran_poin.pdf', array("Attachment" => $isDownload));
+                $dompdf->stream('penukaran_poin.pdf', array("Attachment" => $isDownload));
                 exit();
-            } else {
-                die('Export Excel Script');
             }
+        } else {
+            $header_format = [
+                'fill' => [
+                    'fillType' =>  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => [
+                        'argb' => 'A5A5A5'
+                    ]
+                ],
+                'font' => [
+                    'bold' => true,
+                ],
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                ],
+            ];
+
+            $total_format = [
+                'font' => [
+                    'bold' => true,
+                ],
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $font_bold = [
+                'font' => [
+                    'bold' => true,
+                ],
+            ];
+
+            $border_left_right = [
+                'borders' => [
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $border_top = [
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $template = WRITEPATH . '/template/report/template_report.xlsx';
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+
+            $sheet = $spreadsheet->setActiveSheetIndex(0);
+
+            //make header //
+            $iRow = 7;
+            $sheet->getCell('A' . $iRow)->setValue('KODE PENUKARAN');
+            $sheet->getCell('B' . $iRow)->setValue('KODE CUSTOMER');
+            $sheet->getCell('C' . $iRow)->setValue('NAMA CUSTOMER');
+            $sheet->getCell('D' . $iRow)->setValue('NAMA ITEM');
+            $sheet->getCell('E' . $iRow)->setValue('POIN');
+            $sheet->getCell('F' . $iRow)->setValue('TGL.PENUKARAN');
+            $sheet->getCell('G' . $iRow)->setValue('TGL.PENGAMBILAN');
+            $sheet->getCell('H' . $iRow)->setValue('LOKASI PENGAMBILAN');
+            $sheet->getCell('I' . $iRow)->setValue('OLEH USER');
+            $sheet->getCell('J' . $iRow)->setValue('STATUS');
+
+            $sheet->getStyle('A' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('B' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('C' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('D' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('E' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('F' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('G' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('H' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('I' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('J' . $iRow)->applyFromArray($header_format);
+            $iRow++;
+
+            foreach ($getData as $row) {
+                $sheet->getCell('A' . $iRow)->setValue($row['exchange_code']);
+                $sheet->getCell('B' . $iRow)->setValue($row['customer_code']);
+                $sheet->getCell('C' . $iRow)->setValue($row['customer_name']);
+                $sheet->getCell('D' . $iRow)->setValue($row['reward_name']);
+                $sheet->getCell('E' . $iRow)->setValue(floatval($row['reward_point']));
+                $sheet->getCell('F' . $iRow)->setValue(indo_short_date($row['exchange_date']));
+                $completed_at = $row['completed_at'] == null ? '' : indo_short_date(substr($row['completed_at'], 0, 10));
+                $sheet->getCell('G' . $iRow)->setValue($completed_at);
+                $sheet->getCell('H' . $iRow)->setValue($row['store_name']);
+                $sheet->getCell('I' . $iRow)->setValue($row['user_realname']);
+                $sheet->getCell('J' . $iRow)->setValue($list_status[$row['exchange_status']]);
+
+                $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('F' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('H' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('I' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('J' . $iRow)->applyFromArray($border_left_right);
+                $iRow++;
+            }
+
+            $sheet->getStyle('A' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('B' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('C' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('D' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('E' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('F' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('G' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('H' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('I' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('J' . $iRow)->applyFromArray($border_top);
+
+            //setting periode
+            $periode_text = indo_short_date($start_date) . ' s.d ' . indo_short_date($end_date);
+            $sheet->getCell('A5')->setValue('Periode');
+            $sheet->getStyle('A5')->applyFromArray($font_bold);
+            $sheet->getCell('B5')->setValue($periode_text);
+            $sheet->mergeCells('B5:J5');
+
+            $filter_text = "CUSTOMER = $customer_name;STATUS = $status_text";
+            $sheet->getCell('A6')->setValue('Filter');
+            $sheet->getStyle('A6')->applyFromArray($font_bold);
+            $sheet->getCell('B6')->setValue($filter_text);
+            $sheet->mergeCells('B6:J6');
+
+            //setting excel header//
+            // A4-G4 = Store Phone
+            // A3-G3 = Store Address
+            // A2-G2 = Store Name
+            // A1-G1 = Print By
+            $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
+            $sheet->getCell('A4')->setValue(COMPANY_PHONE);
+            $sheet->getCell('A3')->setValue(COMPANY_ADDRESS);
+            $sheet->getCell('A2')->setValue(COMPANY_NAME);
+            $sheet->getCell('A1')->setValue($reportInfo);
+
+            $sheet->mergeCells('A4:J4');
+            $sheet->mergeCells('A3:J3');
+            $sheet->mergeCells('A2:J2');
+            $sheet->mergeCells('A1:J1');
+
+            $sheet->getStyle('A4:J4')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A3:J3')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A2:J2')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A1:J1')->getAlignment()->setHorizontal('right');
+
+            $sheet->getStyle('A4:J4')->applyFromArray($font_bold);
+            $sheet->getStyle('A3:J3')->applyFromArray($font_bold);
+            $sheet->getStyle('A2:J2')->applyFromArray($font_bold);
+
+            $sheet->getColumnDimension('A')->setAutoSize(true);
+            $sheet->getColumnDimension('B')->setAutoSize(true);
+            $sheet->getColumnDimension('C')->setAutoSize(true);
+            $sheet->getColumnDimension('D')->setAutoSize(true);
+            $sheet->getColumnDimension('E')->setAutoSize(true);
+            $sheet->getColumnDimension('F')->setAutoSize(true);
+            $sheet->getColumnDimension('G')->setAutoSize(true);
+            $sheet->getColumnDimension('H')->setAutoSize(true);
+            $sheet->getColumnDimension('I')->setAutoSize(true);
+            $sheet->getColumnDimension('J')->setAutoSize(true);
+
+            $filename = 'penukaran_poin';
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+            header('Cache-Control: max-age=0');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save('php://output');
+            exit();
         }
     }
-
 
     public function viewCustomerReceivableList()
     {

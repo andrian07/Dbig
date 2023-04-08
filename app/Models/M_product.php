@@ -614,4 +614,27 @@ class M_product extends Model
             }
         }
     }
+
+
+    //report section//
+    public function getReportWarehouseStockList($warehouse_id = '', $product_tax = '')
+    {
+        $builder = $this->db->table('ms_product_stock');
+        $builder->select('ms_product_stock.product_id,ms_product_stock.warehouse_id,ms_product_stock.stock,ms_product.product_code,ms_product.product_name,ms_category.category_name,ms_brand.brand_name,ms_warehouse.warehouse_code,ms_warehouse.warehouse_name,ms_product.has_tax')
+            ->join('ms_product', 'ms_product.product_id=ms_product_stock.product_id')
+            ->join('ms_category', 'ms_category.category_id=ms_product.category_id')
+            ->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id')
+            ->join('ms_warehouse', 'ms_warehouse.warehouse_id=ms_product_stock.warehouse_id');
+
+        if ($warehouse_id != '') {
+            $builder->where('ms_product_stock.warehouse_id', $warehouse_id);
+        }
+
+        if ($product_tax != '') {
+            $builder->where('ms_product.has_tax', $product_tax);
+        }
+
+        $builder->orderBy('ms_product.product_name,ms_warehouse.warehouse_code', 'ASC');
+        return $builder->get();
+    }
 }
