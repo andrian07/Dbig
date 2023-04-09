@@ -136,6 +136,9 @@ $assetsUrl = base_url('assets');
                             <div class="tab-pane fade" id="custom-content-above-history" role="tabpanel" aria-labelledby="custom-content-above-history-tab">
                                 <!-- history -->
                                 <div class="row mb-1">
+                                    <div class="col-12 mb-1">
+                                        <button id="btnaddpoint" class="btn btn-md btn-primary"><i class="fas fa-plus"></i> Tambah Poin</button>
+                                    </div>
                                     <div class="col-12">
                                         <table id="tblhistorypoint" class="table table-bordered table-hover" width="100%">
                                             <thead>
@@ -163,6 +166,47 @@ $assetsUrl = base_url('assets');
         <!-- /.row -->
     </div><!-- /.container-fluid -->
 
+    <div class="modal fade" id="modal-addpoint">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="title-frmcustomer">Tambah Poin</h4>
+                    <button type="button" class="close close-modal-addpoint">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="frmaddpoint" class="form-horizontal">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="addpoint_remark" class="col-sm-12">Keterangan</label>
+                                    <div class="col-sm-12">
+                                        <textarea id="addpoint_remark" name="addpoint_remark" class="form-control" placeholder="Keterangan" data-parsley-maxlength="500" rows="3" required></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="addpoint_value" class="col-sm-12">Jumlah Poin</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" id="addpoint_value" name="addpoint_value" data-parsley-vaddpoint placeholder="Jumlah Poin">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button id="btncancel_addpoint" class="btn btn-danger close-modal-addpoint"><i class="fas fa-times-circle"></i> Batal</button>
+                        <button id="btnsave_addpoint" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 
 </section>
 
@@ -177,7 +221,7 @@ $assetsUrl = base_url('assets');
     $(document).ready(function() {
         let customer_point = new AutoNumeric('#customer_point', configPoint);
         let reward_point = new AutoNumeric('#reward_point', configPoint);
-
+        let addpoint_value = new AutoNumeric('#addpoint_value', configPoint);
 
         let tblexchange = $("#tblexchange").DataTable({
             processing: true,
@@ -513,6 +557,80 @@ $assetsUrl = base_url('assets');
         })
 
 
+        $('#btnaddpoint').click(function(e) {
+            e.preventDefault();
+            let customer_id = $('#customer_id').val();
+            if (customer_id == '' || customer_id == null) {
+                message.info("Pilih customer terlebih dahulu");
+            } else {
+                $('#addpoint_remark').val('');
+                addpoint_value.set(0);
+                $('#modal-addpoint').modal(configModal);
+            }
+
+        })
+
+        $('.close-modal-addpoint').click(function(e) {
+            e.preventDefault();
+            $('#modal-addpoint').modal('hide');
+        })
+
+        $('#btnsave_addpoint').click(function(e) {
+            e.preventDefault();
+            let customer_id = $('#customer_id').val();
+            let remark = $('#addpoint_remark').val();
+            let value = parseFloat(addpoint_value.getNumericString());
+
+            if (customer_id == '' || customer_id == null) {
+                message.info("Pilih customer terlebih dahulu");
+            } else if (remark == '') {
+                message.info("Isi keterangan poin terlebih dahulu");
+            } else if (value == 0) {
+                message.info("Isi jumlah poin terlebih dahulu");
+            } else {
+                let question = `Yakin ingin menambahkan poin sejumlah <b>${value}</b> poin ke customer?`;
+                let actUrl = base_url + '/webmin/point-exchange/add-point';
+                let btnSubmit = $('#btnsave_addpoint');
+                message.question(question).then(function(answer) {
+                    let yes = parseMessageResult(answer);
+                    if (yes) {
+                        let formValues = {
+                            customer_id: customer_id,
+                            point_remark: remark,
+                            point_value: value
+                        };
+                        btnSubmit.prop('disabled', true);
+                        ajax_post(actUrl, formValues, {
+                            success: function(response) {
+                                if (response.success) {
+                                    if (response.result.success) {
+                                        notification.success(response.result.message);
+                                        $('#modal-addpoint').modal('hide');
+                                    } else {
+                                        message.error(response.result.message);
+                                    }
+                                }
+                                btnSubmit.prop('disabled', false);
+                                updateTableHistory()
+                            },
+                            error: function(response) {
+                                btnSubmit.prop('disabled', false);
+                                updateTableHistory()
+                            }
+                        });
+                    }
+
+                })
+            }
+
+
+        })
+
+        $('#addpoint_value').on('change', function(e) {
+            if (addpoint_value.getNumericString() == null || addpoint_value.getNumericString() == '') {
+                addpoint_value.set(0);
+            }
+        })
 
         clearForm();
         clearCustomerData();

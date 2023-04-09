@@ -238,6 +238,40 @@ class PointExchange extends WebminController
             }
         }
     }
+
+    public function addPoint()
+    {
+        $this->validationRequest(TRUE);
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        $validation =  \Config\Services::validation();
+
+        $input = [
+            'customer_id'           => $this->request->getPost('customer_id'),
+            'point_remark'          => $this->request->getPost('point_remark'),
+            'point_value'           => $this->request->getPost('point_value'),
+        ];
+
+
+        $validation->setRules([
+            'customer_id'           => ['rules' => 'required'],
+            'point_remark'          => ['rules' => 'required'],
+            'point_value'           => ['rules' => 'required'],
+        ]);
+
+
+        if ($validation->run($input) === FALSE) {
+            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        } else {
+            if ($this->role->hasRole('point_exchange.add_point')) {
+                $result = $this->M_point_exchange->addPoint($input);
+            } else {
+                $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menukar hadiah'];
+            }
+        }
+
+        $result['csrfHash'] = csrf_hash();
+        resultJSON($result);
+    }
     //--------------------------------------------------------------------
 
 }

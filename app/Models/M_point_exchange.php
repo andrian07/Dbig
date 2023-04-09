@@ -249,6 +249,52 @@ class M_point_exchange extends Model
         return $save;
     }
 
+    public function addPoint($data)
+    {
+        $saveQueries            = NULL;
+        $this->db->query('LOCK TABLES customer_history_point WRITE,ms_customer WRITE');
+
+        $customer_id    = $data['customer_id'];
+        $point_remark   = $data['point_remark'];
+        $point_value    = floatval($data['point_value']);
+
+        $getCustomer = $this->db->table('ms_customer')->where('customer_id', $customer_id)->get()->getRowArray();
+        if ($getCustomer == NULL) {
+            $save = ['success' => FALSE, 'message' => 'Customer tidak ditemukan'];
+        } else {
+            $customer_point = floatval($getCustomer['customer_point']);
+            $new_customer_point = $customer_point + $point_value;
+
+            $this->db->transBegin();
+            $this->db->table('ms_customer')->update(['customer_point' => $new_customer_point], ['customer_id' => $customer_id]);
+            if ($this->db->affectedRows() > 0) {
+                $saveQueries[]  = $this->db->getLastQuery()->getQuery();
+            }
+
+            $history_data = [
+                'customer_id'       => $customer_id,
+                'log_point_remark'  => $point_remark,
+                'customer_point'    => $point_value
+            ];
+            $this->db->table('customer_history_point')->insert($history_data);
+            if ($this->db->affectedRows() > 0) {
+                $saveQueries[]  = $this->db->getLastQuery()->getQuery();
+            }
+
+            if ($this->db->transStatus() === false) {
+                $this->db->transRollback();
+                $saveQueries = NULL;
+                $save = ['success' => FALSE, 'message' => 'Penambahan poin gagal'];
+            } else {
+                $this->db->transCommit();
+                $save = ['success' => TRUE, 'message' => 'Penambahan poin berhasil'];
+            }
+        }
+
+        $this->db->query('UNLOCK TABLES');
+        saveQueries($saveQueries, 'exchange_point',  $customer_id, 'add_point');
+        return $save;
+    }
 
     // report section //
     public function getReportExchangeList($start_date, $end_date, $status = '', $customer_id = '')
