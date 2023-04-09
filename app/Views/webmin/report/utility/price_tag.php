@@ -9,16 +9,9 @@
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-        font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
     }
 
-    .font-primary {
-        font-family: Arial, Helvetica, sans-serif;
-    }
 
-    .font-secondary {
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    }
 
     .price-tag {
         width: 226.77px;
@@ -41,7 +34,6 @@
     }
 
     .price-tag .tag-header {
-        font-family: Arial, Helvetica, sans-serif;
         color: #FFF;
         padding: 2px 3px;
         font-size: 14px;

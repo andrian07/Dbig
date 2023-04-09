@@ -155,6 +155,7 @@ class MyApp extends BaseConfig
             'text'   => 'Tukar Point',
             'roles'   => [
                 'view'   => ['text' => 'Lihat'],
+                'add_point' => ['text' => 'Tambah Poin'],
             ]
         ],
 
