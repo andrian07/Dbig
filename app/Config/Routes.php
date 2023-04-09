@@ -703,6 +703,8 @@ $routes->group('webmin/sales-admin', ['filter' => 'webminauth'], static function
     $routes->post('save/(:alpha)', 'Webmin\Sales_admin::save/$1');
 
     $routes->get('edit-salesadmin/(:alphanum)', 'Webmin\Sales_admin::editSalesadmin/$1');
+
+    $routes->post('import-excell', 'Webmin\Sales_admin::import_excell');
 });
 
 /* end penjualan admin */

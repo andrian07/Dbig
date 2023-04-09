@@ -246,7 +246,8 @@ class M_salesmanadmin extends Model
             $vUpdateStock[] = "('$product_id', '$warehouse_id', '$base_purchase_stock')";
 
             if($getLastEd != null){
-                for($a = $dt_temp_qty; $a > 0; $a++){
+                $a = 0;
+                for($a = $base_purchase_stock; $a > 0; $a++){
 
                     $getLastEdStock = $this->db->table($this->table_ms_warehouse_stock)->select('*')->where('product_id', $product_id)->where('stock > 0')->orderBy('exp_date', 'asc')->limit(1)->get()->getRowArray();
 
@@ -256,7 +257,7 @@ class M_salesmanadmin extends Model
                     }
 
 
-                    $total_input = $stock_eds - $dt_temp_qty;
+                    $total_input = $stock_eds - $a;
 
                     if($total_input < 0){
                         $total_input = 0;
@@ -264,7 +265,7 @@ class M_salesmanadmin extends Model
 
                     $sqlUpdateWarehouse = "update ms_warehouse_stock set stock = '".$total_input."' where stock_id = '".$stock_id_eds."'";
                     $this->db->query($sqlUpdateWarehouse);
-                    $a = $dt_temp_qty - $stock_eds;
+                    $a = $base_purchase_stock - $stock_eds - 1;
                 }
             }
         }
@@ -502,6 +503,8 @@ class M_salesmanadmin extends Model
             return $save;
         }
     }
+
+   
 
 
 

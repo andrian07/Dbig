@@ -48,20 +48,20 @@ class Sales_admin extends WebminController
                 $column[] = esc($row['customer_name']);
                 $column[] = 'Rp. '.esc(number_format($row['sales_admin_grand_total']));
                 if($row['sales_admin_remaining_payment'] < 0){
-                 $column[] = '<span class="badge badge-success">Lunas</span>';
-             }else{
-                 $column[] = '<span class="badge badge-danger">Belum Lunas</span>';
-             }
-             $column[] = 'Rp. '.esc(number_format($row['sales_admin_remaining_payment']));
-             $btns = [];
-             $prop =  'data-id="' . $row['sales_admin_id'] . '" data-name="' . esc($row['sales_admin_id']) . '"';
-             $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/sales-admin/get-sales-admin-detail/'.$row['sales_admin_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
+                   $column[] = '<span class="badge badge-success">Lunas</span>';
+               }else{
+                   $column[] = '<span class="badge badge-danger">Belum Lunas</span>';
+               }
+               $column[] = 'Rp. '.esc(number_format($row['sales_admin_remaining_payment']));
+               $btns = [];
+               $prop =  'data-id="' . $row['sales_admin_id'] . '" data-name="' . esc($row['sales_admin_id']) . '"';
+               $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/sales-admin/get-sales-admin-detail/'.$row['sales_admin_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
 
-             $btns[] = button_print($prop);
-             $btns[] = button_edit($prop);
-             $column[] = implode('&nbsp;', $btns);
-             return $column;
-         });
+               $btns[] = button_print($prop);
+               $btns[] = button_edit($prop);
+               $column[] = implode('&nbsp;', $btns);
+               return $column;
+           });
 
             $table->orderColumn  = ['', 'sales_admin_invoice', 'sales_date','',''];
             $table->searchColumn = ['sales_admin_invoice', ''];
@@ -333,31 +333,31 @@ class Sales_admin extends WebminController
 
             }else if ($type == 'edit') {
 
-            if ($this->role->hasRole('sales_admin.edit')) {
+                if ($this->role->hasRole('sales_admin.edit')) {
 
-                $input['user_id']            = $this->userLogin['user_id'];
+                    $input['user_id']            = $this->userLogin['user_id'];
 
-                $input['sales_admin_id']     = $this->request->getPost('sales_admin_id');
+                    $input['sales_admin_id']     = $this->request->getPost('sales_admin_id');
 
-                $save = $this->M_salesmanadmin->updatesalesmanadmin($input);
+                    $save = $this->M_salesmanadmin->updatesalesmanadmin($input);
 
-                if ($save['success']) {
+                    if ($save['success']) {
 
-                    $result = ['success' => TRUE, 'message' => 'Data pesanan berhasil diperbarui', 'purchase_order_id' => $save['purchase_order_id']];
+                        $result = ['success' => TRUE, 'message' => 'Data pesanan berhasil diperbarui', 'purchase_order_id' => $save['purchase_order_id']];
+
+                    } else {
+
+                        $result = ['success' => FALSE, 'message' => 'Data pesanan gagal diperbarui'];
+
+                    }
 
                 } else {
 
-                    $result = ['success' => FALSE, 'message' => 'Data pesanan gagal diperbarui'];
+                    $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk mengubah pesanan pembelian'];
 
                 }
 
-            } else {
-
-                $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk mengubah pesanan pembelian'];
-
             }
-
-        }
         }
 
         $result['csrfHash'] = csrf_hash();
@@ -512,6 +512,43 @@ class Sales_admin extends WebminController
         $result['csrfHash'] = csrf_hash();
         
         resultJSON($result);
+    }
+
+    public function import_excell()
+    {  
+        if (isset($_FILES["fileExcel"]["name"])) {
+            $path = $_FILES["fileExcel"]["tmp_name"];
+            $object = PHPExcel_IOFactory::load($path);
+            foreach($object->getWorksheetIterator() as $worksheet)
+            {
+                $highestRow = $worksheet->getHighestRow();
+                $highestColumn = $worksheet->getHighestColumn();    
+                for($row=2; $row<=$highestRow; $row++)
+                {
+                    $nama = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
+                    $jurusan = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
+                    $angkatan = $worksheet->getCellByColumnAndRow(3, $row)->getValue();
+                    $temp_data[] = array(
+                        'nama'  => $nama,
+                        'jurusan'   => $jurusan,
+                        'angkatan'  => $angkatan
+                    );  
+
+                    print_r($temp_data);die();
+                }
+            }
+            $this->load->model('ImportModel');
+            $insert = $this->ImportModel->insert($temp_data);
+            if($insert){
+                $this->session->set_flashdata('status', '<span class="glyphicon glyphicon-ok"></span> Data Berhasil di Import ke Database');
+                redirect($_SERVER['HTTP_REFERER']);
+            }else{
+                $this->session->set_flashdata('status', '<span class="glyphicon glyphicon-remove"></span> Terjadi Kesalahan');
+                redirect($_SERVER['HTTP_REFERER']);
+            }
+        }else{
+            echo "Tidak ada file yang masuk";
+        }
     }
     //--------------------------------------------------------------------
 

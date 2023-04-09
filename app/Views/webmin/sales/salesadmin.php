@@ -52,6 +52,11 @@ $assetsUrl = base_url('assets');
 
                             <button id="btnreload" class="btn btn-secondary"><i class="fas fa-sync"></i> Reload</button>
 
+                            <form id="data" enctype="multipart/form-data">
+                                <input name="excell" type="file" />
+                                <button id="btnexcellimport" class="btn btn-success"><i class="fas fa-file-excel"></i> Excell</button>
+                            </form>
+
                         </div>
 
                         <div class="card-body">
@@ -1080,11 +1085,6 @@ $assetsUrl = base_url('assets');
 
         }
 
-        function footer_calculation() {
-            // body...
-        }
-
-
 
         $("#tblsalesadmin").on('click', '.btnedit', function(e) {
 
@@ -1248,6 +1248,8 @@ $("#tblsalesadmin").on('click', '.btnprint', function(e) {
         }
     })
 })
+
+
 
 function loadTempData(items) {
 
@@ -2009,21 +2011,45 @@ $('#btnadd').click(function(e) {
  ajax_get(actUrl, null, {
     success: function(response) {   
         if (response.result.success == 'TRUE') {
-           let form = $('#frmsalesadmin');
-           let items = response.result.data;
-           $('#title-frmsalesadmin').html('Penjualan Admin');
-           formMode = 'add';
-           loadTempData(items);
-           clearItemInput();
-           showInputPage(true);
-       } else {
-        message.error(response.result.message);
+            let form = $('#frmsalesadmin');
+            let items = response.result.data;
+            $('#title-frmsalesadmin').html('Penjualan Admin');
+            formMode = 'add';
+            clearAll();
+            clearItemInput();
+            cleardiscountfooter();
+            footer_total_discount.set(0);
+            footer_total_ppn.set(0);
+            $('#ppn_check').prop('checked', false);
+            footer_dp.set(0);
+            loadTempData(items);
+            showInputPage(true);
+        } else {
+           message.error(response.result.message);
+       }
+
+   }
+})
+})
+
+
+
+
+$("#btnexcellimport").click(function(e) {
+    e.preventDefault();
+    let datasend = $('#excell').files;
+    $.ajax({
+      url: base_url + '/webmin/sales-admin/import-excell',
+      method:"POST",
+      data:datasend,
+      processData:false,
+      contentType:false,
+      cache:false,
+      success:function(data){
+        console.log(data);
     }
-
-}
 })
 })
-
 
 function clearItemInput() {
 
@@ -2046,6 +2072,31 @@ function clearItemInput() {
    temp_total.set(0);
 
    cleardiscount();
+
+}
+
+
+function clearAll() {
+
+   let form = $('#frmaddtemp');
+
+   form.parsley().reset();
+
+   setSelect2('#customer_id', '', '');
+
+   setSelect2('#payment_type', '', '');
+
+   setSelect2('#salesman_id', '', '');
+
+   setSelect2('#store_id', '', '');
+
+   $('#due_date').val('');
+
+   clearItemInput()
+
+   cleardiscount();
+
+   cleardiscountfooter();
 
 }
 
@@ -2229,6 +2280,8 @@ $('#btnsave').click(function(e) {
                                 form.parsley().reset();
 
                                 showInputPage(false);
+
+                                clearAll();
 
                                 let invoice = response.result.purchase_order_id;
 
