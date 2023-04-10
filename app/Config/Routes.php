@@ -629,7 +629,6 @@ $routes->group('webmin/retur', ['filter' => 'webminauth'], static function ($rou
     $routes->get('cancel-retur/(:alphanum)', 'Webmin\Retur\Retur::cancelRetur/$1');
 
     $routes->get('printinvoice/(:alphanum)', 'Webmin\Retur\Retur::printInvoice/$1');
-
 });
 
 
@@ -748,7 +747,7 @@ $routes->group('webmin/payment', ['filter' => 'webminauth'], static function ($r
     $routes->get('get-debt-history-detail/(:alphanum)', 'Webmin\Payment\Debt_repayment::getDebtHistoryDetail/$1');
 
     $routes->get('get-receivable-history-detail/(:alphanum)', 'Webmin\Payment\Receivable_repayment::getReceivableHistoryDetail/$1');
-    
+
 
     /* End Pelunasan Hutang */
 
@@ -831,11 +830,12 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
     $routes->get('view-barcode-generate', 'Webmin\Report\Report::viewBarcodeGenerate');
 
     $routes->get('view-price-tag', 'Webmin\Report\Report::viewPriceTag');
+    $routes->get('view-price-tag-v2', 'Webmin\Report\Report::viewPriceTagV2');
 
     $routes->get('barcode-generate', 'Webmin\Report\Report::barcodeGenerate');
 
     $routes->get('price-tag', 'Webmin\Report\Report::priceTag');
-
+    $routes->get('price-tag-v2', 'Webmin\Report\Report::priceTagV2');
     /* Section Customer */
 
     $routes->get('view-customer-list', 'Webmin\Report\ReportCustomer::viewCustomerList');
