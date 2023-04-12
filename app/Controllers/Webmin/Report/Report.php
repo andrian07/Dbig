@@ -147,7 +147,6 @@ class Report extends WebminController
         }
     }
 
-
     public function viewPriceTagV2()
     {
         $data = [

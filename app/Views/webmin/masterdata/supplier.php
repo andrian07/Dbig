@@ -28,6 +28,20 @@ $assetsUrl = base_url('assets');
                     <div class="card-header p-2">
                         <button id="btnadd" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah</button>
                         <button id="btnreload" class="btn btn-secondary"><i class="fas fa-sync"></i> Reload</button>
+                        <div class="btn-group">
+                            <form id="frmuploadexcel" name="frmupload" method="POST" action="<?= base_url('webmin/supplier/upload-excel') ?>" enctype="multipart/form-data">
+                                <input type="file" id="file_import" name="file_import" hidden />
+                            </form>
+
+                            <button id="btnimport" type="button" class="btn btn-success"><i class="fas fa-file-excel"></i> Import Excel</button>
+
+                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu" role="menu">
+                                <a class="dropdown-item" href="<?= base_url('webmin/supplier/download-import-excel') ?>">Template File Excel</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <table id="tblsupplier" class="table table-bordered table-hover" width="100%">
@@ -167,7 +181,7 @@ $assetsUrl = base_url('assets');
             responsive: true,
             fixedColumns: true,
             order: [
-                [1, 'asc']
+                [0, 'desc']
             ],
             language: {
                 url: lang_datatables,
@@ -188,7 +202,7 @@ $assetsUrl = base_url('assets');
                     targets: 5
                 },
                 {
-                    targets: [0, 5],
+                    targets: [5],
                     orderable: false,
                     searchable: false,
                 },
@@ -419,6 +433,41 @@ $assetsUrl = base_url('assets');
             })
         })
 
+
+
+        $('#btnimport').click(function(e) {
+            e.preventDefault();
+            $('#file_import').click();
+        });
+
+
+        function readUploadFile(file) {
+            if (file.files && file.files[0]) {
+                let file_name = file.files[0].name;
+                let file_ext = file_name.split(".").pop().toLowerCase();
+                let ext = ['xlsx'];
+
+                if (jQuery.inArray(file_ext, ext) == -1) {
+                    let message_text = 'File wajib berekstensi ' + ext.join(", ");
+                    message.info(message_text);
+                    file.value = "";
+                } else {
+                    let file_size = file.files[0].size;
+                    let size = max_upload_size.b;
+                    if (file_size > size) {
+                        let message_text = 'Ukuran file maksimum ' + max_upload_size.mb + ' MB'
+                        message.info(message_text);
+                        file.value = "";
+                    } else {
+                        $('#frmuploadexcel').submit();
+                    }
+                }
+            }
+        }
+
+        $("#file_import").change(function() {
+            readUploadFile(this);
+        });
 
 
         _initButton();

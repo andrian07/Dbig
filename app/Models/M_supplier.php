@@ -120,4 +120,38 @@ class M_supplier extends Model
         saveQueries($saveQueries, 'supplier', $supplier_id);
         return $save;
     }
+
+
+    public function importSupplier($data)
+    {
+        $this->db->query('LOCK TABLES ms_supplier WRITE');
+        $saveQueries    = NULL;
+        $errors         = [];
+
+        $this->db->transBegin();
+        $max_insert = 100;
+        $batchData  = array_chunk($data, $max_insert);
+        foreach ($batchData as $suppliers) {
+            $insert = $this->db->table($this->table)->insertBatch($suppliers);
+
+            if ($this->db->affectedRows() > 0) {
+                $saveQueries[] = $this->db->getLastQuery()->getQuery();
+            }
+
+            $errors[] = $this->db->error();
+        }
+
+        if ($this->db->transStatus() === false) {
+            $this->db->transRollback();
+            $saveQueries = NULL;
+            $save = ['success' => FALSE, 'errors' => $errors, 'message' => 'Import data supplier gagal'];
+        } else {
+            $this->db->transCommit();
+            $save = ['success' => TRUE, 'errors' => $errors, 'message' => 'Import data supplier berhasil'];
+        }
+
+        $this->db->query('UNLOCK TABLES');
+        saveQueries($saveQueries, 'supplier', 0, 'import');
+        return $save;
+    }
 }

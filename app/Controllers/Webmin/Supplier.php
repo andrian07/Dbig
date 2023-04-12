@@ -49,7 +49,7 @@ class Supplier extends WebminController
                 return $column;
             });
 
-            $table->orderColumn  = ['', 'ms_supplier.supplier_code', 'ms_supplier.supplier_name', 'ms_supplier.supplier_address', 'ms_supplier.supplier_phone', ''];
+            $table->orderColumn  = ['ms_supplier.supplier_id', 'ms_supplier.supplier_code', 'ms_supplier.supplier_name', 'ms_supplier.supplier_address', 'ms_supplier.supplier_phone', ''];
             $table->searchColumn = ['ms_supplier.supplier_code', 'ms_supplier.supplier_name'];
             $table->generate();
         }
@@ -206,6 +206,121 @@ class Supplier extends WebminController
         resultJSON($result);
     }
 
+
+    public function downloadImportExcel()
+    {
+        $M_mapping_area = model('M_mapping_area');
+        $getMap =  $M_mapping_area->getMap()->getResultArray();
+
+        $template = WRITEPATH . '/template/template_import_supplier.xlsx';
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+
+        $sheet  = $spreadsheet->setActiveSheetIndex(1);
+        $iRow   = 2;
+        foreach ($getMap as $row) {
+            $sheet->getCell('A' . $iRow)->setValue($row['mapping_id']);
+            $sheet->getCell('B' . $iRow)->setValue($row['mapping_code']);
+            $sheet->getCell('C' . $iRow)->setValue($row['mapping_address']);
+            $sheet->getCell('D' . $iRow)->setValue($row['prov_name']);
+            $sheet->getCell('E' . $iRow)->setValue($row['city_name']);
+            $sheet->getCell('F' . $iRow)->setValue($row['dis_name']);
+            $sheet->getCell('G' . $iRow)->setValue($row['subdis_name']);
+            $sheet->getCell('H' . $iRow)->setValue($row['postal_code']);
+            $iRow++;
+        }
+
+        $filename = 'import_data_supplier';
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit();
+    }
+
+    public function uploadExcel()
+    {
+
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        $validation =  \Config\Services::validation();
+
+        $input = [
+            'file_import'         => $this->request->getFile('file_import')
+        ];
+
+        $maxUploadSize = $this->maxUploadSize['kb'];
+        $ext = 'xlsx';
+        $validation->setRules([
+            'file_import' => ['rules' => 'max_size[file_import,' . $maxUploadSize . ']|ext_in[file_import,' . $ext . ']'],
+        ]);
+
+
+        if ($validation->run($input) === FALSE) {
+            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        } else {
+            $path = $input['file_import']->store();
+            if (!$path) {
+                $result = ['success' => FALSE, 'message' => 'Upload file excel gagal, Harap coba lagi'];
+            } else {
+                $file_path = WRITEPATH . "/uploads/$path";
+
+                $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file_path);
+                $reader->setReadDataOnly(TRUE);
+
+                $spreadsheet = $reader->load($file_path);
+                $sheet1 = $spreadsheet->getSheet(0)->toArray();
+                $sheet2 = $spreadsheet->getSheet(1)->toArray();
+
+                $mappingData    = [];
+                $importData     = [];
+                // read mapping area //
+                // delete header //
+                unset($sheet2[0]);
+                foreach ($sheet2 as $row) {
+                    $mapping_id                 = $row[0];
+                    $mapping_code               = $row[1];
+                    $mappingData[$mapping_code] = $mapping_id;
+                }
+
+                // read supplier data //
+                // delete header //
+                unset($sheet1[0]);
+                foreach ($sheet1 as $row) {
+                    $mapping_code   = $row[4];
+                    $mapping_id     = isset($mappingData[$mapping_code]) ? $mappingData[$mapping_code] : 0;
+
+                    $npwp           = $row[5] == null ? '' : $row[5];
+                    $remark         = $row[6] == null ? '' : $row[6];
+
+                    $importData[] = [
+                        'supplier_code'     => $row[0],
+                        'supplier_name'     => $row[1],
+                        'supplier_phone'    => $row[2],
+                        'supplier_address'  => $row[3],
+                        'mapping_id'        => $mapping_id,
+                        'supplier_npwp'     => $npwp,
+                        'supplier_remark'   => $remark,
+                    ];
+                }
+
+
+                $cData = count($importData);
+                if ($cData > 0) {
+                    $result = $this->M_supplier->importSupplier($importData);
+                } else {
+                    $result = ['success' => FALSE, 'message' => 'Harap isi data excel terlebih dahulu'];
+                }
+
+                if (file_exists($file_path)) {
+                    unlink($file_path);
+                };
+            }
+        }
+
+        $result['title']    = 'Import Data Supplier';
+        $result['back_url'] = base_url('webmin/supplier');
+        return $this->renderView('import_result', $result);
+    }
     //--------------------------------------------------------------------
 
 }
