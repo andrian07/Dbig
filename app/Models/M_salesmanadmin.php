@@ -505,7 +505,53 @@ class M_salesmanadmin extends Model
     }
 
    
+    public function getReportDataDetail($start_date, $end_date, $store_id, $customer_id, $salesman_id, $status)
+    {
+        $builder = $this->db->table('hd_sales_admin')->select("sales_admin_invoice, sales_date, sales_due_date, item_code, product_name, salesman_name, dt_temp_qty, dt_product_price, dt_sales_price");
+        $builder->join('dt_sales_admin', 'dt_sales_admin.sales_admin_id = hd_sales_admin.sales_admin_id');
+        $builder->join('ms_customer', 'ms_customer.customer_id  = hd_sales_admin.sales_customer_id');
+        $builder->join('ms_store', 'ms_store.store_id = hd_sales_admin.sales_store_id');
+        $builder->join('ms_salesman', 'ms_salesman.salesman_id = hd_sales_admin.sales_salesman_id');
+        $builder->join('ms_product_unit', 'ms_product_unit.item_id = dt_sales_admin.dt_item_id');
+        $builder->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id');
+        $builder->join('ms_product', 'ms_product.product_id = ms_product_unit.product_id');
+        $builder->where("(sales_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        if ($store_id != null) {
+            $builder->where('sales_store_id', $store_id);
+        }
+        if ($customer_id != null) {
+            $builder->where('sales_customer_id', $customer_id);
+        }
+        if ($salesman_id != null) {
+            $builder->where('sales_salesman_id', $salesman_id);
+        }
+        if ($status == 2) {
+            $builder->where('sales_due_date > CURDATE()');
+        }
+        return $builder->orderBy('hd_sales_admin.created_at', 'ASC')->get();
+    }
 
+    public function getReportDataHeader($start_date, $end_date, $store_id, $customer_id, $salesman_id, $status)
+    {
+        $builder = $this->db->table('hd_sales_admin')->select("sales_admin_invoice, sales_date, sales_due_date, salesman_name, customer_name, sales_admin_total_discount, sales_admin_ppn, sales_admin_down_payment, sales_admin_grand_total");
+        $builder->join('ms_customer', 'ms_customer.customer_id  = hd_sales_admin.sales_customer_id');
+        $builder->join('ms_store', 'ms_store.store_id = hd_sales_admin.sales_store_id');
+        $builder->join('ms_salesman', 'ms_salesman.salesman_id = hd_sales_admin.sales_salesman_id');
+        $builder->where("(sales_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        if ($store_id != null) {
+            $builder->where('sales_store_id', $store_id);
+        }
+        if ($customer_id != null) {
+            $builder->where('sales_customer_id', $customer_id);
+        }
+        if ($salesman_id != null) {
+            $builder->where('sales_salesman_id', $salesman_id);
+        }
+        if ($status == 2) {
+            $builder->where('sales_due_date > CURDATE()');
+        }
+        return $builder->orderBy('hd_sales_admin.created_at', 'ASC')->get();
+    }
 
 
 }

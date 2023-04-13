@@ -52,11 +52,6 @@ $assetsUrl = base_url('assets');
 
                             <button id="btnreload" class="btn btn-secondary"><i class="fas fa-sync"></i> Reload</button>
 
-                            <form id="data" enctype="multipart/form-data">
-                                <input name="excell" type="file" />
-                                <button id="btnexcellimport" class="btn btn-success"><i class="fas fa-file-excel"></i> Excell</button>
-                            </form>
-
                         </div>
 
                         <div class="card-body">

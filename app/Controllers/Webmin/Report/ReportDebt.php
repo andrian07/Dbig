@@ -55,6 +55,7 @@ class ReportDebt extends WebminController
 
             $getReportData = $M_debt_repayment->getReportData($start_date, $end_date, $supplier_id)->getResultArray();
 
+
             if($getReportData != null){
                 if($supplier_id != null){
                     $supplier_name = $getReportData[0]['supplier_name'];
@@ -225,7 +226,7 @@ class ReportDebt extends WebminController
             }
 
             $getReportData = $M_purchase->getDebtPending($start_date, $end_date, $supplier_id)->getResultArray();
-
+            
             if($getReportData != null){
                 if($supplier_id != null){
                     $supplier_name = $getReportData[0]['supplier_name'];

@@ -957,17 +957,11 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
     $routes->get('sales-list-group-payment', 'Webmin\Report\ReportPos::salesListGroupPayment');
 
 
-    $routes->get('view-project-sales-list', 'Webmin\Report\ReportSales::viewProjectSalesList');
 
-    $routes->get('project-sales-list', 'Webmin\Report\ReportSales::projectSalesList');
+    $routes->get('view-project-sales-list', 'Webmin\Report\ReportProject::viewProjectSalesList');
 
-    $routes->get('view-project-sales-list-group-salesman', 'Webmin\Report\ReportSales::viewProjectSalesListGroupSalesman');
+    $routes->get('project-sales-list', 'Webmin\Report\ReportProject::projectSalesList');
 
-    $routes->get('project-sales-list-group-salesman', 'Webmin\Report\ReportSales::projectSalesListGroupSalesman');
-
-    $routes->get('view-project-sales-list-group-customer', 'Webmin\Report\ReportSales::viewProjectSalesListGroupCustomer');
-
-    $routes->get('project-sales-list-group-customer', 'Webmin\Report\ReportSales::projectSalesListGroupCustomer');
 });
 
 /* End Report */

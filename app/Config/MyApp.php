@@ -380,6 +380,7 @@ class MyApp extends BaseConfig
                 'product_purchase_return_recap'    => ['text' => 'Rekap Retur Pembelian Produk'],
 
                 'sales_list'                => ['text' => 'Daftar Penjualan'],
+                'project_list'              => ['text' => 'Daftar Penjualan Proyek'],
                 'user_sales_list'           => ['text' => 'Daftar Penjualan Per User'],
                 'product_sales_recap'       => ['text' => 'Rekap Penjualan Produk'],
                 'category_product_sales_recap' => ['text' => 'Rekap Penjualan Produk Per Kategori'],
