@@ -408,6 +408,10 @@ $routes->group('webmin/product', ['filter' => 'webminauth'], static function ($r
     $routes->get('delete-temp-parcel/(:num)/(:num)', 'Webmin\Product::deleteTempParcel/$1/$2');
 
     $routes->get('search-product', 'Webmin\Product::searchProduct');
+
+    $routes->get('download-import-excel', 'Webmin\Product::downloadImportExcel');
+    $routes->post('upload-excel', 'Webmin\Product::uploadExcel');
+    $routes->get('upload-excel', 'Webmin\Product::uploadExcel');
 });
 
 
