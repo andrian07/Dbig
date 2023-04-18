@@ -966,6 +966,7 @@ class Product extends WebminController
             if (!$path) {
                 $result = ['success' => FALSE, 'message' => 'Upload file excel gagal, Harap coba lagi'];
             } else {
+                helper('import_excel');
                 $file_path = WRITEPATH . "/uploads/$path";
 
                 $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file_path);
@@ -1110,8 +1111,8 @@ class Product extends WebminController
                     $G6_disc_price          = floatval($row[36]);
                     $G6_promo_price         = $G6_sales_price - $G6_disc_price;
 
-                    $disc_start_date        = $row[37];
-                    $disc_end_date          = $row[38];
+                    $disc_start_date        = indo_to_mysql_date($row[37]);
+                    $disc_end_date          = indo_to_mysql_date($row[38]);
 
                     $margin_allocation      = floatval($row[45]);
                     $G1_margin_allocation   = floatval($row[46]);
