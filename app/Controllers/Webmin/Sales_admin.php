@@ -335,15 +335,17 @@ class Sales_admin extends WebminController
 
                 if ($this->role->hasRole('sales_admin.edit')) {
 
-                    $input['user_id']            = $this->userLogin['user_id'];
-
-                    $input['sales_admin_id']     = $this->request->getPost('sales_admin_id');
+                    $input['user_id']                 = $this->userLogin['user_id'];
+                    $input['sales_admin_id']          = $this->request->getPost('sales_admin_id');
+                    $input['sales_admin_invoice']     = $this->request->getPost('sales_admin_invoice');
+                    $input['created_at']              = $this->request->getPost('sales_date');
+                    $input['updated_at']              = date("Y/m/d");
 
                     $save = $this->M_salesmanadmin->updatesalesmanadmin($input);
 
                     if ($save['success']) {
 
-                        $result = ['success' => TRUE, 'message' => 'Data pesanan berhasil diperbarui', 'purchase_order_id' => $save['purchase_order_id']];
+                        $result = ['success' => TRUE, 'message' => 'Data pesanan berhasil diperbarui', 'sales_admin' => $save['sales_admin_id']];
 
                     } else {
 

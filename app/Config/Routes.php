@@ -320,6 +320,9 @@ $routes->group('webmin/supplier', ['filter' => 'webminauth'], static function ($
     $routes->post('save/(:alpha)', 'Webmin\Supplier::save/$1');
 
     $routes->get('delete/(:num)', 'Webmin\Supplier::delete/$1');
+
+    $routes->get('download-import-excel', 'Webmin\Supplier::downloadImportExcel');
+    $routes->post('upload-excel', 'Webmin\Supplier::uploadExcel');
 });
 
 
@@ -836,8 +839,8 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 
     $routes->get('price-tag', 'Webmin\Report\Report::priceTag');
     $routes->get('price-tag-v2', 'Webmin\Report\Report::priceTagV2');
-    /* Section Customer */
 
+    /* Section Customer */
     $routes->get('view-customer-list', 'Webmin\Report\ReportCustomer::viewCustomerList');
 
     $routes->get('customer-list', 'Webmin\Report\ReportCustomer::customerList');
