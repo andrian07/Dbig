@@ -969,6 +969,11 @@ class Product extends WebminController
                 helper('import_excel');
                 $file_path = WRITEPATH . "/uploads/$path";
 
+                $M_unit     = model('M_unit');
+                $M_brand    = model('M_brand');
+                $M_category = model('M_category');
+
+
                 $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file_path);
                 $reader->setReadDataOnly(TRUE);
 
@@ -985,9 +990,22 @@ class Product extends WebminController
                 // delete header //
                 unset($sheet6[0]);
                 foreach ($sheet6 as $row) {
-                    $unit_id                = $row[0];
+                    $unit_id                = intval($row[0]);
                     $unit_name              = $row[1];
+                    $unit_description       = $row[2] == null ? '' : $row[2];
                     $unit_key               = md5(strtoupper($unit_name));
+                    if ($unit_id == 0) {
+                        $data = [
+                            'unit_name' => $unit_name,
+                            'unit_description' => $unit_description
+                        ];
+
+                        $M_unit->insertUnit($data);
+                        $getUnit = $M_unit->getUnitByName($unit_name)->getRowArray();
+                        if ($getUnit != null) {
+                            $unit_id = $getUnit['unit_id'];
+                        }
+                    }
                     $unitData[$unit_key]    = $unit_id;
                 }
 
@@ -1007,9 +1025,23 @@ class Product extends WebminController
                 // delete header //
                 unset($sheet4[0]);
                 foreach ($sheet4 as $row) {
-                    $brand_id               = $row[0];
+                    $brand_id               = intval($row[0]);
                     $brand_name             = $row[1];
+                    $brand_description      = $row[2] == null ? '' : $row[2];
                     $brand_key              = md5(strtoupper($brand_name));
+
+                    if ($brand_id == 0) {
+                        $data = [
+                            'brand_name'        => $brand_name,
+                            'brand_description' => $brand_description
+                        ];
+
+                        $M_brand->insertBrand($data);
+                        $getBrand = $M_brand->getBrandByName($brand_name)->getRowArray();
+                        if ($getBrand != null) {
+                            $brand_id = $getBrand['brand_id'];
+                        }
+                    }
                     $brandData[$brand_key]  = $brand_id;
                 }
 
@@ -1018,9 +1050,24 @@ class Product extends WebminController
                 // delete header //
                 unset($sheet3[0]);
                 foreach ($sheet3 as $row) {
-                    $category_id                    = $row[0];
+                    $category_id                    = intval($row[0]);
                     $category_name                  = $row[1];
+                    $category_description           = $row[2] == null ? '' : $row[2];
                     $category_key                   = md5(strtoupper($category_name));
+
+                    if ($category_id == 0) {
+                        $data = [
+                            'category_name '        => $category_name,
+                            'category_description'  => $category_description
+                        ];
+
+                        $M_category->insertCategory($data);
+                        $getCategory =  $M_category->getCategoryByName($category_name)->getRowArray();
+                        if ($getCategory != null) {
+                            $category_id = $getCategory['category_id'];
+                        }
+                    }
+
                     $categoryData[$category_key]    = $category_id;
                 }
 
