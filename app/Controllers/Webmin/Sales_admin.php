@@ -48,20 +48,21 @@ class Sales_admin extends WebminController
                 $column[] = esc($row['customer_name']);
                 $column[] = 'Rp. '.esc(number_format($row['sales_admin_grand_total']));
                 if($row['sales_admin_remaining_payment'] < 0){
-                   $column[] = '<span class="badge badge-success">Lunas</span>';
-               }else{
-                   $column[] = '<span class="badge badge-danger">Belum Lunas</span>';
-               }
-               $column[] = 'Rp. '.esc(number_format($row['sales_admin_remaining_payment']));
-               $btns = [];
-               $prop =  'data-id="' . $row['sales_admin_id'] . '" data-name="' . esc($row['sales_admin_id']) . '"';
-               $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/sales-admin/get-sales-admin-detail/'.$row['sales_admin_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
+                 $column[] = '<span class="badge badge-success">Lunas</span>';
+             }else{
+                 $column[] = '<span class="badge badge-danger">Belum Lunas</span>';
+             }
+             $column[] = 'Rp. '.esc(number_format($row['sales_admin_remaining_payment']));
+             $btns = [];
+             $prop =  'data-id="' . $row['sales_admin_id'] . '" data-name="' . esc($row['sales_admin_id']) . '"';
+             $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/sales-admin/get-sales-admin-detail/'.$row['sales_admin_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
 
-               $btns[] = button_print($prop);
-               $btns[] = button_edit($prop);
-               $column[] = implode('&nbsp;', $btns);
-               return $column;
-           });
+             $btns[] = button_print($prop);
+             $btns[] = button_edit($prop);
+             $btns[] = '<button data-id="'.$row['sales_admin_id'].'" class="btn btn-sm btn-success btndownloadfaktur" data-toggle="tooltip" data-placement="top" data-title="Download E-Faktur"><i class="fas fa-file-invoice"></i></button>';
+             $column[] = implode('&nbsp;', $btns);
+             return $column;
+         });
 
             $table->orderColumn  = ['', 'sales_admin_invoice', 'sales_date','',''];
             $table->searchColumn = ['sales_admin_invoice', ''];
@@ -551,6 +552,91 @@ class Sales_admin extends WebminController
         }else{
             echo "Tidak ada file yang masuk";
         }
+    }
+
+
+    public function downloadEFaktur()
+    {
+
+        $id = $this->request->getGet('id');
+
+        $getHdData = $this->M_salesmanadmin->getOrder($id)->getRowArray();
+        $getDtData = $this->M_salesmanadmin->getDtSalesmanOrder($id)->getResultArray();
+
+        $total_format = [
+            'font' => [
+                'bold' => true,
+            ],
+            'borders' => [
+                'top' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+                'right' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+                'left' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+                'bottom' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $font_bold = [
+            'font' => [
+                'bold' => true,
+            ],
+        ];
+
+        $border_left_right = [
+            'borders' => [
+                'right' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+                'left' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+
+        $sheet = $spreadsheet->setActiveSheetIndex(0);
+        $iRow = 8;
+
+        $sheet->getCell('A1')->setValue('FK');
+        $sheet->getCell('B1')->setValue('01');
+        $sheet->getCell('B1')->setValue('01');
+
+        /*foreach ($getReportData as $row) {
+            $debet  = floatval($row['debit']);
+            $credit = floatval($row['credit']);
+            $date_inv = indo_short_date($row['date_inv'], FALSE);
+
+            $sheet->getCell('A' . $iRow)->setValue($date_inv);
+            $sheet->getCell('B' . $iRow)->setValue($row['invoice']);
+            $sheet->getCell('C' . $iRow)->setValue($row['ket']);
+            $sheet->getCell('D' . $iRow)->setValue(numberFormat($debet, TRUE));
+            $sheet->getCell('E' . $iRow)->setValue(numberFormat($credit, TRUE));
+
+            $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
+            $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
+            $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
+            $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
+            $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
+
+            $iRow++;
+        }*/
+                //setting periode
+
+        $filename = 'E-Faktur Pajak';
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.csv"');
+        header('Cache-Control: max-age=0');
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit();
     }
     //--------------------------------------------------------------------
 

@@ -408,6 +408,10 @@ $routes->group('webmin/product', ['filter' => 'webminauth'], static function ($r
     $routes->get('delete-temp-parcel/(:num)/(:num)', 'Webmin\Product::deleteTempParcel/$1/$2');
 
     $routes->get('search-product', 'Webmin\Product::searchProduct');
+
+    $routes->get('download-import-excel', 'Webmin\Product::downloadImportExcel');
+    $routes->post('upload-excel', 'Webmin\Product::uploadExcel');
+    $routes->get('upload-excel', 'Webmin\Product::uploadExcel');
 });
 
 
@@ -708,7 +712,7 @@ $routes->group('webmin/sales-admin', ['filter' => 'webminauth'], static function
 
     $routes->get('edit-salesadmin/(:alphanum)', 'Webmin\Sales_admin::editSalesadmin/$1');
 
-    $routes->post('import-excell', 'Webmin\Sales_admin::import_excell');
+    $routes->get('download-e-faktur', 'Webmin\Sales_admin::downloadEFaktur');
 });
 
 /* end penjualan admin */
@@ -922,7 +926,6 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 
     /* end section Retur Purchase */
 
-
     /* section debt */
 
     //$routes->get('view-debt-balance-list', 'Webmin\Report\ReportDebt::viewDebtBalanceList');
@@ -950,6 +953,7 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
     $routes->get('view-sales-list', 'Webmin\Report\ReportPos::index');
 
     $routes->get('sales-list', 'Webmin\Report\ReportPos::salesList');
+
     $routes->get('detail-sales-list', 'Webmin\Report\ReportPos::detailSalesList');
 
     $routes->get('view-sales-list-group-salesman', 'Webmin\Report\ReportPos::viewSalesListGroupSalesman');

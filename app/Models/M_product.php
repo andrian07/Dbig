@@ -615,6 +615,111 @@ class M_product extends Model
         }
     }
 
+    //import product //
+    public function importProduct($productData, $productSuppliers, $productItem, $parcelItem)
+    {
+        $this->db->query('LOCK TABLES ms_product WRITE,ms_product_supplier WRITE,ms_product_unit WRITE,ms_product_parcel WRITE');
+        $saveQueries    = NULL;
+        $errors         = [];
+
+        $this->db->transBegin();
+        $startNum = 1;
+        $maxCode = $this->db->table($this->table)->select('product_code')->limit(1)->orderBy('product_id', 'desc')->get()->getRowArray();
+        if ($maxCode == NULL) {
+            $startNum = 1;
+        } else {
+            $startNum = floatval(substr($maxCode['product_code'], -6)) + 1;
+        }
+
+        $listProductID  = [];
+        $listItemID     = [];
+
+        foreach ($productData as $product_code => $product) {
+            // insert product //
+            $product['product_code'] = 'P' . substr('000000' . strval($startNum), -6);
+            $this->db->table('ms_product')->insert($product);
+            $product_id = 0;
+            if ($this->db->affectedRows() > 0) {
+                $saveQueries[] = $this->db->getLastQuery()->getQuery();
+                $product_id = $this->db->insertID();
+            }
+            $errors[] = $this->db->error();
+            $listProductID[$product_code] = $product_id;
+
+
+            // insert product supplier //
+            $insertProductSupplier = [];
+            foreach ($productSuppliers[$product_code] as $supplier_id) {
+                $insertProductSupplier[] = [
+                    'product_id'    => $product_id,
+                    'supplier_id'   => $supplier_id
+                ];
+            }
+
+            if (count($insertProductSupplier) > 0) {
+                $this->db->table('ms_product_supplier')->insertBatch($insertProductSupplier);
+                if ($this->db->affectedRows() > 0) {
+                    $saveQueries[] = $this->db->getLastQuery()->getQuery();
+                }
+                $errors[] = $this->db->error();
+            }
+            $startNum++;
+        }
+
+
+        foreach ($productItem as $product_code => $items) {
+            $product_id = isset($listProductID[$product_code]) ? $listProductID[$product_code] : 0;
+            foreach ($items as $item) {
+                $item['product_id'] = $product_id;
+                $item_id    = 0;
+                $item_code  = $item['item_code'];
+
+                $this->db->table('ms_product_unit')->insert($item);
+                if ($this->db->affectedRows() > 0) {
+                    $saveQueries[] = $this->db->getLastQuery()->getQuery();
+                    $item_id = $this->db->insertID();
+                }
+                $errors[] = $this->db->error();
+                $listItemID[$item_code] = $item_id;
+            }
+        }
+
+
+
+        foreach ($parcelItem as $product_code => $items) {
+            $product_id = isset($listProductID[$product_code]) ? $listProductID[$product_code] : 0;
+            $insertParcelItem = [];
+            foreach ($items as $item) {
+                $item_code = $item['item_code'];
+                unset($item['item_code']);
+                $item['item_id']    = isset($listItemID[$item_code]) ? $listItemID[$item_code] : 0;
+                $item['product_id'] = $product_id;
+                $insertParcelItem[] = $item;
+            }
+
+            if (count($insertParcelItem) > 0) {
+                $this->db->table('ms_product_parcel')->insertBatch($insertParcelItem);
+                if ($this->db->affectedRows() > 0) {
+                    $saveQueries[] = $this->db->getLastQuery()->getQuery();
+                }
+                $errors[] = $this->db->error();
+            }
+        }
+
+        if ($this->db->transStatus() === false) {
+            $this->db->transRollback();
+            $saveQueries = NULL;
+            $save = ['success' => FALSE, 'errors' => $errors, 'message' => 'Import data produk gagal'];
+        } else {
+            $this->db->transCommit();
+            $save = ['success' => TRUE, 'errors' => $errors, 'message' => 'Import data produk berhasil'];
+        }
+
+        $this->db->query('UNLOCK TABLES');
+        saveQueries($saveQueries, 'product', 0, 'import');
+        return $save;
+    }
+
 
     //report section//
     public function getReportWarehouseStockList($warehouse_id = '', $product_tax = '')

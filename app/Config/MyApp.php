@@ -290,6 +290,7 @@ class MyApp extends BaseConfig
                 'edit'      => ['text' => 'Ubah'],
                 'delete'    => ['text' => 'hapus'],
                 'print'     => ['text' => 'cetak'],
+                'download'  => ['text' => 'download'],
             ]
         ],
 
@@ -375,7 +376,6 @@ class MyApp extends BaseConfig
                 'product_purchase_history'  => ['text' => 'Histori Pembelian Produk'],
 
                 'debt_list'                 => ['text' => 'Daftar Hutang'],
-
                 'purchase_return_list'             => ['text' => 'Daftar Retur Pembelian'],
                 'product_purchase_return_recap'    => ['text' => 'Rekap Retur Pembelian Produk'],
 
