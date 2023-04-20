@@ -563,80 +563,115 @@ class Sales_admin extends WebminController
         $getHdData = $this->M_salesmanadmin->getOrder($id)->getRowArray();
         $getDtData = $this->M_salesmanadmin->getDtSalesmanOrder($id)->getResultArray();
 
-        $total_format = [
-            'font' => [
-                'bold' => true,
-            ],
-            'borders' => [
-                'top' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+        if($getHdData != null){
+            $total_format = [
+                'font' => [
+                    'bold' => true,
                 ],
-                'right' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
                 ],
-                'left' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+            ];
+
+            $font_bold = [
+                'font' => [
+                    'bold' => true,
                 ],
-                'bottom' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+            ];
+
+            $border_left_right = [
+                'borders' => [
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
                 ],
-            ],
-        ];
+            ];
 
-        $font_bold = [
-            'font' => [
-                'bold' => true,
-            ],
-        ];
+            $template = WRITEPATH . '/template/template_e_faktur.csv';
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
 
-        $border_left_right = [
-            'borders' => [
-                'right' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ],
-                'left' => [
-                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                ],
-            ],
-        ];
+            $sheet = $spreadsheet->setActiveSheetIndex(0);
+            $iRow = 3;
 
-        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+            $trx_date = indo_short_date($getHdData['sales_date']);
 
-        $sheet = $spreadsheet->setActiveSheetIndex(0);
-        $iRow = 8;
+            $sheet->getCell('A1')->setValue('FK');
+            $sheet->getCell('B1')->setValue('1');
+            $sheet->getCell('C1')->setValue('0');
+            $sheet->getCell('D1')->setValue('72237067201');
+            $sheet->getCell('E1')->setValue('9');
+            $sheet->getCell('F1')->setValue('2022');
+            $sheet->getCell('G1')->setValue('FK');
+            $sheet->getCell('H1')->setValue($trx_date);
 
-        $sheet->getCell('A1')->setValue('FK');
-        $sheet->getCell('B1')->setValue('01');
-        $sheet->getCell('B1')->setValue('01');
+            $sheet->getCell('A2')->setValue('LT');
+            $sheet->getCell('B2')->setValue($getHdData['customer_npwp']);
+            $sheet->getCell('C2')->setValue($getHdData['customer_name']);
+            $sheet->getCell('D2')->setValue('');
+            $sheet->getCell('E2')->setValue('');
+            $sheet->getCell('F2')->setValue('');
+            $sheet->getCell('G2')->setValue('');
+            $sheet->getCell('H2')->setValue('');
+            $sheet->getCell('I2')->setValue($getHdData['dis_name']);
+            $sheet->getCell('J2')->setValue($getHdData['subdis_name']);
+            $sheet->getCell('K2')->setValue($getHdData['city_name']);
+            $sheet->getCell('L2')->setValue($getHdData['prov_name']);
+            $sheet->getCell('M2')->setValue($getHdData['postal_code']);
+            $sheet->getCell('N2')->setValue($getHdData['customer_phone']);
 
-        /*foreach ($getReportData as $row) {
-            $debet  = floatval($row['debit']);
-            $credit = floatval($row['credit']);
-            $date_inv = indo_short_date($row['date_inv'], FALSE);
+            $sheet->getCell('G1')->setValue('0');
+            $sheet->getCell('H1')->setValue('0');
 
-            $sheet->getCell('A' . $iRow)->setValue($date_inv);
-            $sheet->getCell('B' . $iRow)->setValue($row['invoice']);
-            $sheet->getCell('C' . $iRow)->setValue($row['ket']);
-            $sheet->getCell('D' . $iRow)->setValue(numberFormat($debet, TRUE));
-            $sheet->getCell('E' . $iRow)->setValue(numberFormat($credit, TRUE));
+            foreach ($getDtData as $row) {
+                $base_price  = floatval($row['dt_sales_price'] / $row['dt_temp_qty']);
+                $qty = floatval($row['dt_temp_qty']);
+                $sales_price = floatval($row['dt_sales_price']);
+                $discount = floatval($row['dt_total_discount']);
+                $dpp = floatval($row['dt_total_dpp']);
+                $ppn = floatval($row['dt_total_dpp']);
+                $tarif_ppnbm = floatval(0);
+                $ppnbm = floatval(0);
+                $sheet->getCell('A' . $iRow)->setValue('OF');
+                $sheet->getCell('B' . $iRow)->setValue($row['item_code']);
+                $sheet->getCell('C' . $iRow)->setValue($row['product_name'].'-'.$row['unit_name']);
+                $sheet->getCell('D' . $iRow)->setValue(numberFormat($base_price, TRUE));
+                $sheet->getCell('E' . $iRow)->setValue(numberFormat($qty, TRUE));
+                $sheet->getCell('F' . $iRow)->setValue(numberFormat($sales_price, TRUE));
+                $sheet->getCell('G' . $iRow)->setValue(numberFormat($discount, TRUE));
+                $sheet->getCell('H' . $iRow)->setValue(numberFormat($dpp, TRUE));
+                $sheet->getCell('I' . $iRow)->setValue(numberFormat($ppn, TRUE));
+                $sheet->getCell('J' . $iRow)->setValue(numberFormat($tarif_ppnbm, TRUE));
+                $sheet->getCell('K' . $iRow)->setValue(numberFormat($ppnbm, TRUE));
 
-            $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
-            $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
-            $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
-            $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
-            $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
-
-            $iRow++;
-        }*/
+                $iRow++;
+            }
                 //setting periode
 
-        $filename = 'E-Faktur Pajak';
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="' . $filename . '.csv"');
-        header('Cache-Control: max-age=0');
-        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $writer->save('php://output');
-        exit();
+            $filename = 'E-Faktur Pajak';
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $filename . '.csv"');
+            header('Cache-Control: max-age=0');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save('php://output');
+            exit();
+        }else{
+            $this->session->set_flashdata('status', '<span class="glyphicon glyphicon-remove"></span>Maping Area Customer Belum Di Isi');
+                redirect($_SERVER['HTTP_REFERER']);
+        }
     }
     //--------------------------------------------------------------------
 

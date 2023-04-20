@@ -100,13 +100,23 @@ class M_salesmanadmin extends Model
 
         $builder = $this->db->table($this->table_hd_sales_admin);
 
-        $builder->select('hd_sales_admin.*,dt_sales_admin.*, ms_payment_method.*, customer_name,customer_address,customer_phone,store_code,store_name,user_account.user_realname, ms_salesman.salesman_name, ms_salesman.salesman_code, hd_sales_admin.created_at as created_at');
+        $builder->select('hd_sales_admin.*,dt_sales_admin.*, ms_payment_method.*, customer_name,customer_address,customer_phone,customer_npwp,store_code,store_name,user_account.user_realname, ms_salesman.salesman_name, ms_salesman.salesman_code, pc_districts.dis_name,pc_subdistricts.subdis_name,pc_cities.city_name, pc_provinces.prov_name,ms_mapping_area.postal_code, hd_sales_admin.created_at as created_at');
 
         $builder->join('dt_sales_admin', 'dt_sales_admin.sales_admin_id = hd_sales_admin.sales_admin_id');
 
         $builder->join('user_account', 'user_account.user_id = hd_sales_admin.user_id');
 
         $builder->join('ms_customer', 'ms_customer.customer_id  = hd_sales_admin.sales_customer_id');
+
+        $builder->join('ms_mapping_area', 'ms_mapping_area.mapping_id  = ms_customer.mapping_id');
+
+        $builder->join('pc_cities', 'pc_cities.city_id  = ms_mapping_area.city_id');
+        
+        $builder->join('pc_districts', 'pc_districts.dis_id  = ms_mapping_area.dis_id');
+
+        $builder->join('pc_provinces', 'pc_provinces.prov_id  = ms_mapping_area.prov_id');
+
+        $builder->join('pc_subdistricts', 'pc_subdistricts.subdis_id  = ms_mapping_area.subdis_id');
 
         $builder->join('ms_salesman', 'ms_salesman.salesman_id  = hd_sales_admin.sales_salesman_id');
 
