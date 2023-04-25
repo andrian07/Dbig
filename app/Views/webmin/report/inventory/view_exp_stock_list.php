@@ -30,13 +30,10 @@ $assetsUrl = base_url('assets');
                                 <div class="row">
                                     <div class="col-sm-3">
                                         <!-- text input -->
+
                                         <div class="form-group">
                                             <label>Gudang:</label>
-                                            <select id="warehouse_id" name="warehouse_id" class="form-control">
-                                                <option value="1" selected>UTM - PUSAT</option>
-                                                <option value="2">KBR - KOTA BARU</option>
-                                                <option value="3">KNY - KONSINYASI</option>
-                                            </select>
+                                            <select id="warehouse_id" name="warehouse_id" class="form-control"></select>
                                         </div>
                                     </div>
                                     <div class="col-sm-2">
@@ -45,7 +42,7 @@ $assetsUrl = base_url('assets');
                                             <label>&nbsp;</label>
                                             <div class="form-group">
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-default"><i class="fas fa-search"></i> Cari</button>
+                                                    <button id="btnsearch" type="button" class="btn btn-default"><i class="fas fa-search"></i> Cari</button>
                                                     <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                                         <span class="sr-only">Toggle Dropdown</span>
                                                     </button>
@@ -92,27 +89,68 @@ $assetsUrl = base_url('assets');
 <?= $this->section('js') ?>
 <script>
     $(document).ready(function() {
-        // $("#customer_id").select2({
-        //     placeholder: '-- Semua --',
-        //     width: "100%",
-        //     allowClear: true,
-        //     ajax: {
-        //         url: base_url + "/select/member",
-        //         dataType: "json",
-        //         type: "POST",
-        //         delay: select2Delay,
-        //         data: function(params) {
-        //             return {
-        //                 search: params.term,
-        //             };
-        //         },
-        //         processResults: function(data, page) {
-        //             return {
-        //                 results: data,
-        //             };
-        //         },
-        //     },
-        // });
+        function reportUrl(params = '') {
+            let selWarehouse = $('#warehouse_id').select2('data');
+
+            let warehouse_id = $('#warehouse_id').val();
+            if (warehouse_id == null) {
+                warehouse_id = '';
+            }
+
+            let warehouse_name = '';
+            if (selWarehouse[0]) {
+                warehouse_name = selWarehouse[0].text;
+            }
+
+            let reportUrl = base_url + '/webmin/report/exp-stock-list?';
+
+            reportUrl += 'warehouse_id=' + warehouse_id;
+            reportUrl += '&warehouse_name=' + warehouse_name;
+
+            if (params != '') {
+                reportUrl += '&' + params;
+            }
+
+            return reportUrl;
+        }
+
+        $("#warehouse_id").select2({
+            placeholder: '-- Semua --',
+            width: "100%",
+            allowClear: true,
+            ajax: {
+                url: base_url + "/webmin/select/warehouse",
+                dataType: "json",
+                type: "GET",
+                delay: select2Delay,
+                data: function(params) {
+                    return {
+                        search: params.term,
+                    };
+                },
+                processResults: function(data, page) {
+                    return {
+                        results: data,
+                    };
+                },
+            },
+        });
+
+
+        $('#btnsearch').click(function(e) {
+            e.preventDefault();
+            $('#preview').attr('src', reportUrl());
+        })
+
+        $('#btnexportpdf').click(function(e) {
+            e.preventDefault();
+            window.open(reportUrl('download=Y'));
+        })
+
+        $('#btnexportexcel').click(function(e) {
+            e.preventDefault();
+            window.open(reportUrl('file=xls'));
+        })
 
 
     })

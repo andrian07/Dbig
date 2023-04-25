@@ -363,6 +363,10 @@ $routes->group('webmin/customer', ['filter' => 'webminauth'], static function ($
     $routes->get('delete/(:num)', 'Webmin\Customer::delete/$1');
 
     $routes->get('reset-password/(:num)', 'Webmin\Customer::resetPassword/$1');
+
+    $routes->get('download-import-excel', 'Webmin\Customer::downloadImportExcel');
+    //$routes->get('upload-excel', 'Webmin\Customer::uploadExcel');
+    $routes->post('upload-excel', 'Webmin\Customer::uploadExcel');
 });
 
 
@@ -411,7 +415,6 @@ $routes->group('webmin/product', ['filter' => 'webminauth'], static function ($r
 
     $routes->get('download-import-excel', 'Webmin\Product::downloadImportExcel');
     $routes->post('upload-excel', 'Webmin\Product::uploadExcel');
-    $routes->get('upload-excel', 'Webmin\Product::uploadExcel');
 });
 
 

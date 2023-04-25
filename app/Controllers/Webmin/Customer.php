@@ -236,6 +236,10 @@ class Customer extends WebminController
             'customer_code'                 => $this->request->getPost('customer_code'),
             'customer_name'                 => $this->request->getPost('customer_name'),
             'customer_address'              => $this->request->getPost('customer_address'),
+            'customer_address_block'        => $this->request->getPost('customer_address_block'),
+            'customer_address_number'       => $this->request->getPost('customer_address_number'),
+            'customer_address_rt'           => $this->request->getPost('customer_address_rt'),
+            'customer_address_rw'           => $this->request->getPost('customer_address_rw'),
             'customer_phone'                => $this->request->getPost('customer_phone'),
             'customer_email'                => $this->request->getPost('customer_email'),
             'customer_group'                => $this->request->getPost('customer_group'),
@@ -260,6 +264,10 @@ class Customer extends WebminController
             'customer_code'                 => ['rules' => 'required|max_length[10]'],
             'customer_name'                 => ['rules' => 'required|max_length[200]'],
             'customer_address'              => ['rules' => 'max_length[500]'],
+            'customer_address_block'        => ['rules' => 'max_length[200]'],
+            'customer_address_number'       => ['rules' => 'max_length[200]'],
+            'customer_address_rt'           => ['rules' => 'max_length[200]'],
+            'customer_address_rw'           => ['rules' => 'max_length[200]'],
             'customer_phone'                => ['rules' => 'required|min_length[8]|max_length[15]'],
             'customer_email'                => ['rules' => 'required|max_length[200]'],
             'customer_group'                => ['rules' => 'required|in_list[G1,G2,G3,G4,G5,G6]'],
@@ -383,6 +391,223 @@ class Customer extends WebminController
             $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk mereset password customer'];
         }
         resultJSON($result);
+    }
+
+    public function downloadImportExcel()
+    {
+        $M_mapping_area = model('M_mapping_area');
+        $M_salesman     = model('M_salesman');
+        $getMap         = $M_mapping_area->getMap()->getResultArray();
+        $getSalesman    = $M_salesman->getSalesman()->getResultArray();
+
+        $template = WRITEPATH . '/template/template_import_customer.xlsx';
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+
+        $sheet2     = $spreadsheet->setActiveSheetIndex(1);
+        $iRow       = 2;
+        foreach ($getMap as $row) {
+            $sheet2->getCell('A' . $iRow)->setValue($row['mapping_id']);
+            $sheet2->getCell('B' . $iRow)->setValue($row['mapping_code']);
+            $sheet2->getCell('C' . $iRow)->setValue($row['mapping_address']);
+            $sheet2->getCell('D' . $iRow)->setValue($row['prov_name']);
+            $sheet2->getCell('E' . $iRow)->setValue($row['city_name']);
+            $sheet2->getCell('F' . $iRow)->setValue($row['dis_name']);
+            $sheet2->getCell('G' . $iRow)->setValue($row['subdis_name']);
+            $sheet2->getCell('H' . $iRow)->setValue($row['postal_code']);
+            $iRow++;
+        }
+
+        $sheet3     = $spreadsheet->setActiveSheetIndex(2);
+        foreach ($getSalesman as $row) {
+            $sheet3->getCell('A' . $iRow)->setValue($row['salesman_id']);
+            $sheet3->getCell('B' . $iRow)->setValue($row['salesman_code']);
+            $sheet3->getCell('C' . $iRow)->setValue($row['salesman_name']);
+            $sheet3->getCell('D' . $iRow)->setValue($row['salesman_address']);
+            $sheet3->getCell('E' . $iRow)->setValue($row['salesman_phone']);
+            $sheet3->getCell('F' . $iRow)->setValue($row['store_name']);
+            $iRow++;
+        }
+
+        $filename = 'import_data_customer';
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit();
+    }
+
+    public function uploadExcel()
+    {
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        $validation =  \Config\Services::validation();
+
+        $input = [
+            'file_import'         => $this->request->getFile('file_import')
+        ];
+
+        $maxUploadSize = $this->maxUploadSize['kb'];
+        $ext = 'xlsx';
+        $validation->setRules([
+            'file_import' => ['rules' => 'max_size[file_import,' . $maxUploadSize . ']|ext_in[file_import,' . $ext . ']'],
+        ]);
+        if ($validation->run($input) === FALSE) {
+            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        } else {
+            $path = $input['file_import']->store();
+            if (!$path) {
+                $result = ['success' => FALSE, 'message' => 'Upload file excel gagal, Harap coba lagi'];
+            } else {
+                helper(['import_excel', 'text']);
+                $file_path = WRITEPATH . "/uploads/$path";
+                //$file_path = WRITEPATH . "/uploads/20230420/import_data_customer.xlsx";
+                $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file_path);
+                $reader->setReadDataOnly(TRUE);
+
+                $spreadsheet = $reader->load($file_path);
+                $sheet1 = $spreadsheet->getSheet(0)->toArray(); //customer
+                $sheet2 = $spreadsheet->getSheet(1)->toArray(); //kode area
+                $sheet3 = $spreadsheet->getSheet(2)->toArray(); //kode salesman
+
+
+                $salesmanData       = [];
+                $mappingData        = [];
+                $listNewReffCode    = [];
+                $customerData       = [];
+
+                $listGroupCustomer = [
+                    'G1'        => 'G1',
+                    'G2'        => 'G2',
+                    'G3'        => 'G3',
+                    'G4'        => 'G4',
+                    'G5'        => 'G5',
+                    'G6'        => 'G6',
+                    'UMUM'      => 'G1',
+                    'SILVER'    => 'G2',
+                    'GOLD'      => 'G3',
+                    'PLATINUM'  => 'G4',
+                    'PROYEK'    => 'G5',
+                    'CUSTOM'    => 'G6',
+
+                ];
+                // read salesman //
+                // delete header //
+                unset($sheet3[0]);
+                foreach ($sheet3 as $row) {
+                    $salesman_id                    = $row[0] == null ? 0 : intval($row[0]);
+                    $salesman_code                  = $row[1];
+                    $salesmanData[$salesman_code]   = $salesman_id;
+                }
+
+                // read mapping //
+                // delete header //
+                unset($sheet2[0]);
+                foreach ($sheet2 as $row) {
+                    $mapping_id                     = $row[0];
+                    $mapping_code                   = strtoupper($row[1]);
+                    $mappingData[$mapping_code]     = $mapping_id;
+                }
+
+                // read customer //
+                // delete header //
+                unset($sheet1[0]);
+                unset($sheet1[1]);
+                foreach ($sheet1 as $row) {
+                    if ($row[1] != null) {
+                        $verification_email             = 'N';
+                        $customer_code                  = $row[0] == null ? '' : $row[0];
+                        $customer_name                  = $row[1];
+                        $group_name                     = strtoupper($row[2]);
+                        $customer_group                 = isset($listGroupCustomer[$group_name]) ? $listGroupCustomer[$group_name] : $group_name;
+
+                        $customer_gender                = $row[3];
+                        $customer_birth_date            = indo_to_mysql_date($row[4]);
+                        $customer_job                   = $row[5] == null ? '' : $row[5];
+                        $customer_email                 = $row[6] == null ? '' : $row[6];
+                        if ($customer_email == '') {
+                            $customer_email = 'u' . random_string('alnum', 12) . '@dbig.com';
+                        } else {
+                            $verification_email = 'Y';
+                        }
+
+                        $customer_phone                 = $row[7];
+                        $customer_address               = $row[8];
+                        $customer_address_block         = $row[9] == null ? '' : $row[9];
+                        $customer_address_number        = $row[10] == null ? '' : $row[10];
+                        $customer_address_rt            = $row[11] == null ? '' : $row[11];
+                        $customer_address_rw            = $row[12] == null ? '' : $row[12];
+
+                        $salesman_code                  = $row[13];
+                        $mapping_code                   = $row[14];
+                        $salesman_id                    = isset($salesmanData[$salesman_code]) ? $salesmanData[$salesman_code] : 0;
+                        $mapping_id                     = isset($mappingData[$mapping_code]) ? $mappingData[$mapping_code] : 0;
+
+                        $customer_tax_invoice_name      = $row[15] == null ? '' : $row[15];
+                        $customer_tax_invoice_address   = $row[16] == null ? '' : $row[16];
+                        $customer_npwp                  = $row[17] == null ? '' : $row[17];
+                        $customer_nik                   = $row[18] == null ? '' : $row[18];
+                        $customer_delivery_address      = $row[19] == null ? $customer_address : $row[19];
+                        $customer_remark                = $row[20] == null ? '' : $row[20];
+                        $exp_date                       = $row[21] == null ? '2050-01-01' : indo_to_mysql_date($row[21], '2050-01-01');
+                        $customer_point                 = $row[22] == null ? 0 : floatval($row[22]);
+                        $customer_password              = password_hash('dbig021254', PASSWORD_BCRYPT);
+
+                        $isFound        = FALSE;
+                        $referral_code  = '';
+                        while ($isFound == FALSE) {
+                            $referral_code = strtoupper(random_string('alnum', 6));
+                            $check = $this->M_customer->getCustomerByReferralCode($referral_code, TRUE)->getRowArray();
+                            if ($check == NULL && !isset($listNewReffCode[$referral_code])) {
+                                $isFound = TRUE;
+                            }
+                        }
+                        $listNewReffCode[$referral_code] = 1;
+                        $invite_by_referral_code        = '';
+
+                        $customerData[] = [
+                            'customer_code'                     => $customer_code,
+                            'customer_name'                     => $customer_name,
+                            'customer_phone'                    => $customer_phone,
+                            'customer_email'                    => $customer_email,
+                            'customer_password'                 => $customer_password,
+                            'customer_address'                  => $customer_address,
+                            'customer_address_block'            => $customer_address_block,
+                            'customer_address_number'           => $customer_address_number,
+                            'customer_address_rt'               => $customer_address_rt,
+                            'customer_address_rw'               => $customer_address_rw,
+                            'customer_point'                    => $customer_point,
+                            'customer_group'                    => $customer_group,
+                            'customer_gender'                   => $customer_gender,
+                            'customer_birth_date'               => $customer_birth_date,
+                            'customer_job'                      => $customer_job,
+                            'salesman_id'                       => $salesman_id,
+                            'customer_remark'                   => $customer_remark,
+                            'customer_delivery_address'         => $customer_delivery_address,
+                            'customer_npwp'                     => $customer_npwp,
+                            'customer_nik'                      => $customer_nik,
+                            'customer_tax_invoice_name'         => $customer_tax_invoice_name,
+                            'customer_tax_invoice_address'      => $customer_tax_invoice_address,
+                            'mapping_id'                        => $mapping_id,
+                            'exp_date'                          => $exp_date,
+                            'referral_code'                     => $referral_code,
+                            'invite_by_referral_code'           => $invite_by_referral_code,
+                            'verification_email'                => $verification_email,
+                            'active'                            => 'Y'
+                        ];
+                    }
+                }
+
+                $result = $this->M_customer->importCustomer($customerData);
+
+                if (file_exists($file_path)) {
+                    unlink($file_path);
+                };
+            }
+        }
+
+        $result['title']    = 'Import Data Customer';
+        $result['back_url'] = base_url('webmin/customer');
+        return $this->renderView('import_result', $result);
     }
     //--------------------------------------------------------------------
 }
