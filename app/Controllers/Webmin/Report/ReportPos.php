@@ -1777,6 +1777,886 @@ class ReportPos extends WebminController
         }
     }
 
+    public function viewSalesListGroupBrand()
+    {
+        $data = [
+            'title'     => 'Laporan Penjualan Per Brand',
+        ];
+        return $this->renderView('report/pos/view_sales_list_group_brand', $data, 'report.pos_sales_list');
+    }
+
+    public function detailSalesListGroupBrand()
+    {
+        $brand_id       = $this->request->getGet('brand_id') != null ? $this->request->getGet('brand_id') : '';
+        $brand_name     = $this->request->getGet('brand_name') != null ? $this->request->getGet('brand_name') : '-';
+        $store_id       = $this->request->getGet('store_id') != null ? $this->request->getGet('store_id') : '';
+        $store_name     = $this->request->getGet('store_name') != null ? $this->request->getGet('store_name') : '-';
+        $start_date     = $this->request->getGet('start_date') != null ? $this->request->getGet('start_date') : date('Y-m-d');
+        $end_date       = $this->request->getGet('end_date') != null ? $this->request->getGet('end_date') : date('Y-m-d');
+        $product_tax    = $this->request->getGet('product_tax') != null ? $this->request->getGet('product_tax') : '';
+
+
+        $agent = $this->request->getUserAgent();
+        $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
+        $fileType   = $this->request->getGet('file');
+
+        if (!in_array($fileType, ['pdf', 'xls'])) {
+            $fileType = 'pdf';
+        }
+
+        $data = [
+            'title'         => 'Laporan Penjualan',
+            'userLogin'     => $this->userLogin,
+            'brand_id'      => $brand_id,
+            'brand_name'    => $brand_name,
+            'store_id'      => $store_id,
+            'store_name'    => $store_name,
+            'start_date'    => $start_date,
+            'end_date'      => $end_date,
+            'product_tax'   => $product_tax
+        ];
+
+        $M_sales_pos        = model('M_sales_pos');
+        $getData            = $M_sales_pos->getReportDetailSalesListByBrand($start_date, $end_date, $store_id, $brand_id, $product_tax);
+        //dd($getData);
+
+
+        if ($fileType == 'pdf') {
+            $tables_rows = [];
+            $sample_tables_rows = [
+                [
+                    ['text' => 'header', 'colspan' => '9', 'class' => 'text-left']
+                ],
+                [
+                    ['text' => '#', 'class' => 'text-right'],
+                    ['text' => 'INVOICE', 'class' => 'text-left'],
+                    ['text' => 'TGL',  'class' => 'text-left'],
+                    ['text' => 'Kode Barang',  'class' => 'text-left'],
+                    ['text' => 'Nama Barang',  'class' => 'text-left'],
+                    ['text' => 'QTY', 'class' => 'col-fixed text-left'],
+                    ['text' => 'DPP', 'class' => 'text-right'],
+                    ['text' => 'PPN',  'class' => 'text-right'],
+                    ['text' => 'TOTAL', 'class' => 'text-right'],
+                ],
+                [
+                    ['text' => 'total', 'colspan' => '6', 'class' => 'text-left'],
+                    ['text' => 'DPP', 'class' => 'text-right'],
+                    ['text' => 'PPN',  'class' => 'text-right'],
+                    ['text' => 'TOTAL', 'class' => 'text-right'],
+                ],
+            ];
+
+            $last_brand_name = '';
+            $num_row = 1;
+            $total_dpp = 0;
+            $total_ppn = 0;
+            $total_sales = 0;
+            foreach ($getData as $row) {
+                $sales_qty = floatval($row['sales_qty']);
+                $sales_dpp = floatval($row['sales_dpp']);
+                $sales_ppn = floatval($row['sales_ppn']);
+                $total     = ($sales_dpp + $sales_ppn) * $sales_qty;
+
+                $class_dpp      = $sales_dpp < 0 ? 'text-red' : '';
+                $class_ppn      = $sales_ppn < 0 ? 'text-red' : '';
+                $class_total    = $total < 0 ? 'text-red' : '';
+                $class_qty      = $sales_qty < 0 ? 'text-red' : '';
+
+                if ($row['brand_name'] != $last_brand_name) {
+                    if ($last_brand_name != '') {
+                        // buat summary total //
+                        $tables_rows[] = [
+                            ['text' => '<b>TOTAL</b>', 'colspan' => '6', 'class' => 'text-right'],
+                            ['text' => numberFormat($total_dpp), 'class' => 'text-right'],
+                            ['text' => numberFormat($total_ppn),  'class' => 'text-right'],
+                            ['text' => numberFormat($total_sales), 'class' => 'text-right'],
+                        ];
+                    }
+
+                    // buat header group //
+                    $header = $row['brand_name'];
+                    $tables_rows[] = [
+                        ['text' => '<b>' . $header . '</b>', 'colspan' => '9', 'class' => 'text-left']
+                    ];
+
+                    // reset total //
+                    $num_row = 1;
+                    $total_dpp = 0;
+                    $total_ppn = 0;
+                    $total_sales = 0;
+                }
+
+                $tables_rows[] = [
+                    ['text' => $num_row, 'class' => 'text-right'],
+                    ['text' => $row['pos_sales_invoice'], 'class' => 'text-left'],
+                    ['text' => indo_short_date($row['pos_sales_date']),  'class' => 'text-left'],
+                    ['text' => $row['item_code'], 'class' => 'col-fixed text-left'],
+                    ['text' => $row['product_name'], 'class' => 'col-fixed text-left'],
+                    ['text' => numberFormat($sales_qty), 'class' => 'text-right ' . $class_qty],
+                    ['text' => numberFormat($sales_dpp), 'class' => 'text-right ' . $class_dpp],
+                    ['text' => numberFormat($sales_ppn),  'class' => 'text-right ' . $class_ppn],
+                    ['text' => numberFormat($total), 'class' => 'text-right ' . $class_total],
+                ];
+
+                $total_dpp      += ($sales_dpp * $sales_qty);
+                $total_ppn      += ($sales_ppn * $sales_qty);
+                $total_sales    += $total;
+                $last_brand_name = $row['brand_name'];
+                $num_row++;
+            }
+
+            if ($last_brand_name != '') {
+                // buat summary total //
+                $tables_rows[] = [
+                    ['text' => '<b>TOTAL</b>', 'colspan' => '6', 'class' => 'text-right'],
+                    ['text' => numberFormat($total_dpp), 'class' => 'text-right'],
+                    ['text' => numberFormat($total_ppn),  'class' => 'text-right'],
+                    ['text' => numberFormat($total_sales), 'class' => 'text-right'],
+                ];
+            }
+
+            $max_report_size    = 14;
+            $pages              = array_chunk($tables_rows, $max_report_size);
+            $data['pages']      = $pages;
+            $data['max_page']   = count($pages);
+
+            $htmlView = $this->renderView('report/pos/sales_list_group_brand_detail', $data);
+            if ($agent->isMobile() && !$isDownload) {
+                return $htmlView;
+            } else {
+                $dompdf = new Dompdf();
+                $dompdf->loadHtml($htmlView);
+                $dompdf->setPaper('A4', 'landscape');
+                $dompdf->render();
+                $dompdf->stream('laporan_penjualan_retail_per_brand.pdf', array("Attachment" => $isDownload));
+                exit();
+            }
+        } else {
+            $header_format = [
+                'fill' => [
+                    'fillType' =>  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => [
+                        'argb' => 'A5A5A5'
+                    ]
+                ],
+                'font' => [
+                    'bold' => true,
+                ],
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                ],
+            ];
+            $total_format = [
+                'font' => [
+                    'bold' => true,
+                ],
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $font_bold = [
+                'font' => [
+                    'bold' => true,
+                ],
+            ];
+
+            $border_left_right = [
+                'borders' => [
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $border_full = [
+                'borders' => [
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $template = WRITEPATH . '/template/report/template_report.xlsx';
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+
+            $sheet = $spreadsheet->setActiveSheetIndex(0);
+
+            //make header //
+            $iRow = 7;
+            $sheet->getCell('A' . $iRow)->setValue('CABANG');
+            $sheet->getCell('B' . $iRow)->setValue('KASIR');
+            $sheet->getCell('C' . $iRow)->setValue('TANGGAL');
+            $sheet->getCell('D' . $iRow)->setValue('NO INVOICE');
+            $sheet->getCell('E' . $iRow)->setValue('METODE PEMBAYARAN');
+            $sheet->getCell('F' . $iRow)->setValue('KODE BARANG');
+            $sheet->getCell('G' . $iRow)->setValue('NAMA BARANG');
+            $sheet->getCell('H' . $iRow)->setValue('KATEGORI');
+            $sheet->getCell('I' . $iRow)->setValue('QTY');
+            $sheet->getCell('J' . $iRow)->setValue('SATUAN');
+            $sheet->getCell('K' . $iRow)->setValue('DPP');
+            $sheet->getCell('L' . $iRow)->setValue('PPN');
+            $sheet->getCell('M' . $iRow)->setValue('TOTAL');
+
+            $sheet->getStyle('A' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('B' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('C' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('D' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('E' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('F' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('G' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('H' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('I' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('J' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('K' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('L' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('M' . $iRow)->applyFromArray($header_format);
+
+            $iRow++;
+
+
+            $last_brand_name = '';
+            $total_dpp = 0;
+            $total_ppn = 0;
+            $total_sales = 0;
+
+            foreach ($getData as $row) {
+                $sales_qty = floatval($row['sales_qty']);
+                $sales_dpp = floatval($row['sales_dpp']);
+                $sales_ppn = floatval($row['sales_ppn']);
+                $total     = ($sales_dpp + $sales_ppn) * $sales_qty;
+
+                $class_dpp = $sales_dpp < 0 ? 'text-red' : '';
+                $class_ppn = $sales_ppn < 0 ? 'text-red' : '';
+                $class_total = $total < 0 ? 'text-red' : '';
+
+                if ($row['brand_name'] != $last_brand_name) {
+                    if ($last_brand_name != '') {
+                        // buat summary total //
+                        $sheet->getCell('A' . $iRow)->setValue('TOTAL');
+                        $sheet->getCell('K' . $iRow)->setValue($total_dpp);
+                        $sheet->getCell('L' . $iRow)->setValue($total_ppn);
+                        $sheet->getCell('M' . $iRow)->setValue($total_sales);
+                        $sheet->mergeCells('A' . $iRow . ':J' . $iRow);
+                        $sheet->getStyle('A' . $iRow . ':J' . $iRow)->getAlignment()->setHorizontal('right');
+
+                        $sheet->getStyle('A' . $iRow . ':J' . $iRow)->applyFromArray($total_format);
+                        $sheet->getStyle('K' . $iRow)->applyFromArray($total_format);
+                        $sheet->getStyle('L' . $iRow)->applyFromArray($total_format);
+                        $sheet->getStyle('M' . $iRow)->applyFromArray($total_format);
+                        $iRow++;
+                    }
+
+                    // buat header group //
+                    $header = $row['brand_name'];
+                    $sheet->getCell('A' . $iRow)->setValue($header);
+                    $sheet->mergeCells('A' . $iRow . ':M' . $iRow);
+                    $sheet->getStyle('A' . $iRow . ':M' . $iRow)->applyFromArray($font_bold);
+                    $sheet->getStyle('A' . $iRow . ':M' . $iRow)->applyFromArray($border_full);
+                    $iRow++;
+
+
+                    // reset total //
+                    $total_dpp = 0;
+                    $total_ppn = 0;
+                    $total_sales = 0;
+                }
+
+
+                $sheet->getCell('A' . $iRow)->setValue($row['store_code']);
+                $sheet->getCell('B' . $iRow)->setValue($row['user_realname']);
+                $sheet->getCell('C' . $iRow)->setValue(indo_short_date($row['pos_sales_date']));
+                $sheet->getCell('D' . $iRow)->setValue($row['pos_sales_invoice']);
+                $sheet->getCell('E' . $iRow)->setValue($row['payment_list']);
+                $sheet->getCell('F' . $iRow)->setValue($row['item_code']);
+                $sheet->getCell('G' . $iRow)->setValue($row['product_name']);
+                $sheet->getCell('H' . $iRow)->setValue($row['category_name']);
+                $sheet->getCell('I' . $iRow)->setValue($sales_qty);
+                $sheet->getCell('J' . $iRow)->setValue($row['unit_name']);
+                $sheet->getCell('K' . $iRow)->setValue($sales_dpp);
+                $sheet->getCell('L' . $iRow)->setValue($sales_ppn);
+                $sheet->getCell('M' . $iRow)->setValue($total);
+
+                $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('F' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('H' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('I' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('J' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('K' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('L' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('M' . $iRow)->applyFromArray($border_left_right);
+                $iRow++;
+
+                $total_dpp      += ($sales_dpp * $sales_qty);
+                $total_ppn      += ($sales_ppn * $sales_qty);
+                $total_sales    += $total;
+                $last_brand_name = $row['brand_name'];
+            }
+
+            if ($last_brand_name != '') {
+                // buat summary total //
+                $sheet->getCell('A' . $iRow)->setValue('TOTAL');
+                $sheet->getCell('K' . $iRow)->setValue($total_dpp);
+                $sheet->getCell('L' . $iRow)->setValue($total_ppn);
+                $sheet->getCell('M' . $iRow)->setValue($total_sales);
+                $sheet->mergeCells('A' . $iRow . ':J' . $iRow);
+                $sheet->getStyle('A' . $iRow . ':J' . $iRow)->getAlignment()->setHorizontal('right');
+
+                $sheet->getStyle('A' . $iRow . ':J' . $iRow)->applyFromArray($total_format);
+                $sheet->getStyle('K' . $iRow)->applyFromArray($total_format);
+                $sheet->getStyle('L' . $iRow)->applyFromArray($total_format);
+                $sheet->getStyle('M' . $iRow)->applyFromArray($total_format);
+                $iRow++;
+            }
+
+
+            //setting periode
+            $periode_text = indo_short_date($start_date) . ' s.d ' . indo_short_date($end_date);
+            $sheet->getCell('A5')->setValue('Periode');
+            $sheet->getStyle('A5')->applyFromArray($font_bold);
+            $sheet->getCell('B5')->setValue($periode_text);
+
+            $sheet->getCell('A6')->setValue('Filter');
+            $sheet->getStyle('A6')->applyFromArray($font_bold);
+            $filterText = "TOKO = $store_name;BRAND = $brand_name;PPN = $product_tax";
+            $sheet->getCell('B6')->setValue($filterText);
+            $sheet->mergeCells('B6:M6');
+
+            //setting excel header//
+            // A4-G4 = Store Phone
+            // A3-G3 = Store Address
+            // A2-G2 = Store Name
+            // A1-G1 = Print By
+            $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
+            $sheet->getCell('A4')->setValue(COMPANY_PHONE);
+            $sheet->getCell('A3')->setValue(COMPANY_ADDRESS);
+            $sheet->getCell('A2')->setValue(COMPANY_NAME);
+            $sheet->getCell('A1')->setValue($reportInfo);
+
+            $sheet->mergeCells('A4:M4');
+            $sheet->mergeCells('A3:M3');
+            $sheet->mergeCells('A2:M2');
+            $sheet->mergeCells('A1:M1');
+
+            $sheet->getStyle('A4:M4')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A3:M3')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A2:M2')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A1:M1')->getAlignment()->setHorizontal('right');
+
+            $sheet->getStyle('A4:M4')->applyFromArray($font_bold);
+            $sheet->getStyle('A3:M3')->applyFromArray($font_bold);
+            $sheet->getStyle('A2:M2')->applyFromArray($font_bold);
+
+            $sheet->getColumnDimension('A')->setAutoSize(true);
+            $sheet->getColumnDimension('B')->setAutoSize(true);
+            $sheet->getColumnDimension('C')->setAutoSize(true);
+            $sheet->getColumnDimension('D')->setAutoSize(true);
+            $sheet->getColumnDimension('E')->setAutoSize(true);
+            $sheet->getColumnDimension('F')->setAutoSize(true);
+            $sheet->getColumnDimension('G')->setAutoSize(true);
+            $sheet->getColumnDimension('H')->setAutoSize(true);
+            $sheet->getColumnDimension('I')->setAutoSize(true);
+            $sheet->getColumnDimension('J')->setAutoSize(true);
+            $sheet->getColumnDimension('K')->setAutoSize(true);
+            $sheet->getColumnDimension('L')->setAutoSize(true);
+            $sheet->getColumnDimension('M')->setAutoSize(true);
+
+
+            $filename = 'laporan_penjualan_retail_per_brand';
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+            header('Cache-Control: max-age=0');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save('php://output');
+            exit();
+        }
+    }
+
+
+    public function viewSalesListGroupCategory()
+    {
+        $data = [
+            'title'     => 'Laporan Penjualan Per Kategori',
+        ];
+        return $this->renderView('report/pos/view_sales_list_group_category', $data, 'report.pos_sales_list');
+    }
+
+    public function detailSalesListGroupCategory()
+    {
+        $category_id    = $this->request->getGet('category_id') != null ? $this->request->getGet('category_id') : '';
+        $category_name  = $this->request->getGet('category_name') != null ? $this->request->getGet('category_name') : '-';
+        $store_id       = $this->request->getGet('store_id') != null ? $this->request->getGet('store_id') : '';
+        $store_name     = $this->request->getGet('store_name') != null ? $this->request->getGet('store_name') : '-';
+        $start_date     = $this->request->getGet('start_date') != null ? $this->request->getGet('start_date') : date('Y-m-d');
+        $end_date       = $this->request->getGet('end_date') != null ? $this->request->getGet('end_date') : date('Y-m-d');
+        $product_tax    = $this->request->getGet('product_tax') != null ? $this->request->getGet('product_tax') : '';
+
+
+        $agent = $this->request->getUserAgent();
+        $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
+        $fileType   = $this->request->getGet('file');
+
+        if (!in_array($fileType, ['pdf', 'xls'])) {
+            $fileType = 'pdf';
+        }
+
+        $data = [
+            'title'         => 'Laporan Penjualan',
+            'userLogin'     => $this->userLogin,
+            'category_id'   => $category_id,
+            'category_name' => $category_name,
+            'store_id'      => $store_id,
+            'store_name'    => $store_name,
+            'start_date'    => $start_date,
+            'end_date'      => $end_date,
+            'product_tax'   => $product_tax
+        ];
+
+        $M_sales_pos        = model('M_sales_pos');
+        $getData            = $M_sales_pos->getReportDetailSalesListByCategory($start_date, $end_date, $store_id, $category_id, $product_tax);
+        //dd($getData);
+
+
+        if ($fileType == 'pdf') {
+            $tables_rows = [];
+            $sample_tables_rows = [
+                [
+                    ['text' => 'header', 'colspan' => '9', 'class' => 'text-left']
+                ],
+                [
+                    ['text' => '#', 'class' => 'text-right'],
+                    ['text' => 'INVOICE', 'class' => 'text-left'],
+                    ['text' => 'TGL',  'class' => 'text-left'],
+                    ['text' => 'Kode Barang',  'class' => 'text-left'],
+                    ['text' => 'Nama Barang',  'class' => 'text-left'],
+                    ['text' => 'QTY', 'class' => 'col-fixed text-left'],
+                    ['text' => 'DPP', 'class' => 'text-right'],
+                    ['text' => 'PPN',  'class' => 'text-right'],
+                    ['text' => 'TOTAL', 'class' => 'text-right'],
+                ],
+                [
+                    ['text' => 'total', 'colspan' => '6', 'class' => 'text-left'],
+                    ['text' => 'DPP', 'class' => 'text-right'],
+                    ['text' => 'PPN',  'class' => 'text-right'],
+                    ['text' => 'TOTAL', 'class' => 'text-right'],
+                ],
+            ];
+
+            $last_category_name = '';
+            $num_row = 1;
+            $total_dpp = 0;
+            $total_ppn = 0;
+            $total_sales = 0;
+            foreach ($getData as $row) {
+                $sales_qty = floatval($row['sales_qty']);
+                $sales_dpp = floatval($row['sales_dpp']);
+                $sales_ppn = floatval($row['sales_ppn']);
+                $total     = ($sales_dpp + $sales_ppn) * $sales_qty;
+
+                $class_dpp      = $sales_dpp < 0 ? 'text-red' : '';
+                $class_ppn      = $sales_ppn < 0 ? 'text-red' : '';
+                $class_total    = $total < 0 ? 'text-red' : '';
+                $class_qty      = $sales_qty < 0 ? 'text-red' : '';
+
+                if ($row['category_name'] != $last_category_name) {
+                    if ($last_category_name != '') {
+                        // buat summary total //
+                        $tables_rows[] = [
+                            ['text' => '<b>TOTAL</b>', 'colspan' => '6', 'class' => 'text-right'],
+                            ['text' => numberFormat($total_dpp), 'class' => 'text-right'],
+                            ['text' => numberFormat($total_ppn),  'class' => 'text-right'],
+                            ['text' => numberFormat($total_sales), 'class' => 'text-right'],
+                        ];
+                    }
+
+                    // buat header group //
+                    $header = $row['category_name'];
+                    $tables_rows[] = [
+                        ['text' => '<b>' . $header . '</b>', 'colspan' => '9', 'class' => 'text-left']
+                    ];
+
+                    // reset total //
+                    $num_row = 1;
+                    $total_dpp = 0;
+                    $total_ppn = 0;
+                    $total_sales = 0;
+                }
+
+                $tables_rows[] = [
+                    ['text' => $num_row, 'class' => 'text-right'],
+                    ['text' => $row['pos_sales_invoice'], 'class' => 'text-left'],
+                    ['text' => indo_short_date($row['pos_sales_date']),  'class' => 'text-left'],
+                    ['text' => $row['item_code'], 'class' => 'col-fixed text-left'],
+                    ['text' => $row['product_name'], 'class' => 'col-fixed text-left'],
+                    ['text' => numberFormat($sales_qty), 'class' => 'text-right ' . $class_qty],
+                    ['text' => numberFormat($sales_dpp), 'class' => 'text-right ' . $class_dpp],
+                    ['text' => numberFormat($sales_ppn),  'class' => 'text-right ' . $class_ppn],
+                    ['text' => numberFormat($total), 'class' => 'text-right ' . $class_total],
+                ];
+
+                $total_dpp      += ($sales_dpp * $sales_qty);
+                $total_ppn      += ($sales_ppn * $sales_qty);
+                $total_sales    += $total;
+                $last_category_name = $row['category_name'];
+                $num_row++;
+            }
+
+            if ($last_category_name != '') {
+                // buat summary total //
+                $tables_rows[] = [
+                    ['text' => '<b>TOTAL</b>', 'colspan' => '6', 'class' => 'text-right'],
+                    ['text' => numberFormat($total_dpp), 'class' => 'text-right'],
+                    ['text' => numberFormat($total_ppn),  'class' => 'text-right'],
+                    ['text' => numberFormat($total_sales), 'class' => 'text-right'],
+                ];
+            }
+
+            $max_report_size    = 14;
+            $pages              = array_chunk($tables_rows, $max_report_size);
+            $data['pages']      = $pages;
+            $data['max_page']   = count($pages);
+
+            $htmlView = $this->renderView('report/pos/sales_list_group_category_detail', $data);
+            if ($agent->isMobile() && !$isDownload) {
+                return $htmlView;
+            } else {
+                $dompdf = new Dompdf();
+                $dompdf->loadHtml($htmlView);
+                $dompdf->setPaper('A4', 'landscape');
+                $dompdf->render();
+                $dompdf->stream('laporan_penjualan_retail_per_kategori.pdf', array("Attachment" => $isDownload));
+                exit();
+            }
+        } else {
+            $header_format = [
+                'fill' => [
+                    'fillType' =>  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => [
+                        'argb' => 'A5A5A5'
+                    ]
+                ],
+                'font' => [
+                    'bold' => true,
+                ],
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                ],
+            ];
+            $total_format = [
+                'font' => [
+                    'bold' => true,
+                ],
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $font_bold = [
+                'font' => [
+                    'bold' => true,
+                ],
+            ];
+
+            $border_left_right = [
+                'borders' => [
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $border_full = [
+                'borders' => [
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $template = WRITEPATH . '/template/report/template_report.xlsx';
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+
+            $sheet = $spreadsheet->setActiveSheetIndex(0);
+
+            //make header //
+            $iRow = 7;
+            $sheet->getCell('A' . $iRow)->setValue('CABANG');
+            $sheet->getCell('B' . $iRow)->setValue('KASIR');
+            $sheet->getCell('C' . $iRow)->setValue('TANGGAL');
+            $sheet->getCell('D' . $iRow)->setValue('NO INVOICE');
+            $sheet->getCell('E' . $iRow)->setValue('METODE PEMBAYARAN');
+            $sheet->getCell('F' . $iRow)->setValue('KODE BARANG');
+            $sheet->getCell('G' . $iRow)->setValue('NAMA BARANG');
+            $sheet->getCell('H' . $iRow)->setValue('BRAND');
+            $sheet->getCell('I' . $iRow)->setValue('QTY');
+            $sheet->getCell('J' . $iRow)->setValue('SATUAN');
+            $sheet->getCell('K' . $iRow)->setValue('DPP');
+            $sheet->getCell('L' . $iRow)->setValue('PPN');
+            $sheet->getCell('M' . $iRow)->setValue('TOTAL');
+
+            $sheet->getStyle('A' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('B' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('C' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('D' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('E' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('F' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('G' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('H' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('I' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('J' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('K' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('L' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('M' . $iRow)->applyFromArray($header_format);
+
+            $iRow++;
+
+
+            $last_category_name = '';
+            $total_dpp = 0;
+            $total_ppn = 0;
+            $total_sales = 0;
+
+            foreach ($getData as $row) {
+                $sales_qty = floatval($row['sales_qty']);
+                $sales_dpp = floatval($row['sales_dpp']);
+                $sales_ppn = floatval($row['sales_ppn']);
+                $total     = ($sales_dpp + $sales_ppn) * $sales_qty;
+
+                $class_dpp = $sales_dpp < 0 ? 'text-red' : '';
+                $class_ppn = $sales_ppn < 0 ? 'text-red' : '';
+                $class_total = $total < 0 ? 'text-red' : '';
+
+                if ($row['category_name'] != $last_category_name) {
+                    if ($last_category_name != '') {
+                        // buat summary total //
+                        $sheet->getCell('A' . $iRow)->setValue('TOTAL');
+                        $sheet->getCell('K' . $iRow)->setValue($total_dpp);
+                        $sheet->getCell('L' . $iRow)->setValue($total_ppn);
+                        $sheet->getCell('M' . $iRow)->setValue($total_sales);
+                        $sheet->mergeCells('A' . $iRow . ':J' . $iRow);
+                        $sheet->getStyle('A' . $iRow . ':J' . $iRow)->getAlignment()->setHorizontal('right');
+
+                        $sheet->getStyle('A' . $iRow . ':J' . $iRow)->applyFromArray($total_format);
+                        $sheet->getStyle('K' . $iRow)->applyFromArray($total_format);
+                        $sheet->getStyle('L' . $iRow)->applyFromArray($total_format);
+                        $sheet->getStyle('M' . $iRow)->applyFromArray($total_format);
+                        $iRow++;
+                    }
+
+                    // buat header group //
+                    $header = $row['category_name'];
+                    $sheet->getCell('A' . $iRow)->setValue($header);
+                    $sheet->mergeCells('A' . $iRow . ':M' . $iRow);
+                    $sheet->getStyle('A' . $iRow . ':M' . $iRow)->applyFromArray($font_bold);
+                    $sheet->getStyle('A' . $iRow . ':M' . $iRow)->applyFromArray($border_full);
+                    $iRow++;
+
+
+                    // reset total //
+                    $total_dpp = 0;
+                    $total_ppn = 0;
+                    $total_sales = 0;
+                }
+
+
+                $sheet->getCell('A' . $iRow)->setValue($row['store_code']);
+                $sheet->getCell('B' . $iRow)->setValue($row['user_realname']);
+                $sheet->getCell('C' . $iRow)->setValue(indo_short_date($row['pos_sales_date']));
+                $sheet->getCell('D' . $iRow)->setValue($row['pos_sales_invoice']);
+                $sheet->getCell('E' . $iRow)->setValue($row['payment_list']);
+                $sheet->getCell('F' . $iRow)->setValue($row['item_code']);
+                $sheet->getCell('G' . $iRow)->setValue($row['product_name']);
+                $sheet->getCell('H' . $iRow)->setValue($row['brand_name']);
+                $sheet->getCell('I' . $iRow)->setValue($sales_qty);
+                $sheet->getCell('J' . $iRow)->setValue($row['unit_name']);
+                $sheet->getCell('K' . $iRow)->setValue($sales_dpp);
+                $sheet->getCell('L' . $iRow)->setValue($sales_ppn);
+                $sheet->getCell('M' . $iRow)->setValue($total);
+
+                $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('F' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('H' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('I' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('J' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('K' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('L' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('M' . $iRow)->applyFromArray($border_left_right);
+                $iRow++;
+
+                $total_dpp      += ($sales_dpp * $sales_qty);
+                $total_ppn      += ($sales_ppn * $sales_qty);
+                $total_sales    += $total;
+                $last_category_name = $row['category_name'];
+            }
+
+            if ($last_category_name != '') {
+                // buat summary total //
+                $sheet->getCell('A' . $iRow)->setValue('TOTAL');
+                $sheet->getCell('K' . $iRow)->setValue($total_dpp);
+                $sheet->getCell('L' . $iRow)->setValue($total_ppn);
+                $sheet->getCell('M' . $iRow)->setValue($total_sales);
+                $sheet->mergeCells('A' . $iRow . ':J' . $iRow);
+                $sheet->getStyle('A' . $iRow . ':J' . $iRow)->getAlignment()->setHorizontal('right');
+
+                $sheet->getStyle('A' . $iRow . ':J' . $iRow)->applyFromArray($total_format);
+                $sheet->getStyle('K' . $iRow)->applyFromArray($total_format);
+                $sheet->getStyle('L' . $iRow)->applyFromArray($total_format);
+                $sheet->getStyle('M' . $iRow)->applyFromArray($total_format);
+                $iRow++;
+            }
+
+
+            //setting periode
+            $periode_text = indo_short_date($start_date) . ' s.d ' . indo_short_date($end_date);
+            $sheet->getCell('A5')->setValue('Periode');
+            $sheet->getStyle('A5')->applyFromArray($font_bold);
+            $sheet->getCell('B5')->setValue($periode_text);
+
+            $sheet->getCell('A6')->setValue('Filter');
+            $sheet->getStyle('A6')->applyFromArray($font_bold);
+            $filterText = "TOKO = $store_name;KATEGORI = $category_name;PPN = $product_tax";
+            $sheet->getCell('B6')->setValue($filterText);
+            $sheet->mergeCells('B6:M6');
+
+            //setting excel header//
+            // A4-G4 = Store Phone
+            // A3-G3 = Store Address
+            // A2-G2 = Store Name
+            // A1-G1 = Print By
+            $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
+            $sheet->getCell('A4')->setValue(COMPANY_PHONE);
+            $sheet->getCell('A3')->setValue(COMPANY_ADDRESS);
+            $sheet->getCell('A2')->setValue(COMPANY_NAME);
+            $sheet->getCell('A1')->setValue($reportInfo);
+
+            $sheet->mergeCells('A4:M4');
+            $sheet->mergeCells('A3:M3');
+            $sheet->mergeCells('A2:M2');
+            $sheet->mergeCells('A1:M1');
+
+            $sheet->getStyle('A4:M4')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A3:M3')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A2:M2')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A1:M1')->getAlignment()->setHorizontal('right');
+
+            $sheet->getStyle('A4:M4')->applyFromArray($font_bold);
+            $sheet->getStyle('A3:M3')->applyFromArray($font_bold);
+            $sheet->getStyle('A2:M2')->applyFromArray($font_bold);
+
+            $sheet->getColumnDimension('A')->setAutoSize(true);
+            $sheet->getColumnDimension('B')->setAutoSize(true);
+            $sheet->getColumnDimension('C')->setAutoSize(true);
+            $sheet->getColumnDimension('D')->setAutoSize(true);
+            $sheet->getColumnDimension('E')->setAutoSize(true);
+            $sheet->getColumnDimension('F')->setAutoSize(true);
+            $sheet->getColumnDimension('G')->setAutoSize(true);
+            $sheet->getColumnDimension('H')->setAutoSize(true);
+            $sheet->getColumnDimension('I')->setAutoSize(true);
+            $sheet->getColumnDimension('J')->setAutoSize(true);
+            $sheet->getColumnDimension('K')->setAutoSize(true);
+            $sheet->getColumnDimension('L')->setAutoSize(true);
+            $sheet->getColumnDimension('M')->setAutoSize(true);
+
+
+            $filename = 'laporan_penjualan_retail_per_kategori';
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+            header('Cache-Control: max-age=0');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save('php://output');
+            exit();
+        }
+    }
+
+
+
+
 
 
     //--------------------------------------------------------------------

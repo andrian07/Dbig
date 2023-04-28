@@ -966,6 +966,11 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
     $routes->get('view-sales-list-group-payment', 'Webmin\Report\ReportPos::viewSalesListGroupPayment');
     $routes->get('sales-list-group-payment', 'Webmin\Report\ReportPos::salesListGroupPayment');
 
+    $routes->get('view-sales-list-group-brand', 'Webmin\Report\ReportPos::viewSalesListGroupBrand');
+    $routes->get('detail-sales-list-group-brand', 'Webmin\Report\ReportPos::detailSalesListGroupBrand');
+
+    $routes->get('view-sales-list-group-category', 'Webmin\Report\ReportPos::viewSalesListGroupCategory');
+    $routes->get('detail-sales-list-group-category', 'Webmin\Report\ReportPos::detailSalesListGroupCategory');
 
     $routes->get('view-project-sales-list', 'Webmin\Report\ReportSales::viewProjectSalesList');
 

@@ -922,6 +922,30 @@ class ReportInventory extends WebminController
 
     public function stockCard()
     {
+        $start_date     = $this->request->getGet('start_date') != null ? $this->request->getGet('start_date') : date('Y-m') . '-01';
+        $end_date       = $this->request->getGet('end_date') != null ? $this->request->getGet('end_date') : date('Y-m-d');
+        $warehouse_id   = $this->request->getGet('warehouse_id') != null ? $this->request->getGet('warehouse_id') : null;
+        $product_id     = $this->request->getGet('product_id') != null ? $this->request->getGet('product_id') : null;
+
+        if ($product_id == null) {
+            die('<h1>Harap pilih produk terlebih dahulu</h1>');
+        } else {
+
+            if ($product_id != null) {
+                $product_id = explode(',', $product_id);
+            }
+
+            $M_product = model('M_product');
+            // foreach($product_id as $pid){
+            //     $getStock = $M_product
+            // }
+
+
+
+            dd($start_date, $end_date);
+        }
+
+        exit();
         $data = [
             'title'         => 'Kartu Stok',
             'userLogin'     => $this->userLogin
