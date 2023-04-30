@@ -160,7 +160,10 @@ $report_role = $user_role['report'];
                         <div class="card-body">
                             <ul class="list-group">
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list') ?>" class="text-primary">Laporan Penjualan Retail</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-customer') ?>" class="text-primary">Laporan Penjualan Retail Per Customer</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-salesman') ?>" class="text-primary">Laporan Penjualan Retail Per Salesman</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-brand') ?>" class="text-primary">Laporan Penjualan Retail Per Brand</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-category') ?>" class="text-primary">Laporan Penjualan Retail Per Kategori</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-payment') ?>" class="text-primary">Laporan Penjualan Retail Per Metode Pembayaran</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-sales-list') ?>" class="text-primary">Laporan Penjualan Proyek </a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-sales-list-group-salesman') ?>" class="text-primary">Laporan Penjualan Proyek Per Salesman</a></li>
