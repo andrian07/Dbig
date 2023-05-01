@@ -3099,9 +3099,287 @@ class ReportPos extends WebminController
     }
 
 
+    public function viewSalesAllocationMargin()
+    {
+        $data = [
+            'title'     => 'Laporan Alokasi Margin Penjualan Retail',
+        ];
+
+        return $this->renderView('report/pos/view_sales_allocation_margin', $data, 'report.pos_sales_list');
+    }
+
+    public function detailSalesAllocationMargin()
+    {
+        $store_id       = $this->request->getGet('store_id') != null ? $this->request->getGet('store_id') : '';
+        $store_name     = $this->request->getGet('store_name') != null ? $this->request->getGet('store_name') : '-';
+        $start_date     = $this->request->getGet('start_date') != null ? $this->request->getGet('start_date') : date('Y-m-d');
+        $end_date       = $this->request->getGet('end_date') != null ? $this->request->getGet('end_date') : date('Y-m-d');
 
 
+        $agent = $this->request->getUserAgent();
+        $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
+        $fileType   = $this->request->getGet('file');
 
+        if (!in_array($fileType, ['pdf', 'xls'])) {
+            $fileType = 'pdf';
+        }
+
+        $data = [
+            'title'         => 'Laporan Alokasi Margin Penjualan Retail',
+            'userLogin'     => $this->userLogin,
+            'store_id'      => $store_id,
+            'store_name'    => $store_name,
+            'start_date'    => $start_date,
+            'end_date'      => $end_date
+        ];
+
+        $M_sales_pos        = model('M_sales_pos');
+        $getData            = $M_sales_pos->getReportDetailSalesAllocationMargin($start_date, $end_date, $store_id);
+
+
+        if ($fileType == 'pdf') {
+            $test = count($getData) % 14;
+            if ($test == 0) {
+                $max_report_size    = 13;
+            } else {
+                $max_report_size    = 14;
+            }
+
+            $pages              = array_chunk($getData, $max_report_size);
+            $data['pages']      = $pages;
+            $data['max_page']   = count($pages);
+
+            $htmlView = $this->renderView('report/pos/sales_allocation_margin_detail', $data);
+            if ($agent->isMobile() && !$isDownload) {
+                return $htmlView;
+            } else {
+                $dompdf = new Dompdf();
+                $dompdf->loadHtml($htmlView);
+                $dompdf->setPaper('A4', 'landscape');
+                $dompdf->render();
+                $dompdf->stream('laporan_alokasi_margin_penjualan.pdf', array("Attachment" => $isDownload));
+                exit();
+            }
+        } else {
+            $header_format = [
+                'fill' => [
+                    'fillType' =>  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => [
+                        'argb' => 'A5A5A5'
+                    ]
+                ],
+                'font' => [
+                    'bold' => true,
+                ],
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                ],
+            ];
+            $total_format = [
+                'font' => [
+                    'bold' => true,
+                ],
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $font_bold = [
+                'font' => [
+                    'bold' => true,
+                ],
+            ];
+
+            $border_left_right = [
+                'borders' => [
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $template = WRITEPATH . '/template/report/template_report.xlsx';
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+
+            $sheet = $spreadsheet->setActiveSheetIndex(0);
+
+            //make header //
+            $iRow = 7;
+            $sheet->getCell('A' . $iRow)->setValue('CABANG');
+            $sheet->getCell('B' . $iRow)->setValue('KASIR');
+            $sheet->getCell('C' . $iRow)->setValue('TANGGAL');
+            $sheet->getCell('D' . $iRow)->setValue('NO INVOICE');
+            $sheet->getCell('E' . $iRow)->setValue('METODE PEMBAYARAN');
+            $sheet->getCell('F' . $iRow)->setValue('KODE BARANG');
+            $sheet->getCell('G' . $iRow)->setValue('NAMA BARANG');
+            $sheet->getCell('H' . $iRow)->setValue('MEREK');
+            $sheet->getCell('I' . $iRow)->setValue('KATEGORI');
+            $sheet->getCell('J' . $iRow)->setValue('QTY');
+            $sheet->getCell('K' . $iRow)->setValue('SATUAN');
+            $sheet->getCell('L' . $iRow)->setValue('ALOKASI MARGIN');
+            $sheet->getCell('M' . $iRow)->setValue('TOTAL');
+            $sheet->getCell('N' . $iRow)->setValue('SALESMAN');
+
+            $sheet->getStyle('A' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('B' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('C' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('D' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('E' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('F' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('G' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('H' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('I' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('J' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('K' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('L' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('M' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('N' . $iRow)->applyFromArray($header_format);
+            $iRow++;
+
+            $sum_summary_total    = 0;
+            foreach ($getData as $row) {
+                $qty        = floatval($row['sales_qty']);
+                $ma         = floatval($row['margin_allocation']);
+                $total      = $ma *  $qty;
+                $salesman   = '-';
+                if (!empty($row['salesman_code'])) {
+                    $salesman   = $row['salesman_code'] . ' - ' . $row['salesman_name'];
+                }
+
+                $sheet->getCell('A' . $iRow)->setValue($row['store_code']);
+                $sheet->getCell('B' . $iRow)->setValue($row['user_realname']);
+                $sheet->getCell('C' . $iRow)->setValue(indo_short_date($row['pos_sales_date']));
+                $sheet->getCell('D' . $iRow)->setValue($row['pos_sales_invoice']);
+                $sheet->getCell('E' . $iRow)->setValue($row['payment_list']);
+                $sheet->getCell('F' . $iRow)->setValue($row['item_code']);
+                $sheet->getCell('G' . $iRow)->setValue($row['product_name']);
+                $sheet->getCell('H' . $iRow)->setValue($row['brand_name']);
+                $sheet->getCell('I' . $iRow)->setValue($row['category_name']);
+                $sheet->getCell('J' . $iRow)->setValue($qty);
+                $sheet->getCell('K' . $iRow)->setValue($row['unit_name']);
+                $sheet->getCell('L' . $iRow)->setValue($ma);
+                $sheet->getCell('M' . $iRow)->setValue($total);
+                $sheet->getCell('N' . $iRow)->setValue($salesman);
+
+                $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('F' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('H' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('I' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('J' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('K' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('L' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('M' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('N' . $iRow)->applyFromArray($border_left_right);
+
+                $sum_summary_total += $total;
+                $iRow++;
+            }
+
+            $sheet->getCell('A' . $iRow)->setValue('TOTAL');
+            $sheet->getCell('M' . $iRow)->setValue($sum_summary_total);
+            $sheet->mergeCells('A' . $iRow . ':L' . $iRow);
+            $sheet->getStyle('A' . $iRow . ':L' . $iRow)->getAlignment()->setHorizontal('right');
+
+            $sheet->getStyle('A' . $iRow . ':L' . $iRow)->applyFromArray($total_format);
+            $sheet->getStyle('M' . $iRow)->applyFromArray($total_format);
+            $sheet->getStyle('N' . $iRow)->applyFromArray($total_format);
+
+            //setting periode
+            $periode_text = indo_short_date($start_date) . ' s.d ' . indo_short_date($end_date);
+            $sheet->getCell('A5')->setValue('Periode');
+            $sheet->getStyle('A5')->applyFromArray($font_bold);
+            $sheet->getCell('B5')->setValue($periode_text);
+
+            $sheet->getCell('A6')->setValue('Filter');
+            $sheet->getStyle('A6')->applyFromArray($font_bold);
+            $filterText = "TOKO = $store_name";
+            $sheet->getCell('B6')->setValue($filterText);
+            $sheet->mergeCells('B6:N6');
+
+            //setting excel header//
+            // A4-G4 = Store Phone
+            // A3-G3 = Store Address
+            // A2-G2 = Store Name
+            // A1-G1 = Print By
+            $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
+            $sheet->getCell('A4')->setValue(COMPANY_PHONE);
+            $sheet->getCell('A3')->setValue(COMPANY_ADDRESS);
+            $sheet->getCell('A2')->setValue(COMPANY_NAME);
+            $sheet->getCell('A1')->setValue($reportInfo);
+
+            $sheet->mergeCells('A4:N4');
+            $sheet->mergeCells('A3:N3');
+            $sheet->mergeCells('A2:N2');
+            $sheet->mergeCells('A1:N1');
+
+            $sheet->getStyle('A4:N4')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A3:N3')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A2:N2')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A1:N1')->getAlignment()->setHorizontal('right');
+
+            $sheet->getStyle('A4:N4')->applyFromArray($font_bold);
+            $sheet->getStyle('A3:N3')->applyFromArray($font_bold);
+            $sheet->getStyle('A2:N2')->applyFromArray($font_bold);
+
+            $sheet->getColumnDimension('A')->setAutoSize(true);
+            $sheet->getColumnDimension('B')->setAutoSize(true);
+            $sheet->getColumnDimension('C')->setAutoSize(true);
+            $sheet->getColumnDimension('D')->setAutoSize(true);
+            $sheet->getColumnDimension('E')->setAutoSize(true);
+            $sheet->getColumnDimension('F')->setAutoSize(true);
+            $sheet->getColumnDimension('G')->setAutoSize(true);
+            $sheet->getColumnDimension('H')->setAutoSize(true);
+            $sheet->getColumnDimension('I')->setAutoSize(true);
+            $sheet->getColumnDimension('J')->setAutoSize(true);
+            $sheet->getColumnDimension('K')->setAutoSize(true);
+            $sheet->getColumnDimension('L')->setAutoSize(true);
+            $sheet->getColumnDimension('M')->setAutoSize(true);
+            $sheet->getColumnDimension('N')->setAutoSize(true);
+
+
+            $filename = 'laporan_alokasi_margin_penjualan';
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+            header('Cache-Control: max-age=0');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save('php://output');
+            exit();
+        }
+    }
 
     //--------------------------------------------------------------------
 

@@ -975,6 +975,8 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
     $routes->get('view-sales-list-group-customer', 'Webmin\Report\ReportPos::viewSalesListGroupCustomer');
     $routes->get('detail-sales-list-group-customer', 'Webmin\Report\ReportPos::detailSalesListGroupCustomer');
 
+    $routes->get('view-sales-allocation-margin', 'Webmin\Report\ReportPos::viewSalesAllocationMargin');
+    $routes->get('detail-sales-allocation-margin', 'Webmin\Report\ReportPos::detailSalesAllocationMargin');
 
     $routes->get('view-project-sales-list', 'Webmin\Report\ReportSales::viewProjectSalesList');
 

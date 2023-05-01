@@ -165,6 +165,8 @@ $report_role = $user_role['report'];
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-brand') ?>" class="text-primary">Laporan Penjualan Retail Per Brand</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-category') ?>" class="text-primary">Laporan Penjualan Retail Per Kategori</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-payment') ?>" class="text-primary">Laporan Penjualan Retail Per Metode Pembayaran</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-allocation-margin') ?>" class="text-primary">Laporan Alokasi Margin Penjualan Retail</a></li>
+
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-sales-list') ?>" class="text-primary">Laporan Penjualan Proyek </a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-sales-list-group-salesman') ?>" class="text-primary">Laporan Penjualan Proyek Per Salesman</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-sales-list-group-customer') ?>" class="text-primary">Laporan Penjualan Proyek Per Customer</a></li>
