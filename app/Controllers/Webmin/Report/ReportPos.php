@@ -23,6 +23,10 @@ class ReportPos extends WebminController
 
     public function salesList()
     {
+        if (!$this->role->hasRole('report.pos_sales_list')) {
+            die('<h1>Anda tidak memiliki akses kelaporan ini</h1>');
+        }
+
         $user_id        = $this->request->getGet('user_id') != null ? $this->request->getGet('user_id') : '';
         $user_realname  = $this->request->getGet('user_realname') != null ? $this->request->getGet('user_realname') : '-';
         $store_id       = $this->request->getGet('store_id') != null ? $this->request->getGet('store_id') : '';
@@ -275,6 +279,10 @@ class ReportPos extends WebminController
 
     public function detailSalesList()
     {
+        if (!$this->role->hasRole('report.pos_sales_list')) {
+            die('<h1>Anda tidak memiliki akses kelaporan ini</h1>');
+        }
+
         $user_id        = $this->request->getGet('user_id') != null ? $this->request->getGet('user_id') : '';
         $user_realname  = $this->request->getGet('user_realname') != null ? $this->request->getGet('user_realname') : '-';
         $store_id       = $this->request->getGet('store_id') != null ? $this->request->getGet('store_id') : '';
@@ -563,13 +571,17 @@ class ReportPos extends WebminController
     public function viewSalesListGroupSalesman()
     {
         $data = [
-            'title'     => 'Laporan Penjualan Per Salesman',
+            'title'     => 'Laporan Penjualan Retail Per Salesman',
         ];
-        return $this->renderView('report/pos/view_sales_list_group_salesman', $data, 'report.pos_sales_list');
+        return $this->renderView('report/pos/view_sales_list_group_salesman', $data, 'report.pos_sales_list_group_salesman');
     }
 
     public function salesListGroupSalesman()
     {
+        if (!$this->role->hasRole('report.pos_sales_list_group_salesman')) {
+            die('<h1>Anda tidak memiliki akses kelaporan ini</h1>');
+        }
+
         $salesman_id    = $this->request->getGet('salesman_id') != null ? $this->request->getGet('salesman_id') : '';
         $salesman_name  = $this->request->getGet('salesman_name') != null ? $this->request->getGet('salesman_name') : '-';
         $store_id       = $this->request->getGet('store_id') != null ? $this->request->getGet('store_id') : '';
@@ -979,6 +991,9 @@ class ReportPos extends WebminController
 
     public function detailSalesListGroupSalesman()
     {
+        if (!$this->role->hasRole('report.pos_sales_list_group_salesman')) {
+            die('<h1>Anda tidak memiliki akses kelaporan ini</h1>');
+        }
         $salesman_id    = $this->request->getGet('salesman_id') != null ? $this->request->getGet('salesman_id') : '';
         $salesman_name  = $this->request->getGet('salesman_name') != null ? $this->request->getGet('salesman_name') : '-';
         $store_id       = $this->request->getGet('store_id') != null ? $this->request->getGet('store_id') : '';
@@ -1415,13 +1430,17 @@ class ReportPos extends WebminController
     public function viewSalesListGroupPayment()
     {
         $data = [
-            'title'     => 'Laporan Penjualan Per Jenis Pembayaran',
+            'title'     => 'Laporan Penjualan Retail Per Jenis Pembayaran',
         ];
-        return $this->renderView('report/pos/view_sales_list_group_payment', $data);
+        return $this->renderView('report/pos/view_sales_list_group_payment', $data, 'report.pos_sales_list_group_payment');
     }
 
     public function salesListGroupPayment()
     {
+        if (!$this->role->hasRole('report.pos_sales_list_group_payment')) {
+            die('<h1>Anda tidak memiliki akses kelaporan ini</h1>');
+        }
+
         $payment_method_id    = $this->request->getGet('payment_method_id') != null ? $this->request->getGet('payment_method_id') : '';
         $payment_method_name  = $this->request->getGet('payment_method_name') != null ? $this->request->getGet('payment_method_name') : '-';
         $store_id             = $this->request->getGet('store_id') != null ? $this->request->getGet('store_id') : '';
@@ -1780,13 +1799,17 @@ class ReportPos extends WebminController
     public function viewSalesListGroupBrand()
     {
         $data = [
-            'title'     => 'Laporan Penjualan Per Brand',
+            'title'     => 'Laporan Penjualan Retail Per Brand',
         ];
-        return $this->renderView('report/pos/view_sales_list_group_brand', $data, 'report.pos_sales_list');
+        return $this->renderView('report/pos/view_sales_list_group_brand', $data, 'report.pos_sales_list_group_brand');
     }
 
     public function detailSalesListGroupBrand()
     {
+        if (!$this->role->hasRole('report.pos_sales_list_group_brand')) {
+            die('<h1>Anda tidak memiliki akses kelaporan ini</h1>');
+        }
+
         $brand_id       = $this->request->getGet('brand_id') != null ? $this->request->getGet('brand_id') : '';
         $brand_name     = $this->request->getGet('brand_name') != null ? $this->request->getGet('brand_name') : '-';
         $store_id       = $this->request->getGet('store_id') != null ? $this->request->getGet('store_id') : '';
@@ -2219,13 +2242,16 @@ class ReportPos extends WebminController
     public function viewSalesListGroupCategory()
     {
         $data = [
-            'title'     => 'Laporan Penjualan Per Kategori',
+            'title'     => 'Laporan Penjualan Retail Per Kategori',
         ];
-        return $this->renderView('report/pos/view_sales_list_group_category', $data, 'report.pos_sales_list');
+        return $this->renderView('report/pos/view_sales_list_group_category', $data, 'report.pos_sales_list_group_category');
     }
 
     public function detailSalesListGroupCategory()
     {
+        if (!$this->role->hasRole('report.pos_sales_list_group_category')) {
+            die('<h1>Anda tidak memiliki akses kelaporan ini</h1>');
+        }
         $category_id    = $this->request->getGet('category_id') != null ? $this->request->getGet('category_id') : '';
         $category_name  = $this->request->getGet('category_name') != null ? $this->request->getGet('category_name') : '-';
         $store_id       = $this->request->getGet('store_id') != null ? $this->request->getGet('store_id') : '';
@@ -2658,13 +2684,16 @@ class ReportPos extends WebminController
     public function viewSalesListGroupCustomer()
     {
         $data = [
-            'title'     => 'Laporan Penjualan Per Customer',
+            'title'     => 'Laporan Penjualan Retail Per Customer',
         ];
-        return $this->renderView('report/pos/view_sales_list_group_customer', $data, 'report.pos_sales_list');
+        return $this->renderView('report/pos/view_sales_list_group_customer', $data, 'report.pos_sales_list_group_customer');
     }
 
     public function detailSalesListGroupCustomer()
     {
+        if (!$this->role->hasRole('report.pos_sales_list_group_customer')) {
+            die('<h1>Anda tidak memiliki akses kelaporan ini</h1>');
+        }
         $customer_id    = $this->request->getGet('customer_id') != null ? $this->request->getGet('customer_id') : '';
         $customer_name  = $this->request->getGet('customer_name') != null ? $this->request->getGet('customer_name') : '-';
         $store_id       = $this->request->getGet('store_id') != null ? $this->request->getGet('store_id') : '';
@@ -3105,11 +3134,14 @@ class ReportPos extends WebminController
             'title'     => 'Laporan Alokasi Margin Penjualan Retail',
         ];
 
-        return $this->renderView('report/pos/view_sales_allocation_margin', $data, 'report.pos_sales_list');
+        return $this->renderView('report/pos/view_sales_allocation_margin', $data, 'report.pos_sales_allocation_margin');
     }
 
     public function detailSalesAllocationMargin()
     {
+        if (!$this->role->hasRole('report.pos_sales_allocation_margin')) {
+            die('<h1>Anda tidak memiliki akses kelaporan ini</h1>');
+        }
         $store_id       = $this->request->getGet('store_id') != null ? $this->request->getGet('store_id') : '';
         $store_name     = $this->request->getGet('store_name') != null ? $this->request->getGet('store_name') : '-';
         $start_date     = $this->request->getGet('start_date') != null ? $this->request->getGet('start_date') : date('Y-m-d');
