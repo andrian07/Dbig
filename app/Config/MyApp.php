@@ -205,6 +205,17 @@ class MyApp extends BaseConfig
             ]
         ],
 
+        'retur_sales_admin' => [
+            'text'   => 'Retur Penjualan Admin',
+            'roles'   => [
+                'view'          => ['text' => 'Lihat'],
+                'add'           => ['text' => 'Tambah'],
+                'edit'          => ['text' => 'Ubah'],
+                'delete'        => ['text' => 'Hapus'],
+                'print'         => ['text' => 'Cetak']
+            ]
+        ],
+
         'debt_repayment' => [
             'text'   => 'Pelunasan Hutang',
             'roles'   => [

@@ -560,7 +560,7 @@ class Sales_admin extends WebminController
 
         $id = $this->request->getGet('id');
 
-        $getHdData = $this->M_salesmanadmin->getOrder($id)->getRowArray();
+        $getHdData = $this->M_salesmanadmin->getOrderEfaktur($id)->getRowArray();
         $getDtData = $this->M_salesmanadmin->getDtSalesmanOrder($id)->getResultArray();
 
         if($getHdData != null){
@@ -605,36 +605,49 @@ class Sales_admin extends WebminController
             $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
 
             $sheet = $spreadsheet->setActiveSheetIndex(0);
-            $iRow = 3;
+            $iRow = 6;
 
+            $total_dpp = floatval($getHdData['sales_admin_grand_total'] - $getHdData['sales_admin_ppn']);
+            $total_ppn = floatval($getHdData['sales_admin_ppn']);
+            $dp = floatval($getHdData['sales_admin_down_payment']);
+            $dp_ppn = floatval($getHdData['sales_admin_down_payment'] * 0.11);
+            $dp_dpp = floatval($getHdData['sales_admin_down_payment'] - $dp_ppn);
             $trx_date = indo_short_date($getHdData['sales_date']);
 
-            $sheet->getCell('A1')->setValue('FK');
-            $sheet->getCell('B1')->setValue('1');
-            $sheet->getCell('C1')->setValue('0');
-            $sheet->getCell('D1')->setValue('72237067201');
-            $sheet->getCell('E1')->setValue('9');
-            $sheet->getCell('F1')->setValue('2022');
-            $sheet->getCell('G1')->setValue('FK');
-            $sheet->getCell('H1')->setValue($trx_date);
+            $sheet->getCell('A4')->setValue('FK');
+            $sheet->getCell('B4')->setValue('1');
+            $sheet->getCell('C4')->setValue('0');
+            $sheet->getCell('D4')->setValue('72237067201');
+            $sheet->getCell('E4')->setValue('9');
+            $sheet->getCell('F4')->setValue('2022');
+            $sheet->getCell('G4')->setValue('FK');
+            $sheet->getCell('H4')->setValue($trx_date);
+            $sheet->getCell('I4')->setValue($getHdData['customer_npwp']);
+            $sheet->getCell('J4')->setValue($getHdData['customer_name']);
+            $sheet->getCell('K4')->setValue($getHdData['customer_address']);
+            $sheet->getCell('L4')->setValue($total_dpp);
+            $sheet->getCell('M4')->setValue($total_ppn);
+            $sheet->getCell('N4')->setValue('0');
+            $sheet->getCell('O4')->setValue('');
+            $sheet->getCell('P4')->setValue($total_dpp);
+            $sheet->getCell('Q4')->setValue($total_ppn);
+            $sheet->getCell('R4')->setValue('0');
+            $sheet->getCell('S4')->setValue('');
 
-            $sheet->getCell('A2')->setValue('LT');
-            $sheet->getCell('B2')->setValue($getHdData['customer_npwp']);
-            $sheet->getCell('C2')->setValue($getHdData['customer_name']);
-            $sheet->getCell('D2')->setValue('');
-            $sheet->getCell('E2')->setValue('');
-            $sheet->getCell('F2')->setValue('');
-            $sheet->getCell('G2')->setValue('');
-            $sheet->getCell('H2')->setValue('');
-            $sheet->getCell('I2')->setValue($getHdData['dis_name']);
-            $sheet->getCell('J2')->setValue($getHdData['subdis_name']);
-            $sheet->getCell('K2')->setValue($getHdData['city_name']);
-            $sheet->getCell('L2')->setValue($getHdData['prov_name']);
-            $sheet->getCell('M2')->setValue($getHdData['postal_code']);
-            $sheet->getCell('N2')->setValue($getHdData['customer_phone']);
-
-            $sheet->getCell('G1')->setValue('0');
-            $sheet->getCell('H1')->setValue('0');
+            $sheet->getCell('A5')->setValue('LT');
+            $sheet->getCell('B5')->setValue($getHdData['customer_npwp']);
+            $sheet->getCell('C5')->setValue($getHdData['customer_name']);
+            $sheet->getCell('D5')->setValue($getHdData['customer_address']);
+            $sheet->getCell('E5')->setValue($getHdData['customer_address_block']);
+            $sheet->getCell('F5')->setValue($getHdData['customer_address_number']);
+            $sheet->getCell('G5')->setValue($getHdData['customer_address_rt']);
+            $sheet->getCell('H5')->setValue($getHdData['customer_address_rw']);
+            $sheet->getCell('I5')->setValue($getHdData['dis_name']);
+            $sheet->getCell('J5')->setValue($getHdData['subdis_name']);
+            $sheet->getCell('K5')->setValue($getHdData['city_name']);
+            $sheet->getCell('L5')->setValue($getHdData['prov_name']);
+            $sheet->getCell('M5')->setValue($getHdData['postal_code']);
+            $sheet->getCell('N5')->setValue($getHdData['customer_phone']);
 
             foreach ($getDtData as $row) {
                 $base_price  = floatval($row['dt_sales_price'] / $row['dt_temp_qty']);
@@ -648,14 +661,14 @@ class Sales_admin extends WebminController
                 $sheet->getCell('A' . $iRow)->setValue('OF');
                 $sheet->getCell('B' . $iRow)->setValue($row['item_code']);
                 $sheet->getCell('C' . $iRow)->setValue($row['product_name'].'-'.$row['unit_name']);
-                $sheet->getCell('D' . $iRow)->setValue(numberFormat($base_price, TRUE));
-                $sheet->getCell('E' . $iRow)->setValue(numberFormat($qty, TRUE));
-                $sheet->getCell('F' . $iRow)->setValue(numberFormat($sales_price, TRUE));
-                $sheet->getCell('G' . $iRow)->setValue(numberFormat($discount, TRUE));
-                $sheet->getCell('H' . $iRow)->setValue(numberFormat($dpp, TRUE));
-                $sheet->getCell('I' . $iRow)->setValue(numberFormat($ppn, TRUE));
-                $sheet->getCell('J' . $iRow)->setValue(numberFormat($tarif_ppnbm, TRUE));
-                $sheet->getCell('K' . $iRow)->setValue(numberFormat($ppnbm, TRUE));
+                $sheet->getCell('D' . $iRow)->setValue($base_price, TRUE);
+                $sheet->getCell('E' . $iRow)->setValue($qty, TRUE);
+                $sheet->getCell('F' . $iRow)->setValue($sales_price, TRUE);
+                $sheet->getCell('G' . $iRow)->setValue($discount, TRUE);
+                $sheet->getCell('H' . $iRow)->setValue($dpp, TRUE);
+                $sheet->getCell('I' . $iRow)->setValue($ppn, TRUE);
+                $sheet->getCell('J' . $iRow)->setValue($tarif_ppnbm, TRUE);
+                $sheet->getCell('K' . $iRow)->setValue($ppnbm, TRUE);
 
                 $iRow++;
             }
@@ -669,8 +682,8 @@ class Sales_admin extends WebminController
             $writer->save('php://output');
             exit();
         }else{
-            $this->session->set_flashdata('status', '<span class="glyphicon glyphicon-remove"></span>Maping Area Customer Belum Di Isi');
-                redirect($_SERVER['HTTP_REFERER']);
+            $result = ['success' => FALSE, 'message' => 'Silahkan Isi Data Maping Terleih Dahulu Di Customer'];
+            print_r($result);die();
         }
     }
     //--------------------------------------------------------------------

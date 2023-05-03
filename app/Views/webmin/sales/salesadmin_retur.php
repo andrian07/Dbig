@@ -17,7 +17,7 @@ $assetsUrl = base_url('assets');
 
                 <div class="col-sm-6">
 
-                    <h1>Retur Pembelian</h1>
+                    <h1>Retur Penjualan Admin</h1>
 
                 </div>
 
@@ -43,64 +43,6 @@ $assetsUrl = base_url('assets');
 
                 <div class="col-md-12">
 
-
-                    <!-- popup modal add -->
-                    <div class="modal fade" id="modal-addreturpayment">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title" id="title-frmaddbanner">Pembayaran Retur</h4>
-                                    <button type="button" class="close close-modal">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <form id="frmaddpaymentretur" class="form-horizontal">
-                                                <div class="form-group">
-                                                    <label for="title_payment_retur" class="col-sm-12">No Invoice</label>
-                                                    <div class="col-sm-12">
-                                                        <input type="hidden" id="hd_retur_purchase_invoice" class="form-control">
-                                                        <input type="text" id="hd_retur_purchase_id" class="form-control">
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="title_payment_retur" class="col-sm-12">Total Pembayaran</label>
-                                                    <div class="col-sm-12">
-                                                        <input type="text" id="hd_retur_total_transaction" class="form-control">
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="active" class="col-sm-12">Jenis Pembayaran</label>
-                                                    <div class="col-sm-12">
-                                                        <select id="payment_type" name="payment_type" class="form-control">
-                                                            <option></option>
-                                                            <option value="Ya">Potong Nota</option>
-                                                            <option value="Tidak">Cash</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </form>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer justify-content-between">
-                                    <button id="btncancel" class="btn btn-danger close-modal"><i class="fas fa-times-circle"></i> Batal</button>
-                                    <button id="btnsavepayment" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
-                                </div>
-
-                            </div>
-                            <!-- /.modal-content -->
-                        </div>
-                        <!-- /.modal-dialog -->
-                    </div>
-                    <!-- end popup modal -->
-
                     <div class="card">
 
                         <div class="card-header p-2">
@@ -113,7 +55,7 @@ $assetsUrl = base_url('assets');
 
                         <div class="card-body">
 
-                            <table id="tblreturpurcase" class="table table-bordered table-hover" width="100%">
+                            <table id="tblretursalesadmin" class="table table-bordered table-hover" width="100%">
 
                                 <thead>
 
@@ -125,7 +67,7 @@ $assetsUrl = base_url('assets');
 
                                         <th data-priority="3">Tanggal</th>
 
-                                        <th data-priority="4">Nama Suplier</th>
+                                        <th data-priority="4">Nama Customer</th>
 
                                         <th data-priority="5">Total Transaksi</th>
 
@@ -179,7 +121,7 @@ $assetsUrl = base_url('assets');
 
                 <div class="col-sm-6">
 
-                    <h1 id="title-frmreturpurchase"></h1>
+                    <h1 id="title-frmretursalesadmin"></h1>
 
                 </div>
 
@@ -210,15 +152,14 @@ $assetsUrl = base_url('assets');
                         <div class="card-body">
 
 
-                          <form id="frmreturpurchase" class="form-horizontal form-space">
+                          <form id="frmretursalesadmin" class="form-horizontal form-space">
 
                             <div class="form-group row">
 
                                 <label for="noinvoice" class="col-sm-1 col-form-label text-right">No Invoice :</label>
 
                                 <div class="col-sm-3">
-
-                                    <input type="hidden" id="hd_retur_purchase_id_edit" class="form-control">
+                                    <input id="hd_retur_sales_admin_id" name="hd_retur_sales_admin_id" type="hidden" class="form-control"  readonly>
 
                                     <input id="retur_invoice_no" name="retur_invoice_no" type="text" class="form-control" value="AUTO" readonly>
 
@@ -238,11 +179,14 @@ $assetsUrl = base_url('assets');
 
                             <div class="form-group row">
 
-                                <label for="suplier" class="col-sm-1 col-form-label text-right">Supplier :</label>
+                                <label for="sales_no" class="col-sm-1 col-form-label text-right">Inv :</label>
 
                                 <div class="col-sm-3">
 
-                                    <select id="supplier_id" name="supplier_id" class="form-control"></select>
+                                    <input id="sales_admin_id" name="sales_admin_id" type="hidden" class="form-control">
+
+                                    <input id="sales_no" name="sales_no" type="text" class="form-control" placeholder="ketikkan nomor invoice Penjualan" value="" data-parsley-vpurchaseno required>
+
 
                                 </div>
 
@@ -259,9 +203,305 @@ $assetsUrl = base_url('assets');
 
                             </div>
 
-                        </form>
 
-                    </div><!-- /.card-body -->
+                            <div class="form-group row">
+
+
+                                <label for="customer_id" class="col-sm-1 col-form-label text-right">Customer :</label>
+
+                                <div class="col-sm-3">
+
+                                    <select id="customer_id" name="customer_id" class="form-control"></select>
+
+                                </div>
+
+
+                                <div class="col-sm-5"> </div>
+
+                                <label for="cabang" class="col-sm-1 col-form-label text-right">Cabang :</label>
+
+                                <div class="col-sm-2">
+
+                                    <select id="store_id" name="store_id" class="form-control"></select>
+
+                                </div>
+
+                            </form>
+
+                        </div><!-- /.card-body -->
+
+                    </div>
+
+                    <!-- /.card -->
+
+                </div>
+
+                <!-- /.col -->
+
+            </div>
+
+            <!-- /.row -->
+
+        </div><!-- /.container-fluid -->
+
+
+
+
+
+        <div class="container-fluid">
+
+            <div class="row">
+
+                <!-- /.col -->
+
+                <div class="col-md-12">
+
+                    <div class="card">
+
+                        <div class="card-body">
+
+                            <form id="frmaddtemp" class="mb-2">
+
+                                <div class="row well well-sm">
+
+                                    <input id="item_id" name="item_id" type="hidden" value="">
+
+                                    <div class="col-sm-4">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Produk</label>
+
+                                            <input id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-2">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Harga</label>
+
+                                            <input id="temp_price" name="temp_price" type="text" class="form-control text-right" value="0" readonly>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-sm-2">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Disc Nota</label>
+
+                                            <input id="temp_disc_nota" name="temp_disc_nota" type="text" class="form-control text-right" value="0" readonly>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-2">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>PPN <?= PPN_TEXT ?></label>
+
+                                            <input id="temp_tax" name="temp_tax" type="text" class="form-control text-right" value="0" readonly>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-2">
+
+
+
+                                    </div>
+
+                                    <div class="col-sm-4">
+
+
+
+                                    </div>
+
+                                    <div class="col-sm-2">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Qty Retur</label>
+                                            <input id="temp_qty_buy" name="temp_qty_buy" type="hidden" class="form-control text-right" value="0" required readonly>
+                                            <input id="temp_qty_retur" name="temp_qty_retur" type="text" class="form-control text-right" value="0" data-parsley-vqty required>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-5">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Total</label>
+
+                                            <input id="temp_total" name="temp_total" type="text" class="form-control text-right" value="0" readonly>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-1">
+
+                                        <!-- text input -->
+
+                                        <label>&nbsp;</label>
+
+                                        <div class="form-group">
+
+                                            <div class="col-12">
+
+                                                <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle" ><i class="fas fa-plus"></i></button>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </form>
+
+
+
+                            <div class="row mb-2">
+
+                                <div class="col-12">
+
+                                    <table id="tbltemp" class="table table-bordered table-hover" width="100%">
+
+                                        <thead>
+
+                                            <tr>
+
+                                                <th data-priority="1">#</th>
+
+                                                <th data-priority="2">Kode Produk</th>
+
+                                                <th data-priority="3" width="25%;">Produk</th>
+
+                                                <th data-priority="4">Harga Retur</th>
+
+                                                <th data-priority="5">Qty Retur</th>
+
+                                                <th data-priority="6">Total</th>
+
+                                                <th data-priority="7">Aksi</th>
+
+                                            </tr>
+
+                                        </thead>
+
+                                        <tbody> </tbody>
+
+                                    </table>
+
+                                    <template id="template_row_temp">
+
+                                        <tr>
+
+                                            <td>{row}</td>
+
+                                            <td>{item_code}</td>
+
+                                            <td width="20%">{product_name}</td>
+
+                                            <td>Rp. {price}</td>
+
+                                            <td>{qty_retur}</td>
+
+                                            <td>Rp. {total}</td>
+
+                                            <td>
+
+                                                <button data-id="{item_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+
+                                                   <i class="fas fa-edit"></i>
+
+                                               </button>
+
+                                               &nbsp;
+
+                                               <button data-id="{item_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+
+                                                   <i class="fas fa-minus"></i>
+
+                                               </button>
+
+                                           </td>
+
+                                       </tr>
+
+                                   </template>
+
+
+                               </div>
+
+                           </div>
+
+
+
+                           <div class="row form-space">
+
+                            <div class="col-lg-6">
+
+                                <div class="form-group">
+
+                                    <div class="col-sm-12">
+
+                                        <textarea id="retur_remark" name="retur_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="3"></textarea>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-lg-6 text-right">
+
+                                <div class="form-group row">
+                                    <label for="footer_sub_total" class="col-sm-4 col-form-label text-right:">Total :</label>
+                                    <div class="col-sm-8">
+                                        <input id="footer_sub_total" name="footer_sub_total" type="text" class="form-control text-right" value="0" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" style="margin-top: 30px;">
+                                    <div class="col-sm-12">
+                                        <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
+                                        <button id="btnsave" class="btn btn-success button-header-custom-save"><i class="fas fa-save"></i> Simpan</button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -270,350 +510,11 @@ $assetsUrl = base_url('assets');
             </div>
 
             <!-- /.col -->
-
         </div>
 
         <!-- /.row -->
 
     </div><!-- /.container-fluid -->
-
-
-
-
-
-    <div class="container-fluid">
-
-        <div class="row">
-
-            <!-- /.col -->
-
-            <div class="col-md-12">
-
-                <div class="card">
-
-                    <div class="card-body">
-
-                        <form id="frmaddtemp" class="mb-2">
-
-                            <div class="row well well-sm">
-
-                                <input id="item_id" name="item_id" type="hidden" value="">
-
-                                <input id="product_tax" name="product_tax" type="hidden" value="">
-
-                                <div class="col-sm-4">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>No Invoice Pembelian</label>
-
-                                        <input id="purchase_no" name="purchase_no" type="text" class="form-control" placeholder="ketikkan nomor invoice pembelian" value="" data-parsley-vpurchaseno required>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-4">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Produk</label>
-
-                                        <input id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname required>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Gudang</label>
-
-                                        <select id="warehouse" type="text" class="form-control"></select>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>DPP</label>
-
-                                        <input id="temp_dpp" name="temp_dpp" type="text" class="form-control text-right" value="0" readonly>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Disc</label>
-
-                                        <input id="temp_disc" name="temp_disc" type="text" class="form-control text-right" value="0" readonly>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Disc Nota</label>
-
-                                        <input id="temp_disc_nota" name="temp_disc_nota" type="text" class="form-control text-right" value="0" readonly>
-
-                                    </div>
-
-                                </div>
-
-
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>PPN <?= PPN_TEXT ?></label>
-
-                                        <input id="temp_tax" name="temp_tax" type="text" class="form-control text-right" value="0" readonly>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Ongkir</label>
-
-                                        <input id="temp_ongkir" name="temp_ongkir" type="text" class="form-control text-right" value="0" readonly>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Harga</label>
-
-                                        <input id="temp_price" name="temp_price" type="text" class="form-control text-right" value="0" readonly>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Qty Retur</label>
-                                        <input id="temp_qty_buy" name="temp_qty_buy" type="hidden" class="form-control text-right" value="0" required readonly>
-                                        <input id="temp_qty_retur" name="temp_qty_retur" type="text" class="form-control text-right" value="0" data-parsley-vqty required>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-6"></div>
-                                <div class="col-sm-5">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Total</label>
-
-                                        <input id="temp_total" name="temp_total" type="text" class="form-control text-right" value="0" readonly>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-1">
-
-                                    <!-- text input -->
-
-                                    <label>&nbsp;</label>
-
-                                    <div class="form-group">
-
-                                        <div class="col-12">
-
-                                            <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle" ><i class="fas fa-plus"></i></button>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </form>
-
-
-
-                        <div class="row mb-2">
-
-                            <div class="col-12">
-
-                                <table id="tbltemp" class="table table-bordered table-hover" width="100%">
-
-                                    <thead>
-
-                                        <tr>
-
-                                            <th data-priority="1">#</th>
-
-                                            <th data-priority="2">No Pembelian</th>
-
-                                            <th data-priority="3">Kode Produk</th>
-
-                                            <th data-priority="4" width="25%;">Produk</th>
-
-                                            <th data-priority="5">Harga</th>
-
-                                            <th data-priority="6">Qty Retur</th>
-
-                                            <th data-priority="7">Total</th>
-
-                                            <th data-priority="8">Aksi</th>
-
-                                        </tr>
-
-                                    </thead>
-
-                                    <tbody> </tbody>
-
-                                </table>
-
-                                <template id="template_row_temp">
-
-                                    <tr>
-
-                                        <td>{row}</td>
-
-                                        <td>{invoice_no}</td>
-
-                                        <td>{item_code}</td>
-
-                                        <td width="20%">{product_name}</td>
-
-                                        <td>Rp. {price}</td>
-
-                                        <td>{qty_retur}</td>
-
-                                        <td>Rp. {total}</td>
-
-                                        <td>
-
-                                            <button data-id="{item_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
-
-                                               <i class="fas fa-edit"></i>
-
-                                           </button>
-
-                                           &nbsp;
-
-                                           <button data-id="{item_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
-
-                                               <i class="fas fa-minus"></i>
-
-                                           </button>
-
-                                       </td>
-
-                                   </tr>
-
-                               </template>
-
-
-                           </div>
-
-                       </div>
-
-
-
-                       <div class="row form-space">
-
-                        <div class="col-lg-6">
-
-                            <div class="form-group">
-
-                                <div class="col-sm-12">
-
-                                    <textarea id="retur_remark" name="retur_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="3"></textarea>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="col-lg-6 text-right">
-
-                            <div class="form-group row">
-                                <label for="footer_sub_total" class="col-sm-4 col-form-label text-right:">Total :</label>
-                                <div class="col-sm-8">
-                                    <input id="footer_sub_total" name="footer_sub_total" type="text" class="form-control text-right" value="0" readonly>
-                                </div>
-                            </div>
-
-                            <div class="form-group row" style="margin-top: 30px;">
-                                <div class="col-sm-12">
-                                    <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
-                                    <button id="btnsave" class="btn btn-success button-header-custom-save"><i class="fas fa-save"></i> Simpan</button>
-                                </div>
-                            </div>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- /.card -->
-
-        </div>
-
-        <!-- /.col -->
-    </div>
-
-    <!-- /.row -->
-
-</div><!-- /.container-fluid -->
 
 </section>
 
@@ -643,19 +544,13 @@ $assetsUrl = base_url('assets');
 
         let temp_total = new AutoNumeric('#temp_total', configRp);
 
-        let temp_disc = new AutoNumeric('#temp_disc', configRp);
-
         let temp_disc_nota = new AutoNumeric('#temp_disc_nota', configRp);
-
-        let temp_dpp = new AutoNumeric('#temp_dpp', configRp);
-
-        let temp_ongkir = new AutoNumeric('#temp_ongkir', configRp);
 
         let footer_sub_total = new AutoNumeric('#footer_sub_total', configRp);
 
-        let hd_retur_total_transaction = new AutoNumeric('#hd_retur_total_transaction', configRp);
+        $('#store_id').prop('disabled', true);
 
-        $('#warehouse').prop('disabled', true);
+        $('#customer_id').prop("disabled", true);
 
         // init component //
 
@@ -666,58 +561,14 @@ $assetsUrl = base_url('assets');
             $('.btnprint').prop('disabled', !hasRole('retur_purchase.print'));
         }
 
-        // select2 //
+        // select2 //    
 
-
-        $("#tblreturpurcase").on('click', '.btnrepayment', function(e) {
-            e.preventDefault();
-            let id = $(this).attr('data-id');
-            let actUrl = base_url + '/webmin/retur/getByid/' + id;
-            ajax_get(actUrl, null, {
-                success: function(response) {
-                    console.log(response);
-                    if (response.success) {
-                        if (response.result.success) {
-                            if(response.result.data.hd_retur_status == 'Pending'){
-                                editMode(response.result.data);
-                            }else{
-                                message.info('Transaksi yang sudah selesai atau dibatalkan tidak dapat di ubah lagi');
-                            }
-                        } else {
-                            message.error(response.result.message);
-                        }
-                    }
-                }
-            })
-
-        })
-
-
-        function editMode(data) {
-            console.log(data);
-            let form = $('#frmaddpaymentretur');
-            $('#hd_retur_purchase_id').val(data.hd_retur_purchase_id);
-            $('#hd_retur_purchase_invoice').val(data.hd_retur_purchase_invoice);
-            hd_retur_total_transaction.set(data.hd_retur_total_transaction);
-            $('#modal-addreturpayment').modal(configModal);
-        }
-
-        $('.close-modal').click(function(e) {
-            e.preventDefault();
-            message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
-                let yes = parseMessageResult(answer);
-                if (yes) {
-                    $('#modal-addreturpayment').modal('hide');
-                }
-            })
-        })
-
-        $("#warehouse").select2({
-            placeholder: '-- Pilih Gudang --',
+        $("#store_id").select2({
+            placeholder: '-- Pilih Store --',
             width: "100%",
             allowClear: true,
             ajax: {
-                url: base_url + "/webmin/select/warehouse",
+                url: base_url + "/webmin/select/store",
                 dataType: "json",
                 type: "GET",
                 delay: select2Delay,
@@ -734,14 +585,12 @@ $assetsUrl = base_url('assets');
             },
         });
 
-
-        $("#supplier_id").select2({
-
-            placeholder: '-- Pilih Supplier --',
+        $("#customer_id").select2({
+            placeholder: '-- Pilih Customer --',
             width: "100%",
             allowClear: true,
             ajax: {
-                url: base_url + "/webmin/select/supplier",
+                url: base_url + "/webmin/select/customer",
                 dataType: "json",
                 type: "GET",
                 delay: select2Delay,
@@ -756,9 +605,9 @@ $assetsUrl = base_url('assets');
                     };
                 },
             },
-        });
+        }); 
 
-        let tblreturpurcase = $("#tblreturpurcase").DataTable({
+        let tblretursalesadmin = $("#tblretursalesadmin").DataTable({
             processing: true,
             select: true,
             serverSide: true,
@@ -771,7 +620,7 @@ $assetsUrl = base_url('assets');
                 url: lang_datatables,
             },
             ajax: {
-                url: base_url + '/webmin/retur/tblreturpurchase',
+                url: base_url + '/webmin/retur/tblretursalesadmin',
                 type: "POST",
                 error: function() {
                     notification.danger('Gagal memuat table, harap coba lagi');
@@ -796,46 +645,6 @@ $assetsUrl = base_url('assets');
             ],
         });
 
-        $('#purchase_no').autocomplete({   
-
-            minLength: 2,
-
-            source: function(req, add) {
-
-                $.ajax({
-
-                    url: base_url + '/webmin/retur/get-no-purchase?sup='+$('#supplier_id').val(),
-
-                    dataType: 'json',
-
-                    type: 'GET',
-
-                    data: req,
-
-                    success: function(res) {
-
-                        if (res.success == true) {
-
-                            add(res.data);
-
-                        }else{
-
-                         message.error(res.message);
-
-                         $('#purchase_no').val('');
-
-                     }
-
-                 },
-
-             });
-
-            }
-
-        });
-        
-
-
         $('#product_name').autocomplete({   
 
             minLength: 2,
@@ -844,7 +653,61 @@ $assetsUrl = base_url('assets');
 
                 $.ajax({
 
-                    url: base_url + '/webmin/retur/search-product-noinvoice?purchase_no='+$('#purchase_no').val(),
+                    url: base_url + '/webmin/retur/search-retur-sales-admin-product?sales_admin_id='+$('#sales_admin_id').val(),
+
+                    dataType: 'json',
+
+                    type: 'GET',
+
+                    data: req,
+
+                    success: function(res) {
+
+                       if (res.success == true) {
+
+                        add(res.data);
+
+                    }else{
+
+                     message.error(res.message);
+
+                     $('#product_name').val('');
+
+                 }
+
+             },
+
+         });
+
+            },
+
+            select: function(event, ui) {
+
+                $('#item_id').val(ui.item.item_id);
+
+                temp_disc_nota.set(parseFloat(ui.item.temp_disc_nota));
+
+                temp_tax.set(parseFloat(ui.item.temp_tax));
+
+                temp_price.set(parseFloat(ui.item.temp_price));
+
+                temp_qty_buy.set(parseFloat(ui.item.temp_qty_buy));
+
+            },
+
+        });
+
+
+
+        $('#sales_no').autocomplete({   
+
+            minLength: 2,
+
+            source: function(req, add) {
+
+                $.ajax({
+
+                    url: base_url + '/webmin/retur/search-sales-invoice',
 
                     dataType: 'json',
 
@@ -862,7 +725,7 @@ $assetsUrl = base_url('assets');
 
                          message.error(res.message);
 
-                         $('#product_name').val('');
+                         $('#sales_no').val('');
 
                      }
 
@@ -874,25 +737,47 @@ $assetsUrl = base_url('assets');
 
             select: function(event, ui) {
 
-                $('#item_id').val(ui.item.item_id);
+                let id = ui.item.id;
 
-                temp_dpp.set(parseFloat(ui.item.purchase_dpp));
+                let actUrl = base_url + '/webmin/retur/get-sales-admin-byid/' + id;
 
-                temp_disc.set(parseFloat(ui.item.purchase_discount));
+                ajax_get(actUrl, null, {
 
-                temp_disc_nota.set(parseFloat(ui.item.purchase_discount_nota));
+                    success: function(response) {
 
-                temp_disc_nota.set(parseFloat(ui.item.purchase_discount_nota));
+                        if (response.success) {
 
-                temp_ongkir.set(parseFloat(ui.item.purchase_ongkir));
+                            if (response.result.success) {
 
-                temp_qty_buy.set(parseFloat(ui.item.purchase_qty));
+                                let data = response.result.data;
 
-                temp_tax.set(parseFloat(ui.item.purchase_ppn));
+                                let customer_id = data.sales_customer_id;
 
-                temp_price.set(parseFloat(ui.item.purchase_price));
+                                let customer_name = data.customer_name;
 
-                setSelect2('#warehouse', ui.item.warehouse_id, ui.item.warehouse_name);
+                                let store_id = data.sales_store_id;
+
+                                let store_name = data.store_code + ' ' + data.store_name;
+
+                                let sales_admin_id = data.sales_admin_id;
+
+                                setSelect2('#customer_id', customer_id, customer_name);
+
+                                setSelect2('#store_id', store_id, store_name);
+
+                                $('#sales_admin_id').val(sales_admin_id);
+
+                            } else {
+
+                                message.error(response.result.message);
+
+                            }
+
+                        }
+
+                    }
+
+                })
 
             },
 
@@ -905,11 +790,17 @@ $assetsUrl = base_url('assets');
 
             let btnSubmit = $('#btnsave');
 
-            let hd_retur_purchase_id = $('#hd_retur_purchase_id_edit').val();
+            let sales_admin_id = $('#sales_admin_id').val();
 
-            let supplier_id = $('#supplier_id').val();
+            let sales_admin_invoice = $('#sales_no').val();
+
+            let hd_retur_sales_admin_id = $('#hd_retur_sales_admin_id').val();
 
             let retur_date = $('#retur_date').val();
+
+            let customer_id = $('#customer_id').val();
+
+            let store_id = $('#store_id').val();
 
             let retur_remark = $('#retur_remark').val();
 
@@ -917,62 +808,65 @@ $assetsUrl = base_url('assets');
 
             let question = 'Yakin ingin menyimpan data Pembelian?';
 
-            let actUrl = base_url + '/webmin/retur/save/add';
+            let actUrl = base_url + '/webmin/retur/save-retur-admin/add';
 
             if (formMode == 'edit') {
 
                 question = 'Yakin ingin memperbarui data Retur?';
 
-                actUrl = base_url + '/webmin/retur/save/edit';
+                actUrl = base_url + '/webmin/retur/save-retur-admin/edit';
 
             }
 
-            if(supplier_id == null){
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Silahkan Isi Nama Supplier!'
-                })
 
-            }else{
 
-                message.question(question).then(function(answer) {
+            message.question(question).then(function(answer) {
 
-                    let yes = parseMessageResult(answer);
+                let yes = parseMessageResult(answer);
 
-                    if (yes) {
+                if (yes) {
 
-                        let formValues = {
+                    let formValues = {
 
-                            hd_retur_purchase_id:hd_retur_purchase_id,
+                        hd_retur_sales_admin_id:hd_retur_sales_admin_id,
 
-                            hd_retur_date: retur_date,
+                        sales_admin_id:sales_admin_id,
 
-                            hd_retur_supplier_id: supplier_id,
+                        hd_retur_date: retur_date,
 
-                            hd_retur_total_transaction: footer_sub_total_val,
+                        sales_admin_invoice: sales_admin_invoice,
 
-                            hd_retur_desc: retur_remark,
+                        sales_admin_id:sales_admin_id,
 
-                        };
+                        hd_retur_customer_id: customer_id,
 
-                        btnSubmit.prop('disabled', true);
+                        hd_retur_store_id: store_id,
 
-                        ajax_post(actUrl, formValues, {
+                        hd_retur_total_transaction: footer_sub_total_val,
 
-                            success: function(response) {
+                        hd_retur_desc: retur_remark,
 
-                                if (response.success) {
+                    };
 
-                                    if (response.result.success) {
+                    btnSubmit.prop('disabled', true);
+
+                    ajax_post(actUrl, formValues, {
+
+                        success: function(response) {
+
+                            if (response.success) {
+
+                                if (response.result.success) {
 
                                         //form[0].reset();
 
                                         notification.success(response.result.message);
 
-                                        //orm.parsley().reset();
+                                        //form.parsley().reset();
 
                                         showInputPage(false);
+
+                                        clearHeader();
 
                                     } else {
 
@@ -998,11 +892,9 @@ $assetsUrl = base_url('assets');
 
                         });
 
-                    }
+                }
 
-                })
-
-            }
+            })
 
         });
 
@@ -1059,8 +951,6 @@ $assetsUrl = base_url('assets');
 
                                     $('#payment_type').val('');
 
-                                    $('#modal-addreturpayment').modal('hide');
-
 
 
                                 } else {
@@ -1093,7 +983,7 @@ $assetsUrl = base_url('assets');
 
         });
 
-        $("#tblreturpurcase").on('click', '.btndelete', function(e) {
+        $("#tblretursalesadmin").on('click', '.btndelete', function(e) {
 
             e.preventDefault();
 
@@ -1105,7 +995,7 @@ $assetsUrl = base_url('assets');
 
                 if (yes) {
 
-                    let actUrl = base_url + '/webmin/retur/cancel-retur/' + id;
+                    let actUrl = base_url + '/webmin/retur/cancel-retur-sales-admin/' + id;
 
                     ajax_get(actUrl, null, {
 
@@ -1138,62 +1028,36 @@ $assetsUrl = base_url('assets');
 
         })
 
-        $("#tblreturpurcase").on('click', '.btnedit', function(e) {
+        $("#tblretursalesadmin").on('click', '.btnedit', function(e) {
 
             e.preventDefault();
 
 
             let id = $(this).attr('data-id');
 
-            let actUrl = base_url + '/webmin/retur/edit-retur-purchase/' + id;
+            let actUrl = base_url + '/webmin/retur/edit-retur-sales-admin/' + id;
 
             ajax_get(actUrl, null, {
 
                 success: function(response) {
 
-                    console.log(response.result.data);
-
                     if (response.success) {
 
                         if (response.result.success) {
 
-                            let form = $('#frm-purchase-order-consignment');
+                            let form = $('#frmretursalesadmin');
 
                             let items = response.result.data;
 
                             let header = response.result.header;
 
-                            let supplier_id = header.supplier_id;
-
-                            let supplier_name = header.supplier_name;
-
-                            let warehouse_id = header.purchase_order_consignment_warehouse_id;
-
-                            let warehouse_name  = header.warehouse_name;
-
-                            let purchase_order_consignment_invoice = header.purchase_order_consignment_invoice;
-
-                            let purchase_order_consignment_id = header.purchase_order_consignment_id;
-
                             if (header.hd_retur_status == 'Pending') {
 
-                                $('#title-frm-purchase-order-consignment').html('Ubah Pengajuan Pesanan');
+                                $('#title-frmretursalesadmin').html('Ubah Penjualan Admin');
+
+                                $('#hd_retur_sales_admin_id').val(header.hd_retur_sales_admin_id);
 
                                 formMode = 'edit';
-
-                                setSelect2('#supplier_id', supplier_id, supplier_name);
-
-                                $('#supplier_id').prop("disabled", true);
-
-                                setSelect2('#warehouse', warehouse_id, warehouse_name);
-
-                                $('#warehouse').prop("disabled", true);
-
-                                $('#purchase_order_consignment_invoice').val(purchase_order_consignment_invoice);
-
-                                $('#purchase_order_consignment_id').val(purchase_order_consignment_id);
-
-                                $('#hd_retur_purchase_id_edit').val(header.hd_retur_purchase_id);
 
                                 loadTempData(items);
 
@@ -1201,7 +1065,7 @@ $assetsUrl = base_url('assets');
 
                             } else {
 
-                                message.info('Pesanan yang sudah selesai atau dibatalkan tidak dapat di ubah lagi');
+                                message.info('Penjualan yang sudah diproses atau dibatalkan tidak dapat di ubah lagi');
 
                             }
 
@@ -1221,7 +1085,7 @@ $assetsUrl = base_url('assets');
         })
 
         function updateTableHeader() {
-            tblreturpurcase.ajax.reload(null, false);
+            tblretursalesadmin.ajax.reload(null, false);
         }
 
 
@@ -1229,27 +1093,15 @@ $assetsUrl = base_url('assets');
 
             e.preventDefault();
 
-            let purchase_no = $('#purchase_no').val();
-
-            let supplier_id = $('#supplier_id').val();
-
-            let supplier_name = $("#supplier_id option:selected" ).text();
+            let retur_sales_admin_invoice = $('#sales_no').val();
 
             let item_id = $('#item_id').val();
-
-            let warehouse = $('#warehouse').val();
 
             let price = parseFloat(temp_price.getNumericString());
 
             let tax = parseFloat(temp_tax.getNumericString());
 
-            let dpp = parseFloat(temp_dpp.getNumericString());
-
-            let disc = parseFloat(temp_disc.getNumericString());
-
             let disc_nota = parseFloat(temp_disc_nota.getNumericString());
-
-            let ongkir = parseFloat(temp_ongkir.getNumericString());
 
             let qty_buy = parseFloat(temp_qty_buy.getNumericString());
 
@@ -1265,15 +1117,11 @@ $assetsUrl = base_url('assets');
 
             if (form.parsley().isValid()) {
 
-                let actUrl = base_url + '/webmin/retur/temp-add';
+                let actUrl = base_url + '/webmin/retur/temp-add-salesadmin';
 
                 let formValues = {
 
-                    retur_invoice_no: purchase_no,
-
-                    retur_supplier_id:supplier_id,
-
-                    retur_supplier_name:supplier_name,
+                    retur_sales_admin_invoice: retur_sales_admin_invoice,
 
                     retur_item_id: item_id,
 
@@ -1281,15 +1129,9 @@ $assetsUrl = base_url('assets');
 
                     retur_ppn: tax,
 
-                    retur_dpp: dpp,
-
-                    retur_disc: disc,
+                    retur_qty_sell : qty_buy,
 
                     retur_disc_nota: disc_nota,
-
-                    retur_ongkir: ongkir,
-
-                    retur_warehouse: warehouse,
 
                     retur_qty_buy: qty_buy,
 
@@ -1310,10 +1152,6 @@ $assetsUrl = base_url('assets');
                             if (response.result.success) {
 
                                 $('#product_name').focus();
-
-                                setSelect2('#supplier_id', supplier_id, supplier_name);
-
-                                $('#supplier_id').attr("disabled", true);
 
                                 notification.success(response.result.message);
 
@@ -1453,21 +1291,13 @@ $assetsUrl = base_url('assets');
 
                 $('#product_name').val(json.product_name +'('+json.unit_name+')');
 
-                temp_dpp.set(json.retur_dpp);
-
-                temp_disc.set(json.retur_disc);
-
                 temp_disc_nota.set(json.retur_disc_nota);
-
-                temp_ongkir.set(json.retur_ongkir);
 
                 temp_price.set(json.retur_price);
 
                 temp_tax.set(json.retur_ppn);
 
-                setSelect2('#warehouse', json.retur_warehouse, json.warehouse_name);
-
-                temp_qty_buy.set(json.retur_qty_buy);
+                temp_qty_buy.set(json.retur_qty_sell);
 
                 temp_qty_retur.set(json.retur_qty);
 
@@ -1490,7 +1320,7 @@ $assetsUrl = base_url('assets');
 
             let id = $(this).attr('data-id');
 
-            let actUrl = base_url + '/webmin/retur/temp-delete/' + id;
+            let actUrl = base_url + '/webmin/retur/temp-delete-sales-admin/' + id;
 
             ajax_get(actUrl, null, {
 
@@ -1543,7 +1373,17 @@ $assetsUrl = base_url('assets');
 
                 let data_json = htmlEntities.encode(JSON.stringify(val));
 
-                let purchase_invoice_no = val.retur_purchase_invoice;
+                let sales_admin_invoice = val.retur_sales_admin_invoice;
+
+                let sales_admin_id = val.sales_admin_id;
+
+                let customer_id = val.customer_id;
+
+                let customer_name = val.customer_name;
+
+                let store_id = val.store_id;
+
+                let store_name = val.store_name;
 
                 let item_code = val.item_code;
 
@@ -1552,8 +1392,6 @@ $assetsUrl = base_url('assets');
                 let product_name  = val.product_name+'('+val.unit_name+')';
 
                 let price = parseFloat(val.retur_price);
-
-                let warehouse = val.warehouse_name;
 
                 let qty_retur = parseFloat(val.retur_qty);
 
@@ -1565,15 +1403,11 @@ $assetsUrl = base_url('assets');
 
                 .replaceAll('{item_id}', item_id)
 
-                .replaceAll('{invoice_no}', purchase_invoice_no)
-
                 .replaceAll('{item_code}', item_code)
 
                 .replaceAll('{product_name}', product_name)
 
                 .replaceAll('{price}', numberFormat(price, true))
-
-                .replaceAll('{warehouse}', warehouse)
 
                 .replaceAll('{qty_retur}', numberFormat(qty_retur, true))
 
@@ -1586,6 +1420,18 @@ $assetsUrl = base_url('assets');
                 tbody += item;
 
                 row++;
+
+                $('#sales_no').val(sales_admin_invoice);
+
+                $('#sales_no').prop("disabled", true);
+
+                $('#sales_no').val(sales_admin_invoice);
+
+                $('#sales_admin_id').val(sales_admin_id);
+
+                setSelect2('#customer_id', customer_id, customer_name);
+
+                setSelect2('#store_id', store_id, store_name);
 
             });
 
@@ -1639,7 +1485,7 @@ $assetsUrl = base_url('assets');
             },
             {
 
-                targets: [0, 7],
+                targets: [0, 6],
 
                 orderable: false,
 
@@ -1665,16 +1511,18 @@ $assetsUrl = base_url('assets');
             let qtybuy_compare = parseFloat(temp_qty_buy.getNumericString());
             let qtyretur_compare = parseFloat(temp_qty_retur.getNumericString());
             let temp_price_cal = parseFloat(temp_price.getNumericString());
+            let temp_disc_nota_cal = parseFloat(temp_disc_nota.getNumericString());
+            let temp_ppn_cal = parseFloat(temp_tax.getNumericString());
             if(qtybuy_compare < qtyretur_compare){
                 Swal.fire({
                   icon: 'error',
                   title: 'Oops...',
-                  text: 'Qty Retur Tidak Boleh Melebih Qty Beli'
+                  text: 'Qty Retur Tidak Boleh Melebih Qty Jual'
               })
                 temp_qty_retur.set(0);
                 temp_total.set(0);
             }else{
-                temp_total.set(qtyretur_compare * temp_price_cal);
+                temp_total.set((qtyretur_compare * temp_price_cal) - (temp_disc_nota_cal * qtyretur_compare) + (temp_ppn_cal * qtyretur_compare));
             }
         });
 
@@ -1711,7 +1559,7 @@ $assetsUrl = base_url('assets');
         }
 
         function setfootervalue() {
-            let actUrl = base_url + '/webmin/retur/get-retur-footer';
+            let actUrl = base_url + '/webmin/retur/get-retur-sales-admin-footer';
             ajax_get(actUrl, null, {
                 success: function(response) {   
                     if (response.result.success == 'TRUE') {
@@ -1754,25 +1602,31 @@ $assetsUrl = base_url('assets');
 
             temp_total.set(0);
 
-            temp_dpp.set(0);
-
-            temp_disc.set(0);
-
             temp_disc_nota.set(0);
-
-            temp_ongkir.set(0);
-
-            setSelect2('#warehouse', '', '');
 
         }
 
-        $("#tblreturpurcase").on('click', '.btnprint', function(e) {
+        function clearHeader() {
+
+            let form = $('#frmretursalesadmin');
+
+            $('#sales_no').val('');
+
+            $('#sales_no').prop("disabled", false);
+
+            setSelect2('#customer_id', '', '');
+
+            setSelect2('#store_id', '', '');
+
+        }
+
+        $("#tblretursalesadmin").on('click', '.btnprint', function(e) {
 
             e.preventDefault();
 
             let id = $(this).attr('data-id');
 
-            let actUrl = base_url + '/webmin/retur/printinvoice/' + id;
+            let actUrl = base_url + '/webmin/retur/printinvoice-sales-admin/' + id;
 
             window.open(actUrl, '_blank').focus();
 
@@ -1781,23 +1635,15 @@ $assetsUrl = base_url('assets');
 
         $('#btnadd').click(function(e) {
             e.preventDefault();
-            let actUrl = base_url + '/webmin/retur/get-retur-temp';
+            let actUrl = base_url + '/webmin/retur/get-retur-sales-admin-temp';
             ajax_get(actUrl, null, {
                 success: function(response) {   
                     if (response.result.success == 'TRUE') {
-                        let form = $('#frmreturpurchase');
+                        let form = $('#frmretursalesadmin');
                         let items = response.result.data;
-                        $('#title-frmreturpurchase').html('Tambah Retur Pembelian');
+                        $('#title-frmretursalesadmin').html('Tambah Retur Penjualan Admin');
                         formMode = 'add';
-                        setSelect2('#supplier_id', "", "");
-                        $('#supplier_id').prop("disabled", false);
                         loadTempData(items);
-                        if(items.length != 0){
-                            let supplier_ids = items[0].retur_supplier_id;
-                            let supplier_names = items[0].retur_supplier_name;
-                            setSelect2('#supplier_id', supplier_ids, supplier_names);
-                            $('#supplier_id').attr("disabled", true);
-                        }
                         clearItemInput();
                         showInputPage(true);
                     } else {

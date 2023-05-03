@@ -95,12 +95,41 @@ class M_salesmanadmin extends Model
         return $save;
     }
 
+
     public function getOrder($sales_admin_id = '')
     {
 
         $builder = $this->db->table($this->table_hd_sales_admin);
 
-        $builder->select('hd_sales_admin.*,dt_sales_admin.*, ms_payment_method.*, customer_name,customer_address,customer_phone,customer_npwp,store_code,store_name,user_account.user_realname, ms_salesman.salesman_name, ms_salesman.salesman_code, pc_districts.dis_name,pc_subdistricts.subdis_name,pc_cities.city_name, pc_provinces.prov_name,ms_mapping_area.postal_code, hd_sales_admin.created_at as created_at');
+        $builder->select('hd_sales_admin.*,dt_sales_admin.*, ms_payment_method.*, customer_name,customer_address,customer_phone,customer_npwp,store_code,store_name,user_account.user_realname, ms_salesman.salesman_name, ms_salesman.salesman_code, hd_sales_admin.created_at as created_at');
+
+        $builder->join('dt_sales_admin', 'dt_sales_admin.sales_admin_id = hd_sales_admin.sales_admin_id');
+
+        $builder->join('user_account', 'user_account.user_id = hd_sales_admin.user_id');
+
+        $builder->join('ms_customer', 'ms_customer.customer_id  = hd_sales_admin.sales_customer_id');
+
+        $builder->join('ms_salesman', 'ms_salesman.salesman_id  = hd_sales_admin.sales_salesman_id');
+
+        $builder->join('ms_store', 'ms_store.store_id  = hd_sales_admin.sales_store_id');
+
+        $builder->join('ms_payment_method', 'ms_payment_method.payment_method_id  = hd_sales_admin.sales_payment_type');
+
+        if ($sales_admin_id  != '') {
+
+            $builder->where(['hd_sales_admin.sales_admin_id' => $sales_admin_id ]);
+
+        }
+
+        return $builder->get();
+    }
+
+    public function getOrderEfaktur($sales_admin_id = '')
+    {
+
+        $builder = $this->db->table($this->table_hd_sales_admin);
+
+        $builder->select('hd_sales_admin.*,dt_sales_admin.*, ms_payment_method.*, customer_name,customer_address,customer_phone,customer_npwp,customer_address_number,customer_address_block,customer_address_rt,customer_address_rw,store_code,store_name,user_account.user_realname, ms_salesman.salesman_name, ms_salesman.salesman_code, pc_districts.dis_name,pc_subdistricts.subdis_name,pc_cities.city_name, pc_provinces.prov_name,ms_mapping_area.postal_code, hd_sales_admin.created_at as created_at');
 
         $builder->join('dt_sales_admin', 'dt_sales_admin.sales_admin_id = hd_sales_admin.sales_admin_id');
 
@@ -201,7 +230,7 @@ class M_salesmanadmin extends Model
 
 
 
-        $sqlDtSalesAdmin = "insert into dt_sales_admin(sales_admin_id,dt_item_id,dt_temp_qty,dt_purchase_price,dt_purchase_tax,dt_purchase_cogs,dt_product_price,dt_disc1,dt_price_disc1_percentage,dt_disc2,dt_price_disc2_percentage,dt_disc3,dt_price_disc3_percentage,dt_total_discount,dt_total_dpp,dt_total_ppn,dt_sales_price,user_id) VALUES";
+        $sqlDtSalesAdmin = "insert into dt_sales_admin(sales_admin_id,dt_item_id,dt_temp_qty,dt_purchase_price,dt_purchase_tax,dt_purchase_cogs,dt_product_price,dt_disc1,dt_price_disc1_percentage,dt_disc2,dt_price_disc2_percentage,dt_disc3,dt_price_disc3_percentage,dt_total_discount,dt_total_dpp,dt_total_ppn,dt_sales_price,dt_total_discount_nota,user_id) VALUES";
 
         $sqlUpdateStock = "insert into ms_product_stock (product_id  , warehouse_id  , stock) VALUES";
 
@@ -210,6 +239,7 @@ class M_salesmanadmin extends Model
         $sqlDtValues = [];
         $vUpdateStock = [];
         $vUpdateWarehouse = [];
+
 
         $getTotalItem = $this->db->table($this->table_temp_sales_admin)->select('sum(temp_qty * product_content) as qty')->join('ms_product_unit', 'ms_product_unit.item_id = temp_sales_admin.item_id')->where('user_id', $data['user_id'])->get()->getRowArray();
 
@@ -240,7 +270,7 @@ class M_salesmanadmin extends Model
             $discount_per_nota          = round(($data['sales_admin_total_discount'] / $total_qty_all), 2);
             $discount_nota_per_item     = round($dt_sales_price - ($discount_per_nota * $base_purchase_stock), 2);
 
-            $ppn_per_item               = round((($dt_sales_price - $discount_nota_per_item) * 0.11), 2);
+            $ppn_per_item               = round(($data['sales_admin_ppn'] / $total_qty_all), 2);
 
             $dt_total_discount          = $dt_disc1 + $dt_disc2 + $dt_disc3;
             $dt_total_ppn               = $ppn_per_item * $base_purchase_stock;
@@ -261,7 +291,7 @@ class M_salesmanadmin extends Model
                 $exp_date_ed     = $getLastEd['exp_date'];
                 $stock_ed        = $getLastEd['stock'];
             }
-            $sqlDtValues[] = "('$sales_admin_id','$dt_item_id','$dt_temp_qty','$dt_purchase_price','$dt_purchase_tax','$dt_purchase_cogs','$dt_product_price','$dt_disc1','$dt_price_disc1_percentage','$dt_disc2','$dt_price_disc2_percentage','$dt_disc3','$dt_price_disc3_percentage','$dt_total_discount','$dt_total_dpp','$dt_total_ppn','$dt_sales_price','$user_id')";
+            $sqlDtValues[] = "('$sales_admin_id','$dt_item_id','$dt_temp_qty','$dt_purchase_price','$dt_purchase_tax','$dt_purchase_cogs','$dt_product_price','$dt_disc1','$dt_price_disc1_percentage','$dt_disc2','$dt_price_disc2_percentage','$dt_disc3','$dt_price_disc3_percentage','$dt_total_discount','$dt_total_dpp','$ppn_per_item','$dt_sales_price','$discount_per_nota','$user_id')";
 
             $vUpdateStock[] = "('$product_id', '$warehouse_id', '$base_purchase_stock')";
 
@@ -396,7 +426,7 @@ class M_salesmanadmin extends Model
             }
 
 
-            $sqlDtSalesAdmin = "insert into dt_sales_admin(sales_admin_id,dt_item_id,dt_temp_qty,dt_purchase_price,dt_purchase_tax,dt_purchase_cogs,dt_product_price,dt_disc1,dt_price_disc1_percentage,dt_disc2,dt_price_disc2_percentage,dt_disc3,dt_price_disc3_percentage,dt_total_discount,dt_total_dpp,dt_total_ppn,dt_sales_price,user_id) VALUES";
+            $sqlDtSalesAdmin = "insert into dt_sales_admin(sales_admin_id,dt_item_id,dt_temp_qty,dt_purchase_price,dt_purchase_tax,dt_purchase_cogs,dt_product_price,dt_disc1,dt_price_disc1_percentage,dt_disc2,dt_price_disc2_percentage,dt_disc3,dt_price_disc3_percentage,dt_total_discount,dt_total_dpp,dt_total_ppn,dt_sales_price,dt_total_discount_nota,user_id) VALUES";
 
             $sqlUpdateStock = "insert into ms_product_stock (product_id  , warehouse_id  , stock) VALUES";
 
@@ -456,7 +486,7 @@ class M_salesmanadmin extends Model
                     $exp_date_ed     = $getLastEd['exp_date'];
                     $stock_ed        = $getLastEd['stock'];
                 }
-                $sqlDtValues[] = "('$sales_admin_id','$dt_item_id','$dt_temp_qty','$dt_purchase_price','$dt_purchase_tax','$dt_purchase_cogs','$dt_product_price','$dt_disc1','$dt_price_disc1_percentage','$dt_disc2','$dt_price_disc2_percentage','$dt_disc3','$dt_price_disc3_percentage','$dt_total_discount','$dt_total_dpp','$dt_total_ppn','$dt_sales_price','$user_id')";
+                $sqlDtValues[] = "('$sales_admin_id','$dt_item_id','$dt_temp_qty','$dt_purchase_price','$dt_purchase_tax','$dt_purchase_cogs','$dt_product_price','$dt_disc1','$dt_price_disc1_percentage','$dt_disc2','$dt_price_disc2_percentage','$dt_disc3','$dt_price_disc3_percentage','$dt_total_discount','$dt_total_dpp','$dt_total_ppn','$dt_sales_price','$discount_per_nota','$user_id')";
 
                 $vUpdateStock[] = "('$product_id', '$warehouse_id', '$base_purchase_stock')";
 

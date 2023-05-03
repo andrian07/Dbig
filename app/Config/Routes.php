@@ -636,6 +636,34 @@ $routes->group('webmin/retur', ['filter' => 'webminauth'], static function ($rou
     $routes->get('cancel-retur/(:alphanum)', 'Webmin\Retur\Retur::cancelRetur/$1');
 
     $routes->get('printinvoice/(:alphanum)', 'Webmin\Retur\Retur::printInvoice/$1');
+
+    $routes->get('sales-admin-retur', 'Webmin\Retur\Retur::salesAdminRetur');
+
+    $routes->get('search-sales-invoice', 'Webmin\Retur\Retur::searchSalesInvoice');
+
+    $routes->get('get-sales-admin-byid/(:alphanum)', 'Webmin\Retur\Retur::getSalesAdminByid/$1');
+
+    $routes->get('search-retur-sales-admin-product', 'Webmin\Retur\Retur::searchReturSalesAdminProduct');
+
+    $routes->post('temp-add-salesadmin', 'Webmin\Retur\Retur::tempAddSalesadmin');
+
+    $routes->get('get-retur-sales-admin-footer', 'Webmin\Retur\Retur::getReturSalesAdminFooter');
+
+    $routes->get('get-retur-sales-admin-temp', 'Webmin\Retur\Retur::getReturSalesAdminTemp');
+
+    $routes->get('temp-delete-sales-admin/(:alphanum)', 'Webmin\Retur\Retur::deleteTempSalesAdmin/$1');
+
+    $routes->post('tblretursalesadmin', 'Webmin\Retur\Retur::tblretursalesadmin');
+
+    $routes->post('save-retur-admin/(:alpha)', 'Webmin\Retur\Retur::saveReturAdmin/$1');
+
+    $routes->get('get-retur-sales-admin-detail/(:alphanum)', 'Webmin\Retur\Retur::getReturSalesAdminDetail/$1');
+
+    $routes->get('edit-retur-sales-admin/(:alphanum)', 'Webmin\Retur\Retur::editReturSalesAdmin/$1');
+
+    $routes->get('cancel-retur-sales-admin/(:alphanum)', 'Webmin\Retur\Retur::cancelReturSalesAdmin/$1');
+
+    $routes->get('printinvoice-sales-admin/(:alphanum)', 'Webmin\Retur\Retur::printInvoiceSalesAdmin/$1');
 });
 
 

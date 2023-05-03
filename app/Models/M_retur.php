@@ -13,6 +13,11 @@ class M_retur extends Model
     protected $table_warehouse_stock = 'ms_warehouse_stock';
     protected $table_warehouse = 'ms_warehouse';
     protected $table_dt_purchase = 'dt_purchase';
+    protected $table_sales_admin = 'hd_sales_admin';
+    protected $table_temp_sales_admin = 'temp_sales_admin';
+    protected $table_temp_retur_sales_admin = 'temp_retur_sales_admin';
+    protected $table_hd_retur_sales_admin = 'hd_retur_sales_admin';
+    protected $table_dt_retur_sales_admin = 'dt_retur_sales_admin';
 
     public function insertTemp($data)
     {
@@ -50,11 +55,64 @@ class M_retur extends Model
 
     }
 
+    public function insertTempSalesAdmin($data)
+    {
+
+        $exist = $this->db->table($this->table_temp_retur_sales_admin)
+
+        ->where('retur_item_id', $data['retur_item_id'])
+
+        ->where('retur_user_id', $data['retur_user_id'])
+
+        ->countAllResults();
+
+
+        if ($exist > 0) {
+
+            return $this->db->table($this->table_temp_retur_sales_admin)
+
+            ->where('retur_item_id', $data['retur_item_id'])
+
+            ->where('retur_user_id', $data['retur_user_id'])
+
+            ->update($data);
+
+        } else {
+
+            $this->db->table($this->table_temp_retur_sales_admin)->where('retur_user_id', $data['retur_user_id'])->where('retur_item_id', $data['retur_item_id'])->delete();
+
+            return $this->db->table($this->table_temp_retur_sales_admin)->insert($data);
+
+        }
+
+    }
+
     public function searchPurchaseBysuplier($keyword, $supplier_id = '', $isItemCode = FALSE, $limit = 10)
     {
         $builder = $this->db->table('hd_purchase');
         $builder->select('purchase_id, purchase_invoice');
         $builder->Like('purchase_invoice', $keyword);
+        return  $builder->limit($limit)->get();
+    }
+
+    public function searchReturSalesAdminProduct($keyword, $sales_admin_id= '', $isItemCode = FALSE, $limit = 10)
+    {
+        $builder = $this->db->table('dt_sales_admin');
+        $builder->select('*')
+        ->join('ms_product_unit', 'ms_product_unit.item_id=dt_sales_admin.dt_item_id')
+        ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+        ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id');
+
+        if ($isItemCode) {
+            $builder->where('ms_product_unit.item_code', $keyword);
+            $builder->where('dt_sales_admin.sales_admin_id', $sales_admin_id);
+        } else {
+            $builder->where('dt_sales_admin.sales_admin_id', $sales_admin_id);
+            $builder->groupStart();
+            $builder->Like('ms_product.product_name', $keyword);
+            $builder->orLike('ms_product_unit.item_code', $keyword);    
+            $builder->groupEnd();
+        }
         return  $builder->limit($limit)->get();
     }
 
@@ -83,10 +141,30 @@ class M_retur extends Model
         return  $builder->limit($limit)->get();
     }
 
+    public function searchInvoiceSalesAdmin($keyword, $isItemCode = FALSE, $limit = 10)
+    {
+        $builder = $this->db->table('hd_sales_admin');
+        $builder->select('*');
+        $builder->Like('sales_admin_invoice', $keyword);
+        return  $builder->limit($limit)->get();
+    }
 
-    public function deletetemp($retur_item_id, $user_id){
+
+    public function deletetemp($retur_item_id, $user_id)
+    {
 
         return $this->db->table($this->table_temp_retur_purchase)
+
+        ->where('retur_item_id', $retur_item_id)
+
+        ->where('retur_user_id', $user_id)
+
+        ->delete();
+    }
+
+    public function deleteTempSalesAdmin($retur_item_id, $user_id)
+    {
+        return $this->db->table($this->table_temp_retur_sales_admin)
 
         ->where('retur_item_id', $retur_item_id)
 
@@ -102,6 +180,18 @@ class M_retur extends Model
         return $builder->select('sum(retur_total) as subTotal')
 
         ->where('temp_retur_purchase.retur_user_id', $user_id)
+
+        ->get();
+
+    }
+
+    public function getReturSalesAdminFooter($user_id){
+
+        $builder = $this->db->table($this->table_temp_retur_sales_admin);
+
+        return $builder->select('sum(retur_total) as subTotal')
+
+        ->where('retur_user_id', $user_id)
 
         ->get();
 
@@ -142,13 +232,49 @@ class M_retur extends Model
         ->get();
     }
 
+    public function getTempReturSalesAdmin($user_id)
+    {
+        $builder = $this->db->table($this->table_temp_retur_sales_admin);
+
+        return $builder->select('store_id, store_name, customer_id, customer_name, temp_retur_sales_admin.*, ms_product_unit.item_code, ms_product.product_id, ms_product.product_code, ms_product_unit.product_content,  ms_product.product_name, temp_retur_sales_admin.retur_item_id, ms_product.product_id, ms_unit.unit_name, hd_sales_admin.sales_admin_id')
+
+        ->join('hd_sales_admin', 'hd_sales_admin.sales_admin_invoice = temp_retur_sales_admin.retur_sales_admin_invoice')
+
+        ->join('ms_customer', 'ms_customer.customer_id = hd_sales_admin.sales_customer_id')
+
+        ->join('ms_store', 'ms_store.store_id = hd_sales_admin.sales_store_id')
+
+        ->join('ms_product_unit', 'ms_product_unit.item_id = temp_retur_sales_admin.retur_item_id')
+
+        ->join('ms_product', 'ms_product.product_id = ms_product_unit.product_id')
+
+        ->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id')
+
+        ->where('temp_retur_sales_admin.retur_user_id', $user_id)
+
+        ->orderBy('temp_retur_sales_admin.retur_update_at', 'ASC')
+
+        ->get();
+    }
+
     public function getTempReturPPNandDPP($user_id)
     {
         $builder = $this->db->table($this->table_temp_retur_purchase);
 
         return $builder->select('sum(retur_ppn) as total_retur_ppn, sum(retur_dpp) as total_retur_dpp')
-        
+
         ->where('temp_retur_purchase.retur_user_id', $user_id)
+
+        ->get();
+    }
+
+    public function getTempReturPPNandDPPSalesAdmin($user_id)
+    {
+        $builder = $this->db->table($this->table_temp_retur_sales_admin);
+
+        return $builder->select('sum(retur_ppn) as total_retur_ppn, sum(retur_price - retur_disc - retur_disc_nota) as total_retur_dpp')
+
+        ->where('temp_retur_sales_admin.retur_user_id', $user_id)
 
         ->get();
     }
@@ -180,7 +306,7 @@ class M_retur extends Model
 
 
         foreach ($getTotalRetur->getResultArray() as $row) {
-         if($hd_retur_payment == 'Ya'){
+           if($hd_retur_payment == 'Ya'){
             $get_purchase_retur_nominal = $this->db->table($this->table_hd_purchase)->select('purchase_retur_nominal')->where('purchase_invoice', $row['dt_retur_purchase_invoice'])->get()->getResultArray();
 
             $total_retur_purchase = $get_purchase_retur_nominal[0]['purchase_retur_nominal'] + $hd_retur_total_transaction;
@@ -331,6 +457,26 @@ class M_retur extends Model
         return $save;
     }
 
+    public function cancelOrderSalesAdmin($hd_retur_sales_admin_id)
+    {
+
+        $this->db->query('LOCK TABLES hd_retur_sales_admin WRITE');
+
+        $save =  $this->db->table($this->table_hd_retur_sales_admin)->where('hd_retur_sales_admin_id', $hd_retur_sales_admin_id)->update(['hd_retur_status' => 'Cancel']);
+
+        $saveQueries = NULL;
+
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries = $this->db->getLastQuery()->getQuery();
+        }
+
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'retur_purchase', $hd_retur_sales_admin_id, 'cancel_retur_sales_admin');
+
+        return $save;
+    }
+
     public function insertRetur($data)
     {
         $this->db->query('LOCK TABLES hd_retur_purchase WRITE, dt_retur_purchase WRITE');
@@ -356,7 +502,7 @@ class M_retur extends Model
 
         $getTempReturPPNandDPP =  $this->getTempReturPPNandDPP($data['created_by'])->getResultArray();
 
-   
+
 
         $data['hd_retur_total_dpp'] = $getTempReturPPNandDPP[0]['total_retur_dpp'];
 
@@ -464,6 +610,159 @@ class M_retur extends Model
         return $save;
     }
 
+    public function insertReturSalesAdmin($data)
+    {
+        $this->db->query('LOCK TABLES hd_retur_sales_admin WRITE, dt_retur_sales_admin WRITE');
+
+        $this->db->transBegin();
+
+        $saveQueries = NULL;
+
+        $maxCode = $this->db->table($this->table_hd_retur_sales_admin)->select('hd_retur_sales_admin_id, hd_retur_sales_admin_invoice')->orderBy('hd_retur_sales_admin_id', 'desc')->limit(1)->get()->getRowArray();
+
+        $invoice_date =  date_format(date_create($data['hd_retur_date']),"y/m");
+
+        if ($maxCode == NULL) {
+
+            $data['hd_retur_sales_admin_invoice'] = 'RTR/A/'.$invoice_date.'/'.'0000000001';
+
+        } else {
+
+            $invoice = substr($maxCode['hd_retur_sales_admin_invoice'], -10);
+
+            $data['hd_retur_sales_admin_invoice'] = 'RTR/A/'.$invoice_date.'/'.substr('000000000' . strval(floatval($invoice) + 1), -10);
+        }
+
+        $getTempReturPPNandDPPSalesAdmin =  $this->getTempReturPPNandDPPSalesAdmin($data['created_by'])->getResultArray();
+
+        $data['hd_retur_total_dpp'] = $getTempReturPPNandDPPSalesAdmin[0]['total_retur_dpp'];
+
+        $data['hd_retur_total_ppn'] = $getTempReturPPNandDPPSalesAdmin[0]['total_retur_ppn'];
+
+        $this->db->table($this->table_hd_retur_sales_admin)->insert($data);
+
+        $hd_retur_sales_admin_id  = $this->db->insertID();
+
+        if ($this->db->affectedRows() > 0) {
+
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
+
+        }
+
+
+        $sqlDtOrder = "insert into dt_retur_sales_admin(hd_retur_sales_admin_id,dt_retur_item_id,dt_retur_price,dt_retur_ppn,dt_retur_dpp,dt_retur_disc,dt_retur_disc_nota,dt_retur_qty,dt_retur_qty_sell,dt_retur_total) VALUES";
+
+        $sqlUpdateStock = "insert into ms_product_stock (product_id  , warehouse_id  , stock) VALUES";
+
+        $sqlUpdateWarehouse = "insert into ms_warehouse_stock (stock_id, product_id , warehouse_id , purchase_id , exp_date, stock) VALUES";
+
+        $sqlDtValues = [];
+        $vUpdateProduct = [];
+        $vUpdateStock = [];
+        $vUpdateWarehouse = [];
+
+
+        $getTemp =  $this->getTempReturSalesAdmin($data['created_by']);
+
+
+        foreach ($getTemp->getResultArray() as $row) {
+
+            $hd_retur_sales_admin_id               = $hd_retur_sales_admin_id ;
+            $dt_retur_item_id                      = $row['retur_item_id'];
+            $dt_retur_price                        = floatval($row['retur_price']);
+            $dt_retur_ppn                          = floatval($row['retur_ppn']);
+            $dt_retur_disc                         = floatval($row['retur_disc']);
+            $dt_retur_disc_nota                    = floatval($row['retur_disc_nota']);
+            $dt_retur_dpp                          = floatval($row['retur_price'] - $row['retur_disc'] - $row['retur_disc_nota']);
+            $dt_retur_qty                          = floatval($row['retur_qty']);
+            $dt_retur_qty_sell                     = floatval($row['retur_qty_sell']);
+            $dt_retur_total                        = floatval($row['retur_total']);
+
+            $sales_admin_id                        = $data['sales_admin_id'];
+
+            $product_id             = $row['product_id'];
+            $product_content        = floatval($row['product_content']);
+            $base_purchase_stock    = $dt_retur_qty * $product_content;
+
+            $getwarehouse = $this->db->table($this->table_warehouse)->select('*')->where('store_id', $data['hd_retur_store_id'])->where('warehouse_name NOT LIKE "%konsinyasi%"')->limit(1)->get()->getRowArray();
+
+            $warehouse_id = $getwarehouse['warehouse_id'];
+
+            $getWarehouseStock = $this->db->table($this->table_warehouse_stock)->select('*')->where('product_id', $product_id)->where('warehouse_id', $warehouse_id)->orderBy('exp_date', 'desc')->limit(1)->get()->getRowArray();
+
+
+
+            $sqlDtValues[] = "('$hd_retur_sales_admin_id','$dt_retur_item_id','$dt_retur_price','$dt_retur_ppn','$dt_retur_dpp','$dt_retur_disc','$dt_retur_disc_nota','$dt_retur_qty','$dt_retur_qty_sell','$dt_retur_total')";
+
+            $vUpdateStock[] = "('$product_id', '$warehouse_id', '$base_purchase_stock')";
+
+            if($getWarehouseStock != null){
+
+                $stock_id    = $getWarehouseStock['stock_id'];
+                $purchase_id = $getWarehouseStock['purchase_id'];
+                $exp_date    = $getWarehouseStock['exp_date'];
+
+                $vUpdateWarehouse[] = "('$stock_id','$product_id', '$warehouse_id', '$purchase_id', '$exp_date', '$base_purchase_stock')";
+            }
+
+        }
+
+        $sqlDtOrder .= implode(',', $sqlDtValues);
+
+        $sqlUpdateStock .= implode(',', $vUpdateStock). " ON DUPLICATE KEY UPDATE stock=stock+VALUES(stock)";
+
+        if($getWarehouseStock != null){
+            $sqlUpdateWarehouse .= implode(',', $vUpdateWarehouse). " ON DUPLICATE KEY UPDATE stock_id=VALUES(stock_id),stock=stock+VALUES(stock)";
+        }
+
+
+
+        $this->db->query($sqlDtOrder);
+        if ($this->db->affectedRows() > 0) {
+
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
+
+        }
+
+        $this->db->query($sqlUpdateStock);
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        }
+
+        if($getWarehouseStock != null){
+            $this->db->query($sqlUpdateWarehouse);
+            if ($this->db->affectedRows() > 0) {
+                $saveQueries[] = $this->db->getLastQuery()->getQuery();
+            }
+        }
+
+
+        if ($this->db->transStatus() === false) {
+
+            $saveQueries[] = NULL;
+
+            $this->db->transRollback();
+
+            $save = ['success' => FALSE, 'hd_retur_sales_admin_id' => 0];
+
+        } else {
+
+            $this->db->transCommit();
+
+            $this->clearTempSalesAdmin($data['created_by']);
+
+            $save = ['success' => TRUE, 'hd_retur_sales_admin_id' => $hd_retur_sales_admin_id ];
+
+        }
+
+
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'retur_sales_admin', $hd_retur_sales_admin_id, 'insertReturSalesAdmin');
+
+        return $save;
+    }
+
     public function clearTemp($user_id)
     {
         return $this->db->table($this->table_temp_retur_purchase)
@@ -473,8 +772,18 @@ class M_retur extends Model
         ->delete();
     }
 
+    public function clearTempSalesAdmin($user_id)
+    {
+        return $this->db->table($this->table_temp_retur_sales_admin)
 
-    public function getRetur($hd_retur_purchase_id){
+        ->where('retur_user_id', $user_id)
+
+        ->delete();
+    }
+
+
+    public function getRetur($hd_retur_purchase_id)
+    {
 
         $builder = $this->db->table($this->table_hd_retur);
 
@@ -489,7 +798,8 @@ class M_retur extends Model
         ->get();
     }
 
-    public function getDtRetur($hd_retur_purchase_id){
+    public function getDtRetur($hd_retur_purchase_id)
+    {
 
         $builder = $this->db->table($this->table_dt_retur);
 
@@ -509,24 +819,90 @@ class M_retur extends Model
 
     }
 
+    public function getReturSalesAdmin($hd_retur_sales_admin_id)
+    {
+
+        $builder = $this->db->table($this->table_hd_retur_sales_admin);
+
+        return $builder->select('*, hd_retur_sales_admin.created_at as created_at')
+
+        ->join('user_account', 'user_account.user_id = hd_retur_sales_admin.created_by')
+
+        ->join('ms_customer', 'ms_customer.customer_id = hd_retur_sales_admin.hd_retur_customer_id')
+
+        ->join('ms_store', 'ms_store.store_id = hd_retur_sales_admin.hd_retur_store_id')
+
+        ->where('hd_retur_sales_admin.hd_retur_sales_admin_id', $hd_retur_sales_admin_id)
+
+        ->get();
+    }
+
+    public function getDtReturSalesAdmin($hd_retur_sales_admin_id)
+    {
+
+        $builder = $this->db->table($this->table_dt_retur_sales_admin);
+
+        return $builder->select('*')
+
+        ->join('ms_product_unit', 'ms_product_unit.item_id = dt_retur_sales_admin.dt_retur_item_id')
+
+        ->join('ms_product', 'ms_product.product_id = ms_product_unit.product_id')
+
+        ->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id')
+
+        ->where('hd_retur_sales_admin_id', $hd_retur_sales_admin_id)
+
+        ->get();
+
+    }
 
     public function getOrder($hd_retur_purchase_id = '')
     {
-        $builder = $this->db->table($this->table);
+        $builder = $this->db->table($this->table_hd_retur);
 
-        $builder->select('*, hd_purchase_order_consignment.created_at as created_at');
+        $builder->select('*, hd_retur_purchase.created_at as created_at');
 
-        $builder->join('user_account', 'user_account.user_id = hd_purchase_order_consignment.purchase_order_consignment_user_id');
+        $builder->join('user_account', 'user_account.user_id = hd_retur_purchase.created_by');
 
-        $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_purchase_order_consignment.purchase_order_consignment_supplier_id');
+        $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_retur_purchase.hd_retur_supplier_id');
 
-        $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_purchase_order_consignment.purchase_order_consignment_warehouse_id');
+        if ($hd_retur_purchase_id  != '') {
 
-        if ($purchase_order_consignment_id  != '') {
-
-            $builder->where(['hd_purchase_order_consignment.purchase_order_consignment_id ' => $purchase_order_consignment_id ]);
+            $builder->where(['hd_retur_purchase.hd_retur_purchase_id ' => $hd_retur_purchase_id ]);
 
         }
+
+        return $builder->get();
+    }
+
+    public function getOrderSalesAdmin($hd_retur_sales_admin_id = '')
+    {
+        $builder = $this->db->table($this->table_hd_retur_sales_admin);
+
+        $builder->select('*, hd_retur_sales_admin.created_at as created_at');
+
+        $builder->join('user_account', 'user_account.user_id = hd_retur_sales_admin.created_by');
+
+        $builder->join('ms_customer', 'ms_customer.customer_id  = hd_retur_sales_admin.hd_retur_customer_id');
+
+        $builder->join('ms_store', 'ms_store.store_id = hd_retur_sales_admin.hd_retur_store_id');
+
+        if ($hd_retur_sales_admin_id != '') {
+
+            $builder->where(['hd_retur_sales_admin.hd_retur_sales_admin_id ' => $hd_retur_sales_admin_id ]);
+
+        }
+
+        return $builder->get();
+    }
+
+    public function getSalesAdmin($sales_admin_id)
+    {
+        $builder = $this->db->table($this->table_sales_admin);
+
+        $builder->select('*');
+
+        $builder->where(['sales_admin_id' => $sales_admin_id]);
 
         return $builder->get();
     }
@@ -552,11 +928,31 @@ class M_retur extends Model
         return $this->getTemp($user_id);
     }
 
+    public function copyReturSalesAdminToTemp($datacopy)
+    {
+        $user_id                   = $datacopy['retur_user_id'];
+        $sales_admin_invoice = $datacopy['sales_admin_invoice'];
+        $hd_retur_sales_admin_id   = $datacopy['hd_retur_sales_admin_id'];
+
+        $this->clearTempSalesAdmin($user_id);
+
+        $sqlText = "INSERT INTO temp_retur_sales_admin(retur_sales_admin_invoice,retur_item_id,retur_price,retur_ppn,retur_disc,retur_disc_nota,retur_qty,retur_qty_sell,retur_total,retur_user_id  ) ";
+
+
+        $sqlText .= "SELECT '".$sales_admin_invoice."' as retur_sales_admin_invoice,dt_retur_item_id,dt_retur_price, dt_retur_ppn,dt_retur_disc,dt_retur_disc_nota,dt_retur_qty,dt_retur_qty_sell,dt_retur_total,'".$user_id."' as retur_user_id";
+
+        $sqlText .= " FROM dt_retur_sales_admin WHERE hd_retur_sales_admin_id = '$hd_retur_sales_admin_id'";
+
+        $this->db->query($sqlText);
+
+        return $this->getTempReturSalesAdmin($user_id);
+    }
+
 
     public function updateOrder($data)
     {
 
-        $this->db->query('LOCK TABLES hd_retur_purchase WRITE, dt_retur_purchase WRITE, temp_retur_purchase WRITE, ms_supplier READ, ms_warehouse READ, user_account READ');
+        $this->db->query('LOCK TABLES hd_retur_purchase WRITE, dt_retur_purchase WRITE, hd_purchase READ, temp_retur_purchase WRITE, ms_supplier READ, ms_warehouse READ, user_account READ');
 
         $hd_retur_purchase_id = $data['hd_retur_purchase_id'];
 
@@ -572,41 +968,54 @@ class M_retur extends Model
 
                 $saveQueries = NULL;
 
-                $user_id = $data['created_at'];
+                $user_id = $data['created_by'];
 
                 unset($data['user_id']);
 
-                $sqlDtOrder = "INSERT INTO dt_retur_purchase(hd_retur_purchase_id,dt_retur_purchase_invoice,dt_retur_supplier_id,dt_retur_item_id,dt_retur_price,dt_retur_ppn,dt_retur_warehouse,dt_retur_qty_buy,dt_retur_qty,dt_retur_total) VALUES ";
+                $sqlDtOrder = "INSERT INTO dt_retur_purchase(hd_retur_purchase_id,dt_retur_purchase_invoice,dt_retur_supplier_id,dt_retur_item_id,dt_retur_price,dt_retur_ppn,dt_retur_dpp,dt_retur_disc,dt_retur_disc_nota,dt_retur_ongkir,dt_retur_warehouse,dt_retur_qty_buy,dt_retur_qty,dt_retur_total) VALUES ";
 
                 $sqlDtValues = [];
 
                 $deleteItemId = [];
 
-                $getTemp =  $this->db->table($this->table_temp_po)->where('temp_po_user_id', $user_id)->get();
+                $getTemp =  $this->getTemp($data['created_by']);
 
                 foreach ($getTemp->getResultArray() as $row) {
 
-                    $hd_retur_purchase_id                       = $hd_retur_purchase_id;
+                    $hd_retur_purchase_id                  = $hd_retur_purchase_id ;
+                    $dt_retur_purchase_invoice             = $row['retur_purchase_invoice'];
+                    $dt_retur_supplier_id                  = $row['retur_supplier_id'];
+                    $dt_retur_item_id                      = $row['retur_item_id'];
+                    $dt_retur_price                        = floatval($row['retur_price']);
+                    $dt_retur_ppn                          = floatval($row['retur_ppn']);
 
-                    $dt_retur_purchase_invoice                  = $row['retur_purchase_invoice'];
+                    $dt_retur_dpp                          = floatval($row['retur_dpp']);
+                    $dt_retur_disc                         = floatval($row['retur_disc']);
+                    $dt_retur_disc_nota                    = floatval($row['retur_disc_nota']);
+                    $dt_retur_ongkir                       = floatval($row['retur_ongkir']);
 
-                    $dt_retur_supplier_id                       = $row['retur_supplier_id'];
+                    $dt_retur_warehouse                    = $row['retur_warehouse'];
+                    $dt_retur_qty                          = floatval($row['retur_qty']);
+                    $dt_retur_qty_buy                      = floatval($row['retur_qty_buy']);
+                    $dt_retur_total                        = floatval($row['retur_total']);
 
-                    $dt_retur_item_id                           = $row['retur_item_id'];
 
-                    $dt_retur_price                             = $row['retur_price'];
+                    $getPurchase = $this->db->table($this->table_hd_purchase)->select('*')->where('purchase_invoice', $dt_retur_purchase_invoice)->get()->getRowArray();
 
-                    $dt_retur_ppn                               = $row['retur_ppn'];
+                    $product_id             = $row['product_id'];
 
-                    $dt_retur_warehouse                         = $row['retur_warehouse'];
+                    $product_content        = floatval($row['product_content']);
 
-                    $dt_retur_qty_buy                           = $row['retur_qty_buy'];
+                    $base_purchase_stock    = $dt_retur_qty * $product_content;
 
-                    $dt_retur_qty                               = $row['retur_qty'];
+                    $purchase_id            = $getPurchase['purchase_id'];
 
-                    $dt_retur_total                             = $row['retur_total'];
 
-                    $sqlDtValues[] = "('$hd_retur_purchase_id','$dt_retur_purchase_invoice','$dt_retur_supplier_id','$dt_retur_item_id','$dt_retur_price','$dt_retur_price','$dt_retur_ppn','$dt_retur_warehouse','$dt_retur_qty_buy','$dt_retur_qty','$dt_retur_total')";
+
+                    $getWarehouseStock = $this->db->table($this->table_warehouse_stock)->select('*')->where('purchase_id', $purchase_id)->where('product_id', $product_id)->get()->getRowArray();
+
+                    $sqlDtValues[] = "('$hd_retur_purchase_id','$dt_retur_purchase_invoice','$dt_retur_supplier_id','$dt_retur_item_id','$dt_retur_price','$dt_retur_ppn','$dt_retur_dpp','$dt_retur_disc','$dt_retur_disc_nota','$dt_retur_ongkir','$dt_retur_warehouse','$dt_retur_qty_buy','$dt_retur_qty','$dt_retur_total')";
+
                 }
 
                 $sqlDtOrder .= implode(',', $sqlDtValues);
@@ -660,11 +1069,124 @@ class M_retur extends Model
     }
 
 
+    public function updateOrderReturSalesAdmin($data)
+    {
+
+        $this->db->query('LOCK TABLES hd_retur_sales_admin WRITE, dt_retur_sales_admin WRITE, temp_retur_sales_admin WRITE, ms_customer READ, ms_store READ, user_account READ');
+
+        $hd_retur_sales_admin_id = $data['hd_retur_sales_admin_id'];
+
+        $save = ['success' => FALSE, 'hd_retur_sales_admin_id' => 0];
+
+        $getOrder = $this->getOrderSalesAdmin($hd_retur_sales_admin_id)->getRowArray();
+
+        if ($getOrder != NULL) {
+
+            if ($getOrder['hd_retur_status'] == 'Pending') {
+
+                $this->db->transBegin();
+
+                $saveQueries = NULL;
+
+                $user_id = $data['created_by'];
+
+                $sqlDtOrder = "INSERT INTO dt_retur_sales_admin(hd_retur_sales_admin_id,dt_retur_item_id,dt_retur_price,dt_retur_ppn,dt_retur_dpp,dt_retur_disc,dt_retur_disc_nota,dt_retur_qty,dt_retur_qty_sell,dt_retur_total) VALUES ";
+
+                $sqlDtValues = [];
+
+                $deleteItemId = [];
+
+                $getTemp =  $this->db->table($this->table_temp_retur_sales_admin)->where('retur_user_id', $user_id)->get();
+
+                foreach ($getTemp->getResultArray() as $row) {
+
+                    $hd_retur_sales_admin_id    = $hd_retur_sales_admin_id;
+
+                    $dt_retur_item_id           = $row['retur_item_id'];
+
+                    $dt_retur_price             = $row['retur_price'];
+
+                    $dt_retur_ppn               = floatval($row['retur_ppn']);
+
+                    $dt_retur_dpp               = floatval($row['retur_price'] - $row['retur_disc'] - $row['retur_disc_nota']);
+
+                    $dt_retur_disc              = floatval($row['retur_disc']);
+
+                    $dt_retur_disc_nota         = floatval($row['retur_disc_nota']);
+
+                    $dt_retur_qty               = floatval($row['retur_qty']);
+
+                    $dt_retur_qty_sell          = floatval($row['retur_qty_sell']);
+
+                    $dt_retur_total             = floatval($row['retur_total']);
+
+                    $sqlDtValues[] = "('$hd_retur_sales_admin_id','$dt_retur_item_id','$dt_retur_price','$dt_retur_ppn','$dt_retur_dpp','$dt_retur_disc','$dt_retur_disc_nota','$dt_retur_qty','$dt_retur_qty_sell','$dt_retur_total')";
+                }
+
+                $sqlDtOrder .= implode(',', $sqlDtValues);
+
+                $this->db->table($this->table_hd_retur_sales_admin)->where('hd_retur_sales_admin_id', $hd_retur_sales_admin_id)->update($data);
+
+                if ($this->db->affectedRows() > 0) {
+
+                    $saveQueries[] = $this->db->getLastQuery()->getQuery();
+
+                }
+
+                $this->clearUpdateDetailSalesAdmin($hd_retur_sales_admin_id);
+
+                $this->db->query($sqlDtOrder);
+
+                if ($this->db->affectedRows() > 0) {
+
+                    $saveQueries[] = $this->db->getLastQuery()->getQuery();
+
+                }
+
+
+                if ($this->db->transStatus() === false) {
+
+                    $saveQueries = NULL;
+
+                    $this->db->transRollback();
+
+                    $save = ['success' => FALSE, 'hd_retur_sales_admin_id' => 0];
+
+                } else {
+
+                    $this->db->transCommit();
+
+                    $this->clearTempSalesAdmin($user_id);
+
+                    $save = ['success' => TRUE, 'hd_retur_sales_admin_id' => $hd_retur_sales_admin_id];
+
+                }
+
+                $this->db->query('UNLOCK TABLES');
+
+                saveQueries($saveQueries, 'retur_sales_admin', $hd_retur_sales_admin_id, 'updateReturSalesAdmin');
+
+            }
+
+            return $save;
+        }
+
+    }
+
     public function clearUpdateDetail($hd_retur_purchase_id){
 
         return $this->db->table($this->table_dt_retur)
 
         ->where('hd_retur_purchase_id', $hd_retur_purchase_id)
+
+        ->delete();
+    }
+
+    public function clearUpdateDetailSalesAdmin($hd_retur_sales_admin_id){
+
+        return $this->db->table($this->table_dt_retur_sales_admin)
+
+        ->where('hd_retur_sales_admin_id', $hd_retur_sales_admin_id)
 
         ->delete();
     }
@@ -678,6 +1200,15 @@ class M_retur extends Model
             $builder->where('hd_retur_supplier_id', $supplier_id);
         }
         return $builder->orderBy('hd_retur_purchase.created_at', 'ASC')->get();
+    }
+
+    public function getSalesAdminByid($sales_admin_id)
+    {
+        $builder = $this->db->table('hd_sales_admin')->select("sales_customer_id, customer_name, sales_store_id, store_name, store_code, sales_admin_id");
+        $builder->join('ms_customer', 'ms_customer.customer_id  = hd_sales_admin.sales_customer_id');
+        $builder->join('ms_store', 'ms_store.store_id  = hd_sales_admin.sales_store_id');
+        $builder->where('sales_admin_id', $sales_admin_id);
+        return $builder->get();
     }
 
     public function getReportData($start_date, $end_date, $supplier_id)
