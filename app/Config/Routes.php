@@ -841,11 +841,13 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 
     $routes->get('view-price-tag', 'Webmin\Report\Report::viewPriceTag');
     $routes->get('view-price-tag-v2', 'Webmin\Report\Report::viewPriceTagV2');
+    $routes->get('view-price-tag-v3', 'Webmin\Report\Report::viewPriceTagV3');
 
     $routes->get('barcode-generate', 'Webmin\Report\Report::barcodeGenerate');
 
     $routes->get('price-tag', 'Webmin\Report\Report::priceTag');
     $routes->get('price-tag-v2', 'Webmin\Report\Report::priceTagV2');
+    $routes->get('price-tag-v3', 'Webmin\Report\Report::priceTagV3');
 
     /* Section Customer */
     $routes->get('view-customer-list', 'Webmin\Report\ReportCustomer::viewCustomerList');
