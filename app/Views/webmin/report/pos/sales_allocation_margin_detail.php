@@ -2,18 +2,22 @@
 
 <?= $this->section('css') ?>
 <style>
-    #sample {
+    .text-red {
         color: red;
+    }
+
+    .table-detail {
+        font-size: 10pt;
     }
 </style>
 <?= $this->endSection() ?>
 
 
 <?= $this->section('content') ?>
-
 <?php
 $iPage          = 1;
 $numRow         = 1;
+$total_summary  = 0;
 foreach ($pages as $page) :
 ?>
     <!-- page 1/2 -->
@@ -31,7 +35,7 @@ foreach ($pages as $page) :
 
         <div class="text-center">
             <div class="text-center">
-                <div width="780px">
+                <div width="1100px">
                     <table width="100%">
                         <tbody>
                             <tr>
@@ -60,26 +64,34 @@ foreach ($pages as $page) :
                     <tbody>
                         <tr>
                             <td colspan="2" align="center">
-                                <p class="header2">DAFTAR STOK KEDALUWARSA<br><br></p>
+                                <p class="header2">LAPORAN ALOKASI MARGIN PENJUALAN<br><br></p>
                             </td>
                         </tr>
                         <tr valign="top">
-                            <td width="50%" class="loseborder">
+                            <td width="65%" class="loseborder">
                                 <table>
                                     <tbody>
+                                        <tr align="left" class="loseborder">
+                                            <td width="120" class="loseborder">Tanggal Transaksi</td>
+                                            <td class="loseborder">: <?= indo_short_date($start_date) ?> s.d <?= indo_short_date($end_date) ?></td>
+                                        </tr>
                                         <tr align="left">
-                                            <td width="120" class="loseborder">Gudang</td>
-                                            <td class="loseborder">: <?= $warehouse_name ?></td>
+                                            <td class="loseborder">Toko</td>
+                                            <td class="loseborder">: <?= $store_name ?></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </td>
-                            <td width="50%" class="loseborder">
+                            <td width="35%" class="loseborder">
                                 <table>
                                     <tbody>
                                         <tr align="left">
                                             <td width="120" class="text-right">Hal</td>
                                             <td>:&nbsp;<?= $iPage ?>/<?= $max_page ?>&nbsp;</td>
+                                        </tr>
+                                        <tr align="left">
+                                            <td class="text-right"></td>
+                                            <td class=""></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -94,29 +106,41 @@ foreach ($pages as $page) :
                         <thead>
                             <tr>
                                 <th class="header-table" width="3%">NO</th>
-                                <th class="header-table" width="10%" nowrap="">KODE PRODUK</th>
-                                <th class="header-table" width="37%">NAMA PRODUK</th>
-                                <th class="header-table" width="20%">GUDANG</th>
-                                <th class="header-table" width="10%">TANGGAL.EXP</th>
-                                <th class="header-table" width="10%" nowrap="">STOK</th>
+                                <th class="header-table" width="10%" nowrap="">INVOICE</th>
+                                <th class="header-table" width="10%">TANGGAL</th>
+                                <th class="header-table" width="10%">KODE BARANG</th>
+                                <th class="header-table" width="55%">NAMA BARANG</th>
+                                <th class="header-table" width="12%">JUMLAH</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
                             foreach ($page as $row) :
+                                $qty        = floatval($row['sales_qty']);
+                                $ma         = floatval($row['margin_allocation']);
+                                $total      = $ma * $qty;
                             ?>
                                 <tr align="left">
                                     <td class="text-right"><?= $numRow ?>&nbsp;</td>
-                                    <td align="text-left" nowrap=""><?= $row['product_code'] ?>&nbsp;</td>
-                                    <td class="text-left col-fixed"><?= $row['product_name'] ?>&nbsp;</td>
-                                    <td class="col-fixed text-left"><?= $row['warehouse_code'] . ' - ' . $row['warehouse_name'] ?></td>
-                                    <td class="col-fixed text-left"><?= indo_short_date($row['exp_date']) ?></td>
-                                    <td class="text-right"><?= numberFormat($row['stock'], TRUE) ?>&nbsp;</td>
+                                    <td class="text-left" nowrap=""><?= $row['pos_sales_invoice'] ?>&nbsp;</td>
+                                    <td class="text-left"><?= indo_short_date($row['pos_sales_date']) ?>&nbsp;</td>
+                                    <td class="col-fixed text-left"><?= $row['item_code'] ?></td>
+                                    <td class="col-fixed text-left"><?= $row['product_name'] ?></td>
+                                    <td class="text-right <?= $total < 0 ? 'text-red' : '' ?>"><?= numberFormat($total) ?>&nbsp;</td>
                                 </tr>
                             <?php
+                                $total_summary  += $total;
                                 $numRow++;
                             endforeach;
                             ?>
+
+                            <?php if ($iPage == $max_page) : ?>
+                                <!-- cetak summary -->
+                                <tr align="left">
+                                    <td class="text-right" colspan="5"><b>TOTAL</b></td>
+                                    <td class="text-right <?= $total_summary < 0 ? 'text-red' : '' ?>"><?= numberFormat($total_summary) ?>&nbsp;</td>
+                                </tr>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                     <br>
@@ -129,6 +153,7 @@ foreach ($pages as $page) :
     $iPage++;
 endforeach;
 ?>
+
 
 
 <?= $this->endSection() ?>

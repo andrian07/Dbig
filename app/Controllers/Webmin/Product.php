@@ -990,11 +990,11 @@ class Product extends WebminController
                 // delete header //
                 unset($sheet6[0]);
                 foreach ($sheet6 as $row) {
-                    $unit_id                = intval($row[0]);
+                    $unit_id                = $row[0] == null ? 0 : intval($row[0]);
                     $unit_name              = $row[1];
                     $unit_description       = $row[2] == null ? '' : $row[2];
                     $unit_key               = md5(strtoupper($unit_name));
-                    if ($unit_id == 0) {
+                    if ($unit_id == 0 && $unit_name != null) {
                         $data = [
                             'unit_name' => $unit_name,
                             'unit_description' => $unit_description
@@ -1025,12 +1025,12 @@ class Product extends WebminController
                 // delete header //
                 unset($sheet4[0]);
                 foreach ($sheet4 as $row) {
-                    $brand_id               = intval($row[0]);
+                    $brand_id               = $row[0] == null ? 0 : intval($row[0]);
                     $brand_name             = $row[1];
                     $brand_description      = $row[2] == null ? '' : $row[2];
                     $brand_key              = md5(strtoupper($brand_name));
 
-                    if ($brand_id == 0) {
+                    if ($brand_id == 0 && $brand_name != null) {
                         $data = [
                             'brand_name'        => $brand_name,
                             'brand_description' => $brand_description
@@ -1050,12 +1050,12 @@ class Product extends WebminController
                 // delete header //
                 unset($sheet3[0]);
                 foreach ($sheet3 as $row) {
-                    $category_id                    = intval($row[0]);
+                    $category_id                    = $row[0] == null ? 0 : intval($row[0]);
                     $category_name                  = $row[1];
                     $category_description           = $row[2] == null ? '' : $row[2];
                     $category_key                   = md5(strtoupper($category_name));
 
-                    if ($category_id == 0) {
+                    if ($category_id == 0 && $category_name != null) {
                         $data = [
                             'category_name '        => $category_name,
                             'category_description'  => $category_description

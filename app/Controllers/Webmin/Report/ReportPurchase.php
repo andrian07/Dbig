@@ -1157,9 +1157,9 @@ class ReportPurchase extends WebminController
             $last_retur_invoice = '';
 
             foreach ($getReportData as $row) {
-                $dpp   = floatval($row['hd_retur_total_dpp']);
-                $ppn   = floatval($row['hd_retur_total_ppn']);
-                $total = floatval($row['hd_retur_total_transaction']);
+                $dpp   = floatval($row['dt_retur_dpp'] + $row['dt_retur_disc'] + $row['dt_retur_disc_nota'] + $row['dt_retur_ongkir']);
+                $ppn   = floatval($row['dt_retur_ppn']);
+                $total = floatval($row['dt_retur_total']);
                 $qty   = floatval($row['dt_retur_qty']);
                 $price = $total / $qty;
                 $retur_date  = indo_short_date($row['hd_retur_date']);

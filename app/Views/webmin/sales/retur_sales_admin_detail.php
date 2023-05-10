@@ -95,7 +95,8 @@ $assetsUrl = base_url('assets');
                 </div>
 
                 <div class="col-sm-4 invoice-col">
-                    <p><b><?= esc($hdRetur['hd_retur_sales_admin_invoice']) ?></b><br>
+                    <p>Invoice: <b><?= esc($hdRetur['hd_retur_sales_admin_invoice']) ?></b><br>
+                    No Penjualan: <b><?= esc($hdRetur['sales_admin_invoice']) ?></b><br>
                     </p>
                 </div>
 

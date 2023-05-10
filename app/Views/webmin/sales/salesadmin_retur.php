@@ -43,69 +43,128 @@ $assetsUrl = base_url('assets');
 
                 <div class="col-md-12">
 
-                    <div class="card">
+                  <!-- popup modal add -->
+                  <div class="modal fade" id="modal-addreturpayment">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="title-frmaddbanner">Pembayaran Retur</h4>
+                                <button type="button" class="close close-modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
 
-                        <div class="card-header p-2">
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <form id="frmaddpaymentretur" class="form-horizontal">
+                                            <div class="form-group">
+                                                <label for="title_payment_retur" class="col-sm-12">No Invoice</label>
+                                                <div class="col-sm-12">
+                                                    <input type="hidden" id="hd_retur_sales_admin_id" class="form-control">
+                                                    <input type="text" id="hd_retur_sales_admin_invoice" class="form-control">
+                                                </div>
+                                            </div>
 
-                            <button id="btnadd" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah</button>
+                                            <div class="form-group">
+                                                <label for="title_payment_retur" class="col-sm-12">Total Pembayaran</label>
+                                                <div class="col-sm-12">
+                                                    <input type="text" id="hd_retur_total_transaction" class="form-control">
+                                                </div>
+                                            </div>
 
-                            <button id="btnreload" class="btn btn-secondary"><i class="fas fa-sync"></i> Reload</button>
+                                            <div class="form-group">
+                                                <label for="active" class="col-sm-12">Jenis Pembayaran</label>
+                                                <div class="col-sm-12">
+                                                    <select id="payment_type" name="payment_type" class="form-control">
+                                                        <option></option>
+                                                        <option value="Ya">Potong Nota</option>
+                                                        <option value="Tidak">Cash</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button id="btncancel" class="btn btn-danger close-modal"><i class="fas fa-times-circle"></i> Batal</button>
+                                <button id="btnsavepayment" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
+                            </div>
 
                         </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+                <!-- end popup modal -->
 
-                        <div class="card-body">
+                <div class="card">
 
-                            <table id="tblretursalesadmin" class="table table-bordered table-hover" width="100%">
+                    <div class="card-header p-2">
 
-                                <thead>
+                        <button id="btnadd" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah</button>
 
-                                    <tr>
-
-                                        <th data-priority="1">#</th>
-
-                                        <th data-priority="2">No Invoice</th>
-
-                                        <th data-priority="3">Tanggal</th>
-
-                                        <th data-priority="4">Nama Customer</th>
-
-                                        <th data-priority="5">Total Transaksi</th>
-
-                                        <th data-priority="6">Status</th>
-
-                                        <th data-priority="7">Aksi</th>
-
-                                    </tr>
-
-                                </thead>
-
-                                <tbody>
-
-                                </tbody>
-
-                            </table>
-
-
-
-                            <!-- /.tab-content -->
-
-                        </div><!-- /.card-body -->
+                        <button id="btnreload" class="btn btn-secondary"><i class="fas fa-sync"></i> Reload</button>
 
                     </div>
 
-                    <!-- /.card -->
+                    <div class="card-body">
+
+                        <table id="tblretursalesadmin" class="table table-bordered table-hover" width="100%">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th data-priority="1">#</th>
+
+                                    <th data-priority="2">No Invoice</th>
+
+                                    <th data-priority="3">No Penjualan</th>
+
+                                    <th data-priority="4">Tanggal</th>
+
+                                    <th data-priority="5">Nama Customer</th>
+
+                                    <th data-priority="6">Total Transaksi</th>
+
+                                    <th data-priority="7">Status</th>
+
+                                    <th data-priority="8">Aksi</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                            </tbody>
+
+                        </table>
+
+
+
+                        <!-- /.tab-content -->
+
+                    </div><!-- /.card-body -->
 
                 </div>
 
-                <!-- /.col -->
+                <!-- /.card -->
 
             </div>
 
-            <!-- /.row -->
+            <!-- /.col -->
 
-        </div><!-- /.container-fluid -->
+        </div>
 
-    </section>
+        <!-- /.row -->
+
+    </div><!-- /.container-fluid -->
+
+</section>
 
 </div>
 
@@ -548,6 +607,8 @@ $assetsUrl = base_url('assets');
 
         let footer_sub_total = new AutoNumeric('#footer_sub_total', configRp);
 
+        let hd_retur_total_transaction = new AutoNumeric('#hd_retur_total_transaction', configRp);
+
         $('#store_id').prop('disabled', true);
 
         $('#customer_id').prop("disabled", true);
@@ -634,7 +695,7 @@ $assetsUrl = base_url('assets');
                 width: 100
             },
             {
-                targets: [0, 6],
+                targets: [0, 7],
                 orderable: false,
                 searchable: false,
             },
@@ -898,24 +959,73 @@ $assetsUrl = base_url('assets');
 
         });
 
+
+        $("#btncancel").click(function(e) {
+
+            e.preventDefault();
+
+            message.question('Yakin ingin batal input retur penjualan admin?').then(function(answer) {
+
+                let yes = parseMessageResult(answer);
+
+                if (yes) {
+
+                    let actUrl = base_url + '/webmin/retur/cancel-input-retur-sales-admin/';
+
+                    ajax_get(actUrl, null, {
+
+                        success: function(response) {
+
+                            if (response.success) {
+
+                                if (response.result.success) {
+
+                                    clearHeader();
+
+                                    clearItemInput();
+
+                                } else {
+
+                                    message.error(response.result.message);
+
+                                }
+
+                                updateTableHeader();
+
+                                showInputPage(false);
+
+                            }
+
+                        }
+
+                    })
+
+                }
+
+            })
+
+        });
+        
+
         $('#btnsavepayment').click(function(e) {
 
             e.preventDefault();
 
-
             let btnSubmit = $('#btnsavepayment');
 
-            let hd_retur_purchase_invoice = $('#hd_retur_purchase_invoice').val();
+            let hd_retur_sales_admin_invoice = $('#hd_retur_sales_admin_invoice').val();
 
-            let hd_retur_purchase_id = $('#hd_retur_purchase_id').val();
+            let hd_retur_sales_admin_id = $('#hd_retur_sales_admin_id').val();
 
             let hd_retur_total_transaction_val = parseFloat(hd_retur_total_transaction.getNumericString());
 
             let payment_type = $('#payment_type').val();
 
+            let sales_no = $('#sales_no').val();
+
             let question = 'Yakin ingin menyimpan data Pembayaran?';
 
-            let actUrl = base_url + '/webmin/retur/savepayment';
+            let actUrl = base_url + '/webmin/retur/savepayment-retur-sales-admin';
 
             message.question(question).then(function(answer) {
 
@@ -925,7 +1035,9 @@ $assetsUrl = base_url('assets');
 
                     let formValues = {
 
-                        hd_retur_purchase_id: hd_retur_purchase_id,
+                        sales_no:sales_no,
+
+                        hd_retur_sales_admin_id: hd_retur_sales_admin_id,
 
                         payment_type: payment_type,
 
@@ -946,8 +1058,6 @@ $assetsUrl = base_url('assets');
                                     notification.success(response.result.message);
 
                                     showInputPage(false);
-
-
 
                                     $('#payment_type').val('');
 
@@ -982,6 +1092,49 @@ $assetsUrl = base_url('assets');
             })
 
         });
+
+        $("#tblretursalesadmin").on('click', '.btnrepayment', function(e) {
+            e.preventDefault();
+            let id = $(this).attr('data-id');
+            let actUrl = base_url + '/webmin/retur/getReturSalesById/' + id;
+            ajax_get(actUrl, null, {
+                success: function(response) {
+                    console.log(response);
+                    if (response.success) {
+                        if (response.result.success) {
+                            if(response.result.data.hd_retur_status == 'Pending'){
+                                editMode(response.result.data);
+                            }else{
+                                message.info('Transaksi yang sudah selesai atau dibatalkan tidak dapat di ubah lagi');
+                            }
+                        } else {
+                            message.error(response.result.message);
+                        }
+                    }
+                }
+            })
+
+        })
+
+
+        function editMode(data) {
+            console.log(data);
+            let form = $('#frmaddpaymentretur');
+            $('#hd_retur_sales_admin_id').val(data.hd_retur_sales_admin_id);
+            $('#hd_retur_sales_admin_invoice').val(data.hd_retur_sales_admin_invoice);
+            hd_retur_total_transaction.set(data.hd_retur_total_transaction);
+            $('#modal-addreturpayment').modal(configModal);
+        }
+
+        $('.close-modal').click(function(e) {
+            e.preventDefault();
+            message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
+                let yes = parseMessageResult(answer);
+                if (yes) {
+                    $('#modal-addreturpayment').modal('hide');
+                }
+            })
+        })
 
         $("#tblretursalesadmin").on('click', '.btndelete', function(e) {
 

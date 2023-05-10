@@ -344,7 +344,6 @@ class M_purchase extends Model
             $total_qty_all          = floatval($getTotalItemPurchase['qty']);
             $discount_per_item      = round(($row['temp_purchase_discount_total'] / $base_unit), 2);
             $discount_per_nota      = round(($data['purchase_total_discount'] / $total_qty_all), 2);
-            $discount_per_item      = round(($row['temp_purchase_discount_total'] / $base_unit), 2);
 
             $last_base_purchase_price   = floatval($get_price['base_purchase_price']);
             $new_base_purchase_price    = floatval($row['temp_purchase_price'] / $product_content - $discount_per_item - $discount_per_nota);
@@ -372,7 +371,7 @@ class M_purchase extends Model
             $dt_discount_nota       = $temp_discount_nota_per_item * $temp_purchase_qty;
 
 
-            $sqlDtValues[] = "('$temp_purchase_po_id','$temp_purchase_po_invoice','$purchase_inv','$temp_purchase_item_id','$temp_purchase_qty','$dt_ppn','$dt_discount_nota','$dt_dpp','$temp_purchase_price','$temp_purchase_discount1','$temp_purchase_discount1_percentage','$temp_purchase_discount2','$temp_purchase_discount2_percentage','$temp_purchase_discount3','$temp_purchase_discount3_percentage','$temp_purchase_discount_total','$temp_purchase_ongkir','$temp_purchase_expire_date','$temp_purchase_total','$temp_purchase_supplier_id','$temp_purchase_supplier_name','$temp_purchase_user_id')";
+            $sqlDtValues[] = "('$temp_purchase_po_id','$temp_purchase_po_invoice','$purchase_inv','$temp_purchase_item_id','$temp_purchase_qty','$dt_ppn','$dt_discount_nota','$dt_dpp','$temp_purchase_price','$temp_purchase_discount1','$temp_purchase_discount1_percentage','$temp_purchase_discount2','$temp_purchase_discount2_percentage','$temp_purchase_discount3','$temp_purchase_discount3_percentage','$discount_per_nota','$temp_purchase_ongkir','$temp_purchase_expire_date','$temp_purchase_total','$temp_purchase_supplier_id','$temp_purchase_supplier_name','$temp_purchase_user_id')";
 
 
             $vUpdateProduct[] = "('$product_id', '$product_code', '$product_name', '$category_id', '$brand_id', '$base_purchase_price', '$base_purchase_tax', '$calcualtion_cogs', '$product_description', '$product_image', '$min_stock', '$has_tax', '$is_parcel', '$active', '$deleted')";

@@ -77,12 +77,13 @@ class Retur extends WebminController
         if ($this->role->hasRole('retur_sales_admin.view')) {
             helper('datatable');
             $table = new \App\Libraries\Datatables('hd_retur_sales_admin');
-            $table->db->select('hd_retur_sales_admin_id,hd_retur_sales_admin_invoice,hd_retur_date,customer_name,hd_retur_total_transaction,hd_retur_status');
+            $table->db->select('hd_retur_sales_admin_id,hd_retur_sales_admin_invoice,sales_admin_invoice, hd_retur_date,customer_name,hd_retur_total_transaction,hd_retur_status');
             $table->db->join('ms_customer', 'ms_customer.customer_id  = hd_retur_sales_admin.hd_retur_customer_id');
             $table->renderColumn(function ($row, $i) {
                 $column = [];
                 $column[] = $i;
                 $column[] = esc($row['hd_retur_sales_admin_invoice']);
+                $column[] = esc($row['sales_admin_invoice']);
                 $column[] = indo_short_date($row['hd_retur_date']);
                 $column[] = esc($row['customer_name']);
                 $column[] = 'Rp. '.esc(number_format($row['hd_retur_total_transaction']));
@@ -416,6 +417,25 @@ class Retur extends WebminController
         resultJSON($result);
     }
 
+
+    public function getReturSalesById($hd_retur_sales_admin_id = '')
+    {
+        $this->validationRequest(TRUE);
+        $result = ['success' => FALSE, 'message' => 'Data tidak ditemukan'];
+        if ($this->role->hasRole('retur_sales_admin.view')) {
+            if ($hd_retur_sales_admin_id != '') {
+                $find = $this->M_retur->getReturSalesAdmin($hd_retur_sales_admin_id)->getRowArray();
+                if ($find == NULL) {
+                    $result = ['success' => FALSE, 'message' => 'Data Penjualan Tidak Di Temukan'];
+                } else {
+                    $result = ['success' => TRUE, 'data' => $find, 'message' => ''];
+                }
+            }
+        }
+
+        resultJSON($result);
+    }
+
     public function save($type)
     {
         $this->validationRequest(TRUE, 'POST');
@@ -662,6 +682,112 @@ class Retur extends WebminController
 
     }
 
+    public function savepaymentReturSalesAdmin()
+    {
+
+        $this->validationRequest(TRUE, 'POST');
+
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+        $validation =  \Config\Services::validation();
+
+        $input = [
+            'sales_no'                               => $this->request->getPost('sales_no'),
+            'hd_retur_sales_admin_id'                => $this->request->getPost('hd_retur_sales_admin_id'),
+            'payment_type'                           => $this->request->getPost('payment_type'),
+            'hd_retur_total_transaction'             => $this->request->getPost('hd_retur_total_transaction'),
+            'user_id'                                => $this->userLogin['user_id']
+        ];
+
+        $validation->setRules([
+            'hd_retur_sales_admin_id'         => ['rules' => 'required'],
+            'payment_type'                    => ['rules' => 'required'],
+            'hd_retur_total_transaction'      => ['rules' => 'required'],
+        ]);
+
+        if ($validation->run($input) === FALSE) {
+
+            $result = ['success' => FALSE, 'message' => 'Silahkan Input Semua Data Terlebih Dahulu'];
+
+        } else {
+
+            if ($this->role->hasRole('retur_sales_admin.update_payment')) {
+
+                $save = $this->M_retur->updateReturSalesAdmin($input);
+
+                if ($save['success']) {
+
+                    $result = ['success' => TRUE, 'message' => 'Data pembayaran retur berhasil disimpan', 'hd_retur_purchase_id ' => $save['hd_retur_sales_admin_id']];
+
+                } else {
+
+                    $result = ['success' => FALSE, 'message' => 'Data pembayaran retur gagal disimpan'];
+
+                }
+
+            } else {
+
+                $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menambah pembayaran retur'];
+
+            }
+
+        }
+
+        $result['csrfHash'] = csrf_hash();
+
+        resultJSON($result);
+
+    }
+
+    public function cancelInputReturSalesAdmin()
+    {
+
+        $this->M_retur->clearTempSalesAdmin($this->userLogin['user_id']);
+
+        $getTemp = $this->M_retur->getTempReturSalesAdmin($this->userLogin['user_id'])->getResultArray();
+
+        $find_result = [];
+
+        foreach ($getTemp as $k => $v) {
+
+            $find_result[$k] = esc($v);
+
+        }
+
+        $result['data'] = $find_result;
+
+        $result['csrfHash'] = csrf_hash();
+
+        $result['success'] = 'TRUE';
+
+        resultJSON($result);
+
+    }
+
+    public function cancelInputRetur()
+    {
+
+        $this->M_retur->clearTemp($this->userLogin['user_id']);
+
+        $getTemp = $this->M_retur->getTemp($this->userLogin['user_id'])->getResultArray();
+
+        $find_result = [];
+
+        foreach ($getTemp as $k => $v) {
+
+            $find_result[$k] = esc($v);
+
+        }
+
+        $result['data'] = $find_result;
+
+        $result['csrfHash'] = csrf_hash();
+
+        $result['success'] = 'TRUE';
+
+        resultJSON($result);
+
+    }
 
     public function getReturTemp(){
 
@@ -817,7 +943,12 @@ class Retur extends WebminController
 
             $getOrder = $this->M_retur->getRetur($hd_retur_purchase_id)->getRowArray();
 
-            if ($getOrder == NULL) {
+            if($getOrder['hd_retur_status'] != 'pending')
+            {
+                $result = ['success' => FALSE, 'message' => 'Transaksi yang sudah selesai atau dibatalkan tidak dapat di ubah lagi'];
+            }
+            else if ($getOrder == NULL) 
+            {
 
                 $result = ['success' => FALSE, 'message' => 'Transaksi tidak ditemukan'];
 
@@ -853,7 +984,7 @@ class Retur extends WebminController
 
     public function editReturSalesAdmin($hd_retur_sales_admin_id)
     {
-         $this->validationRequest(TRUE, 'GET');
+        $this->validationRequest(TRUE, 'GET');
 
         $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk mengubah retur penjualan'];
 
@@ -861,7 +992,11 @@ class Retur extends WebminController
 
             $getOrder = $this->M_retur->getReturSalesAdmin($hd_retur_sales_admin_id)->getRowArray();
 
-            if ($getOrder == NULL) {
+            if($getOrder['hd_retur_status'] != 'pending')
+            {
+                $result = ['success' => FALSE, 'message' => 'Transaksi yang sudah selesai atau dibatalkan tidak dapat di ubah lagi'];
+            }
+            else if ($getOrder == NULL) {
 
                 $result = ['success' => FALSE, 'message' => 'Transaksi tidak ditemukan'];
 
@@ -1198,7 +1333,7 @@ class Retur extends WebminController
                 $result = ['success' => FALSE, 'message' => 'Data item gagal ditambahkan'];
 
             }
-            
+
 
         }
 

@@ -265,4 +265,81 @@ class M_customer extends Model
         saveQueries($saveQueries, 'customer', $customer_id, 'verification');
         return  $result;
     }
+
+
+    public function importCustomer($customerData)
+    {
+        $this->db->query('LOCK TABLES ms_customer WRITE,last_record_number WRITE');
+        $saveQueries    = NULL;
+        $errors         = [];
+        $this->db->transBegin();
+        $record_period = date('mY');
+        $getLastNumber = $this->db->table('last_record_number')
+            ->where('record_module', 'customer')
+            ->where('record_period', $record_period)
+            ->get()->getRowArray();
+
+        $record_id = 0;
+        if ($getLastNumber == NULL) {
+            $last_number    = 0;
+        } else {
+            $record_id      = intval($getLastNumber['record_id']);
+            $last_number    = intval($getLastNumber['last_number']);
+        }
+
+        $max_insert = 1;
+        $batchInsert = array_chunk($customerData, $max_insert);
+        foreach ($batchInsert as $batch) {
+            $insert_customer = [];
+            foreach ($batch as $data) {
+                $customer_code = $data['customer_code'];
+                if ($customer_code == '') {
+                    $last_number++;
+                    $data['customer_code'] =  'C' . substr($record_period, 0, 2) . substr($record_period, -2) . substr('00000' . $last_number, -5);
+                }
+
+                $insert_customer[] = $data;
+            }
+            $this->db->table($this->table)->insertBatch($insert_customer, true, $max_insert);
+            if ($this->db->affectedRows() > 0) {
+                $saveQueries[]  = $this->db->getLastQuery()->getQuery();
+            }
+            $errors[] = $this->db->error();
+        }
+
+        $update_last_number = [
+            'record_module' => 'customer',
+            'store_id'      => 0,
+            'record_period' => $record_period,
+            'last_number'   => $last_number
+        ];
+
+        if ($record_id == 0) {
+            $this->db->table('last_record_number')->set($update_last_number)->insert();
+            $errors[] = $this->db->error();
+            if ($this->db->affectedRows() > 0) {
+                $saveQueries[]  = $this->db->getLastQuery()->getQuery();
+            }
+        } else {
+            $this->db->table('last_record_number')->set($update_last_number)->where('record_id', $record_id)->update();
+            $errors[] = $this->db->error();
+            if ($this->db->affectedRows() > 0) {
+                $saveQueries[]  = $this->db->getLastQuery()->getQuery();
+            }
+        }
+
+
+        if ($this->db->transStatus() === false) {
+            $this->db->transRollback();
+            $saveQueries = NULL;
+            $save = ['success' => FALSE, 'errors' => $errors, 'message' => 'Import data customer gagal'];
+        } else {
+            $this->db->transCommit();
+            $save = ['success' => TRUE, 'errors' => $errors, 'message' => 'Import data customer gagal'];
+        }
+
+        $this->db->query('UNLOCK TABLES');
+        saveQueries($saveQueries, 'customer', 0, 'import');
+        return $save;
+    }
 }

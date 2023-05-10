@@ -62,8 +62,8 @@ $assetsUrl = base_url('assets');
                                                 <div class="form-group">
                                                     <label for="title_payment_retur" class="col-sm-12">No Invoice</label>
                                                     <div class="col-sm-12">
-                                                        <input type="hidden" id="hd_retur_purchase_invoice" class="form-control">
-                                                        <input type="text" id="hd_retur_purchase_id" class="form-control">
+                                                        <input type="hidden" id="hd_retur_purchase_id" class="form-control">
+                                                        <input type="text" id="hd_retur_purchase_invoice" class="form-control">
                                                     </div>
                                                 </div>
 
@@ -538,32 +538,32 @@ $assetsUrl = base_url('assets');
 
                                             <button data-id="{item_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
-                                               <i class="fas fa-edit"></i>
+                                             <i class="fas fa-edit"></i>
 
-                                           </button>
+                                         </button>
 
-                                           &nbsp;
+                                         &nbsp;
 
-                                           <button data-id="{item_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+                                         <button data-id="{item_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
 
-                                               <i class="fas fa-minus"></i>
+                                             <i class="fas fa-minus"></i>
 
-                                           </button>
+                                         </button>
 
-                                       </td>
+                                     </td>
 
-                                   </tr>
+                                 </tr>
 
-                               </template>
-
-
-                           </div>
-
-                       </div>
+                             </template>
 
 
+                         </div>
 
-                       <div class="row form-space">
+                     </div>
+
+
+
+                     <div class="row form-space">
 
                         <div class="col-lg-6">
 
@@ -590,7 +590,7 @@ $assetsUrl = base_url('assets');
 
                             <div class="form-group row" style="margin-top: 30px;">
                                 <div class="col-sm-12">
-                                    <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
+                                    <button id="btncancel-input" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
                                     <button id="btnsave" class="btn btn-success button-header-custom-save"><i class="fas fa-save"></i> Simpan</button>
                                 </div>
                             </div>
@@ -820,15 +820,15 @@ $assetsUrl = base_url('assets');
 
                         }else{
 
-                         message.error(res.message);
+                           message.error(res.message);
 
-                         $('#purchase_no').val('');
+                           $('#purchase_no').val('');
 
-                     }
+                       }
 
-                 },
+                   },
 
-             });
+               });
 
             }
 
@@ -860,15 +860,15 @@ $assetsUrl = base_url('assets');
 
                         }else{
 
-                         message.error(res.message);
+                           message.error(res.message);
 
-                         $('#product_name').val('');
+                           $('#product_name').val('');
 
-                     }
+                       }
 
-                 },
+                   },
 
-             });
+               });
 
             },
 
@@ -1086,6 +1086,52 @@ $assetsUrl = base_url('assets');
                         }
 
                     });
+
+                }
+
+            })
+
+        });
+
+        $("#btncancel-input").click(function(e) {
+
+            e.preventDefault();
+
+            message.question('Yakin ingin batal input retur pembelian?').then(function(answer) {
+
+                let yes = parseMessageResult(answer);
+
+                if (yes) {
+
+                    let actUrl = base_url + '/webmin/retur/cancel-input-retur/';
+
+                    ajax_get(actUrl, null, {
+
+                        success: function(response) {
+
+                            if (response.success) {
+
+                                if (response.result.success) {
+
+                                    clearHeader();
+
+                                    clearItemInput();
+
+                                } else {
+
+                                    message.error(response.result.message);
+
+                                }
+
+                                updateTableHeader();
+
+                                showInputPage(false);
+
+                            }
+
+                        }
+
+                    })
 
                 }
 
@@ -1319,20 +1365,20 @@ $assetsUrl = base_url('assets');
 
                             } else {
 
-                             message.error(response.result.message);
+                               message.error(response.result.message);
 
-                         }
+                           }
 
-                         clearItemInput();
-                         loadTempData(response.result.data);
+                           clearItemInput();
+                           loadTempData(response.result.data);
 
-                     }
+                       }
 
-                     btnSubmit.prop('disabled', false);
+                       btnSubmit.prop('disabled', false);
 
-                 },
+                   },
 
-                 error: function(response) {
+                   error: function(response) {
 
                     btnSubmit.prop('disabled', false);
 
@@ -1730,7 +1776,10 @@ $assetsUrl = base_url('assets');
         }
 
 
-
+        function clearHeader()
+        {
+            setSelect2('#supplier_id', '', '');
+        }
 
         function clearItemInput() {
 

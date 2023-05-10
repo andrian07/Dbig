@@ -363,6 +363,10 @@ $routes->group('webmin/customer', ['filter' => 'webminauth'], static function ($
     $routes->get('delete/(:num)', 'Webmin\Customer::delete/$1');
 
     $routes->get('reset-password/(:num)', 'Webmin\Customer::resetPassword/$1');
+
+    $routes->get('download-import-excel', 'Webmin\Customer::downloadImportExcel');
+    //$routes->get('upload-excel', 'Webmin\Customer::uploadExcel');
+    $routes->post('upload-excel', 'Webmin\Customer::uploadExcel');
 });
 
 
@@ -411,7 +415,6 @@ $routes->group('webmin/product', ['filter' => 'webminauth'], static function ($r
 
     $routes->get('download-import-excel', 'Webmin\Product::downloadImportExcel');
     $routes->post('upload-excel', 'Webmin\Product::uploadExcel');
-    $routes->get('upload-excel', 'Webmin\Product::uploadExcel');
 });
 
 
@@ -631,6 +634,8 @@ $routes->group('webmin/retur', ['filter' => 'webminauth'], static function ($rou
 
     $routes->get('getByid/(:alphanum)', 'Webmin\Retur\Retur::getByid/$1');
 
+    //$routes->get('clear-temp', 'Webmin\Retur\Retur::clearTemp');
+
     $routes->post('savepayment', 'Webmin\Retur\Retur::savepayment');
 
     $routes->get('cancel-retur/(:alphanum)', 'Webmin\Retur\Retur::cancelRetur/$1');
@@ -664,6 +669,14 @@ $routes->group('webmin/retur', ['filter' => 'webminauth'], static function ($rou
     $routes->get('cancel-retur-sales-admin/(:alphanum)', 'Webmin\Retur\Retur::cancelReturSalesAdmin/$1');
 
     $routes->get('printinvoice-sales-admin/(:alphanum)', 'Webmin\Retur\Retur::printInvoiceSalesAdmin/$1');
+
+    $routes->get('cancel-input-retur', 'Webmin\Retur\Retur::cancelInputRetur');
+
+    $routes->get('cancel-input-retur-sales-admin', 'Webmin\Retur\Retur::cancelInputReturSalesAdmin');
+
+    $routes->get('getReturSalesById/(:alphanum)', 'Webmin\Retur\Retur::getReturSalesById/$1');
+
+    $routes->post('savepayment-retur-sales-admin', 'Webmin\Retur\Retur::savepaymentReturSalesAdmin');
 });
 
 
@@ -954,6 +967,14 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 
     /* end section Retur Purchase */
 
+    /* section Retur Sales Admin */
+
+    $routes->get('view-project-retur-sales-list', 'Webmin\Report\ReportProject::viewProjectReturSalesList');
+
+    $routes->get('retur-project-sales-list', 'Webmin\Report\ReportProject::returProjectSalesList');
+
+    /* end section Retur Sales Admin */
+
     /* section debt */
 
     //$routes->get('view-debt-balance-list', 'Webmin\Report\ReportDebt::viewDebtBalanceList');
@@ -991,6 +1012,17 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
     $routes->get('view-sales-list-group-payment', 'Webmin\Report\ReportPos::viewSalesListGroupPayment');
     $routes->get('sales-list-group-payment', 'Webmin\Report\ReportPos::salesListGroupPayment');
 
+    $routes->get('view-sales-list-group-brand', 'Webmin\Report\ReportPos::viewSalesListGroupBrand');
+    $routes->get('detail-sales-list-group-brand', 'Webmin\Report\ReportPos::detailSalesListGroupBrand');
+
+    $routes->get('view-sales-list-group-category', 'Webmin\Report\ReportPos::viewSalesListGroupCategory');
+    $routes->get('detail-sales-list-group-category', 'Webmin\Report\ReportPos::detailSalesListGroupCategory');
+
+    $routes->get('view-sales-list-group-customer', 'Webmin\Report\ReportPos::viewSalesListGroupCustomer');
+    $routes->get('detail-sales-list-group-customer', 'Webmin\Report\ReportPos::detailSalesListGroupCustomer');
+
+    $routes->get('view-sales-allocation-margin', 'Webmin\Report\ReportPos::viewSalesAllocationMargin');
+    $routes->get('detail-sales-allocation-margin', 'Webmin\Report\ReportPos::detailSalesAllocationMargin');
 
 
     $routes->get('view-project-sales-list', 'Webmin\Report\ReportProject::viewProjectSalesList');

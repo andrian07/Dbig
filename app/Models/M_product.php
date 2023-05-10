@@ -742,4 +742,49 @@ class M_product extends Model
         $builder->orderBy('ms_product.product_name,ms_warehouse.warehouse_code', 'ASC');
         return $builder->get();
     }
+
+    public function getReportExpStockList($warehouse_id = '')
+    {
+        $builder = $this->db->table('ms_warehouse_stock');
+        $builder->select('ms_warehouse_stock.product_id,ms_warehouse_stock.warehouse_id,sum(ms_warehouse_stock.stock) as stock,ms_warehouse_stock.exp_date,ms_product.product_code,ms_product.product_name,ms_category.category_name,ms_brand.brand_name,ms_warehouse.warehouse_code,ms_warehouse.warehouse_name,ms_product.has_tax')
+            ->join('ms_product', 'ms_product.product_id=ms_warehouse_stock.product_id')
+            ->join('ms_category', 'ms_category.category_id=ms_product.category_id')
+            ->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id')
+            ->join('ms_warehouse', 'ms_warehouse.warehouse_id=ms_warehouse_stock.warehouse_id');
+
+        if ($warehouse_id != '') {
+            $builder->where('ms_warehouse_stock.warehouse_id', $warehouse_id);
+        }
+
+        $builder->where('ms_warehouse_stock.stock>', '0');
+
+        $now = date('Y-m-d');
+        $builder->where("ms_warehouse_stock.exp_date <= CAST('$now' AS DATE)");
+
+        $builder->groupBy('ms_warehouse_stock.product_id,ms_warehouse_stock.warehouse_id,ms_warehouse_stock.exp_date');
+        $builder->orderBy('ms_product.product_name,ms_warehouse.warehouse_code', 'ASC');
+        return $builder->get();
+    }
+
+    public function getReportExpStockList_old($warehouse_id = '')
+    {
+        $builder = $this->db->table('ms_warehouse_stock');
+        $builder->select('ms_warehouse_stock.product_id,ms_warehouse_stock.warehouse_id,ms_warehouse_stock.stock,ms_warehouse_stock.exp_date,ms_product.product_code,ms_product.product_name,ms_category.category_name,ms_brand.brand_name,ms_warehouse.warehouse_code,ms_warehouse.warehouse_name,ms_product.has_tax')
+            ->join('ms_product', 'ms_product.product_id=ms_warehouse_stock.product_id')
+            ->join('ms_category', 'ms_category.category_id=ms_product.category_id')
+            ->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id')
+            ->join('ms_warehouse', 'ms_warehouse.warehouse_id=ms_warehouse_stock.warehouse_id');
+
+        if ($warehouse_id != '') {
+            $builder->where('ms_warehouse_stock.warehouse_id', $warehouse_id);
+        }
+
+        $builder->where('ms_warehouse_stock.stock>', '0');
+
+        $now = date('Y-m-d');
+        $builder->where("ms_warehouse_stock.exp_date <= CAST('$now' AS DATE)");
+
+        $builder->orderBy('ms_product.product_name,ms_warehouse.warehouse_code', 'ASC');
+        return $builder->get();
+    }
 }

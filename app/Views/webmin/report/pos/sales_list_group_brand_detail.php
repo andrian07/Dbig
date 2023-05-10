@@ -2,21 +2,23 @@
 
 <?= $this->section('css') ?>
 <style>
-    #sample {
+    .text-red {
         color: red;
+    }
+
+    .table-detail {
+        font-size: 10pt;
     }
 </style>
 <?= $this->endSection() ?>
 
 
 <?= $this->section('content') ?>
-
+<!-- page 1/2 -->
 <?php
 $iPage          = 1;
-$numRow         = 1;
 foreach ($pages as $page) :
 ?>
-    <!-- page 1/2 -->
     <div style="<?= $iPage == $max_page ? '' : 'page-break-after:always;' ?>margin:0px;padding:0px;">
         <table width="100%" border="0" cellpadding="1" cellspacing="1" style="background-color:#FFFFFF;  ">
             <tbody>
@@ -31,7 +33,7 @@ foreach ($pages as $page) :
 
         <div class="text-center">
             <div class="text-center">
-                <div width="780px">
+                <div width="1100px">
                     <table width="100%">
                         <tbody>
                             <tr>
@@ -60,26 +62,38 @@ foreach ($pages as $page) :
                     <tbody>
                         <tr>
                             <td colspan="2" align="center">
-                                <p class="header2">DAFTAR STOK KEDALUWARSA<br><br></p>
+                                <p class="header2">LAPORAN PENJUALAN PER BRAND<br><br></p>
                             </td>
                         </tr>
                         <tr valign="top">
-                            <td width="50%" class="loseborder">
+                            <td width="65%" class="loseborder">
                                 <table>
                                     <tbody>
+                                        <tr align="left" class="loseborder">
+                                            <td width="120" class="loseborder">Tanggal Transaksi</td>
+                                            <td class="loseborder">: <?= indo_short_date($start_date) ?> s.d <?= indo_short_date($end_date) ?></td>
+                                        </tr>
                                         <tr align="left">
-                                            <td width="120" class="loseborder">Gudang</td>
-                                            <td class="loseborder">: <?= $warehouse_name ?></td>
+                                            <td class="loseborder">Brand</td>
+                                            <td class="loseborder">: <?= $brand_name ?>&nbsp;</td>
+                                        </tr>
+                                        <tr align="left">
+                                            <td class="loseborder">Toko</td>
+                                            <td class="loseborder">: <?= $store_name ?></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </td>
-                            <td width="50%" class="loseborder">
+                            <td width="35%" class="loseborder">
                                 <table>
                                     <tbody>
                                         <tr align="left">
                                             <td width="120" class="text-right">Hal</td>
                                             <td>:&nbsp;<?= $iPage ?>/<?= $max_page ?>&nbsp;</td>
+                                        </tr>
+                                        <tr align="left">
+                                            <td class="text-right">PPN</td>
+                                            <td class="">: <?= $product_tax ?></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -94,27 +108,32 @@ foreach ($pages as $page) :
                         <thead>
                             <tr>
                                 <th class="header-table" width="3%">NO</th>
-                                <th class="header-table" width="10%" nowrap="">KODE PRODUK</th>
-                                <th class="header-table" width="37%">NAMA PRODUK</th>
-                                <th class="header-table" width="20%">GUDANG</th>
-                                <th class="header-table" width="10%">TANGGAL.EXP</th>
-                                <th class="header-table" width="10%" nowrap="">STOK</th>
+                                <th class="header-table" width="10%" nowrap="">INVOICE</th>
+                                <th class="header-table" width="8%">TANGGAL</th>
+                                <th class="header-table" width="10%">KODE BARANG</th>
+                                <th class="header-table" width="34%">NAMA BARANG</th>
+                                <th class="header-table" width="5%" nowrap="">QTY</th>
+                                <th class="header-table" width="10%" nowrap="">DPP</th>
+                                <th class="header-table" width="10%" nowrap="">PPN</th>
+                                <th class="header-table" width="10%">TOTAL</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
                             foreach ($page as $row) :
                             ?>
-                                <tr align="left">
-                                    <td class="text-right"><?= $numRow ?>&nbsp;</td>
-                                    <td align="text-left" nowrap=""><?= $row['product_code'] ?>&nbsp;</td>
-                                    <td class="text-left col-fixed"><?= $row['product_name'] ?>&nbsp;</td>
-                                    <td class="col-fixed text-left"><?= $row['warehouse_code'] . ' - ' . $row['warehouse_name'] ?></td>
-                                    <td class="col-fixed text-left"><?= indo_short_date($row['exp_date']) ?></td>
-                                    <td class="text-right"><?= numberFormat($row['stock'], TRUE) ?>&nbsp;</td>
+                                <tr>
+                                    <?php
+                                    foreach ($row  as $col) :
+                                        $class = isset($col['class']) ? 'class="' . $col['class'] . '"' : '';
+                                        $colspan = isset($col['colspan']) ? 'colspan="' . $col['colspan'] . '"' : '';
+                                    ?>
+                                        <td <?= $colspan . ' ' . $class ?>><?= $col['text'] ?></td>
+                                    <?php
+                                    endforeach;
+                                    ?>
                                 </tr>
                             <?php
-                                $numRow++;
                             endforeach;
                             ?>
                         </tbody>
@@ -129,6 +148,7 @@ foreach ($pages as $page) :
     $iPage++;
 endforeach;
 ?>
+
 
 
 <?= $this->endSection() ?>

@@ -20,7 +20,7 @@ $num_row = 1;
 
 
 <?php
-foreach ($pages as $returPurchaseData) :
+foreach ($pages as $returSalesmanAdminData) :
     ?>
     <div style="<?= $currentPage == $maxPage ? '' : 'page-break-after:always;' ?>margin:0px;padding:0px;">
         <table width="100%" border="0" cellpadding="1" cellspacing="1" style="background-color:#FFFFFF;  ">
@@ -105,29 +105,35 @@ foreach ($pages as $returPurchaseData) :
                         <thead>
                             <tr>
                                 <th class="header-table" width="20%">NO RETUR</th>
-                                <th class="header-table" width="15%">KODE SUPPLIER</th>
-                                <th class="header-table" width="10%">NAMA SUPPLIER</th>
+                                <th class="header-table" width="15%">KODE CUSTOMER</th>
+                                <th class="header-table" width="10%">NAMA CUSTOMER</th>
                                 <th class="header-table" width="10%">KODE BARANG</th>
                                 <th class="header-table" width="20%">NAMA BARANG</th>
                                 <th class="header-table" width="10%">QTY</th>
                                 <th class="header-table" width="10%">TANGGAL</th>
+                                <th class="header-table" width="10%">DPP</th>
+                                <th class="header-table" width="10%">PPN</th>
                                 <th class="header-table" width="10%">TOTAL</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            foreach ($returPurchaseData as $row) :
+                            foreach ($returSalesmanAdminData as $row) :
+                                $dpp   = floatval($row['hd_retur_total_dpp'] + $row['hd_retur_total_dpp']);
+                                $ppn   = floatval($row['hd_retur_total_ppn']);
                                 $total = floatval($row['hd_retur_total_transaction']);
-                                $qty = floatval($row['dt_retur_qty']);
+                                $qty   = floatval($row['dt_retur_qty']);
                                 ?>
                                 <tr align="left">
-                                    <td class="text-left"><?= $row['hd_retur_purchase_invoice'] ?>&nbsp;</td>
-                                    <td class="text-left"><?= $row['supplier_code'] ?>&nbsp;</td>
-                                    <td class="text-left"><?= $row['supplier_name'] ?>&nbsp;</td>
+                                    <td class="text-left"><?= $row['hd_retur_sales_admin_invoice'] ?>&nbsp;</td>
+                                    <td class="text-left"><?= $row['customer_code'] ?>&nbsp;</td>
+                                    <td class="text-left"><?= $row['customer_name'] ?>&nbsp;</td>
                                     <td class="text-left"><?= $row['item_code'] ?>&nbsp;</td>
                                     <td class="text-left"><?= $row['product_name'] ?>&nbsp;</td>
                                     <td class="text-left"><?= $qty ?>&nbsp;</td>
-                                    <td class="text-left"><?= indo_short_date($row['hd_retur_date'], TRUE) ?>&nbsp;</td> 
+                                    <td class="text-left"><?= indo_short_date($row['hd_retur_date'], TRUE) ?>&nbsp;</td>    
+                                    <td class="text-right"><?= numberFormat($dpp, TRUE) ?>&nbsp;</td>
+                                    <td class="text-right"><?= numberFormat($ppn, TRUE) ?>&nbsp;</td>
                                     <td class="text-right"><?= numberFormat($total, TRUE) ?>&nbsp;</td>
                                 </tr>
                                 <?php

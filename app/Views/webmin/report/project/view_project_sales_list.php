@@ -236,9 +236,6 @@ $assetsUrl = base_url('assets');
         if (salesman_id != null && salesman_id != '') {
             reportUrl += '&salesman_id=' + salesman_id;
         }
-        if (salesman_id != null && salesman_id != '') {
-            reportUrl += '&brand_id=' + brand_id;
-        }
         $('#preview').prop('src', reportUrl);
     })
 
@@ -266,9 +263,6 @@ $assetsUrl = base_url('assets');
         }
         if (salesman_id != null && salesman_id != '') {
             reportUrl += '&salesman_id=' + salesman_id;
-        }
-        if (salesman_id != null && salesman_id != '') {
-            reportUrl += '&brand_id=' + brand_id;
         }
         reportUrl += '&file=xls';
         reportUrl += '&download=Y';

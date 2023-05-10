@@ -29,12 +29,15 @@ $assetsUrl = base_url('assets');
                         <button id="btnadd" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah</button>
                         <button id="btnreload" class="btn btn-secondary"><i class="fas fa-sync"></i> Reload</button>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-success"><i class="fas fa-file-excel"></i> Import Excel</button>
+                            <form id="frmuploadexcel" name="frmupload" method="POST" action="<?= base_url('webmin/customer/upload-excel') ?>" enctype="multipart/form-data">
+                                <input type="file" id="file_import" name="file_import" hidden />
+                            </form>
+                            <button id="btnimport" type="button" class="btn btn-success"><i class="fas fa-file-excel"></i> Import Excel</button>
                             <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div class="dropdown-menu" role="menu">
-                                <a class="dropdown-item" href="#">Template File Excel</a>
+                                <a class="dropdown-item" href="<?= base_url('webmin/customer/download-import-excel') ?>">Template File Excel</a>
                             </div>
                         </div>
                         <!--
@@ -173,6 +176,36 @@ $assetsUrl = base_url('assets');
                                             <label for="customer_address" class="col-sm-12">Alamat</label>
                                             <div class="col-sm-12">
                                                 <textarea id="customer_address" name="customer_address" class="form-control" placeholder="Alamat" data-parsley-maxlength="500" rows="3" required></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="customer_address_block" class="col-sm-12">Blok & No Rumah</label>
+
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <input type="text" class="form-control" id="customer_address_block" name="customer_address_block" placeholder="Blok" value="" data-parsley-maxlength="200">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <input type="text" class="form-control" id="customer_address_number" name="customer_address_number" placeholder="No" value="" data-parsley-maxlength="200">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="customer_address_rt" class="col-sm-12">RT/RW</label>
+
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <input type="text" class="form-control" id="customer_address_rt" name="customer_address_rt" placeholder="RT" value="" data-parsley-maxlength="200">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <input type="text" class="form-control" id="customer_address_rw" name="customer_address_rw" placeholder="RW" value="" data-parsley-maxlength="200">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -587,6 +620,10 @@ $assetsUrl = base_url('assets');
             $('#customer_name').val('');
             $('#customer_phone').val('');
             $('#customer_address').val('');
+            $('#customer_address_block').val('');
+            $('#customer_address_number').val('');
+            $('#customer_address_rt').val('');
+            $('#customer_address_rw').val('');
             let dummy_email = 'u' + randomString(10).toLowerCase() + '@dbig.com';
             $('#customer_email').val(dummy_email);
             $('#customer_group').val('G1');
@@ -619,6 +656,10 @@ $assetsUrl = base_url('assets');
             $('#customer_name').val(htmlEntities.decode(data.customer_name));
             $('#customer_phone').val(htmlEntities.decode(data.customer_phone));
             $('#customer_address').val(htmlEntities.decode(data.customer_address));
+            $('#customer_address_block').val(data.customer_address_block);
+            $('#customer_address_number').val(data.customer_address_number);
+            $('#customer_address_rt').val(data.customer_address_rt);
+            $('#customer_address_rw').val(data.customer_address_rw);
             $('#customer_email').val(htmlEntities.decode(data.customer_email));
             $('#customer_group').val(data.customer_group);
             let mapping_id = parseFloat(data.mapping_id);
@@ -799,6 +840,40 @@ $assetsUrl = base_url('assets');
             })
         })
 
+
+        $('#btnimport').click(function(e) {
+            e.preventDefault();
+            $('#file_import').click();
+        });
+
+
+        function readUploadFile(file) {
+            if (file.files && file.files[0]) {
+                let file_name = file.files[0].name;
+                let file_ext = file_name.split(".").pop().toLowerCase();
+                let ext = ['xlsx'];
+
+                if (jQuery.inArray(file_ext, ext) == -1) {
+                    let message_text = 'File wajib berekstensi ' + ext.join(", ");
+                    message.info(message_text);
+                    file.value = "";
+                } else {
+                    let file_size = file.files[0].size;
+                    let size = max_upload_size.b;
+                    if (file_size > size) {
+                        let message_text = 'Ukuran file maksimum ' + max_upload_size.mb + ' MB'
+                        message.info(message_text);
+                        file.value = "";
+                    } else {
+                        $('#frmuploadexcel').submit();
+                    }
+                }
+            }
+        }
+
+        $("#file_import").change(function() {
+            readUploadFile(this);
+        });
 
 
         filter_point_value.set(0);

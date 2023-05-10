@@ -385,4 +385,272 @@ class M_sales_pos extends Model
         $getResult = $this->db->query($sqlText)->getResultArray();
         return $getResult;
     }
+
+    public function getReportDetailSalesListByBrand($start_date, $end_date, $store_id = '', $brand_id = '', $product_tax = '')
+    {
+        // get sales //
+        $querySales = $this->db->table('dt_pos_sales');
+        $querySales->select('hd_pos_sales.pos_sales_invoice,hd_pos_sales.pos_sales_date,hd_pos_sales.payment_list,hd_pos_sales.payment_remark,ms_store.store_code,user_account.user_realname,dt_pos_sales.sales_dpp,dt_pos_sales.sales_ppn,dt_pos_sales.sales_qty,ms_product_unit.item_code,ms_product.product_name,ms_brand.brand_name,ms_category.category_name,dt_pos_sales.salesman_id,ms_salesman.salesman_code,ms_salesman.salesman_name,ms_unit.unit_name,hd_pos_sales.created_at')
+            ->join('hd_pos_sales', 'hd_pos_sales.pos_sales_id=dt_pos_sales.pos_sales_id')
+            ->join('ms_store', 'ms_store.store_id=hd_pos_sales.store_id')
+            ->join('user_account', 'user_account.user_id=hd_pos_sales.user_id')
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales.item_id')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id')
+            ->join('ms_category', 'ms_category.category_id=ms_product.category_id')
+            ->join('ms_salesman', 'ms_salesman.salesman_id=dt_pos_sales.salesman_id', 'left')
+            ->where("(hd_pos_sales.pos_sales_date BETWEEN '$start_date' AND '$end_date')");
+
+        if ($store_id != '') {
+            $querySales->where('hd_pos_sales.store_id', $store_id);
+        }
+
+        if ($brand_id != '') {
+            $querySales->where('ms_product.brand_id', $brand_id);
+        }
+
+        if ($product_tax != '') {
+            if ($product_tax == 'Y') {
+                $querySales->where('dt_pos_sales.sales_ppn>0');
+            } else {
+                $querySales->where('dt_pos_sales.sales_ppn=0');
+            }
+        }
+
+
+
+        // get sales return //
+        $querySalesReturn = $this->db->table('dt_pos_sales_return');
+        $querySalesReturn->select('hd_pos_sales_return.pos_sales_return_invoice as pos_sales_invoice,hd_pos_sales_return.pos_sales_return_date as pos_sales_date,hd_pos_sales_return.payment_list,hd_pos_sales_return.payment_remark,ms_store.store_code,user_account.user_realname,dt_pos_sales_return.sales_return_dpp as sales_dpp,dt_pos_sales_return.sales_return_ppn as sales_ppn,(dt_pos_sales_return.sales_return_qty*-1) as sales_qty,ms_product_unit.item_code,ms_product.product_name,ms_brand.brand_name,ms_category.category_name,dt_pos_sales_return.salesman_id,ms_salesman.salesman_code,ms_salesman.salesman_name,ms_unit.unit_name,hd_pos_sales_return.created_at')
+            ->join('hd_pos_sales_return', 'hd_pos_sales_return.pos_sales_return_id=dt_pos_sales_return.pos_sales_return_id')
+            ->join('ms_store', 'ms_store.store_id=hd_pos_sales_return.store_id')
+            ->join('user_account', 'user_account.user_id=hd_pos_sales_return.user_id')
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales_return.item_id')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id')
+            ->join('ms_category', 'ms_category.category_id=ms_product.category_id')
+            ->join('ms_salesman', 'ms_salesman.salesman_id=dt_pos_sales_return.salesman_id', 'left')
+            ->where("(hd_pos_sales_return.pos_sales_return_date BETWEEN '$start_date' AND '$end_date')");
+
+        if ($store_id != '') {
+            $querySalesReturn->where('hd_pos_sales_return.store_id', $store_id);
+        }
+
+        if ($brand_id != '') {
+            $querySalesReturn->where('ms_product.brand_id', $brand_id);
+        }
+
+        if ($product_tax != '') {
+            if ($product_tax == 'Y') {
+                $querySalesReturn->where('dt_pos_sales_return.sales_return_ppn>0');
+            } else {
+                $querySalesReturn->where('dt_pos_sales_return.sales_return_ppn=0');
+            }
+        }
+
+        $qSI = $querySales->getCompiledSelect();
+        $qSR = $querySalesReturn->getCompiledSelect();
+
+        $sqlText = "$qSI UNION ALL $qSR ORDER BY brand_name,created_at ASC";
+        $getResult = $this->db->query($sqlText)->getResultArray();
+        return $getResult;
+    }
+
+    public function getReportDetailSalesListByCategory($start_date, $end_date, $store_id = '', $category_id = '', $product_tax = '')
+    {
+        // get sales //
+        $querySales = $this->db->table('dt_pos_sales');
+        $querySales->select('hd_pos_sales.pos_sales_invoice,hd_pos_sales.pos_sales_date,hd_pos_sales.payment_list,hd_pos_sales.payment_remark,ms_store.store_code,user_account.user_realname,dt_pos_sales.sales_dpp,dt_pos_sales.sales_ppn,dt_pos_sales.sales_qty,ms_product_unit.item_code,ms_product.product_name,ms_brand.brand_name,ms_category.category_name,dt_pos_sales.salesman_id,ms_salesman.salesman_code,ms_salesman.salesman_name,ms_unit.unit_name,hd_pos_sales.created_at')
+            ->join('hd_pos_sales', 'hd_pos_sales.pos_sales_id=dt_pos_sales.pos_sales_id')
+            ->join('ms_store', 'ms_store.store_id=hd_pos_sales.store_id')
+            ->join('user_account', 'user_account.user_id=hd_pos_sales.user_id')
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales.item_id')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id')
+            ->join('ms_category', 'ms_category.category_id=ms_product.category_id')
+            ->join('ms_salesman', 'ms_salesman.salesman_id=dt_pos_sales.salesman_id', 'left')
+            ->where("(hd_pos_sales.pos_sales_date BETWEEN '$start_date' AND '$end_date')");
+
+        if ($store_id != '') {
+            $querySales->where('hd_pos_sales.store_id', $store_id);
+        }
+
+        if ($category_id != '') {
+            $querySales->where('ms_product.category_id', $category_id);
+        }
+
+        if ($product_tax != '') {
+            if ($product_tax == 'Y') {
+                $querySales->where('dt_pos_sales.sales_ppn>0');
+            } else {
+                $querySales->where('dt_pos_sales.sales_ppn=0');
+            }
+        }
+
+
+
+        // get sales return //
+        $querySalesReturn = $this->db->table('dt_pos_sales_return');
+        $querySalesReturn->select('hd_pos_sales_return.pos_sales_return_invoice as pos_sales_invoice,hd_pos_sales_return.pos_sales_return_date as pos_sales_date,hd_pos_sales_return.payment_list,hd_pos_sales_return.payment_remark,ms_store.store_code,user_account.user_realname,dt_pos_sales_return.sales_return_dpp as sales_dpp,dt_pos_sales_return.sales_return_ppn as sales_ppn,(dt_pos_sales_return.sales_return_qty*-1) as sales_qty,ms_product_unit.item_code,ms_product.product_name,ms_brand.brand_name,ms_category.category_name,dt_pos_sales_return.salesman_id,ms_salesman.salesman_code,ms_salesman.salesman_name,ms_unit.unit_name,hd_pos_sales_return.created_at')
+            ->join('hd_pos_sales_return', 'hd_pos_sales_return.pos_sales_return_id=dt_pos_sales_return.pos_sales_return_id')
+            ->join('ms_store', 'ms_store.store_id=hd_pos_sales_return.store_id')
+            ->join('user_account', 'user_account.user_id=hd_pos_sales_return.user_id')
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales_return.item_id')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id')
+            ->join('ms_category', 'ms_category.category_id=ms_product.category_id')
+            ->join('ms_salesman', 'ms_salesman.salesman_id=dt_pos_sales_return.salesman_id', 'left')
+            ->where("(hd_pos_sales_return.pos_sales_return_date BETWEEN '$start_date' AND '$end_date')");
+
+        if ($store_id != '') {
+            $querySalesReturn->where('hd_pos_sales_return.store_id', $store_id);
+        }
+
+        if ($category_id != '') {
+            $querySalesReturn->where('ms_product.category_id', $category_id);
+        }
+
+        if ($product_tax != '') {
+            if ($product_tax == 'Y') {
+                $querySalesReturn->where('dt_pos_sales_return.sales_return_ppn>0');
+            } else {
+                $querySalesReturn->where('dt_pos_sales_return.sales_return_ppn=0');
+            }
+        }
+
+        $qSI = $querySales->getCompiledSelect();
+        $qSR = $querySalesReturn->getCompiledSelect();
+
+        $sqlText = "$qSI UNION ALL $qSR ORDER BY category_name,created_at ASC";
+        $getResult = $this->db->query($sqlText)->getResultArray();
+        return $getResult;
+    }
+
+    public function getReportDetailSalesListByCustomer($start_date, $end_date, $store_id = '', $customer_id = '', $product_tax = '')
+    {
+        // get sales //
+        $querySales = $this->db->table('dt_pos_sales');
+        $querySales->select('hd_pos_sales.pos_sales_invoice,hd_pos_sales.pos_sales_date,hd_pos_sales.payment_list,hd_pos_sales.payment_remark,ms_store.store_code,user_account.user_realname,dt_pos_sales.sales_dpp,dt_pos_sales.sales_ppn,dt_pos_sales.sales_qty,ms_product_unit.item_code,ms_product.product_name,ms_brand.brand_name,ms_category.category_name,dt_pos_sales.salesman_id,ms_salesman.salesman_code,ms_salesman.salesman_name,ms_unit.unit_name,hd_pos_sales.created_at,ms_customer.customer_code,ms_customer.customer_name')
+            ->join('hd_pos_sales', 'hd_pos_sales.pos_sales_id=dt_pos_sales.pos_sales_id')
+            ->join('ms_customer', 'ms_customer.customer_id=hd_pos_sales.customer_id')
+            ->join('ms_store', 'ms_store.store_id=hd_pos_sales.store_id')
+            ->join('user_account', 'user_account.user_id=hd_pos_sales.user_id')
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales.item_id')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id')
+            ->join('ms_category', 'ms_category.category_id=ms_product.category_id')
+            ->join('ms_salesman', 'ms_salesman.salesman_id=dt_pos_sales.salesman_id', 'left')
+            ->where("(hd_pos_sales.pos_sales_date BETWEEN '$start_date' AND '$end_date')");
+
+        if ($store_id != '') {
+            $querySales->where('hd_pos_sales.store_id', $store_id);
+        }
+
+        if ($customer_id != '') {
+            $querySales->where('hd_pos_sales.customer_id', $customer_id);
+        }
+
+        if ($product_tax != '') {
+            if ($product_tax == 'Y') {
+                $querySales->where('dt_pos_sales.sales_ppn>0');
+            } else {
+                $querySales->where('dt_pos_sales.sales_ppn=0');
+            }
+        }
+
+
+
+        // get sales return //
+        $querySalesReturn = $this->db->table('dt_pos_sales_return');
+        $querySalesReturn->select('hd_pos_sales_return.pos_sales_return_invoice as pos_sales_invoice,hd_pos_sales_return.pos_sales_return_date as pos_sales_date,hd_pos_sales_return.payment_list,hd_pos_sales_return.payment_remark,ms_store.store_code,user_account.user_realname,dt_pos_sales_return.sales_return_dpp as sales_dpp,dt_pos_sales_return.sales_return_ppn as sales_ppn,(dt_pos_sales_return.sales_return_qty*-1) as sales_qty,ms_product_unit.item_code,ms_product.product_name,ms_brand.brand_name,ms_category.category_name,dt_pos_sales_return.salesman_id,ms_salesman.salesman_code,ms_salesman.salesman_name,ms_unit.unit_name,hd_pos_sales_return.created_at,ms_customer.customer_code,ms_customer.customer_name')
+            ->join('hd_pos_sales_return', 'hd_pos_sales_return.pos_sales_return_id=dt_pos_sales_return.pos_sales_return_id')
+            ->join('ms_customer', 'ms_customer.customer_id=hd_pos_sales_return.customer_id')
+            ->join('ms_store', 'ms_store.store_id=hd_pos_sales_return.store_id')
+            ->join('user_account', 'user_account.user_id=hd_pos_sales_return.user_id')
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales_return.item_id')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id')
+            ->join('ms_category', 'ms_category.category_id=ms_product.category_id')
+            ->join('ms_salesman', 'ms_salesman.salesman_id=dt_pos_sales_return.salesman_id', 'left')
+            ->where("(hd_pos_sales_return.pos_sales_return_date BETWEEN '$start_date' AND '$end_date')");
+
+        if ($store_id != '') {
+            $querySalesReturn->where('hd_pos_sales_return.store_id', $store_id);
+        }
+
+        if ($customer_id != '') {
+            $querySalesReturn->where('hd_pos_sales_return.customer_id', $customer_id);
+        }
+
+        if ($product_tax != '') {
+            if ($product_tax == 'Y') {
+                $querySalesReturn->where('dt_pos_sales_return.sales_return_ppn>0');
+            } else {
+                $querySalesReturn->where('dt_pos_sales_return.sales_return_ppn=0');
+            }
+        }
+
+        $qSI = $querySales->getCompiledSelect();
+        $qSR = $querySalesReturn->getCompiledSelect();
+
+        $sqlText = "$qSI UNION ALL $qSR ORDER BY customer_name,created_at ASC";
+        $getResult = $this->db->query($sqlText)->getResultArray();
+        return $getResult;
+    }
+
+    public function getReportDetailSalesAllocationMargin($start_date, $end_date, $store_id = '')
+    {
+        // get sales //
+        $querySales = $this->db->table('dt_pos_sales');
+        $querySales->select('hd_pos_sales.pos_sales_invoice,hd_pos_sales.pos_sales_date,hd_pos_sales.payment_list,hd_pos_sales.payment_remark,ms_store.store_code,user_account.user_realname,dt_pos_sales.margin_allocation,dt_pos_sales.sales_dpp,dt_pos_sales.sales_ppn,dt_pos_sales.sales_qty,ms_product_unit.item_code,ms_product.product_name,ms_brand.brand_name,ms_category.category_name,ms_salesman.salesman_code,ms_salesman.salesman_name,ms_unit.unit_name,hd_pos_sales.created_at')
+            ->join('hd_pos_sales', 'hd_pos_sales.pos_sales_id=dt_pos_sales.pos_sales_id')
+            ->join('ms_store', 'ms_store.store_id=hd_pos_sales.store_id')
+            ->join('user_account', 'user_account.user_id=hd_pos_sales.user_id')
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales.item_id')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id')
+            ->join('ms_category', 'ms_category.category_id=ms_product.category_id')
+            ->join('ms_salesman', 'ms_salesman.salesman_id=dt_pos_sales.salesman_id', 'left')
+            ->where("(hd_pos_sales.pos_sales_date BETWEEN '$start_date' AND '$end_date')");
+
+        if ($store_id != '') {
+            $querySales->where('hd_pos_sales.store_id', $store_id);
+        }
+
+        $querySales->where('dt_pos_sales.margin_allocation>0');
+
+        // get sales return //
+        $querySalesReturn = $this->db->table('dt_pos_sales_return');
+        $querySalesReturn->select('hd_pos_sales_return.pos_sales_return_invoice as pos_sales_invoice,hd_pos_sales_return.pos_sales_return_date as pos_sales_date,hd_pos_sales_return.payment_list,hd_pos_sales_return.payment_remark,ms_store.store_code,user_account.user_realname,dt_pos_sales_return.margin_allocation,dt_pos_sales_return.sales_return_dpp as sales_dpp,dt_pos_sales_return.sales_return_ppn as sales_ppn,(dt_pos_sales_return.sales_return_qty*-1) as sales_qty,ms_product_unit.item_code,ms_product.product_name,ms_brand.brand_name,ms_category.category_name,ms_salesman.salesman_code,ms_salesman.salesman_name,ms_unit.unit_name,hd_pos_sales_return.created_at')
+            ->join('hd_pos_sales_return', 'hd_pos_sales_return.pos_sales_return_id=dt_pos_sales_return.pos_sales_return_id')
+            ->join('ms_store', 'ms_store.store_id=hd_pos_sales_return.store_id')
+            ->join('user_account', 'user_account.user_id=hd_pos_sales_return.user_id')
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales_return.item_id')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id')
+            ->join('ms_category', 'ms_category.category_id=ms_product.category_id')
+            ->join('ms_salesman', 'ms_salesman.salesman_id=dt_pos_sales_return.salesman_id', 'left')
+            ->where("(hd_pos_sales_return.pos_sales_return_date BETWEEN '$start_date' AND '$end_date')");
+
+        if ($store_id != '') {
+            $querySalesReturn->where('hd_pos_sales_return.store_id', $store_id);
+        }
+
+        $querySalesReturn->where('dt_pos_sales_return.margin_allocation>0');
+
+        $qSI = $querySales->getCompiledSelect();
+        $qSR = $querySalesReturn->getCompiledSelect();
+
+        $sqlText = "$qSI UNION ALL $qSR ORDER BY created_at,pos_sales_invoice ASC";
+        $getResult = $this->db->query($sqlText)->getResultArray();
+        return $getResult;
+    }
 }

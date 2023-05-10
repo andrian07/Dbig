@@ -128,15 +128,19 @@ $report_role = $user_role['report'];
                                 <i class="fas fa-minus"></i>
                             </button>
                         </div>
-                        <!-- /.card-tools -->
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
                         <ul class="list-group">
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list') ?>" class="text-primary">Laporan Penjualan Retail</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-salesman') ?>" class="text-primary">Laporan Penjualan Retail Per Salesman</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-payment') ?>" class="text-primary">Laporan Penjualan Retail Per Metode Pembayaran</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-sales-list') ?>" class="text-primary">Laporan Penjualan Proyek </a></li>
+                           <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list') ?>" class="text-primary">Laporan Penjualan Retail</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-customer') ?>" class="text-primary">Laporan Penjualan Retail Per Customer</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-salesman') ?>" class="text-primary">Laporan Penjualan Retail Per Salesman</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-brand') ?>" class="text-primary">Laporan Penjualan Retail Per Brand</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-category') ?>" class="text-primary">Laporan Penjualan Retail Per Kategori</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-payment') ?>" class="text-primary">Laporan Penjualan Retail Per Metode Pembayaran</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-allocation-margin') ?>" class="text-primary">Laporan Alokasi Margin Penjualan Retail</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-sales-list') ?>" class="text-primary">Laporan Penjualan Proyek </a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-retur-sales-list') ?>" class="text-primary">Laporan Retur Penjualan Proyek </a></li>
                         </ul>
                     </div>
                     <!-- /.card-body -->
@@ -169,36 +173,10 @@ $report_role = $user_role['report'];
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
-            </div>         
+            </div>        
 
             <div class="col-md-4">
                 <div class="card card-success">
-                    <div class="card-header">
-                        <h3 class="card-title">Laporan Retur Penjualan</h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
-                        <!-- /.card-tools -->
-                    </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <ul class="list-group">
-                                <!--
-                                <li class="list-group-item"><a href="<?= base_url('report/view-sales-return-list') ?>" class="text-primary">Daftar Retur Penjualan</a></li>
-                                <li class="list-group-item"><a href="<?= base_url('report/view-user-sales-return-list') ?>" class="text-primary">Daftar Retur Penjualan Per User</a></li>
-                            -->
-                        </ul>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-
-            <div class="col-md-4">
-                <div class="card card-primary">
                     <div class="card-header">
                         <h3 class="card-title">Utilitas</h3>
 

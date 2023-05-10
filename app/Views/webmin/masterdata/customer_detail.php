@@ -107,6 +107,18 @@ $product_type   = 'N' == 'Y' ? 'Barang Kena Pajak (BKP)' : 'Barang Tidak Dikenak
                                                         <td><?= nl2br(esc($customer['customer_address'])) ?></td>
                                                     </tr>
                                                     <tr>
+                                                        <td class="text-right"><b>Blok &nbsp;:&nbsp;</b></td>
+                                                        <td><?= esc($customer['customer_address_block']) ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right"><b>No Rumah &nbsp;:&nbsp;</b></td>
+                                                        <td><?= esc($customer['customer_address_number']) ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right"><b>RT/RW&nbsp;:&nbsp;</b></td>
+                                                        <td><?= esc($customer['customer_address_rt']) ?>/<?= esc($customer['customer_address_rw']) ?></td>
+                                                    </tr>
+                                                    <tr>
                                                         <td class="text-right"><b>No Telp&nbsp;:&nbsp;</b></td>
                                                         <td><?= esc($customer['customer_phone']) ?></td>
                                                     </tr>

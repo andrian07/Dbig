@@ -390,8 +390,23 @@ class MyApp extends BaseConfig
                 'purchase_return_list'             => ['text' => 'Daftar Retur Pembelian'],
                 'product_purchase_return_recap'    => ['text' => 'Rekap Retur Pembelian Produk'],
 
+                /* sales section */
+
+                /* pos sales */
+                'pos_sales_list'                    => ['text' => 'Laporan Penjualan Retail'],
+                'pos_sales_list_group_salesman'     => ['text' => 'Laporan Penjualan Retail Per Salesman'],
+                'pos_sales_list_group_payment'      => ['text' => 'Laporan Penjualan Retail Per Jenis Pembayaran'],
+                'pos_sales_list_group_brand'        => ['text' => 'Laporan Penjualan Retail Per Brand'],
+                'pos_sales_list_group_category'     => ['text' => 'Laporan Penjualan Retail Per Kategori'],
+                'pos_sales_list_group_customer'     => ['text' => 'Laporan Penjualan Retail Per Customer'],
+                'pos_sales_allocation_margin'       => ['text' => 'Laporan Alokasi Margin Penjualan Retail'],
+                /* end pos sales */
+
+
+
                 'sales_list'                => ['text' => 'Daftar Penjualan'],
                 'project_list'              => ['text' => 'Daftar Penjualan Proyek'],
+                'retur_project_list'        => ['text' => 'Daftar Retur Penjualan Proyek'],
                 'user_sales_list'           => ['text' => 'Daftar Penjualan Per User'],
                 'product_sales_recap'       => ['text' => 'Rekap Penjualan Produk'],
                 'category_product_sales_recap' => ['text' => 'Rekap Penjualan Produk Per Kategori'],

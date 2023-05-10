@@ -18,6 +18,7 @@ class M_retur extends Model
     protected $table_temp_retur_sales_admin = 'temp_retur_sales_admin';
     protected $table_hd_retur_sales_admin = 'hd_retur_sales_admin';
     protected $table_dt_retur_sales_admin = 'dt_retur_sales_admin';
+    protected $table_hd_sales_admin = 'hd_sales_admin';
 
     public function insertTemp($data)
     {
@@ -437,6 +438,141 @@ class M_retur extends Model
 
     }
 
+
+    public function updateReturSalesAdmin($input)
+    {
+        $this->db->query('LOCK TABLES hd_retur_sales_admin WRITE, dt_retur_sales_admin READ');
+
+        $this->db->transBegin();
+
+        $saveQueries = NULL;
+
+        $sales_no                          = $input['sales_no'];
+        $hd_retur_sales_admin_id           = $input['hd_retur_sales_admin_id'];
+        $hd_retur_payment                  = $input['payment_type'];
+        $hd_retur_total_transaction        = $input['hd_retur_total_transaction'];
+
+
+        $updateRetur = "update hd_retur_sales_admin SET hd_retur_payment = '".$hd_retur_payment."' WHERE hd_retur_sales_admin_id = '".$hd_retur_sales_admin_id."'";
+
+        $this->db->query($updateRetur);
+
+        if ($this->db->affectedRows() > 0) {
+
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
+
+        }
+
+
+        $get_sales_admin = $this->db->table($this->table_hd_sales_admin)->select('*')->where('sales_admin_invoice', $sales_no)->get()->getRowArray();
+
+        if($hd_retur_payment == 'Ya'){
+            $get_sales_admin_retur_nominal = $this->db->table($this->table_hd_sales_admin)->select('sales_admin_retur_nominal')->where('sales_admin_invoice', $sales_no)->get()->getRowArray();
+
+            $total_retur_sales_admin = $get_sales_admin_retur_nominal['sales_admin_retur_nominal'] + $hd_retur_total_transaction;
+
+            $updateStatus =  $this->db->table($this->table_hd_sales_admin)->where('sales_admin_invoice', $sales_no)->update(['sales_admin_retur_nominal' => $total_retur_sales_admin]);
+        }
+
+        $updateStatus =  $this->db->table($this->table_hd_retur_sales_admin)->where('hd_retur_sales_admin_id', $hd_retur_sales_admin_id)->update(['hd_retur_status' => 'Selesai']);
+
+
+        
+        $sqlUpdateStock = "insert into ms_product_stock (product_id  , warehouse_id  , stock) VALUES";
+
+        $sqlUpdateWarehouse = "insert into ms_warehouse_stock (stock_id, product_id , warehouse_id , purchase_id , exp_date, stock) VALUES";
+
+        //$vUpdateProduct = [];
+        $vUpdateStock = [];
+        $vUpdateWarehouse = [];
+
+        $getDtRetur =  $this->getDtReturSalesAdmin($hd_retur_sales_admin_id);
+
+        foreach ($getDtRetur->getResultArray() as $row) {
+
+
+
+            $hd_retur_sales_admin_id               = $hd_retur_sales_admin_id ;
+            $dt_retur_item_id                      = $row['dt_retur_item_id'];
+            $dt_retur_price                        = floatval($row['dt_retur_price']);
+            $dt_retur_dpp                          = floatval($row['dt_retur_dpp']);
+            $dt_retur_ppn                          = floatval($row['dt_retur_ppn']);
+            $dt_retur_warehouse                    = $row['warehouse_id'];
+            $dt_retur_qty                          = floatval($row['dt_retur_qty']);
+            $dt_retur_total                        = floatval($row['dt_retur_total']);
+
+            $product_id                            = $row['product_id'];
+            
+            $product_content        = floatval($row['product_content']);
+
+            $base_sales_stock    = $dt_retur_qty * $product_content;
+
+            $getWarehouseStock = $this->db->table($this->table_warehouse_stock)->select('*')->where('product_id', $product_id)->where('warehouse_id', $dt_retur_warehouse)->orderBy('exp_date', 'desc')->limit(1)->get()->getRowArray();
+
+            if($getWarehouseStock != null){
+                $stock_id               = $getWarehouseStock['stock_id'];
+                $exp_date_ed            = $getWarehouseStock['exp_date'];
+                $purchase_id            = $getWarehouseStock['purchase_id'];
+            }
+
+            $vUpdateStock[] = "('$product_id', '$dt_retur_warehouse', '$base_sales_stock')";
+
+            if($getWarehouseStock != null){
+                $vUpdateWarehouse[] = "('$stock_id', '$product_id', '$dt_retur_warehouse', '$purchase_id', '$exp_date_ed', '$base_sales_stock')";
+            }
+        }
+
+        
+        $sqlUpdateStock .= implode(',', $vUpdateStock). " ON DUPLICATE KEY UPDATE stock=stock+VALUES(stock)";
+
+        if($getWarehouseStock != null){
+            $sqlUpdateWarehouse .= implode(',', $vUpdateWarehouse). " ON DUPLICATE KEY UPDATE stock=stock+VALUES(stock)";
+        }
+
+        
+        $this->db->query($sqlUpdateStock);
+
+        if ($this->db->affectedRows() > 0) {
+
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
+
+        }
+
+        if($getWarehouseStock != null){
+            $this->db->query($sqlUpdateWarehouse);
+
+            if ($this->db->affectedRows() > 0) {
+
+                $saveQueries[] = $this->db->getLastQuery()->getQuery();
+
+            }
+        }
+
+        if ($this->db->transStatus() === false) {
+
+            $saveQueries[] = NULL;
+
+            $this->db->transRollback();
+
+            $save = ['success' => FALSE, 'hd_retur_sales_admin_id' => 0];
+
+        } else {
+
+            $this->db->transCommit();
+
+            $save = ['success' => TRUE, 'hd_retur_sales_admin_id' => $hd_retur_sales_admin_id ];
+
+        }
+
+
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'retur_sales_admin', $hd_retur_sales_admin_id, 'update_payment');
+
+        return $save;
+
+    }
+
     public function cancelOrder($hd_retur_purchase_id)
     {
 
@@ -521,9 +657,9 @@ class M_retur extends Model
 
         $sqlDtOrder = "insert into dt_retur_purchase(hd_retur_purchase_id,dt_retur_purchase_invoice,dt_retur_supplier_id,dt_retur_item_id,dt_retur_price,dt_retur_ppn,dt_retur_dpp,dt_retur_disc,dt_retur_disc_nota,dt_retur_ongkir,dt_retur_warehouse,dt_retur_qty_buy,dt_retur_qty,dt_retur_total) VALUES";
 
-        $sqlUpdateStock = "insert into ms_product_stock (product_id  , warehouse_id  , stock) VALUES";
+        //$sqlUpdateStock = "insert into ms_product_stock (product_id  , warehouse_id  , stock) VALUES";
 
-        $sqlUpdateWarehouse = "insert into ms_warehouse_stock (stock_id, product_id , warehouse_id , purchase_id , exp_date, stock) VALUES";
+        //$sqlUpdateWarehouse = "insert into ms_warehouse_stock (stock_id, product_id , warehouse_id , purchase_id , exp_date, stock) VALUES";
 
         $sqlDtValues = [];
         $vUpdateProduct = [];
@@ -652,14 +788,8 @@ class M_retur extends Model
 
         $sqlDtOrder = "insert into dt_retur_sales_admin(hd_retur_sales_admin_id,dt_retur_item_id,dt_retur_price,dt_retur_ppn,dt_retur_dpp,dt_retur_disc,dt_retur_disc_nota,dt_retur_qty,dt_retur_qty_sell,dt_retur_total) VALUES";
 
-        $sqlUpdateStock = "insert into ms_product_stock (product_id  , warehouse_id  , stock) VALUES";
-
-        $sqlUpdateWarehouse = "insert into ms_warehouse_stock (stock_id, product_id , warehouse_id , purchase_id , exp_date, stock) VALUES";
 
         $sqlDtValues = [];
-        $vUpdateProduct = [];
-        $vUpdateStock = [];
-        $vUpdateWarehouse = [];
 
 
         $getTemp =  $this->getTempReturSalesAdmin($data['created_by']);
@@ -684,36 +814,19 @@ class M_retur extends Model
             $product_content        = floatval($row['product_content']);
             $base_purchase_stock    = $dt_retur_qty * $product_content;
 
-            $getwarehouse = $this->db->table($this->table_warehouse)->select('*')->where('store_id', $data['hd_retur_store_id'])->where('warehouse_name NOT LIKE "%konsinyasi%"')->limit(1)->get()->getRowArray();
+            //$getwarehouse = $this->db->table($this->table_warehouse)->select('*')->where('store_id', $data['hd_retur_store_id'])->where('warehouse_name NOT LIKE "%konsinyasi%"')->limit(1)->get()->getRowArray();
 
-            $warehouse_id = $getwarehouse['warehouse_id'];
+            //$warehouse_id = $getwarehouse['warehouse_id'];
 
-            $getWarehouseStock = $this->db->table($this->table_warehouse_stock)->select('*')->where('product_id', $product_id)->where('warehouse_id', $warehouse_id)->orderBy('exp_date', 'desc')->limit(1)->get()->getRowArray();
+            //$getWarehouseStock = $this->db->table($this->table_warehouse_stock)->select('*')->where('product_id', $product_id)->where('warehouse_id', $warehouse_id)->orderBy('exp_date', 'desc')->limit(1)->get()->getRowArray();
 
 
 
             $sqlDtValues[] = "('$hd_retur_sales_admin_id','$dt_retur_item_id','$dt_retur_price','$dt_retur_ppn','$dt_retur_dpp','$dt_retur_disc','$dt_retur_disc_nota','$dt_retur_qty','$dt_retur_qty_sell','$dt_retur_total')";
 
-            $vUpdateStock[] = "('$product_id', '$warehouse_id', '$base_purchase_stock')";
-
-            if($getWarehouseStock != null){
-
-                $stock_id    = $getWarehouseStock['stock_id'];
-                $purchase_id = $getWarehouseStock['purchase_id'];
-                $exp_date    = $getWarehouseStock['exp_date'];
-
-                $vUpdateWarehouse[] = "('$stock_id','$product_id', '$warehouse_id', '$purchase_id', '$exp_date', '$base_purchase_stock')";
-            }
-
         }
 
         $sqlDtOrder .= implode(',', $sqlDtValues);
-
-        $sqlUpdateStock .= implode(',', $vUpdateStock). " ON DUPLICATE KEY UPDATE stock=stock+VALUES(stock)";
-
-        if($getWarehouseStock != null){
-            $sqlUpdateWarehouse .= implode(',', $vUpdateWarehouse). " ON DUPLICATE KEY UPDATE stock_id=VALUES(stock_id),stock=stock+VALUES(stock)";
-        }
 
 
 
@@ -723,19 +836,6 @@ class M_retur extends Model
             $saveQueries[] = $this->db->getLastQuery()->getQuery();
 
         }
-
-        $this->db->query($sqlUpdateStock);
-        if ($this->db->affectedRows() > 0) {
-            $saveQueries[] = $this->db->getLastQuery()->getQuery();
-        }
-
-        if($getWarehouseStock != null){
-            $this->db->query($sqlUpdateWarehouse);
-            if ($this->db->affectedRows() > 0) {
-                $saveQueries[] = $this->db->getLastQuery()->getQuery();
-            }
-        }
-
 
         if ($this->db->transStatus() === false) {
 
@@ -844,13 +944,19 @@ class M_retur extends Model
 
         return $builder->select('*')
 
+        ->join('hd_retur_sales_admin', 'hd_retur_sales_admin.hd_retur_sales_admin_id = dt_retur_sales_admin.hd_retur_sales_admin_id')
+
         ->join('ms_product_unit', 'ms_product_unit.item_id = dt_retur_sales_admin.dt_retur_item_id')
 
         ->join('ms_product', 'ms_product.product_id = ms_product_unit.product_id')
 
         ->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id')
 
-        ->where('hd_retur_sales_admin_id', $hd_retur_sales_admin_id)
+        ->join('ms_store', 'ms_store.store_id = hd_retur_sales_admin.hd_retur_store_id')
+
+        ->join('ms_warehouse', 'ms_warehouse.store_id = ms_store.store_id')
+
+        ->where('dt_retur_sales_admin.hd_retur_sales_admin_id', $hd_retur_sales_admin_id)
 
         ->get();
 
@@ -1213,7 +1319,7 @@ class M_retur extends Model
 
     public function getReportData($start_date, $end_date, $supplier_id)
     {
-        $builder = $this->db->table('hd_retur_purchase')->select("hd_retur_total_dpp, hd_retur_total_ppn, hd_retur_total_transaction, hd_retur_purchase_invoice, hd_retur_date, supplier_code, supplier_name, hd_retur_purchase_invoice, dt_retur_purchase_invoice, hd_retur_date, item_code, product_name, brand_name, category_name, dt_retur_qty, unit_name, dt_retur_price, dt_retur_dpp, dt_retur_ppn, dt_retur_total, warehouse_name");
+        $builder = $this->db->table('hd_retur_purchase')->select("hd_retur_total_dpp, hd_retur_total_ppn, hd_retur_total_transaction, hd_retur_purchase_invoice, hd_retur_date, supplier_code, supplier_name, hd_retur_purchase_invoice, dt_retur_purchase_invoice, hd_retur_date, item_code, product_name, brand_name, category_name, dt_retur_qty, unit_name, dt_retur_price, dt_retur_dpp, dt_retur_ppn, dt_retur_total, warehouse_name, dt_retur_disc, dt_retur_disc_nota, dt_retur_ongkir");
         $builder->join('dt_retur_purchase', 'dt_retur_purchase.hd_retur_purchase_id = hd_retur_purchase.hd_retur_purchase_id');
         $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = dt_retur_purchase.dt_retur_warehouse');
         $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_retur_purchase.hd_retur_supplier_id');

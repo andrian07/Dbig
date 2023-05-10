@@ -67,7 +67,6 @@ $assetsUrl = base_url('assets');
                                                         <span class="sr-only">Toggle Dropdown</span>
                                                     </button>
                                                     <div class="dropdown-menu" role="menu">
-                                                        <a id="btnexportpdf" class="dropdown-item" href="#">Export PDF</a>
                                                         <a id="btnexportexcel" class="dropdown-item" href="#">Export Excel</a>
                                                     </div>
                                                 </div>
