@@ -39,22 +39,11 @@ $assetsUrl = base_url('assets');
                                             </div>
 
 
-                                            <div class="col-md-2">
+                                            <div class="col-md-4">
                                                 <!-- text input -->
                                                 <div class="form-group">
-                                                    <label>Cetak Versi</label>
-                                                    <select id="print_version" name="print_version" class="form-control">
-                                                        <option value="1">Tanpa Diskon</option>
-                                                        <option value="2">Diskon</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-2">
-                                                <!-- text input -->
-                                                <div class="form-group">
-                                                    <label>Jumlah</label>
-                                                    <input type="number" id="print_count" name="print_count" class="form-control" value="1">
+                                                    <label>Brand:</label>
+                                                    <select id="brand_id" name="brand_id" class="form-control" multiple></select>
                                                 </div>
                                             </div>
 
@@ -99,6 +88,25 @@ $assetsUrl = base_url('assets');
                                                             <label class="form-check-label" for="price_G4">Platinum</label>
                                                         </div>
                                                     </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <!-- text input -->
+                                                <div class="form-group">
+                                                    <label>Cetak Versi</label>
+                                                    <select id="print_version" name="print_version" class="form-control">
+                                                        <option value="1">Tanpa Diskon</option>
+                                                        <option value="2">Diskon</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <!-- text input -->
+                                                <div class="form-group">
+                                                    <label>Jumlah</label>
+                                                    <input type="number" id="print_count" name="print_count" class="form-control" value="1">
                                                 </div>
                                             </div>
 
@@ -158,7 +166,7 @@ $assetsUrl = base_url('assets');
 <script>
     $(document).ready(function() {
         $("#item_id").select2({
-            placeholder: '-- Semua --',
+            placeholder: '-- Pilih --',
             width: "100%",
             allowClear: true,
             ajax: {
@@ -179,8 +187,40 @@ $assetsUrl = base_url('assets');
             },
         });
 
+        $("#brand_id").select2({
+            placeholder: '-- Pilih --',
+            width: "100%",
+            allowClear: true,
+            ajax: {
+                url: base_url + "/webmin/select/brand",
+                dataType: "json",
+                type: "GET",
+                delay: select2Delay,
+                data: function(params) {
+                    return {
+                        search: params.term,
+                    };
+                },
+                processResults: function(data, page) {
+                    return {
+                        results: data,
+                    };
+                },
+            },
+        });
+
+        $('#item_id').change(function() {
+            setSelect2('#brand_id');
+        })
+
+        $('#brand_id').change(function() {
+            setSelect2('#item_id');
+        })
+
+
         function reportUrl(params = '') {
             let item_id = $("#item_id").val();
+            let brand_id = $('#brand_id').val();
             let print_version = $('#print_version').val();
             let print_count = $('#print_count').val();
             let print_group = [];
@@ -195,6 +235,9 @@ $assetsUrl = base_url('assets');
                 item_id = '';
             }
 
+            if (brand_id == null) {
+                brand_id = '';
+            }
 
             if (price_G1) {
                 print_group.push('G1');
@@ -213,6 +256,7 @@ $assetsUrl = base_url('assets');
             }
 
             reportUrl += 'item_id=' + item_id;
+            reportUrl += '&brand_id=' + brand_id;
             reportUrl += '&print_version=' + print_version;
             reportUrl += '&print_count=' + print_count;
             reportUrl += '&print_group=' + print_group.join(',');

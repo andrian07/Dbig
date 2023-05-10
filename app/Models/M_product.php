@@ -788,4 +788,24 @@ class M_product extends Model
         $builder->orderBy('ms_product.product_name,ms_warehouse.warehouse_code', 'ASC');
         return $builder->get();
     }
+
+
+    public function getListProductUnitByIDorBrand($item_id = [], $brand_id = [])
+    {
+        $builder =  $this->db->table('ms_product_unit')
+            ->select('ms_product.product_code,ms_product.product_name,ms_product_unit.*,(ms_product_unit.product_content*ms_product.base_purchase_price) as product_price,(ms_product_unit.product_content*ms_product.base_purchase_tax) as product_tax,ms_unit.unit_name')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->where('ms_product.deleted', 'N');
+
+        if (count($item_id) > 0) {
+            $builder->whereIn('ms_product_unit.item_id', $item_id);
+        }
+
+        if (count($brand_id) > 0) {
+            $builder->whereIn('ms_product.brand_id', $brand_id);
+        }
+
+        return $builder->get();
+    }
 }

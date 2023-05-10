@@ -834,16 +834,14 @@ $routes->group('webmin/stock-transfer', ['filter' => 'webminauth'], static funct
 $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($routes) {
 
     /* Section Utility */
-
     $routes->get('/', 'Webmin\Report\Report::index');
 
     $routes->get('view-barcode-generate', 'Webmin\Report\Report::viewBarcodeGenerate');
+    $routes->get('barcode-generate', 'Webmin\Report\Report::barcodeGenerate');
 
     $routes->get('view-price-tag', 'Webmin\Report\Report::viewPriceTag');
     $routes->get('view-price-tag-v2', 'Webmin\Report\Report::viewPriceTagV2');
     $routes->get('view-price-tag-v3', 'Webmin\Report\Report::viewPriceTagV3');
-
-    $routes->get('barcode-generate', 'Webmin\Report\Report::barcodeGenerate');
 
     $routes->get('price-tag', 'Webmin\Report\Report::priceTag');
     $routes->get('price-tag-v2', 'Webmin\Report\Report::priceTagV2');
@@ -885,8 +883,6 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
     $routes->get('view-stock-transfer-list', 'Webmin\Report\ReportInventory::viewStockTransferList');
 
     $routes->get('stock-transfer-list', 'Webmin\Report\ReportInventory::stockTransferList');
-
-
 
     $routes->get('view-dead-stock-list', 'Webmin\Report\ReportInventory::viewDeadStockList');
 
@@ -996,7 +992,6 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 /* End Report */
 
 /* Select2 */
-
 $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('store', 'Webmin\Select::store');
 
@@ -1048,11 +1043,7 @@ $routes->group('webmin/select', ['filter' => 'webminauth'], static function ($ro
 
     $routes->get('salesman', 'Webmin\Select::salesman');
 });
-
 /* END Select2 */
-
-
-
 
 /* api pos */
 $routes->group('api-pos', static function ($routes) {

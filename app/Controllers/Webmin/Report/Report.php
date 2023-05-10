@@ -312,6 +312,8 @@ class Report extends WebminController
     public function priceTagV3()
     {
         $item_id                = $this->request->getGet('item_id') != NULL ? $this->request->getGet('item_id') : '';
+        $brand_id               = $this->request->getGet('brand_id') != NULL ? $this->request->getGet('brand_id') : '';
+
         $print_version          = $this->request->getGet('print_version') != NULL ? intval($this->request->getGet('print_version')) : 1;
         $print_count            = $this->request->getGet('print_count') != NULL ? intval($this->request->getGet('print_count')) : 1;
         $print_group            = $this->request->getGet('print_group') != NULL ? explode(',', $this->request->getGet('print_group')) : ['G1', 'G2', 'G3', 'G4'];
@@ -344,12 +346,15 @@ class Report extends WebminController
             $fileType = 'pdf';
         }
 
-        if ($item_id == '') {
-            die('<h1>Harap Pilih Item Yang Akan Dicetak</h1>');
+        if ($item_id == '' && $brand_id == '') {
+            die('<h1>Harap Pilih Item atau Brand Yang Akan Dicetak</h1>');
         } else {
             $M_product  = model('M_product');
-            $item_id    = explode(',', $item_id);
-            $getProductUnit = $M_product->getListProductUnit($item_id)->getResultArray();
+
+            $item_id    = $item_id == '' ? [] : explode(',', $item_id);
+            $brand_id   = $brand_id == '' ? [] : explode(',', $brand_id);
+
+            $getProductUnit = $M_product->getListProductUnitByIDorBrand($item_id, $brand_id)->getResultArray();
 
             if (count($getProductUnit) == 0) {
                 die("<h1>Item tidak ditemukan</h1>");
@@ -427,7 +432,7 @@ class Report extends WebminController
                 }
 
                 $table_rows     = array_chunk($table_item, 3);
-                $pages          = array_chunk($table_rows, 4);
+                $pages          = array_chunk($table_rows, 7);
                 $max_page       = count($pages);
                 $data = [
                     'title'             => 'Price Tag',
