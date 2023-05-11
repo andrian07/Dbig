@@ -191,12 +191,14 @@ $report_role = $user_role['report'];
                     <div class="card-body">
                         <ul class="list-group">
                             <li class="list-group-item"><a href="<?= base_url('webmin/report/view-barcode-generate') ?>" class="text-primary">Cetak Barcode</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-price-tag-v2') ?>" class="text-primary">Cetak Label Harga</a></li>
+                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-price-tag-v3') ?>" class="text-primary">Cetak Label Harga</a></li>
                         </ul>
                     </div>
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
+
+
             </div>
 
 

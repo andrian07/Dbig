@@ -402,18 +402,16 @@ class MyApp extends BaseConfig
                 'pos_sales_allocation_margin'       => ['text' => 'Laporan Alokasi Margin Penjualan Retail'],
                 /* end pos sales */
 
-
-
-                'sales_list'                => ['text' => 'Daftar Penjualan'],
-                'project_list'              => ['text' => 'Daftar Penjualan Proyek'],
-                'retur_project_list'        => ['text' => 'Daftar Retur Penjualan Proyek'],
-                'user_sales_list'           => ['text' => 'Daftar Penjualan Per User'],
-                'product_sales_recap'       => ['text' => 'Rekap Penjualan Produk'],
-                'category_product_sales_recap' => ['text' => 'Rekap Penjualan Produk Per Kategori'],
-                'invoice_sales_recap'       => ['text' => 'Rekap Penjualan Per Nota'],
-                'invoice_sales_recap_group_date' => ['text' => 'Rekap Penjualan Nota Harian'],
-                'income_recap'              => ['text' => 'Laporan Laba Rugi'],
-
+                'sales_list'                        => ['text' => 'Daftar Penjualan'],
+                'user_sales_list'                   => ['text' => 'Daftar Penjualan Per User'],
+                'project_list'                      => ['text' => 'Daftar Penjualan Proyek'],
+                'retur_project_list'                => ['text' => 'Daftar Retur Penjualan Proyek'],
+                'user_sales_list'                   => ['text' => 'Daftar Penjualan Per User'],
+                'product_sales_recap'               => ['text' => 'Rekap Penjualan Produk'],
+                'category_product_sales_recap'      => ['text' => 'Rekap Penjualan Produk Per Kategori'],
+                'invoice_sales_recap'               => ['text' => 'Rekap Penjualan Per Nota'],
+                'invoice_sales_recap_group_date'    => ['text' => 'Rekap Penjualan Nota Harian'],
+                'income_recap'                      => ['text' => 'Laporan Laba Rugi'],
                 'sales_return_list'         => ['text' => 'Daftar Retur Penjualan'],
                 'user_sales_return_list'    => ['text' => 'Daftar Retur Penjualan Per User'],
 

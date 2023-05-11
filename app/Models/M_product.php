@@ -628,7 +628,7 @@ class M_product extends Model
         if ($maxCode == NULL) {
             $startNum = 1;
         } else {
-            $startNum = floatval(substr($maxCode['product_code'], -6)) + 1;
+            $startNum = intval(substr($maxCode['product_code'], -6)) + 1;
         }
 
         $listProductID  = [];
@@ -666,43 +666,44 @@ class M_product extends Model
             $startNum++;
         }
 
+        if (count($productItem) > 0) {
+            foreach ($productItem as $product_code => $items) {
+                $product_id = isset($listProductID[$product_code]) ? $listProductID[$product_code] : 0;
+                foreach ($items as $item) {
+                    $item['product_id'] = $product_id;
+                    $item_id    = 0;
+                    $item_code  = $item['item_code'];
 
-        foreach ($productItem as $product_code => $items) {
-            $product_id = isset($listProductID[$product_code]) ? $listProductID[$product_code] : 0;
-            foreach ($items as $item) {
-                $item['product_id'] = $product_id;
-                $item_id    = 0;
-                $item_code  = $item['item_code'];
-
-                $this->db->table('ms_product_unit')->insert($item);
-                if ($this->db->affectedRows() > 0) {
-                    $saveQueries[] = $this->db->getLastQuery()->getQuery();
-                    $item_id = $this->db->insertID();
+                    $this->db->table('ms_product_unit')->insert($item);
+                    if ($this->db->affectedRows() > 0) {
+                        $saveQueries[] = $this->db->getLastQuery()->getQuery();
+                        $item_id = $this->db->insertID();
+                    }
+                    $errors[] = $this->db->error();
+                    $listItemID[$item_code] = $item_id;
                 }
-                $errors[] = $this->db->error();
-                $listItemID[$item_code] = $item_id;
             }
         }
 
-
-
-        foreach ($parcelItem as $product_code => $items) {
-            $product_id = isset($listProductID[$product_code]) ? $listProductID[$product_code] : 0;
-            $insertParcelItem = [];
-            foreach ($items as $item) {
-                $item_code = $item['item_code'];
-                unset($item['item_code']);
-                $item['item_id']    = isset($listItemID[$item_code]) ? $listItemID[$item_code] : 0;
-                $item['product_id'] = $product_id;
-                $insertParcelItem[] = $item;
-            }
-
-            if (count($insertParcelItem) > 0) {
-                $this->db->table('ms_product_parcel')->insertBatch($insertParcelItem);
-                if ($this->db->affectedRows() > 0) {
-                    $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        if (count($parcelItem) > 0) {
+            foreach ($parcelItem as $product_code => $items) {
+                $product_id = isset($listProductID[$product_code]) ? $listProductID[$product_code] : 0;
+                $insertParcelItem = [];
+                foreach ($items as $item) {
+                    $item_code = $item['item_code'];
+                    unset($item['item_code']);
+                    $item['item_id']    = isset($listItemID[$item_code]) ? $listItemID[$item_code] : 0;
+                    $item['product_id'] = $product_id;
+                    $insertParcelItem[] = $item;
                 }
-                $errors[] = $this->db->error();
+
+                if (count($insertParcelItem) > 0) {
+                    $this->db->table('ms_product_parcel')->insertBatch($insertParcelItem);
+                    if ($this->db->affectedRows() > 0) {
+                        $saveQueries[] = $this->db->getLastQuery()->getQuery();
+                    }
+                    $errors[] = $this->db->error();
+                }
             }
         }
 
@@ -785,6 +786,26 @@ class M_product extends Model
         $builder->where("ms_warehouse_stock.exp_date <= CAST('$now' AS DATE)");
 
         $builder->orderBy('ms_product.product_name,ms_warehouse.warehouse_code', 'ASC');
+        return $builder->get();
+    }
+
+
+    public function getListProductUnitByIDorBrand($item_id = [], $brand_id = [])
+    {
+        $builder =  $this->db->table('ms_product_unit')
+            ->select('ms_product.product_code,ms_product.product_name,ms_product_unit.*,(ms_product_unit.product_content*ms_product.base_purchase_price) as product_price,(ms_product_unit.product_content*ms_product.base_purchase_tax) as product_tax,ms_unit.unit_name')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->where('ms_product.deleted', 'N');
+
+        if (count($item_id) > 0) {
+            $builder->whereIn('ms_product_unit.item_id', $item_id);
+        }
+
+        if (count($brand_id) > 0) {
+            $builder->whereIn('ms_product.brand_id', $brand_id);
+        }
+
         return $builder->get();
     }
 }

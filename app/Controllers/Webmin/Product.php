@@ -973,6 +973,8 @@ class Product extends WebminController
                 $M_brand    = model('M_brand');
                 $M_category = model('M_category');
 
+                $validation_errors = [];
+
 
                 $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file_path);
                 $reader->setReadDataOnly(TRUE);
@@ -991,7 +993,7 @@ class Product extends WebminController
                 unset($sheet6[0]);
                 foreach ($sheet6 as $row) {
                     $unit_id                = $row[0] == null ? 0 : intval($row[0]);
-                    $unit_name              = $row[1];
+                    $unit_name              = $row[1] == null ? null : trim($row[1]);
                     $unit_description       = $row[2] == null ? '' : $row[2];
                     $unit_key               = md5(strtoupper($unit_name));
                     if ($unit_id == 0 && $unit_name != null) {
@@ -1015,7 +1017,7 @@ class Product extends WebminController
                 unset($sheet5[0]);
                 foreach ($sheet5 as $row) {
                     $supplier_id                    = $row[0];
-                    $supplier_code                  = strtoupper($row[1]);
+                    $supplier_code                  = trim(strtoupper($row[1]));
                     $supplierData[$supplier_code]   = $supplier_id;
                 }
 
@@ -1026,7 +1028,7 @@ class Product extends WebminController
                 unset($sheet4[0]);
                 foreach ($sheet4 as $row) {
                     $brand_id               = $row[0] == null ? 0 : intval($row[0]);
-                    $brand_name             = $row[1];
+                    $brand_name             = $row[1] == null ? null : trim($row[1]);
                     $brand_description      = $row[2] == null ? '' : $row[2];
                     $brand_key              = md5(strtoupper($brand_name));
 
@@ -1051,13 +1053,13 @@ class Product extends WebminController
                 unset($sheet3[0]);
                 foreach ($sheet3 as $row) {
                     $category_id                    = $row[0] == null ? 0 : intval($row[0]);
-                    $category_name                  = $row[1];
+                    $category_name                  = $row[1] == null ? null : trim($row[1]);
                     $category_description           = $row[2] == null ? '' : $row[2];
                     $category_key                   = md5(strtoupper($category_name));
 
                     if ($category_id == 0 && $category_name != null) {
                         $data = [
-                            'category_name '        => $category_name,
+                            'category_name'        => $category_name,
                             'category_description'  => $category_description
                         ];
 
@@ -1082,24 +1084,58 @@ class Product extends WebminController
                 foreach ($sheet1 as $row) {
                     $product_code = $row[0];
                     $product_name = $row[1];
-                    $category_key = md5(strtoupper($row[2]));
+                    $category_name = $row[2] == null ? null : trim($row[2]);
+                    $category_key = md5(strtoupper($category_name));
                     $category_id    = isset($categoryData[$category_key]) ? $categoryData[$category_key] : 0;
-                    $brand_key = md5(strtoupper($row[3]));
-                    $brand_id    = isset($brandData[$brand_key]) ? $brandData[$brand_key] : 0;
+                    if ($category_id == 0) {
+                        $validation_errors[] = [
+                            'code'      => 100,
+                            'message'   => "Kategori '$category_name' untuk produk dengan kode '$product_code' tidak ditemukan"
+                        ];
+                    }
 
-                    $supp1 = strtoupper($row[4]);
+                    $brand_name = $row[3] == null ? null : trim($row[3]);
+                    $brand_key = md5(strtoupper($brand_name));
+                    $brand_id    = isset($brandData[$brand_key]) ? $brandData[$brand_key] : 0;
+                    if ($brand_id == 0) {
+                        $validation_errors[] = [
+                            'code'      => 100,
+                            'message'   => "Brand '$brand_name' untuk produk dengan kode '$product_code' tidak ditemukan"
+                        ];
+                    }
+
+                    $supp1 = trim(strtoupper($row[4]));
                     if (!($supp1 == null || $supp1 == '')) {
                         $productSuppliers[$product_code][] = isset($supplierData[$supp1]) ? $supplierData[$supp1] : 0;
+
+                        if (!isset($supplierData[$supp1])) {
+                            $validation_errors[] = [
+                                'code'      => 100,
+                                'message'   => "Supplier '$supp1' untuk produk dengan kode '$product_code' tidak ditemukan"
+                            ];
+                        }
                     }
 
-                    $supp2 = strtoupper($row[5]);
+                    $supp2 = trim(strtoupper($row[5]));
                     if (!($supp2 == null || $supp2 == '')) {
                         $productSuppliers[$product_code][] = isset($supplierData[$supp2]) ? $supplierData[$supp2] : 0;
+                        if (!isset($supplierData[$supp2])) {
+                            $validation_errors[] = [
+                                'code'      => 100,
+                                'message'   => "Supplier '$supp2' untuk produk dengan kode '$product_code' tidak ditemukan"
+                            ];
+                        }
                     }
 
-                    $supp3 = strtoupper($row[6]);
+                    $supp3 = trim(strtoupper($row[6]));
                     if (!($supp3 == null || $supp3 == '')) {
                         $productSuppliers[$product_code][] = isset($supplierData[$supp3]) ? $supplierData[$supp3] : 0;
+                        if (!isset($supplierData[$supp3])) {
+                            $validation_errors[] = [
+                                'code'      => 100,
+                                'message'   => "Supplier '$supp3' untuk produk dengan kode '$product_code' tidak ditemukan"
+                            ];
+                        }
                     }
 
                     $is_parcel              = $row[7];
@@ -1113,8 +1149,17 @@ class Product extends WebminController
                     $sales_point            = $row[11];
 
                     $barcode                = $row[12];
-                    $unit_key               = md5(strtoupper($row[13]));
+                    $unit_name              = $row[13] == null ? null : trim($row[13]);
+                    $unit_key               = md5(strtoupper($unit_name));
                     $unit_id                = isset($unitData[$unit_key]) ? $unitData[$unit_key] : 0;
+
+                    if ($unit_id == 0) {
+                        $validation_errors[] = [
+                            'code'      => 100,
+                            'message'   => "Satuan '$unit_name' untuk produk dengan kode '$product_code' tidak ditemukan"
+                        ];
+                    }
+
                     $product_content        = floatval($row[14]);
                     $base_unit              = $product_content > 1 ? 'N' : 'Y';
                     $purchase_price         = floatval($row[15]);
@@ -1140,23 +1185,26 @@ class Product extends WebminController
                     $G6_sales_price         = floatval($row[29]);
 
                     $disc_seasonal          = floatval($row[30]);
-                    $G1_disc_price          = floatval($row[31]);
-                    $G1_promo_price         = $G1_sales_price - $G1_disc_price;
 
-                    $G2_disc_price          = floatval($row[32]);
-                    $G2_promo_price         = $G2_sales_price - $G2_disc_price;
 
-                    $G3_disc_price          = floatval($row[33]);
-                    $G3_promo_price         = $G3_sales_price - $G3_disc_price;
+                    $G1_promo_price         = floatval($row[31]);
+                    $G1_disc_price          = $G1_sales_price - $G1_promo_price;
 
-                    $G4_disc_price          = floatval($row[34]);
-                    $G4_promo_price         = $G4_sales_price - $G4_disc_price;
 
-                    $G5_disc_price          = floatval($row[35]);
-                    $G5_promo_price         = $G5_sales_price - $G5_disc_price;
+                    $G2_promo_price         = floatval($row[32]);
+                    $G2_disc_price          = $G2_sales_price - $G2_promo_price;
 
-                    $G6_disc_price          = floatval($row[36]);
-                    $G6_promo_price         = $G6_sales_price - $G6_disc_price;
+                    $G3_promo_price         = floatval($row[33]);
+                    $G3_disc_price          = $G3_sales_price - $G3_promo_price;
+
+                    $G4_promo_price         = floatval($row[34]);
+                    $G4_disc_price          = $G4_sales_price - $G4_promo_price;
+
+                    $G5_promo_price         = floatval($row[35]);
+                    $G5_disc_price          = $G5_sales_price - $G5_promo_price;
+
+                    $G6_promo_price         = floatval($row[36]);
+                    $G6_disc_price          = $G6_sales_price - $G6_promo_price;
 
                     $disc_start_date        = indo_to_mysql_date($row[37]);
                     $disc_end_date          = indo_to_mysql_date($row[38]);
@@ -1267,7 +1315,15 @@ class Product extends WebminController
                     }
                 }
 
-                $result = $this->M_product->importProduct($productData, $productSuppliers, $productItem, $parcelItem);
+                if (count($validation_errors) > 0) {
+                    $result = [
+                        'success'   => FALSE,
+                        'errors'    => $validation_errors,
+                        'message'   => 'Ditemukan kesalahan input data'
+                    ];
+                } else {
+                    $result = $this->M_product->importProduct($productData, $productSuppliers, $productItem, $parcelItem);
+                }
 
                 if (file_exists($file_path)) {
                     unlink($file_path);
