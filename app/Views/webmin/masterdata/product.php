@@ -38,6 +38,7 @@ $assetsUrl = base_url('assets');
                             </button>
                             <div class="dropdown-menu" role="menu">
                                 <a class="dropdown-item" href="<?= base_url('webmin/product/download-import-excel') ?>">Template File Excel</a>
+                                <a class="dropdown-item" href="<?= base_url('webmin/product/view-batch-update-product') ?>">Update Harga Produk</a>
                             </div>
                         </div>
                     </div>

@@ -18,7 +18,6 @@ class Product extends WebminController
 
     public function index()
     {
-
         $data = [
             'title'             => 'Produk',
             'customer_group'    => $this->appConfig->get('default', 'customer_group')
@@ -1219,7 +1218,7 @@ class Product extends WebminController
 
 
                     $is_sale                = $row[52];
-                    $show_on_mobile_app        = $row[53];
+                    $show_on_mobile_app     = $row[53];
                     if ($is_sale == '' || $is_sale == null) {
                         $is_sale = 'Y';
                     }
@@ -1235,7 +1234,7 @@ class Product extends WebminController
                         $base_cogs              = $product_cogs > 0 ? ($product_cogs / $product_content) : 0;
 
                         $productData[$product_code] = [
-                            'product_code'              => 'GENERATE_FROM_DB',
+                            'product_code'              => $product_code,
                             'product_name'              => $product_name,
                             'category_id'               => $category_id,
                             'brand_id'                  => $brand_id,
@@ -1335,6 +1334,352 @@ class Product extends WebminController
         $result['back_url'] = base_url('webmin/product');
         return $this->renderView('import_result', $result);
     }
+
+    // update batch product //
+    public function viewBatchUpdateProduct()
+    {
+
+        $data = [
+            'title'             => 'Batch Update Produk'
+        ];
+        return $this->renderView('masterdata/product/view_batch_update_product', $data, 'product.view');
+    }
+
+    public function downloadProductData()
+    {
+        $brand_id               = $this->request->getGet('brand_id') != NULL ? $this->request->getGet('brand_id') : '';
+        if ($brand_id == '') {
+            die('<h1>Harap Pilih Brand Yang Akan Diexport</h1>');
+        } else {
+            $M_product  = model('M_product');
+            $brand_id   = $brand_id == '' ? [] : explode(',', $brand_id);
+            $getProductUnit = $M_product->getListProductUnitByBrand($brand_id)->getResultArray();
+
+            //dd($getProductUnit);
+
+            $template = WRITEPATH . '/template/template_batch_update_product.xlsx';
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+
+            $sheet1  = $spreadsheet->setActiveSheetIndex(0);
+            $iRow   = 3;
+            foreach ($getProductUnit as $row) {
+                $product_content        = floatval($row['product_content']);
+                $base_purchase_price    = floatval($row['base_purchase_price']);
+                $base_purchase_tax      = floatval($row['base_purchase_tax']);
+                $base_cogs              = floatval($row['base_cogs']);
+                $purchase_price         = $product_content * $base_purchase_price;
+                $purchase_tax           = $product_content * $base_purchase_tax;
+                $product_price          = $purchase_price + $purchase_tax;
+                $product_cogs           = $product_content * $base_cogs;
+
+                $G1_sales_price         = floatval($row['G1_sales_price']);
+                $G1_margin_rate         = numberFormat(calcPercentRate($product_price, $G1_sales_price), true);
+
+                $G2_sales_price         = floatval($row['G2_sales_price']);
+                $G2_margin_rate         = numberFormat(calcPercentRate($product_price, $G2_sales_price), true);
+
+                $G3_sales_price         = floatval($row['G3_sales_price']);
+                $G3_margin_rate         = numberFormat(calcPercentRate($product_price, $G3_sales_price), true);
+
+                $G4_sales_price         = floatval($row['G4_sales_price']);
+                $G4_margin_rate         = numberFormat(calcPercentRate($product_price, $G4_sales_price), true);
+
+                $G5_sales_price         = floatval($row['G5_sales_price']);
+                $G5_margin_rate         = numberFormat(calcPercentRate($product_price, $G5_sales_price), true);
+
+                $G6_sales_price         = floatval($row['G6_sales_price']);
+                $G6_margin_rate         = numberFormat(calcPercentRate($product_price, $G6_sales_price), true);
+
+                $disc_seasonal          = floatval($row['disc_seasonal']);
+                $G1_promo_price         = $disc_seasonal == 0 ? $G1_sales_price : floatval($row['G1_promo_price']);
+                $G2_promo_price         = $disc_seasonal == 0 ? $G2_sales_price : floatval($row['G2_promo_price']);
+                $G3_promo_price         = $disc_seasonal == 0 ? $G3_sales_price : floatval($row['G3_promo_price']);
+                $G4_promo_price         = $disc_seasonal == 0 ? $G4_sales_price : floatval($row['G4_promo_price']);
+                $G5_promo_price         = $disc_seasonal == 0 ? $G5_sales_price : floatval($row['G5_promo_price']);
+                $G6_promo_price         = $disc_seasonal == 0 ? $G6_sales_price : floatval($row['G6_promo_price']);
+
+
+                $G1_margin              = $G1_promo_price - $product_price;
+                $G2_margin              = $G2_promo_price - $product_price;
+                $G3_margin              = $G3_promo_price - $product_price;
+                $G4_margin              = $G4_promo_price - $product_price;
+                $G5_margin              = $G5_promo_price - $product_price;
+                $G6_margin              = $G6_promo_price - $product_price;
+
+                $ma                     = floatval($row['margin_allocation']);
+                $G1_ma                  = $ma == 0 ? 0 : (($ma / 100) * $G1_margin);
+                $G2_ma                  = $ma == 0 ? 0 : (($ma / 100) * $G2_margin);
+                $G3_ma                  = $ma == 0 ? 0 : (($ma / 100) * $G3_margin);
+                $G4_ma                  = $ma == 0 ? 0 : (($ma / 100) * $G4_margin);
+                $G5_ma                  = $ma == 0 ? 0 : (($ma / 100) * $G5_margin);
+                $G6_ma                  = $ma == 0 ? 0 : (($ma / 100) * $G6_margin);
+
+
+                $sheet1->getCell('A' . $iRow)->setValue($row['item_id']);
+                $sheet1->getCell('B' . $iRow)->setValue($row['product_id']);
+                $sheet1->getCell('C' . $iRow)->setValue($row['product_code']);
+                $sheet1->getCell('D' . $iRow)->setValue($row['product_name']);
+                $sheet1->getCell('E' . $iRow)->setValue($row['category_name']);
+                $sheet1->getCell('F' . $iRow)->setValue($row['brand_name']);
+                $sheet1->getCell('G' . $iRow)->setValue($row['is_parcel']);
+                $sheet1->getCell('H' . $iRow)->setValue($row['has_tax']);
+                $sheet1->getCell('I' . $iRow)->setValue($row['item_code']);
+                $sheet1->getCell('J' . $iRow)->setValue($row['unit_name']);
+                $sheet1->getCell('K' . $iRow)->setValue($product_content);
+                $sheet1->getCell('L' . $iRow)->setValue($purchase_price);
+                $sheet1->getCell('M' . $iRow)->setValue($purchase_tax);
+                $sheet1->getCell('N' . $iRow)->setValue($product_price);
+                $sheet1->getCell('O' . $iRow)->setValue($product_cogs);
+
+
+                $sheet1->getCell('P' . $iRow)->setValue($G1_margin_rate);
+                $sheet1->getCell('Q' . $iRow)->setValue($G1_sales_price);
+                $sheet1->getCell('R' . $iRow)->setValue($G2_margin_rate);
+                $sheet1->getCell('S' . $iRow)->setValue($G2_sales_price);
+                $sheet1->getCell('T' . $iRow)->setValue($G3_margin_rate);
+                $sheet1->getCell('U' . $iRow)->setValue($G3_sales_price);
+                $sheet1->getCell('V' . $iRow)->setValue($G4_margin_rate);
+                $sheet1->getCell('W' . $iRow)->setValue($G4_sales_price);
+                $sheet1->getCell('X' . $iRow)->setValue($G5_margin_rate);
+                $sheet1->getCell('Y' . $iRow)->setValue($G5_sales_price);
+                $sheet1->getCell('Z' . $iRow)->setValue($G6_margin_rate);
+                $sheet1->getCell('AA' . $iRow)->setValue($G6_sales_price);
+
+                $sheet1->getCell('AB' . $iRow)->setValue($disc_seasonal);
+                $sheet1->getCell('AC' . $iRow)->setValue($G1_promo_price);
+                $sheet1->getCell('AD' . $iRow)->setValue($G2_promo_price);
+                $sheet1->getCell('AE' . $iRow)->setValue($G3_promo_price);
+                $sheet1->getCell('AF' . $iRow)->setValue($G4_promo_price);
+                $sheet1->getCell('AG' . $iRow)->setValue($G5_promo_price);
+                $sheet1->getCell('AH' . $iRow)->setValue($G6_promo_price);
+                $sheet1->getCell('AI' . $iRow)->setValue(indo_short_date($row['disc_start_date']));
+                $sheet1->getCell('AJ' . $iRow)->setValue(indo_short_date($row['disc_end_date']));
+
+                $sheet1->getCell('AK' . $iRow)->setValue($G1_margin);
+                $sheet1->getCell('AL' . $iRow)->setValue($G2_margin);
+                $sheet1->getCell('AM' . $iRow)->setValue($G3_margin);
+                $sheet1->getCell('AN' . $iRow)->setValue($G4_margin);
+                $sheet1->getCell('AO' . $iRow)->setValue($G5_margin);
+                $sheet1->getCell('AP' . $iRow)->setValue($G6_margin);
+
+                $sheet1->getCell('AQ' . $iRow)->setValue($ma);
+                $sheet1->getCell('AR' . $iRow)->setValue($G1_ma);
+                $sheet1->getCell('AS' . $iRow)->setValue($G2_ma);
+                $sheet1->getCell('AT' . $iRow)->setValue($G3_ma);
+                $sheet1->getCell('AU' . $iRow)->setValue($G4_ma);
+                $sheet1->getCell('AV' . $iRow)->setValue($G5_ma);
+                $sheet1->getCell('AW' . $iRow)->setValue($G6_ma);
+
+                $sheet1->getCell('AX' . $iRow)->setValue($row['is_sale']);
+                $sheet1->getCell('AY' . $iRow)->setValue($row['show_on_mobile_app']);
+                $iRow++;
+            }
+
+            $filename = 'batch_update_product';
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+            header('Cache-Control: max-age=0');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save('php://output');
+            exit();
+        }
+    }
+
+    public function uploadExcelBatchUpdateProduct()
+    {
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        $validation =  \Config\Services::validation();
+
+        $input = [
+            'file_import'         => $this->request->getFile('file_import')
+        ];
+
+        $maxUploadSize = $this->maxUploadSize['kb'];
+        $ext = 'xlsx';
+        $validation->setRules([
+            'file_import' => ['rules' => 'max_size[file_import,' . $maxUploadSize . ']|ext_in[file_import,' . $ext . ']'],
+        ]);
+
+        if ($validation->run($input) === FALSE) {
+            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        } else {
+            $path = $input['file_import']->store();
+            if (!$path) {
+                $result = ['success' => FALSE, 'message' => 'Upload file excel gagal, Harap coba lagi'];
+            } else {
+                helper('import_excel');
+                $file_path = WRITEPATH . "/uploads/$path";
+                $validation_errors = [];
+
+
+                $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file_path);
+                $reader->setReadDataOnly(TRUE);
+
+                $spreadsheet = $reader->load($file_path);
+                $sheet1 = $spreadsheet->getSheet(0)->toArray(); //produk
+
+
+                $updateProduct      = [];
+                $updateProductUnit  = [];
+
+
+                // read product //
+                // delete header //
+                unset($sheet1[0]);
+                unset($sheet1[1]);
+
+                //dd($sheet1);
+                foreach ($sheet1 as $row) {
+                    $item_id                = $row[0];
+                    $product_id             = $row[1];
+                    $product_content        = floatval($row[10]);
+                    $base_unit              = $product_content > 1 ? 'N' : 'Y';
+                    $purchase_price         = floatval($row[11]);
+                    $purchase_tax           = floatval($row[12]);
+                    $product_price          = floatval($row[13]);
+                    $product_cogs           = floatval($row[14]);
+
+                    $G1_margin_rate         = floatval($row[15]);
+                    $G1_sales_price         = floatval($row[16]);
+
+                    $G2_margin_rate         = floatval($row[17]);
+                    $G2_sales_price         = floatval($row[18]);
+
+                    $G3_margin_rate         = floatval($row[19]);
+                    $G3_sales_price         = floatval($row[20]);
+
+                    $G4_margin_rate         = floatval($row[21]);
+                    $G4_sales_price         = floatval($row[22]);
+
+                    $G5_margin_rate         = floatval($row[23]);
+                    $G5_sales_price         = floatval($row[24]);
+
+                    $G6_margin_rate         = floatval($row[25]);
+                    $G6_sales_price         = floatval($row[26]);
+
+                    $disc_seasonal          = floatval($row[27]);
+
+
+                    $G1_promo_price         = floatval($row[28]);
+                    $G1_disc_price          = $G1_sales_price - $G1_promo_price;
+
+
+                    $G2_promo_price         = floatval($row[29]);
+                    $G2_disc_price          = $G2_sales_price - $G2_promo_price;
+
+                    $G3_promo_price         = floatval($row[30]);
+                    $G3_disc_price          = $G3_sales_price - $G3_promo_price;
+
+                    $G4_promo_price         = floatval($row[31]);
+                    $G4_disc_price          = $G4_sales_price - $G4_promo_price;
+
+                    $G5_promo_price         = floatval($row[32]);
+                    $G5_disc_price          = $G5_sales_price - $G5_promo_price;
+
+                    $G6_promo_price         = floatval($row[33]);
+                    $G6_disc_price          = $G6_sales_price - $G6_promo_price;
+
+                    $disc_start_date        = indo_to_mysql_date($row[34]);
+                    $disc_end_date          = indo_to_mysql_date($row[35]);
+
+                    $margin_allocation      = floatval($row[42]);
+                    $G1_margin_allocation   = floatval($row[43]);
+                    $G2_margin_allocation   = floatval($row[44]);
+                    $G3_margin_allocation   = floatval($row[45]);
+                    $G4_margin_allocation   = floatval($row[46]);
+                    $G5_margin_allocation   = floatval($row[47]);
+                    $G6_margin_allocation   = floatval($row[48]);
+
+
+                    $is_sale                = $row[49];
+                    $show_on_mobile_app     = $row[50];
+                    if ($is_sale == '' || $is_sale == null) {
+                        $is_sale = 'Y';
+                    }
+
+                    if ($show_on_mobile_app == '' || $show_on_mobile_app == null) {
+                        $show_on_mobile_app = 'Y';
+                    }
+                    // setup update product //
+                    $base_purchase_price    = $purchase_price > 0 ? ($purchase_price / $product_content) : 0;
+                    $base_purchase_tax      = $purchase_tax > 0 ? ($purchase_tax / $product_content) : 0;
+                    $base_cogs              = $product_cogs > 0 ? ($product_cogs / $product_content) : 0;
+
+                    $updateProduct[] = [
+                        'product_id'                => $product_id,
+                        'base_purchase_price'       => $base_purchase_price,
+                        'base_purchase_tax'         => $base_purchase_tax,
+                        'base_cogs'                 => $base_cogs
+                    ];
+
+                    // setup product item //
+                    $updateProductUnit[] = [
+                        'item_id'                   => $item_id,
+                        'product_content'           => $product_content,
+                        'G1_margin_rate'            => $G1_margin_rate,
+                        'G1_sales_price'            => $G1_sales_price,
+                        'G2_margin_rate'            => $G2_margin_rate,
+                        'G2_sales_price'            => $G2_sales_price,
+                        'G3_margin_rate'            => $G3_margin_rate,
+                        'G3_sales_price'            => $G3_sales_price,
+                        'G4_margin_rate'            => $G4_margin_rate,
+                        'G4_sales_price'            => $G4_sales_price,
+                        'G5_margin_rate'            => $G5_margin_rate,
+                        'G5_sales_price'            => $G5_sales_price,
+                        'G6_margin_rate'            => $G6_margin_rate,
+                        'G6_sales_price'            => $G6_sales_price,
+                        'disc_seasonal'             => $disc_seasonal,
+                        'disc_start_date'           => $disc_start_date,
+                        'disc_end_date'             => $disc_end_date,
+                        'G1_disc_price'             => $G1_disc_price,
+                        'G1_promo_price'            => $G1_promo_price,
+                        'G2_disc_price'             => $G2_disc_price,
+                        'G2_promo_price'            => $G2_promo_price,
+                        'G3_disc_price'             => $G3_disc_price,
+                        'G3_promo_price'            => $G3_promo_price,
+                        'G4_disc_price'             => $G4_disc_price,
+                        'G4_promo_price'            => $G4_promo_price,
+                        'G5_disc_price'             => $G5_disc_price,
+                        'G5_promo_price'            => $G5_promo_price,
+                        'G6_disc_price'             => $G6_disc_price,
+                        'G6_promo_price'            => $G6_promo_price,
+                        'margin_allocation'         => $margin_allocation,
+                        'G1_margin_allocation'      => $G1_margin_allocation,
+                        'G2_margin_allocation'      => $G2_margin_allocation,
+                        'G3_margin_allocation'      => $G3_margin_allocation,
+                        'G4_margin_allocation'      => $G4_margin_allocation,
+                        'G5_margin_allocation'      => $G5_margin_allocation,
+                        'G6_margin_allocation'      => $G6_margin_allocation,
+                        'is_sale'                   => $is_sale,
+                        'show_on_mobile_app'        => $show_on_mobile_app
+                    ];
+                }
+
+                if (count($validation_errors) > 0) {
+                    $result = [
+                        'success'   => FALSE,
+                        'errors'    => $validation_errors,
+                        'message'   => 'Ditemukan kesalahan input data'
+                    ];
+                } else {
+                    $result = $this->M_product->batchUpdateProduct($updateProduct, $updateProductUnit);
+                }
+
+                if (file_exists($file_path)) {
+                    unlink($file_path);
+                };
+            }
+        }
+
+        $result['title']    = 'Update Data Produk';
+        $back_url = $result['success'] ? base_url('webmin/product') : base_url('webmin/product/view-batch-update-product');
+        $result['back_url'] = $back_url;
+        return $this->renderView('import_result', $result);
+    }
+
+
+
+
     //--------------------------------------------------------------------
 
 }

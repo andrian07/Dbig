@@ -415,6 +415,10 @@ $routes->group('webmin/product', ['filter' => 'webminauth'], static function ($r
 
     $routes->get('download-import-excel', 'Webmin\Product::downloadImportExcel');
     $routes->post('upload-excel', 'Webmin\Product::uploadExcel');
+
+    $routes->get('view-batch-update-product', 'Webmin\Product::viewBatchUpdateProduct');
+    $routes->get('download-product-data', 'Webmin\Product::downloadProductData');
+    $routes->post('upload-excel-batch-update-product', 'Webmin\Product::uploadExcelBatchUpdateProduct');
 });
 
 

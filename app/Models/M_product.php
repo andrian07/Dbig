@@ -137,11 +137,12 @@ class M_product extends Model
 
         $maxCode = $this->db->table($this->table)->select('product_code')->limit(1)->orderBy('product_id', 'desc')->get()->getRowArray();
         if ($maxCode == NULL) {
-            $data['product_code'] = "P000001";
+            $product_code = "00000001";
         } else {
-            $data['product_code'] = 'P' . substr('000000' . strval(floatval(substr($maxCode['product_code'], -6)) + 1), -6);
+            $product_code =  substr('00000000' . strval(floatval($maxCode['product_code']) + 1), -8);
         }
 
+        $data['product_code'] = $product_code;
 
         $supplier_id    = is_string($data['supplier_id']) ? explode(',', $data['supplier_id']) : $data['supplier_id'];
         $unit_id        = $data['base_unit'];
@@ -172,8 +173,22 @@ class M_product extends Model
             $margin_allocation = 50;
         }
 
+        $item_code  = $product_code;
+        $addNum     = 1;
+        $isExist    = true;
+        while ($isExist) {
+            $check = $this->db->table('ms_product_unit')->select('item_id')->where('item_code', $item_code)->get()->getRowArray();
+            if ($check == null) {
+                $isExist = false;
+            } else {
+                $item_code = $item_code . strval($addNum);
+                $addNum++;
+            }
+        }
+
+
         $data_unit = [
-            'item_code'             => $product_id,
+            'item_code'             => $item_code,
             'product_id'            => $product_id,
             'unit_id'               => $unit_id,
             'base_unit'             => 'Y',
@@ -593,7 +608,6 @@ class M_product extends Model
         if ($getData == NULL) {
             return $this->db->table('temp_parcel')->insert($data);
         } else {
-
             return $this->db->table('temp_parcel')->update($data, $wheres);
         }
     }
@@ -620,7 +634,7 @@ class M_product extends Model
     }
 
     //import product //
-    public function importProduct($productData, $productSuppliers, $productItem, $parcelItem)
+    public function importProduct_v1($productData, $productSuppliers, $productItem, $parcelItem)
     {
         $this->db->query('LOCK TABLES ms_product WRITE,ms_product_supplier WRITE,ms_product_unit WRITE,ms_product_parcel WRITE');
         $saveQueries    = NULL;
@@ -725,6 +739,146 @@ class M_product extends Model
         return $save;
     }
 
+    public function importProduct($productData, $productSuppliers, $productItem, $parcelItem)
+    {
+        $this->db->query('LOCK TABLES ms_product WRITE,ms_product_supplier WRITE,ms_product_unit WRITE,ms_product_parcel WRITE');
+        $saveQueries    = NULL;
+        $errors         = [];
+
+        $this->db->transBegin();
+
+
+        $listProductID  = [];
+        $listItemID     = [];
+
+        foreach ($productData as $product_code => $product) {
+            // insert product //
+            $this->db->table('ms_product')->insert($product);
+            $product_id = 0;
+            if ($this->db->affectedRows() > 0) {
+                $saveQueries[] = $this->db->getLastQuery()->getQuery();
+                $product_id = $this->db->insertID();
+            }
+            $errors[] = $this->db->error();
+            $listProductID[$product_code] = $product_id;
+
+
+            // insert product supplier //
+            $insertProductSupplier = [];
+            foreach ($productSuppliers[$product_code] as $supplier_id) {
+                $insertProductSupplier[] = [
+                    'product_id'    => $product_id,
+                    'supplier_id'   => $supplier_id
+                ];
+            }
+
+            if (count($insertProductSupplier) > 0) {
+                $this->db->table('ms_product_supplier')->insertBatch($insertProductSupplier);
+                if ($this->db->affectedRows() > 0) {
+                    $saveQueries[] = $this->db->getLastQuery()->getQuery();
+                }
+                $errors[] = $this->db->error();
+            }
+        }
+
+        if (count($productItem) > 0) {
+            foreach ($productItem as $product_code => $items) {
+                $product_id = isset($listProductID[$product_code]) ? $listProductID[$product_code] : 0;
+                foreach ($items as $item) {
+                    $item['product_id'] = $product_id;
+                    $item_id    = 0;
+                    $item_code  = $item['item_code'];
+
+                    $this->db->table('ms_product_unit')->insert($item);
+                    if ($this->db->affectedRows() > 0) {
+                        $saveQueries[] = $this->db->getLastQuery()->getQuery();
+                        $item_id = $this->db->insertID();
+                    }
+                    $errors[] = $this->db->error();
+                    $listItemID[$item_code] = $item_id;
+                }
+            }
+        }
+
+        if (count($parcelItem) > 0) {
+            foreach ($parcelItem as $product_code => $items) {
+                $product_id = isset($listProductID[$product_code]) ? $listProductID[$product_code] : 0;
+                $insertParcelItem = [];
+                foreach ($items as $item) {
+                    $item_code = $item['item_code'];
+                    unset($item['item_code']);
+                    $item['item_id']    = isset($listItemID[$item_code]) ? $listItemID[$item_code] : 0;
+                    $item['product_id'] = $product_id;
+                    $insertParcelItem[] = $item;
+                }
+
+                if (count($insertParcelItem) > 0) {
+                    $this->db->table('ms_product_parcel')->insertBatch($insertParcelItem);
+                    if ($this->db->affectedRows() > 0) {
+                        $saveQueries[] = $this->db->getLastQuery()->getQuery();
+                    }
+                    $errors[] = $this->db->error();
+                }
+            }
+        }
+
+        if ($this->db->transStatus() === false) {
+            $this->db->transRollback();
+            $saveQueries = NULL;
+            $save = ['success' => FALSE, 'errors' => $errors, 'message' => 'Import data produk gagal'];
+        } else {
+            $this->db->transCommit();
+            $save = ['success' => TRUE, 'errors' => $errors, 'message' => 'Import data produk berhasil'];
+        }
+
+        $this->db->query('UNLOCK TABLES');
+        saveQueries($saveQueries, 'product', 0, 'import');
+        return $save;
+    }
+
+    public function batchUpdateProduct($productData, $productUnit)
+    {
+        $this->db->query('LOCK TABLES ms_product WRITE,ms_product_unit WRITE');
+        $saveQueries    = NULL;
+        $errors         = [];
+
+        $this->db->transBegin();
+
+        if (count($productData) > 0) {
+            foreach ($productData as $row) {
+                $this->db->table('ms_product')->where('product_id', $row['product_id'])->update($row);
+                if ($this->db->affectedRows() > 0) {
+                    $saveQueries[] = $this->db->getLastQuery()->getQuery();
+                }
+                $errors[] = $this->db->error();
+            }
+        }
+
+
+        if (count($productUnit) > 0) {
+            foreach ($productUnit as $row) {
+                $this->db->table('ms_product_unit')->where('item_id', $row['item_id'])->update($row);
+                if ($this->db->affectedRows() > 0) {
+                    $saveQueries[] = $this->db->getLastQuery()->getQuery();
+                }
+                $errors[] = $this->db->error();
+            }
+        }
+
+        if ($this->db->transStatus() === false) {
+            $this->db->transRollback();
+            $saveQueries = NULL;
+            $save = ['success' => FALSE, 'errors' => $errors, 'message' => 'Update data produk gagal'];
+        } else {
+            $this->db->transCommit();
+            $save = ['success' => TRUE, 'errors' => $errors, 'message' => 'Update data produk berhasil'];
+        }
+
+        $this->db->query('UNLOCK TABLES');
+        saveQueries($saveQueries, 'product', 0, 'batch_update');
+        return $save;
+    }
+
 
     //report section//
     public function getReportWarehouseStockList($warehouse_id = '', $product_tax = '')
@@ -793,7 +947,6 @@ class M_product extends Model
         return $builder->get();
     }
 
-
     public function getListProductUnitByIDorBrand($item_id = [], $brand_id = [])
     {
         $builder =  $this->db->table('ms_product_unit')
@@ -805,6 +958,24 @@ class M_product extends Model
         if (count($item_id) > 0) {
             $builder->whereIn('ms_product_unit.item_id', $item_id);
         }
+
+        if (count($brand_id) > 0) {
+            $builder->whereIn('ms_product.brand_id', $brand_id);
+        }
+
+        return $builder->get();
+    }
+
+    public function getListProductUnitByBrand($brand_id = [])
+    {
+        $builder =  $this->db->table('ms_product_unit')
+            ->select('ms_product.product_code,ms_product.product_name,ms_product_unit.*,(ms_product_unit.product_content*ms_product.base_purchase_price) as product_price,(ms_product_unit.product_content*ms_product.base_purchase_tax) as product_tax,ms_unit.unit_name,ms_brand.brand_name,ms_category.category_name,ms_product.base_purchase_price,ms_product.base_purchase_tax,ms_product.base_cogs,ms_product.has_tax,ms_product.is_parcel')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id')
+            ->join('ms_category', 'ms_category.category_id=ms_product.category_id')
+            ->where('ms_product.deleted', 'N');
+
 
         if (count($brand_id) > 0) {
             $builder->whereIn('ms_product.brand_id', $brand_id);
