@@ -122,7 +122,6 @@ foreach ($pages as $debtData) :
                         </thead>
                         <tbody>
                             <?php
-
                             foreach ($debtData as $row) :
                                 $purchase_total  = floatval($row['purchase_total']);
                                 $discount = floatval($row['dt_payment_debt_discount']);

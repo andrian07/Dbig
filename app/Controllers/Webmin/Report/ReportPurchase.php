@@ -166,17 +166,19 @@ class ReportPurchase extends WebminController
                     $sheet->getCell('B' . $iRow)->setValue($ccode);
                     $sheet->getCell('C' . $iRow)->setValue($row['item_code']);
                     $sheet->getCell('D' . $iRow)->setValue($row['product_name']);
-                    $sheet->getCell('E' . $iRow)->setValue($row['supplier_code']);
-                    $sheet->getCell('F' . $iRow)->setValue($row['supplier_name']);
-                    $sheet->getCell('G' . $iRow)->setValue(number_format($detail_purchase_po_base_price, TRUE));
-                    $sheet->getCell('H' . $iRow)->setValue(number_format($detail_purchase_po_dpp, TRUE));
-                    $sheet->getCell('I' . $iRow)->setValue(number_format($detail_purchase_po_ppn, TRUE));
-                    $sheet->getCell('J' . $iRow)->setValue(number_format($detail_purchase_po_price, TRUE));
-                    $sheet->getCell('K' . $iRow)->setValue(number_format($detail_purchase_po_ongkir, TRUE));
-                    $sheet->getCell('L' . $iRow)->setValue(number_format($detail_purchase_po_tatao_plus_ongkir, TRUE));
-                    $sheet->getCell('M' . $iRow)->setValue($detail_purchase_po_qty);
-                    $sheet->getCell('N' . $iRow)->setValue($detail_purchase_po_recive);
-                    $sheet->getCell('o' . $iRow)->setValue($last_po_invoice);
+                    $sheet->getCell('E' . $iRow)->setValue($product_tax);
+                    $sheet->getCell('F' . $iRow)->setValue($row['supplier_code']);
+                    $sheet->getCell('G' . $iRow)->setValue($row['supplier_name']);
+                    $sheet->getCell('H' . $iRow)->setValue();
+                    $sheet->getCell('I' . $iRow)->setValue(number_format($detail_purchase_po_base_price, TRUE));
+                    $sheet->getCell('J' . $iRow)->setValue(number_format($detail_purchase_po_dpp, TRUE));
+                    $sheet->getCell('K' . $iRow)->setValue(number_format($detail_purchase_po_ppn, TRUE));
+                    $sheet->getCell('L' . $iRow)->setValue(number_format($detail_purchase_po_price, TRUE));
+                    $sheet->getCell('M' . $iRow)->setValue(number_format($detail_purchase_po_ongkir, TRUE));
+                    $sheet->getCell('N' . $iRow)->setValue(number_format($detail_purchase_po_tatao_plus_ongkir, TRUE));
+                    $sheet->getCell('O' . $iRow)->setValue($detail_purchase_po_qty);
+                    $sheet->getCell('P' . $iRow)->setValue($detail_purchase_po_recive);
+                    $sheet->getCell('Q' . $iRow)->setValue($detail_purchase_po_qty - $detail_purchase_po_recive);
 
                     $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
                     $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
@@ -193,6 +195,8 @@ class ReportPurchase extends WebminController
                     $sheet->getStyle('M' . $iRow)->applyFromArray($border_left_right);
                     $sheet->getStyle('N' . $iRow)->applyFromArray($border_left_right);
                     $sheet->getStyle('O' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('P' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('Q' . $iRow)->applyFromArray($border_left_right);
 
 
                     $last_po_date = $row['purchase_order_date'];

@@ -6,7 +6,7 @@ use CodeIgniter\Config\BaseConfig;
 
 class MyApp extends BaseConfig
 {
-    public $allowedHosts        = ['localhost', 'dbig.stoklogistiksks.com', 'dbig.borneoeternityswiftlet.co.id'];
+    public $allowedHosts        = ['localhost', 'dashboard-dbig.com'];
     public $uploadFileType      = [
         'image' => ['jpg', 'jpeg', 'png']
     ];
@@ -386,7 +386,8 @@ class MyApp extends BaseConfig
                 'product_purchase_recap'    => ['text' => 'Rekap Pembelian Produk'],
                 'product_purchase_history'  => ['text' => 'Histori Pembelian Produk'],
 
-                'debt_list'                 => ['text' => 'Daftar Hutang'],
+                'debt_list'                        => ['text' => 'Daftar Hutang'],
+                'receivable_list'                  => ['text' => 'Daftar Piutang'],
                 'purchase_return_list'             => ['text' => 'Daftar Retur Pembelian'],
                 'product_purchase_return_recap'    => ['text' => 'Rekap Retur Pembelian Produk'],
 

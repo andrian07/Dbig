@@ -521,7 +521,7 @@ class M_purchase extends Model
 
     public function getDebtDueDate($start_date, $end_date, $supplier_id)
     {
-        $builder = $this->db->table('hd_purchase')->select("purchase_invoice, purchase_date, purchase_due_date, purchase_total, purchase_remaining_debt, purchase_down_payment");
+        $builder = $this->db->table('hd_purchase')->select("purchase_invoice, purchase_date, purchase_due_date, purchase_total, purchase_remaining_debt, purchase_down_payment, supplier_name");
         $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_purchase.purchase_supplier_id');
         $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_purchase.purchase_warehouse_id');
         $builder->where("purchase_remaining_debt > 0");

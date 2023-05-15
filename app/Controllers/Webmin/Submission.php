@@ -155,7 +155,7 @@ class Submission extends WebminController
 
                         'id'                  => $diplay_text,
 
-                        'value'               => $diplay_text.'('.$row['unit_name'].')',
+                        'value'               => $row['product_code'].' - '.$diplay_text.'('.$row['unit_name'].')',
 
                         'item_id'             => $row['item_id'],
                         

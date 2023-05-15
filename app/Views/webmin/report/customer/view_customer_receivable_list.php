@@ -28,39 +28,49 @@ $assetsUrl = base_url('assets');
                         <div class="card-body">
                             <form>
                                 <div class="row">
-                                    <div class="col-sm-4">
-                                        <!-- text input -->
-                                        <div class="form-group">
-                                            <label>Customer:</label>
-                                            <select id="customer_id" name="customer_id" class="form-control">
-                                                <option value="1">Samsul (0896-7899-8899)</option>
-                                                <option value="2">Udin (0896-7899-5555)</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
                                     <div class="col-sm-3">
                                         <!-- text input -->
                                         <div class="form-group">
-                                            <label>Status:</label>
-                                            <select id="status" name="status" class="form-control">
-                                                <option value="1">SEMUA</option>
-                                                <option value="2" SELECTED>JATUH TEMPO SAJA</option>
-                                            </select>
+                                            <label>Customer:</label>
+                                            <select id="customer_id" name="customer_id" class="form-control"></select>
                                         </div>
                                     </div>
+
+                                    <div class="col-sm-2">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>Cabang:</label>
+                                            <select id="store_id" name="store_id" class="form-control"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>J.Tempo Dari:</label>
+                                            <input id="start_date" name="start_date" type="date" class="form-control" value="<?= date('Y-m') ?>-01">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>J.Tempo Sampai:</label>
+                                            <input id="end_date" name="end_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>">
+                                        </div>
+                                    </div>
+
                                     <div class="col-sm-2">
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>&nbsp;</label>
                                             <div class="form-group">
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-default"><i class="fas fa-search"></i> Cari</button>
+                                                    <button type="button" id="btnsearch" class="btn btn-default"><i class="fas fa-search"></i> Cari</button>
                                                     <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                                         <span class="sr-only">Toggle Dropdown</span>
                                                     </button>
                                                     <div class="dropdown-menu" role="menu">
-                                                        <a id="btnexportpdf" class="dropdown-item" href="#">Export PDF</a>
                                                         <a id="btnexportexcel" class="dropdown-item" href="#">Export Excel</a>
                                                     </div>
                                                 </div>
@@ -78,7 +88,6 @@ $assetsUrl = base_url('assets');
             <!-- /.row -->
         </div><!-- /.container-fluid -->
 
-
         <div class="container-fluid">
             <div class="row">
                 <!-- /.col -->
@@ -86,6 +95,7 @@ $assetsUrl = base_url('assets');
                     <div class="card">
                         <div class="card-body">
                             <h5>Preview</h5>
+
                             <iframe id="preview" src="<?= base_url('webmin/report/customer-receivable-list') ?>" width="100%" height="1000px"></iframe>
                         </div>
                     </div>
@@ -101,30 +111,94 @@ $assetsUrl = base_url('assets');
 
 <?= $this->section('js') ?>
 <script>
-    $(document).ready(function() {
-        // $("#customer_id").select2({
-        //     placeholder: '-- Semua --',
-        //     width: "100%",
-        //     allowClear: true,
-        //     ajax: {
-        //         url: base_url + "/select/member",
-        //         dataType: "json",
-        //         type: "POST",
-        //         delay: select2Delay,
-        //         data: function(params) {
-        //             return {
-        //                 search: params.term,
-        //             };
-        //         },
-        //         processResults: function(data, page) {
-        //             return {
-        //                 results: data,
-        //             };
-        //         },
-        //     },
-        // });
+
+    $("#customer_id").select2({
+        placeholder: '-- SEMUA --',
+        width: "100%",
+        allowClear: true,
+        ajax: {
+            url: base_url + "/webmin/select/customer",
+            dataType: "json",
+            type: "GET",
+            delay: select2Delay,
+            data: function(params) {
+                return {
+                    search: params.term,
+                };
+            },
+            processResults: function(data, page) {
+                return {
+                    results: data,
+                };
+            },
+        },
+    });
+
+    $("#store_id").select2({
+        placeholder: '-- SEMUA --',
+        width: "100%",
+        allowClear: true,
+        ajax: {
+            url: base_url + "/webmin/select/store",
+            dataType: "json",
+            type: "GET",
+            delay: select2Delay,
+            data: function(params) {
+                return {
+                    search: params.term,
+                };
+            },
+            processResults: function(data, page) {
+                return {
+                    results: data,
+                };
+            },
+        },
+    });
 
 
+    $('#btnsearch').click(function(e) {
+        e.preventDefault();
+        let customer_id = $('#customer_id').val();
+        let status = $('#status').val();
+        let store_id = $('#store_id').val();
+        let start_date = $('#start_date').val();
+        let end_date = $('#end_date').val();
+        let reportUrl = '<?= base_url('webmin/report/customer-receivable-list') ?>?';
+        reportUrl += '&start_date=' + start_date;
+        reportUrl += '&end_date=' + end_date;
+        reportUrl += '&status=' + status;
+        if (customer_id != null && customer_id != '') {
+            reportUrl += '&customer_id=' + customer_id;
+        }
+        if (store_id != null && store_id != '') {
+            reportUrl += '&store_id=' + store_id;
+        }
+        $('#preview').prop('src', reportUrl);
     })
+
+    $('#btnexportexcel').click(function(e) {
+        e.preventDefault();
+        let customer_id = $('#customer_id').val();
+        let status = $('#status').val();
+        let store_id = $('#store_id').val();
+        let start_date = $('#start_date').val();
+        let end_date = $('#end_date').val();
+        let reportUrl = '<?= base_url('webmin/report/customer-receivable-list') ?>?';
+        reportUrl += '&start_date=' + start_date;
+        reportUrl += '&end_date=' + end_date;
+          reportUrl += '&status=' + status;
+        if (customer_id != null && customer_id != '') {
+            reportUrl += '&customer_id=' + customer_id;
+        }
+        if (store_id != null && store_id != '') {
+            reportUrl += '&store_id=' + store_id;
+        }
+        reportUrl += '&file=xls';
+        reportUrl += '&download=Y';
+
+        window.open(reportUrl, '_blank');
+    })
+
 </script>
 <?= $this->endSection() ?>

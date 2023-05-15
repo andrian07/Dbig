@@ -543,7 +543,20 @@ $assetsUrl = base_url('assets');
 
                                 <div class="col-sm-12">
 
-                                    <textarea id="purchase_order_remark" name="purchase_order_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="3"></textarea>
+
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <div class="col-sm-12">
+                                                <input type="checkbox" class="form-check-input" id="show_tax_desc">
+                                                <label class="form-check-label" for="show_tax_desc">Tampilkan Faktur</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <textarea id="purchase_order_remark" name="purchase_order_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="10">- UNTUK SETIAP MOTIF KERAMIK/ GRANIT HARAP DAPAT DIMUATKAN DENGAN NOMOR SERI YANG SAMA
+- Kami meminta support dari Bapak/Ibu jika terdapat brosur & souvenir Sehingga bisa membantu memasarkan produk ke konsumen
+- Kami juga mengharapakan jika untuk keramik bisa mensupport rak display dan sample keramik untuk display
+                                    </textarea>
 
                                 </div>
 
@@ -1221,6 +1234,8 @@ $assetsUrl = base_url('assets');
 
                     purchase_order_remark: $('#purchase_order_remark').val(),
 
+                    purchase_show_tax_desc: $('#show_tax_desc:checked').val(),
+
                     purchase_order_sub_total: purchase_order_sub_total,
 
                     purchase_order_discount1: purchase_order_discount1,
@@ -1576,6 +1591,8 @@ $("#tblpurchaseorders").on('click', '.btnedit', function(e) {
 
                     let footer_total_invoice_val  = header.purchase_order_total;
 
+                    let purchase_show_tax_desc = header.purchase_show_tax_desc;
+
                     if (header.purchase_order_status == 'Pending') {
 
                         $('#title-frmpurchaseorder').html('Ubah Pengajuan Pesanan');
@@ -1595,6 +1612,12 @@ $("#tblpurchaseorders").on('click', '.btnedit', function(e) {
                         $('#purchase_order_id').val(header.purchase_order_id);
 
                         $('#purchase_order_remark').val(header.purchase_order_remark);
+
+                        if(purchase_show_tax_desc == 'Y'){
+                            $('#show_tax_desc').prop('checked', true);
+                        }else{
+                            $('#show_tax_desc').prop('checked', false);
+                        }
 
                         $('#display_user').val(header.user_realname);
 
@@ -1621,6 +1644,8 @@ $("#tblpurchaseorders").on('click', '.btnedit', function(e) {
                         footer_total_ongkir.set(footer_total_ongkir_Val);
 
                         footer_total_invoice.set(footer_total_invoice_val);
+
+                        
 
                         loadTempData(items);
 
@@ -2395,43 +2420,43 @@ function updateTableHeader() {
 
 function clearItemInput() {
 
-     let form = $('#frmaddtemp');
+ let form = $('#frmaddtemp');
 
-     form.parsley().reset();
+ form.parsley().reset();
 
-     $('#item_id').val('');
+ $('#item_id').val('');
 
-     $('#product_name').val('');
+ $('#product_name').val('');
 
-     $('#temp_ed_date').val('');
+ $('#temp_ed_date').val('');
 
-     temp_qty.set('0.00');
+ temp_qty.set('0.00');
 
-     temp_ongkir.set(0);
+ temp_ongkir.set(0);
 
-     temp_price.set(0);
+ temp_price.set(0);
 
-     temp_total.set(0);
+ temp_total.set(0);
 
-     temp_tax.set(0);
+ temp_tax.set(0);
 
-     edit_temp_discount_percentage1.set('0.00%');
+ edit_temp_discount_percentage1.set('0.00%');
 
-     edit_temp_discount_percentage2.set('0.00%');
+ edit_temp_discount_percentage2.set('0.00%');
 
-     edit_temp_discount_percentage3.set('0.00%');
+ edit_temp_discount_percentage3.set('0.00%');
 
-     edit_temp_discount1.set(0);
+ edit_temp_discount1.set(0);
 
-     edit_temp_discount2.set(0);
+ edit_temp_discount2.set(0);
 
-     edit_temp_discount3.set(0);
+ edit_temp_discount3.set(0);
 
-     total_temp_discount.set(0);
+ total_temp_discount.set(0);
 
-     $('#temp_desc').val('');
+ $('#temp_desc').val('');
 
-     setSelect2('#nosubmission','','');
+ setSelect2('#nosubmission','','');
 
 }
 

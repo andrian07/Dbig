@@ -106,9 +106,10 @@ class Purchase_order extends WebminController
 
                     $find_result[] = [
 
+
                         'id'                  => $diplay_text,
 
-                        'value'               => $diplay_text.'('.$row['unit_name'].')',
+                        'value'               => $row['product_code'].' - '.$diplay_text.'('.$row['unit_name'].')',
 
                         'item_id'             => $row['item_id'],
 
@@ -388,16 +389,16 @@ class Purchase_order extends WebminController
             if ($temp_po_id != '') {
                 $delete = $this->M_purchase_order->deletetemp($temp_po_id);
                 if ($delete) {
-                   $getTemp = $this->M_purchase_order->getTemp($this->userLogin['user_id'])->getResultArray();
-                   $find_result = [];
-                   foreach ($getTemp as $k => $v) {
-                       $find_result[$k] = esc($v);
-                   }
-                   $result['data'] = $find_result;
-                   $result['csrfHash'] = csrf_hash();
-                   $result['success'] = 'TRUE';
-                   $result['message'] = 'Data Berhasil Di Hapus';
-               } else {
+                 $getTemp = $this->M_purchase_order->getTemp($this->userLogin['user_id'])->getResultArray();
+                 $find_result = [];
+                 foreach ($getTemp as $k => $v) {
+                     $find_result[$k] = esc($v);
+                 }
+                 $result['data'] = $find_result;
+                 $result['csrfHash'] = csrf_hash();
+                 $result['success'] = 'TRUE';
+                 $result['message'] = 'Data Berhasil Di Hapus';
+             } else {
                 $result = ['success' => FALSE, 'message' => 'Data Gagal Di Hapus'];
             }
         }
@@ -483,12 +484,20 @@ public function save($type)
 
     $validation =  \Config\Services::validation();
 
+
+    if($this->request->getPost('purchase_show_tax_desc') == 'on'){
+        $purchase_show_tax_desc = 'Y';
+    }else{
+        $purchase_show_tax_desc = 'N';
+    }
+
     $input = [
         'purchase_order_id'                       => $this->request->getPost('purchase_order_id'),
         'purchase_order_date'                     => $this->request->getPost('purchase_order_date'),
         'purchase_order_supplier_id'              => $this->request->getPost('purchase_order_supplier_id'),
         'purchase_order_warehouse_id'             => $this->request->getPost('purchase_order_warehouse_id'),
         'purchase_order_remark'                   => $this->request->getPost('purchase_order_remark'),
+        'purchase_show_tax_desc'                  => $purchase_show_tax_desc,
         'purchase_order_sub_total'                => $this->request->getPost('purchase_order_sub_total'),
         'purchase_order_discount1'                => $this->request->getPost('purchase_order_discount1'),
         'purchase_order_discount2'                => $this->request->getPost('purchase_order_discount2'),
@@ -637,7 +646,7 @@ public function printinvoice($purchase_order_id = "")
         $dompdf->stream('invoice');
     } else {
     */
-     if ($purchase_order_id == '') {
+       if ($purchase_order_id == '') {
 
         throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
 

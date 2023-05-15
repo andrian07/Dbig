@@ -143,6 +143,7 @@ class ReportCustomer extends WebminController
                 'userLogin'             => $this->userLogin
             ];
 
+
             $htmlView   = view('webmin/report/customer/customer_list', $data);
 
             if ($agent->isMobile()  && !$isDownload) {
@@ -520,31 +521,170 @@ class ReportCustomer extends WebminController
 
     public function customerReceivableList()
     {
-        $data = [
-            'title'         => 'Daftar Penukaran Poin',
-            'userLogin'     => $this->userLogin
-        ];
+        if ($this->role->hasRole('report.receivable_list')) {
 
-        $htmlView   = view('webmin/report/customer/customer_receivable_list', $data);
-        $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
-        $fileType   = $this->request->getGet('file');
-        $agent      = $this->request->getUserAgent();
-        if (!in_array($fileType, ['pdf'])) {
-            $fileType = 'pdf';
-        }
-        if ($agent->isMobile() && !$isDownload) {
-            return $htmlView;
-        } else {
-            if ($fileType == 'pdf') {
-                $dompdf = new Dompdf();
-                $dompdf->loadHtml($htmlView);
-                $dompdf->setPaper('A4', 'landscape');
-                $dompdf->render();
-                $dompdf->stream('daftar_piutang_customer.pdf', array("Attachment" => $isDownload));
-                exit();
-            } else {
-                die('Export Excel Script');
+            $M_receivable_repayment = model('M_receivable_repayment');
+
+            $start_date      = $this->request->getGet('start_date') != NULL ? $this->request->getGet('start_date') : date('Y-m') . '-01';
+            $end_date        = $this->request->getGet('end_date') != NULL ? $this->request->getGet('end_date') : date('Y-m-d');
+            $customer_id     = $this->request->getGet('customer_id');
+            $store_id        = $this->request->getGet('store_id');
+            $isDownload      = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
+            $fileType        = $this->request->getGet('file') == NULL ? 'pdf' : $this->request->getGet('file');
+            $agent           = $this->request->getUserAgent();
+
+
+            if (!in_array($fileType, ['pdf', 'xls'])) {
+                $fileType = 'pdf';
             }
+
+            $getReportData = $M_receivable_repayment->getReportData($start_date, $end_date, $customer_id, $store_id)->getResultArray();
+
+
+            if($getReportData != null){
+                if($customer_id != null){
+                    $customer_name = $getReportData[0]['customer_name'];
+                }else{
+                    $customer_name = '-';
+                }
+            }else{
+                $customer_name = '-';
+            }
+
+
+            if ($fileType == 'pdf') {
+                $cRow           = count($getReportData);
+                if ($cRow % 16 == 0) {
+                    $max_page_item  = 15;
+                } else {
+                    $max_page_item  = 16;
+                }
+                $receivabledata    = array_chunk($getReportData, $max_page_item);
+                $data = [
+                    'title'                 => 'Laporan Kartu Hutang',
+                    'start_date'            => $start_date,
+                    'end_date'              => $end_date,
+                    'customer_name'         => $customer_name,
+                    'pages'                 => $receivabledata,
+                    'maxPage'               => count($receivabledata),
+                    'userLogin'             => $this->userLogin
+                ];
+
+
+                $htmlView   = view('webmin/report/customer/customer_receivable_list', $data);
+
+                if ($agent->isMobile()  && !$isDownload) {
+                    return $htmlView;
+                } else {
+                    if ($fileType == 'pdf') {
+                        $dompdf = new Dompdf();
+                        $dompdf->loadHtml($htmlView);
+                        $dompdf->setPaper('A4', 'landscape');
+                        $dompdf->render();
+                        $dompdf->stream('daftar-piutang-customer.pdf', array("Attachment" => $isDownload));
+                        exit();
+                    }
+                }
+            } else {
+                $total_format = [
+                    'font' => [
+                        'bold' => true,
+                    ],
+                    'borders' => [
+                        'top' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'right' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'left' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'bottom' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                    ],
+                ];
+
+                $font_bold = [
+                    'font' => [
+                        'bold' => true,
+                    ],
+                ];
+
+                $border_left_right = [
+                    'borders' => [
+                        'right' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'left' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                    ],
+                ];
+
+                $template = WRITEPATH . '/template/template_export_receivable.xlsx';
+                $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+
+                $sheet = $spreadsheet->setActiveSheetIndex(0);
+                $iRow = 8;
+
+                $last_customer = '';
+                foreach ($getReportData as $row) {
+                    $sales_admin_grand_total  = floatval($row['sales_admin_grand_total']);
+                    $sales_admin_down_payment = floatval($row['sales_admin_down_payment']);
+                    $sales_admin_remaining_payment = floatval($row['sales_admin_remaining_payment']);
+                    $total_pay = floatval($row['sales_admin_remaining_payment'] - $sales_admin_down_payment);
+                    $sales_date = indo_short_date($row['sales_date'], TRUE);
+                    $sales_due_date = indo_short_date($row['sales_due_date'], TRUE);
+
+                    $sheet->getCell('A' . $iRow)->setValue($last_customer == $row['customer_name'] ? '' : $row['customer_name']);
+                    $sheet->getCell('B' . $iRow)->setValue($row['store_code'].'-'.$row['store_name']);
+                    $sheet->getCell('C' . $iRow)->setValue($row['sales_admin_invoice']);
+                    $sheet->getCell('D' . $iRow)->setValue(indo_short_date($row['sales_date'], FALSE));
+                    $sheet->getCell('E' . $iRow)->setValue(indo_short_date($row['sales_due_date'], FALSE));
+                    $sheet->getCell('F' . $iRow)->setValue($sales_admin_grand_total);
+                    $sheet->getCell('G' . $iRow)->setValue($sales_admin_down_payment);
+                    $sheet->getCell('H' . $iRow)->setValue($total_pay);
+                    $sheet->getCell('I' . $iRow)->setValue($sales_admin_remaining_payment);
+
+
+                    $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('F' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('H' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('I' . $iRow)->applyFromArray($border_left_right);
+
+                    $last_customer = $row['customer_name'];
+                    $iRow++;
+                }
+                //setting periode
+                $periode_text = indo_short_date($start_date) . ' s.d ' . indo_short_date($end_date);
+                $sheet->getCell('B1')->setValue($periode_text);
+                $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
+                $sheet->getCell('A1')->setValue($reportInfo);
+
+                $sheet->mergeCells('A1:I1');
+
+                $sheet->getStyle('A1:I1')->getAlignment()->setHorizontal('right');
+
+                $sheet->getStyle('A2:I2')->applyFromArray($font_bold);
+
+
+                $filename = 'Daftar Piutang Customer';
+                header('Content-Type: application/vnd.ms-excel');
+                header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+                header('Cache-Control: max-age=0');
+                $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+                $writer->save('php://output');
+                exit();
+            }
+        } else {
+            echo "<h1>Anda tidak memiliki akses ke laman ini</h1>";
         }
     }
 

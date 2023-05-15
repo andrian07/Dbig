@@ -791,13 +791,14 @@ class ReportProject extends WebminController
                $hd_retur_date     = indo_short_date($row['hd_retur_date'], FALSE);
 
                $sheet->getCell('A' . $iRow)->setValue($row['store_code'].'-'.$row['store_name']);
-               $sheet->getCell('B' . $iRow)->setValue($row['customer_code']);
-               $sheet->getCell('C' . $iRow)->setValue($row['customer_name']);
-               $sheet->getCell('D' . $iRow)->setValue($row['hd_retur_sales_admin_invoice']);
-               $sheet->getCell('E' . $iRow)->setValue($hd_retur_date);
-               $sheet->getCell('F' . $iRow)->setValue(numberFormat($hd_retur_total_dpp, TRUE));
-               $sheet->getCell('G' . $iRow)->setValue(numberFormat($hd_retur_total_ppn, TRUE));
-               $sheet->getCell('H' . $iRow)->setValue(numberFormat($hd_retur_total_transaction, TRUE));
+               $sheet->getCell('B' . $iRow)->setValue($hd_retur_date);
+               $sheet->getCell('C' . $iRow)->setValue($row['customer_code']);
+               $sheet->getCell('D' . $iRow)->setValue($row['customer_name']);
+               $sheet->getCell('E' . $iRow)->setValue($row['hd_retur_sales_admin_invoice']);
+               $sheet->getCell('F' . $iRow)->setValue($hd_retur_date);
+               $sheet->getCell('G' . $iRow)->setValue(numberFormat($hd_retur_total_dpp, TRUE));
+               $sheet->getCell('H' . $iRow)->setValue(numberFormat($hd_retur_total_ppn, TRUE));
+               $sheet->getCell('I' . $iRow)->setValue(numberFormat($hd_retur_total_transaction, TRUE));
 
                $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
                $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
@@ -807,6 +808,7 @@ class ReportProject extends WebminController
                $sheet->getStyle('F' . $iRow)->applyFromArray($border_left_right);
                $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
                $sheet->getStyle('H' . $iRow)->applyFromArray($border_left_right);
+               $sheet->getStyle('I' . $iRow)->applyFromArray($border_left_right);
 
 
                $iRow++;
@@ -822,9 +824,9 @@ class ReportProject extends WebminController
            $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
            $sheet->getCell('A1')->setValue($reportInfo);
 
-           $sheet->mergeCells('A1:H1');
+           $sheet->mergeCells('A1:I1');
 
-           $sheet->getStyle('A1:H1')->getAlignment()->setHorizontal('right');
+           $sheet->getStyle('A1:I1')->getAlignment()->setHorizontal('right');
 
            $sheet->getStyle('A2:I2')->applyFromArray($font_bold);
 

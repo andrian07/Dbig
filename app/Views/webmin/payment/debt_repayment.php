@@ -318,7 +318,7 @@ $assetsUrl = base_url('assets');
 
                                          <td>
 
-                                             <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                             <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Payment">
 
                                                  <i class="fas fa-money-bill-wave"></i>
 
@@ -442,7 +442,7 @@ $assetsUrl = base_url('assets');
 
            let purchase_retur_nominal = val.purchase_retur_nominal;
 
-           let temp_payment_remaining  = val.purchase_remaining_debt - val.temp_payment_debt_nominal;
+           let temp_payment_remaining  = val.purchase_remaining_debt - val.temp_payment_debt_nominal - val.purchase_retur_nominal - val.temp_payment_debt_discount;
 
 
 
@@ -873,7 +873,7 @@ $assetsUrl = base_url('assets');
 
             repayment_total.set(json.temp_payment_debt_nominal);
 
-            remaining_debt.set(json.purchase_remaining_debt - json.purchase_retur_nominal);
+            remaining_debt.set(json.purchase_remaining_debt);
 
             purchase_retur_nominal.set(json.purchase_retur_nominal);
 

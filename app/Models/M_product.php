@@ -269,7 +269,7 @@ class M_product extends Model
     public function searchProductUnitByName($keyword, $isItemCode = FALSE, $limit = 10)
     {
         $builder = $this->db->table('ms_product_unit');
-        $builder->select('ms_product_unit.*,ms_product.product_name,ms_product_unit.item_code,(ms_product.base_purchase_price*ms_product_unit.product_content) as purchase_price,(ms_product.base_purchase_tax*ms_product_unit.product_content) as purchase_tax,ms_unit.unit_name,ms_product.is_parcel,base_purchase_price,base_purchase_tax,base_cogs')
+        $builder->select('ms_product_unit.*,ms_product.product_name,ms_product_unit.item_code,(ms_product.base_purchase_price*ms_product_unit.product_content) as purchase_price,(ms_product.base_purchase_tax*ms_product_unit.product_content) as purchase_tax,ms_unit.unit_name,ms_product.is_parcel,base_purchase_price,base_purchase_tax,base_cogs, product_code')
             ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
             ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
             ->where('ms_product.deleted', 'N')
@@ -278,10 +278,12 @@ class M_product extends Model
 
         if ($isItemCode) {
             $builder->where('ms_product_unit.item_code', $keyword);
+            $builder->orLike('ms_product.product_code', $keyword);
         } else {
             $builder->groupStart();
             $builder->like('ms_product_unit.item_code', $keyword);
             $builder->orLike('ms_product.product_name', $keyword);
+            $builder->orLike('ms_product.product_code', $keyword);
             $builder->groupEnd();
         }
         return  $builder->limit($limit)->get();
@@ -291,7 +293,7 @@ class M_product extends Model
     {
 
         $builder = $this->db->table('ms_product_unit');
-        $builder->select('ms_product_unit.*,ms_product.product_name,(ms_product.base_purchase_price*ms_product_unit.product_content) as purchase_price,(ms_product.base_purchase_tax*ms_product_unit.product_content) as purchase_tax,ms_unit.unit_name,ms_product.is_parcel')
+        $builder->select('ms_product_unit.*,ms_product.product_name,(ms_product.base_purchase_price*ms_product_unit.product_content) as purchase_price,(ms_product.base_purchase_tax*ms_product_unit.product_content) as purchase_tax,ms_unit.unit_name,ms_product.is_parcel, product_code')
             ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
             ->join('ms_product_supplier', 'ms_product_supplier.product_id = ms_product.product_id')
             ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
@@ -301,11 +303,13 @@ class M_product extends Model
 
         if ($isItemCode) {
             $builder->where('ms_product_unit.item_code', $keyword);
+            $builder->orLike('ms_product.product_code', $keyword);
         } else {
             $builder->groupStart();
             $builder->Like('ms_product.product_name', $keyword);
             $builder->Like('ms_product_supplier.supplier_id', $supplier_id);
             $builder->orLike('ms_product_unit.item_code', $keyword);
+            $builder->orLike('ms_product.product_code', $keyword);
             $builder->groupEnd();
         }
         return  $builder->limit($limit)->get();
