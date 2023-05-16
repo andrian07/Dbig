@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Webmin;
 
+use Dompdf\Dompdf;
 use App\Models\M_point_exchange;
 use App\Controllers\Base\WebminController;
 
@@ -89,7 +90,7 @@ class PointExchange extends WebminController
                 $column[] = $label_status;
 
                 $btns = [];
-
+                $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="' . base_url('webmin/point-exchange/invoice/' . $row['exchange_id']) . '" class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" data-title="Print"><i class="fas fa-print"></i></a>';
                 $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="' . base_url('webmin/point-exchange/detail/' . $row['exchange_id']) . '" class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
                 $prop =  'data-id="' . $row['exchange_id'] . '" data-name="' . esc($row['reward_name']) . '" data-code="' . esc($row['exchange_code']) . '"';
 
@@ -229,12 +230,42 @@ class PointExchange extends WebminController
             if ($find == NULL) {
                 throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
             } else {
-                $data = [
-                    'title'     => 'Detail Penukaran',
-                    'detail'    => $find,
+                $config_label_group     = $this->appConfig->get('default', 'label_customer_group');
 
+                $data = [
+                    'title'                 => 'Detail Penukaran',
+                    'detail'                => $find,
+                    'config_label_group'    => $config_label_group
                 ];
                 return $this->renderView('customer_point/point_exchange_detail', $data, 'point_exchange.view');
+            }
+        }
+    }
+
+
+    public function invoice($exchange_id = '')
+    {
+        if ($exchange_id == '') {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        } else {
+            $find = $this->M_point_exchange->getExchange($exchange_id)->getRowArray();
+            if ($find == NULL) {
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            } else {
+                $data = [
+                    'title'                 => 'Invoice Penukaran Poin',
+                    'detail'                => $find
+                ];
+
+                $htmlView   = $this->renderView('customer_point/point_exchange_invoice', $data);
+                $isDownload = false;
+
+                $dompdf = new Dompdf();
+                $dompdf->loadHtml($htmlView);
+                $dompdf->setPaper('A4', 'portrait');
+                $dompdf->render();
+                $dompdf->stream('invoice_penukaran_poin.pdf', array("Attachment" => $isDownload));
+                exit();
             }
         }
     }

@@ -11,10 +11,12 @@ class M_point_exchange extends Model
     public function getExchange($exchange_id = '')
     {
         $builder = $this->db->table($this->table);
-        $builder->select('exchange_point.*,user_account.user_realname,ms_point_reward.reward_name,ua.user_realname as completed_by_realname');
+        $builder->select('exchange_point.*,user_account.user_realname,ms_point_reward.reward_code,ms_point_reward.reward_name,ua.user_realname as completed_by_realname,ms_store.store_name,ms_store.store_address,ms_store.store_phone,ms_customer.customer_name,ms_customer.customer_address,ms_customer.customer_phone,ms_customer.customer_group,ms_customer.customer_delivery_address');
         $builder->join('ms_point_reward', 'ms_point_reward.reward_id=exchange_point.reward_id');
+        $builder->join('ms_customer', 'ms_customer.customer_id=exchange_point.customer_id');
         $builder->join('user_account', 'user_account.user_id=exchange_point.user_id', 'left');
         $builder->join('user_account as ua', 'ua.user_id=exchange_point.completed_by', 'left');
+        $builder->join('ms_store', 'ms_store.store_id=exchange_point.store_id', 'left');
 
         $builder->where('exchange_id', $exchange_id);
         return $builder->get();

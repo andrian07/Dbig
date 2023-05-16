@@ -259,7 +259,7 @@ $assetsUrl = base_url('assets');
                     targets: 0
                 },
                 {
-                    width: 120,
+                    width: 150,
                     targets: 6
                 },
                 {

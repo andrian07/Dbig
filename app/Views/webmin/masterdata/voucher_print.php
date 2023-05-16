@@ -33,7 +33,7 @@
         background-image: url("data:image/png;base64,<?= $voucher_cover ?>");
         background-repeat: no-repeat;
         background-attachment: fixed;
-        background-size: cover;
+        background-size: 100% 100%;
     }
 
     .voucher-code {
@@ -59,7 +59,7 @@
         background-image: url("data:image/png;base64,<?= $voucher_backcover ?>");
         background-repeat: no-repeat;
         background-attachment: fixed;
-        background-size: cover;
+        background-size: 100% 100%;
     }
 </style>
 <?= $this->endSection() ?>
@@ -124,33 +124,34 @@
         for ($i = 1; $i <= 3; $i++) {
         ?>
             <tr>
-                <td width="45%">
-                    <table class="voucher-detail">
-                        <tr>
-                            <td class="voucher-code" style="height:100px;">&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td style="height:60px;">&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td class="voucher-exp-date" style="height:20px;">&nbsp;</td>
-                        </tr>
-                    </table>
-                </td>
-                <td width="45%">
-                    <table class="voucher-detail">
-                        <tr>
-                            <td class="voucher-code" style="height:100px;">&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td style="height:60px;">&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td class="voucher-exp-date" style="height:20px;">&nbsp;</td>
-                        </tr>
-                    </table>
-                </td>
                 <td width="10%"></td>
+                <td width="45%">
+                    <table class="voucher-detail">
+                        <tr>
+                            <td class="voucher-code" style="height:100px;">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="height:60px;">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td class="voucher-exp-date" style="height:20px;">&nbsp;</td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="45%">
+                    <table class="voucher-detail">
+                        <tr>
+                            <td class="voucher-code" style="height:100px;">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="height:60px;">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td class="voucher-exp-date" style="height:20px;">&nbsp;</td>
+                        </tr>
+                    </table>
+                </td>
+
             </tr>
         <?php } ?>
     </table>

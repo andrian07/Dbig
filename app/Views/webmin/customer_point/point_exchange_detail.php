@@ -46,13 +46,28 @@ $assetsUrl = base_url('assets');
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
-                    <b>#0000000001</b><br>
+                    <?php
+                    $label_status = '';
+                    switch ($detail['exchange_status']) {
+                        case 'pending':
+                            $label_status = '<span class="badge badge-primary">Proses</span>';
+                            break;
+                        case 'success':
+                            $label_status = ' <span class="badge badge-success">Selesai</span>';
+                            break;
+                        case 'cancel':
+                            $label_status = '<span class="badge badge-danger">Batal</span>';
+                            break;
+                    }
+                    ?>
+                    <b>#<?= $detail['exchange_code'] ?></b><br>
                     <br>
-                    <b>Nama Customer:</b> Samsul<br>
-                    <b>Grup:</b> <span class="badge badge-light">Member Silver</span><br>
-                    <b>Alamat:</b> Jl.Sui raya km 8.5 no 25<br>
-                    <b>No Telp:</b> 0896-7899-8899<br>
-                    <b>Status Penukaran:</b> <span class="badge badge-success">Selesai</span><br>
+                    <b>Nama Customer:</b> <?= $detail['customer_name'] ?><br>
+                    <b>Grup:</b> <?= isset($config_label_group[$detail['customer_group']]) ? $config_label_group[$detail['customer_group']] : 'NO CONFIG' ?><br>
+                    <b>Alamat:</b> <?= $detail['customer_address'] ?><br>
+                    <b>Alamat Pengiriman:</b> <?= $detail['customer_delivery_address'] ?><br>
+                    <b>No Telp:</b> <?= $detail['customer_phone'] ?><br>
+                    <b>Status Penukaran:</b> <?= $label_status ?><br>
                 </div>
                 <!-- /.col -->
             </div>
@@ -65,6 +80,11 @@ $assetsUrl = base_url('assets');
                     <p class="lead">Detail Penukaran</p>
                     <div class="row">
                         <div class="col-12 table-responsive">
+                            <?php
+                            $exchange_date = $detail['exchange_date'];
+                            $completed_at  = substr($detail['completed_at'], 0, 10);
+                            $completed_by  = $detail['completed_by'] == '0' ? '-' : $detail['completed_by_realname'];
+                            ?>
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
@@ -77,11 +97,11 @@ $assetsUrl = base_url('assets');
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>01/08/2022</td>
-                                        <td>Kopin Mangkok Vegetable Bowl 9″ Kukuruyuk (KPQ-9VB)</td>
-                                        <td class="text-right">50.00</td>
-                                        <td>05/08/2022</td>
-                                        <td>Reza</td>
+                                        <td><?= indo_short_date($exchange_date) ?></td>
+                                        <td><b><?= $detail['reward_code'] ?></b><br><?= $detail['reward_name'] ?></td>
+                                        <td class="text-right"><?= numberFormat($detail['reward_point']) ?></td>
+                                        <td><?= indo_short_date($completed_at) ?></td>
+                                        <td><?= $completed_by ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -90,7 +110,14 @@ $assetsUrl = base_url('assets');
                     </div>
                 </div>
                 <div class="col-md-12 col-xs-12">
-                    <p>Lokasi Pengambilan Hadiah: <b><?= COMPANY_NAME ?></b><br> <?= COMPANY_ADDRESS ?>
+                    <?php
+                    $lokasi_pengambilan = '-';
+                    if (intval($detail['store_id']) > 0) {
+                        $lokasi_pengambilan = '<b>' . $detail['store_name'] . '</b><br>' . $detail['store_address'];
+                    }
+                    ?>
+                    <p>
+                        Lokasi Pengambilan Hadiah: <?= $lokasi_pengambilan ?>
                     <p>
 
 

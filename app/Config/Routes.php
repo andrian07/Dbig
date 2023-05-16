@@ -301,6 +301,7 @@ $routes->group('webmin/point-exchange', ['filter' => 'webminauth'], static funct
     $routes->get('cancel-exchange/(:num)', 'Webmin\PointExchange::cancelExchange/$1');
     $routes->get('success-exchange/(:num)', 'Webmin\PointExchange::successExchange/$1');
     $routes->get('detail/(:num)', 'Webmin\PointExchange::detail/$1');
+    $routes->get('invoice/(:num)', 'Webmin\PointExchange::invoice/$1');
 
     $routes->post('add-point', 'Webmin\PointExchange::addPoint');
 });
@@ -1030,7 +1031,6 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
     $routes->get('view-project-sales-list', 'Webmin\Report\ReportProject::viewProjectSalesList');
 
     $routes->get('project-sales-list', 'Webmin\Report\ReportProject::projectSalesList');
-
 });
 
 /* End Report */
