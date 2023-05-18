@@ -75,6 +75,11 @@ $assetsUrl = base_url('assets');
                                 <td id="manage_voucher_remark"></td>
                             </tr>
                             <tr>
+                                <th>Min. Belanja</th>
+                                <td>:</td>
+                                <td id="manage_voucher_min_sales"></td>
+                            </tr>
+                            <tr>
                                 <th>Exp.Date</th>
                                 <td>:</td>
                                 <td id="manage_voucher_exp_date"></td>
@@ -180,6 +185,13 @@ $assetsUrl = base_url('assets');
                                         </div>
 
                                         <div class="form-group">
+                                            <label for="min_sales" class="col-sm-12">Min. Belanja</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control" id="min_sales" name="min_sales" placeholder="Min. Belanja" value="" data-parsley-vminsales required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
                                             <label for="exp_date" class="col-sm-12">Exp. Date</label>
                                             <div class="col-sm-12">
                                                 <input type="date" class="form-control" id="exp_date" name="exp_date" placeholder="Exp. Date" value="" required>
@@ -263,6 +275,7 @@ $assetsUrl = base_url('assets');
         }
 
         let voucher_value = new AutoNumeric('#voucher_value', configRp);
+        let min_sales = new AutoNumeric('#min_sales', configRp);
         let voucher_count = new AutoNumeric('#voucher_count', configQty);
 
 
@@ -534,6 +547,7 @@ $assetsUrl = base_url('assets');
             $('#voucher_group_id').val('0');
             $('#voucher_name').val('');
             voucher_value.set(0);
+            min_sales.set(0);
             $('#voucher_remark').val('');
             setSelect2('#category_restriction');
             setSelect2('#brand_restriction');
@@ -559,6 +573,7 @@ $assetsUrl = base_url('assets');
             $('#voucher_group_id').val(htmlEntities.decode(data.voucher_group_id));
             $('#voucher_name').val(htmlEntities.decode(data.voucher_name));
             voucher_value.set(parseFloat(data.voucher_value));
+            min_sales.set(parseFloat(data.min_sales));
             $('#voucher_remark').val(htmlEntities.decode(data.voucher_remark));
 
             if (category_restriction.length > 0) {
@@ -644,6 +659,8 @@ $assetsUrl = base_url('assets');
                         formValues.append('voucher_group_id', $('#voucher_group_id').val());
                         formValues.append('voucher_name', $('#voucher_name').val());
                         formValues.append('voucher_value', parseFloat(voucher_value.getNumericString()));
+                        formValues.append('min_sales', parseFloat(min_sales.getNumericString()));
+
                         formValues.append('voucher_remark', $('#voucher_remark').val());
                         formValues.append('exp_date', $('#exp_date').val());
                         formValues.append('category_restriction', $("#category_restriction").val());
@@ -765,6 +782,7 @@ $assetsUrl = base_url('assets');
                             $('#manage_voucher_name').html(data.voucher_name);
                             $('#manage_voucher_remark').html(data.voucher_remark);
                             $('#manage_voucher_exp_date').html(data.indo_exp_date);
+                            $('#manage_voucher_min_sales').html(numberFormat(parseFloat(data.min_sales), true));
                             $('#manage_voucher_value').html(numberFormat(parseFloat(data.voucher_value), true));
                             tblmanagevoucher.ajax.reload();
                             $('#frmgenerate').parsley().reset();

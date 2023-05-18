@@ -127,7 +127,7 @@ class Voucher extends WebminController
             'exp_date'                      => $this->request->getPost('exp_date'),
             'category_restriction'          => $this->request->getPost('category_restriction[]'),
             'brand_restriction'             => $this->request->getPost('brand_restriction[]'),
-
+            'min_sales'                     => $this->request->getPost('min_sales'),
             'upload_image_cover'            => $this->request->getFile('upload_image_cover'),
             'upload_image_backcover'        => $this->request->getFile('upload_image_backcover'),
             'old_cover_image'               => $this->request->getPost('old_cover_image'),
@@ -140,6 +140,7 @@ class Voucher extends WebminController
             'voucher_remark'                => ['rules' => 'max_length[500]'],
             'voucher_value'                 => ['rules' => 'required'],
             'exp_date'                      => ['rules' => 'required'],
+            'min_sales'                     => ['rules' => 'required'],
         ]);
 
         $maxUploadSize = $this->maxUploadSize['kb'];
