@@ -931,7 +931,7 @@ class ApiPos extends BaseController
 
     private function _update_pos_sales($dsHdPosSales, $dsDtPosSales, $dsDtPosSalesPayment)
     {
-        $warehouse_id       = 1;
+        $warehouse_id       = 0;
         $voucher_payment_id = 2;
 
 
@@ -944,6 +944,7 @@ class ApiPos extends BaseController
                 'customer_id'                   => $row['customer_id'],
                 'customer_group'                => $row['customer_group'],
                 'store_id'                      => $row['store_id'],
+                'warehouse_id'                  => $row['warehouse_id'],
                 'pos_sales_remark'              => $row['pos_sales_remark'],
                 'pos_sales_total'               => $row['pos_sales_total'],
                 'pos_total_payment'             => $row['pos_total_payment'],
@@ -958,6 +959,8 @@ class ApiPos extends BaseController
                 'created_at'                    => $row['created_at'],
                 'updated_at'                    => $row['updated_at'],
             ];
+
+            $warehouse_id = intval($row['warehouse_id']);
 
             $getSales =  $this->db->table('hd_pos_sales')->where('pos_sales_invoice', $pos_sales_invoice)->get()->getRowArray();
             if ($getSales == null) {
@@ -1197,7 +1200,7 @@ class ApiPos extends BaseController
 
     private function _update_pos_sales_return($dsHdPosSalesReturn, $dsDtPosSalesReturn)
     {
-        $warehouse_id       = 1;
+        $warehouse_id = 0;
 
         foreach ($dsHdPosSalesReturn as $row) {
             $pos_sales_return_invoice           = $row['pos_sales_return_invoice'];
@@ -1209,6 +1212,7 @@ class ApiPos extends BaseController
                 'pos_sales_id'                  => $pos_sales_id,
                 'customer_id'                   => $row['customer_id'],
                 'store_id'                      => $row['store_id'],
+                'warehouse_id'                  => $row['warehouse_id'],
                 'pos_sales_return_remark'       => $row['pos_sales_return_remark'],
                 'pos_sales_return_total'        => $row['pos_sales_return_total'],
                 'customer_initial_point'        => $row['customer_initial_point'],
@@ -1220,6 +1224,8 @@ class ApiPos extends BaseController
                 'created_at'                    => $row['created_at'],
                 'updated_at'                    => $row['updated_at'],
             ];
+
+            $warehouse_id = intval($row['warehouse_id']);
 
             $getSalesReturn =  $this->db->table('hd_pos_sales_return')->where('pos_sales_return_invoice', $pos_sales_return_invoice)->get()->getRowArray();
             if ($getSalesReturn == null) {

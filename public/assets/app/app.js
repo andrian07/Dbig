@@ -15,8 +15,8 @@ let configModal = {
 let configMargin = {
   currencySymbol: "%",
   currencySymbolPlacement: "s",
-  digitGroupSeparator: ",",
-  decimalCharacter: ".",
+  digitGroupSeparator: THOUSAND_SEPARATOR,
+  decimalCharacter: DECIMAL_SEPARATOR,
   maximumValue: "999",
   minimumValue: "-999",
   modifyValueOnWheel: AutoNumeric.options.modifyValueOnWheel.doNothing,
@@ -25,8 +25,8 @@ let configMargin = {
 let configDisc = {
   currencySymbol: "%",
   currencySymbolPlacement: "s",
-  digitGroupSeparator: ",",
-  decimalCharacter: ".",
+  digitGroupSeparator: THOUSAND_SEPARATOR,
+  decimalCharacter: DECIMAL_SEPARATOR,
   maximumValue: "100",
   minimumValue: "0",
   modifyValueOnWheel: AutoNumeric.options.modifyValueOnWheel.doNothing,
@@ -35,8 +35,8 @@ let configDisc = {
 let configQty = {
   currencySymbol: "",
   currencySymbolPlacement: "s",
-  digitGroupSeparator: ",",
-  decimalCharacter: ".",
+  digitGroupSeparator: THOUSAND_SEPARATOR,
+  decimalCharacter: DECIMAL_SEPARATOR,
   maximumValue: "99999",
   minimumValue: "-99999",
   modifyValueOnWheel: AutoNumeric.options.modifyValueOnWheel.doNothing,
@@ -45,8 +45,8 @@ let configQty = {
 let configPoint = {
   currencySymbol: "",
   currencySymbolPlacement: "s",
-  digitGroupSeparator: ",",
-  decimalCharacter: ".",
+  digitGroupSeparator: THOUSAND_SEPARATOR,
+  decimalCharacter: DECIMAL_SEPARATOR,
   maximumValue: "999999999",
   minimumValue: "0",
   modifyValueOnWheel: AutoNumeric.options.modifyValueOnWheel.doNothing,
@@ -54,8 +54,8 @@ let configPoint = {
 
 let configRp = {
   currencySymbol: "Rp ",
-  digitGroupSeparator: ",",
-  decimalCharacter: ".",
+  digitGroupSeparator: THOUSAND_SEPARATOR,
+  decimalCharacter: DECIMAL_SEPARATOR,
   maximumValue: "99999999999",
   minimumValue: "-99999999999",
   modifyValueOnWheel: AutoNumeric.options.modifyValueOnWheel.doNothing,

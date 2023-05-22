@@ -47,8 +47,8 @@ defined('DECADE') || define('DECADE', 315_360_000);
 */
 defined('PPN')                  || define('PPN', 0.11);
 defined('PPN_TEXT')             || define('PPN_TEXT', '11%');
-defined('THOUSAND_SEPARATOR')   || define('THOUSAND_SEPARATOR', ',');
-defined('DECIMAL_SEPARATOR')    || define('DECIMAL_SEPARATOR', '.');
+defined('THOUSAND_SEPARATOR')   || define('THOUSAND_SEPARATOR', '.');
+defined('DECIMAL_SEPARATOR')    || define('DECIMAL_SEPARATOR', ',');
 defined('DECIMAL_DIGIT')        || define('DECIMAL_DIGIT', 2);
 
 /*
