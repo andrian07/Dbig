@@ -131,7 +131,8 @@ $assetsUrl = base_url('assets');
 					<td class="text-center">Dibuat Oleh,</td><td class="text-center">Disetujui Oleh ,</td>
 				</tr>
 				<tr>
-					<td style="height: 80px;"></td><td></td>
+					<td style="height: 80px;"><img src="<?= $assetsUrl ?>/images/TTD_Bag_Pembelian.png" style="width: 80%;"></td><td><img src="<?= $assetsUrl ?>/images/TTD_Direktur.png" style="width: 80%;">
+				</td>
 				</tr>
 				<tr>
 					<td class="text-center">Bag.Pembelian</td><td class="text-center">Direktur</td>

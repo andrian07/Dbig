@@ -151,8 +151,8 @@ class M_purchase_order extends Model
         $sqlDtOrder .= implode(',', $sqlDtValues);
 
 
-
-
+        print_r($sqlDtValues);die();
+        
         $this->db->query($sqlDtOrder);
 
         if ($this->db->affectedRows() > 0) {
