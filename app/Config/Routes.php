@@ -768,6 +768,7 @@ $routes->group('webmin/sales-pos', ['filter' => 'webminauth'], static function (
     $routes->get('/', 'Webmin\SalesPos::index');
     $routes->get('getbyid/(:num)', 'Webmin\SalesPos::getById/$1');
     $routes->get('getdetailbyid/(:num)', 'Webmin\SalesPos::getDetailById/$1');
+    $routes->get('printdispatch/(:num)', 'Webmin\SalesPos::printDispatch/$1');
     $routes->post('table', 'Webmin\SalesPos::table');
     $routes->post('table-detail-sales', 'Webmin\SalesPos::tableDetailSales');
     $routes->post('change-salesman/(:num)/(:num)', 'Webmin\SalesPos::changeSalesman/$1/$2');
@@ -914,6 +915,10 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
     $routes->get('view-stock-list', 'Webmin\Report\ReportInventory::viewStockList');
 
     $routes->get('stock-list', 'Webmin\Report\ReportInventory::stockList');
+
+    $routes->get('view-stock-list-v2', 'Webmin\Report\ReportInventory::viewStockListV2');
+
+    $routes->get('stock-list-v2', 'Webmin\Report\ReportInventory::stockListV2');
 
     $routes->get('view-stock-card', 'Webmin\Report\ReportInventory::viewStockCard');
 

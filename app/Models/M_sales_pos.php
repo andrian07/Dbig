@@ -14,7 +14,7 @@ class M_sales_pos extends Model
     {
         $builder = $this->db->table($this->table);
 
-        $builder->select('hd_pos_sales.*,ms_store.store_name,ms_customer.customer_name,user_account.user_realname');
+        $builder->select('hd_pos_sales.*,ms_store.store_name,ms_customer.customer_name,ms_customer.customer_address,ms_customer.customer_delivery_address,user_account.user_realname');
         $builder->join('user_account', 'user_account.user_id=hd_pos_sales.user_id');
         $builder->join('ms_store', 'ms_store.store_id=hd_pos_sales.store_id');
         $builder->join('ms_customer', 'ms_customer.customer_id=hd_pos_sales.customer_id');

@@ -47,8 +47,10 @@ class SalesPos extends WebminController
                 $column[] = numberFormat($row['pos_sales_total'], true);
                 $btns = [];
                 $prop =  'data-id="' . $row['pos_sales_id'] . '"';
+                $btns[] = button_print($prop);
                 $btns[] = button_edit($prop);
-                $column[] = implode('', $btns);
+
+                $column[] = implode('&nbsp;', $btns);
 
                 return $column;
             });
@@ -276,28 +278,33 @@ class SalesPos extends WebminController
         resultJSON($result);
     }
 
-    public function delete($reward_id = '')
+    public function printDispatch($pos_sales_id = '')
     {
-        $this->validationRequest(TRUE);
-        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
-        if ($this->role->hasRole('reward_point.delete')) {
-            $hasExchange = 0;
-            if ($hasExchange) {
-                $result = ['success' => FALSE, 'message' => 'Hadiah tidak dapat dihapus'];
-            } else {
-                if ($reward_id != '') {
-                    $delete = $this->M_point_reward->deleteReward($reward_id);
-                    if ($delete) {
-                        $result = ['success' => TRUE, 'message' => 'Data hadiah berhasil dihapus'];
-                    } else {
-                        $result = ['success' => FALSE, 'message' => 'Data hadiah gagal dihapus'];
-                    }
-                }
-            }
+        if ($pos_sales_id  == '') {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         } else {
-            $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menghapus hadiah'];
+            $find = $this->M_sales_pos->getSales($pos_sales_id)->getRowArray();
+            if ($find == NULL) {
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            } else {
+
+                $detail     = $this->M_sales_pos->getDetailSales($pos_sales_id)->getResultArray();
+                $max_item   = 6;
+                $pages      = array_chunk($detail, $max_item);
+
+                $data = [
+                    'title'     => 'Surat Jalan',
+                    'header'    => $find,
+                    'pages'     => $pages,
+                    'agent'     => $this->request->getUserAgent()
+                ];
+
+                if (isset($_GET['debug'])) {
+                    dd($data);
+                }
+                return view('webmin/sales_pos/dispatch_invoice', $data);
+            }
         }
-        resultJSON($result);
     }
     //--------------------------------------------------------------------
 
