@@ -432,8 +432,8 @@ class ReportPurchase extends WebminController
                 $sheet->getCell('D' . $iRow)->setValue($purchase_date);
                 $sheet->getCell('E' . $iRow)->setValue($purchase_due_date);
                 $sheet->getCell('F' . $iRow)->setValue(numberFormat($dpp, TRUE));
-                $sheet->getCell('G' . $iRow)->setValue(number_format($ppn, TRUE));
-                $sheet->getCell('H' . $iRow)->setValue(number_format($total, TRUE));
+                $sheet->getCell('G' . $iRow)->setValue(numberFormat($ppn, TRUE));
+                $sheet->getCell('H' . $iRow)->setValue(numberFormat($total, TRUE));
 
                 $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
                 $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
@@ -626,8 +626,8 @@ class ReportPurchase extends WebminController
                 $sheet->getCell('K' . $iRow)->setValue($row['unit_name']);
                 $sheet->getCell('L' . $iRow)->setValue(numberFormat($base_price, TRUE));
                 $sheet->getCell('M' . $iRow)->setValue(numberFormat($dpp, TRUE));
-                $sheet->getCell('N' . $iRow)->setValue(number_format($ppn, TRUE));
-                $sheet->getCell('O' . $iRow)->setValue(number_format($total, TRUE));
+                $sheet->getCell('N' . $iRow)->setValue(numberFormat($ppn, TRUE));
+                $sheet->getCell('O' . $iRow)->setValue(numberFormat($total, TRUE));
 
                 $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
                 $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);

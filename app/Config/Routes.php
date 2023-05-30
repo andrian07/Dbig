@@ -903,6 +903,8 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 
     $routes->get('customer-receivable-list', 'Webmin\Report\ReportCustomer::customerReceivableList');
 
+    $routes->get('customer-receivable-receipt', 'Webmin\Report\ReportCustomer::customerReceivableReceipt');
+
     $routes->get('view-customer-receivable-receipt', 'Webmin\Report\ReportCustomer::viewCustomerReceivableReceipt');
 
     $routes->get('customer-receivable-receipt', 'Webmin\Report\ReportCustomer::customerReceivableReceipt');

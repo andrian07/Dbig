@@ -28,6 +28,15 @@ $assetsUrl = base_url('assets');
                         <div class="card-body">
                             <form>
                                 <div class="row">
+
+                                    <div class="col-sm-2">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>Cabang:</label>
+                                            <select id="store_id" name="store_id" class="form-control"></select>
+                                        </div>
+                                    </div>
+
                                     <div class="col-sm-3">
                                         <!-- text input -->
                                         <div class="form-group">
@@ -39,19 +48,11 @@ $assetsUrl = base_url('assets');
                                     <div class="col-sm-2">
                                         <!-- text input -->
                                         <div class="form-group">
-                                            <label>Cabang:</label>
-                                            <select id="store_id" name="store_id" class="form-control"></select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-2">
-                                        <!-- text input -->
-                                        <div class="form-group">
                                             <label>J.Tempo Dari:</label>
                                             <input id="start_date" name="start_date" type="date" class="form-control" value="<?= date('Y-m') ?>-01">
                                         </div>
                                     </div>
-
+                                    
                                     <div class="col-sm-2">
                                         <!-- text input -->
                                         <div class="form-group">
@@ -160,14 +161,12 @@ $assetsUrl = base_url('assets');
     $('#btnsearch').click(function(e) {
         e.preventDefault();
         let customer_id = $('#customer_id').val();
-        let status = $('#status').val();
         let store_id = $('#store_id').val();
         let start_date = $('#start_date').val();
         let end_date = $('#end_date').val();
         let reportUrl = '<?= base_url('webmin/report/customer-receivable-list') ?>?';
         reportUrl += '&start_date=' + start_date;
         reportUrl += '&end_date=' + end_date;
-        reportUrl += '&status=' + status;
         if (customer_id != null && customer_id != '') {
             reportUrl += '&customer_id=' + customer_id;
         }
@@ -180,14 +179,12 @@ $assetsUrl = base_url('assets');
     $('#btnexportexcel').click(function(e) {
         e.preventDefault();
         let customer_id = $('#customer_id').val();
-        let status = $('#status').val();
         let store_id = $('#store_id').val();
         let start_date = $('#start_date').val();
         let end_date = $('#end_date').val();
         let reportUrl = '<?= base_url('webmin/report/customer-receivable-list') ?>?';
         reportUrl += '&start_date=' + start_date;
         reportUrl += '&end_date=' + end_date;
-          reportUrl += '&status=' + status;
         if (customer_id != null && customer_id != '') {
             reportUrl += '&customer_id=' + customer_id;
         }

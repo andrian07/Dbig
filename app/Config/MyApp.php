@@ -403,6 +403,12 @@ class MyApp extends BaseConfig
                 'pos_sales_allocation_margin'       => ['text' => 'Laporan Alokasi Margin Penjualan Retail'],
                 /* end pos sales */
 
+                /*customer report */
+                'receivable_list'                   => ['text' => 'Laporan Piutang'],
+                'receivable_list_receipt'           => ['text' => 'Laporan Tagihan Piutang'],
+                
+                /* end customer report */
+
                 'sales_list'                        => ['text' => 'Daftar Penjualan'],
                 'user_sales_list'                   => ['text' => 'Daftar Penjualan Per User'],
                 'project_list'                      => ['text' => 'Daftar Penjualan Proyek'],
@@ -413,10 +419,10 @@ class MyApp extends BaseConfig
                 'invoice_sales_recap'               => ['text' => 'Rekap Penjualan Per Nota'],
                 'invoice_sales_recap_group_date'    => ['text' => 'Rekap Penjualan Nota Harian'],
                 'income_recap'                      => ['text' => 'Laporan Laba Rugi'],
-                'sales_return_list'         => ['text' => 'Daftar Retur Penjualan'],
-                'user_sales_return_list'    => ['text' => 'Daftar Retur Penjualan Per User'],
+                'sales_return_list'                 => ['text' => 'Daftar Retur Penjualan'],
+                'user_sales_return_list'            => ['text' => 'Daftar Retur Penjualan Per User'],
 
-                'accounting'                => ['text' => 'Akuntansi'],
+                'accounting'                        => ['text' => 'Akuntansi'],
             ]
         ]
     ];

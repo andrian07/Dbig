@@ -199,6 +199,8 @@ class ReportProject extends WebminController
                 $dt_temp_qty = floatval($row['dt_temp_qty']);
                 $dt_product_price = floatval($row['dt_product_price']);
                 $dt_sales_price = floatval($row['dt_sales_price']);
+                $dt_total_ppn = floatval($row['dt_total_ppn']);
+                $dt_total_dpp = floatval($row['dt_total_dpp']);
 
                 $invoice = $last_invoice == $row['sales_admin_invoice'] ? '' : $row['sales_admin_invoice'];
 
@@ -211,9 +213,13 @@ class ReportProject extends WebminController
                 $sheet->getCell('D' . $iRow)->setValue($row['salesman_name']);
                 $sheet->getCell('E' . $iRow)->setValue($row['item_code']);
                 $sheet->getCell('F' . $iRow)->setValue($row['product_name']);
-                $sheet->getCell('G' . $iRow)->setValue($dt_temp_qty);
-                $sheet->getCell('H' . $iRow)->setValue(numberFormat($dt_product_price, TRUE));
-                $sheet->getCell('I' . $iRow)->setValue(numberFormat($dt_sales_price, TRUE));
+                $sheet->getCell('G' . $iRow)->setValue($row['brand_name']);
+                $sheet->getCell('H' . $iRow)->setValue($row['category_name']);
+                $sheet->getCell('I' . $iRow)->setValue($dt_temp_qty);
+                $sheet->getCell('J' . $iRow)->setValue(numberFormat($dt_product_price, TRUE));
+                $sheet->getCell('K' . $iRow)->setValue(numberFormat($dt_total_ppn, TRUE));
+                $sheet->getCell('L' . $iRow)->setValue(numberFormat($dt_total_dpp, TRUE));
+                $sheet->getCell('M' . $iRow)->setValue(numberFormat($dt_sales_price, TRUE));
 
                 $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
                 $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
@@ -224,7 +230,10 @@ class ReportProject extends WebminController
                 $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
                 $sheet->getStyle('H' . $iRow)->applyFromArray($border_left_right);
                 $sheet->getStyle('I' . $iRow)->applyFromArray($border_left_right);
-
+                $sheet->getStyle('J' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('K' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('L' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('M' . $iRow)->applyFromArray($border_left_right);
 
                 $last_invoice = $row['sales_admin_invoice'];
                 $iRow++;
@@ -232,19 +241,14 @@ class ReportProject extends WebminController
                 //setting periode
             $periode_text = indo_short_date($start_date) . ' s.d ' . indo_short_date($end_date);
             $sheet->getCell('B5')->setValue($periode_text);
-                //setting excel header//
-                // A4-G4 = Store Phone
-                // A3-G3 = Store Address
-                // A2-G2 = Store Name
-                // A1-G1 = Print By
-            $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
+            $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_short_date(date('Y-m-d H:i:s'), FALSE);
             $sheet->getCell('A1')->setValue($reportInfo);
 
-            $sheet->mergeCells('A1:I1');
+            $sheet->mergeCells('A1:M1');
 
-            $sheet->getStyle('A1:I1')->getAlignment()->setHorizontal('right');
+            $sheet->getStyle('A1:M1')->getAlignment()->setHorizontal('right');
 
-            $sheet->getStyle('A2:I2')->applyFromArray($font_bold);
+            $sheet->getStyle('A2:M2')->applyFromArray($font_bold);
 
 
             $filename = 'Penjualan Detail Admin';
@@ -402,9 +406,10 @@ class ReportProject extends WebminController
                 $sheet->getCell('D' . $iRow)->setValue($row['salesman_name']);
                 $sheet->getCell('E' . $iRow)->setValue($row['customer_name']);
                 $sheet->getCell('F' . $iRow)->setValue(numberFormat($sales_admin_total_discount, TRUE));
-                $sheet->getCell('G' . $iRow)->setValue(numberFormat($sales_admin_ppn, TRUE));
-                $sheet->getCell('H' . $iRow)->setValue(numberFormat($sales_admin_down_payment, TRUE));
-                $sheet->getCell('I' . $iRow)->setValue(numberFormat($sales_admin_grand_total, TRUE));
+                $sheet->getCell('G' . $iRow)->setValue(numberFormat($sales_admin_grand_total - $sales_admin_ppn, TRUE));
+                $sheet->getCell('H' . $iRow)->setValue(numberFormat($sales_admin_ppn, TRUE));
+                $sheet->getCell('I' . $iRow)->setValue(numberFormat($sales_admin_down_payment, TRUE));
+                $sheet->getCell('J' . $iRow)->setValue(numberFormat($sales_admin_grand_total, TRUE));
 
                 $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
                 $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
@@ -415,6 +420,7 @@ class ReportProject extends WebminController
                 $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
                 $sheet->getStyle('H' . $iRow)->applyFromArray($border_left_right);
                 $sheet->getStyle('I' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('J' . $iRow)->applyFromArray($border_left_right);
 
 
                 $iRow++;
@@ -430,11 +436,11 @@ class ReportProject extends WebminController
             $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
             $sheet->getCell('A1')->setValue($reportInfo);
 
-            $sheet->mergeCells('A1:I1');
+            $sheet->mergeCells('A1:J1');
 
-            $sheet->getStyle('A1:I1')->getAlignment()->setHorizontal('right');
+            $sheet->getStyle('A1:J1')->getAlignment()->setHorizontal('right');
 
-            $sheet->getStyle('A2:I2')->applyFromArray($font_bold);
+            $sheet->getStyle('A2:J2')->applyFromArray($font_bold);
 
 
             $filename = 'Penjualan Admin';
@@ -483,6 +489,7 @@ class ReportProject extends WebminController
             if($show_detail == 'on'){
                 $this->SalesListDetailReturProject($data);
             }else{
+                
                 $this->SalesListHeaderReturProject($data);
             }
 
@@ -509,7 +516,6 @@ class ReportProject extends WebminController
         if (!in_array($fileType, ['pdf', 'xls'])) {
             $fileType = 'pdf';
         }
-
         $getReportData = $M_salesmanadmin->getReportReturSalesAdminDataDetail($start_date, $end_date, $store_id, $customer_id)->getResultArray();
 
         if($getReportData != null){
@@ -610,17 +616,18 @@ class ReportProject extends WebminController
 
             foreach ($getReportData as $row) {
 
-                $dt_temp_qty = floatval($row['dt_temp_qty']);
-                $dt_product_price = floatval($row['dt_product_price']);
-                $dt_sales_price = floatval($row['dt_sales_price']);
+                $retur_price = floatval($row['dt_retur_price']);
+                $retur_qty = floatval($row['dt_retur_qty']);
+                $retur_ppn = floatval($row['dt_retur_ppn']);
+                $retur_total = floatval($row['dt_retur_total']);
 
                 $invoice = $last_invoice == $row['sales_admin_invoice'] ? '' : $row['sales_admin_invoice'];
 
-                $sales_date     = indo_short_date($row['sales_date'], FALSE);
+                $retur_sales_date     = indo_short_date($row['hd_retur_sales_admin_invoice'], FALSE);
                 $sales_due_date = indo_short_date($row['sales_due_date'], FALSE);
 
                 $sheet->getCell('A' . $iRow)->setValue($invoice);
-                $sheet->getCell('B' . $iRow)->setValue($sales_date);
+                $sheet->getCell('B' . $iRow)->setValue($retur_sales_date);
                 $sheet->getCell('C' . $iRow)->setValue($sales_due_date);
                 $sheet->getCell('D' . $iRow)->setValue($row['salesman_name']);
                 $sheet->getCell('E' . $iRow)->setValue($row['item_code']);
@@ -674,6 +681,8 @@ class ReportProject extends WebminController
 
     public function SalesListHeaderReturProject($data)
     {
+
+      
         $M_salesmanadmin = model('M_salesmanadmin');
 
         $start_date  = $data['start_date'];
@@ -778,7 +787,7 @@ class ReportProject extends WebminController
                 ],
             ];
 
-            $template = WRITEPATH . '/template/template_export_sales_admin_header.xlsx';
+            $template = WRITEPATH . '/template/template_export_retur_sales_admin_header.xlsx';
             $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
 
             $sheet = $spreadsheet->setActiveSheetIndex(0);
@@ -789,16 +798,15 @@ class ReportProject extends WebminController
                $hd_retur_total_ppn = floatval($row['hd_retur_total_ppn']);
                $hd_retur_total_transaction = floatval($row['hd_retur_total_transaction']);
                $hd_retur_date     = indo_short_date($row['hd_retur_date'], FALSE);
-
-               $sheet->getCell('A' . $iRow)->setValue($row['store_code'].'-'.$row['store_name']);
-               $sheet->getCell('B' . $iRow)->setValue($hd_retur_date);
-               $sheet->getCell('C' . $iRow)->setValue($row['customer_code']);
+               
+               $sheet->getCell('A' . $iRow)->setValue($row['hd_retur_sales_admin_invoice']);
+               $sheet->getCell('B' . $iRow)->setValue($row['customer_code']);
+               $sheet->getCell('C' . $iRow)->setValue($row['salesman_name']);
                $sheet->getCell('D' . $iRow)->setValue($row['customer_name']);
-               $sheet->getCell('E' . $iRow)->setValue($row['hd_retur_sales_admin_invoice']);
-               $sheet->getCell('F' . $iRow)->setValue($hd_retur_date);
-               $sheet->getCell('G' . $iRow)->setValue(numberFormat($hd_retur_total_dpp, TRUE));
-               $sheet->getCell('H' . $iRow)->setValue(numberFormat($hd_retur_total_ppn, TRUE));
-               $sheet->getCell('I' . $iRow)->setValue(numberFormat($hd_retur_total_transaction, TRUE));
+               $sheet->getCell('E' . $iRow)->setValue($hd_retur_date);
+               $sheet->getCell('F' . $iRow)->setValue(numberFormat($hd_retur_total_dpp, TRUE));
+               $sheet->getCell('G' . $iRow)->setValue(numberFormat($hd_retur_total_ppn, TRUE));
+               $sheet->getCell('H' . $iRow)->setValue(numberFormat($hd_retur_total_transaction, TRUE));
 
                $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
                $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
@@ -808,8 +816,6 @@ class ReportProject extends WebminController
                $sheet->getStyle('F' . $iRow)->applyFromArray($border_left_right);
                $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
                $sheet->getStyle('H' . $iRow)->applyFromArray($border_left_right);
-               $sheet->getStyle('I' . $iRow)->applyFromArray($border_left_right);
-
 
                $iRow++;
            }
@@ -824,11 +830,11 @@ class ReportProject extends WebminController
            $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
            $sheet->getCell('A1')->setValue($reportInfo);
 
-           $sheet->mergeCells('A1:I1');
+           $sheet->mergeCells('A1:G1');
 
-           $sheet->getStyle('A1:I1')->getAlignment()->setHorizontal('right');
+           $sheet->getStyle('A1:G1')->getAlignment()->setHorizontal('right');
 
-           $sheet->getStyle('A2:I2')->applyFromArray($font_bold);
+           $sheet->getStyle('A2:G2')->applyFromArray($font_bold);
 
 
            $filename = 'Retur Penjualan Admin';

@@ -55,7 +55,9 @@ class Api extends BaseController
                     echo json_encode($result);die();
                 }
                 if (password_verify($customer_password, $getCustomerLogin['customer_password'])) {
-                    echo json_encode($getCustomerLogin);die();
+
+                    $result = ['err_code' => '00', 'message' => $getCustomerLogin];
+                    echo json_encode($result);die();
                 }else{
                     $result = ['err_code' => '01', 'message' => 'Username atau password anda salah'];
                     echo json_encode($result);die();
@@ -81,8 +83,6 @@ class Api extends BaseController
         $data = json_decode(file_get_contents('php://input'), true);
         $checkOuth = $this->checkOuth($headers);
         if($checkOuth['err_code'] == '00'){
-
-
             if($type == 'add'){
                 $input = [
                     'customer_code'                 => $data['customer_code'],
@@ -90,7 +90,7 @@ class Api extends BaseController
                     'customer_address'              => $data['customer_address'],
                     'customer_phone'                => $data['customer_phone'],
                     'customer_email'                => $data['customer_email'],
-                    'customer_nik'                  => $data['customer_nik'],
+                    'customer_nik'                  => '',
                     'customer_group'                => $data['customer_group'],
                     'customer_gender'               => $data['customer_gender'],
                     'customer_job'                  => $data['customer_job'],
@@ -140,12 +140,13 @@ class Api extends BaseController
                     echo json_encode($result);die();
                 }
 
+                if($input['invite_by_referral_code'] != null){
+                  $check_referalcode = $this->M_api->check_referalcode($input['invite_by_referral_code'])->getRowArray();
 
-                $check_referalcode = $this->M_api->check_referalcode($input['invite_by_referral_code'])->getRowArray();
-
-                if($check_referalcode == null){
-                    $result = ['err_code' => '01', 'message' => 'Referal Code Tidak Di Temukan'];
-                    echo json_encode($result);die();
+                  if($check_referalcode == null){
+                      $result = ['err_code' => '01', 'message' => 'Referal Code Tidak Di Temukan'];
+                      echo json_encode($result);die();
+                  }
                 }
 
                 $customer_password = $input['customer_password'];
@@ -163,8 +164,11 @@ class Api extends BaseController
 
                 $input['referral_code'] = $referral_code;
 
+                
+
                 $save = $this->M_api->insertCustomer($input);
-                if ($save) {
+
+                if ($save['result'] == 1) {
                     helper('encrypter');
                     $customer_id    = $save['customer_id'];
                     $customer_name  = $data['customer_name'];
@@ -192,11 +196,11 @@ class Api extends BaseController
                     $mail->setMessage($message);
 
                     if ($mail->send()) {
-                        $result = ['err_code' => '00', 'message' => 'Data customer berhasil disimpan'];
+                         $result = ['err_code' => '00', 'message' => 'Data customer berhasil disimpan silahkan cek email anda'];
                     } else {
-                        $result = ['err_code' => '01', 'message' => 'Data customer gagal disimpan'];
+                        $result = ['err_code' => '00', 'message' => 'Data customer berhasil disimpan silahkan cek email anda'];
                     }          
-                }else {
+                } else {
                     $result = ['err_code' => '01', 'message' => 'Data customer gagal disimpan'];
                 }
 
@@ -314,9 +318,10 @@ class Api extends BaseController
             $err_code['err_code'] = '00';
             $data = array_merge($result, $total_rows, $err_code);
             if ($result['result'] != NULL) {
-                echo json_encode($data);die();
+                $result = ['err_code' => '00', 'message' => $result];
+                echo json_encode($result);die();
             } else {
-                $result = ['err_code' => '01', 'message' => 'Data User Di Temukan'];
+                $result = ['err_code' => '01', 'message' => 'Data User Tidak Di Temukan'];
                 echo json_encode($result);die();
             }
         }else{
@@ -335,7 +340,7 @@ class Api extends BaseController
         $checkOuth = $this->checkOuth($headers);
         if($checkOuth['err_code'] == '00'){
             $result['result'] = $this->M_api->getBanner($perpage, $start)->getResultArray();
-            $total_rows['total_rows'] = $this->M_api->getBanner($perpage, $start)->getNumRows();
+            $total_rows['total_rows'] = $this->M_api->getBanner($perpage = 0, $start = 0)->getNumRows();
             $err_code['err_code'] = '00';
             $data = array_merge($result, $total_rows, $err_code);
             if ($result['result'] != NULL) {
@@ -384,7 +389,7 @@ class Api extends BaseController
         $checkOuth = $this->checkOuth($headers);
         if($checkOuth['err_code'] == '00'){
             $result['result'] = $this->M_api->getPromo($perpage, $start)->getResultArray();
-            $total_rows['total_rows'] = $this->M_api->getPromo($perpage, $start)->getNumRows();
+            $total_rows['total_rows'] = $this->M_api->getPromo($perpage = 0, $start = 0)->getNumRows();
             $err_code['err_code'] = '00';
             $data = array_merge($result, $total_rows, $err_code);
             if ($result['result'] != NULL) {
@@ -444,7 +449,7 @@ class Api extends BaseController
 
         if($checkOuth['err_code'] == '00'){
             $result['result'] = $this->M_api->getProduct($customer_group, $perpage, $start, $brand_id, $category_id, $sort)->getResultArray();
-            $total_rows['total_rows'] = $this->M_api->getProduct($customer_group, $perpage, $start, $brand_id, $category_id, $sort)->getNumRows();
+            $total_rows['total_rows'] = $this->M_api->getProduct($customer_group, $perpage = 0, $start = 0, $brand_id, $category_id, $sort)->getNumRows();
             $err_code['err_code'] = '00';
             $data = array_merge($result, $total_rows, $err_code);
             if ($result['result'] != NULL) {
@@ -521,7 +526,7 @@ class Api extends BaseController
         $start = $data['start'];
         if($checkOuth['err_code'] == '00'){
             $result['result'] = $this->M_api->getCategory($perpage, $start)->getResultArray();
-            $total_rows['total_rows'] = $this->M_api->getCategory($perpage, $start)->getNumRows();
+            $total_rows['total_rows'] = $this->M_api->getCategory($perpage = 0, $start = 0)->getNumRows();
             $err_code['err_code'] = '00';
             $data = array_merge($result, $total_rows, $err_code);
             if ($result['result'] != NULL) {
@@ -545,7 +550,7 @@ class Api extends BaseController
         $start = $data['start'];
         if($checkOuth['err_code'] == '00'){
             $result['result'] = $this->M_api->getBrand($perpage, $start)->getResultArray();
-            $total_rows['total_rows'] = $this->M_api->getBrand($perpage, $start)->getNumRows();
+            $total_rows['total_rows'] = $this->M_api->getBrand($perpage = 0, $start = 0)->getNumRows();
             $err_code['err_code'] = '00';
             $data = array_merge($result, $total_rows, $err_code);
             if ($result['result'] != NULL) {
@@ -570,7 +575,7 @@ class Api extends BaseController
         $start = $data['start'];
         if($checkOuth['err_code'] == '00'){
             $result['result'] = $this->M_api->getitempoint($perpage, $start)->getResultArray();
-            $total_rows['total_rows'] = $this->M_api->getitempoint($perpage, $start)->getNumRows();
+            $total_rows['total_rows'] = $this->M_api->getitempoint($perpage = 0, $start = 0)->getNumRows();
             $err_code['err_code'] = '00';
             $data = array_merge($result, $total_rows, $err_code);
             if ($result['result'] != NULL) {
@@ -596,7 +601,7 @@ class Api extends BaseController
         $customer_id = $data['customer_id'];
         if($checkOuth['err_code'] == '00'){
             $result['result'] = $this->M_api->getHistoryPoint($perpage, $start, $customer_id)->getResultArray();
-            $total_rows['total_rows'] = $this->M_api->getHistoryPoint($perpage, $start, $customer_id)->getNumRows();
+            $total_rows['total_rows'] = $this->M_api->getHistoryPoint($perpage = 0, $start = 0, $customer_id)->getNumRows();
             $err_code['err_code'] = '00';
             $data = array_merge($result, $total_rows, $err_code);
             if ($result['result'] != NULL) {
@@ -622,7 +627,7 @@ class Api extends BaseController
         $customer_id = $data['customer_id'];
         if($checkOuth['err_code'] == '00'){
             $result['result'] = $this->M_api->getHistoryPoint($perpage, $start, $customer_id)->getResultArray();
-            $total_rows['total_rows'] = $this->M_api->getHistoryPoint($perpage, $start, $customer_id)->getNumRows();
+            $total_rows['total_rows'] = $this->M_api->getHistoryPoint($perpage = 0, $start = 0, $customer_id)->getNumRows();
             $err_code['err_code'] = '00';
             $data = array_merge($result, $total_rows, $err_code);
             if ($result['result'] != NULL) {

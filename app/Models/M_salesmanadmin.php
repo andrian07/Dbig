@@ -557,7 +557,7 @@ class M_salesmanadmin extends Model
 
     public function getReportDataDetail($start_date, $end_date, $store_id, $customer_id, $salesman_id, $status)
     {
-        $builder = $this->db->table('hd_sales_admin')->select("sales_admin_invoice, sales_date, sales_due_date, item_code, product_name, salesman_name, dt_temp_qty, dt_product_price, dt_sales_price, store_name, customer_name");
+        $builder = $this->db->table('hd_sales_admin')->select("sales_admin_invoice, sales_date, sales_due_date, item_code, product_name, salesman_name,dt_total_dpp,dt_total_ppn, dt_temp_qty, dt_product_price, dt_sales_price,brand_name,category_name,store_name, customer_name, ");
         $builder->join('dt_sales_admin', 'dt_sales_admin.sales_admin_id = hd_sales_admin.sales_admin_id');
         $builder->join('ms_customer', 'ms_customer.customer_id  = hd_sales_admin.sales_customer_id');
         $builder->join('ms_store', 'ms_store.store_id = hd_sales_admin.sales_store_id');
@@ -565,6 +565,8 @@ class M_salesmanadmin extends Model
         $builder->join('ms_product_unit', 'ms_product_unit.item_id = dt_sales_admin.dt_item_id');
         $builder->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id');
         $builder->join('ms_product', 'ms_product.product_id = ms_product_unit.product_id');
+        $builder->join('ms_category', 'ms_category.category_id = ms_product.category_id');
+        $builder->join('ms_brand', 'ms_brand.brand_id = ms_product.brand_id');
         $builder->where("(sales_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
         if ($store_id != null) {
             $builder->where('sales_store_id', $store_id);
@@ -606,8 +608,9 @@ class M_salesmanadmin extends Model
 
     public function getReportReturSalesAdminDataHeader($start_date, $end_date, $store_id, $customer_id)
     {
-        $builder = $this->db->table('hd_retur_sales_admin')->select("hd_retur_sales_admin_invoice, hd_retur_date, customer_code,customer_name, store_code, store_name, hd_retur_total_dpp, hd_retur_total_ppn, hd_retur_total_transaction");
+        $builder = $this->db->table('hd_retur_sales_admin')->select("hd_retur_sales_admin_invoice, hd_retur_date, customer_code,customer_name, store_code, store_name, hd_retur_total_dpp, hd_retur_total_ppn, hd_retur_total_transaction, salesman_name");
         $builder->join('ms_customer', 'ms_customer.customer_id  = hd_retur_sales_admin.hd_retur_customer_id');
+        $builder->join('ms_salesman', 'ms_salesman.salesman_id  = hd_retur_sales_admin.sales_admin_id');
         $builder->join('ms_store', 'ms_store.store_id = hd_retur_sales_admin.hd_retur_store_id');
         $builder->where("(hd_retur_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
         if ($store_id != null) {

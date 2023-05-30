@@ -108,7 +108,7 @@ $assetsUrl = base_url('assets');
                     <div class="card">
                         <div class="card-body">
                             <h5>Preview</h5>
-                            <iframe id="preview" src="<?= base_url('webmin/report/retur-purchase-list') ?>" width="100%" height="1000px"></iframe>
+                            <iframe id="preview" src="<?= base_url('webmin/report/retur-project-sales-list') ?>" width="100%" height="1000px"></iframe>
                         </div>
                     </div>
                 </div>
