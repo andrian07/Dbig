@@ -114,7 +114,7 @@ class M_purchase_order extends Model
 
 
 
-        $sqlDtOrder = "insert into dt_purchase_order(purchase_order_id,detail_submission_id,detail_submission_invoice,detail_purchase_po_item_id,detail_purchase_po_qty,detail_purchase_po_ppn,detail_purchase_po_dpp,detail_purchase_po_price,detail_purchase_po_discount1,detail_purchase_po_discount1_percentage,detail_purchase_po_discount2,detail_purchase_po_discount2_percentage,detail_purchase_po_discount3,detail_purchase_po_discount3_percentage,detail_purchase_po_total_discount,detail_purchase_po_ongkir,detail_purchase_po_expire_date,detail_purchase_po_total) VALUES";
+        $sqlDtOrder = "insert into dt_purchase_order(purchase_order_id,detail_submission_id,detail_submission_invoice,detail_purchase_po_item_id,detail_purchase_po_qty,detail_purchase_po_ppn,detail_purchase_po_dpp,detail_purchase_po_price,detail_purchase_po_discount1,detail_purchase_po_discount1_percentage,detail_purchase_po_discount2,detail_purchase_po_discount2_percentage,detail_purchase_po_discount3,detail_purchase_po_discount3_percentage,detail_purchase_po_total_discount,detail_purchase_po_ongkir,detail_purchase_po_expire_date,detail_purchase_po_total,detail_purchase_po_recive) VALUES";
 
         $sqlDtValues = [];
 
@@ -140,8 +140,9 @@ class M_purchase_order extends Model
             $detail_purchase_po_ongkir               = $row['temp_po_ongkir'];
             $detail_purchase_po_expire_date          = $row['temp_po_expire_date'];
             $detail_purchase_po_total                = $row['temp_po_total'];
+            $detail_purchase_po_recive               = 0;
 
-            $sqlDtValues[] = "('$purchase_order_id','$detail_purchase_submission_id','$detail_purchase_submission_invoice','$detail_purchase_po_item_id','$detail_purchase_po_qty','$detail_purchase_po_ppn','$detail_purchase_po_dpp','$detail_purchase_po_price','$detail_purchase_po_discount1','$detail_purchase_po_discount1_percentage','$detail_purchase_po_discount2','$detail_purchase_po_discount2_percentage','$detail_purchase_po_discount3','$detail_purchase_po_discount3_percentage','$detail_purchase_po_total_discount','$detail_purchase_po_ongkir','$detail_purchase_po_expire_date','$detail_purchase_po_total')";
+            $sqlDtValues[] = "('$purchase_order_id','$detail_purchase_submission_id','$detail_purchase_submission_invoice','$detail_purchase_po_item_id','$detail_purchase_po_qty','$detail_purchase_po_ppn','$detail_purchase_po_dpp','$detail_purchase_po_price','$detail_purchase_po_discount1','$detail_purchase_po_discount1_percentage','$detail_purchase_po_discount2','$detail_purchase_po_discount2_percentage','$detail_purchase_po_discount3','$detail_purchase_po_discount3_percentage','$detail_purchase_po_total_discount','$detail_purchase_po_ongkir','$detail_purchase_po_expire_date','$detail_purchase_po_total','$$detail_purchase_po_recive')";
 
             if($detail_purchase_submission_id != null){
                 $updateStatus =  $this->db->table($this->table_hd_submission)->where('submission_id ', $detail_purchase_submission_id)->update(['submission_status' => 'Accept']);
@@ -149,9 +150,6 @@ class M_purchase_order extends Model
         }
 
         $sqlDtOrder .= implode(',', $sqlDtValues);
-
-
-        print_r($sqlDtValues);die();
         
         $this->db->query($sqlDtOrder);
 

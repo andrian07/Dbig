@@ -309,7 +309,6 @@ class Purchase extends WebminController
 
                 //$checkEd = $this->M_purchase->checkEd($this->userLogin['user_id'])->getResultArray();
 
-
                 $save = $this->M_purchase->insertPurchase($input);
 
                 if ($save['success']) {
