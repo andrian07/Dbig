@@ -50,6 +50,19 @@ $assetsUrl = base_url('assets');
                                         </div>
                                     </div>
                                     <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label>&nbsp;</label>
+                                            <div class="form-check">
+                                                <div class="col-sm-12">
+                                                    <input type="checkbox" class="form-check-input" id="show_detail">
+                                                    <label class="form-check-label" for="show_detail">Tampilkan Detail</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    
+                                    <div class="col-sm-2">
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>&nbsp;</label>
@@ -132,9 +145,11 @@ $assetsUrl = base_url('assets');
             let start_date = $('#start_date').val();
             let end_date = $('#end_date').val();
             let supplier_id = $('#supplier_id').val();
+            let show_detail = $("#show_detail:checked").val();
             let reportUrl = '<?= base_url('webmin/report/debt-duedate-list') ?>?';
             reportUrl += '&start_date=' + start_date;
             reportUrl += '&end_date=' + end_date;
+            reportUrl += '&show_detail=' + show_detail;
             if (supplier_id != null && supplier_id != '') {
                 reportUrl += '&supplier_id=' + supplier_id;
             }
@@ -147,9 +162,11 @@ $assetsUrl = base_url('assets');
             let start_date = $('#start_date').val();
             let end_date = $('#end_date').val();
             let supplier_id = $('#supplier_id').val();
+            let show_detail = $("#show_detail:checked").val();
             let reportUrl = '<?= base_url('webmin/report/debt-duedate-list') ?>?';
             reportUrl += '&start_date=' + start_date;
             reportUrl += '&end_date=' + end_date;
+            reportUrl += '&show_detail=' + show_detail;
             if (supplier_id != null && supplier_id != '') {
                 reportUrl += '&supplier_id=' + supplier_id;
             }

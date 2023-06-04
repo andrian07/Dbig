@@ -450,6 +450,9 @@ class Sales_admin extends WebminController
         } else {
 
             $getOrder =  $this->M_salesmanadmin->getOrder($sales_admin_id)->getRowArray();
+            $detail   = $this->M_salesmanadmin->getDtSalesmanOrder($sales_admin_id)->getResultArray();
+            $max_item   = 6;
+            $pages      = array_chunk($detail, $max_item);
 
             if ($getOrder == NULL) {
 
@@ -458,11 +461,10 @@ class Sales_admin extends WebminController
             } else {
 
                 $data = [
-
-                    'hdSales' => $getOrder,
-
-                    'dtSales' => $this->M_salesmanadmin->getDtSalesmanOrder($sales_admin_id)->getResultArray(),
-
+                    'title'     => 'Surat Jalan',
+                    'header'    => $getOrder,
+                    'pages'     => $pages,
+                    'agent'     => $this->request->getUserAgent()
                 ]; 
 
                 return view('webmin/sales/salesadmin_dispatch', $data);

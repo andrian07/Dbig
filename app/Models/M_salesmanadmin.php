@@ -101,7 +101,7 @@ class M_salesmanadmin extends Model
 
         $builder = $this->db->table($this->table_hd_sales_admin);
 
-        $builder->select('hd_sales_admin.*,dt_sales_admin.*, ms_payment_method.*, customer_name,customer_address,customer_phone,customer_npwp,store_code,store_name,user_account.user_realname, ms_salesman.salesman_name, ms_salesman.salesman_code, hd_sales_admin.created_at as created_at');
+        $builder->select('hd_sales_admin.*,dt_sales_admin.*, ms_payment_method.*, customer_name,customer_address,customer_phone,customer_delivery_address,customer_npwp,store_code,store_name,user_account.user_realname, ms_salesman.salesman_name, ms_salesman.salesman_code, hd_sales_admin.created_at as created_at');
 
         $builder->join('dt_sales_admin', 'dt_sales_admin.sales_admin_id = hd_sales_admin.sales_admin_id');
 

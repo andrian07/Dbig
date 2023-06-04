@@ -325,7 +325,7 @@ class M_debt_repayment extends Model
 
     public function getReportData($start_date, $end_date, $supplier_id)
     {
-        $builder = $this->db->table('hd_payment_debt')->select("payment_debt_date as date_inv, payment_debt_invoice as invoice, CONCAT('Pembayaran ', purchase_invoice) AS ket, dt_payment_debt_nominal as debit,'0' as credit, sp1.supplier_name as supplier_name");
+        $builder = $this->db->table('hd_payment_debt')->select("payment_debt_date as date_inv, payment_debt_invoice as invoice, CONCAT('Pembayaran ', purchase_invoice) AS ket, dt_payment_debt_nominal as debit,'0' as credit, sp1.supplier_name as supplier_name, sp1.supplier_code as supplier_code");
         $builder->join('dt_payment_debt', 'dt_payment_debt.payment_debt_id = hd_payment_debt.payment_debt_id');
         $builder->join('hd_purchase', 'hd_purchase.purchase_id = dt_payment_debt.dt_payment_debt_purchase_id');
         $builder->join('ms_supplier sp1', 'sp1.supplier_id = hd_payment_debt.payment_debt_supplier_id');
@@ -334,7 +334,7 @@ class M_debt_repayment extends Model
             $builder->where('purchase_supplier_id', $supplier_id);
         }
 
-        $union   = $this->db->table('hd_purchase')->select("purchase_date as date_inv, purchase_invoice as invoice, CONCAT('PEMBELIAN ', purchase_invoice) AS ket, '0' as debit, purchase_total as credit, sp2.supplier_name as supplier_name");
+        $union   = $this->db->table('hd_purchase')->select("purchase_date as date_inv, purchase_invoice as invoice, CONCAT('PEMBELIAN ', purchase_invoice) AS ket, '0' as debit, purchase_total as credit, sp2.supplier_name as supplier_name, sp2.supplier_code as supplier_code");
         $union->join('ms_supplier sp2', 'sp2.supplier_id = hd_purchase.purchase_supplier_id');
         $union->where("(purchase_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
         if ($supplier_id != null) {
@@ -348,7 +348,7 @@ class M_debt_repayment extends Model
 
     public function getDebt($purchase_invoice, $start_date, $end_date, $supplier_id)
     {
-        $builder = $this->db->table('hd_payment_debt')->select("purchase_invoice, payment_debt_invoice, payment_debt_date, supplier_name, purchase_total, dt_payment_debt_discount, dt_payment_debt_nominal");
+        $builder = $this->db->table('hd_payment_debt')->select("purchase_invoice, payment_debt_invoice, payment_debt_date, supplier_name, purchase_total, dt_payment_debt_discount, dt_payment_debt_nominal,supplier_code");
         $builder->join('dt_payment_debt', 'dt_payment_debt.payment_debt_id = hd_payment_debt.payment_debt_id');
         $builder->join('hd_purchase', 'hd_purchase.purchase_id = dt_payment_debt.dt_payment_debt_purchase_id');
         $builder->join('ms_supplier sp1', 'sp1.supplier_id = hd_payment_debt.payment_debt_supplier_id');

@@ -512,7 +512,7 @@ class M_purchase extends Model
 
     public function getDebtPending($start_date, $end_date, $supplier_id)
     {
-        $builder = $this->db->table('hd_purchase')->select("purchase_invoice, purchase_date, purchase_due_date, purchase_total, purchase_remaining_debt, purchase_down_payment, supplier_name");
+        $builder = $this->db->table('hd_purchase')->select("purchase_invoice, purchase_date, purchase_due_date, purchase_total, purchase_remaining_debt, purchase_down_payment, supplier_name, supplier_code");
         $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_purchase.purchase_supplier_id');
         $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_purchase.purchase_warehouse_id');
         $builder->where("purchase_remaining_debt > 0");
@@ -525,9 +525,28 @@ class M_purchase extends Model
 
     public function getDebtDueDate($start_date, $end_date, $supplier_id)
     {
-        $builder = $this->db->table('hd_purchase')->select("purchase_invoice, purchase_date, purchase_due_date, purchase_total, purchase_remaining_debt, purchase_down_payment, supplier_name");
+        $builder = $this->db->table('hd_purchase')->select("purchase_invoice, purchase_date, purchase_due_date, purchase_total, purchase_remaining_debt, purchase_down_payment, supplier_name, supplier_code");
         $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_purchase.purchase_supplier_id');
         $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_purchase.purchase_warehouse_id');
+        $builder->where("purchase_remaining_debt > 0");
+        $builder->where("(purchase_due_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        if ($supplier_id != null) {
+            $builder->where('purchase_supplier_id', $supplier_id);
+        }
+        return $builder->orderBy('hd_purchase.created_at', 'ASC')->get();
+    }
+
+    public function getDebtDueDateDetail($start_date, $end_date, $supplier_id)
+    {
+        $builder = $this->db->table('hd_purchase')->select("purchase_invoice, purchase_date, purchase_due_date, purchase_total, purchase_remaining_debt, purchase_down_payment, supplier_name, product_code, product_name,dt_purchase_qty,purchase_total_dpp,purchase_total_ppn,purchase_total,supplier_code,supplier_name,item_code,brand_name,category_name,unit_name ");
+        $builder->join('dt_purchase', 'dt_purchase.dt_purchase_invoice = hd_purchase.purchase_invoice');
+        $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_purchase.purchase_supplier_id');
+        $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_purchase.purchase_warehouse_id');
+        $builder->join('ms_product_unit', 'ms_product_unit.item_id = dt_purchase.dt_purchase_item_id');
+        $builder->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id');
+        $builder->join('ms_product', 'ms_product.product_id = ms_product_unit.product_id');
+        $builder->join('ms_category', 'ms_category.category_id = ms_product.category_id');
+        $builder->join('ms_brand', 'ms_brand.brand_id = ms_product.brand_id');
         $builder->where("purchase_remaining_debt > 0");
         $builder->where("(purchase_due_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
         if ($supplier_id != null) {

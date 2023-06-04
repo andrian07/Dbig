@@ -107,7 +107,9 @@ foreach ($pages as $debtData) :
                         <thead>
                             <tr>
                                 <th class="header-table" width="15%">TANGGAL</th>
-                                <th class="header-table" width="15%">NO BUKTI</th>
+                                <th class="header-table" width="10%">NO BUKTI</th>
+                                <th class="header-table" width="10%">Nama Supplier</th>
+                                <th class="header-table" width="8%">Kode Supplier</th>
                                 <th class="header-table" width="25%">KETERANGAN</th>
                                 <th class="header-table" width="15%">DEBET</th>
                                 <th class="header-table" width="15%">KREDIT</th>
@@ -123,6 +125,8 @@ foreach ($pages as $debtData) :
                                 <tr align="left">
                                     <td class="text-left"><?= indo_short_date($row['date_inv'], FALSE) ?>&nbsp;</td>
                                     <td class="text-left"><?= $row['invoice'] ?>&nbsp;</td>
+                                    <td class="text-left"><?= $row['supplier_name'] ?>&nbsp;</td>
+                                    <td class="text-left"><?= $row['supplier_code'] ?>&nbsp;</td>
                                     <td class="text-left"><?= $row['ket'] ?>&nbsp;</td>
                                     <td class="text-right"><?= numberFormat($debet, TRUE) ?>&nbsp;</td>
                                     <td class="text-right"><?= numberFormat($credit, TRUE) ?>&nbsp;</td>
