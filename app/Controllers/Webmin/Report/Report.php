@@ -54,12 +54,28 @@ class Report extends WebminController
                     $bname =  $barcode_type_list[$barcode_type];
                     die("<h1>Jenis barcode '$bname' tidak mendukung barcode \"$item_code\"</h1>");
                 } else {
+                    $print_item             = $getProductUnit;
+                    //$print_item['barcode']  = $barcode;
+
+                    $products = [];
+                    for ($i = 1; $i <= $print_count; $i++) {
+                        $products[] = $print_item;
+                    }
+
+                    $max_item_page  = 11;
+                    $pages          = array_chunk($products, $max_item_page);
+                    $max_page       = count($pages);
+
+
                     $data = [
                         'title'         => 'Cetak Barcode',
-                        'product'       => $getProductUnit,
+                        'pages'         => $pages,
+                        'max_page'      => $max_page,
                         'barcode'       => $barcode,
-                        'printCount'    => $print_count,
                     ];
+
+
+
                     $htmlView = $this->renderView('report/utility/barcode_generate', $data);
 
                     $agent = $this->request->getUserAgent();

@@ -3,8 +3,8 @@ require ROOTPATH . 'vendor/autoload.php';
 function generate_barcode($text, $type = 'auto')
 {
     $generator = new Picqer\Barcode\BarcodeGeneratorSVG();
-    $width_factor   = 1;
-    $height         = 15;
+    $width_factor   = 1.5;
+    $height         = 25; //15->18
     $barcode        = FALSE;
 
     $barcode_type_config = [

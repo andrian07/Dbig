@@ -964,7 +964,7 @@ $assetsUrl = base_url('assets');
                                     <div class="form-group">
                                         <label for="product_content" class="col-sm-12">Isi</label>
                                         <div class="col-sm-12">
-                                            <input id="product_content" name="product_content" type="text" class="form-control text-right" min="1" value="0" />
+                                            <input id="product_content" name="product_content" type="text" class="form-control text-right" value="0" />
                                         </div>
                                     </div>
 

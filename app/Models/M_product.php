@@ -881,6 +881,97 @@ class M_product extends Model
 
 
     //report section//
+
+    public function getReportProductList($has_tax = '', $show_deleted = FALSE)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('ms_product.*,ms_brand.brand_name,ms_category.category_name');
+        $builder->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id');
+        $builder->join('ms_category', 'ms_category.category_id=ms_product.category_id');
+
+        if ($has_tax  != '') {
+            $builder->where('ms_product.has_tax', $has_tax);
+        }
+
+        if ($show_deleted == FALSE) {
+            $builder->where(['ms_product.deleted' => 'N']);
+        }
+
+        return $builder->get();
+    }
+
+    public function getReportInitStock($product_ids = [], $start_date = null, $end_date = null)
+    {
+        // query dengan format return product_id | warehouse_id | stock_date | stock(qty*product_content) | created_at //
+
+        // getting from purchase //
+        $builder = $this->db->table('dt_purchase');
+        $builder->select('ms_product_unit.product_id,hd_purchase.purchase_warehouse_id as warehouse_id,hd_purchase.purchase_date AS stock_date,(ms_product_unit.product_content*dt_purchase.dt_purchase_qty) AS stock,hd_purchase.created_at')
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_purchase.dt_purchase_item_id')
+            ->join('hd_purchase', 'hd_purchase.purchase_invoice=dt_purchase.dt_purchase_invoice')
+            ->whereIn('ms_product_unit.product_id', $product_ids);
+
+        if ($start_date == null) {
+            $builder->where("hd_purchase.purchase_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_purchase.purchase_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlPurchase = $builder->getCompiledSelect();
+
+        // getting from purchase return //
+        $purchase_return = '';
+
+
+
+        // getting from sales pos //
+        $builder = $this->db->table('dt_pos_sales');
+        $builder->select('ms_product_unit.product_id,hd_pos_sales.warehouse_id,hd_pos_sales.pos_sales_date AS stock_date,((ms_product_unit.product_content*dt_pos_sales.sales_qty)*-1) AS stock,hd_pos_sales.created_at')
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales.item_id')
+            ->join('hd_pos_sales', 'hd_pos_sales.pos_sales_id=dt_pos_sales.pos_sales_id')
+            ->whereIn('ms_product_unit.product_id', $product_ids);
+
+        if ($start_date == null) {
+            $builder->where("hd_pos_sales.pos_sales_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_pos_sales.pos_sales_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlSalesPos = $builder->getCompiledSelect();
+
+
+        // getting from sales return pos //
+        $builder = $this->db->table('dt_pos_sales_return');
+        $builder->select('ms_product_unit.product_id,hd_pos_sales_return.warehouse_id,hd_pos_sales_return.pos_sales_return_date AS stock_date,(ms_product_unit.product_content*dt_pos_sales_return.sales_return_qty) AS stock,hd_pos_sales_return.created_at')
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales_return.item_id')
+            ->join('hd_pos_sales_return', 'hd_pos_sales_return.pos_sales_return_id=dt_pos_sales_return.pos_sales_return_id')
+            ->whereIn('ms_product_unit.product_id', $product_ids);
+
+        if ($start_date == null) {
+            $builder->where("hd_pos_sales_return.pos_sales_return_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_pos_sales_return.pos_sales_return_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlSalesPosReturn = $builder->getCompiledSelect();
+
+
+
+
+        d($sqlSalesPosReturn);
+        dd($this->db->query($sqlSalesPosReturn)->getResultArray());
+
+        // d($sqlPurchase);
+        // dd($this->db->query($sqlPurchase)->getResultArray());
+    }
+
+    public function getReportStockListByID($product_ids = [])
+    {
+        return true;
+    }
+
+    public function getReportStockByID($product_ids = [])
+    {
+        return true;
+    }
+
     public function getReportWarehouseStockList($warehouse_id = '', $product_tax = '')
     {
         $builder = $this->db->table('ms_product_stock');

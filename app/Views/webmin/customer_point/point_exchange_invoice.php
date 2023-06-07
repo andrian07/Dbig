@@ -1,4 +1,4 @@
-<?= $this->extend('webmin/template/report_A4_landscape_template') ?>
+<?= $this->extend('webmin/template/report_A4_template') ?>
 
 <?= $this->section('css') ?>
 <style>
@@ -58,7 +58,7 @@
 
         <div id="content" class="text-center">
             <!-- HEADER -->
-            <table width="1100px">
+            <table width="780px">
                 <tbody>
                     <tr>
                         <td colspan="2" align="center">
@@ -102,11 +102,11 @@
                                     }
                                     ?>
                                     <tr align="left">
-                                        <td width="150" class="text-right">&nbsp;</td>
+                                        <td width="60" class="text-right">&nbsp;</td>
                                         <td>&nbsp;</td>
                                     </tr>
                                     <tr align="left">
-                                        <td class="text-right">LOKASI PENGAMBILAN&nbsp;</td>
+                                        <td class="text-right">LOKASI&nbsp;</td>
                                         <td class="">:&nbsp;<?= $store_name ?></td>
                                     </tr>
                                     <tr align="left">
@@ -125,15 +125,15 @@
             </table>
             <!-- END HEADER -->
             <br>
-            <div style="width:1100px; height:350px;margin:auto;">
+            <div style="width:780px; height:100px;margin:auto;">
                 <table width="100%" celpadding="0" cellspacing="0" class="table-bordered table-detail">
                     <thead>
                         <tr>
-                            <th class="header-table" width="10%" nowrap="">TGL. PENUKARAN</th>
-                            <th class="header-table" width="10%" nowrap="">KODE ITEM</th>
-                            <th class="header-table" width="10%" nowrap="">NAMA ITEM</th>
-                            <th class="header-table" width="10%" nowrap="">JLH. POIN</th>
-                            <th class="header-table" width="10%" nowrap="">TGL. PENYELESAIAN</th>
+                            <th class="header-table" width="8%" nowrap="">TGL.TUKAR</th>
+                            <th class="header-table" width="8%" nowrap="">KODE ITEM</th>
+                            <th class="header-table" width="22%" nowrap="">NAMA ITEM</th>
+                            <th class="header-table" width="5%" nowrap="">POIN</th>
+                            <th class="header-table" width="8%" nowrap="">TGL.SELESAI</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -169,7 +169,7 @@
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
-                    <td class="ttd"><span class="underline"><?= $ttd  ?></span></td>
+                    <td class="ttd"><span class="underline">Customer Service</span></td>
                     <td>&nbsp;</td>
                     <td class="ttd"><span class="underline"><?= $detail['customer_name'] ?></span></td>
                     <td>&nbsp;</td>

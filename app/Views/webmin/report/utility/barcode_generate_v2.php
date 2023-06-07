@@ -5,11 +5,12 @@
     * {
         margin: 0px;
         padding: 0px;
+        font-size: 10px;
     }
 
     div.barcode-label {
-        width: 200px;
-        height: 80px;
+        width: 160px;
+        height: 50px;
         text-align: center;
         margin-left: 5px;
         margin-top: 5px;
@@ -20,10 +21,11 @@
         text-overflow: ellipsis;
         width: 80%;
         margin-left: 19px;
+        font-size: 9px;
     }
 
-    .label {
-        font-size: 12px;
+    .fs-20 {
+        font-size: 9px;
     }
 </style>
 <?= $this->endSection() ?>
@@ -42,8 +44,8 @@ foreach ($pages as $pageData) {
             ?>
                 <div class="barcode-label">
                     <img src="data:image/svg+xml;base64,<?= base64_encode($ubarcode)  ?>" />
-                    <p class="info label"><?= esc($row['item_code']) ?><br></p>
-                    <div class="title label"> <?= esc($row['product_name'] . ' (' . $row['unit_name'] . ')') ?></div>
+                    <p class="info fs-20"><?= esc($row['item_code']) ?><br></p>
+                    <div class="title"> <?= esc($row['product_name'] . ' (' . $row['unit_name'] . ')') ?></div>
                 </div>
             <?php
             }

@@ -12,11 +12,10 @@
 <?= $this->section('content') ?>
 <?php
 $currentPage = 1;
-$num_row = 1;
 ?>
 
 <?php
-foreach ($pages as $customerData) :
+foreach ($pages as $page) :
 ?>
     <div style="<?= $currentPage == $maxPage ? '' : 'page-break-after:always;' ?>margin:0px;padding:0px;">
         <table width="100%" border="0" cellpadding="1" cellspacing="1" style="background-color:#FFFFFF;  ">
@@ -61,35 +60,17 @@ foreach ($pages as $customerData) :
                     <tbody>
                         <tr>
                             <td colspan="3" align="center">
-                                <p class="header2">DAFTAR CUSTOMER</p>
+                                <p class="header2">DAFTAR MAPPING CUSTOMER</p>
                                 <br>
                             </td>
                         </tr>
                         <tr valign="top">
-                            <td width="30%" class="loseborder">
+                            <td width="70%" class="loseborder">
                                 <table>
                                     <tbody>
                                         <tr align="left" class="loseborder">
-                                            <td width="60" class="loseborder">Provinsi</td>
-                                            <td width="160" class="loseborder">: <?= $prov_name ?></td>
-                                        </tr>
-                                        <tr align="left">
-                                            <td class="loseborder">Kota/Kab</td>
-                                            <td class="col-fixed">: <?= $city_name ?></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                            <td width="40%" class="loseborder">
-                                <table>
-                                    <tbody>
-                                        <tr align="left" class="loseborder">
-                                            <td width="60" class="loseborder">Kecamatan</td>
-                                            <td width="160" class="loseborder">: <?= $dis_name ?></td>
-                                        </tr>
-                                        <tr align="left">
-                                            <td class="loseborder">Kelurahan</td>
-                                            <td class="col-fixed">: <?= $subdis_name ?></td>
+                                            <td width="60" class="loseborder">Mapping</td>
+                                            <td width="160" class="loseborder">: <?= $mapping_name ?></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -101,14 +82,7 @@ foreach ($pages as $customerData) :
                                             <td width="70" class="loseborder">Hal</td>
                                             <td width="150" class="loseborder">:&nbsp;<?= $currentPage ?>/<?= $maxPage ?>&nbsp;</td>
                                         </tr>
-                                        <tr align="left">
-                                            <td class="loseborder">Grup</td>
-                                            <td class="col-fixed">: <?= $customer_group == '' ? '-' : $customer_group_text ?></td>
-                                        </tr>
-                                        <tr align="left">
-                                            <td class="loseborder">Masa Berlaku</td>
-                                            <td class="col-fixed">: <?= $exp_date == '' ? '-' : $exp_date_text ?></td>
-                                        </tr>
+
                                     </tbody>
                                 </table>
 
@@ -133,19 +107,20 @@ foreach ($pages as $customerData) :
                         </thead>
                         <tbody>
                             <?php
-                            foreach ($customerData as $row) :
+                            foreach ($page as $row) :
                             ?>
-                                <tr align="left">
-                                    <td class="text-right"><?= $num_row ?>&nbsp;</td>
-                                    <td align="text-left" nowrap=""><?= $row['customer_code'] ?>&nbsp;</td>
-                                    <td class="text-left"><?= $row['customer_name'] ?>&nbsp;</td>
-                                    <td class="col-fixed text-left"><?= $row['customer_address'] ?>&nbsp;</td>
-                                    <td class="col-fixed text-left"><?= $row['customer_phone'] ?></td>
-                                    <td class="text-left"><?= isset($configGroup[$row['customer_group']]) ? $configGroup[$row['customer_group']] : 'ERROR' ?>&nbsp;</td>
-                                    <td class="text-left"><?= indo_short_date($row['exp_date'], FALSE) ?>&nbsp;</td>
+                                <tr>
+                                    <?php
+                                    foreach ($row  as $col) :
+                                        $class = isset($col['class']) ? 'class="' . $col['class'] . '"' : '';
+                                        $colspan = isset($col['colspan']) ? 'colspan="' . $col['colspan'] . '"' : '';
+                                    ?>
+                                        <td <?= $colspan . ' ' . $class ?>><?= $col['text'] ?></td>
+                                    <?php
+                                    endforeach;
+                                    ?>
                                 </tr>
                             <?php
-                                $num_row++;
                             endforeach;
                             ?>
 

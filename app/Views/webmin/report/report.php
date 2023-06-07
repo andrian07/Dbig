@@ -44,95 +44,96 @@ $report_role = $user_role['report'];
                                 <!--
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-customer-point-history-chart') ?>" class="text-primary">Grafik Histori Poin Customer</a></li>
                             -->
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-customer-receivable-list') ?>" class="text-primary">Daftar Tagihan Piutang</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-customer-receivable-receipt') ?>" class="text-primary">Cetak Kwitansi Penagihan</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-customer-receivable-list') ?>" class="text-primary">Daftar Tagihan Piutang</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-customer-receivable-receipt') ?>" class="text-primary">Cetak Kwitansi Penagihan</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-customer-mapping-list') ?>" class="text-primary">Daftar Mapping Customer</a></li>
 
-                        </ul>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-
-
-            <div class="col-md-4">
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">Inventory</h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
+                            </ul>
                         </div>
-                        <!-- /.card-tools -->
+                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <ul class="list-group">
+                    <!-- /.card -->
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Inventory</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                            <!-- /.card-tools -->
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <ul class="list-group">
                                 <!--
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-product-list') ?>" class="text-primary">Daftar Produk</a></li>
                             -->
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-list') ?>" class="text-primary">Laporan Stok Produk</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-card') ?>" class="text-primary">Kartu Stok</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-opname-list') ?>" class="text-primary">Laporan Stok Opname</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-transfer-list') ?>" class="text-primary">Laporan Stok Transfer</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-dead-stock-list') ?>" class="text-primary">Laporan Dead Stock</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-exp-stock-list') ?>" class="text-primary">Laporan Stok Kadaluarsa</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-point-exchange-list') ?>" class="text-primary">Laporan Penukaran Poin</a></li>
-                        </ul>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-
-
-            <div class="col-md-4">
-                <div class="card card-success">
-                    <div class="card-header">
-                        <h3 class="card-title">Laporan Pembelian</h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-list') ?>" class="text-primary">Laporan Stok Produk</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-card') ?>" class="text-primary">Kartu Stok</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-opname-list') ?>" class="text-primary">Laporan Stok Opname</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-transfer-list') ?>" class="text-primary">Laporan Stok Transfer</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-dead-stock-list') ?>" class="text-primary">Laporan Dead Stock</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-exp-stock-list') ?>" class="text-primary">Laporan Stok Kadaluarsa</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-point-exchange-list') ?>" class="text-primary">Laporan Penukaran Poin</a></li>
+                            </ul>
                         </div>
-                        <!-- /.card-tools -->
+                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <ul class="list-group">
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-po-list') ?>" class="text-primary">Laporan PO</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-purchase-list') ?>" class="text-primary">Laporan Pembelian</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-po-consignment-list') ?>" class="text-primary">Laporan PO Konsinyasi</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-retur-purchase-list') ?>" class="text-primary">Laporan Retur Pembelian</a></li>
-                        </ul>
-                    </div>
-                    <!-- /.card-body -->
+                    <!-- /.card -->
                 </div>
-                <!-- /.card -->
-            </div>
 
 
+                <div class="col-md-4">
+                    <div class="card card-success">
+                        <div class="card-header">
+                            <h3 class="card-title">Laporan Pembelian</h3>
 
-
-
-            <div class="col-md-4">
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">Laporan Penjualan</h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                            <!-- /.card-tools -->
                         </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-po-list') ?>" class="text-primary">Laporan PO</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-purchase-list') ?>" class="text-primary">Laporan Pembelian</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-po-consignment-list') ?>" class="text-primary">Laporan PO Konsinyasi</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-retur-purchase-list') ?>" class="text-primary">Laporan Retur Pembelian</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <ul class="list-group">
-                           <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list') ?>" class="text-primary">Laporan Penjualan Retail</a></li>
+                    <!-- /.card -->
+                </div>
+
+
+
+
+
+                <div class="col-md-4">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Laporan Penjualan</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list') ?>" class="text-primary">Laporan Penjualan Retail</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-customer') ?>" class="text-primary">Laporan Penjualan Retail Per Customer</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-salesman') ?>" class="text-primary">Laporan Penjualan Retail Per Salesman</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-list-group-brand') ?>" class="text-primary">Laporan Penjualan Retail Per Brand</a></li>
@@ -141,74 +142,74 @@ $report_role = $user_role['report'];
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-sales-allocation-margin') ?>" class="text-primary">Laporan Alokasi Margin Penjualan Retail</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-sales-list') ?>" class="text-primary">Laporan Penjualan Proyek </a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-project-retur-sales-list') ?>" class="text-primary">Laporan Retur Penjualan Proyek </a></li>
-                        </ul>
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            
-            <div class="col-md-4">
-                <div class="card card-danger">
-                    <div class="card-header">
-                        <h3 class="card-title">Laporan Hutang</h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
+                            </ul>
                         </div>
-                        <!-- /.card-tools -->
+                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <ul class="list-group">
-                            <!-- <li class="list-group-item"><a href="<?= base_url('webmin/report/view-debt-balance-list') ?>" class="text-primary">Laporan Saldo Hutang</a></li> -->
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-debt-card-list') ?>" class="text-primary">Laporan Kartu Hutang</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-debt-pending-list') ?>" class="text-primary">Laporan Sisa Hutang Belum Lunas</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-debt-duedate-list') ?>" class="text-primary">Laporan Hutang Jatuh Tempo</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-debt-list') ?>" class="text-primary">Laporan Pembayaran Hutang</a></li>
-                        </ul>
-                    </div>
-                    <!-- /.card-body -->
+                    <!-- /.card -->
                 </div>
-                <!-- /.card -->
-            </div>        
 
-            <div class="col-md-4">
-                <div class="card card-success">
-                    <div class="card-header">
-                        <h3 class="card-title">Utilitas</h3>
+                <div class="col-md-4">
+                    <div class="card card-danger">
+                        <div class="card-header">
+                            <h3 class="card-title">Laporan Hutang</h3>
 
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                            <!-- /.card-tools -->
                         </div>
-                        <!-- /.card-tools -->
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <!-- <li class="list-group-item"><a href="<?= base_url('webmin/report/view-debt-balance-list') ?>" class="text-primary">Laporan Saldo Hutang</a></li> -->
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-debt-card-list') ?>" class="text-primary">Laporan Kartu Hutang</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-debt-pending-list') ?>" class="text-primary">Laporan Sisa Hutang Belum Lunas</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-debt-duedate-list') ?>" class="text-primary">Laporan Hutang Jatuh Tempo</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-debt-list') ?>" class="text-primary">Laporan Pembayaran Hutang</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <ul class="list-group">
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-barcode-generate') ?>" class="text-primary">Cetak Barcode</a></li>
-                            <li class="list-group-item"><a href="<?= base_url('webmin/report/view-price-tag-v3') ?>" class="text-primary">Cetak Label Harga</a></li>
-                        </ul>
-                    </div>
-                    <!-- /.card-body -->
+                    <!-- /.card -->
                 </div>
-                <!-- /.card -->
+
+                <div class="col-md-4">
+                    <div class="card card-success">
+                        <div class="card-header">
+                            <h3 class="card-title">Utilitas</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                            <!-- /.card-tools -->
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-barcode-generate') ?>" class="text-primary">Cetak Barcode</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-price-tag-v3') ?>" class="text-primary">Cetak Label Harga</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+
+
+                </div>
+
 
 
             </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
 
 
-
-        </div>
-        <!-- /.row -->
-    </div><!-- /.container-fluid -->
-
-
-</section>
+    </section>
 </div>
 <!-- /.content -->
 <?= $this->endSection() ?>

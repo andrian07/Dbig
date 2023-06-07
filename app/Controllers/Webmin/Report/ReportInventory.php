@@ -274,7 +274,8 @@ class ReportInventory extends WebminController
         $warehouse_id   = $this->request->getGet('warehouse_id') != null ? $this->request->getGet('warehouse_id') : '';
         $warehouse_name = $this->request->getGet('warehouse_name') != null ? $this->request->getGet('warehouse_name') : '-';
         $product_tax    = $this->request->getGet('product_tax') != null ? $this->request->getGet('product_tax') : '';
-
+        $start_date     = $this->request->getGet('start_date') != null ? $this->request->getGet('start_date') : '';
+        $end_date       = $this->request->getGet('end_date') != null ? $this->request->getGet('end_date') : '';
 
         $agent = $this->request->getUserAgent();
         $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
@@ -292,9 +293,43 @@ class ReportInventory extends WebminController
             'product_tax'       => $product_tax
         ];
 
-        $M_product       = model('M_product');
-        $getData         = $M_product->getReportWarehouseStockList($warehouse_id, $product_tax)->getResultArray();
-        //dd($getData);
+        $M_warehouse        = model('M_warehouse');
+        $M_product          = model('M_product');
+
+        $getWarehouse       = $M_warehouse->getWarehouse($warehouse_id)->getResultArray();
+        $getProduct         = $M_product->getReportProductList($product_tax)->getResultArray();
+
+        /* test */
+        $start_date         = '2023-06-01';
+        //$start_date         = null;
+        $end_date           = '2023-06-30';
+        $ids                = ['36029', '36030'];
+
+
+        $M_product->getReportInitStock($ids, $start_date, $end_date);
+
+        die();
+
+        /* list_product_id */
+        $list_product_id    = [];
+        foreach ($getProduct as $product) {
+            $list_product_id[] = $product['product_id'];
+        }
+
+        /* get stock per 500 id */
+        $max_get_stock      = 500;
+        $chunk_product_id   = array_chunk($list_product_id, $max_get_stock);
+        foreach ($chunk_product_id as $product_ids) {
+            //d($product_ids);
+        }
+
+
+
+
+
+
+        //$getData            = $M_product->getReportWarehouseStockList($warehouse_id, $product_tax)->getResultArray();
+        //dd($getWarehouse,  $getProduct);
 
         if ($fileType == 'pdf') {
             $max_report_size    = 15;
