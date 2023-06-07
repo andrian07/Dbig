@@ -896,9 +896,9 @@ $assetsUrl = base_url('assets');
                             let supplier_names = items[0].temp_purchase_supplier_name;
                             setSelect2('#supplier_id', supplier_ids, supplier_names);
                             $('#supplier_id').attr("disabled", true);
-
                             let po_ids = items[0].temp_purchase_po_id;
                             let po_invs = items[0].temp_purchase_po_invoice;
+                            console.log(items);
                             setSelect2('#no_po_purchase', po_ids, po_invs);
                         }else{
                             clearHeader();
@@ -2072,13 +2072,17 @@ $assetsUrl = base_url('assets');
         })
 
         $('#temp_qty').on('change', function() {
-            calculation_temp_total();
             cleardiscount();
+            cleardiscountfooter();
+            calculation_temp_total();
+            
         });
 
         $('#temp_price').on('change', function() {
-            calculation_temp_total();
             cleardiscount();
+            cleardiscountfooter();
+            calculation_temp_total();
+           
         });
 
         
@@ -2266,6 +2270,7 @@ $assetsUrl = base_url('assets');
             temp_dpp.set(parseFloat(dpp.toFixed(2)));
             temp_tax.set(parseFloat(ppn.toFixed(2)));
             temp_total.set(total_price.get() - total_temp_discount.get());
+            
         }
 
         function updateTableHeader() {

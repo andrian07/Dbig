@@ -64,8 +64,19 @@ class M_purchase extends Model
         $this->clearTemp($user_id);
 
         $sqlText = "INSERT INTO temp_purchase(temp_purchase_po_id, temp_purchase_po_invoice, temp_purchase_item_id, temp_purchase_qty,temp_purchase_ppn, temp_purchase_dpp, temp_purchase_price, temp_purchase_discount1, temp_purchase_discount1_percentage, temp_purchase_discount2,temp_purchase_discount2_percentage, temp_purchase_discount3, temp_purchase_discount3_percentage, temp_purchase_discount_total,temp_purchase_ongkir, temp_purchase_expire_date,temp_purchase_total, temp_purchase_supplier_id,temp_purchase_supplier_name,temp_purchase_user_id) ";
+        
+        $get_purchase_partial = $this->db->table($this->table_hd_purchase)->select('*')->where('purchase_po_invoice', $purchase_order_invoice)->get()->getRowArray();
 
-        $sqlText .= "SELECT purchase_order_id, '". $purchase_order_invoice."' as purchase_order_invoice, detail_purchase_po_item_id, detail_purchase_po_qty_pending,detail_purchase_po_ppn,detail_purchase_po_dpp,detail_purchase_po_price,detail_purchase_po_discount1,detail_purchase_po_discount1_percentage,detail_purchase_po_discount2,detail_purchase_po_discount2_percentage,detail_purchase_po_discount3,detail_purchase_po_discount3_percentage,detail_purchase_po_total_discount,detail_purchase_po_ongkir,detail_purchase_po_expire_date,detail_purchase_po_total,'".$supplier_id."' as detail_purchase_supplier_id,'".$supplier_name."' as detail_purchase_supplier_name,'".$user_id."' as detail_purchase_user_id";
+        if($get_purchase_partial == null){
+
+            $sqlText .= "SELECT '".$purchase_order_id."','".$purchase_order_invoice."',detail_purchase_po_item_id, detail_purchase_po_qty_pending, detail_purchase_po_ppn, detail_purchase_po_dpp,detail_purchase_po_price,detail_purchase_po_discount1,detail_purchase_po_discount1_percentage,detail_purchase_po_discount2,detail_purchase_po_discount2_percentage,detail_purchase_po_discount3,detail_purchase_po_discount3_percentage,detail_purchase_po_total_discount,detail_purchase_po_ongkir,detail_purchase_po_expire_date,(detail_purchase_po_price * detail_purchase_po_qty_pending) as detail_purchase_po_total,'".$supplier_id."' as detail_po_supplier_id, '".$supplier_name."' as detail_po_supplier_name,'".$user_id."' as detail_po_user_id";
+
+        }else{
+
+            $sqlText .= "SELECT '".$purchase_order_id."','".$purchase_order_invoice."',detail_purchase_po_item_id, detail_purchase_po_qty_pending, detail_purchase_po_ppn, detail_purchase_po_dpp,detail_purchase_po_price,0,0,0,0,0,0,0,detail_purchase_po_ongkir,detail_purchase_po_expire_date,(detail_purchase_po_price * detail_purchase_po_qty_pending) as detail_purchase_po_total,'".$supplier_id."' as detail_po_supplier_id, '".$supplier_name."' as detail_po_supplier_name,'".$user_id."' as detail_po_user_id";
+            
+        }
+        
 
         $sqlText .= " FROM dt_purchase_order WHERE purchase_order_id = '$purchase_order_id'";
 
@@ -310,8 +321,13 @@ class M_purchase extends Model
             //End Detail Purchase Data
             
             $get_dt_po = $this->db->table($this->table_dt_po)->select('detail_purchase_po_qty_pending, detail_purchase_po_recive')->where('purchase_order_id', $temp_purchase_po_id)->where('detail_purchase_po_item_id', $temp_purchase_item_id)->get()->getRowArray();
+            if($get_dt_po == null){
+            $detail_purchase_po_qty_pending = 0;
+            $detail_purchase_po_recive = 0;
+            }else{
             $detail_purchase_po_qty_pending = $get_dt_po['detail_purchase_po_qty_pending'] - $temp_purchase_qty;
             $detail_purchase_po_recive = $get_dt_po['detail_purchase_po_recive'] + $temp_purchase_qty;
+            }
             $updateQtyPO =  $this->db->table($this->table_dt_po)->where('purchase_order_id', $temp_purchase_po_id)->where('detail_purchase_po_item_id', $temp_purchase_item_id)->update(['detail_purchase_po_recive' => $detail_purchase_po_recive,'detail_purchase_po_qty_pending' => $detail_purchase_po_qty_pending]);
 
             $getTotalItemPurchase = $this->db->table($this->table_temp_purchase)->select('sum(temp_purchase_qty * product_content) as qty')->join('ms_product_unit', 'ms_product_unit.item_id = temp_purchase.temp_purchase_item_id')->where('temp_purchase_user_id', $data['purchase_user_id'])->get()->getRowArray();
