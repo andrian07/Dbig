@@ -271,6 +271,8 @@ class ReportInventory extends WebminController
 
     public function stockListV2()
     {
+
+        dd($this->userLogin);
         $warehouse_id   = $this->request->getGet('warehouse_id') != null ? $this->request->getGet('warehouse_id') : '';
         $warehouse_name = $this->request->getGet('warehouse_name') != null ? $this->request->getGet('warehouse_name') : '-';
         $product_tax    = $this->request->getGet('product_tax') != null ? $this->request->getGet('product_tax') : '';
