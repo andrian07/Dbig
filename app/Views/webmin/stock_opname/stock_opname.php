@@ -44,30 +44,6 @@ $assetsUrl = base_url('assets');
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>OP/UTM/22/09/000001</td>
-                                        <td>01/09/2022</td>
-                                        <td>UTM - PUSAT</td>
-                                        <td>100,000.00</td>
-                                        <td>Reza</td>
-                                        <td>
-                                            <a href="javascript:;" data-fancybox data-type="iframe" data-src="<?= base_url('webmin/stock-opname/detail') ?>" class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>&nbsp;
-                                            <button class="btn btn-sm btn-default btnprint" data-toggle="tooltip" data-placement="top" data-title="Cetak"><i class="fas fa-print"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>OP/KBR/22/09/000001</td>
-                                        <td>03/09/2022</td>
-                                        <td>KBR - CABANG KOTA BARU</td>
-                                        <td>-152,500.00</td>
-                                        <td>Ani</td>
-                                        <td>
-                                            <a href="javascript:;" data-fancybox data-type="iframe" data-src="<?= base_url('webmin/stock-opname/detail') ?>" class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>&nbsp;
-                                            <button class="btn btn-sm btn-default btnprint" data-toggle="tooltip" data-placement="top" data-title="Cetak"><i class="fas fa-print"></i></button>
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                             <!-- /.tab-content -->
@@ -117,7 +93,7 @@ $assetsUrl = base_url('assets');
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Tanggal Opname</label>
-                                            <input id="opname_date" name="opname_date" type="date" class="form-control" value="2022-09-03" readonly>
+                                            <input id="opname_date" name="opname_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>" readonly>
                                         </div>
                                     </div>
 
@@ -133,7 +109,7 @@ $assetsUrl = base_url('assets');
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>User</label>
-                                            <input id="display_user" type="text" class="form-control" value="Ani" readonly>
+                                            <input id="display_user" type="text" class="form-control" value="<?= $user['user_realname'] ?>" readonly>
                                         </div>
                                     </div>
                                 </div>

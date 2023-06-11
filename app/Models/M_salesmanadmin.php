@@ -548,6 +548,7 @@ class M_salesmanadmin extends Model
 
             $save = ['success' => TRUE, 'sales_admin_id' => $sales_admin_id ];
 
+
             saveQueries($saveQueries, 'sales_admin', $sales_admin_id, 'edit');
 
             return $save;

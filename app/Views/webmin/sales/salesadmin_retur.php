@@ -61,6 +61,7 @@ $assetsUrl = base_url('assets');
                                             <div class="form-group">
                                                 <label for="title_payment_retur" class="col-sm-12">No Invoice</label>
                                                 <div class="col-sm-12">
+                                                    <input type="hidden" id="rt_sales_admin_id" class="form-control">
                                                     <input type="hidden" id="hd_retur_sales_admin_id" class="form-control">
                                                     <input type="text" id="hd_retur_sales_admin_invoice" class="form-control">
                                                 </div>
@@ -401,7 +402,7 @@ $assetsUrl = base_url('assets');
                                         <div class="form-group">
 
                                             <label>Qty Retur</label>
-                                            <input id="temp_qty_buy" name="temp_qty_buy" type="hidden" class="form-control text-right" value="0" required readonly>
+                                            <input id="temp_qty_buy" name="temp_qty_buy" type="text" class="form-control text-right" value="0" required readonly>
                                             <input id="temp_qty_retur" name="temp_qty_retur" type="text" class="form-control text-right" value="0" data-parsley-vqty required>
 
                                         </div>
@@ -1021,7 +1022,7 @@ $assetsUrl = base_url('assets');
 
             let payment_type = $('#payment_type').val();
 
-            let sales_no = $('#sales_no').val();
+            let rt_sales_admin_id = $('#rt_sales_admin_id').val();
 
             let question = 'Yakin ingin menyimpan data Pembayaran?';
 
@@ -1035,7 +1036,7 @@ $assetsUrl = base_url('assets');
 
                     let formValues = {
 
-                        sales_no:sales_no,
+                        sales_no:rt_sales_admin_id,
 
                         hd_retur_sales_admin_id: hd_retur_sales_admin_id,
 
@@ -1072,9 +1073,10 @@ $assetsUrl = base_url('assets');
                             }
 
                             btnSubmit.prop('disabled', false);
-
+                            
                             updateTableHeader();
 
+                            $('#modal-addreturpayment').modal('hide');
                         },
 
                         error: function(response) {
@@ -1103,7 +1105,7 @@ $assetsUrl = base_url('assets');
                     if (response.success) {
                         if (response.result.success) {
                             if(response.result.data.hd_retur_status == 'Pending'){
-                                editMode(response.result.data);
+                                editModeRepayment(response.result.data);
                             }else{
                                 message.info('Transaksi yang sudah selesai atau dibatalkan tidak dapat di ubah lagi');
                             }
@@ -1117,9 +1119,9 @@ $assetsUrl = base_url('assets');
         })
 
 
-        function editMode(data) {
-            console.log(data);
+        function editModeRepayment(data) {
             let form = $('#frmaddpaymentretur');
+            $('#rt_sales_admin_id').val(data.sales_admin_invoice);
             $('#hd_retur_sales_admin_id').val(data.hd_retur_sales_admin_id);
             $('#hd_retur_sales_admin_invoice').val(data.hd_retur_sales_admin_invoice);
             hd_retur_total_transaction.set(data.hd_retur_total_transaction);

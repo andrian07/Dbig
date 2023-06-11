@@ -343,7 +343,7 @@ class Sales_admin extends WebminController
                     $input['updated_at']              = date("Y/m/d");
 
                     $save = $this->M_salesmanadmin->updatesalesmanadmin($input);
-
+              
                     if ($save['success']) {
 
                         $result = ['success' => TRUE, 'message' => 'Data pesanan berhasil diperbarui', 'sales_admin' => $save['sales_admin_id']];

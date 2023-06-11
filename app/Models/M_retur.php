@@ -465,10 +465,10 @@ class M_retur extends Model
 
 
         $get_sales_admin = $this->db->table($this->table_hd_sales_admin)->select('*')->where('sales_admin_invoice', $sales_no)->get()->getRowArray();
-
+             
         if($hd_retur_payment == 'Ya'){
             $get_sales_admin_retur_nominal = $this->db->table($this->table_hd_sales_admin)->select('sales_admin_retur_nominal')->where('sales_admin_invoice', $sales_no)->get()->getRowArray();
-
+       
             $total_retur_sales_admin = $get_sales_admin_retur_nominal['sales_admin_retur_nominal'] + $hd_retur_total_transaction;
 
             $updateStatus =  $this->db->table($this->table_hd_sales_admin)->where('sales_admin_invoice', $sales_no)->update(['sales_admin_retur_nominal' => $total_retur_sales_admin]);
@@ -637,8 +637,6 @@ class M_retur extends Model
         }
 
         $getTempReturPPNandDPP =  $this->getTempReturPPNandDPP($data['created_by'])->getResultArray();
-
-
 
         $data['hd_retur_total_dpp'] = $getTempReturPPNandDPP[0]['total_retur_dpp'];
 
@@ -937,6 +935,7 @@ class M_retur extends Model
         ->get();
     }
 
+    
     public function getDtReturSalesAdmin($hd_retur_sales_admin_id)
     {
 
@@ -953,8 +952,6 @@ class M_retur extends Model
         ->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id')
 
         ->join('ms_store', 'ms_store.store_id = hd_retur_sales_admin.hd_retur_store_id')
-
-        ->join('ms_warehouse', 'ms_warehouse.store_id = ms_store.store_id')
 
         ->where('dt_retur_sales_admin.hd_retur_sales_admin_id', $hd_retur_sales_admin_id)
 
@@ -1037,13 +1034,16 @@ class M_retur extends Model
     public function copyReturSalesAdminToTemp($datacopy)
     {
         $user_id                   = $datacopy['retur_user_id'];
-        $sales_admin_invoice = $datacopy['sales_admin_invoice'];
+        $sales_admin_invoice       = $datacopy['sales_admin_invoice'];
         $hd_retur_sales_admin_id   = $datacopy['hd_retur_sales_admin_id'];
+
+        $builder = $this->db->table($this->table_hd_retur);
 
         $this->clearTempSalesAdmin($user_id);
 
-        $sqlText = "INSERT INTO temp_retur_sales_admin(retur_sales_admin_invoice,retur_item_id,retur_price,retur_ppn,retur_disc,retur_disc_nota,retur_qty,retur_qty_sell,retur_total,retur_user_id  ) ";
+        $get_sales_admin = $this->db->table($this->table_hd_sales_admin)->select('*')->where('sales_admin_invoice', $sales_admin_invoice)->get()->getRowArray();
 
+        $sqlText = "INSERT INTO temp_retur_sales_admin(retur_sales_admin_invoice,retur_item_id,retur_price,retur_ppn,retur_disc,retur_disc_nota,retur_qty,retur_qty_sell,retur_total,retur_user_id  ) ";
 
         $sqlText .= "SELECT '".$sales_admin_invoice."' as retur_sales_admin_invoice,dt_retur_item_id,dt_retur_price, dt_retur_ppn,dt_retur_disc,dt_retur_disc_nota,dt_retur_qty,dt_retur_qty_sell,dt_retur_total,'".$user_id."' as retur_user_id";
 

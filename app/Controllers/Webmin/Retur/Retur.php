@@ -992,7 +992,9 @@ class Retur extends WebminController
 
             $getOrder = $this->M_retur->getReturSalesAdmin($hd_retur_sales_admin_id)->getRowArray();
 
-            if($getOrder['hd_retur_status'] != 'pending')
+            //print_r($getOrder['hd_retur_status']);die();
+
+            if($getOrder['hd_retur_status'] != 'Pending')
             {
                 $result = ['success' => FALSE, 'message' => 'Transaksi yang sudah selesai atau dibatalkan tidak dapat di ubah lagi'];
             }
