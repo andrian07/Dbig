@@ -74,7 +74,7 @@ $report_role = $user_role['report'];
                                 <!--
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-product-list') ?>" class="text-primary">Daftar Produk</a></li>
                             -->
-                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-list') ?>" class="text-primary">Laporan Stok Produk</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-list-v2') ?>" class="text-primary">Laporan Stok Produk</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-card') ?>" class="text-primary">Kartu Stok</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-opname-list') ?>" class="text-primary">Laporan Stok Opname</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-stock-transfer-list') ?>" class="text-primary">Laporan Stok Transfer</a></li>
