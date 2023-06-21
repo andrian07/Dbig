@@ -109,6 +109,7 @@ if (!function_exists('displayDisc')) {
     }
 }
 
+
 if (!function_exists('saveQueries')) {
     function saveQueries($queries, $module, $ref_id = 0, $log_remark = '')
     {
@@ -182,3 +183,4 @@ if (!function_exists('deleteImage')) {
         }
     }
 }
+

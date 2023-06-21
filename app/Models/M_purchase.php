@@ -195,6 +195,25 @@ class M_purchase extends Model
         ->get();
     }
 
+    public function getPurchaseAccounting($purchase_id){
+
+        $builder = $this->db->table($this->table_hd_purchase);
+
+        return $builder->select('*, hd_purchase.created_at as created_at')
+
+        ->join('user_account', 'user_account.user_id = hd_purchase.purchase_user_id')
+
+        ->join('ms_supplier', 'ms_supplier.supplier_id = hd_purchase.purchase_supplier_id')
+
+        ->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_purchase.purchase_warehouse_id')
+
+        ->join('ms_store', 'ms_store.store_id = ms_warehouse.store_id')
+
+        ->where('purchase_id', $purchase_id)
+
+        ->get();
+    }
+
     public function getDtPurchase($invoice_num){
 
         $builder = $this->db->table($this->table_dt_purchase);
@@ -454,8 +473,8 @@ class M_purchase extends Model
             $this->db->transCommit();
 
             $this->clearTemp($data['purchase_user_id']);
-
-            $save = ['success' => TRUE, 'purchase_id' => $purchase_id ];
+            
+            $save = ['success' => TRUE, 'purchase_id' => $purchase_id];
 
         }
 

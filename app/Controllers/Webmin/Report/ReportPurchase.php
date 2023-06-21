@@ -172,7 +172,7 @@ class ReportPurchase extends WebminController
                     $sheet->getCell('H' . $iRow)->setValue('');
                     $sheet->getCell('I' . $iRow)->setValue(numberFormat($detail_purchase_po_base_price, TRUE));
                     $sheet->getCell('J' . $iRow)->setValue(numberFormat($detail_purchase_po_dpp, TRUE));
-                    $sheet->getCell('K' . $iRow)->setValue(numberFormat($detail_purchase_po_ppn, TRUE));
+                    $sheet->getCell('K' . $iRow)->setValue(numberFormat($detail_purchase_po_ppn / $detail_purchase_po_qty, TRUE));
                     $sheet->getCell('L' . $iRow)->setValue(numberFormat($detail_purchase_po_price, TRUE));
                     $sheet->getCell('M' . $iRow)->setValue(numberFormat($detail_purchase_po_ongkir, TRUE));
                     $sheet->getCell('N' . $iRow)->setValue(numberFormat($detail_purchase_po_tatao_plus_ongkir, TRUE));

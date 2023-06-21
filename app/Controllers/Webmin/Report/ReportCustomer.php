@@ -533,7 +533,6 @@ class ReportCustomer extends WebminController
             $fileType        = $this->request->getGet('file') == NULL ? 'pdf' : $this->request->getGet('file');
             $agent           = $this->request->getUserAgent();
 
-
             if (!in_array($fileType, ['pdf', 'xls'])) {
                 $fileType = 'pdf';
             }
@@ -559,14 +558,14 @@ class ReportCustomer extends WebminController
                 } else {
                     $max_page_item  = 16;
                 }
-                $receivabledata    = array_chunk($getReportData, $max_page_item);
+                //$receivabledata    = array_chunk($getReportData, $max_page_item);
                 $data = [
                     'title'                 => 'Laporan Piutang Customer',
                     'start_date'            => $start_date,
                     'end_date'              => $end_date,
                     'customer_name'         => $customer_name,
-                    'pages'                 => $receivabledata,
-                    'maxPage'               => count($receivabledata),
+                    'pages'                 => $getReportData,
+                    'maxPage'               => count($getReportData),
                     'userLogin'             => $this->userLogin
                 ];
 

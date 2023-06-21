@@ -17,9 +17,7 @@ $currentPage = 1;
 $num_row = 1;
 ?>
 
-<?php
-foreach ($pages as $receivabledata) :
-    ?>
+
     <div style="<?= $currentPage == $maxPage ? '' : 'page-break-after:always;' ?>margin:0px;padding:0px;">
         <table width="100%" border="0" cellpadding="1" cellspacing="1" style="background-color:#FFFFFF;  ">
             <tbody>
@@ -31,7 +29,9 @@ foreach ($pages as $receivabledata) :
                 </tr>
             </tbody>
         </table>
-
+        <?php
+foreach ($pages as $receivabledata) :
+    ?>
         <div class="text-center">
             <div class="text-center">
                 <div width="780px">
@@ -153,11 +153,12 @@ foreach ($pages as $receivabledata) :
 
             </div>
         </div>
-    </div>
-    <?php
+        <?php
     $currentPage++;
 endforeach;
 ?>
+    </div>
+    
 
 
 
