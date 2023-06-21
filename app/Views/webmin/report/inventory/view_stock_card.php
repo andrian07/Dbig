@@ -28,81 +28,63 @@ $assetsUrl = base_url('assets');
                         <div class="card-body">
                             <form>
                                 <div class="row">
-                                    <div class="col-sm-4">
-                                        <!-- text input -->
-                                        <div class="form-group">
-                                            <label>Produk:</label>
-                                            <select id="product_id" name="product_id" class="form-control">
-                                                <option value="1">P000001 - Toto Gantungan Double Robe Hook (TX04AES)</option>
-                                                <option value="2">P000002 - Toto Floor Drain (TX1DA)</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <!-- text input -->
+                                                <div class="form-group">
+                                                    <label>Produk:</label>
+                                                    <select id="product_id" name="product_id" class="form-control" multiple></select>
+                                                </div>
+                                            </div>
 
-                                    <div class="col-sm-2">
-                                        <!-- text input -->
-                                        <div class="form-group">
-                                            <label>Bulan:</label>
-                                            <select id="period_month" name="period_month" class="form-control">
-                                                <?php
-                                                $cur_month = date('m');
-                                                $month_list = [
-                                                    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-                                                ];
+                                            <div class="col-md-4">
+                                                <!-- text input -->
+                                                <div class="form-group">
+                                                    <label>Dari:</label>
+                                                    <input id="start_date" name="start_date" type="date" class="form-control" value="<?= date('Y-m') ?>-01">
 
-                                                foreach ($month_list as $i => $v) {
-                                                    $month = substr('00' . strval($i + 1), -2);
-                                                    $isSelected = $month == $cur_month ? 'selected' : '';
-                                                ?>
-                                                    <option value="<?= $month ?>" <?= $isSelected ?>><?= $v ?></option>
-                                                <?php
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
+                                                </div>
+                                            </div>
 
-                                    <div class="col-sm-2">
-                                        <!-- text input -->
-                                        <div class="form-group">
-                                            <label>Tahun:</label>
+                                            <div class="col-md-4">
+                                                <!-- text input -->
+                                                <div class="form-group">
+                                                    <label>Sampai:</label>
+                                                    <input id="end_date" name="end_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>">
 
-                                            <select id="period_year" name="period_year" class="form-control">
-                                                <?php
-                                                for ($year = 2020; $year <= 2050; $year++) {
-                                                    $isSelected = intval(date('Y')) == $year ? 'selected' : '';
-                                                ?>
-                                                    <option value="<?= $year ?>" <?= $isSelected ?>><?= $year ?></option>
-                                                <?php
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
+                                                </div>
+                                            </div>
 
 
-                                    <div class="col-sm-2">
-                                        <!-- text input -->
-                                        <div class="form-group">
-                                            <label>Gudang:</label>
-                                            <select id="warehouse_id" name="warehouse_id" class="form-control">
-                                                <option value="0" selected>SEMUA</option>
-                                                <option value="1">UTM - PUSAT</option>
-                                                <option value="2">KBR - KOTA BARU</option>
-                                                <option value="3">KNY - KONSINYASI</option>
-                                            </select>
+                                            <div class="col-md-4">
+                                                <!-- text input -->
+                                                <div class="form-group">
+                                                    <label>Gudang:</label>
+                                                    <select id="warehouse_id" name="warehouse_id" class="form-control"> </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
 
 
-                                    <div class="col-sm-2">
-                                        <!-- text input -->
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label>&nbsp;</label>
+                                            <div class="form-group">
+                                                <button id="btnexportexcel" type="button" class="btn btn-default"><i class="fas fa-search"></i> Export Excel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 
+                                         <div class="col-md-2">
                                         <div class="form-group">
                                             <label>&nbsp;</label>
                                             <div class="form-group">
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-default"><i class="fas fa-search"></i> Cari</button>
+                                                    <button id="btnsearch" type="button" class="btn btn-default"><i class="fas fa-search"></i> Cari</button>
                                                     <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                                         <span class="sr-only">Toggle Dropdown</span>
                                                     </button>
@@ -114,6 +96,7 @@ $assetsUrl = base_url('assets');
                                             </div>
                                         </div>
                                     </div>
+                                    -->
                                 </div>
                             </form>
                         </div><!-- /.card-body -->
@@ -126,21 +109,7 @@ $assetsUrl = base_url('assets');
         </div><!-- /.container-fluid -->
 
 
-        <div class="container-fluid">
-            <div class="row">
-                <!-- /.col -->
-                <div class="col-md-12 ">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5>Preview</h5>
-                            <iframe id="preview" src="<?= base_url('webmin/report/stock-card') ?>" width="100%" height="1000px"></iframe>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+
     </section>
 </div>
 <!-- /.content -->
@@ -149,34 +118,99 @@ $assetsUrl = base_url('assets');
 <?= $this->section('js') ?>
 <script>
     $(document).ready(function() {
-        // $("#customer_id").select2({
-        //     placeholder: '-- Semua --',
-        //     width: "100%",
-        //     allowClear: true,
-        //     ajax: {
-        //         url: base_url + "/select/customer",
-        //         dataType: "json",
-        //         type: "POST",
-        //         delay: select2Delay,
-        //         data: function(params) {
-        //             return {
-        //                 search: params.term,
-        //             };
-        //         },
-        //         processResults: function(data, page) {
-        //             return {
-        //                 results: data,
-        //             };
-        //         },
-        //     },
-        // });
+        $("#product_id").select2({
+            placeholder: '-- Semua --',
+            width: "100%",
+            allowClear: true,
+            ajax: {
+                url: base_url + "/webmin/select/product",
+                dataType: "json",
+                type: "GET",
+                delay: select2Delay,
+                data: function(params) {
+                    return {
+                        search: params.term,
+                    };
+                },
+                processResults: function(data, page) {
+                    return {
+                        results: data,
+                    };
+                },
+            },
+        });
 
+        $("#warehouse_id").select2({
+            placeholder: '-- Semua --',
+            width: "100%",
+            allowClear: true,
+            ajax: {
+                url: base_url + "/webmin/select/warehouse",
+                dataType: "json",
+                type: "GET",
+                delay: select2Delay,
+                data: function(params) {
+                    return {
+                        search: params.term,
+                    };
+                },
+                processResults: function(data, page) {
+                    return {
+                        results: data,
+                    };
+                },
+            },
+        });
+
+        function reportUrl(params = '') {
+            let selWarehouse = $('#warehouse_id').select2('data');
+            let selProduct = $('#product_id').select2('data');
+
+            let warehouse_id = $('#warehouse_id').val();
+            if (warehouse_id == null) {
+                warehouse_id = '';
+            }
+
+            let product_id = $('#product_id').val();
+            if (product_id == null) {
+                product_id = '';
+            }
+
+            let warehouse_name = '';
+            if (selWarehouse[0]) {
+                warehouse_name = selWarehouse[0].text;
+            }
+
+
+            let reportUrl = base_url + '/webmin/report/stock-card?';
+            reportUrl += '&warehouse_id=' + warehouse_id;
+            reportUrl += '&warehouse_name=' + warehouse_name;
+            reportUrl += '&product_id=' + product_id;
+            reportUrl += '&start_date=' + $('#start_date').val();
+            reportUrl += '&end_date=' + $('#end_date').val();
+
+            if (params != '') {
+                reportUrl += '&' + params;
+            }
+
+            return reportUrl;
+        }
+
+        $('#btnsearch').click(function(e) {
+            e.preventDefault();
+            $('#preview').attr('src', reportUrl());
+        })
 
         $('#btnexportpdf').click(function(e) {
             e.preventDefault();
-            let reportUrl = '<?= base_url('webmin/report/sales-list') ?>?download=Y';
-            window.open(reportUrl);
+            window.open(reportUrl('download=Y'));
         })
+
+        $('#btnexportexcel').click(function(e) {
+            e.preventDefault();
+            window.open(reportUrl('file=xls'));
+        })
+
 
     })
 </script>

@@ -1253,6 +1253,184 @@ class M_product extends Model
         return $this->db->query($sqlGetStockData)->getResultArray();
     }
 
+    public function getReportStockLog($product_ids = [], $start_date = null, $end_date = null)
+    {
+        // query dengan format return product_id | warehouse_id | stock_date | stock_in|stock_out(qty*product_content) | stock_remark | created_at //
+
+        // getting from purchase [IN]//
+        $builder = $this->db->table('dt_purchase');
+        $builder->select("ms_product_unit.product_id,hd_purchase.purchase_warehouse_id as warehouse_id,hd_purchase.purchase_date AS stock_date,(ms_product_unit.product_content*dt_purchase.dt_purchase_qty) AS stock_in,0 AS stock_out,CONCAT('Pembelian ',hd_purchase.purchase_invoice) as stock_remark,hd_purchase.created_at", false)
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_purchase.dt_purchase_item_id')
+            ->join('hd_purchase', 'hd_purchase.purchase_invoice=dt_purchase.dt_purchase_invoice')
+            ->whereIn('ms_product_unit.product_id', $product_ids);
+
+        if ($start_date == null) {
+            $builder->where("hd_purchase.purchase_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_purchase.purchase_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlPurchase = $builder->getCompiledSelect();
+
+        // getting from purchase return [OUT]//
+        $builder = $this->db->table('dt_retur_purchase');
+        $builder->select("ms_product_unit.product_id,dt_retur_purchase.dt_retur_warehouse as warehouse_id,hd_retur_purchase.hd_retur_date AS stock_date,0 AS stock_in,((ms_product_unit.product_content*dt_retur_purchase.dt_retur_qty)*-1) AS stock_out,CONCAT('Retur Pembelian ',dt_retur_purchase.dt_retur_purchase_invoice) AS stock_remark,hd_retur_purchase.created_at", false)
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_retur_purchase.dt_retur_item_id')
+            ->join('hd_retur_purchase', 'hd_retur_purchase.hd_retur_purchase_id=dt_retur_purchase.hd_retur_purchase_id')
+            ->where('hd_retur_purchase.hd_retur_status', 'Selesai')
+            ->whereIn('ms_product_unit.product_id', $product_ids);
+
+        if ($start_date == null) {
+            $builder->where("hd_retur_purchase.hd_retur_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_retur_purchase.hd_retur_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlPurchaseReturn = $builder->getCompiledSelect();
+
+
+        // getting from hd_purchase_consignment [IN]//
+        $builder = $this->db->table('dt_purchase_consignment');
+        $builder->select("ms_product_unit.product_id,hd_purchase_consignment.purchase_consignment_warehouse_id as warehouse_id,hd_purchase_consignment.purchase_consignment_date AS stock_date,(ms_product_unit.product_content*dt_purchase_consignment.dt_consignment_qty) AS stock_in,0 AS stock_out,CONCAT('Pembelian Konsinyasi ',hd_purchase_consignment.purchase_consignment_invoice) AS stock_remark,hd_purchase_consignment.created_at", false)
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_purchase_consignment.dt_consignment_item_id')
+            ->join('hd_purchase_consignment', 'hd_purchase_consignment.purchase_consignment_invoice=dt_purchase_consignment.dt_consignment_invoice')
+            ->whereIn('ms_product_unit.product_id', $product_ids);
+
+        if ($start_date == null) {
+            $builder->where("hd_purchase_consignment.purchase_consignment_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_purchase_consignment.purchase_consignment_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlPurchaseConsignment = $builder->getCompiledSelect();
+
+
+        // getting from sales pos [OUT]//
+        $builder = $this->db->table('dt_pos_sales');
+        $builder->select("ms_product_unit.product_id,hd_pos_sales.warehouse_id,hd_pos_sales.pos_sales_date AS stock_date,0 AS stock_in,((ms_product_unit.product_content*dt_pos_sales.sales_qty)*-1) AS stock_out,CONCAT('Penjualan POS ',hd_pos_sales.pos_sales_invoice) AS stock_remark,hd_pos_sales.created_at", false)
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales.item_id')
+            ->join('hd_pos_sales', 'hd_pos_sales.pos_sales_id=dt_pos_sales.pos_sales_id')
+            ->whereIn('ms_product_unit.product_id', $product_ids);
+
+        if ($start_date == null) {
+            $builder->where("hd_pos_sales.pos_sales_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_pos_sales.pos_sales_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlSalesPos = $builder->getCompiledSelect();
+
+
+        // getting from sales return pos [IN]//
+        $builder = $this->db->table('dt_pos_sales_return');
+        $builder->select("ms_product_unit.product_id,hd_pos_sales_return.warehouse_id,hd_pos_sales_return.pos_sales_return_date AS stock_date,(ms_product_unit.product_content*dt_pos_sales_return.sales_return_qty) AS stock_in,0 AS stock_out,CONCAT('Retur Penjualan POS ',hd_pos_sales_return.pos_sales_return_invoice) AS stock_remark,hd_pos_sales_return.created_at", false)
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales_return.item_id')
+            ->join('hd_pos_sales_return', 'hd_pos_sales_return.pos_sales_return_id=dt_pos_sales_return.pos_sales_return_id')
+            ->whereIn('ms_product_unit.product_id', $product_ids);
+
+        if ($start_date == null) {
+            $builder->where("hd_pos_sales_return.pos_sales_return_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_pos_sales_return.pos_sales_return_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlSalesPosReturn = $builder->getCompiledSelect();
+
+
+        // getting from sales admin [OUT]//
+        $builder = $this->db->table('dt_sales_admin');
+        $builder->select("ms_product_unit.product_id,hd_sales_admin.sales_store_id as warehouse_id,hd_sales_admin.sales_date AS stock_date,0 AS stock_in,((ms_product_unit.product_content*dt_sales_admin.dt_temp_qty)*-1) AS stock_out,CONCAT('Penjualan Admin ',hd_sales_admin.sales_admin_invoice) AS stock_remark,hd_sales_admin.created_at", false)
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_sales_admin.dt_item_id')
+            ->join('hd_sales_admin', 'hd_sales_admin.sales_admin_id=dt_sales_admin.sales_admin_id')
+            ->whereIn('ms_product_unit.product_id', $product_ids);
+
+        if ($start_date == null) {
+            $builder->where("hd_sales_admin.sales_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_sales_admin.sales_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlSalesAdmin = $builder->getCompiledSelect();
+
+
+        // getting from sales return admin [OUT]//
+        $builder = $this->db->table('dt_retur_sales_admin');
+        $builder->select("ms_product_unit.product_id,hd_retur_sales_admin.hd_retur_store_id as warehouse_id,hd_retur_sales_admin.hd_retur_date AS stock_date,(ms_product_unit.product_content*dt_retur_sales_admin.dt_retur_qty) AS stock_in,0 AS stock_out,CONCAT('Retur Penjualan Admin ',hd_retur_sales_admin.hd_retur_sales_admin_invoice) AS stock_remark,hd_retur_sales_admin.created_at", false)
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_retur_sales_admin.dt_retur_item_id')
+            ->join('hd_retur_sales_admin', 'hd_retur_sales_admin.hd_retur_sales_admin_id=dt_retur_sales_admin.hd_retur_sales_admin_id')
+            ->whereIn('ms_product_unit.product_id', $product_ids);
+
+        if ($start_date == null) {
+            $builder->where("hd_retur_sales_admin.hd_retur_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_retur_sales_admin.hd_retur_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlSalesReturnAdmin = $builder->getCompiledSelect();
+
+
+
+        // getting from stock opname [IN|OUT]//
+        $builder = $this->db->table('dt_opname');
+        $builder->select("dt_opname.product_id,hd_opname.warehouse_id,hd_opname.opname_date AS stock_date,IF((dt_opname.warehouse_stock-dt_opname.system_stock)>=0,(dt_opname.warehouse_stock-dt_opname.system_stock),0) AS stock_in,IF((dt_opname.warehouse_stock-dt_opname.system_stock)<0,(dt_opname.warehouse_stock-dt_opname.system_stock),0) AS stock_out,CONCAT('Stok Opname ',hd_opname.opname_code) AS stock_remark,hd_opname.created_at", false)
+            ->join('hd_opname', 'hd_opname.opname_id=dt_opname.opname_id')
+            ->whereIn('dt_opname.product_id', $product_ids);
+        if ($start_date == null) {
+            $builder->where("hd_opname.opname_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_opname.opname_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlOpname = $builder->getCompiledSelect();
+
+
+        // getting from transfer out [OUT]//
+        $builder = $this->db->table('dt_transfer_stock');
+        $builder->select("ms_product_unit.product_id,hd_transfer_stock.hd_transfer_stock_warehose_from as warehouse_id,hd_transfer_stock.hd_transfer_stock_date AS stock_date,0 AS stock_in,((ms_product_unit.product_content*dt_transfer_stock.item_qty)*-1) AS stock_out,CONCAT('Transfer Stok ',hd_transfer_stock.hd_transfer_stock_no) AS stock_remark,hd_transfer_stock.created_at", false)
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_transfer_stock.item_id')
+            ->join('hd_transfer_stock', 'hd_transfer_stock.hd_transfer_stock_id=dt_transfer_stock.hd_transfer_stock_id')
+            ->whereIn('ms_product_unit.product_id', $product_ids);
+
+        if ($start_date == null) {
+            $builder->where("hd_transfer_stock.hd_transfer_stock_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_transfer_stock.hd_transfer_stock_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlTransferOut = $builder->getCompiledSelect();
+
+        // getting from transfer in [IN]//
+        $builder = $this->db->table('dt_transfer_stock');
+        $builder->select("ms_product_unit.product_id,hd_transfer_stock.hd_transfer_stock_warehose_to as warehouse_id,hd_transfer_stock.hd_transfer_stock_date AS stock_date,(ms_product_unit.product_content*dt_transfer_stock.item_qty) AS stock_in,0 AS stock_out,CONCAT('Transfer Stok ',hd_transfer_stock.hd_transfer_stock_no) AS stock_remark,hd_transfer_stock.created_at", false)
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_transfer_stock.item_id')
+            ->join('hd_transfer_stock', 'hd_transfer_stock.hd_transfer_stock_id=dt_transfer_stock.hd_transfer_stock_id')
+            ->whereIn('ms_product_unit.product_id', $product_ids);
+
+        if ($start_date == null) {
+            $builder->where("hd_transfer_stock.hd_transfer_stock_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_transfer_stock.hd_transfer_stock_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlTransferIn = $builder->getCompiledSelect();
+
+
+        $unionAll = "($sqlPurchase)
+        UNION ALL
+        ($sqlPurchaseReturn)
+        UNION ALL
+        ($sqlPurchaseConsignment)
+        UNION ALL
+        ($sqlSalesPos)
+        UNION ALL
+        ($sqlSalesPosReturn)
+        UNION ALL
+        ($sqlSalesAdmin)
+        UNION ALL
+        ($sqlSalesReturnAdmin)
+        UNION ALL
+        ($sqlOpname)
+        UNION ALL
+        ($sqlTransferOut)
+        UNION ALL
+        ($sqlTransferIn)";
+
+        $sqlGetStockData = "SELECT stock_data.* FROM ($unionAll) as stock_data ORDER BY stock_data.stock_date,stock_data.created_at ASC";
+
+        return $this->db->query($sqlGetStockData)->getResultArray();
+    }
+
+
 
     public function getReportInitStock2($product_ids = [], $start_date = null, $end_date = null)
     {
@@ -1429,15 +1607,7 @@ class M_product extends Model
         $sqlGetStockData = "SELECT stock_data.* FROM ($unionAll) as stock_data";
     }
 
-    public function getReportStockListByID($product_ids = [])
-    {
-        return true;
-    }
 
-    public function getReportStockByID($product_ids = [])
-    {
-        return true;
-    }
 
     public function getReportWarehouseStockList($warehouse_id = '', $product_tax = '')
     {
@@ -1537,6 +1707,18 @@ class M_product extends Model
 
         if (count($brand_id) > 0) {
             $builder->whereIn('ms_product.brand_id', $brand_id);
+        }
+
+        return $builder->get();
+    }
+
+    public function getListProductByID($product_ids = [])
+    {
+        $builder =  $this->db->table('ms_product')
+            ->select('ms_product.*');
+
+        if (count($product_ids) > 0) {
+            $builder->whereIn('ms_product.product_id', $product_ids);
         }
 
         return $builder->get();

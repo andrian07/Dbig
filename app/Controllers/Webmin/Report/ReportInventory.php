@@ -1250,10 +1250,6 @@ class ReportInventory extends WebminController
     }
 
 
-
-    // ok //
-
-
     public function viewStockCard()
     {
         $data = [
@@ -1268,61 +1264,301 @@ class ReportInventory extends WebminController
     {
         $start_date     = $this->request->getGet('start_date') != null ? $this->request->getGet('start_date') : date('Y-m') . '-01';
         $end_date       = $this->request->getGet('end_date') != null ? $this->request->getGet('end_date') : date('Y-m-d');
-        $warehouse_id   = $this->request->getGet('warehouse_id') != null ? $this->request->getGet('warehouse_id') : null;
-        $product_id     = $this->request->getGet('product_id') != null ? $this->request->getGet('product_id') : null;
+        $warehouse_id   = $this->request->getGet('warehouse_id') != null ? $this->request->getGet('warehouse_id') : '';
+        $warehouse_name = $this->request->getGet('warehouse_name') != null ? $this->request->getGet('warehouse_name') : 'Semua';
+        $product_id     = $this->request->getGet('product_id') != null ? $this->request->getGet('product_id') : '';
+
+        $agent          = $this->request->getUserAgent();
+        $isDownload     = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
+        $fileType       = $this->request->getGet('file');
+
+        if (!in_array($fileType, ['pdf', 'xls'])) {
+            $fileType = 'pdf';
+        }
+
 
         if ($product_id == null) {
             die('<h1>Harap pilih produk terlebih dahulu</h1>');
         } else {
-
+            $product_ids = [];
             if ($product_id != null) {
-                $product_id = explode(',', $product_id);
+                $product_ids = explode(',', $product_id);
             }
 
-            $M_product = model('M_product');
-            // foreach($product_id as $pid){
-            //     $getStock = $M_product
-            // }
+            $M_warehouse        = model('M_warehouse');
+            $M_product          = model('M_product');
+
+            $getProduct         = $M_product->getListProductByID($product_ids)->getResultArray();
+            $getWarehouse       = $M_warehouse->getWarehouse($warehouse_id)->getResultArray();
+
+            /* datasource stock */
+            $stockData_sample = [
+                'P0001' => [       // P0001 = product_id
+                    [
+                        'W1' => [ // W1 = warehouse_id 1
+                            'init'    => 0,
+                            'data'    => [
+                                ['date' => 'mysql_date', 'remark' => '', 'stock_in' => 0, 'stock_out' => 0, 'stock_final' => 0, 'created_at' => 'mysql_datetime'],
+                                ['date' => 'mysql_date', 'remark' => '', 'stock_in' => 0, 'stock_out' => 0, 'stock_final' => 0, 'created_at' => 'mysql_datetime']
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+            $stockData = [];
+
+            $init_max_date = new \DateTime($start_date); //1 hari sebelum tgl mulai
+            $init_max_date->sub(new \DateInterval('P1D'));
+            $sInitMaxDate = $init_max_date->format('Y-m-d');
 
 
+            $getInitStock = $M_product->getReportInitStock($product_ids, null,  $sInitMaxDate);
+            foreach ($getInitStock as $row) {
+                $pid =  'P' . $row['product_id'];
+                $wid = 'W' . $row['warehouse_id'];
+                $stockData[$pid][$wid]['init'] = floatval($row['stock']);
+            }
 
-            dd($start_date, $end_date);
-        }
+            $getStockLog = $M_product->getReportStockLog($product_ids, $start_date, $end_date);
+            foreach ($getStockLog as $row) {
+                $pid =  'P' . $row['product_id'];
+                $wid = 'W' . $row['warehouse_id'];
+                $stockData[$pid][$wid]['data'][] = $row;
+            }
 
-        exit();
-        $data = [
-            'title'         => 'Kartu Stok',
-            'userLogin'     => $this->userLogin
-        ];
-
-        $htmlView   = view('webmin/report/inventory/stock_card', $data);
-        $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
-        $fileType   = $this->request->getGet('file');
-        $agent      = $this->request->getUserAgent();
-
-        if (!in_array($fileType, ['pdf'])) {
-            $fileType = 'pdf';
-        }
-
-        if ($agent->isMobile()  && !$isDownload) {
-            return $htmlView;
-        } else {
             if ($fileType == 'pdf') {
-                set_time_limit(0);
-                $dompdf = new Dompdf();
-                $dompdf->loadHtml($htmlView);
-                $dompdf->setPaper('A4', 'landscape');
-                $dompdf->render();
-                $dompdf->stream('kartu_stok.pdf', array("Attachment" => $isDownload));
-                exit();
+                die('<h1>Excel Only</h1>');
+                $getData = [];
+
+                $max_report_size    = 15;
+                $pages              = array_chunk($getData, $max_report_size);
+                $data['pages']      = $pages;
+                $data['max_page']   = count($pages);
+
+                $htmlView = $this->renderView('report/inventory/stock_list_v2', $data);
+                if ($agent->isMobile() && !$isDownload) {
+                    return $htmlView;
+                } else {
+                    $dompdf = new Dompdf();
+                    $dompdf->loadHtml($htmlView);
+                    $dompdf->setPaper('A4', 'landscape');
+                    $dompdf->render();
+                    $dompdf->stream('stock_list.pdf', array("Attachment" => $isDownload));
+                    exit();
+                }
             } else {
-                die('Export Excel Script');
+                //dd($getProduct, $stockData);
+                $header_format = [
+                    'fill' => [
+                        'fillType' =>  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                        'startColor' => [
+                            'argb' => 'A5A5A5'
+                        ]
+                    ],
+                    'font' => [
+                        'bold' => true,
+                    ],
+                    'borders' => [
+                        'top' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                        ],
+                        'right' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                        ],
+                        'left' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                        ],
+                        'bottom' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                        ],
+                    ],
+                ];
+
+                $total_format = [
+                    'font' => [
+                        'bold' => true,
+                    ],
+                    'borders' => [
+                        'top' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'right' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'left' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'bottom' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                    ],
+                ];
+
+                $font_bold = [
+                    'font' => [
+                        'bold' => true,
+                    ],
+                ];
+
+                $border_left_right = [
+                    'borders' => [
+                        'right' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'left' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                    ],
+                ];
+
+                $border_top = [
+                    'borders' => [
+                        'top' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                    ],
+                ];
+
+                $template = WRITEPATH . '/template/report/template_report.xlsx';
+                $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+
+                $sheet = $spreadsheet->setActiveSheetIndex(0);
+                // init iRow //
+                $iRow = 7;
+
+
+                foreach ($getProduct as $product) {
+                    $pid = 'P' . $product['product_id'];
+                    $product_title = $product['product_code'] . ' - ' . $product['product_name'];
+                    foreach ($getWarehouse as $warehouse) {
+                        $warehouse_title = $warehouse['warehouse_code'] . ' - ' . $warehouse['warehouse_name'];
+                        $wid = 'W' . $warehouse['warehouse_id'];
+
+                        //make group title by product and warehouse
+                        $sheet->getCell('A' . $iRow)->setValue('PRODUK');
+                        $sheet->getStyle('A' . $iRow)->applyFromArray($font_bold);
+                        $sheet->getCell('B' . $iRow)->setValue($product_title);
+                        $iRow++;
+
+                        $sheet->getCell('A' . $iRow)->setValue('GUDANG');
+                        $sheet->getStyle('A' . $iRow)->applyFromArray($font_bold);
+                        $sheet->getCell('B' . $iRow)->setValue($warehouse_title);
+                        $iRow++;
+
+                        //make header //
+                        $sheet->getCell('A' . $iRow)->setValue('TANGGAL');
+                        $sheet->getCell('B' . $iRow)->setValue('KETERANGAN');
+                        $sheet->getCell('C' . $iRow)->setValue('STOK MASUK');
+                        $sheet->getCell('D' . $iRow)->setValue('STOK KELUAR');
+                        $sheet->getCell('E' . $iRow)->setValue('STOK AKHIR');
+
+                        $sheet->getStyle('A' . $iRow)->applyFromArray($header_format);
+                        $sheet->getStyle('B' . $iRow)->applyFromArray($header_format);
+                        $sheet->getStyle('C' . $iRow)->applyFromArray($header_format);
+                        $sheet->getStyle('D' . $iRow)->applyFromArray($header_format);
+                        $sheet->getStyle('E' . $iRow)->applyFromArray($header_format);
+                        $iRow++;
+
+
+                        // SET INIT STOCK //
+                        $stock = isset($stockData[$pid][$wid]['init']) ? $stockData[$pid][$wid]['init'] : 0;
+                        $sheet->getCell('A' . $iRow)->setValue('');
+                        $sheet->getCell('B' . $iRow)->setValue('Saldo Awal');
+                        $sheet->getCell('C' . $iRow)->setValue(0);
+                        $sheet->getCell('D' . $iRow)->setValue(0);
+                        $sheet->getCell('E' . $iRow)->setValue($stock);
+
+                        $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
+                        $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
+                        $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
+                        $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
+                        $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
+                        $iRow++;
+
+
+                        $stockLog = isset($stockData[$pid][$wid]['data']) ? $stockData[$pid][$wid]['data'] : [];
+                        foreach ($stockLog as $row) {
+                            $stock_in   = floatval($row['stock_in']);
+                            $stock_out  = floatval($row['stock_out']);
+                            $stock      = $stock + $stock_in + $stock_out;
+                            $sheet->getCell('A' . $iRow)->setValue(indo_short_date($row['stock_date']));
+                            $sheet->getCell('B' . $iRow)->setValue($row['stock_remark']);
+                            $sheet->getCell('C' . $iRow)->setValue($stock_in);
+                            $sheet->getCell('D' . $iRow)->setValue($stock_out);
+                            $sheet->getCell('E' . $iRow)->setValue($stock);
+
+                            $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
+                            $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
+                            $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
+                            $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
+                            $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
+                            $iRow++;
+                        }
+
+                        $sheet->getStyle('A' . $iRow)->applyFromArray($border_top);
+                        $sheet->getStyle('B' . $iRow)->applyFromArray($border_top);
+                        $sheet->getStyle('C' . $iRow)->applyFromArray($border_top);
+                        $sheet->getStyle('D' . $iRow)->applyFromArray($border_top);
+                        $sheet->getStyle('E' . $iRow)->applyFromArray($border_top);
+                        $iRow++;
+                        $iRow++;
+                    }
+                }
+
+
+                //setting periode
+                $filter_date = indo_short_date($start_date) . ' s.d ' . indo_short_date($end_date);
+                $sheet->getCell('A5')->setValue('TANGGAL');
+                $sheet->getStyle('A5')->applyFromArray($font_bold);
+                $sheet->getCell('B5')->setValue($filter_date);
+                $sheet->mergeCells('B5:E5');
+
+                //setting excel header//
+                // A4-G4 = Store Phone
+                // A3-G3 = Store Address
+                // A2-G2 = Store Name
+                // A1-G1 = Print By
+                $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
+                $sheet->getCell('A4')->setValue(COMPANY_PHONE);
+                $sheet->getCell('A3')->setValue(COMPANY_ADDRESS);
+                $sheet->getCell('A2')->setValue(COMPANY_NAME);
+                $sheet->getCell('A1')->setValue($reportInfo);
+
+                $sheet->mergeCells('A4:E4');
+                $sheet->mergeCells('A3:E3');
+                $sheet->mergeCells('A2:E2');
+                $sheet->mergeCells('A1:E1');
+
+                $sheet->getStyle('A4:E4')->getAlignment()->setHorizontal('center');
+                $sheet->getStyle('A3:E3')->getAlignment()->setHorizontal('center');
+                $sheet->getStyle('A2:E2')->getAlignment()->setHorizontal('center');
+                $sheet->getStyle('A1:E1')->getAlignment()->setHorizontal('right');
+
+                $sheet->getStyle('A4:E4')->applyFromArray($font_bold);
+                $sheet->getStyle('A3:E3')->applyFromArray($font_bold);
+                $sheet->getStyle('A2:E2')->applyFromArray($font_bold);
+
+                $sheet->getColumnDimension('A')->setAutoSize(true);
+                $sheet->getColumnDimension('B')->setAutoSize(true);
+                $sheet->getColumnDimension('C')->setAutoSize(true);
+                $sheet->getColumnDimension('D')->setAutoSize(true);
+                $sheet->getColumnDimension('E')->setAutoSize(true);
+
+
+                $filename = 'stock_card';
+                header('Content-Type: application/vnd.ms-excel');
+                header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+                header('Cache-Control: max-age=0');
+                $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+                $writer->save('php://output');
+                exit();
             }
         }
     }
-
-
-
 
     public function stockOpnameList_old()
     {
