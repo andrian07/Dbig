@@ -67,16 +67,8 @@ $assetsUrl = base_url('assets');
                                         <div class="form-group">
                                             <label>&nbsp;</label>
                                             <div class="form-group">
-                                                <div class="btn-group">
-                                                    <button id="btnsearch" type="button" class="btn btn-default"><i class="fas fa-search"></i> Cari</button>
-                                                    <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
-                                                        <span class="sr-only">Toggle Dropdown</span>
-                                                    </button>
-                                                    <div class="dropdown-menu" role="menu">
-                                                        <a id="btnexportpdf" class="dropdown-item" href="#">Export PDF</a>
-                                                        <a id="btnexportexcel" class="dropdown-item" href="#">Export Excel</a>
-                                                    </div>
-                                                </div>
+                                                <button id="btnexportexcel" type="button" class="btn btn-default"><i class="fas fa-file-xls"></i> Export Excel</button>
+
                                             </div>
                                         </div>
                                     </div>
@@ -92,21 +84,7 @@ $assetsUrl = base_url('assets');
         </div><!-- /.container-fluid -->
 
 
-        <div class="container-fluid">
-            <div class="row">
-                <!-- /.col -->
-                <div class="col-md-12 ">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5>Preview</h5>
-                            <iframe id="preview" src="<?= base_url('webmin/report/stock-list') ?>" width="100%" height="1000px"></iframe>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+
     </section>
 </div>
 <!-- /.content -->
@@ -130,12 +108,14 @@ $assetsUrl = base_url('assets');
 
             let product_tax = $('#product_tax').val();
 
-            let reportUrl = base_url + '/webmin/report/stock-list?';
+            let reportUrl = base_url + '/webmin/report/stock-list-v2?';
 
 
             reportUrl += '&warehouse_id=' + warehouse_id;
             reportUrl += '&warehouse_name=' + warehouse_name;
             reportUrl += '&product_tax=' + product_tax;
+            reportUrl += '&start_date=' + $('#start_date').val();
+            reportUrl += '&end_date=' + $('#end_date').val();
 
             if (params != '') {
                 reportUrl += '&' + params;
@@ -167,10 +147,10 @@ $assetsUrl = base_url('assets');
         });
 
 
-        $('#btnsearch').click(function(e) {
-            e.preventDefault();
-            $('#preview').attr('src', reportUrl());
-        })
+        // $('#btnsearch').click(function(e) {
+        //     e.preventDefault();
+        //     $('#preview').attr('src', reportUrl());
+        // })
 
         $('#btnexportpdf').click(function(e) {
             e.preventDefault();
