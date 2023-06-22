@@ -363,4 +363,13 @@ class M_debt_repayment extends Model
         return $builder->get();
     }
 
+    public function getDebtRepaymentAccounting($payment_debt_id)
+    {
+        $builder = $this->db->table($this->hd_payment_debt);
+        $builder->select('*');
+        $builder->join('ms_supplier', 'ms_supplier.supplier_id=hd_payment_debt.payment_debt_supplier_id');
+        $builder->where('payment_debt_id', $payment_debt_id);
+        return $builder->get();
+    }
+
 }

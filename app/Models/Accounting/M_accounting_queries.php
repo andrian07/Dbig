@@ -270,6 +270,7 @@ class M_accounting_queries extends Model
 
         $getTemp =  $this->getTempcashout($data['cashout_created_by']);
 
+      
 
         foreach ($getTemp->getResultArray() as $row) {
 
@@ -283,6 +284,8 @@ class M_accounting_queries extends Model
         }
 
         $sqlDtOrder .= implode(',', $sqlDtValues);
+
+        //print_r($sqlDtOrder);die();
 
         $this->db->query($sqlDtOrder);
         if ($this->db->affectedRows() > 0) {

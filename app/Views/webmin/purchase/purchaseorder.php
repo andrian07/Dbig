@@ -1076,14 +1076,12 @@ $assetsUrl = base_url('assets');
                                         temp_price.set(header.base_purchase_price * header.product_content);
                                         temp_qty.set(header.submission_qty);
                                         temp_dpp.set(header.base_purchase_price * header.product_content - (header.base_purchase_price * header.product_content * 0.11));
-                                        temp_ppn.set(header.base_purchase_price * header.product_content - (header.base_purchase_price * header.product_content - (header.base_purchase_price * header.product_content * 0.11)));
+                                        temp_tax.set(header.base_purchase_price * header.product_content - (header.base_purchase_price * header.product_content - (header.base_purchase_price * header.product_content * 0.11)));
                                         temp_total.set((header.base_purchase_price * header.product_content) * header.submission_qty);
                                         total_price.set((header.base_purchase_price * header.product_content) * header.submission_qty);
                                     }
                                 } else {
-
                                     $('#supplier_id').prop('disabled', true);
-
                                 }
 
                             } else {

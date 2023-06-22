@@ -5,6 +5,7 @@ namespace App\Controllers\Webmin\Payment;
 use Dompdf\Dompdf;
 use Config\App as AppConfig;
 use App\Models\M_debt_repayment;
+use App\Models\Accounting\M_accounting_queries;
 use App\Controllers\Base\WebminController;
 
 
@@ -13,10 +14,13 @@ class Debt_repayment extends WebminController
 
     protected $M_debt_repayment;
 
+    protected $M_accounting_queries;
+
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);
         $this->M_debt_repayment = new M_debt_repayment;
+        $this->M_accounting_queries = new M_accounting_queries;
     }
 
     public function index()
@@ -25,6 +29,17 @@ class Debt_repayment extends WebminController
             'title'         => 'Pelunasan Hutang'
         ];
         return $this->renderView('payment/debt_repayment', $data);
+    }
+
+    private function generateRandomString($length = 5)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = ''; 
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 
     public function tbl_debtrepayment()
@@ -268,7 +283,11 @@ class Debt_repayment extends WebminController
 
                 $save = $this->M_debt_repayment->insertPayment($input);
 
+                //$save = ['success' => TRUE, 'payment_debt_id' => '2' ];
+
                 if ($save['success']) {
+
+                    $saveaccounting = $this->save_debt_repayment_accounting($input, $save['payment_debt_id']);
 
                     $result = ['success' => TRUE, 'message' => 'Data pelunasan hutang berhasil disimpan', 'payment_debt_id' => $save['payment_debt_id']];
 
@@ -290,6 +309,90 @@ class Debt_repayment extends WebminController
 
         resultJSON($result);
 
+    }
+
+    public function save_debt_repayment_accounting($input, $payment_debt_id)
+    {
+        $user_id = 5;
+        $api_module = 'debtRepayment';
+
+        $contents = $this->M_debt_repayment->getDebtRepaymentAccounting($payment_debt_id)->getResultArray();
+
+            foreach ($contents as $row) {
+
+                $account_api_name_Hutang_dagang = 'purchase_hutang_dagang';
+
+                $getApiAccountHutangDagang = $this->M_accounting_queries->getApiAccount($account_api_name_Hutang_dagang)->getRowArray();
+
+                $key = $getApiAccountHutangDagang['account_id'] . $this->generateRandomString() . date('YmdHis');
+
+                $temp_cashout_id = md5($key);
+
+                $input_temp = [
+                    'temp_cashout_id'           => $temp_cashout_id,
+                    'temp_cashout_account_id'   => $getApiAccountHutangDagang['account_id'],
+                    'temp_cashout_account_name' => $getApiAccountHutangDagang['account_name'],
+                    'temp_cashout_nominal'      => $row['payment_debt_total_pay'],
+                    'temp_cashout_user_id'      => $user_id
+                ];
+
+                
+
+                $savetemp =  $this->M_accounting_queries->insertTempCashout($input_temp);
+
+                $getApiAccountBank = $this->M_accounting_queries->getApiAccountBank($row['payment_debt_method_id'])->getRowArray();
+
+                if ($row['payment_debt_method_id'] == 1) {
+                    $cashout_type = 'Kas';
+                } else {
+                    $cashout_type = 'Bank';
+                }
+
+                $account_api_name_Hutang_dagang = 'purchase_hutang_dagang';
+
+                $getApiAccountHutangDagang = $this->M_accounting_queries->getApiAccount($account_api_name_Hutang_dagang)->getRowArray();
+                $input_jurnal = [
+                    'cashout_recipient_id'               => $row['payment_debt_supplier_id'],
+                    'cashout_recipient_name'             => '',
+                    'cashout_date'                       => $row['payment_debt_date'],
+                    'cashout_ref'                        => $row['payment_debt_invoice'],
+                    'cashout_total_nominal'              => $row['payment_debt_total_pay'],
+                    'cash_out_remark'                    => 'Pelunasan Invoice ' . $row['payment_debt_invoice'],
+                    'cashout_account_id'                 => $getApiAccountHutangDagang['account_id'],
+                    'cashout_created_by'                 => $user_id,
+                    'cashout_store_id'                   => 1,
+                    'store_code'                         => 'UTM',
+                ];
+        
+                $savejurnal = $this->M_accounting_queries->insertJurnalApi($input_jurnal);
+
+                $input_temp = [
+                    'temp_cashout_id'           => $temp_cashout_id,
+                    'temp_cashout_account_id'   => $getApiAccountHutangDagang['account_id'],
+                    'temp_cashout_account_name' => $getApiAccountHutangDagang['account_name'],
+                    'temp_cashout_nominal'      => $row['payment_debt_total_pay'],
+                    'temp_cashout_user_id'      => $user_id
+                ];
+                
+                $savetemp =  $this->M_accounting_queries->insertTempCashout($input_temp);
+
+                $input = [
+                    'cashout_recipient_id'               => $row['payment_debt_supplier_id'],
+                    'cashout_recipient_name'             => $row['supplier_name'],
+                    'cashout_date'                       => $row['payment_debt_date'],
+                    'cashout_ref'                        => $row['payment_debt_invoice'],
+                    'cashout_total_nominal'              => $row['payment_debt_total_pay'],
+                    'cash_out_remark'                    => $row['payment_debt_invoice'],
+                    'cashout_account_id'                 => $getApiAccountBank['account_id'],
+                    'cashout_created_by'                 => $user_id,
+                    'cashout_store_id'                   => 1,
+                    'store_code'                         => 'UTM',
+                    'cashout_type'                       => $cashout_type
+                ];
+                
+                $savecashout = $this->M_accounting_queries->insertCashOut($input);
+
+            }
     }
 
     public function getPaymentFooter()

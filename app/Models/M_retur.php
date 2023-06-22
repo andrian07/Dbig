@@ -486,11 +486,12 @@ class M_retur extends Model
         $vUpdateStock = [];
         $vUpdateWarehouse = [];
 
+
         $getDtRetur =  $this->getDtReturSalesAdmin($hd_retur_sales_admin_id);
 
+       
+
         foreach ($getDtRetur->getResultArray() as $row) {
-
-
 
             $hd_retur_sales_admin_id               = $hd_retur_sales_admin_id ;
             $dt_retur_item_id                      = $row['dt_retur_item_id'];
@@ -952,6 +953,8 @@ class M_retur extends Model
         ->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id')
 
         ->join('ms_store', 'ms_store.store_id = hd_retur_sales_admin.hd_retur_store_id')
+
+        ->join('ms_warehouse', 'ms_warehouse.store_id = ms_store.store_id')
 
         ->where('dt_retur_sales_admin.hd_retur_sales_admin_id', $hd_retur_sales_admin_id)
 

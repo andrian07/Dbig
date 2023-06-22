@@ -355,6 +355,7 @@ class Purchase extends WebminController
     
     public function save_purchase_accounting($input, $purchase_id)
     {
+
         $user_id = 4;
         $api_module = 'purchase';
 
@@ -427,7 +428,7 @@ class Purchase extends WebminController
         $getApiAccountHutangDagang = $this->M_accounting_queries->getApiAccount($account_api_name_Hutang_dagang)->getRowArray();
         $input = [
             'cashout_recipient_id'               => $row['supplier_id'],
-            'cashout_recipient_name'             => '',
+            'cashout_recipient_name'             => $row['supplier_name'],
             'cashout_date'                       => $row['purchase_faktur_date'],
             'cashout_ref'                        => $row['purchase_invoice'],
             'cashout_total_nominal'              => $row['purchase_total'],
@@ -455,7 +456,6 @@ class Purchase extends WebminController
         }
 
         foreach ($contents as $row) {
-
         if ($row['purchase_down_payment'] > 0) {
 
             $account_api_name_Ongkir = 'purchase_hutang_dagang';
