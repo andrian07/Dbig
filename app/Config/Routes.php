@@ -944,6 +944,10 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 
     $routes->get('exp-stock-list', 'Webmin\Report\ReportInventory::expStockList');
 
+    $routes->get('view-safety-stock', 'Webmin\Report\ReportInventory::viewSafetyStock');
+
+    $routes->get('safety-stock', 'Webmin\Report\ReportInventory::safetyStock');
+
 
     /* section purchase */
 

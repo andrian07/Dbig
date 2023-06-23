@@ -1723,4 +1723,56 @@ class M_product extends Model
 
         return $builder->get();
     }
+
+    public function getReportMinStockProduct()
+    {
+        $subQueryStock = $this->db->table('ms_product_stock')
+            ->select("product_id,SUM(stock) AS stock_total,GROUP_CONCAT(CONCAT(warehouse_id,'=',stock) SEPARATOR ';') AS warehouse_stock", false)
+            ->groupBy('product_id')
+            ->getCompiledSelect();
+
+        $builder = $this->db->table('ms_product');
+        $builder->select("ms_product.product_id,ms_product.product_code,ms_product.product_name,ms_product.min_stock,IFNULL(product_stock.stock_total,0) AS stock_total,product_stock.warehouse_stock", false);
+        $builder->join("($subQueryStock) AS product_stock", 'product_stock.product_id=ms_product.product_id', 'LEFT', false);
+        $builder->where('IFNULL(product_stock.stock_total,0)<=ms_product.min_stock', null, false);
+
+        return $builder->get();
+    }
+
+    public function getSalesStockByProduct($product_ids = [], $start_date, $end_date)
+    {
+        // subquery output product_id,sales_stock
+        // getting from sales pos //
+        $builder = $this->db->table('dt_pos_sales');
+        $builder->select("ms_product_unit.product_id,(ms_product_unit.product_content*dt_pos_sales.sales_qty) AS sales_stock", false)
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales.item_id')
+            ->join('hd_pos_sales', 'hd_pos_sales.pos_sales_id=dt_pos_sales.pos_sales_id')
+            ->whereIn('ms_product_unit.product_id', $product_ids);
+
+        if ($start_date == null) {
+            $builder->where("hd_pos_sales.pos_sales_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_pos_sales.pos_sales_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlSalesPos = $builder->getCompiledSelect();
+
+        // getting from sales admin //
+        $builder = $this->db->table('dt_sales_admin');
+        $builder->select("ms_product_unit.product_id,(ms_product_unit.product_content*dt_sales_admin.dt_temp_qty) AS sales_stock", false)
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_sales_admin.dt_item_id')
+            ->join('hd_sales_admin', 'hd_sales_admin.sales_admin_id=dt_sales_admin.sales_admin_id')
+            ->whereIn('ms_product_unit.product_id', $product_ids);
+
+        if ($start_date == null) {
+            $builder->where("hd_sales_admin.sales_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_sales_admin.sales_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlSalesAdmin = $builder->getCompiledSelect();
+
+        $unionAll = "($sqlSalesPos) UNION ALL ($sqlSalesAdmin)";
+        $sqlGetSalesStock = "SELECT sales_data.product_id,SUM(sales_data.sales_stock) AS sales_stock FROM ($unionAll) AS sales_data GROUP BY sales_data.product_id";
+
+        return $this->db->query($sqlGetSalesStock)->getResultArray();
+    }
 }
