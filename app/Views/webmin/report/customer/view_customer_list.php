@@ -64,10 +64,13 @@ $assetsUrl = base_url('assets');
                                             <select id="filter_customer_group" name="filter_customer_group" class="form-control">
                                                 <option value="">Semua Customer</option>
                                                 <?php
+                                                $cGroup = ['G1', 'G2', 'G3', 'G4', 'G5', 'G6'];
                                                 foreach ($customerGroup as $key => $val) {
+                                                    if (in_array($key, $cGroup)) {
                                                 ?>
-                                                    <option value="<?= $key ?>"><?= $key ?> - <?= $val ?></option>
+                                                        <option value="<?= $key ?>"><?= $key ?> - <?= $val ?></option>
                                                 <?php
+                                                    }
                                                 }
                                                 ?>
                                             </select>
