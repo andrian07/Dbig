@@ -1779,15 +1779,13 @@ class M_product extends Model
 
     public function getHistorySalesPrice($product_id, $start_date, $end_date)
     {
-        // subquery output product_id,sales_date,customer_group,sales_price //
-
+        // subquery output product_id,sales_date,customer_group,sales_price,count_data //
 
         // getting from sales pos //
         $builder = $this->db->table('dt_pos_sales');
-        $builder->select("ms_product_unit.product_id,(ms_product_unit.product_content*dt_pos_sales.sales_qty) AS sales_stock", false)
+        $builder->select("dt_pos_sales.detail_id as id,ms_product_unit.product_id,hd_pos_sales.pos_sales_date as sales_date,hd_pos_sales.customer_group,dt_pos_sales.product_price as sales_price", false)
             ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales.item_id')
             ->join('hd_pos_sales', 'hd_pos_sales.pos_sales_id=dt_pos_sales.pos_sales_id')
-            ->join('ms_customer', 'ms_customer.customer_id=hd_pos_sales.customer_id')
             ->where('ms_product_unit.product_id', $product_id);
 
         if ($start_date == null) {
@@ -1799,9 +1797,10 @@ class M_product extends Model
 
         // getting from sales admin //
         $builder = $this->db->table('dt_sales_admin');
-        $builder->select("ms_product_unit.product_id,(ms_product_unit.product_content*dt_sales_admin.dt_temp_qty) AS sales_stock", false)
+        $builder->select("dt_sales_admin.dt_sales_admin_id as id,ms_product_unit.product_id,hd_sales_admin.sales_date,ms_customer.customer_group,dt_sales_admin.dt_product_price as sales_price", false)
             ->join('ms_product_unit', 'ms_product_unit.item_id=dt_sales_admin.dt_item_id')
             ->join('hd_sales_admin', 'hd_sales_admin.sales_admin_id=dt_sales_admin.sales_admin_id')
+            ->join('ms_customer', 'ms_customer.customer_id=hd_sales_admin.sales_customer_id')
             ->where('ms_product_unit.product_id', $product_id);
 
         if ($start_date == null) {
@@ -1812,8 +1811,30 @@ class M_product extends Model
         $sqlSalesAdmin = $builder->getCompiledSelect();
 
         $unionAll = "($sqlSalesPos) UNION ALL ($sqlSalesAdmin)";
-        $sqlGetSalesStock = "SELECT sales_data.product_id,SUM(sales_data.sales_stock) AS sales_stock FROM ($unionAll) AS sales_data GROUP BY sales_data.product_id";
+        $sqlGetSalesData = "SELECT sales_data.product_id,sales_data.customer_group,sales_data.sales_date,sales_data.sales_price,count(sales_data.id) as count_data FROM ($unionAll) AS sales_data GROUP BY sales_data.product_id,sales_data.sales_date,sales_data.customer_group,sales_data.sales_price ORDER BY sales_data.customer_group,sales_data.sales_date";
 
-        return $this->db->query($sqlGetSalesStock)->getResultArray();
+        return $this->db->query($sqlGetSalesData)->getResultArray();
+    }
+
+    public function getHistoryPurchasePrice($product_id, $start_date, $end_date)
+    {
+
+        // getting from purchase //
+        $builder = $this->db->table('dt_purchase');
+        $builder->select("ms_product_unit.product_id,hd_purchase.purchase_date AS purchase_date,dt_purchase.dt_purchase_total AS purchase_price,dt_purchase.dt_purchase_id", false)
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_purchase.dt_purchase_item_id')
+            ->join('hd_purchase', 'hd_purchase.purchase_invoice=dt_purchase.dt_purchase_invoice')
+            ->where('ms_product_unit.product_id', $product_id);
+
+        if ($start_date == null) {
+            $builder->where("hd_purchase.purchase_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_purchase.purchase_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+
+        $sqlPurchase = $builder->getCompiledSelect();
+
+        $sqlText = "SELECT stock_data.product_id,stock_data.purchase_date,stock_data.purchase_price,count(stock_data.dt_purchase_id) as count_data FROM ($sqlPurchase) as stock_data GROUP BY stock_data.product_id,stock_data.purchase_date,stock_data.purchase_price ORDER BY purchase_date";
+        return $this->db->query($sqlText)->getResultArray();
     }
 }

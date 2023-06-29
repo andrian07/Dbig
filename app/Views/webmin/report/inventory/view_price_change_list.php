@@ -30,7 +30,7 @@ $assetsUrl = base_url('assets');
                                 <div class="row">
                                     <div class="col-md-10">
                                         <div class="row">
-                                            <div class="col-md-12">
+                                            <div class="col-md-8">
                                                 <!-- text input -->
                                                 <div class="form-group">
                                                     <label>Produk:</label>
@@ -38,7 +38,7 @@ $assetsUrl = base_url('assets');
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-4">
+                                            <div class="col-md-2">
                                                 <!-- text input -->
                                                 <div class="form-group">
                                                     <label>Dari:</label>
@@ -47,7 +47,7 @@ $assetsUrl = base_url('assets');
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-4">
+                                            <div class="col-md-2">
                                                 <!-- text input -->
                                                 <div class="form-group">
                                                     <label>Sampai:</label>
@@ -57,24 +57,7 @@ $assetsUrl = base_url('assets');
                                             </div>
 
 
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>Grup:</label>
-                                                    <select id="customer_group" name="customer_group" class="form-control">
-                                                        <option value="">Semua Customer</option>
-                                                        <?php
-                                                        $cGroup = ['G1', 'G2', 'G3', 'G4', 'G5', 'G6'];
-                                                        foreach ($customerGroup as $key => $val) {
-                                                            if (in_array($key, $cGroup)) {
-                                                        ?>
-                                                                <option value="<?= $key ?>"><?= $key ?> - <?= $val ?></option>
-                                                        <?php
-                                                            }
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                </div>
-                                            </div>
+
 
                                         </div>
                                     </div>
@@ -154,8 +137,6 @@ $assetsUrl = base_url('assets');
 
         function reportUrl(params = '') {
             let selProduct = $('#product_id').select2('data');
-            let customer_group = $('#customer_group').val();
-            let customer_group_text = $('customer_group option:selected').text();
 
             let product_id = $('#product_id').val();
             if (product_id == null) {
@@ -165,8 +146,6 @@ $assetsUrl = base_url('assets');
 
 
             let reportUrl = base_url + '/webmin/report/price-change-list?';
-            reportUrl += '&customer_group=' + customer_group;
-            reportUrl += '&customer_group_text=' + customer_group_text;
             reportUrl += '&product_id=' + product_id;
             reportUrl += '&start_date=' + $('#start_date').val();
             reportUrl += '&end_date=' + $('#end_date').val();
