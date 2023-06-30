@@ -1524,7 +1524,6 @@ $assetsUrl = base_url('assets');
         footer_dpp.set(Number(footer_sub_total.get()) - Number(footer_total_discount.get()));
 
         if($('#has_tax').val() == 'Pajak'){
-
             footer_total_ppn.set(Number(footer_dpp.get() * 0.11));
         }else{
             footer_total_ppn.set(0);   

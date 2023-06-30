@@ -68,25 +68,25 @@ foreach ($pages as $receivabledata) :
                             </td>
                         </tr>
                         <tr valign="top">
-                            <td width="30%" class="loseborder">
+                            <td width="60%" class="loseborder">
                                 <table>
                                     <tbody>
                                         <tr align="left" class="loseborder">
                                             <td width="60" class="loseborder">Customer</td>
-                                            <td width="160" class="loseborder">: <?= $customer_name ?></td>
+                                            <td width="360" class="loseborder">: <?= $customer_name ?></td>
                                         </tr>
                                         <tr align="left" class="loseborder">
                                             <td width="60" class="loseborder">Alamat</td>
-                                            <td width="160" class="loseborder">: <?= $customer_address ?></td>
+                                            <td width="360" class="loseborder">: <?= $customer_address ?></td>
                                         </tr>
                                         <tr align="left" class="loseborder">
                                             <td width="60" class="loseborder">Telp</td>
-                                            <td width="160" class="loseborder">: <?= $customer_phone ?></td>
+                                            <td width="360" class="loseborder">: <?= $customer_phone ?></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </td>
-                            <td width="40%" class="loseborder">
+                            <td width="10%" class="loseborder">
 
                             </td>
                             <td width="30%" class="loseborder">
@@ -163,6 +163,10 @@ endforeach;
 
 
 <?= $this->endSection() ?>
+
+
+
+
 
 
 

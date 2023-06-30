@@ -157,6 +157,7 @@ class ReportPurchase extends WebminController
                     $detail_purchase_po_qty  = floatval($row['detail_purchase_po_qty']);
                     $detail_purchase_po_recive  = floatval($row['detail_purchase_po_recive']);
                     $detail_purchase_po_qty_min = floatval($row['detail_purchase_po_qty'] - $row['detail_purchase_po_recive']);
+                    $detail_purchase_po_total = floatval($row['detail_purchase_po_total']);
                     
 
                     $cdate = $last_po_date == $row['purchase_order_date'] ? '' : indo_short_date($row['purchase_order_date'], FALSE);
@@ -175,7 +176,7 @@ class ReportPurchase extends WebminController
                     $sheet->getCell('K' . $iRow)->setValue(numberFormat($detail_purchase_po_ppn / $detail_purchase_po_qty, TRUE));
                     $sheet->getCell('L' . $iRow)->setValue(numberFormat($detail_purchase_po_price, TRUE));
                     $sheet->getCell('M' . $iRow)->setValue(numberFormat($detail_purchase_po_ongkir, TRUE));
-                    $sheet->getCell('N' . $iRow)->setValue(numberFormat($detail_purchase_po_tatao_plus_ongkir, TRUE));
+                    $sheet->getCell('N' . $iRow)->setValue(numberFormat($detail_purchase_po_total, TRUE));
                     $sheet->getCell('O' . $iRow)->setValue($detail_purchase_po_qty);
                     $sheet->getCell('P' . $iRow)->setValue($detail_purchase_po_recive);
                     $sheet->getCell('Q' . $iRow)->setValue($detail_purchase_po_qty - $detail_purchase_po_recive);

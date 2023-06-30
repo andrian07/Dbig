@@ -954,7 +954,7 @@ class M_retur extends Model
 
         ->join('ms_store', 'ms_store.store_id = hd_retur_sales_admin.hd_retur_store_id')
 
-        ->join('ms_warehouse', 'ms_warehouse.store_id = ms_store.store_id')
+        //->join('ms_warehouse', 'ms_warehouse.store_id = ms_store.store_id')
 
         ->where('dt_retur_sales_admin.hd_retur_sales_admin_id', $hd_retur_sales_admin_id)
 

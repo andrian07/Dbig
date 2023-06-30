@@ -549,6 +549,8 @@ $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static funct
 
     $routes->get('edit-order/(:alphanum)', 'Webmin\Purchase_order::editOrder/$1');
 
+    $routes->get('clear-temp', 'Webmin\Purchase_order::clearTemp');
+
     $routes->get('cancel-order/(:alphanum)', 'Webmin\Purchase_order::cancelOrder/$1');
 
     $routes->get('get-submission-detail/(:alphanum)', 'Webmin\Purchase_order::getSubmissionDetail/$1');
@@ -722,6 +724,8 @@ $routes->group('webmin/consignment', ['filter' => 'webminauth'], static function
     $routes->get('edit-po-consignment/(:alphanum)', 'Webmin\Consignment\Consignment::editPoConsignment/$1');
 
     $routes->get('cancel-po-order/(:alphanum)', 'Webmin\Consignment\Consignment::cancelPoOrder/$1');
+
+    
 });
 
 /* end pembelian */

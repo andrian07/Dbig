@@ -434,6 +434,7 @@ public function getPoTemp(){
 
 public function getPoFooter(){
 
+
     $getFooter = $this->M_purchase_order->getFooter($this->userLogin['user_id'])->getResultArray();
 
     $find_result = [];
@@ -452,6 +453,17 @@ public function getPoFooter(){
 
     resultJSON($result);
 
+}
+
+public function clearTemp()
+{
+    $this->M_purchase_order->clearTemp($this->userLogin['user_id']);
+
+    $result['csrfHash'] = csrf_hash();
+
+    $result['success'] = 'TRUE';
+
+    resultJSON($result);
 }
 
 public function getTax(){

@@ -219,7 +219,7 @@ class ReportProject extends WebminController
                 $sheet->getCell('J' . $iRow)->setValue(numberFormat($dt_product_price, TRUE));
                 $sheet->getCell('K' . $iRow)->setValue(numberFormat($dt_total_ppn, TRUE));
                 $sheet->getCell('L' . $iRow)->setValue(numberFormat($dt_total_dpp, TRUE));
-                $sheet->getCell('M' . $iRow)->setValue(numberFormat($dt_sales_price, TRUE));
+                $sheet->getCell('M' . $iRow)->setValue(numberFormat($dt_total_ppn + $dt_total_dpp, TRUE));
 
                 $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
                 $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
@@ -698,7 +698,7 @@ class ReportProject extends WebminController
         }
 
         $getReportData = $M_salesmanadmin->getReportReturSalesAdminDataHeader($start_date, $end_date, $store_id, $customer_id)->getResultArray();
-
+        
         if($getReportData != null){
             if($store_id != null){
                 $store_name = $getReportData[0]['store_name'];

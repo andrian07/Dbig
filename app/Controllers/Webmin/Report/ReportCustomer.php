@@ -716,9 +716,10 @@ class ReportCustomer extends WebminController
             if (!in_array($fileType, ['pdf', 'xls'])) {
                 $fileType = 'pdf';
             }
-
+            
+            
             $getReportData = $M_receivable_repayment->getReportData($start_date, $end_date, $customer_id, $store_id)->getResultArray();
-
+    
 
             if ($getReportData != null) {
                 if ($customer_id != null) {

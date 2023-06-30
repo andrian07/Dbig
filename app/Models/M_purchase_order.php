@@ -468,11 +468,9 @@ public function updateOrder($data)
 
             $sqlDtOrder .= implode(',', $sqlDtValues);
 
-
             //$sqlDtOrder .= " ON DUPLICATE KEY UPDATE detail_purchase_order_id = VALUES(detail_purchase_order_id)";
 
             //print_r($sqlDtOrder);die();
-
 
             $this->db->table($this->table_hd_po)->where('purchase_order_id', $purchase_order_id)->update($data);
 
@@ -531,7 +529,7 @@ public function updateOrder($data)
 
 public function getReportData($start_date, $end_date, $warehouse, $product_tax, $supplier_id, $status_po)
 {
-    $builder = $this->db->table('hd_purchase_order')->select("purchase_order_invoice, purchase_order_date, product_code, ,item_code, product_name, has_tax, supplier_code, supplier_name, detail_purchase_po_price, detail_purchase_po_dpp, detail_purchase_po_ppn, detail_purchase_po_ongkir, detail_purchase_po_qty, detail_purchase_po_recive, purchase_order_total_ppn, unit_name, warehouse_name, hd_purchase_order.created_at");
+    $builder = $this->db->table('hd_purchase_order')->select("purchase_order_invoice, purchase_order_date, product_code, ,item_code, product_name, has_tax, supplier_code, supplier_name, detail_purchase_po_price, detail_purchase_po_dpp, detail_purchase_po_ppn, detail_purchase_po_total, detail_purchase_po_ongkir, detail_purchase_po_qty, detail_purchase_po_recive, purchase_order_total_ppn, unit_name, warehouse_name, hd_purchase_order.created_at");
     $builder->join('dt_purchase_order', 'dt_purchase_order.purchase_order_id = hd_purchase_order.purchase_order_id');
     $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_purchase_order.purchase_order_supplier_id');
     $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_purchase_order.purchase_order_warehouse_id');

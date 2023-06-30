@@ -335,8 +335,8 @@ $assetsUrl = base_url('assets');
                                         <label>Harga Beli Per Unit</label>
 
                                         <input id="temp_price" name="temp_price" class="form-control text-right" value="0" data-parsley-vprice required>
-                                        <input id="temp_dpp" name="temp_dpp" type="hidden" class="form-control text-right" value="0" required>
-                                        <input id="temp_tax" name="temp_tax" type="hidden" class="form-control text-right" value="0" readonly required>
+                                        <input id="temp_dpp" name="temp_dpp" type="text" class="form-control text-right" value="0" required>
+                                        <input id="temp_tax" name="temp_tax" type="text" class="form-control text-right" value="0" readonly required>
                                     </div>
 
                                 </div>
@@ -1722,6 +1722,8 @@ $('#btncancel').click(function(e) {
 
             showInputPage(false);
 
+            clearTemp();
+
             clearItemInput();
 
         }
@@ -1729,6 +1731,43 @@ $('#btncancel').click(function(e) {
     })
 
 })
+
+function clearTemp() {
+
+let actUrl = base_url + '/webmin/purchase-order/clear-temp';
+
+ajax_get(actUrl, null, {
+
+    success: function(response) {
+
+        console.log(response);
+
+        if (response.success) {
+
+            if (response.result.success) {
+
+                clearItemInput();
+
+                location.reload();
+
+            } else {
+
+                message.error(response.result.message);
+
+            }
+
+        }
+
+    },
+
+    error: function(response) {
+
+        getTemp();
+
+    }
+
+})
+}
 
 
 $("#tbltemp").on('click', '.btnedit', function(e) {
@@ -2515,6 +2554,7 @@ $("#tblpurchaseorders").on('click', '.btnprint', function(e) {
     window.open(actUrl, '_blank').focus();
 
 })
+
 
 function setfootervalue(){
     let actUrl = base_url + '/webmin/purchase-order/get-po-footer';

@@ -260,15 +260,18 @@ class M_salesmanadmin extends Model
             $dt_price_disc2_percentage  = $row['temp_price_disc2_percentage'];
             $dt_disc3                   = $row['temp_disc3'];
             $dt_price_disc3_percentage  = $row['temp_price_disc3_percentage'];
+            $dt_sales_price             = $row['temp_sales_price'];
             $user_id                    = $row['user_id'];
+
             $product_id                 = $row['product_id'];
             $base_purchase_stock        = $dt_temp_qty * $row['product_content'];
+
             $total_qty_all              = floatval($getTotalItem['qty']);
             $discount_per_nota          = round(($data['sales_admin_total_discount'] / $total_qty_all), 2);
             $discount_nota_per_item     = round($dt_sales_price - ($discount_per_nota * $base_purchase_stock), 2);
-        
+
             $ppn_per_item               = round(($data['sales_admin_ppn'] / $total_qty_all), 2);
-            $dt_sales_price             = $row['temp_sales_price'] + $ppn_per_item;
+
             $dt_total_discount          = $dt_disc1 + $dt_disc2 + $dt_disc3;
             $dt_total_ppn               = $ppn_per_item * $base_purchase_stock;
             $dt_total_dpp               = $dt_sales_price;
@@ -466,7 +469,7 @@ class M_salesmanadmin extends Model
 
                 $dt_total_discount          = $dt_disc1 + $dt_disc2 + $dt_disc3;
                 $dt_total_ppn               = $ppn_per_item * $base_purchase_stock;
-                $dt_total_dpp               = $dt_sales_price - $dt_total_ppn;
+                $dt_total_dpp               = $dt_sales_price;
 
                 $getWarehouse = $this->db->table($this->table_ms_warehouse)->select('warehouse_id')->where('store_id', $data['sales_store_id'])->get()->getRowArray();
 
@@ -617,7 +620,6 @@ class M_salesmanadmin extends Model
         if ($customer_id != null) {
             $builder->where('hd_retur_customer_id', $customer_id);
         }
-        $builder->where('hd_retur_status =  "Selesai"');
         return $builder->orderBy('hd_retur_sales_admin.created_at', 'ASC')->get();
     }
 

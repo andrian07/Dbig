@@ -134,15 +134,10 @@ $assetsUrl = base_url('assets');
         let customer_id = $('#customer_id').val();
         let start_date = $('#start_date').val();
         let end_date = $('#end_date').val();
-        if(customer_id == null){
-            Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Silahkan Isi Nama Customer Yang Di Cari!'
-            })
-        }
         let reportUrl = '<?= base_url('webmin/report/customer-receivable-receipt') ?>?';
+        if (customer_id != null && customer_id != '') {
         reportUrl += '&customer_id=' + customer_id;
+        }
         reportUrl += '&start_date=' + start_date;
         reportUrl += '&end_date=' + end_date;
         $('#preview').prop('src', reportUrl);
@@ -154,7 +149,9 @@ $assetsUrl = base_url('assets');
         let start_date = $('#start_date').val();
         let end_date = $('#end_date').val();
         let reportUrl = '<?= base_url('webmin/report/customer-receivable-receipt') ?>?';
+        if (customer_id != null && customer_id != '') {
         reportUrl += '&customer_id=' + customer_id;
+        }
         reportUrl += '&start_date=' + start_date;
         reportUrl += '&end_date=' + end_date;
         reportUrl += '&file=xls';
