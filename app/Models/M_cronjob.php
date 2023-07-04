@@ -4,66 +4,42 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class M_voucher extends Model
+class M_cronjob extends Model
 {
-    protected $table = 'ms_voucher';
+    protected $table = 'list_purchase_order';
 
-    public function getVoucherGroup($voucher_group_id = '', $show_deleted = FALSE)
+    public function insertListPurchaseOrder($orderData, $insertDate)
     {
-        $builder = $this->db->table('ms_voucher_group');
-        if ($show_deleted == FALSE) {
-            $builder->where('deleted', 'N');
+        $isSuccess = true;
+        if (count($orderData) > 0) {
+            $saveQueries = NULL;
+            $this->db->query('LOCK TABLES list_purchase_order WRITE');
+            $this->db->transBegin();
+            $max_insert = 500;
+
+            $this->db->table('list_purchase_order')->where('update_date', $insertDate)->delete();
+
+            $batchUpdate = array_chunk($orderData, $max_insert);
+            foreach ($batchUpdate as $batch) {
+                $this->db->table('list_purchase_order')->insertBatch($batch);
+                if ($this->db->affectedRows() > 0) {
+                    $saveQueries[] = $this->db->getLastQuery()->getQuery();
+                }
+            }
+
+            if ($this->db->transStatus() === false) {
+                $this->db->transRollback();
+                $isSuccess = false;
+                $saveQueries = NULL;
+            } else {
+                $this->db->transCommit();
+            }
+
+            $this->db->query('UNLOCK TABLES');
+
+            logQueries($saveQueries, 'list_purchase_order', 0, 'CJ_UPDATE');
+            return $isSuccess;
         }
-
-        if ($voucher_group_id != '') {
-            $builder->where('voucher_group_id', $voucher_group_id);
-        }
-
-        return $builder->get();
-    }
-
-    public function getVoucherCategoryRestriction($voucher_group_id)
-    {
-        return $this->db->table('ms_voucher_category_restriction')
-            ->select('ms_voucher_category_restriction.voucher_group_id,ms_voucher_category_restriction.category_id,ms_category.category_name')
-            ->join('ms_category', 'ms_category.category_id=ms_voucher_category_restriction.category_id')
-            ->where('ms_voucher_category_restriction.voucher_group_id', $voucher_group_id)->get();
-    }
-
-    public function getVoucherBrandRestriction($voucher_group_id)
-    {
-        return $this->db->table('ms_voucher_brand_restriction')
-            ->select('ms_voucher_brand_restriction.voucher_group_id,ms_voucher_brand_restriction.brand_id,ms_brand.brand_name')
-            ->join('ms_brand', 'ms_brand.brand_id=ms_voucher_brand_restriction.brand_id')
-            ->where('ms_voucher_brand_restriction.voucher_group_id', $voucher_group_id)->get();
-    }
-
-    public function getVoucher($voucher_group_id = '', $show_deleted = FALSE)
-    {
-        $builder = $this->db->table('ms_voucher');
-        $builder->select('ms_voucher.*,ms_customer.customer_name,user_account.user_realname');
-        $builder->join('ms_customer', 'ms_customer.customer_id=ms_voucher.used_by', 'left');
-        $builder->join('user_account', 'user_account.user_id=ms_voucher.created_by');
-        if ($show_deleted == FALSE) {
-            $builder->where('ms_voucher.deleted', 'N');
-        }
-
-        if ($voucher_group_id != '') {
-            $builder->where('ms_voucher.voucher_group_id', $voucher_group_id);
-        }
-
-        return $builder->get();
-    }
-
-    public function getVoucherByCode($voucher_code, $show_deleted = FALSE)
-    {
-        $builder = $this->db->table('ms_voucher');
-        if ($show_deleted == FALSE) {
-            $builder->where('deleted', 'N');
-        }
-
-        $builder->where('voucher_code', $voucher_code);
-        return $builder->get();
     }
 
     public function insertVoucherGroup($data)
@@ -130,6 +106,68 @@ class M_voucher extends Model
         saveQueries($saveQueries, 'voucher', $voucher_group_id);
         return $save;
     }
+
+
+
+    public function getVoucherGroup($voucher_group_id = '', $show_deleted = FALSE)
+    {
+        $builder = $this->db->table('ms_voucher_group');
+        if ($show_deleted == FALSE) {
+            $builder->where('deleted', 'N');
+        }
+
+        if ($voucher_group_id != '') {
+            $builder->where('voucher_group_id', $voucher_group_id);
+        }
+
+        return $builder->get();
+    }
+
+    public function getVoucherCategoryRestriction($voucher_group_id)
+    {
+        return $this->db->table('ms_voucher_category_restriction')
+            ->select('ms_voucher_category_restriction.voucher_group_id,ms_voucher_category_restriction.category_id,ms_category.category_name')
+            ->join('ms_category', 'ms_category.category_id=ms_voucher_category_restriction.category_id')
+            ->where('ms_voucher_category_restriction.voucher_group_id', $voucher_group_id)->get();
+    }
+
+    public function getVoucherBrandRestriction($voucher_group_id)
+    {
+        return $this->db->table('ms_voucher_brand_restriction')
+            ->select('ms_voucher_brand_restriction.voucher_group_id,ms_voucher_brand_restriction.brand_id,ms_brand.brand_name')
+            ->join('ms_brand', 'ms_brand.brand_id=ms_voucher_brand_restriction.brand_id')
+            ->where('ms_voucher_brand_restriction.voucher_group_id', $voucher_group_id)->get();
+    }
+
+    public function getVoucher($voucher_group_id = '', $show_deleted = FALSE)
+    {
+        $builder = $this->db->table('ms_voucher');
+        $builder->select('ms_voucher.*,ms_customer.customer_name,user_account.user_realname');
+        $builder->join('ms_customer', 'ms_customer.customer_id=ms_voucher.used_by', 'left');
+        $builder->join('user_account', 'user_account.user_id=ms_voucher.created_by');
+        if ($show_deleted == FALSE) {
+            $builder->where('ms_voucher.deleted', 'N');
+        }
+
+        if ($voucher_group_id != '') {
+            $builder->where('ms_voucher.voucher_group_id', $voucher_group_id);
+        }
+
+        return $builder->get();
+    }
+
+    public function getVoucherByCode($voucher_code, $show_deleted = FALSE)
+    {
+        $builder = $this->db->table('ms_voucher');
+        if ($show_deleted == FALSE) {
+            $builder->where('deleted', 'N');
+        }
+
+        $builder->where('voucher_code', $voucher_code);
+        return $builder->get();
+    }
+
+
 
     public function updateVoucherGroup($data)
     {
@@ -328,52 +366,5 @@ class M_voucher extends Model
 
         saveQueries($saveQueries, 'voucher', $voucher_id);
         return $save;
-    }
-
-    public function setExpiredVoucher($max_exp_date = '')
-    {
-        $isSuccess = true;
-
-        $builder = $this->db->table('ms_voucher');
-        $builder->select('ms_voucher.voucher_id,ms_voucher.voucher_code,ms_voucher_group.exp_date')
-            ->join('ms_voucher_group', 'ms_voucher_group.voucher_group_id=ms_voucher.voucher_group_id')
-            ->where('ms_voucher.voucher_status', 'not used')
-            ->where('ms_voucher.deleted', 'N')
-            ->where("ms_voucher_group.exp_date<CAST('$max_exp_date' AS DATE)", null, null);
-
-        $getVoucherList = $builder->get()->getResultArray();
-
-        $updateList = [];
-        foreach ($getVoucherList as $voucher) {
-            $updateList[] = $voucher['voucher_id'];
-        }
-
-        if (count($updateList) > 0) {
-            $saveQueries = NULL;
-            $this->db->query('LOCK TABLES ms_voucher WRITE');
-            $this->db->transBegin();
-            $max_update = 500;
-
-            $batchUpdate = array_chunk($updateList, $max_update);
-            foreach ($batchUpdate as $batch) {
-                $this->db->table('ms_voucher')->set('voucher_status', 'expired')->whereIn('voucher_id', $batch)->update();
-                if ($this->db->affectedRows() > 0) {
-                    $saveQueries[] = $this->db->getLastQuery()->getQuery();
-                }
-            }
-
-            if ($this->db->transStatus() === false) {
-                $this->db->transRollback();
-                $isSuccess = false;
-                $saveQueries = NULL;
-            } else {
-                $this->db->transCommit();
-            }
-
-            $this->db->query('UNLOCK TABLES');
-
-            logQueries($saveQueries, 'voucher', 0, 'CJ_UPDATE');
-            return $isSuccess;
-        }
     }
 }

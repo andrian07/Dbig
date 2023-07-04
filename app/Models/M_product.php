@@ -1776,7 +1776,6 @@ class M_product extends Model
         return $this->db->query($sqlGetSalesStock)->getResultArray();
     }
 
-
     public function getHistorySalesPrice($product_id, $start_date, $end_date)
     {
         // subquery output product_id,sales_date,customer_group,sales_price,count_data //

@@ -165,6 +165,9 @@ $routes->group('webmin', static function ($routes) {
 
 
 $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('dashboard', 'Webmin\Dashboard::index');
+    $routes->get('dashboard/delete-notification/(:num)', 'Webmin\Dashboard::deleteNotification/$1');
+
     $routes->get('profile', 'Webmin\Profile::index');
     $routes->post('profile/update-password', 'Webmin\Profile::updatePassword');
     $routes->post('profile/update-pin', 'Webmin\Profile::updatePin');
@@ -1119,10 +1122,12 @@ $routes->group('api-pos', static function ($routes) {
 /* end api pos */
 
 
-
-
-
-
+/* cronjob */
+$routes->group('cjob', static function ($routes) {
+    $routes->get('/', 'CronJob::index');
+    $routes->get('update-voucher', 'CronJob::updateVoucher');
+    $routes->get('update-po-safety-stock', 'CronJob::updatePOSafetyStock');
+});
 /*
 
  * --------------------------------------------------------------------

@@ -127,6 +127,16 @@ if (!function_exists('saveQueries')) {
     }
 }
 
+if (!function_exists('logQueries')) {
+    function logQueries($queries, $module, $ref_id = 0, $log_remark = '', $user_id = 0)
+    {
+        if (APP_LOG_QUERIES) {
+            $M_log_queries = model('Log/M_log_queries',);
+            $M_log_queries->insertLog($queries, $log_remark, $user_id, $module, $ref_id);
+        }
+    }
+}
+
 if (!function_exists('saveEditQueries')) {
     function saveEditQueries($queries, $module, $ref_id = 0, $log_remark = '')
     {
@@ -183,4 +193,3 @@ if (!function_exists('deleteImage')) {
         }
     }
 }
-
