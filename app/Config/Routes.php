@@ -423,6 +423,8 @@ $routes->group('webmin/product', ['filter' => 'webminauth'], static function ($r
     $routes->get('view-batch-update-product', 'Webmin\Product::viewBatchUpdateProduct');
     $routes->get('download-product-data', 'Webmin\Product::downloadProductData');
     $routes->post('upload-excel-batch-update-product', 'Webmin\Product::uploadExcelBatchUpdateProduct');
+
+    $routes->get('info-update-safety', 'Webmin\Product::viewInfoUpdateSafety');
 });
 
 
@@ -1127,6 +1129,7 @@ $routes->group('cjob', static function ($routes) {
     $routes->get('/', 'CronJob::index');
     $routes->get('update-voucher', 'CronJob::updateVoucher');
     $routes->get('update-po-safety-stock', 'CronJob::updatePOSafetyStock');
+    $routes->get('update-safety-stock-balance', 'CronJob::updateSafetyStockBalance');
 });
 /*
 

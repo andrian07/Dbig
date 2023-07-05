@@ -3,6 +3,7 @@
 
 namespace App\Controllers\Webmin;
 
+use Dompdf\Dompdf;
 use App\Models\M_product;
 use App\Controllers\Base\WebminController;
 
@@ -1675,6 +1676,45 @@ class Product extends WebminController
         $back_url = $result['success'] ? base_url('webmin/product') : base_url('webmin/product/view-batch-update-product');
         $result['back_url'] = $back_url;
         return $this->renderView('import_result', $result);
+    }
+
+    // view update cronjob safety stock //
+    public function viewInfoUpdateSafety()
+    {
+        $update_date = $this->request->getGet('update_date') == null ? '' : $this->request->getGet('update_date');
+
+        $M_cronjob = model('M_cronjob');
+        $getData = $M_cronjob->getListUpdateSafetyStock($update_date);
+        if (count($getData) == 0) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        } else {
+            $agent = $this->request->getUserAgent();
+            $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
+
+            //dd($getData);
+            $max_report_size        = 15;
+            $pages                  = array_chunk($getData, $max_report_size);
+
+            $data = [
+                'title'             => 'DAFTAR PERUBAHAN SAFETY STOCK',
+                'userLogin'         => $this->userLogin,
+                'update_date'       => $update_date,
+                'pages'             => $pages,
+                'max_page'          => count($pages)
+            ];
+
+            $htmlView = $this->renderView('report/inventory/list_update_safety_stock', $data);
+            if ($agent->isMobile() && !$isDownload) {
+                return $htmlView;
+            } else {
+                $dompdf = new Dompdf();
+                $dompdf->loadHtml($htmlView);
+                $dompdf->setPaper('A4', 'landscape');
+                $dompdf->render();
+                $dompdf->stream('stock_list.pdf', array("Attachment" => $isDownload));
+                exit();
+            }
+        }
     }
 
 

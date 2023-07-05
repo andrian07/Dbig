@@ -1746,8 +1746,10 @@ class M_product extends Model
         $builder = $this->db->table('dt_pos_sales');
         $builder->select("ms_product_unit.product_id,(ms_product_unit.product_content*dt_pos_sales.sales_qty) AS sales_stock", false)
             ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales.item_id')
-            ->join('hd_pos_sales', 'hd_pos_sales.pos_sales_id=dt_pos_sales.pos_sales_id')
-            ->whereIn('ms_product_unit.product_id', $product_ids);
+            ->join('hd_pos_sales', 'hd_pos_sales.pos_sales_id=dt_pos_sales.pos_sales_id');
+        if (count($product_ids) > 0) {
+            $builder->whereIn('ms_product_unit.product_id', $product_ids);
+        }
 
         if ($start_date == null) {
             $builder->where("hd_pos_sales.pos_sales_date<=CAST('$end_date' AS DATE)");
@@ -1760,8 +1762,11 @@ class M_product extends Model
         $builder = $this->db->table('dt_sales_admin');
         $builder->select("ms_product_unit.product_id,(ms_product_unit.product_content*dt_sales_admin.dt_temp_qty) AS sales_stock", false)
             ->join('ms_product_unit', 'ms_product_unit.item_id=dt_sales_admin.dt_item_id')
-            ->join('hd_sales_admin', 'hd_sales_admin.sales_admin_id=dt_sales_admin.sales_admin_id')
-            ->whereIn('ms_product_unit.product_id', $product_ids);
+            ->join('hd_sales_admin', 'hd_sales_admin.sales_admin_id=dt_sales_admin.sales_admin_id');
+
+        if (count($product_ids) > 0) {
+            $builder->whereIn('ms_product_unit.product_id', $product_ids);
+        }
 
         if ($start_date == null) {
             $builder->where("hd_sales_admin.sales_date<=CAST('$end_date' AS DATE)");
