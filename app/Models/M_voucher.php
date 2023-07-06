@@ -329,4 +329,51 @@ class M_voucher extends Model
         saveQueries($saveQueries, 'voucher', $voucher_id);
         return $save;
     }
+
+    public function setExpiredVoucher($max_exp_date = '')
+    {
+        $isSuccess = true;
+
+        $builder = $this->db->table('ms_voucher');
+        $builder->select('ms_voucher.voucher_id,ms_voucher.voucher_code,ms_voucher_group.exp_date')
+            ->join('ms_voucher_group', 'ms_voucher_group.voucher_group_id=ms_voucher.voucher_group_id')
+            ->where('ms_voucher.voucher_status', 'not used')
+            ->where('ms_voucher.deleted', 'N')
+            ->where("ms_voucher_group.exp_date<CAST('$max_exp_date' AS DATE)", null, null);
+
+        $getVoucherList = $builder->get()->getResultArray();
+
+        $updateList = [];
+        foreach ($getVoucherList as $voucher) {
+            $updateList[] = $voucher['voucher_id'];
+        }
+
+        if (count($updateList) > 0) {
+            $saveQueries = NULL;
+            $this->db->query('LOCK TABLES ms_voucher WRITE');
+            $this->db->transBegin();
+            $max_update = 500;
+
+            $batchUpdate = array_chunk($updateList, $max_update);
+            foreach ($batchUpdate as $batch) {
+                $this->db->table('ms_voucher')->set('voucher_status', 'expired')->whereIn('voucher_id', $batch)->update();
+                if ($this->db->affectedRows() > 0) {
+                    $saveQueries[] = $this->db->getLastQuery()->getQuery();
+                }
+            }
+
+            if ($this->db->transStatus() === false) {
+                $this->db->transRollback();
+                $isSuccess = false;
+                $saveQueries = NULL;
+            } else {
+                $this->db->transCommit();
+            }
+
+            $this->db->query('UNLOCK TABLES');
+
+            logQueries($saveQueries, 'voucher', 0, 'CJ_UPDATE');
+            return $isSuccess;
+        }
+    }
 }

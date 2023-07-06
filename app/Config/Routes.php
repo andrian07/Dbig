@@ -165,6 +165,9 @@ $routes->group('webmin', static function ($routes) {
 
 
 $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
+    $routes->get('dashboard', 'Webmin\Dashboard::index');
+    $routes->get('dashboard/delete-notification/(:num)', 'Webmin\Dashboard::deleteNotification/$1');
+
     $routes->get('profile', 'Webmin\Profile::index');
     $routes->post('profile/update-password', 'Webmin\Profile::updatePassword');
     $routes->post('profile/update-pin', 'Webmin\Profile::updatePin');
@@ -420,6 +423,8 @@ $routes->group('webmin/product', ['filter' => 'webminauth'], static function ($r
     $routes->get('view-batch-update-product', 'Webmin\Product::viewBatchUpdateProduct');
     $routes->get('download-product-data', 'Webmin\Product::downloadProductData');
     $routes->post('upload-excel-batch-update-product', 'Webmin\Product::uploadExcelBatchUpdateProduct');
+
+    $routes->get('info-update-safety', 'Webmin\Product::viewInfoUpdateSafety');
 });
 
 
@@ -1123,10 +1128,13 @@ $routes->group('api-pos', static function ($routes) {
 /* end api pos */
 
 
-
-
-
-
+/* cronjob */
+$routes->group('cjob', static function ($routes) {
+    $routes->get('/', 'CronJob::index');
+    $routes->get('update-voucher', 'CronJob::updateVoucher');
+    $routes->get('update-po-safety-stock', 'CronJob::updatePOSafetyStock');
+    $routes->get('update-safety-stock-balance', 'CronJob::updateSafetyStockBalance');
+});
 /*
 
  * --------------------------------------------------------------------
