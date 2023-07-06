@@ -489,16 +489,16 @@ class M_retur extends Model
 
         $getDtRetur =  $this->getDtReturSalesAdmin($hd_retur_sales_admin_id);
 
-       
-
         foreach ($getDtRetur->getResultArray() as $row) {
+
+            $getWarehouse =  $this->getWarehouse($row['hd_retur_store_id'], $hd_retur_sales_admin_id)->getRowArray();
 
             $hd_retur_sales_admin_id               = $hd_retur_sales_admin_id ;
             $dt_retur_item_id                      = $row['dt_retur_item_id'];
             $dt_retur_price                        = floatval($row['dt_retur_price']);
             $dt_retur_dpp                          = floatval($row['dt_retur_dpp']);
             $dt_retur_ppn                          = floatval($row['dt_retur_ppn']);
-            $dt_retur_warehouse                    = $row['warehouse_id'];
+            $dt_retur_warehouse                    = $getWarehouse['warehouse_id'];
             $dt_retur_qty                          = floatval($row['dt_retur_qty']);
             $dt_retur_total                        = floatval($row['dt_retur_total']);
 
@@ -955,6 +955,25 @@ class M_retur extends Model
         ->join('ms_store', 'ms_store.store_id = hd_retur_sales_admin.hd_retur_store_id')
 
         //->join('ms_warehouse', 'ms_warehouse.store_id = ms_store.store_id')
+
+        ->where('dt_retur_sales_admin.hd_retur_sales_admin_id', $hd_retur_sales_admin_id)
+
+        ->get();
+
+    }
+
+    public function getWarehouse($hd_retur_store_id, $hd_retur_sales_admin_id)
+    {
+
+        $builder = $this->db->table($this->table_dt_retur_sales_admin);
+
+        return $builder->select('*')
+
+        ->join('hd_retur_sales_admin', 'hd_retur_sales_admin.hd_retur_sales_admin_id = dt_retur_sales_admin.hd_retur_sales_admin_id')
+
+        ->join('ms_store', 'ms_store.store_id = hd_retur_sales_admin.hd_retur_store_id')
+
+        ->join('ms_warehouse', 'ms_warehouse.store_id = ms_store.store_id')
 
         ->where('dt_retur_sales_admin.hd_retur_sales_admin_id', $hd_retur_sales_admin_id)
 

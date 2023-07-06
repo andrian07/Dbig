@@ -87,6 +87,7 @@ class M_receivable_repayment extends Model
 
     }
 
+    
     public function copySalesTemp($customerid, $user_id)
     {
 

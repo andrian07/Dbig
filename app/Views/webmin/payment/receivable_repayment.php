@@ -255,9 +255,15 @@ $assetsUrl = base_url('assets');
                                         </div>
                                     </div>
 
-                                    
+                                    <div class="col-sm-12 col-md-2">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>Pot. Nota</label>
+                                            <input id="sales_admin_retur_nominal" name="sales_admin_retur_nominal" type="text" class="form-control text-right" value="0" readonly>
+                                        </div>
+                                    </div>
 
-                                    <div class="col-sm-12 col-md-4">
+                                    <div class="col-sm-12 col-md-2">
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Sisa Piutang</label>
@@ -399,6 +405,7 @@ $assetsUrl = base_url('assets');
         let customer_total_debt = new AutoNumeric('#customer_total_debt', configRp);
         let footer_invoice_total = new AutoNumeric('#footer_invoice_total', configRp);
         let footer_total_pay = new AutoNumeric('#footer_total_pay', configQty);
+        let sales_admin_retur_nominal = new AutoNumeric('#sales_admin_retur_nominal', configRp);
 
 
         $("#payment_method_id").select2({
@@ -670,6 +677,7 @@ $assetsUrl = base_url('assets');
             repayment_disc.set(0);
             repayment_total.set(0);
             new_remaining_receivable.set(0);
+            sales_admin_retur_nominal.set(0);
             $('#repayment_remark').val('');
         }
 
@@ -803,6 +811,7 @@ $assetsUrl = base_url('assets');
 
         function calcRepayment() {
             let rdebt = parseFloat(remaining_receivable.getNumericString());
+            let retur_nominal = parseFloat(sales_admin_retur_nominal.getNumericString());
 
             let rpdisc = 0;
             if (repayment_disc.getNumericString() == '') {
@@ -819,7 +828,7 @@ $assetsUrl = base_url('assets');
                 rptotal = parseFloat(repayment_total.getNumericString());
             }
 
-            let nrdebt = rdebt - (rpdisc + rptotal);
+            let nrdebt = rdebt - (rpdisc + rptotal) - retur_nominal;
             new_remaining_receivable.set(nrdebt);
         }
 
@@ -855,11 +864,13 @@ $assetsUrl = base_url('assets');
 
                 $('#due_date').val(json.sales_due_date);
 
-                repayment_total.set(json.temp_payment_debt_nominal);
+                repayment_total.set(json.temp_payment_receivable_nominal);
 
                 remaining_receivable.set(json.sales_admin_remaining_payment);
 
-                //new_remaining_receivable.set(json.purchase_remaining_receivable - json.temp_payment_debt_nominal);
+                sales_admin_retur_nominal.set(json.sales_admin_retur_nominal);
+
+                new_remaining_receivable.set(json.sales_admin_remaining_payment - json.temp_payment_receivable_nominal - json.sales_admin_retur_nominal);
 
                 $('#repayment_total').focus();
 
@@ -904,7 +915,9 @@ $assetsUrl = base_url('assets');
 
                let temp_payment_receivable_discount = val.temp_payment_receivable_discount;
 
-               let temp_payment_remaining  = val.sales_admin_remaining_payment - val.temp_payment_receivable_nominal;
+               let sales_admin_retur_nominal = val.sales_admin_retur_nominal;
+
+               let temp_payment_remaining  = val.sales_admin_remaining_payment - val.temp_payment_receivable_nominal - val.sales_admin_retur_nominal - val.temp_payment_receivable_discount;
 
 
                item = item.replaceAll('{row}', row)
@@ -924,6 +937,8 @@ $assetsUrl = base_url('assets');
                .replaceAll('{temp_payment_receivable_nominal}', numberFormat(temp_payment_receivable_nominal, true))
 
                .replaceAll('{temp_payment_remaining}', numberFormat(temp_payment_remaining, true))
+
+               .replaceAll('{sales_admin_retur_nominal}', numberFormat(sales_admin_retur_nominal, true))
 
                .replaceAll('{data_json}', data_json);
 

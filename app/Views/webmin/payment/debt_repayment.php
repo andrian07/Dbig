@@ -834,7 +834,7 @@ $assetsUrl = base_url('assets');
                 rptotal = parseFloat(repayment_total.getNumericString());
             }
 
-            let nrdebt = rdebt - (rpdisc + rptotal);
+            let nrdebt = rdebt - (rpdisc + rptotal) - retur_nominal;
             new_remaining_debt.set(nrdebt);
         }
 
