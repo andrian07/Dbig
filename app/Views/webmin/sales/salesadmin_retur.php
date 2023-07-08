@@ -402,7 +402,7 @@ $assetsUrl = base_url('assets');
                                         <div class="form-group">
 
                                             <label>Qty Retur</label>
-                                            <input id="temp_qty_buy" name="temp_qty_buy" type="text" class="form-control text-right" value="0" required readonly>
+                                            <input id="temp_qty_buy" name="temp_qty_buy" type="hidden" class="form-control text-right" value="0" required readonly>
                                             <input id="temp_qty_retur" name="temp_qty_retur" type="text" class="form-control text-right" value="0" data-parsley-vqty required>
 
                                         </div>

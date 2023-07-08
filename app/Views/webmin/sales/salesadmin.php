@@ -1293,7 +1293,7 @@ function loadTempData(items) {
 
      let temp_total_discount = val.temp_total_discount;
 
-     let temp_sales_price = val.temp_sales_price;
+     let temp_total = val.temp_sales_price;
 
      item = item.replaceAll('{row}', row)
 
@@ -1305,11 +1305,11 @@ function loadTempData(items) {
 
      .replaceAll('{temp_qty}', numberFormat(temp_qty, true))
 
-     .replaceAll('{temp_sales_price}', numberFormat(temp_sales_price, true))
+     .replaceAll('{temp_sales_price}', numberFormat(temp_product_price, true))
 
      .replaceAll('{discount}', numberFormat(temp_total_discount, true))
 
-     .replaceAll('{total}', numberFormat(temp_sales_price, true))
+     .replaceAll('{total}', numberFormat(temp_total, true))
 
      .replaceAll('{data_json}', data_json);
 
@@ -1924,7 +1924,7 @@ $("#tbltemp").on('click', '.btnedit', function(e) {
 
     temp_purchase_tax.set(json.temp_purchase_tax);
 
-    temp_price.set(json.temp_sales_price);
+    temp_price.set(json.temp_product_price);
 
     temp_qty.set(json.temp_qty);
 

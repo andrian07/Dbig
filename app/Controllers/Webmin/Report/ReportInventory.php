@@ -2211,6 +2211,7 @@ class ReportInventory extends WebminController
         }
     }
 
+
     public function viewStockTransferList()
     {
         $data = [
@@ -2223,33 +2224,159 @@ class ReportInventory extends WebminController
 
     public function stockTransferList()
     {
-        $data = [
-            'title'         => 'Daftar Stok Transfer',
-            'userLogin'     => $this->userLogin
-        ];
+        if ($this->role->hasRole('report.stock_transfer')) {
 
-        $htmlView   = view('webmin/report/inventory/stock_transfer_list_detail', $data);
-        $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
-        $fileType   = $this->request->getGet('file');
-        $agent      = $this->request->getUserAgent();
+            $M_stock_transfer = model('M_stock_transfer');
 
-        if (!in_array($fileType, ['pdf'])) {
-            $fileType = 'pdf';
-        }
+            $start_date          = $this->request->getGet('start_date') != NULL ? $this->request->getGet('start_date') : date('Y-m') . '-01';
+            $end_date            = $this->request->getGet('end_date') != NULL ? $this->request->getGet('end_date') : date('Y-m-d');
+            $source_warehouse_id = $this->request->getGet('source_warehouse_id');
+            $dest_warehouse_id   = $this->request->getGet('dest_warehouse_id');
+            $isDownload          = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
+            $fileType            = $this->request->getGet('file') == NULL ? 'pdf' : $this->request->getGet('file');
+            $agent               = $this->request->getUserAgent();
 
-        if ($agent->isMobile()  && !$isDownload) {
-            return $htmlView;
-        } else {
-            if ($fileType == 'pdf') {
-                $dompdf = new Dompdf();
-                $dompdf->loadHtml($htmlView);
-                $dompdf->setPaper('A4', 'landscape');
-                $dompdf->render();
-                $dompdf->stream('stock_transfer.pdf', array("Attachment" => $isDownload));
-                exit();
-            } else {
-                die('Export Excel Script');
+            if (!in_array($fileType, ['pdf', 'xls'])) {
+                $fileType = 'pdf';
             }
+
+            $getReportData = $M_stock_transfer->getTransfer($start_date, $end_date, $source_warehouse_id, $dest_warehouse_id)->getResultArray();
+
+            if($getReportData != null){
+                $warehouse_from_name = $getReportData[0]['warehouse_from_name'];
+                $warehouse_to_name = $getReportData[0]['warehouse_to_name'];
+            }else{
+                $warehouse_from_name = '-';
+                $warehouse_to_name = '-';
+            }
+
+            if ($fileType == 'pdf') {
+                $cRow           = count($getReportData);
+                if ($cRow % 16 == 0) {
+                    $max_page_item  = 15;
+                } else {
+                    $max_page_item  = 16;
+                }
+                $transferstock    = array_chunk($getReportData, $max_page_item);
+                $data = [
+                    'title'                 => 'Laporan Transfer Stock',
+                    'start_date'            => $start_date,
+                    'end_date'              => $end_date,
+                    'warehouse_from_name'   => $warehouse_from_name,
+                    'warehouse_to_name'     => $warehouse_to_name,
+                    'pages'                 => $transferstock,
+                    'maxPage'               => count($transferstock),
+                    'userLogin'             => $this->userLogin
+                ];
+
+
+                $htmlView   = view('webmin/report/inventory/stock_transfer_list_detail', $data);
+
+                if ($agent->isMobile()  && !$isDownload) {
+                    return $htmlView;
+                } else {
+                    if ($fileType == 'pdf') {
+                        $dompdf = new Dompdf();
+                        $dompdf->loadHtml($htmlView);
+                        $dompdf->setPaper('A4', 'landscape');
+                        $dompdf->render();
+                        $dompdf->stream('Stoktransfer.pdf', array("Attachment" => $isDownload));
+                        exit();
+                    }
+                }
+            } else {
+                $total_format = [
+                    'font' => [
+                        'bold' => true,
+                    ],
+                    'borders' => [
+                        'top' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'right' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'left' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'bottom' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                    ],
+                ];
+
+                $font_bold = [
+                    'font' => [
+                        'bold' => true,
+                    ],
+                ];
+
+                $border_left_right = [
+                    'borders' => [
+                        'right' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'left' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                    ],
+                ];
+
+                $template = WRITEPATH . '/template/template_export_transfer_stock.xlsx';
+                $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+
+                $sheet = $spreadsheet->setActiveSheetIndex(0);
+                $iRow = 8;
+
+                foreach ($getReportData as $row) {
+                
+                    
+                   $hd_transfer_stock_date = indo_short_date($row['hd_transfer_stock_date'], FALSE);
+                    
+                   $sheet->getCell('A' . $iRow)->setValue($row['hd_transfer_stock_no']);
+                   $sheet->getCell('B' . $iRow)->setValue($hd_transfer_stock_date);
+                   $sheet->getCell('C' . $iRow)->setValue($row['warehouse_from_code']);
+                   $sheet->getCell('D' . $iRow)->setValue($row['warehouse_to_code']);
+                   $sheet->getCell('E' . $iRow)->setValue($row['product_code']);
+                   $sheet->getCell('F' . $iRow)->setValue($row['product_name']);
+                   $sheet->getCell('G' . $iRow)->setValue($row['unit_name']);
+                   $sheet->getCell('H' . $iRow)->setValue(numberFormat($row['item_qty'], FALSE));
+
+                   $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
+                   $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
+                   $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
+                   $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
+                   $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
+                   $sheet->getStyle('F' . $iRow)->applyFromArray($border_left_right);
+                   $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
+                   $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
+
+                   $iRow++;
+               }
+
+                //setting periode
+               $periode_text = indo_short_date($start_date) . ' s.d ' . indo_short_date($end_date);
+               $sheet->getCell('B5')->setValue($periode_text);
+               $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
+               $sheet->getCell('A1')->setValue($reportInfo);
+
+               $sheet->mergeCells('A1:H1');
+
+               $sheet->getStyle('A1:H1')->getAlignment()->setHorizontal('right');
+
+               $sheet->getStyle('A2:H2')->applyFromArray($font_bold);
+
+
+               $filename = 'Laporan Pembayaran Hutang';
+               header('Content-Type: application/vnd.ms-excel');
+               header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+               header('Cache-Control: max-age=0');
+               $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+               $writer->save('php://output');
+               exit();
+           }
+        } else {
+        echo "<h1>Anda tidak memiliki akses ke laman ini</h1>";
         }
     }
 

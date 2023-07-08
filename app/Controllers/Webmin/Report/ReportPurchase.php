@@ -171,12 +171,12 @@ class ReportPurchase extends WebminController
                     $sheet->getCell('F' . $iRow)->setValue($row['supplier_code']);
                     $sheet->getCell('G' . $iRow)->setValue($row['supplier_name']);
                     $sheet->getCell('H' . $iRow)->setValue('');
-                    $sheet->getCell('I' . $iRow)->setValue(numberFormat($detail_purchase_po_base_price, TRUE));
+                    $sheet->getCell('I' . $iRow)->setValue(numberFormat($detail_purchase_po_price, TRUE));
                     $sheet->getCell('J' . $iRow)->setValue(numberFormat($detail_purchase_po_dpp, TRUE));
-                    $sheet->getCell('K' . $iRow)->setValue(numberFormat($detail_purchase_po_ppn / $detail_purchase_po_qty, TRUE));
-                    $sheet->getCell('L' . $iRow)->setValue(numberFormat($detail_purchase_po_price, TRUE));
+                    $sheet->getCell('K' . $iRow)->setValue(numberFormat($detail_purchase_po_ppn, TRUE));
+                    $sheet->getCell('L' . $iRow)->setValue(numberFormat($detail_purchase_po_dpp + $detail_purchase_po_ppn, TRUE));
                     $sheet->getCell('M' . $iRow)->setValue(numberFormat($detail_purchase_po_ongkir, TRUE));
-                    $sheet->getCell('N' . $iRow)->setValue(numberFormat($detail_purchase_po_total, TRUE));
+                    $sheet->getCell('N' . $iRow)->setValue(numberFormat($detail_purchase_po_total + ($detail_purchase_po_ppn * $detail_purchase_po_qty), TRUE));
                     $sheet->getCell('O' . $iRow)->setValue($detail_purchase_po_qty);
                     $sheet->getCell('P' . $iRow)->setValue($detail_purchase_po_recive);
                     $sheet->getCell('Q' . $iRow)->setValue($detail_purchase_po_qty - $detail_purchase_po_recive);

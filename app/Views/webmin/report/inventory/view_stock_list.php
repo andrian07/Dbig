@@ -59,8 +59,7 @@ $assetsUrl = base_url('assets');
                                                         <span class="sr-only">Toggle Dropdown</span>
                                                     </button>
                                                     <div class="dropdown-menu" role="menu">
-                                                        <a id="btnexportpdf" class="dropdown-item" href="#">Export PDF</a>
-                                                        <a id="btnexportexcel" class="dropdown-item" href="#">Export Excel</a>
+                                                        <a id="btnexportexcel" id="btnexportexcel" class="dropdown-item" href="#">Export Excel</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -101,35 +100,6 @@ $assetsUrl = base_url('assets');
 <?= $this->section('js') ?>
 <script>
     $(document).ready(function() {
-        function reportUrl(params = '') {
-            let selWarehouse = $('#warehouse_id').select2('data');
-
-            let warehouse_id = $('#warehouse_id').val();
-            if (warehouse_id == null) {
-                warehouse_id = '';
-            }
-
-            let warehouse_name = '';
-            if (selWarehouse[0]) {
-                warehouse_name = selWarehouse[0].text;
-            }
-
-            let product_tax = $('#product_tax').val();
-
-            let reportUrl = base_url + '/webmin/report/stock-list?';
-
-
-            reportUrl += '&warehouse_id=' + warehouse_id;
-            reportUrl += '&warehouse_name=' + warehouse_name;
-            reportUrl += '&product_tax=' + product_tax;
-
-            if (params != '') {
-                reportUrl += '&' + params;
-            }
-
-            return reportUrl;
-        }
-
         $("#warehouse_id").select2({
             placeholder: '-- Semua --',
             width: "100%",
@@ -155,17 +125,34 @@ $assetsUrl = base_url('assets');
 
         $('#btnsearch').click(function(e) {
             e.preventDefault();
-            $('#preview').attr('src', reportUrl());
+            let start_date = $('#start_date').val();
+            let end_date = $('#end_date').val();
+            let source_warehouse_id = $('#source_warehouse_id').val();
+            let dest_warehouse_id = $('#dest_warehouse_id').val();
+            let reportUrl = '<?= base_url('webmin/report/stock-list') ?>?';
+            reportUrl += '&start_date=' + start_date;
+            reportUrl += '&end_date=' + end_date;
+            reportUrl += '&source_warehouse_id=' + source_warehouse_id;
+            reportUrl += '&dest_warehouse_id=' + dest_warehouse_id;
+            $('#preview').prop('src', reportUrl);
         })
-
-        $('#btnexportpdf').click(function(e) {
-            e.preventDefault();
-            window.open(reportUrl('download=Y'));
-        })
+        
 
         $('#btnexportexcel').click(function(e) {
             e.preventDefault();
-            window.open(reportUrl('file=xls'));
+            let start_date = $('#start_date').val();
+            let end_date = $('#end_date').val();
+            let source_warehouse_id = $('#source_warehouse_id').val();
+            let dest_warehouse_id = $('#dest_warehouse_id').val();
+            let reportUrl = '<?= base_url('webmin/report/stock-list') ?>?';
+            reportUrl += '&start_date=' + start_date;
+            reportUrl += '&end_date=' + end_date;
+            reportUrl += '&source_warehouse_id=' + source_warehouse_id;
+            reportUrl += '&dest_warehouse_id=' + dest_warehouse_id;
+            reportUrl += '&file=xls';
+            reportUrl += '&download=Y';
+
+            window.open(reportUrl, '_blank');
         })
 
     })

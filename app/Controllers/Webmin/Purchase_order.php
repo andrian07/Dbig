@@ -113,7 +113,9 @@ class Purchase_order extends WebminController
 
                         'item_id'             => $row['item_id'],
 
-                        'purchase_price'      => $row['purchase_price'] 
+                        'purchase_price'      => $row['purchase_price'],
+
+                        'base_purchase_tax'   => $row['base_purchase_tax'],
 
                     ];
 
@@ -295,6 +297,7 @@ class Purchase_order extends WebminController
         $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
 
         $validation =  \Config\Services::validation();
+
 
         $input = [
             'temp_po_id'                        => $this->request->getPost('temp_po_id'),

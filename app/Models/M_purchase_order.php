@@ -123,6 +123,7 @@ class M_purchase_order extends Model
 
         foreach ($getTemp->getResultArray() as $row) {
 
+
             $detail_purchase_submission_id           = $row['temp_po_submission_id'];
             $detail_purchase_submission_invoice      = $row['temp_po_submission_invoice'];
             $detail_purchase_po_item_id              = $row['temp_po_item_id'];

@@ -36,7 +36,7 @@ $assetsUrl = base_url('assets');
                                                     <select id="product_tax" name="product_tax" class="form-control">
                                                         <option value="1" selected>Semua</option>
                                                         <option value="2">PPN</option>
-                                                        <option value="2">NON PPN</option>
+                                                        <option value="3">NON PPN</option>
                                                     </select>
                                                 </div>
                                             </div>

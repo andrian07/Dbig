@@ -70,12 +70,11 @@ $assetsUrl = base_url('assets');
                                             <label>&nbsp;</label>
                                             <div class="form-group">
                                                 <div class="btn-group">
-                                                    <button type="button" class="btn btn-default"><i class="fas fa-search"></i> Cari</button>
+                                                    <button type="button" id="btnsearch" class="btn btn-default"><i class="fas fa-search"></i> Cari</button>
                                                     <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
                                                         <span class="sr-only">Toggle Dropdown</span>
                                                     </button>
                                                     <div class="dropdown-menu" role="menu">
-                                                        <a id="btnexportpdf" class="dropdown-item" href="#">Export PDF</a>
                                                         <a id="btnexportexcel" class="dropdown-item" href="#">Export Excel</a>
                                                     </div>
                                                 </div>
@@ -116,30 +115,35 @@ $assetsUrl = base_url('assets');
 
 <?= $this->section('js') ?>
 <script>
-    $(document).ready(function() {
-        // $("#customer_id").select2({
-        //     placeholder: '-- Semua --',
-        //     width: "100%",
-        //     allowClear: true,
-        //     ajax: {
-        //         url: base_url + "/select/member",
-        //         dataType: "json",
-        //         type: "POST",
-        //         delay: select2Delay,
-        //         data: function(params) {
-        //             return {
-        //                 search: params.term,
-        //             };
-        //         },
-        //         processResults: function(data, page) {
-        //             return {
-        //                 results: data,
-        //             };
-        //         },
-        //     },
-        // });
+       $('#btnsearch').click(function(e) {
+            e.preventDefault();
+            let start_date = $('#date_from').val();
+            let end_date = $('#date_until').val();
+            let source_warehouse_id = $('#source_warehouse_id').val();
+            let dest_warehouse_id = $('#dest_warehouse_id').val();
+            let reportUrl = '<?= base_url('webmin/report/stock-transfer-list') ?>?';
+            reportUrl += '&start_date=' + start_date;
+            reportUrl += '&end_date=' + end_date;
+            reportUrl += '&source_warehouse_id=' + source_warehouse_id;
+            reportUrl += '&dest_warehouse_id=' + dest_warehouse_id;
+            $('#preview').prop('src', reportUrl);
+        })
+        
 
-
-    })
+        $('#btnexportexcel').click(function(e) {
+            e.preventDefault();
+            let start_date = $('#date_from').val();
+            let end_date = $('#date_until').val();
+            let source_warehouse_id = $('#source_warehouse_id').val();
+            let dest_warehouse_id = $('#dest_warehouse_id').val();
+            let reportUrl = '<?= base_url('webmin/report/stock-transfer-list') ?>?';
+            reportUrl += '&start_date=' + start_date;
+            reportUrl += '&end_date=' + end_date;
+            reportUrl += '&source_warehouse_id=' + source_warehouse_id;
+            reportUrl += '&dest_warehouse_id=' + dest_warehouse_id;
+            reportUrl += '&file=xls';
+            reportUrl += '&download=Y';
+            window.open(reportUrl, '_blank');
+        })
 </script>
 <?= $this->endSection() ?>

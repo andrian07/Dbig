@@ -312,7 +312,7 @@ $assetsUrl = base_url('assets');
                                     <input id="submission_inv" type="hidden" name="submission_inv">
                                 </div>
 
-                                <div class="col-sm-3">
+                                <div class="col-sm-4">
 
                                     <!-- text input -->
 
@@ -335,8 +335,8 @@ $assetsUrl = base_url('assets');
                                         <label>Harga Beli Per Unit</label>
 
                                         <input id="temp_price" name="temp_price" class="form-control text-right" value="0" data-parsley-vprice required>
-                                        <input id="temp_dpp" name="temp_dpp" type="text" class="form-control text-right" value="0" required>
-                                        <input id="temp_tax" name="temp_tax" type="text" class="form-control text-right" value="0" readonly required>
+                                        <input id="temp_dpp" name="temp_dpp" type="hidden" class="form-control text-right" value="0" required>
+                                        <input id="temp_tax" name="temp_tax" type="hidden" class="form-control text-right" value="0" readonly required>
                                     </div>
 
                                 </div>
@@ -356,6 +356,7 @@ $assetsUrl = base_url('assets');
                                     </div>
 
                                 </div>
+                                <div class="col-md-5"></div>
 
                                 <div class="col-sm-2">
 
@@ -371,9 +372,7 @@ $assetsUrl = base_url('assets');
 
                                 </div>
 
-                                <div class="col-md-3"></div>
-
-                                <div class="col-sm-2">
+                                <div class="col-sm-2" style="display:none;">
 
                                     <!-- text input -->
 
@@ -394,7 +393,7 @@ $assetsUrl = base_url('assets');
                                 </div>
 
 
-                                <div class="col-sm-2">
+                                <div class="col-sm-2" style="display:none;">
 
                                     <!-- text input -->
 
@@ -573,7 +572,7 @@ $assetsUrl = base_url('assets');
                                 </div>
                             </div>
 
-                            <div class="form-group row">
+                            <div class="form-group row" style="display:none;">
                                 <label for="footer_total_discount" class="col-sm-7 col-form-label text-right:">Discount :</label>
                                 <div class="col-sm-4">
                                     <input id="footer_discount1" name="footer_discount1" type="hidden" class="form-control text-right" value="0" readonly>
@@ -1075,8 +1074,16 @@ $assetsUrl = base_url('assets');
                                         $('#product_name').val(header.submission_product_name);
                                         temp_price.set(header.base_purchase_price * header.product_content);
                                         temp_qty.set(header.submission_qty);
-                                        temp_dpp.set(header.base_purchase_price * header.product_content - (header.base_purchase_price * header.product_content * 0.11));
-                                        temp_tax.set(header.base_purchase_price * header.product_content - (header.base_purchase_price * header.product_content - (header.base_purchase_price * header.product_content * 0.11)));
+                                        if($('#has_tax').val() == 'Pajak'){
+                                            let tax = header.base_purchase_price * header.product_content - (header.base_purchase_price * header.product_content - (header.base_purchase_price * header.product_content * 0.11));
+                                            temp_tax.set(tax);
+                                            temp_dpp.set(header.base_purchase_price * header.product_content - tax);
+                                        }else{
+                                            let tax = 0;
+                                            temp_tax.set(tax);
+                                            temp_dpp.set(header.base_purchase_price * header.product_content - tax); 
+                                        }
+                                        
                                         temp_total.set((header.base_purchase_price * header.product_content) * header.submission_qty);
                                         total_price.set((header.base_purchase_price * header.product_content) * header.submission_qty);
                                     }
@@ -2082,6 +2089,10 @@ $('#product_name').autocomplete({
 
      temp_price.set(parseFloat(ui.item.purchase_price));
 
+     temp_dpp.set(parseFloat(ui.item.purchase_price));
+
+     temp_tax.set(parseFloat(ui.item.base_purchase_tax));
+
            //temp_tax.set(0);
 
            //temp_qty.set(1);
@@ -2340,8 +2351,8 @@ function calculation_temp_total(){
     let qty_calculation = parseFloat(temp_qty.getNumericString());
     let subtotal_calculation = price_calculation * qty_calculation;
     total_price.set(subtotal_calculation);
-    temp_dpp.set(parseFloat(dpp.toFixed(2)));
-    temp_tax.set(parseFloat(ppn.toFixed(2)));
+    //temp_dpp.set(parseFloat(dpp.toFixed(2)));
+    //temp_tax.set(parseFloat(ppn.toFixed(2)));
     temp_total.set(total_price.get() - total_temp_discount.get());
 }
 
@@ -2474,6 +2485,8 @@ function clearItemInput() {
  temp_price.set(0);
 
  temp_total.set(0);
+
+ temp_dpp.set(0);
 
  temp_tax.set(0);
 

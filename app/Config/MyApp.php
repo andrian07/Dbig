@@ -423,6 +423,8 @@ class MyApp extends BaseConfig
                 'user_sales_return_list'            => ['text' => 'Daftar Retur Penjualan Per User'],
 
                 'accounting'                        => ['text' => 'Akuntansi'],
+                'stock_transfer'                    => ['text' => 'Daftar Transfer Stock'],
+
             ]
         ]
     ];

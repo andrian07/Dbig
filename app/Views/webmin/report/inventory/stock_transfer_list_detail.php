@@ -11,6 +11,11 @@
 
 <?= $this->section('content') ?>
 
+<?php
+$iPage          = 1;
+$numRow         = 1;
+foreach ($pages as $page) :
+?>
 
 <!-- page 1/2 -->
 <div style="page-break-after:always;margin:0px;padding:0px;">
@@ -65,15 +70,15 @@
                                 <tbody>
                                     <tr align="left" class="loseborder">
                                         <td width="120" class="loseborder">Periode</td>
-                                        <td class="loseborder">: 01/09/2022 s.d 30/09/2022&nbsp;</td>
+                                        <td class="loseborder">: <?= indo_short_date($start_date) ?> s.d <?= indo_short_date($end_date) ?>&nbsp;</td>
                                     </tr>
                                     <tr align="left">
                                         <td class="loseborder">Dari Gudang</td>
-                                        <td class="loseborder">: -</td>
+                                        <td class="loseborder">:<?= $warehouse_from_name?></td>
                                     </tr>
                                     <tr align="left">
                                         <td class="loseborder">Ke Gudang</td>
-                                        <td class="loseborder">: -</td>
+                                        <td class="loseborder">:<?= $warehouse_to_name ?></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -111,39 +116,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="text-left" colspan="7"><b>ST/UTM/22/09/000001</b>&nbsp;</td>
-                        </tr>
-                        <tr align="left">
-                            <td class="text-left">01/09/2022&nbsp;</td>
-                            <td class="text-left col-fixed">UTM&nbsp;</td>
-                            <td class="text-left col-fixed">KBR</td>
-                            <td align="text-left" nowrap="">P00001&nbsp;</td>
-                            <td class="text-left col-fixed">Toto Gantungan Double Robe Hook (TX04AES)&nbsp;</td>
-                            <td class="text-left col-fixed">PCS</td>
-                            <td class="text-right">50.00</td>
-                        </tr>
-                        <tr>
-                            <td class="text-left" colspan="7"><b>ST/UTM/22/09/000002</b>&nbsp;</td>
-                        </tr>
-                        <tr align="left">
-                            <td class="text-left">01/09/2022&nbsp;</td>
-                            <td class="text-left col-fixed">KNY&nbsp;</td>
-                            <td class="text-left col-fixed">UTM</td>
-                            <td align="text-left" nowrap="">P00001&nbsp;</td>
-                            <td class="text-left col-fixed">Toto Gantungan Double Robe Hook (TX04AES)&nbsp;</td>
-                            <td class="text-left col-fixed">PCS</td>
-                            <td class="text-right">10.00</td>
-                        </tr>
-                        <tr align="left">
-                            <td class="text-left">01/09/2022&nbsp;</td>
-                            <td class="text-left col-fixed">KNY&nbsp;</td>
-                            <td class="text-left col-fixed">UTM</td>
-                            <td align="text-left" nowrap="">P00001&nbsp;</td>
-                            <td class="text-left col-fixed">Toto Gantungan Double Robe Hook (TX04AES)&nbsp;</td>
-                            <td class="text-left col-fixed">PCS</td>
-                            <td class="text-right">30.00</td>
-                        </tr>
+                    <?php
+                            $hd_transfer_stock_no = '';
+                            foreach ($page as $row) :
+                                ?>
+                                <tr>
+                                    <td class="text-left" colspan="7"><b><?= $hd_transfer_stock_no == $row['hd_transfer_stock_no'] ? '' : $row['hd_transfer_stock_no'] ?></b>&nbsp;</td>
+                                </tr>
+                                <tr align="left">
+                                    <td class="text-left"><?= indo_short_date($row['hd_transfer_stock_date'], FALSE) ?>&nbsp;</td>
+                                    <td class="text-left col-fixed"><?= $row['warehouse_from_code'] ?>&nbsp;</td>
+                                    <td class="text-left col-fixed"><?= $row['warehouse_to_code'] ?>&nbsp;</td>
+                                    <td align="text-left" nowrap=""><?= $row['product_code'] ?>&nbsp;</td>
+                                    <td class="text-left col-fixed"><?= $row['product_name'] ?>&nbsp;</td>
+                                    <td class="text-left col-fixed"><?= $row['unit_name'] ?></td>
+                                    <td class="text-right"><?= numberFormat($row['item_qty'], false) ?>&nbsp;</td>
+                                </tr>
+                                <?php
+                                $hd_transfer_stock_no = $row['hd_transfer_stock_no'];
+                            endforeach;
+                            ?>
                     </tbody>
                 </table>
                 <br>
@@ -153,6 +145,10 @@
         </div>
     </div>
 </div>
+<?php
+    $iPage++;
+endforeach;
+?>
 
 
 <?= $this->endSection() ?>

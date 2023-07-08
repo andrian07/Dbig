@@ -825,8 +825,6 @@ $assetsUrl = base_url('assets');
             } else {
                 rpdisc = parseFloat(repayment_disc.getNumericString());
             }
-
-
             let rptotal = 0;
             if (repayment_total.getNumericString() == '') {
                 repayment_total.set(0);

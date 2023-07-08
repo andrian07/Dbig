@@ -217,9 +217,9 @@ class ReportProject extends WebminController
                 $sheet->getCell('H' . $iRow)->setValue($row['category_name']);
                 $sheet->getCell('I' . $iRow)->setValue($dt_temp_qty);
                 $sheet->getCell('J' . $iRow)->setValue(numberFormat($dt_product_price, TRUE));
-                $sheet->getCell('K' . $iRow)->setValue(numberFormat($dt_total_ppn, TRUE));
+                $sheet->getCell('K' . $iRow)->setValue(numberFormat($dt_total_ppn * $dt_temp_qty, TRUE));
                 $sheet->getCell('L' . $iRow)->setValue(numberFormat($dt_total_dpp, TRUE));
-                $sheet->getCell('M' . $iRow)->setValue(numberFormat($dt_total_ppn + $dt_total_dpp, TRUE));
+                $sheet->getCell('M' . $iRow)->setValue(numberFormat($dt_total_ppn * $dt_temp_qty + $dt_total_dpp, TRUE));
 
                 $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
                 $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
@@ -607,7 +607,7 @@ class ReportProject extends WebminController
                 ],
             ];
 
-            $template = WRITEPATH . '/template/template_export_sales_admin_detail.xlsx';
+            $template = WRITEPATH . '/template/template_export_retur_sales_admin_detail.xlsx';
             $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
 
             $sheet = $spreadsheet->setActiveSheetIndex(0);
@@ -623,18 +623,17 @@ class ReportProject extends WebminController
 
                 $invoice = $last_invoice == $row['sales_admin_invoice'] ? '' : $row['sales_admin_invoice'];
 
-                $retur_sales_date     = indo_short_date($row['hd_retur_sales_admin_invoice'], FALSE);
-                $sales_due_date = indo_short_date($row['sales_due_date'], FALSE);
+                $retur_sales_date     = indo_short_date($row['hd_retur_date'], FALSE);
+                //$sales_due_date = indo_short_date($row['sales_due_date'], FALSE);
 
                 $sheet->getCell('A' . $iRow)->setValue($invoice);
                 $sheet->getCell('B' . $iRow)->setValue($retur_sales_date);
-                $sheet->getCell('C' . $iRow)->setValue($sales_due_date);
-                $sheet->getCell('D' . $iRow)->setValue($row['salesman_name']);
-                $sheet->getCell('E' . $iRow)->setValue($row['item_code']);
-                $sheet->getCell('F' . $iRow)->setValue($row['product_name']);
-                $sheet->getCell('G' . $iRow)->setValue($dt_temp_qty);
-                $sheet->getCell('H' . $iRow)->setValue(numberFormat($dt_product_price, TRUE));
-                $sheet->getCell('I' . $iRow)->setValue(numberFormat($dt_sales_price, TRUE));
+                $sheet->getCell('C' . $iRow)->setValue($row['salesman_name']);
+                $sheet->getCell('D' . $iRow)->setValue($row['item_code']);
+                $sheet->getCell('E' . $iRow)->setValue($row['product_name']);
+                $sheet->getCell('F' . $iRow)->setValue($retur_qty);
+                $sheet->getCell('G' . $iRow)->setValue(numberFormat($retur_price, TRUE));
+                $sheet->getCell('H' . $iRow)->setValue(numberFormat($retur_total, TRUE));
 
                 $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
                 $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
@@ -644,7 +643,6 @@ class ReportProject extends WebminController
                 $sheet->getStyle('F' . $iRow)->applyFromArray($border_left_right);
                 $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
                 $sheet->getStyle('H' . $iRow)->applyFromArray($border_left_right);
-                $sheet->getStyle('I' . $iRow)->applyFromArray($border_left_right);
 
 
                 $last_invoice = $row['sales_admin_invoice'];
@@ -661,14 +659,14 @@ class ReportProject extends WebminController
             $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
             $sheet->getCell('A1')->setValue($reportInfo);
 
-            $sheet->mergeCells('A1:I1');
+            $sheet->mergeCells('A1:H1');
 
-            $sheet->getStyle('A1:I1')->getAlignment()->setHorizontal('right');
+            $sheet->getStyle('A1:H1')->getAlignment()->setHorizontal('right');
 
-            $sheet->getStyle('A2:I2')->applyFromArray($font_bold);
+            $sheet->getStyle('A2:H2')->applyFromArray($font_bold);
 
 
-            $filename = 'Penjualan Detail Admin';
+            $filename = 'Retur Detail Penjualan Admin';
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
             header('Cache-Control: max-age=0');
