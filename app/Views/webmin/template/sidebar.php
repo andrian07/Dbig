@@ -374,6 +374,16 @@
 				</li>
 
 				<li class="nav-item">
+					<a href="<?= base_url('webmin/configs') ?>" class="nav-link">
+						<i class="nav-icon fas fa-cogs"></i>
+						<p>
+							Pengaturan
+							<span class="right badge badge-danger"></span>
+						</p>
+					</a>
+				</li>
+
+				<li class="nav-item">
 					<a id="btnlogout" href="<?= base_url('webmin/auth/logout') ?>" data-question="Yakin ingin keluar dari aplikasi?" class="nav-link">
 						<i class="nav-icon fas fa-power-off text-danger"></i>
 						<p class="text text-danger"><b>Logout</b></p>

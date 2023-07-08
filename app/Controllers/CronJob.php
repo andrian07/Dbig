@@ -31,6 +31,7 @@ class CronJob extends BaseController
 
     public function updatePOSafetyStock()
     {
+        $isUserRequest          = $this->request->getGet('user_request') == null ? false : true;
         $today                  = date('Y-m-d');
         $M_cronjob              = model('M_cronjob');
         $M_admin_notification   = model('M_admin_notification');
@@ -59,7 +60,6 @@ class CronJob extends BaseController
         $insertOrder = $M_cronjob->insertListPurchaseOrder($orderData, $today);
 
         if ($insertOrder) {
-            echo "Update Order:OK";
             // set notification //
             $notifData = [
                 'notification_date' => date('Y-m-d'),
@@ -67,14 +67,24 @@ class CronJob extends BaseController
                 'notification_view_url' => base_url('webmin/purchase-order/auto-po?update_date=' . $today),
             ];
             $M_admin_notification->insertNotification($notifData);
+
+            if ($isUserRequest) {
+                return redirect()->to(base_url('webmin/dashboard'));
+            } else {
+                echo "Update Order : OK";
+            }
         } else {
-            echo "Update Order:NO";
+            if ($isUserRequest) {
+                return redirect()->to(base_url('webmin/dashboard'));
+            } else {
+                echo "Update Order : GAGAL";
+            }
         }
     }
 
     public function updateSafetyStockBalance()
     {
-        echo "update safety stock balance<br>";
+        $isUserRequest          = $this->request->getGet('user_request') == null ? false : true;
         $storeCount = 2;
         $today      = date('Y-m-d');
 
@@ -144,9 +154,30 @@ class CronJob extends BaseController
                 'notification_view_url' => base_url('webmin/product/info-update-safety?update_date=' . $today),
             ];
             $M_admin_notification->insertNotification($notifData);
-            echo "update min_stok:OK";
+
+            if ($isUserRequest) {
+                return redirect()->to(base_url('webmin/dashboard'));
+            } else {
+                echo "Update Safety Stok : OK";
+            }
         } else {
-            echo "update min_stok:GAGAL";
+            if ($isUserRequest) {
+                return redirect()->to(base_url('webmin/dashboard'));
+            } else {
+                echo "Update Safety Stok : GAGAL";
+            }
+        }
+    }
+
+    public function deleteLastMonthRecap()
+    {
+        $M_cronjob = model('M_cronjob');
+        $max_date = date('Y-m') . '-01';
+        $delete = $M_cronjob->deleteRecapData($max_date);
+        if ($delete) {
+            echo "Delete Recap Data : OK";
+        } else {
+            echo "Delete Recap Data : GAGAL";
         }
     }
 }

@@ -124,4 +124,11 @@ class M_cronjob extends Model
             return $isSuccess;
         }
     }
+
+    public function deleteRecapData($max_date)
+    {
+        $deleteListPO = $this->db->table('list_purchase_order')->where('update_date<', $max_date)->delete();
+        $deleteListSafety = $this->db->table('list_update_safety_stock')->where('update_date<', $max_date)->delete();
+        return $deleteListPO && $deleteListSafety;
+    }
 }

@@ -406,7 +406,7 @@ class MyApp extends BaseConfig
                 /*customer report */
                 'receivable_list'                   => ['text' => 'Laporan Piutang'],
                 'receivable_list_receipt'           => ['text' => 'Laporan Tagihan Piutang'],
-                
+
                 /* end customer report */
 
                 'sales_list'                        => ['text' => 'Daftar Penjualan'],
@@ -425,6 +425,14 @@ class MyApp extends BaseConfig
                 'accounting'                        => ['text' => 'Akuntansi'],
                 'stock_transfer'                    => ['text' => 'Daftar Transfer Stock'],
 
+            ]
+        ],
+
+
+        'configs' => [
+            'text'   => 'Pengaturan',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
             ]
         ]
     ];

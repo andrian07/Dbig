@@ -171,6 +171,8 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('profile', 'Webmin\Profile::index');
     $routes->post('profile/update-password', 'Webmin\Profile::updatePassword');
     $routes->post('profile/update-pin', 'Webmin\Profile::updatePin');
+
+    $routes->get('configs', 'Webmin\Configs::index');
 });
 
 
@@ -856,6 +858,8 @@ $routes->group('webmin/mobileapps/promo', ['filter' => 'webminauth'], static fun
 });
 
 /* end Mobile*/
+
+
 
 
 /* Stock Transfer*/
