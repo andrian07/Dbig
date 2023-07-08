@@ -283,24 +283,16 @@ $assetsUrl = base_url('assets');
     $(document).ready(function() {
         $('#tblnotification').on('click', '.btnview', function(e) {
             e.preventDefault();
-            let notification_id = $(this).data('id');
             let view_url = $(this).data('url');
-
-            let openUrl = base_url + '/webmin/dashboard/delete-notification/' + notification_id + '?view_url=' + view_url;
-            window.location.href = openUrl;
-
+            window.location.href = view_url;
         })
 
         $('#tblnotification').on('click', '.btndelete', function(e) {
             e.preventDefault();
             let notification_id = $(this).data('id');
-
             let openUrl = base_url + '/webmin/dashboard/delete-notification/' + notification_id;
             window.location.href = openUrl;
         })
-
-
-
     })
 </script>
 

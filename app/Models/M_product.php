@@ -1647,6 +1647,9 @@ class M_product extends Model
 
         $now = date('Y-m-d');
         $builder->where("ms_warehouse_stock.exp_date <= CAST('$now' AS DATE)");
+        $builder->where("ms_warehouse_stock.exp_date IS NOT NULL", null, false);
+        $builder->where("ms_warehouse_stock.exp_date!=", '0000-00-00');
+
 
         $builder->groupBy('ms_warehouse_stock.product_id,ms_warehouse_stock.warehouse_id,ms_warehouse_stock.exp_date');
         $builder->orderBy('ms_product.product_name,ms_warehouse.warehouse_code', 'ASC');

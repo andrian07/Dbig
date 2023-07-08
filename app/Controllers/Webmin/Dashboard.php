@@ -35,6 +35,8 @@ class Dashboard extends WebminController
         $M_admin_notification->deleteNotification($notification_id);
         return redirect()->to($view_url);
     }
+
+
     //--------------------------------------------------------------------
 
 }
