@@ -2166,11 +2166,6 @@ class ReportInventory extends WebminController
         }
     }
 
-
-
-
-
-
     public function stockOpnameList_old()
     {
         $data = [
@@ -2265,33 +2260,285 @@ class ReportInventory extends WebminController
 
     public function deadStockList()
     {
-        $data = [
-            'title'         => 'Daftar Dead Stok',
-            'userLogin'     => $this->userLogin
-        ];
-
-        $htmlView   = view('webmin/report/inventory/dead_stock_list', $data);
+        $percent_sales      = $this->request->getGet('percent_sales') != null ? floatval($this->request->getGet('percent_sales')) : 20;
+        $cutoff_date        = $this->request->getGet('cutoff_date') != null ? $this->request->getGet('cutoff_date') : date('Y-m') . '-01';
+        $three_months_ago   = date('Y-m-d', strtotime('-3 months', strtotime($cutoff_date)));
         $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
         $fileType   = $this->request->getGet('file');
         $agent      = $this->request->getUserAgent();
 
-        if (!in_array($fileType, ['pdf'])) {
+
+        if (!in_array($fileType, ['pdf', 'xls'])) {
             $fileType = 'pdf';
         }
 
-        if ($agent->isMobile()  && !$isDownload) {
-            return $htmlView;
-        } else {
-            if ($fileType == 'pdf') {
+
+        $M_product = model('M_product');
+
+        $getProduct = $M_product->getReportStockProduct()->getResultArray();
+
+        $list_product_id    = []; //list array product_id 1,2,3
+        $stockData          = [];
+        $sampleStockData = [
+            'P1' => [
+                'purchase'  => 10,
+                'sales'     => 10,
+            ]
+        ];
+
+
+        foreach ($getProduct as $row) {
+            $list_product_id[] = $row['product_id'];
+        }
+
+
+        $max_get_product = 500;
+        $batchProductIds = array_chunk($list_product_id, $max_get_product);
+        foreach ($batchProductIds as $product_ids) {
+            $getSalesStock      = $M_product->getSalesStockByProduct($product_ids, null, $cutoff_date);
+            $getPurchaseStock   = $M_product->getPurchaseStockByProduct($product_ids, null,  $three_months_ago);
+
+            foreach ($getSalesStock as $row) {
+                $pid = 'P' . $row['product_id'];
+                $stockData[$pid]['sales'] = floatval($row['sales_stock']);
+            }
+
+
+            foreach ($getPurchaseStock as $row) {
+                $pid = 'P' . $row['product_id'];
+                $stockData[$pid]['purchase'] = floatval($row['purchase_stock']);
+            }
+        }
+
+        if ($fileType == 'pdf') {
+            die('Export Excel Only');
+            $data = [
+                'title'         => 'Daftar Dead Stok',
+                'userLogin'     => $this->userLogin
+            ];
+            $htmlView   = view('webmin/report/inventory/dead_stock_list', $data);
+            if ($agent->isMobile()  && !$isDownload) {
+                return $htmlView;
+            } else {
                 $dompdf = new Dompdf();
                 $dompdf->loadHtml($htmlView);
                 $dompdf->setPaper('A4', 'landscape');
                 $dompdf->render();
                 $dompdf->stream('daftar_dead_stock.pdf', array("Attachment" => $isDownload));
                 exit();
-            } else {
-                die('Export Excel Script');
             }
+        } else {
+
+            // dd($getProduct, $stockData);
+            // die('Export Excel Script');
+            $header_format = [
+                'fill' => [
+                    'fillType' =>  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => [
+                        'argb' => 'A5A5A5'
+                    ]
+                ],
+                'font' => [
+                    'bold' => true,
+                ],
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                    ],
+                ],
+            ];
+
+            $total_format = [
+                'font' => [
+                    'bold' => true,
+                ],
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'bottom' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $font_bold = [
+                'font' => [
+                    'bold' => true,
+                ],
+            ];
+
+            $border_left_right = [
+                'borders' => [
+                    'right' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                    'left' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $border_top = [
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+
+            $template = WRITEPATH . '/template/report/template_report.xlsx';
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+
+            $sheet = $spreadsheet->setActiveSheetIndex(0);
+            // init iRow //
+            $iRow = 8;
+
+            // MAKE HEADER // 
+            $sheet->getCell('A' . $iRow)->setValue('KODE PRODUK');
+            $sheet->getCell('B' . $iRow)->setValue('NAMA PRODUK');
+            $sheet->getCell('C' . $iRow)->setValue('BRAND');
+            $sheet->getCell('D' . $iRow)->setValue('KATEGORI');
+            $sheet->getCell('E' . $iRow)->setValue('PERSENTASE (%)');
+            $sheet->getCell('F' . $iRow)->setValue('HISTORI BARANG MASUK');
+            $sheet->getCell('G' . $iRow)->setValue('HISTORI QTY JUAL');
+            $sheet->getCell('H' . $iRow)->setValue('SISA STOK');
+            $sheet->getCell('I' . $iRow)->setValue('KETERANGAN');
+
+            $sheet->getStyle('A' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('B' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('C' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('D' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('E' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('F' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('G' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('H' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('I' . $iRow)->applyFromArray($header_format);
+            $iRow++;
+            // END MAKE HEADER //
+
+
+            foreach ($getProduct as $row) {
+                $pid = 'P' . $row['product_id'];
+
+                $sales_stock        = isset($stockData[$pid]['sales']) ? $stockData[$pid]['sales'] : 0;
+                $purchase_stock     = isset($stockData[$pid]['purchase']) ? $stockData[$pid]['purchase'] : 0;
+                $product_percent    = $purchase_stock == 0 ? 100 : (($sales_stock / $purchase_stock) * 100);
+                $stock              = $purchase_stock - $sales_stock;
+                $product_status     = 'Stock Aman';
+                if ($product_percent <= $percent_sales) {
+                    $product_status     = 'Dead Stock';
+                }
+                $sheet->getCell('A' . $iRow)->setValue($row['product_code']);
+                $sheet->getCell('B' . $iRow)->setValue($row['product_name']);
+                $sheet->getCell('C' . $iRow)->setValue($row['brand_name']);
+                $sheet->getCell('D' . $iRow)->setValue($row['category_name']);
+                $sheet->getCell('E' . $iRow)->setValue(numberFormat($percent_sales, true));
+                $sheet->getCell('F' . $iRow)->setValue(numberFormat($purchase_stock, true));
+                $sheet->getCell('G' . $iRow)->setValue(numberFormat($sales_stock, true));
+                $sheet->getCell('H' . $iRow)->setValue(numberFormat($stock, true));
+                $sheet->getCell('I' . $iRow)->setValue($product_status);
+
+
+                $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('F' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('H' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('I' . $iRow)->applyFromArray($border_left_right);
+                $iRow++;
+            }
+
+
+            // close table //
+            $sheet->getStyle('A' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('B' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('C' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('D' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('E' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('F' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('G' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('H' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('I' . $iRow)->applyFromArray($border_top);
+            $iRow++;
+
+            //setting periode
+
+            $sheet->getCell('A5')->setValue('TANGGAL CUTOFF');
+            $sheet->getStyle('A5')->applyFromArray($font_bold);
+            $sheet->getCell('B5')->setValue(indo_short_date($cutoff_date));
+            $sheet->mergeCells('B5:I5');
+
+            $sheet->getCell('A6')->setValue('BATAS PEMBELIAN');
+            $sheet->getStyle('A6')->applyFromArray($font_bold);
+            $sheet->getCell('B6')->setValue(indo_short_date($three_months_ago));
+            $sheet->mergeCells('B6:I6');
+
+            //setting excel header//
+            // A4-G4 = Store Phone
+            // A3-G3 = Store Address
+            // A2-G2 = Store Name
+            // A1-G1 = Print By
+            $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
+            $sheet->getCell('A4')->setValue(COMPANY_PHONE);
+            $sheet->getCell('A3')->setValue(COMPANY_ADDRESS);
+            $sheet->getCell('A2')->setValue(COMPANY_NAME);
+            $sheet->getCell('A1')->setValue($reportInfo);
+
+            $sheet->mergeCells('A4:I4');
+            $sheet->mergeCells('A3:I3');
+            $sheet->mergeCells('A2:I2');
+            $sheet->mergeCells('A1:I1');
+
+            $sheet->getStyle('A4:I4')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A3:I3')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A2:I2')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A1:I1')->getAlignment()->setHorizontal('right');
+
+            $sheet->getStyle('A4:I4')->applyFromArray($font_bold);
+            $sheet->getStyle('A3:I3')->applyFromArray($font_bold);
+            $sheet->getStyle('A2:I2')->applyFromArray($font_bold);
+
+            $sheet->getColumnDimension('A')->setAutoSize(true);
+            $sheet->getColumnDimension('B')->setAutoSize(true);
+            $sheet->getColumnDimension('C')->setAutoSize(true);
+            $sheet->getColumnDimension('D')->setAutoSize(true);
+            $sheet->getColumnDimension('E')->setAutoSize(true);
+            $sheet->getColumnDimension('F')->setAutoSize(true);
+            $sheet->getColumnDimension('G')->setAutoSize(true);
+            $sheet->getColumnDimension('H')->setAutoSize(true);
+            $sheet->getColumnDimension('I')->setAutoSize(true);
+
+
+            $filename = 'laporan_dead_stock';
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+            header('Cache-Control: max-age=0');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save('php://output');
+            exit();
         }
     }
 

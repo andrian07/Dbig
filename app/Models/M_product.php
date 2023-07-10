@@ -1784,6 +1784,32 @@ class M_product extends Model
         return $this->db->query($sqlGetSalesStock)->getResultArray();
     }
 
+    public function getPurchaseStockByProduct($product_ids = [], $start_date, $end_date)
+    {
+        // subquery output product_id,purchase_stock
+
+        // getting from purchase //
+        $builder = $this->db->table('dt_purchase');
+        $builder->select('ms_product_unit.product_id,(ms_product_unit.product_content*dt_purchase.dt_purchase_qty) AS purchase_stock')
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_purchase.dt_purchase_item_id')
+            ->join('hd_purchase', 'hd_purchase.purchase_invoice=dt_purchase.dt_purchase_invoice')
+            ->whereIn('ms_product_unit.product_id', $product_ids);
+
+        if ($start_date == null) {
+            $builder->where("hd_purchase.purchase_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_purchase.purchase_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlPurchase = $builder->getCompiledSelect();
+
+
+
+
+        $sqlGetPurchaseStock = "SELECT purchase_data.product_id,SUM(purchase_data.purchase_stock) AS purchase_stock FROM ($sqlPurchase) AS purchase_data GROUP BY purchase_data.product_id";
+
+        return $this->db->query($sqlGetPurchaseStock)->getResultArray();
+    }
+
     public function getHistorySalesPrice($product_id, $start_date, $end_date)
     {
         // subquery output product_id,sales_date,customer_group,sales_price,count_data //
@@ -1843,5 +1869,21 @@ class M_product extends Model
 
         $sqlText = "SELECT stock_data.product_id,stock_data.purchase_date,stock_data.purchase_price,count(stock_data.dt_purchase_id) as count_data FROM ($sqlPurchase) as stock_data GROUP BY stock_data.product_id,stock_data.purchase_date,stock_data.purchase_price ORDER BY purchase_date";
         return $this->db->query($sqlText)->getResultArray();
+    }
+
+
+    public function getReportStockProduct()
+    {
+        $subQueryStock = $this->db->table('ms_product_stock')
+            ->select("product_id,SUM(stock) AS stock_total", false)
+            ->groupBy('product_id')
+            ->getCompiledSelect();
+
+        $builder = $this->db->table('ms_product');
+        $builder->select("ms_product.product_id,ms_product.product_code,ms_product.product_name,ms_brand.brand_name,ms_category.category_name,ms_product.min_stock,IFNULL(product_stock.stock_total,0) AS stock_total", false);
+        $builder->join("($subQueryStock) AS product_stock", 'product_stock.product_id=ms_product.product_id', 'LEFT', false);
+        $builder->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id');
+        $builder->join('ms_category', 'ms_category.category_id=ms_product.category_id');
+        return $builder->get();
     }
 }

@@ -262,109 +262,6 @@ $assetsUrl = base_url('assets');
     </section>
 </div>
 
-
-
-
-<div class="modal fade" id="modal-voucher">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="title-frmvoucher"></h4>
-                <button type="button" class="close close-modal">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6 col-sm-12 col-xs-12">
-                        <form id="frmvoucher" class="form-horizontal">
-                            <input type="hidden" id="voucher_group_id" name="voucher_group_id" value="0">
-                            <input type="hidden" id="old_cover_image" name="old_cover_image" value="">
-                            <input type="hidden" id="old_backcover_image" name="old_backcover_image" value="">
-                            <div class="form-group">
-                                <label for="voucher_name" class="col-sm-12">Nama Voucher</label>
-                                <div class="col-sm-12">
-                                    <input type="text" class="form-control" id="voucher_name" name="voucher_name" placeholder="Nama Voucher" value="" data-parsley-maxlength="200" required>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="voucher_value" class="col-sm-12">Nilai Voucher</label>
-                                <div class="col-sm-12">
-                                    <input type="text" class="form-control" id="voucher_value" name="voucher_value" placeholder="Nilai Voucher" value="" data-parsley-vvouchervalue required>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="voucher_remark" class="col-sm-12">Keterangan</label>
-                                <div class="col-sm-12">
-                                    <textarea id="voucher_remark" name="voucher_remark" class="form-control" placeholder="Keterangan" data-parsley-maxlength="500" rows="3" required></textarea>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="category_restriction" class="col-sm-12">Filter Kategori</label>
-                                <div class="col-sm-12 sel2">
-                                    <select id="category_restriction" name="category_restriction[]" class="form-control" multiple="multiple"></select>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="brand_restriction" class="col-sm-12">Filter Brand</label>
-                                <div class="col-sm-12 sel2">
-                                    <select id="brand_restriction" name="brand_restriction[]" class="form-control" multiple="multiple"></select>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="exp_date" class="col-sm-12">Exp. Date</label>
-                                <div class="col-sm-12">
-                                    <input type="date" class="form-control" id="exp_date" name="exp_date" placeholder="Exp. Date" value="" required>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-md-6 col-sm-12 col-xs-12">
-                        <?php
-                        $defaultImage = base_url('assets/images/no-image.PNG');
-                        $allow_ext = [];
-                        foreach ($upload_file_type['image'] as $ext) {
-                            $allow_ext[] = '.' . $ext;
-                        }
-                        ?>
-                        <div class="mb-3 border">
-                            <p class="text-center"><b>Cover Voucher</b></p>
-                            <img id="preview_image_cover" src="<?= $defaultImage ?>" width="100%" height="200px">
-
-                            <input type="file" name="upload_image_cover" id="upload_image_cover" accept="<?= implode(',', $allow_ext) ?>" hidden>
-                            <button id="btnuploadcover" class="btn btn-primary btn-block mt-0"><i class="fas fa-cloud-upload-alt"></i> Unggah Gambar</button>
-                        </div>
-
-                        <div class="mb-3 border">
-                            <p class="text-center"><b>Back Cover Voucher</b></p>
-                            <img id="preview_image_backcover" src="<?= $defaultImage ?>" width="100%" height="200px">
-                            <input type="file" name="upload_image_backcover" id="upload_image_backcover" accept="<?= implode(',', $allow_ext) ?>" hidden>
-                            <button id="btnuploadbackcover" class="btn btn-primary btn-block mt-0"><i class="fas fa-cloud-upload-alt"></i> Unggah Gambar</button>
-
-                        </div>
-
-
-
-                    </div>
-                </div>
-
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button id="btncancel" class="btn btn-danger close-modal"><i class="fas fa-times-circle"></i> Batal</button>
-                <button id="btnsave" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
-            </div>
-
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
 <!-- /.content -->
 <?= $this->endSection() ?>
 
@@ -470,10 +367,6 @@ $assetsUrl = base_url('assets');
             updateTable();
         })
 
-
-
-
-
         let tbldetailsales = $("#tbldetailsales").DataTable({
             processing: true,
             select: true,
@@ -574,6 +467,15 @@ $assetsUrl = base_url('assets');
             })
 
         })
+
+
+        $("#tblsalespos").on('click', '.btnprint', function(e) {
+            e.preventDefault();
+            let id = $(this).attr('data-id');
+            let openUrl = base_url + '/webmin/sales-pos/printdispatch/' + id;
+            window.open(openUrl, '_blank');
+        })
+
 
         $("#tbldetailsales").on('click', '.btnedit', function(e) {
             e.preventDefault();
