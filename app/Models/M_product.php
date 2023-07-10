@@ -1778,7 +1778,45 @@ class M_product extends Model
         }
         $sqlSalesAdmin = $builder->getCompiledSelect();
 
-        $unionAll = "($sqlSalesPos) UNION ALL ($sqlSalesAdmin)";
+
+        // getting from sales return [-] //
+        $builder = $this->db->table('dt_pos_sales_return');
+        $builder->select('ms_product_unit.product_id,((ms_product_unit.product_content*dt_pos_sales_return.sales_return_qty)*-1) AS sales_stock', false)
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales_return.item_id')
+            ->join('hd_pos_sales_return', 'hd_pos_sales_return.pos_sales_return_id=dt_pos_sales_return.pos_sales_return_id');
+
+        if (count($product_ids) > 0) {
+            $builder->whereIn('ms_product_unit.product_id', $product_ids);
+        }
+
+        if ($start_date == null) {
+            $builder->where("hd_pos_sales_return.pos_sales_return_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_pos_sales_return.pos_sales_return_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlSalesPosReturn = $builder->getCompiledSelect();
+
+
+
+        // getting from sales return admin [-] //
+        $builder = $this->db->table('dt_retur_sales_admin');
+        $builder->select('ms_product_unit.product_id,((ms_product_unit.product_content*dt_retur_sales_admin.dt_retur_qty)*-1) AS sales_stock', false)
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_retur_sales_admin.dt_retur_item_id')
+            ->join('hd_retur_sales_admin', 'hd_retur_sales_admin.hd_retur_sales_admin_id=dt_retur_sales_admin.hd_retur_sales_admin_id');
+
+        if (count($product_ids) > 0) {
+            $builder->whereIn('ms_product_unit.product_id', $product_ids);
+        }
+
+        if ($start_date == null) {
+            $builder->where("hd_retur_sales_admin.hd_retur_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_retur_sales_admin.hd_retur_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlSalesReturnAdmin = $builder->getCompiledSelect();
+
+
+        $unionAll = "($sqlSalesPos) UNION ALL ($sqlSalesAdmin) UNION ALL ($sqlSalesPosReturn) UNION ALL ($sqlSalesReturnAdmin)";
         $sqlGetSalesStock = "SELECT sales_data.product_id,SUM(sales_data.sales_stock) AS sales_stock FROM ($unionAll) AS sales_data GROUP BY sales_data.product_id";
 
         return $this->db->query($sqlGetSalesStock)->getResultArray();
@@ -1792,8 +1830,11 @@ class M_product extends Model
         $builder = $this->db->table('dt_purchase');
         $builder->select('ms_product_unit.product_id,(ms_product_unit.product_content*dt_purchase.dt_purchase_qty) AS purchase_stock')
             ->join('ms_product_unit', 'ms_product_unit.item_id=dt_purchase.dt_purchase_item_id')
-            ->join('hd_purchase', 'hd_purchase.purchase_invoice=dt_purchase.dt_purchase_invoice')
-            ->whereIn('ms_product_unit.product_id', $product_ids);
+            ->join('hd_purchase', 'hd_purchase.purchase_invoice=dt_purchase.dt_purchase_invoice');
+
+        if (count($product_ids) > 0) {
+            $builder->whereIn('ms_product_unit.product_id', $product_ids);
+        }
 
         if ($start_date == null) {
             $builder->where("hd_purchase.purchase_date<=CAST('$end_date' AS DATE)");
@@ -1803,9 +1844,28 @@ class M_product extends Model
         $sqlPurchase = $builder->getCompiledSelect();
 
 
+        // getting from purchase return [-] //
+        $builder = $this->db->table('dt_retur_purchase');
+        $builder->select('ms_product_unit.product_id,((ms_product_unit.product_content*dt_retur_purchase.dt_retur_qty)*-1) AS purchase_stock', false)
+            ->join('ms_product_unit', 'ms_product_unit.item_id=dt_retur_purchase.dt_retur_item_id')
+            ->join('hd_retur_purchase', 'hd_retur_purchase.hd_retur_purchase_id=dt_retur_purchase.hd_retur_purchase_id')
+            ->where('hd_retur_purchase.hd_retur_status', 'Selesai');
+
+        if (count($product_ids) > 0) {
+            $builder->whereIn('ms_product_unit.product_id', $product_ids);
+        }
+
+        if ($start_date == null) {
+            $builder->where("hd_retur_purchase.hd_retur_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(hd_retur_purchase.hd_retur_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+        $sqlPurchaseReturn = $builder->getCompiledSelect();
 
 
-        $sqlGetPurchaseStock = "SELECT purchase_data.product_id,SUM(purchase_data.purchase_stock) AS purchase_stock FROM ($sqlPurchase) AS purchase_data GROUP BY purchase_data.product_id";
+
+        $unionAll = "($sqlPurchase) UNION ALL ($sqlPurchaseReturn)";
+        $sqlGetPurchaseStock = "SELECT purchase_data.product_id,SUM(purchase_data.purchase_stock) AS purchase_stock FROM ($unionAll) AS purchase_data GROUP BY purchase_data.product_id";
 
         return $this->db->query($sqlGetPurchaseStock)->getResultArray();
     }
