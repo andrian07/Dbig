@@ -406,6 +406,75 @@ class Submission extends WebminController
 
         resultJSON($result);
     }
+    
+    public function createSubmissionSystem()
+    {
+
+        $this->validationRequest(TRUE, 'POST');
+
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+        $validation =  \Config\Services::validation();
+
+        $input = [
+            
+            'submission_warehouse_id'    => $this->request->getPost('submission_warehouse_id'),
+            'submission_type'            => $this->request->getPost('submission_type'),
+            'submission_item_id'         => $this->request->getPost('item_id'),
+            'submission_product_name'    => $this->request->getPost('product_name'),
+            'submission_qty'             => $this->request->getPost('qty'),
+            'submission_item_status'     => $this->request->getPost('temp_status'), 
+            'submission_date'            => $this->request->getPost('submission_order_date'),
+            'submission_salesman_id'     => $this->request->getPost('salesman_id'),
+            'submission_desc'            => $this->request->getPost('desc')
+        ];
+
+        $validation->setRules([
+            'submission_warehouse_id'        => ['rules' => 'required'],
+            'submission_desc'                => ['rules' => 'max_length[500]'],
+            'submission_item_id'             => ['rules' => 'required'],
+        ]);
+
+        if ($validation->run($input) === FALSE) {
+
+            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+        } else {
+
+            if ($this->role->hasRole('submission.add')) {
+
+                $input['submission_user_id']= $this->userLogin['user_id'];
+
+                $input['submission_status'] = 'Pending';
+
+                $save = $this->M_submission->insertSubmission($input);
+
+                $product_id = $this->request->getPost('product_id');
+
+                $saves = $this->M_submission->updateNotif($product_id);
+
+                if ($save['success']) {
+
+                    $result = ['success' => TRUE, 'message' => 'Data pengajuan berhasil disimpan', 'submission_id' => $save['submission_id']];
+
+                } else {
+
+                    $result = ['success' => FALSE, 'message' => 'Data pengajuan gagal disimpan'];
+
+                }
+
+            } else {
+
+                $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menambah pengajuan'];
+
+            }
+        }
+
+
+        $result['csrfHash'] = csrf_hash();
+        resultJSON($result);
+
+    }
 
 
 }

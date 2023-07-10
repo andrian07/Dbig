@@ -567,6 +567,10 @@ $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static funct
     $routes->get('getbyid/(:num)', 'Webmin\Purchase_order::getById/$1');
 
     $routes->post('update-status-item', 'Webmin\Purchase_order::UpdateStatusItem');
+
+    $routes->get('auto-po', 'Webmin\Purchase_order::autoPo');
+
+    $routes->POST('list-auto-po', 'Webmin\Purchase_order::tbllistAutoPo');
 });
 
 
@@ -592,6 +596,8 @@ $routes->group('webmin/submission', ['filter' => 'webminauth'], static function 
     $routes->get('get-submission-detail/(:alphanum)', 'Webmin\Submission::getSubmissionDetail/$1');
 
     $routes->get('getbyid/(:num)', 'Webmin\Submission::getById/$1');
+
+    $routes->post('create-submission-system', 'Webmin\Submission::createSubmissionSystem');
 });
 
 

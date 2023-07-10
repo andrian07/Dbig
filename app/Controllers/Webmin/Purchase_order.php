@@ -691,8 +691,53 @@ public function printinvoice($purchase_order_id = "")
 
     }
     
-    
-    
+}
+
+
+public function autoPo()
+{
+    $data = [
+        'title'         => 'Pengajuan Produk Dibawah Safety Stok'
+    ];
+    return $this->renderView('purchase/submission_system', $data);
+}
+
+public function tbllistAutoPo()
+{
+    $this->validationRequest(TRUE);
+    if ($this->role->hasRole('submission.view')) {
+        helper('datatable');
+        $table = new \App\Libraries\Datatables('list_purchase_order');
+        $table->db->select('*');
+        $table->db->join('ms_product', 'ms_product.product_id  = list_purchase_order.product_id');
+        $table->db->join('ms_product_unit', 'ms_product_unit.product_id  = ms_product.product_id');
+        $table->db->join('ms_unit', 'ms_unit.unit_id  = ms_product_unit.unit_id');
+        $table->db->where('base_unit = "Y"');
+        $table->db->orderBy('list_purchase_order.product_id', 'desc');
+        $table->renderColumn(function ($row, $i) {
+            $column = [];
+            $column[] = $i;
+            $column[] = esc($row['item_code'].'-'.$row['product_name'].'('.$row['unit_name'].')');
+            $column[] = esc($row['min_stock']);
+            $column[] = esc($row['stock']);
+            $column[] = esc($row['order_stock']);
+            if($row['status'] == 'Success'){
+                $column[] = '<span class="badge badge-success">Selesai</span>';
+            }else if($row['status'] == 'Pending'){
+                $column[] = '<span class="badge badge-primary">Pending</span>';
+            }else{
+                $column[] = '<span class="badge badge-danger">Batal</span>';
+            }
+            $btns = [];
+            $btns[] = '<button data-id="'.$row['item_id'].'" data-prod="'.$row['product_id'].'" data-name="'. esc($row['item_code'].'-'.$row['product_name'].'('.$row['unit_name'].')').'" data-qty="'.$row['order_stock'].'"  data-dates="'.$row['update_date'].'" class="margins btn btn-sm btn-success mb-2 btnorder" data-toggle="tooltip" data-placement="top" data-title="Order" data-original-title="" title=""><i class="fas fa-check"></i></button>';
+            $column[] = implode('&nbsp;', $btns);
+            return $column;
+        });
+
+        $table->orderColumn  = ['', 'product_name',''];
+        $table->searchColumn = ['product_name'];
+        $table->generate();
+    }
 }
 
     //--------------------------------------------------------------------

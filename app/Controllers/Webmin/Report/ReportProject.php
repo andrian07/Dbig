@@ -619,6 +619,7 @@ class ReportProject extends WebminController
                 $retur_price = floatval($row['dt_retur_price']);
                 $retur_qty = floatval($row['dt_retur_qty']);
                 $retur_ppn = floatval($row['dt_retur_ppn']);
+                $retur_dpp = floatval($row['dt_retur_dpp']);
                 $retur_total = floatval($row['dt_retur_total']);
 
                 $invoice = $last_invoice == $row['sales_admin_invoice'] ? '' : $row['sales_admin_invoice'];
@@ -628,12 +629,15 @@ class ReportProject extends WebminController
 
                 $sheet->getCell('A' . $iRow)->setValue($invoice);
                 $sheet->getCell('B' . $iRow)->setValue($retur_sales_date);
-                $sheet->getCell('C' . $iRow)->setValue($row['salesman_name']);
-                $sheet->getCell('D' . $iRow)->setValue($row['item_code']);
-                $sheet->getCell('E' . $iRow)->setValue($row['product_name']);
-                $sheet->getCell('F' . $iRow)->setValue($retur_qty);
-                $sheet->getCell('G' . $iRow)->setValue(numberFormat($retur_price, TRUE));
-                $sheet->getCell('H' . $iRow)->setValue(numberFormat($retur_total, TRUE));
+                $sheet->getCell('C' . $iRow)->setValue($row['product_code']);
+                $sheet->getCell('D' . $iRow)->setValue($row['product_name']);
+                $sheet->getCell('E' . $iRow)->setValue($row['brand_name']);
+                $sheet->getCell('F' . $iRow)->setValue($row['category_name']);
+                $sheet->getCell('G' . $iRow)->setValue(numberFormat($retur_qty, TRUE));
+                $sheet->getCell('H' . $iRow)->setValue(numberFormat($retur_price, TRUE));
+                $sheet->getCell('I' . $iRow)->setValue(numberFormat($retur_ppn, TRUE));
+                $sheet->getCell('J' . $iRow)->setValue(numberFormat($retur_dpp - $retur_ppn, TRUE));
+                $sheet->getCell('K' . $iRow)->setValue(numberFormat($retur_total, TRUE));
 
                 $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
                 $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
@@ -643,7 +647,9 @@ class ReportProject extends WebminController
                 $sheet->getStyle('F' . $iRow)->applyFromArray($border_left_right);
                 $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
                 $sheet->getStyle('H' . $iRow)->applyFromArray($border_left_right);
-
+                $sheet->getStyle('I' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('J' . $iRow)->applyFromArray($border_left_right);
+                $sheet->getStyle('K' . $iRow)->applyFromArray($border_left_right);
 
                 $last_invoice = $row['sales_admin_invoice'];
                 $iRow++;

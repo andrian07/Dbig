@@ -10,6 +10,9 @@ class M_submission extends Model
     protected $table_hd_submission   = 'hd_submission';
     protected $table_warehouse       = 'ms_warehouse';
     protected $log_queries           = 'hd_log_queries';
+    protected $table_list_purchase_order   = 'list_purchase_order';
+
+    
 
 
     public function getSubmissiondetaildata($submission_id){
@@ -231,6 +234,41 @@ class M_submission extends Model
         return $save;
 
     }
+
+    public function updateNotif($product_id)
+    {
+
+        $this->db->query('LOCK TABLES list_purchase_order WRITE');
+
+        $saveQueries = $this->db->table($this->table_list_purchase_order)->update(['status' => 'Success'], ['product_id ' => $product_id]);
+
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries = $this->db->getLastQuery()->getQuery();
+        }
+
+        if ($this->db->transStatus() === false) {
+
+            $saveQueries = NULL;
+
+            $this->db->transRollback();
+
+            $save = ['success' => FALSE, 'submission_id' => 0];
+
+        } else {
+
+            $this->db->transCommit();
+
+            $save = ['success' => TRUE, 'product_id' => $product_id];
+
+        }
+        
+        $this->db->query('UNLOCK TABLES');
+
+        return $save;
+
+    }
+
+    
 
 
     
