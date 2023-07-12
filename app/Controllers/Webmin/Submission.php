@@ -425,7 +425,7 @@ class Submission extends WebminController
             'submission_qty'             => $this->request->getPost('qty'),
             'submission_item_status'     => $this->request->getPost('temp_status'), 
             'submission_date'            => $this->request->getPost('submission_order_date'),
-            'submission_salesman_id'     => $this->request->getPost('salesman_id'),
+            'submission_salesman_id'     => 2,
             'submission_desc'            => $this->request->getPost('desc')
         ];
 
