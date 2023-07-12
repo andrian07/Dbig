@@ -17,11 +17,11 @@ class M_cronjob extends Model
             $this->db->transBegin();
             $max_insert = 500;
 
-            $this->db->table('list_purchase_order')->where('update_date', $insertDate)->delete();
+            //$this->db->table('list_purchase_order')->where('update_date', $insertDate)->delete();
 
             $batchUpdate = array_chunk($orderData, $max_insert);
             foreach ($batchUpdate as $batch) {
-                $this->db->table('list_purchase_order')->insertBatch($batch);
+                $this->db->table('list_purchase_order')->ignore()->insertBatch($batch);
                 if ($this->db->affectedRows() > 0) {
                     $saveQueries[] = $this->db->getLastQuery()->getQuery();
                 }

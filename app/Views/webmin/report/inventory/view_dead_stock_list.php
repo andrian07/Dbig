@@ -44,42 +44,32 @@ $assetsUrl = base_url('assets');
                                         </div>
                                     </div>
                                     -->
-                                    <div class="col-sm-3">
+
+
+                                    <div class="col-md-3">
                                         <!-- text input -->
                                         <div class="form-group">
-                                            <label>Tidak Ada Transaksi Selama:</label>
-                                            <select id="max_period" name="max_period" class="form-control">
-                                                <option value="3" selected>3 BULAN</option>
-                                                <option value="2">2 BULAN</option>
-                                                <option value="1">1 BULAN</option>
-                                            </select>
+                                            <label>Tanggal CutOff:</label>
+                                            <input id="cutoff_date" name="cutoff_date" type="date" class="form-control" value="<?= date('Y-m') ?>-01">
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+
+                                    <div class="col-md-3">
                                         <!-- text input -->
                                         <div class="form-group">
-                                            <label>Toko:</label>
-                                            <select id="store_id" name="store_id" class="form-control">
-                                                <option value="1">UTM - UTAMA</option>
-                                                <option value="2">KBR - CABANG KOTA BARU</option>
-                                            </select>
+                                            <label>Persentase Penjualan:</label>
+                                            <input id="percent_sales" name="percent_sales" type="text" class="form-control">
                                         </div>
                                     </div>
+
+
                                     <div class="col-sm-2">
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>&nbsp;</label>
                                             <div class="form-group">
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-default"><i class="fas fa-search"></i> Cari</button>
-                                                    <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
-                                                        <span class="sr-only">Toggle Dropdown</span>
-                                                    </button>
-                                                    <div class="dropdown-menu" role="menu">
-                                                        <a id="btnexportpdf" class="dropdown-item" href="#">Export PDF</a>
-                                                        <a id="btnexportexcel" class="dropdown-item" href="#">Export Excel</a>
-                                                    </div>
-                                                </div>
+                                                <button id="btnexportexcel" type="button" class="btn btn-default"><i class="fas fa-file-xls"></i> Export Excel</button>
+
                                             </div>
                                         </div>
                                     </div>
@@ -95,21 +85,6 @@ $assetsUrl = base_url('assets');
         </div><!-- /.container-fluid -->
 
 
-        <div class="container-fluid">
-            <div class="row">
-                <!-- /.col -->
-                <div class="col-md-12 ">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5>Preview</h5>
-                            <iframe id="preview" src="<?= base_url('webmin/report/dead-stock-list') ?>" width="100%" height="1000px"></iframe>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
     </section>
 </div>
 <!-- /.content -->
@@ -118,28 +93,39 @@ $assetsUrl = base_url('assets');
 <?= $this->section('js') ?>
 <script>
     $(document).ready(function() {
-        // $("#customer_id").select2({
-        //     placeholder: '-- Semua --',
-        //     width: "100%",
-        //     allowClear: true,
-        //     ajax: {
-        //         url: base_url + "/select/member",
-        //         dataType: "json",
-        //         type: "POST",
-        //         delay: select2Delay,
-        //         data: function(params) {
-        //             return {
-        //                 search: params.term,
-        //             };
-        //         },
-        //         processResults: function(data, page) {
-        //             return {
-        //                 results: data,
-        //             };
-        //         },
-        //     },
-        // });
+        let percent_sales = new AutoNumeric('#percent_sales', configDisc);
+        percent_sales.set(20);
 
+        function reportUrl(params = '') {
+            let reportUrl = base_url + '/webmin/report/dead-stock-list?';
+            let psales = 20;
+            if (percent_sales.getNumericString() != null) {
+                psales = parseFloat(percent_sales.getNumericString());
+            }
+
+            reportUrl += '&cutoff_date=' + $('#cutoff_date').val();
+            reportUrl += '&percent_sales=' + psales;
+
+            if (params != '') {
+                reportUrl += '&' + params;
+            }
+            return reportUrl;
+        }
+
+        $('#btnsearch').click(function(e) {
+            e.preventDefault();
+            $('#preview').attr('src', reportUrl());
+        })
+
+        $('#btnexportpdf').click(function(e) {
+            e.preventDefault();
+            window.open(reportUrl('download=Y'));
+        })
+
+        $('#btnexportexcel').click(function(e) {
+            e.preventDefault();
+            window.open(reportUrl('file=xls'));
+        })
 
     })
 </script>

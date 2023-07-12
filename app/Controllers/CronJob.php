@@ -52,7 +52,8 @@ class CronJob extends BaseController
                 'min_stock'     => $min_stock,
                 'stock'         => $stock_total,
                 'order_stock'   => $order_stock,
-                'update_date'   => $today
+                'update_date'   => $today,
+                'status'        => 'Pending'
             ];
         }
 
@@ -85,8 +86,8 @@ class CronJob extends BaseController
     public function updateSafetyStockBalance()
     {
         $isUserRequest          = $this->request->getGet('user_request') == null ? false : true;
-        $storeCount = 2;
-        $today      = date('Y-m-d');
+        $monthCount             = 3;
+        $today                  = date('Y-m-d');
 
         $M_product              = model('M_product');
         $M_cronjob              = model('M_cronjob');
@@ -129,7 +130,7 @@ class CronJob extends BaseController
         foreach ($getSalesStock as $row) {
             $pid = 'P' . $row['product_id'];
             $salesStock = floatval($row['sales_stock']);
-            $new_min_stock = ceil($salesStock / $storeCount);
+            $new_min_stock = ceil($salesStock / $monthCount);
             if (isset($updateList[$pid])) {
                 $old_min_stock = $updateList[$pid]['min_stock'];
                 $updateList[$pid]['min_stock'] = $new_min_stock;
