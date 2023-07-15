@@ -38,6 +38,16 @@
 				</li>
 
 				<li class="nav-item">
+					<a href="<?= base_url('webmin/product/view-info-product') ?>" class="nav-link">
+						<i class="nav-icon fas fa-search"></i>
+						<p>
+							Cari Produk
+							<span class="right badge badge-danger"></span>
+						</p>
+					</a>
+				</li>
+
+				<li class="nav-item">
 					<a href="javascript:void(0)" class="nav-link">
 						<i class="nav-icon fas fa-newspaper"></i>
 						<p>
@@ -372,6 +382,9 @@
 						</p>
 					</a>
 				</li>
+
+
+
 
 				<li class="nav-item">
 					<a href="<?= base_url('webmin/configs') ?>" class="nav-link">
