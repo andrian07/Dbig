@@ -1946,4 +1946,53 @@ class M_product extends Model
         $builder->join('ms_category', 'ms_category.category_id=ms_product.category_id');
         return $builder->get();
     }
+
+    public function searchInfoProduct($search, $filter_search)
+    {
+        // $subQueryStock = $this->db->table('ms_product_stock')
+        //     ->select("product_id,SUM(stock) AS stock_total,GROUP_CONCAT(CONCAT(warehouse_id,'=',stock) SEPARATOR ';') AS warehouse_stock", false)
+        //     ->groupBy('product_id')
+        //     ->getCompiledSelect();
+
+        // $builder = $this->db->table($this->table);
+        // $builder->select('ms_product.*,ms_brand.brand_name,ms_category.category_name,IFNULL(product_stock.stock_total,0) AS stock_total,product_stock.warehouse_stock');
+        // $builder->join("($subQueryStock) AS product_stock", 'product_stock.product_id=ms_product.product_id', 'LEFT', false);
+        // $builder->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id');
+        // $builder->join('ms_category', 'ms_category.category_id=ms_product.category_id');
+
+        // if ($filter_search == 'product_code') {
+        //     $builder->where('ms_product.product_code', $search);
+        // }
+        // if ($filter_search == 'product_name') {
+        //     $builder->like('ms_product.product_name', $search);
+        // }
+
+        // $builder->where('ms_product.deleted', 'N');
+
+        // return $builder->get()->getResultArray();
+
+
+        $subQueryStock = $this->db->table('ms_product_stock')
+            ->select("product_id,SUM(stock) AS stock_total,GROUP_CONCAT(CONCAT(warehouse_id,'=',stock) SEPARATOR ';') AS warehouse_stock", false)
+            ->groupBy('product_id')
+            ->getCompiledSelect();
+
+        $builder = $this->db->table('ms_product_unit');
+        $builder->select('ms_product_unit.*,ms_product.product_code,ms_product.product_name,ms_brand.brand_name,ms_category.category_name,IFNULL(product_stock.stock_total,0) AS stock_total,product_stock.warehouse_stock');
+        $builder->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id');
+        $builder->join("($subQueryStock) AS product_stock", 'product_stock.product_id=ms_product.product_id', 'LEFT', false);
+        $builder->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id');
+        $builder->join('ms_category', 'ms_category.category_id=ms_product.category_id');
+
+        if ($filter_search == 'product_code') {
+            $builder->where('ms_product.product_code', $search);
+        }
+        if ($filter_search == 'product_name') {
+            $builder->like('ms_product.product_name', $search);
+        }
+
+        $builder->where('ms_product.deleted', 'N');
+
+        return $builder->get()->getResultArray();
+    }
 }

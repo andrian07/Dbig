@@ -307,7 +307,6 @@ $routes->group('webmin/point-exchange', ['filter' => 'webminauth'], static funct
     $routes->get('success-exchange/(:num)', 'Webmin\PointExchange::successExchange/$1');
     $routes->get('detail/(:num)', 'Webmin\PointExchange::detail/$1');
     $routes->get('invoice/(:num)', 'Webmin\PointExchange::invoice/$1');
-
     $routes->post('add-point', 'Webmin\PointExchange::addPoint');
 });
 
@@ -427,6 +426,10 @@ $routes->group('webmin/product', ['filter' => 'webminauth'], static function ($r
     $routes->post('upload-excel-batch-update-product', 'Webmin\Product::uploadExcelBatchUpdateProduct');
 
     $routes->get('info-update-safety', 'Webmin\Product::viewInfoUpdateSafety');
+
+    $routes->get('view-info-product', 'Webmin\Product::viewInfoProduct');
+    $routes->post('info-product', 'Webmin\Product::infoProduct');
+    $routes->get('info-product', 'Webmin\Product::infoProduct');
 });
 
 
@@ -737,8 +740,6 @@ $routes->group('webmin/consignment', ['filter' => 'webminauth'], static function
     $routes->get('edit-po-consignment/(:alphanum)', 'Webmin\Consignment\Consignment::editPoConsignment/$1');
 
     $routes->get('cancel-po-order/(:alphanum)', 'Webmin\Consignment\Consignment::cancelPoOrder/$1');
-
-    
 });
 
 /* end pembelian */

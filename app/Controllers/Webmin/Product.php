@@ -1717,6 +1717,96 @@ class Product extends WebminController
         }
     }
 
+    // fast search modul //
+    public function viewInfoProduct()
+    {
+        $data = [
+            'title'             => 'Pencarian Produk',
+        ];
+        return $this->renderView('masterdata/product/view_info_product', $data);
+    }
+
+    public function infoProduct()
+    {
+        $data  = [];
+        $search         = $this->request->getPost('search');
+        $filter_search  = $this->request->getPost('filter_search');
+
+        if ($search != null) {
+            $M_warehouse    = model('M_warehouse');
+            $warehouseList  = [];
+            $getWarehouse   = $M_warehouse->getWarehouse()->getResultArray();
+            foreach ($getWarehouse as $row) {
+                $wid = 'W' . $row['warehouse_id'];
+                $warehouseList[$wid] = $row;
+            }
+
+            $searchData = $this->M_product->searchInfoProduct($search, $filter_search);
+
+            foreach ($searchData as $row) {
+                $product_content    = floatval($row['product_content']);
+                $stock_total        = floatval($row['stock_total']);
+                $product_stock      = $stock_total / $product_content;
+
+
+                $stock_detail       = '';
+                if ($row['warehouse_stock'] != null) {
+                    $warehouseStock = [];
+                    $expStock = explode(';', $row['warehouse_stock']);
+                    if (!empty($expStock)) {
+
+                        foreach ($expStock as $wstock) {
+                            $readStock = explode('=', $wstock);
+                            $wid = 'W' . $readStock[0];
+                            $stock = floatval($readStock[1]) / $product_content;
+                            $warehouseStock[] = $warehouseList[$wid]['warehouse_code'] . ' = ' . numberFormat($stock);
+                        }
+
+                        $stock_detail = implode('<br>', $warehouseStock);
+                    }
+                }
+
+
+                $disc_seasonal  = floatval($row['disc_seasonal']);
+                $G1_sales_price =  $disc_seasonal == 0 ? numberFormat($row['G1_sales_price'], true) : '<del>' . numberFormat($row['G1_sales_price'], true) . '</del><br>' . numberFormat($row['G1_promo_price'], true);
+                $G2_sales_price =  $disc_seasonal == 0 ? numberFormat($row['G2_sales_price'], true) : '<del>' . numberFormat($row['G2_sales_price'], true) . '</del><br>' . numberFormat($row['G2_promo_price'], true);
+                $G3_sales_price =  $disc_seasonal == 0 ? numberFormat($row['G3_sales_price'], true) : '<del>' . numberFormat($row['G3_sales_price'], true) . '</del><br>' . numberFormat($row['G3_promo_price'], true);
+                $G4_sales_price =  $disc_seasonal == 0 ? numberFormat($row['G4_sales_price'], true) : '<del>' . numberFormat($row['G4_sales_price'], true) . '</del><br>' . numberFormat($row['G4_promo_price'], true);
+                $G5_sales_price =  $disc_seasonal == 0 ? numberFormat($row['G5_sales_price'], true) : '<del>' . numberFormat($row['G5_sales_price'], true) . '</del><br>' . numberFormat($row['G5_promo_price'], true);
+                $G6_sales_price =  $disc_seasonal == 0 ? numberFormat($row['G6_sales_price'], true) : '<del>' . numberFormat($row['G6_sales_price'], true) . '</del><br>' . numberFormat($row['G6_promo_price'], true);
+
+                $disc_period    = $disc_seasonal == 0 ? '' : indo_short_date($row['disc_start_date']) . ' s.d ' . indo_short_date($row['disc_end_date']);
+
+                $data[] = [
+                    'product_code'      => $row['product_code'],
+                    'item_code'         => $row['item_code'],
+                    'product_name'      => $row['product_name'],
+                    'brand_name'        => $row['brand_name'],
+                    'category_name'     => $row['category_name'],
+                    'product_stock'     => numberFormat($product_stock),
+                    'stock_detail'      => $stock_detail,
+                    'G1_sales_price'    => $G1_sales_price,
+                    'G2_sales_price'    => $G2_sales_price,
+                    'G3_sales_price'    => $G3_sales_price,
+                    'G4_sales_price'    => $G4_sales_price,
+                    'G5_sales_price'    => $G5_sales_price,
+                    'G6_sales_price'    => $G6_sales_price,
+                    'disc_seasonal'     => numberFormat($disc_seasonal, true),
+                    'disc_period'       => $disc_period
+                ];
+            }
+        }
+
+        $result = [
+            'data'      => $data,
+            'num_rows'  => count($data),
+        ];
+
+        resultJSON($result);
+    }
+
+
+
 
 
 
