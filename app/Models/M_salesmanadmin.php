@@ -611,7 +611,8 @@ class M_salesmanadmin extends Model
     {
         $builder = $this->db->table('hd_retur_sales_admin')->select("hd_retur_sales_admin_invoice, hd_retur_date, customer_code,customer_name, store_code, store_name, hd_retur_total_dpp, hd_retur_total_ppn, hd_retur_total_transaction, salesman_name");
         $builder->join('ms_customer', 'ms_customer.customer_id  = hd_retur_sales_admin.hd_retur_customer_id');
-        $builder->join('ms_salesman', 'ms_salesman.salesman_id  = hd_retur_sales_admin.sales_admin_id');
+        $builder->join('hd_sales_admin', 'hd_sales_admin.sales_admin_id  = hd_retur_sales_admin.sales_admin_id');
+        $builder->join('ms_salesman', 'ms_salesman.salesman_id  = hd_sales_admin.sales_salesman_id');
         $builder->join('ms_store', 'ms_store.store_id = hd_retur_sales_admin.hd_retur_store_id');
         $builder->where("(hd_retur_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
         if ($store_id != null) {

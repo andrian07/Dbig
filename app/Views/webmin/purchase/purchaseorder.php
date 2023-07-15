@@ -1070,18 +1070,19 @@ $assetsUrl = base_url('assets');
                                         cleardiscount();
                                         clearItemInput();
                                     }else{
+                                        console.log(header);
                                         $('#item_id').val(header.submission_item_id);
                                         $('#product_name').val(header.submission_product_name);
                                         temp_price.set(header.base_purchase_price * header.product_content);
                                         temp_qty.set(header.submission_qty);
-                                        if($('#has_tax').val() == 'Pajak'){
+                                        if(header.has_tax == 'Y'){
                                             let tax = header.base_purchase_price * header.product_content - (header.base_purchase_price * header.product_content - (header.base_purchase_price * header.product_content * 0.11));
                                             temp_tax.set(tax);
-                                            temp_dpp.set(header.base_purchase_price * header.product_content - tax);
+                                            temp_dpp.set(header.base_purchase_price * header.product_content);
                                         }else{
                                             let tax = 0;
                                             temp_tax.set(tax);
-                                            temp_dpp.set(header.base_purchase_price * header.product_content - tax); 
+                                            temp_dpp.set(header.base_purchase_price * header.product_content); 
                                         }
                                         
                                         temp_total.set((header.base_purchase_price * header.product_content) * header.submission_qty);
@@ -2346,7 +2347,7 @@ $('#temp_ongkir').on('change', function() {
 
 function calculation_temp_total(){
     var price_calculation = AutoNumeric.getAutoNumericElement('#temp_price').get();
-    let dpp = price_calculation - (price_calculation * 0.11);
+    let dpp = price_calculation;
     let ppn = price_calculation - dpp;
     let qty_calculation = parseFloat(temp_qty.getNumericString());
     let subtotal_calculation = price_calculation * qty_calculation;
