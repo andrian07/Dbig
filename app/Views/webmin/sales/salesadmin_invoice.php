@@ -20,17 +20,18 @@ $assetsUrl = base_url('assets');
 
 			background-color: #f4f6f9;
 
-			font-size: 13px;
+			font-size: 14px;
 
 		}
 
+		@page {     margin: 0 !important; }
 
 
 		.faktur-print {
 
 			width: 21.59cm !important;
 
-			height: 13.97cm !important;
+			height: 13.67cm !important;
 
 			margin: auto;
 
@@ -150,7 +151,7 @@ $assetsUrl = base_url('assets');
 
 		.invoice-item tbody {
 
-			min-height: 280px;
+			min-height: 260px;
 
 			width: 100%;
 

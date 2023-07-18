@@ -363,6 +363,29 @@ class M_debt_repayment extends Model
         return $builder->get();
     }
 
+    public function getDebtDetail($purchase_invoice, $start_date, $end_date, $supplier_id)
+    {
+        $builder = $this->db->table('hd_payment_debt')->select("purchase_invoice, payment_debt_invoice, payment_debt_date, supplier_name, purchase_total, dt_payment_debt_discount, dt_payment_debt_nominal,supplier_code,item_code,product_name,brand_name,category_name,dt_purchase_qty,unit_name");
+        $builder->join('dt_payment_debt', 'dt_payment_debt.payment_debt_id = hd_payment_debt.payment_debt_id');
+        $builder->join('hd_purchase', 'hd_purchase.purchase_id = dt_payment_debt.dt_payment_debt_purchase_id');
+        $builder->join('dt_purchase', 'dt_purchase.dt_purchase_invoice = hd_purchase.purchase_invoice');
+        $builder->join('ms_product_unit', 'ms_product_unit.item_id = dt_purchase.dt_purchase_item_id');
+        $builder->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id');
+        $builder->join('ms_product', 'ms_product.product_id = ms_product_unit.product_id');
+        $builder->join('ms_category', 'ms_category.category_id = ms_product.category_id');
+        $builder->join('ms_brand', 'ms_brand.brand_id = ms_product.brand_id');  
+        $builder->join('ms_supplier sp1', 'sp1.supplier_id = hd_payment_debt.payment_debt_supplier_id');
+        $builder->where("(payment_debt_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        if ($supplier_id != null) {
+            $builder->where('purchase_supplier_id', $supplier_id);
+        }
+        if ($purchase_invoice != null) {
+            $builder->where('dt_payment_debt_purchase_id', $purchase_invoice);
+        }
+
+        return $builder->get();
+    }
+
     public function getDebtRepaymentAccounting($payment_debt_id)
     {
         $builder = $this->db->table($this->hd_payment_debt);

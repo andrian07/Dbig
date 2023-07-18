@@ -29,21 +29,21 @@ $assetsUrl = base_url('assets');
                             <form>
                                 <div class="row">
                                     <!-- text input -->
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Tanggal Dari:</label>
                                             <input id="start_date" name="start_date" type="date" class="form-control" value="<?= date('Y-m') ?>-01">
                                         </div>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Tanggal Sampai:</label>
                                             <input id="end_date" name="end_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>">
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>No Pembelian:</label>
@@ -56,6 +56,18 @@ $assetsUrl = base_url('assets');
                                             <label>Supplier:</label>
                                             <select id="supplier_id" name="supplier_id" class="form-control"></select>
                                         </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label>&nbsp;</label>
+                                            <div class="form-check">
+                                                <div class="col-sm-12">
+                                                    <input type="checkbox" class="form-check-input" id="show_detail">
+                                                    <label class="form-check-label" for="show_detail">Tampilkan Detail</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
 
                                     <div class="col-sm-2">
@@ -165,9 +177,11 @@ $assetsUrl = base_url('assets');
             let end_date = $('#end_date').val();
             let supplier_id = $('#supplier_id').val();
             let purchase_invoice = $('#purchase_invoice').val();
+            let show_detail = $("#show_detail:checked").val();
             let reportUrl = '<?= base_url('webmin/report/debt-list') ?>?';
             reportUrl += '&start_date=' + start_date;
             reportUrl += '&end_date=' + end_date;
+            reportUrl += '&show_detail=' + show_detail;
             if (supplier_id != null && supplier_id != '') {
                 reportUrl += '&supplier_id=' + supplier_id;
             }
@@ -184,9 +198,11 @@ $assetsUrl = base_url('assets');
             let end_date = $('#end_date').val();
             let supplier_id = $('#supplier_id').val();
             let purchase_invoice = $('#purchase_invoice').val();
+            let show_detail = $("#show_detail:checked").val();
             let reportUrl = '<?= base_url('webmin/report/debt-list') ?>?';
             reportUrl += '&start_date=' + start_date;
             reportUrl += '&end_date=' + end_date;
+            reportUrl += '&show_detail=' + show_detail;
             if (supplier_id != null && supplier_id != '') {
                 reportUrl += '&supplier_id=' + supplier_id;
             }

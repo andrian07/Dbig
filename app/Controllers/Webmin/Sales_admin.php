@@ -624,7 +624,7 @@ class Sales_admin extends WebminController
             $sheet->getCell('F4')->setValue('2022');
             $sheet->getCell('G4')->setValue('FK');
             $sheet->getCell('H4')->setValue($trx_date);
-            $sheet->getCell('I4')->setValue($getHdData['customer_npwp']);
+            $sheet->getCell('I4')->setValue(esc($getHdData['customer_npwp']));
             $sheet->getCell('J4')->setValue($getHdData['customer_name']);
             $sheet->getCell('K4')->setValue($getHdData['customer_address']);
             $sheet->getCell('L4')->setValue($total_dpp);
@@ -680,7 +680,7 @@ class Sales_admin extends WebminController
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="' . $filename . '.csv"');
             header('Cache-Control: max-age=0');
-            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Csv');
             $writer->save('php://output');
             exit();
         }else{
