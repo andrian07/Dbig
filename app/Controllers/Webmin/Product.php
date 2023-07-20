@@ -417,6 +417,7 @@ class Product extends WebminController
     public function saveProductUnit($type)
     {
         $this->validationRequest(TRUE);
+        helper('get_change_price');
         $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
         $validation =  \Config\Services::validation();
 
@@ -875,6 +876,7 @@ class Product extends WebminController
 
     public function downloadImportExcel()
     {
+
         $M_category     = model('M_category');
         $getCategory    = $M_category->getCategory()->getResultArray();
 
@@ -946,6 +948,7 @@ class Product extends WebminController
 
     public function uploadExcel()
     {
+        helper('get_change_price');
         $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
         $validation =  \Config\Services::validation();
 
@@ -1488,6 +1491,7 @@ class Product extends WebminController
 
     public function uploadExcelBatchUpdateProduct()
     {
+        helper('get_change_price');
         $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
         $validation =  \Config\Services::validation();
 
@@ -1616,6 +1620,7 @@ class Product extends WebminController
                     // setup product item //
                     $updateProductUnit[] = [
                         'item_id'                   => $item_id,
+                        'product_id'                => $product_id,
                         'product_content'           => $product_content,
                         'G1_margin_rate'            => $G1_margin_rate,
                         'G1_sales_price'            => $G1_sales_price,

@@ -9,6 +9,7 @@ class M_product extends Model
     protected $table = 'ms_product';
     protected $tProductSupplier = 'ms_product_supplier';
     protected $tProductUnit = 'ms_product_unit';
+    protected $tLogChangePrice = 'log_change_price';
 
     public function getProduct($product_id = '', $show_deleted = FALSE)
     {
@@ -378,6 +379,11 @@ class M_product extends Model
         $this->db->table($this->tProductUnit)->insert($data);
         if ($this->db->affectedRows() > 0) {
             $saveQueries[] = $this->db->getLastQuery()->getQuery();
+            $item_id = $this->db->insertID();
+
+            //save update price//
+            $getChangePrice = get_change_price($product_id, $item_id, $data);
+            $this->addLogChangePrice($getChangePrice);
         }
 
         $update_data = [
@@ -424,12 +430,16 @@ class M_product extends Model
         unset($data['purchase_price']);
         unset($data['purchase_tax']);
 
-
+        $getOldData = $this->db->table($this->tProductUnit)->where('item_id', $item_id)->get()->getRowArray();
         $this->db->transBegin();
 
         $this->db->table($this->tProductUnit)->update($data, ['item_id' => $item_id]);
         if ($this->db->affectedRows() > 0) {
             $saveQueries[] = $this->db->getLastQuery()->getQuery();
+
+            //save update price//
+            $getChangePrice = get_change_price($product_id, $item_id, $data, $getOldData);
+            $this->addLogChangePrice($getChangePrice);
         }
 
         $update_data = [
@@ -441,6 +451,7 @@ class M_product extends Model
         if ($this->db->affectedRows() > 0) {
             $saveQueries[] = $this->db->getLastQuery()->getQuery();
         }
+
 
 
         if ($this->db->transStatus() === false) {
@@ -793,6 +804,10 @@ class M_product extends Model
                     if ($this->db->affectedRows() > 0) {
                         $saveQueries[] = $this->db->getLastQuery()->getQuery();
                         $item_id = $this->db->insertID();
+
+                        // add log change price //
+                        $getChangePrice = get_change_price($product_id, $item_id, $item);
+                        $this->addLogChangePrice($getChangePrice);
                     }
                     $errors[] = $this->db->error();
                     $listItemID[$item_code] = $item_id;
@@ -857,9 +872,17 @@ class M_product extends Model
 
         if (count($productUnit) > 0) {
             foreach ($productUnit as $row) {
+                $oldData = $this->db->table('ms_product_unit')->where('item_id', $row['item_id'])->get()->getRowArray();
+
                 $this->db->table('ms_product_unit')->where('item_id', $row['item_id'])->update($row);
                 if ($this->db->affectedRows() > 0) {
                     $saveQueries[] = $this->db->getLastQuery()->getQuery();
+
+                    $product_id = $row['product_id'];
+                    $item_id    = $row['item_id'];
+                    // add log change price //
+                    $getChangePrice = get_change_price($product_id, $item_id, $row, $oldData);
+                    $this->addLogChangePrice($getChangePrice);
                 }
                 $errors[] = $this->db->error();
             }
@@ -1949,29 +1972,6 @@ class M_product extends Model
 
     public function searchInfoProduct($search, $filter_search)
     {
-        // $subQueryStock = $this->db->table('ms_product_stock')
-        //     ->select("product_id,SUM(stock) AS stock_total,GROUP_CONCAT(CONCAT(warehouse_id,'=',stock) SEPARATOR ';') AS warehouse_stock", false)
-        //     ->groupBy('product_id')
-        //     ->getCompiledSelect();
-
-        // $builder = $this->db->table($this->table);
-        // $builder->select('ms_product.*,ms_brand.brand_name,ms_category.category_name,IFNULL(product_stock.stock_total,0) AS stock_total,product_stock.warehouse_stock');
-        // $builder->join("($subQueryStock) AS product_stock", 'product_stock.product_id=ms_product.product_id', 'LEFT', false);
-        // $builder->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id');
-        // $builder->join('ms_category', 'ms_category.category_id=ms_product.category_id');
-
-        // if ($filter_search == 'product_code') {
-        //     $builder->where('ms_product.product_code', $search);
-        // }
-        // if ($filter_search == 'product_name') {
-        //     $builder->like('ms_product.product_name', $search);
-        // }
-
-        // $builder->where('ms_product.deleted', 'N');
-
-        // return $builder->get()->getResultArray();
-
-
         $subQueryStock = $this->db->table('ms_product_stock')
             ->select("product_id,SUM(stock) AS stock_total,GROUP_CONCAT(CONCAT(warehouse_id,'=',stock) SEPARATOR ';') AS warehouse_stock", false)
             ->groupBy('product_id')
@@ -1993,6 +1993,35 @@ class M_product extends Model
 
         $builder->where('ms_product.deleted', 'N');
 
+        return $builder->get()->getResultArray();
+    }
+
+
+    public function addLogChangePrice($updateData)
+    {
+        if (count($updateData) > 0) {
+            $builder = $this->db->table($this->tLogChangePrice);
+            return $builder->insertBatch($updateData, 500);
+        }
+    }
+
+
+    public function getLogChangePrice($product_id, $start_date = null, $end_date)
+    {
+        $builder = $this->db->table($this->tLogChangePrice);
+
+        $builder->select('log_change_price.*,ms_product_unit.item_code,user_account.user_name,user_account.user_realname');
+        $builder->join('ms_product_unit', 'ms_product_unit.item_id=log_change_price.item_id');
+        $builder->join('user_account', 'user_account.user_id=log_change_price.user_id');
+        $builder->where('log_change_price.product_id', $product_id);
+
+        if ($start_date == null) {
+            $builder->where("log_change_price.update_date<=CAST('$end_date' AS DATE)");
+        } else {
+            $builder->where("(log_change_price.update_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        }
+
+        $builder->orderBy('log_change_price.customer_group,log_change_price.update_date', 'asc');
         return $builder->get()->getResultArray();
     }
 }

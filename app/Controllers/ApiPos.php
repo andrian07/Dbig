@@ -189,9 +189,8 @@ class ApiPos extends BaseController
                     'store_code'    => 'UTM',
                     'sales' => [
                         'sales_total'       => 10000,
-                        'sales_no_tax'      => 2000,
-                        'sales_has_tax'     => 7000,
-                        'tax_out'           => 1000,
+                        'sales_dpp'         => 2000,
+                        'sales_ppn'         => 7000,
                         'sales_cogs'        => 6000,
                         'margin_allocation' => 3000,
                         'payments'          => [
@@ -231,31 +230,24 @@ class ApiPos extends BaseController
                     ->get()
                     ->getResultArray();
 
-                $sales_cogs                 = 0;
-                $sales_no_tax               = 0;
-                $sales_has_tax              = 0;
-                $sales_margin_allocation    = 0;
-                $tax_out                    = 0;
+
+                $total_sales_cogs                 = 0;
+                $total_sales_dpp                  = 0;
+                $total_sales_ppn                  = 0;
+                $total_sales_margin_allocation    = 0;
 
                 foreach ($getItemSales as $item) {
-                    $product_cogs       = floatval($item['product_cogs']);
-                    $sales_qty          = floatval($item['sales_qty']);
-                    $sales_price        = floatval($item['sales_price']);
-                    $margin_allocation  = floatval($item['margin_allocation']);
+                    $product_cogs                   = floatval($item['product_cogs']);
+                    $sales_qty                      = floatval($item['sales_qty']);
+                    $sales_price                    = floatval($item['sales_price']);
+                    $sales_dpp                      = floatval($item['sales_dpp']);
+                    $sales_ppn                      = floatval($item['sales_ppn']);
+                    $margin_allocation              = floatval($item['margin_allocation']);
 
-                    $sales_cogs += $sales_qty * $product_cogs;
-                    $sales_margin_allocation += $sales_qty * $margin_allocation;
-                    if ($item['has_tax'] == 'Y') {
-                        $sales_has_tax += $sales_qty * $sales_price;
-                    } else {
-                        $sales_no_tax += $sales_qty * $sales_price;
-                    }
-                }
-
-                if ($sales_has_tax > 0) {
-                    $extract_no_tax = $sales_has_tax / 1.11;
-                    $tax_out = $sales_has_tax - $extract_no_tax;
-                    $sales_has_tax = $extract_no_tax;
+                    $total_sales_cogs               += $sales_qty * $product_cogs;
+                    $total_sales_margin_allocation  += $sales_qty * $margin_allocation;
+                    $total_sales_dpp                += $sales_qty * $sales_dpp;
+                    $total_sales_ppn                += $sales_qty * $sales_ppn;
                 }
 
                 $payments = [];
@@ -269,6 +261,7 @@ class ApiPos extends BaseController
                     ->groupBy('dt_pos_sales_payment.payment_method_id')
                     ->get()
                     ->getResultArray();
+
                 foreach ($getPayment as $pay) {
                     $_pay_name = $pay['payment_method_name'];
                     $payments[$_pay_name] = [
@@ -299,21 +292,19 @@ class ApiPos extends BaseController
                     $payments['CASH']['payment_balance']    = $cash_balance - $total_change;
                 }
 
-                $sales_total = $sales_no_tax + $sales_has_tax + $tax_out;
+                $sales_total = $total_sales_dpp + $total_sales_ppn +  $total_sales_margin_allocation;
                 $salesData = [
                     'sales_total'       => $sales_total,
-                    'sales_no_tax'      => $sales_no_tax,
-                    'sales_has_tax'     => $sales_has_tax,
-                    'tax_out'           => $tax_out,
-                    'sales_cogs'        => $sales_cogs,
-                    'margin_allocation' => $sales_margin_allocation,
+                    'sales_dpp'         => $total_sales_dpp,
+                    'sales_ppn'         => $total_sales_ppn,
+                    'sales_cogs'        => $total_sales_cogs,
+                    'margin_allocation' => $total_sales_margin_allocation,
                     'payments'          => $payments
                 ];
 
-                $sales_return_cogs          = 0;
-                $sales_return_no_tax        = 0;
-                $sales_return_has_tax       = 0;
-                $sales_return_tax_out       = 0;
+                $total_sales_return_cogs          = 0;
+                $total_sales_return_dpp           = 0;
+                $total_sales_return_ppn           = 0;
 
                 $getItemSalesReturn = $this->db->table('dt_pos_session_transaction')
                     ->select('dt_pos_sales_return.*,ms_product.product_name,ms_product.has_tax')
@@ -327,31 +318,23 @@ class ApiPos extends BaseController
                     ->getResultArray();
 
                 foreach ($getItemSalesReturn as $item) {
-                    $product_cogs       = floatval($item['product_cogs']);
-                    $sales_return_qty   = floatval($item['sales_return_qty']);
-                    $sales_return_price = floatval($item['sales_return_price']);
+                    $product_cogs               = floatval($item['product_cogs']);
+                    $sales_return_qty           = floatval($item['sales_return_qty']);
+                    $sales_return_price         = floatval($item['sales_return_price']);
+                    $sales_return_dpp           = floatval($item['sales_return_dpp']);
+                    $sales_return_ppn           = floatval($item['sales_return_ppn']);
 
-                    $sales_return_cogs += $sales_return_qty * $product_cogs;
-                    if ($item['has_tax'] == 'Y') {
-                        $sales_return_has_tax += $sales_return_qty * $sales_return_price;
-                    } else {
-                        $sales_return_no_tax += $sales_return_qty * $sales_return_price;
-                    }
+                    $total_sales_return_cogs    += $sales_return_qty * $product_cogs;
+                    $total_sales_return_dpp     += $sales_return_qty * $sales_return_dpp;
+                    $total_sales_return_ppn     += $sales_return_qty * $sales_return_ppn;
                 }
 
-                if ($sales_return_has_tax > 0) {
-                    $extract_no_tax         = $sales_return_has_tax / 1.11;
-                    $sales_return_tax_out   = $sales_return_has_tax - $extract_no_tax;
-                    $sales_return_has_tax   = $extract_no_tax;
-                }
-
-                $sales_return_total = $sales_return_no_tax + $sales_return_has_tax + $sales_return_tax_out;
+                $sales_return_total = $total_sales_return_dpp + $total_sales_return_ppn;
                 $salesReturnData = [
                     'sales_return_total'        => $sales_return_total,
-                    'sales_return_no_tax'       => $sales_return_no_tax,
-                    'sales_return_has_tax'      => $sales_return_has_tax,
-                    'sales_return_tax_out'      => $sales_return_tax_out,
-                    'sales_return_cogs'         => $sales_return_cogs,
+                    'sales_return_dpp'          => $total_sales_return_dpp,
+                    'sales_return_ppn'          => $total_sales_return_ppn,
+                    'sales_return_cogs'         => $total_sales_return_cogs
                 ];
 
 
@@ -367,10 +350,12 @@ class ApiPos extends BaseController
                 ];
             }
 
+            dd($postData);
+
             $urlOffline = 'http://localhost:8989/';
             $urlOnline = 'https://https://accounting.dashboard-dbig.com/';
             $client = \Config\Services::curlrequest([
-                'baseURI' => $urlOnline,
+                'baseURI' => $urlOffline,
             ]);
 
             $accountingApiUri = 'api-accounting/api-pos-sales';

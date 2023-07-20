@@ -1886,7 +1886,8 @@ class ReportInventory extends WebminController
         return $this->renderView('report/inventory/view_price_change_list', $data);
     }
 
-    public function priceChangeList()
+
+    public function priceChangeList_v1()
     {
         $start_date             = $this->request->getGet('start_date') != null ? $this->request->getGet('start_date') : date('Y-m') . '-01';
         $end_date               = $this->request->getGet('end_date') != null ? $this->request->getGet('end_date') : date('Y-m-d');
@@ -2166,6 +2167,301 @@ class ReportInventory extends WebminController
         }
     }
 
+    public function priceChangeList()
+    {
+        $start_date             = $this->request->getGet('start_date') != null ? $this->request->getGet('start_date') : date('Y-m') . '-01';
+        $end_date               = $this->request->getGet('end_date') != null ? $this->request->getGet('end_date') : date('Y-m-d');
+        $product_id             = $this->request->getGet('product_id') != null ? $this->request->getGet('product_id') : '';
+
+        $agent                  = $this->request->getUserAgent();
+        $isDownload             = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
+        $fileType               = $this->request->getGet('file');
+
+
+        if (!in_array($fileType, ['pdf', 'xls'])) {
+            $fileType = 'pdf';
+        }
+
+
+        if ($product_id == null) {
+            die('<h1>Harap pilih produk terlebih dahulu</h1>');
+        } else {
+            $M_product          = model('M_product');
+
+            $getProduct = $M_product->getProduct($product_id, true)->getRowArray();
+            if ($getProduct == null) {
+                die("<h1>Produk tidak ditemukan</h1>");
+            }
+
+            $cGroup = [];
+            $getConfig = $this->appConfig->get('default', 'customer_group');
+            foreach ($getConfig as $key => $val) {
+                $cGroup[$key] = preg_replace('/<[^>]*>/', '', $val);
+            }
+
+            //$getHistorySalesPrice       = $M_product->getHistorySalesPrice($product_id, $start_date, $end_date);
+
+            $getHistoryChangePrice      = $M_product->getLogChangePrice($product_id, $start_date, $end_date);
+
+
+            $getHistoryPurchasePrice    = $M_product->getHistoryPurchasePrice($product_id, $start_date, $end_date);
+
+            if ($fileType == 'pdf') {
+                die('<h1>Excel Only</h1>');
+                $getData = [];
+
+                $max_report_size    = 15;
+                $pages              = array_chunk($getData, $max_report_size);
+                $data['pages']      = $pages;
+                $data['max_page']   = count($pages);
+
+                $htmlView = $this->renderView('report/inventory/stock_list_v2', $data);
+                if ($agent->isMobile() && !$isDownload) {
+                    return $htmlView;
+                } else {
+                    $dompdf = new Dompdf();
+                    $dompdf->loadHtml($htmlView);
+                    $dompdf->setPaper('A4', 'landscape');
+                    $dompdf->render();
+                    $dompdf->stream('stock_list.pdf', array("Attachment" => $isDownload));
+                    exit();
+                }
+            } else {
+                //dd($getProduct, $stockData);
+                $header_format = [
+                    'fill' => [
+                        'fillType' =>  \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                        'startColor' => [
+                            'argb' => 'A5A5A5'
+                        ]
+                    ],
+                    'font' => [
+                        'bold' => true,
+                    ],
+                    'borders' => [
+                        'top' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                        ],
+                        'right' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                        ],
+                        'left' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                        ],
+                        'bottom' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+
+                        ],
+                    ],
+                ];
+
+                $total_format = [
+                    'font' => [
+                        'bold' => true,
+                    ],
+                    'borders' => [
+                        'top' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'right' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'left' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'bottom' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                    ],
+                ];
+
+                $font_bold = [
+                    'font' => [
+                        'bold' => true,
+                    ],
+                ];
+
+                $border_left_right = [
+                    'borders' => [
+                        'right' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'left' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                    ],
+                ];
+
+                $border_top = [
+                    'borders' => [
+                        'top' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                    ],
+                ];
+
+                $template = WRITEPATH . '/template/report/template_report.xlsx';
+                $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+
+                $sheet = $spreadsheet->setActiveSheetIndex(0);
+                // init iRow //
+                $iRow = 8;
+
+                $last_customer_group    = '';
+                foreach ($getHistoryChangePrice as $row) {
+                    if ($row['customer_group'] != $last_customer_group) {
+                        if ($last_customer_group != '') {
+                            // close table //
+                            $sheet->getStyle('A' . $iRow)->applyFromArray($border_top);
+                            $sheet->getStyle('B' . $iRow)->applyFromArray($border_top);
+                            $sheet->getStyle('C' . $iRow)->applyFromArray($border_top);
+                            $sheet->getStyle('D' . $iRow)->applyFromArray($border_top);
+                            $sheet->getStyle('E' . $iRow)->applyFromArray($border_top);
+                            $iRow++;
+                        }
+
+                        // MAKE HEADER // 
+                        $title_group = isset($cGroup[$row['customer_group']]) ? $cGroup[$row['customer_group']] : $row['customer_group'];
+                        $sheet->getCell('A' . $iRow)->setValue('Harga Jual ' . $title_group);
+                        $sheet->getStyle('A' . $iRow)->applyFromArray($font_bold);
+                        $sheet->mergeCells('A' . $iRow . ':E' . $iRow);
+                        $iRow++;
+
+                        $sheet->getCell('A' . $iRow)->setValue('TANGGAL');
+                        $sheet->getCell('B' . $iRow)->setValue('HARGA LAMA');
+                        $sheet->getCell('C' . $iRow)->setValue('HARGA BARU');
+                        $sheet->getCell('D' . $iRow)->setValue('KETERANGAN');
+                        $sheet->getCell('E' . $iRow)->setValue('OLEH USER');
+                        $sheet->getStyle('A' . $iRow)->applyFromArray($header_format);
+                        $sheet->getStyle('B' . $iRow)->applyFromArray($header_format);
+                        $sheet->getStyle('C' . $iRow)->applyFromArray($header_format);
+                        $sheet->getStyle('D' . $iRow)->applyFromArray($header_format);
+                        $sheet->getStyle('E' . $iRow)->applyFromArray($header_format);
+                        $iRow++;
+                        // END MAKE HEADER //
+
+
+                    }
+
+                    // print //
+
+
+                    $sheet->getCell('A' . $iRow)->setValue(indo_short_date($row['update_date']));
+                    $sheet->getCell('B' . $iRow)->setValue(numberFormat($row['old_sales_price'], true));
+                    $sheet->getCell('C' . $iRow)->setValue(numberFormat($row['new_sales_price'], true));
+                    $sheet->getCell('D' . $iRow)->setValue($row['update_remark']);
+                    $sheet->getCell('E' . $iRow)->setValue($row['user_name']);
+
+                    $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
+                    $iRow++;
+
+                    $last_customer_group = $row['customer_group'];
+                }
+
+                if ($last_customer_group != '') {
+                    // close table //
+                    $sheet->getStyle('A' . $iRow)->applyFromArray($border_top);
+                    $sheet->getStyle('B' . $iRow)->applyFromArray($border_top);
+                    $sheet->getStyle('C' . $iRow)->applyFromArray($border_top);
+                    $sheet->getStyle('D' . $iRow)->applyFromArray($border_top);
+                    $sheet->getStyle('E' . $iRow)->applyFromArray($border_top);
+                    $iRow++;
+                }
+
+                if (count($getHistoryPurchasePrice) > 0) {
+                    $sheet->getCell('A' . $iRow)->setValue('Harga Beli');
+                    $sheet->getStyle('A' . $iRow)->applyFromArray($font_bold);
+                    $sheet->mergeCells('A' . $iRow . ':E' . $iRow);
+                    $iRow++;
+
+                    $sheet->getCell('A' . $iRow)->setValue('TANGGAL');
+                    $sheet->getCell('B' . $iRow)->setValue('HARGA BELI');
+                    $sheet->getStyle('A' . $iRow)->applyFromArray($header_format);
+                    $sheet->getStyle('B' . $iRow)->applyFromArray($header_format);
+                    $iRow++;
+
+                    $last_price             = 0;
+                    foreach ($getHistoryPurchasePrice as $row) {
+                        $purchase_price = floatval($row['purchase_price']);
+                        if ($purchase_price != $last_price) {
+                            $sheet->getCell('A' . $iRow)->setValue(indo_short_date($row['purchase_date']));
+                            $sheet->getCell('B' . $iRow)->setValue(numberFormat($purchase_price, true));
+
+                            $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
+                            $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
+                            $iRow++;
+                        }
+                        $last_price = $purchase_price;
+                    }
+
+                    // close table //
+                    $sheet->getStyle('A' . $iRow)->applyFromArray($border_top);
+                    $sheet->getStyle('B' . $iRow)->applyFromArray($border_top);
+                    $iRow++;
+                }
+
+                //setting periode
+                $sheet->getCell('A5')->setValue('PRODUK');
+                $sheet->getStyle('A5')->applyFromArray($font_bold);
+                $sheet->getCell('B5')->setValue($getProduct['product_code'] . ' - ' . $getProduct['product_name']);
+                $sheet->mergeCells('B5:E5');
+
+                $filter_date = indo_short_date($start_date) . ' s.d ' . indo_short_date($end_date);
+                $sheet->getCell('A6')->setValue('TANGGAL');
+                $sheet->getStyle('A6')->applyFromArray($font_bold);
+                $sheet->getCell('B6')->setValue($filter_date);
+                $sheet->mergeCells('B6:E6');
+
+                //setting excel header//
+                // A4-G4 = Store Phone
+                // A3-G3 = Store Address
+                // A2-G2 = Store Name
+                // A1-G1 = Print By
+                $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
+                $sheet->getCell('A4')->setValue(COMPANY_PHONE);
+                $sheet->getCell('A3')->setValue(COMPANY_ADDRESS);
+                $sheet->getCell('A2')->setValue(COMPANY_NAME);
+                $sheet->getCell('A1')->setValue($reportInfo);
+
+                $sheet->mergeCells('A4:E4');
+                $sheet->mergeCells('A3:E3');
+                $sheet->mergeCells('A2:E2');
+                $sheet->mergeCells('A1:E1');
+
+                $sheet->getStyle('A4:E4')->getAlignment()->setHorizontal('center');
+                $sheet->getStyle('A3:E3')->getAlignment()->setHorizontal('center');
+                $sheet->getStyle('A2:E2')->getAlignment()->setHorizontal('center');
+                $sheet->getStyle('A1:E1')->getAlignment()->setHorizontal('right');
+
+                $sheet->getStyle('A4:E4')->applyFromArray($font_bold);
+                $sheet->getStyle('A3:E3')->applyFromArray($font_bold);
+                $sheet->getStyle('A2:E2')->applyFromArray($font_bold);
+
+                $sheet->getColumnDimension('A')->setAutoSize(true);
+                $sheet->getColumnDimension('B')->setAutoSize(true);
+                $sheet->getColumnDimension('C')->setAutoSize(true);
+                $sheet->getColumnDimension('D')->setAutoSize(true);
+                $sheet->getColumnDimension('E')->setAutoSize(true);
+
+
+                $filename = 'laporan_perubahan_harga_jual_beli';
+                header('Content-Type: application/vnd.ms-excel');
+                header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+                header('Cache-Control: max-age=0');
+                $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+                $writer->save('php://output');
+                exit();
+            }
+        }
+    }
+
     public function stockOpnameList_old()
     {
         $data = [
@@ -2206,7 +2502,6 @@ class ReportInventory extends WebminController
         }
     }
 
-
     public function viewStockTransferList()
     {
         $data = [
@@ -2237,10 +2532,10 @@ class ReportInventory extends WebminController
 
             $getReportData = $M_stock_transfer->getTransfer($start_date, $end_date, $source_warehouse_id, $dest_warehouse_id)->getResultArray();
 
-            if($getReportData != null){
+            if ($getReportData != null) {
                 $warehouse_from_name = $getReportData[0]['warehouse_from_name'];
                 $warehouse_to_name = $getReportData[0]['warehouse_to_name'];
-            }else{
+            } else {
                 $warehouse_from_name = '-';
                 $warehouse_to_name = '-';
             }
@@ -2324,54 +2619,54 @@ class ReportInventory extends WebminController
                 $iRow = 8;
 
                 foreach ($getReportData as $row) {
-                
-                    
-                   $hd_transfer_stock_date = indo_short_date($row['hd_transfer_stock_date'], FALSE);
-                    
-                   $sheet->getCell('A' . $iRow)->setValue($row['hd_transfer_stock_no']);
-                   $sheet->getCell('B' . $iRow)->setValue($hd_transfer_stock_date);
-                   $sheet->getCell('C' . $iRow)->setValue($row['warehouse_from_code']);
-                   $sheet->getCell('D' . $iRow)->setValue($row['warehouse_to_code']);
-                   $sheet->getCell('E' . $iRow)->setValue($row['product_code']);
-                   $sheet->getCell('F' . $iRow)->setValue($row['product_name']);
-                   $sheet->getCell('G' . $iRow)->setValue($row['unit_name']);
-                   $sheet->getCell('H' . $iRow)->setValue(numberFormat($row['item_qty'], FALSE));
 
-                   $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
-                   $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
-                   $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
-                   $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
-                   $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
-                   $sheet->getStyle('F' . $iRow)->applyFromArray($border_left_right);
-                   $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
-                   $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
 
-                   $iRow++;
-               }
+                    $hd_transfer_stock_date = indo_short_date($row['hd_transfer_stock_date'], FALSE);
+
+                    $sheet->getCell('A' . $iRow)->setValue($row['hd_transfer_stock_no']);
+                    $sheet->getCell('B' . $iRow)->setValue($hd_transfer_stock_date);
+                    $sheet->getCell('C' . $iRow)->setValue($row['warehouse_from_code']);
+                    $sheet->getCell('D' . $iRow)->setValue($row['warehouse_to_code']);
+                    $sheet->getCell('E' . $iRow)->setValue($row['product_code']);
+                    $sheet->getCell('F' . $iRow)->setValue($row['product_name']);
+                    $sheet->getCell('G' . $iRow)->setValue($row['unit_name']);
+                    $sheet->getCell('H' . $iRow)->setValue(numberFormat($row['item_qty'], FALSE));
+
+                    $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('F' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
+
+                    $iRow++;
+                }
 
                 //setting periode
-               $periode_text = indo_short_date($start_date) . ' s.d ' . indo_short_date($end_date);
-               $sheet->getCell('B5')->setValue($periode_text);
-               $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
-               $sheet->getCell('A1')->setValue($reportInfo);
+                $periode_text = indo_short_date($start_date) . ' s.d ' . indo_short_date($end_date);
+                $sheet->getCell('B5')->setValue($periode_text);
+                $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
+                $sheet->getCell('A1')->setValue($reportInfo);
 
-               $sheet->mergeCells('A1:H1');
+                $sheet->mergeCells('A1:H1');
 
-               $sheet->getStyle('A1:H1')->getAlignment()->setHorizontal('right');
+                $sheet->getStyle('A1:H1')->getAlignment()->setHorizontal('right');
 
-               $sheet->getStyle('A2:H2')->applyFromArray($font_bold);
+                $sheet->getStyle('A2:H2')->applyFromArray($font_bold);
 
 
-               $filename = 'Laporan Pembayaran Hutang';
-               header('Content-Type: application/vnd.ms-excel');
-               header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
-               header('Cache-Control: max-age=0');
-               $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-               $writer->save('php://output');
-               exit();
-           }
+                $filename = 'Laporan Pembayaran Hutang';
+                header('Content-Type: application/vnd.ms-excel');
+                header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+                header('Cache-Control: max-age=0');
+                $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+                $writer->save('php://output');
+                exit();
+            }
         } else {
-        echo "<h1>Anda tidak memiliki akses ke laman ini</h1>";
+            echo "<h1>Anda tidak memiliki akses ke laman ini</h1>";
         }
     }
 
