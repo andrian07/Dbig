@@ -12,7 +12,7 @@ $assetsUrl = base_url('assets');
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Kartu Stok Produk</h1>
+                    <h1>Laporan Perubahan Harga Jual & Beli</h1>
                 </div>
                 <div class="col-sm-6"></div>
             </div>
