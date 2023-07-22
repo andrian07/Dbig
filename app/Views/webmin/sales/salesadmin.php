@@ -915,6 +915,7 @@ $assetsUrl = base_url('assets');
             },
         });
 
+        
         $('#product_name').autocomplete({   
 
            minLength: 2,

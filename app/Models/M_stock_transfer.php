@@ -15,6 +15,8 @@ class M_stock_transfer extends Model
 
 	protected $table_warehouse = 'ms_warehouse';
 
+	protected $table_ms_warehouse_stock = 'ms_warehouse_stock';
+
 	public function insertTemp($data)
 	{
 
@@ -98,8 +100,9 @@ class M_stock_transfer extends Model
 
 	public function insertStockTransfer($data)
 	{
-
-		$this->db->query('LOCK TABLES hd_transfer_stock WRITE');
+		$this->db->transBegin();
+		
+		$this->db->query('LOCK TABLES ms_warehouse WRITE, hd_transfer_stock WRITE, ms_warehouse_stock WRITE');
 
 		$this->db->transBegin();
 
@@ -127,27 +130,18 @@ class M_stock_transfer extends Model
 
 		$hd_transfer_stock_id  = $this->db->insertID();
 
-
-
 		if ($this->db->affectedRows() > 0) {
 
-			$saveQueries[] = [
-
-				'query_text'    => $this->db->getLastQuery()->getQuery(),
-
-				'ref_id'        => $hd_transfer_stock_id 
-
-			];
+			$saveQueries[] = $this->db->getLastQuery()->getQuery();
 
 		}
-
-
 
 		$sqlDtOrder = "insert into dt_transfer_stock(hd_transfer_stock_id,item_id,item_qty) VALUES";
 
 		$sqlUpdateStock = "insert into ms_product_stock (product_id  , warehouse_id  , stock) VALUES";
 
 		$sqlPlusStock = "insert into ms_product_stock (product_id  , warehouse_id  , stock) VALUES";
+
 
 		$sqlDtValues = [];
 
@@ -173,6 +167,47 @@ class M_stock_transfer extends Model
 			$vUpdateStock[] = "('$product_id', '$warehouse_id_from', '$base_purchase_stock')";
 
 			$vPlusStock[] = "('$product_id', '$warehouse_id_to', '$base_purchase_stock')";
+
+			$getLastEd = $this->db->table($this->table_ms_warehouse_stock)->select('*')->where('product_id', $product_id)->where('stock > 0')->where('warehouse_id', $warehouse_id_from)->orderBy('exp_date', 'asc')->limit(1)->get()->getRowArray();
+
+			if($getLastEd != null){
+                $a = 0;
+                for($a = $base_purchase_stock; $a > 0; $a++){
+
+                    $getLastEdStock = $this->db->table($this->table_ms_warehouse_stock)->select('*')->where('product_id', $product_id)->where('stock > 0')->where('warehouse_id', $warehouse_id_from)->orderBy('exp_date', 'asc')->limit(1)->get()->getRowArray();
+
+                    if($getLastEdStock != null){
+                        $stock_id_eds     = $getLastEdStock['stock_id'];
+                        $stock_eds        = $getLastEdStock['stock'];
+
+                        $total_input = $stock_eds - $a;
+						
+                        if($total_input < 0){
+                            $total_input = 0;
+                        }
+
+                        $sqlUpdateWarehouse = "update ms_warehouse_stock set stock = '".$total_input."' where stock_id = '".$stock_id_eds."' and warehouse_id = '".$warehouse_id_from."'";
+                        $this->db->query($sqlUpdateWarehouse);
+
+						$getLastEdStockTo = $this->db->table($this->table_ms_warehouse_stock)->select('*')->where('product_id', $product_id)->where('stock > 0')->where('warehouse_id', $warehouse_id_to)->orderBy('exp_date', 'asc')->limit(1)->get()->getRowArray();
+						if($getLastEdStockTo != null){
+							$stock_id_eds_plus     = $getLastEdStock['stock_id'];
+							$stock_eds_plus        = $getLastEdStock['stock'];
+							$total_input_plus = $stock_eds_plus + $a;
+							$sqlUpdateWarehouse = "update ms_warehouse_stock set stock = '".$total_input_plus."' where stock_id = '".$stock_id_eds_plus."'";
+						}else{
+							$sqlUpdateWarehouse = "insert into ms_warehouse_stock (product_id,warehouse_id,purchase_id,stock) VALUES ('$product_id','$warehouse_id_to','0',$total_input_plus)";
+						}
+            			$this->db->query($sqlUpdateWarehouse);
+                        $a = $base_purchase_stock - $stock_eds;
+                    }else{
+                        $a = -1;
+                    }
+
+                }
+            }
+
+			
 		}
 
 		$sqlDtOrder .= implode(',', $sqlDtValues);

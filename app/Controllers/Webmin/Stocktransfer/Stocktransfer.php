@@ -74,7 +74,7 @@ class Stocktransfer extends WebminController
 
                 $M_product = model('M_product');
 
-                $find = $M_product->searchProductBywarehouse($keyword, $warehouse_id)->getResultArray();
+                $find = $M_product->searchProductTransferStock($keyword, $warehouse_id)->getResultArray();
 
                 $find_result = [];
 
@@ -89,8 +89,6 @@ class Stocktransfer extends WebminController
                         'value'               => $diplay_text.'('.$row['unit_name'].')',
 
                         'item_id'             => $row['item_id'],
-
-                        'purchase_price'      => $row['purchase_price'],
 
                         'warehouse_stock'     => $row['warehouse_stock'],
 

@@ -574,6 +574,7 @@ $assetsUrl = base_url('assets');
         source: function(req, add) {
 
             $.ajax({
+                
 
                 url: base_url + '/webmin/stock-transfer/search-product-transfer?warehouse='+$('#warehouse_from').val(),
 
