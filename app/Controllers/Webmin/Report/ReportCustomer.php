@@ -538,7 +538,7 @@ class ReportCustomer extends WebminController
             }
 
             $getReportData = $M_receivable_repayment->getReportData($start_date, $end_date, $customer_id, $store_id)->getResultArray();
-
+            
 
             if ($getReportData != null) {
                 if ($customer_id != null) {
@@ -558,14 +558,15 @@ class ReportCustomer extends WebminController
                 } else {
                     $max_page_item  = 16;
                 }
-                //$receivabledata    = array_chunk($getReportData, $max_page_item);
+                $receivabledata    = array_chunk($getReportData, $max_page_item);
+                
                 $data = [
                     'title'                 => 'Laporan Piutang Customer',
                     'start_date'            => $start_date,
                     'end_date'              => $end_date,
                     'customer_name'         => $customer_name,
-                    'pages'                 => $getReportData,
-                    'maxPage'               => count($getReportData),
+                    'pages'                 => $receivabledata,
+                    'maxPage'               => count($receivabledata),
                     'userLogin'             => $this->userLogin
                 ];
 
@@ -630,23 +631,42 @@ class ReportCustomer extends WebminController
 
                 $last_customer = '';
                 foreach ($getReportData as $row) {
-                    $sales_admin_grand_total  = floatval($row['sales_admin_grand_total']);
-                    $sales_admin_down_payment = floatval($row['sales_admin_down_payment']);
+                    
+
                     $sales_admin_remaining_payment = floatval($row['sales_admin_remaining_payment']);
-                    $total_pay = floatval($row['sales_admin_remaining_payment'] - $sales_admin_down_payment);
-                    $sales_date = indo_short_date($row['sales_date'], TRUE);
-                    $sales_due_date = indo_short_date($row['sales_due_date'], TRUE);
+                    $date_difference = $row['date_difference'];
 
                     $sheet->getCell('A' . $iRow)->setValue($last_customer == $row['customer_name'] ? '' : $row['customer_name']);
                     $sheet->getCell('B' . $iRow)->setValue($row['store_code'] . '-' . $row['store_name']);
                     $sheet->getCell('C' . $iRow)->setValue($row['sales_admin_invoice']);
                     $sheet->getCell('D' . $iRow)->setValue(indo_short_date($row['sales_date'], FALSE));
                     $sheet->getCell('E' . $iRow)->setValue(indo_short_date($row['sales_due_date'], FALSE));
-                    $sheet->getCell('F' . $iRow)->setValue(numberFormat($sales_admin_grand_total));
-                    $sheet->getCell('G' . $iRow)->setValue(numberFormat($sales_admin_down_payment));
-                    $sheet->getCell('H' . $iRow)->setValue(numberFormat($total_pay));
-                    $sheet->getCell('I' . $iRow)->setValue(numberFormat($sales_admin_remaining_payment));
-
+                    if($date_difference <= 30){
+                        $sheet->getCell('F' . $iRow)->setValue(numberFormat($sales_admin_remaining_payment));
+                    }else{
+                        $sheet->getCell('F' . $iRow)->setValue(0);
+                    }
+                    if($date_difference >30 && $date_difference <= 60){
+                        $sheet->getCell('G' . $iRow)->setValue(numberFormat($sales_admin_remaining_payment));
+                    }else{
+                        $sheet->getCell('G' . $iRow)->setValue(0);
+                    }
+                    if($date_difference >60 && $date_difference <= 90){
+                        $sheet->getCell('H' . $iRow)->setValue(numberFormat($sales_admin_remaining_payment));
+                    }else{
+                        $sheet->getCell('H' . $iRow)->setValue(0);
+                    }
+                    if($date_difference >90 && $date_difference <= 180){
+                        $sheet->getCell('I' . $iRow)->setValue(numberFormat($sales_admin_remaining_payment));
+                    }else{
+                        $sheet->getCell('I' . $iRow)->setValue(0);
+                    }
+                    if($date_difference > 180){
+                        $sheet->getCell('J' . $iRow)->setValue(numberFormat($sales_admin_remaining_payment));
+                    }else{
+                        $sheet->getCell('J' . $iRow)->setValue(0);
+                    }
+                    $sheet->getCell('K' . $iRow)->setValue(numberFormat($sales_admin_remaining_payment));
 
                     $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
                     $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
@@ -657,6 +677,8 @@ class ReportCustomer extends WebminController
                     $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
                     $sheet->getStyle('H' . $iRow)->applyFromArray($border_left_right);
                     $sheet->getStyle('I' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('J' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('K' . $iRow)->applyFromArray($border_left_right);
 
                     $last_customer = $row['customer_name'];
                     $iRow++;
@@ -668,12 +690,8 @@ class ReportCustomer extends WebminController
                 $sheet->getCell('A1')->setValue($reportInfo);
 
                 $sheet->mergeCells('A1:I1');
-
                 $sheet->getStyle('A1:I1')->getAlignment()->setHorizontal('right');
-
                 $sheet->getStyle('A2:I2')->applyFromArray($font_bold);
-
-
                 $filename = 'Daftar Piutang Customer';
                 header('Content-Type: application/vnd.ms-excel');
                 header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');

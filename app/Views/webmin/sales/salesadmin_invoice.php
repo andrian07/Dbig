@@ -151,7 +151,7 @@ $assetsUrl = base_url('assets');
 
 		.invoice-item tbody {
 
-			min-height: 260px;
+			min-height: 240px;
 
 			width: 100%;
 
@@ -237,9 +237,9 @@ $assetsUrl = base_url('assets');
 
 				<td width="20%"><?= indo_date($hdSales['sales_date']) ?></td>
 
-				<td rowspan="5" class="text-center title-faktur" width="25%">FAKTUR</td>
+				<td rowspan="5" class="text-center title-faktur" width="15%">FAKTUR</td>
 
-				<td width="45%">Kepada Yth,</td>
+				<td width="55%">Kepada Yth,</td>
 
 			</tr>
 
@@ -263,7 +263,7 @@ $assetsUrl = base_url('assets');
 
 				<td><?= $hdSales['salesman_name'] ?> (<?= $hdSales['salesman_code'] ?>)</td>
 
-				<td><?= $hdSales['customer_address'] ?></td>
+				<td rowspan="2"><p style="margin-top: 1px; line-height: 14px;"><?= $hdSales['customer_address'] ?> <br /> Telp:<?= $hdSales['customer_phone'] ?></p></td>
 
 			</tr>
 
@@ -274,8 +274,6 @@ $assetsUrl = base_url('assets');
 				<td>:</td>
 
 				<td><?= indo_date($hdSales['sales_due_date']) ?></td>
-
-				<td>Telp:<?= $hdSales['customer_phone'] ?></td>
 
 			</tr>
 

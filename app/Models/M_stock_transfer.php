@@ -50,7 +50,7 @@ class M_stock_transfer extends Model
 
 	public function getTemp($user_id)
 	{
-		$this->db->query('LOCK TABLES ms_product_unit READ, temp_transfer_stock READ, ms_product READ, ms_unit READ');
+		$this->db->query('LOCK TABLES ms_product_unit READ, temp_transfer_stock READ, ms_product READ, ms_unit READ, ms_warehouse_stock WRITE');
 
 		$builder = $this->db->table($this->table_temp_transfer);
 
@@ -187,14 +187,17 @@ class M_stock_transfer extends Model
                         }
 
                         $sqlUpdateWarehouse = "update ms_warehouse_stock set stock = '".$total_input."' where stock_id = '".$stock_id_eds."' and warehouse_id = '".$warehouse_id_from."'";
-                        $this->db->query($sqlUpdateWarehouse);
-
+						//print_r($sqlUpdateWarehouse);die();
+                        //$this->db->query($sqlUpdateWarehouse);
+						
 						$getLastEdStockTo = $this->db->table($this->table_ms_warehouse_stock)->select('*')->where('product_id', $product_id)->where('stock > 0')->where('warehouse_id', $warehouse_id_to)->orderBy('exp_date', 'asc')->limit(1)->get()->getRowArray();
+						print_r($getLastEdStockTo);die();
 						if($getLastEdStockTo != null){
-							$stock_id_eds_plus     = $getLastEdStock['stock_id'];
-							$stock_eds_plus        = $getLastEdStock['stock'];
-							$total_input_plus = $stock_eds_plus + $a;
+							$stock_id_eds_plus     = $getLastEdStockTo['stock_id'];
+							$stock_eds_plus        = $getLastEdStockTo['stock'];
+							$total_input_plus      = $stock_eds_plus + $a;
 							$sqlUpdateWarehouse = "update ms_warehouse_stock set stock = '".$total_input_plus."' where stock_id = '".$stock_id_eds_plus."'";
+							
 						}else{
 							$sqlUpdateWarehouse = "insert into ms_warehouse_stock (product_id,warehouse_id,purchase_id,stock) VALUES ('$product_id','$warehouse_id_to','0',$total_input_plus)";
 						}

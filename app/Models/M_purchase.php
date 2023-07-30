@@ -14,7 +14,7 @@ class M_purchase extends Model
     protected $table_dt_purchase        = 'dt_purchase';
     protected $table_ms_product_stock   = 'ms_product_stock';
     protected $table_ms_product         = 'ms_product';
-
+    protected $table_ms_product_unit    = 'ms_product_unit';
 
     public function insertTemp($data)
     {
@@ -366,14 +366,13 @@ class M_purchase extends Model
             $base_cogs              = $row['base_cogs'];
             $warehouse_id           = $data['purchase_warehouse_id'];
 
+            
             $getStock = $this->db->table($this->table_ms_product_stock)->select('sum(stock) as stock')->where('product_id', $product_id)->get()->getRowArray();
             if($getStock['stock'] == null){
                 $stock              = 0;
             }else{
                 $stock              = $getStock['stock'];    
             }
-
-
 
             $get_price = $this->db->table($this->table_ms_product)->select('base_purchase_price')->where('product_id', $product_id)->get()->getRowArray();
             $product_content        = floatval($row['product_content']);
@@ -406,7 +405,6 @@ class M_purchase extends Model
             $dt_ppn                 = $dt_ppn_cal * $base_unit;
             $dt_dpp                 = $new_base_purchase_price * $base_unit;
             $dt_discount_nota       = $temp_discount_nota_per_item * $temp_purchase_qty;
-
 
             $sqlDtValues[] = "('$temp_purchase_po_id','$temp_purchase_po_invoice','$purchase_inv','$temp_purchase_item_id','$temp_purchase_qty','$dt_ppn','$dt_discount_nota','$dt_dpp','$temp_purchase_price','$temp_purchase_discount1','$temp_purchase_discount1_percentage','$temp_purchase_discount2','$temp_purchase_discount2_percentage','$temp_purchase_discount3','$temp_purchase_discount3_percentage','$discount_per_nota','$temp_purchase_ongkir','$temp_purchase_expire_date','$temp_purchase_total','$temp_purchase_supplier_id','$temp_purchase_supplier_name','$temp_purchase_user_id')";
 

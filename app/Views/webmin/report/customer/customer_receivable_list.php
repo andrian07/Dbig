@@ -125,6 +125,7 @@ foreach ($pages as $receivabledata) :
                                 $sales_admin_down_payment = floatval($row['sales_admin_down_payment']);
                                 $sales_admin_remaining_payment = floatval($row['sales_admin_remaining_payment']);
                                 $total_pay = floatval($row['sales_admin_remaining_payment'] - $sales_admin_down_payment);
+                                $date_difference = floatval($row['date_difference']);
                                 ?>
                                 <tr align="left">
                                     <td class="text-left"><?= $last_customer == $row['customer_name'] ? '' : $row['customer_name'] ?>&nbsp;</td>

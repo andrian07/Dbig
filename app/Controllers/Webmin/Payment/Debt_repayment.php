@@ -287,7 +287,7 @@ class Debt_repayment extends WebminController
 
                 if ($save['success']) {
 
-                    $saveaccounting = $this->save_debt_repayment_accounting($input, $save['payment_debt_id']);
+                    //$saveaccounting = $this->save_debt_repayment_accounting($input, $save['payment_debt_id']);
 
                     $result = ['success' => TRUE, 'message' => 'Data pelunasan hutang berhasil disimpan', 'payment_debt_id' => $save['payment_debt_id']];
 
@@ -311,7 +311,7 @@ class Debt_repayment extends WebminController
 
     }
 
-    public function save_debt_repayment_accounting($input, $payment_debt_id)
+    /*public function save_debt_repayment_accounting($input, $payment_debt_id)
     {
         $user_id = 5;
         $api_module = 'debtRepayment';
@@ -335,8 +335,6 @@ class Debt_repayment extends WebminController
                     'temp_cashout_nominal'      => $row['payment_debt_total_pay'],
                     'temp_cashout_user_id'      => $user_id
                 ];
-
-                
 
                 $savetemp =  $this->M_accounting_queries->insertTempCashout($input_temp);
 
@@ -393,7 +391,7 @@ class Debt_repayment extends WebminController
                 $savecashout = $this->M_accounting_queries->insertCashOut($input);
 
             }
-    }
+    }*/
 
     public function getPaymentFooter()
     {

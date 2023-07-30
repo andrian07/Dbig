@@ -284,7 +284,7 @@ class M_receivable_repayment extends Model
 
     public function getReportData($start_date, $end_date, $customer_id, $store_id)
     {
-        $builder = $this->db->table('hd_sales_admin')->select("sales_admin_invoice, sales_date, sales_due_date, sales_admin_grand_total, sales_admin_down_payment, sales_admin_remaining_payment, customer_name, customer_address, customer_phone, store_name, store_code");
+        $builder = $this->db->table('hd_sales_admin')->select("sales_admin_invoice, sales_date, sales_due_date, sales_admin_grand_total, sales_admin_down_payment, sales_admin_remaining_payment, customer_name, customer_address, customer_phone, store_name, store_code,  DATEDIFF(sales_date, sales_due_date) AS date_difference,");
         $builder->join('ms_customer', 'ms_customer.customer_id  = hd_sales_admin.sales_customer_id');
         $builder->join('ms_store', 'ms_store.store_id = hd_sales_admin.sales_store_id');
         if ($store_id != null) {

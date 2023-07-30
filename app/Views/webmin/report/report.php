@@ -44,7 +44,8 @@ $report_role = $user_role['report'];
                                 <!--
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-customer-point-history-chart') ?>" class="text-primary">Grafik Histori Poin Customer</a></li>
                             -->
-                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-customer-receivable-list') ?>" class="text-primary">Daftar Tagihan Piutang</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-customer-receivable-list') ?>" class="text-primary">Laporan Aging Piutang</a></li>
+                                <li class="list-group-item"><a href="<?= base_url('webmin/report/view-customer-receivable-list') ?>" class="text-primary">Laporan Penerimaan Piutang</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-customer-receivable-receipt') ?>" class="text-primary">Cetak Kwitansi Penagihan</a></li>
                                 <li class="list-group-item"><a href="<?= base_url('webmin/report/view-customer-mapping-list') ?>" class="text-primary">Daftar Mapping Customer</a></li>
 

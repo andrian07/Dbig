@@ -5,18 +5,21 @@ namespace App\Controllers\Webmin\Retur;
 
 use Dompdf\Dompdf;
 use App\Models\M_retur;
+use App\Models\Accounting\M_accounting_queries;
 use App\Controllers\Base\WebminController;
 
 
 class Retur extends WebminController
 {
-
     protected $M_retur;
+    protected $M_accounting_queries;
+
 
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);
         $this->M_retur = new M_retur;
+        $this->M_accounting_queries = new M_accounting_queries;
     }
 
     public function index()
@@ -660,6 +663,8 @@ class Retur extends WebminController
 
                 if ($save['success']) {
 
+                    $saveaccounting = $this->save_retur_purchase_accounting($input, $input['hd_retur_purchase_id']);
+
                     $result = ['success' => TRUE, 'message' => 'Data pembayaran retur berhasil disimpan', 'hd_retur_purchase_id ' => $save['hd_retur_purchase_id']];
 
                 } else {
@@ -680,6 +685,78 @@ class Retur extends WebminController
 
         resultJSON($result);
 
+    }
+
+    public function save_retur_purchase_accounting($input, $hd_retur_purchase_id)
+    {
+        $user_id = 6;
+        $api_module = 'returPurchase';
+        $contents = $this->M_retur->getRetur($hd_retur_purchase_id)->getResultArray();
+    
+        foreach ($contents as $row) {
+            
+            $account_api_name_piutang_lain_lain = 'purchase_piutang_lain_lain';
+
+            $getApiAccountPiutangLainLain = $this->M_accounting_queries->getApiAccount($account_api_name_piutang_lain_lain)->getRowArray();
+
+            $key = $getApiAccountPiutangLainLain['account_id'] . $this->generateRandomString() . date('YmdHis');
+
+            $input_dt_journal = [
+                    'temp_key'             => $key,
+                    'account_id'           => $getApiAccountPiutangLainLain['account_id'],
+                    'debit_balance'        => $row['hd_retur_total_transaction'],
+                    'credit_balance'       => 0,
+                    'user_id'              => $user_id
+            ];
+
+            $savetemp = $this->M_accounting_queries->insertJurnalApi($input_dt_journal);
+
+            $account_api_name_piutang_lain_lain = 'purchase_persediaan';
+
+            $getApiAccountPiutangLainLain = $this->M_accounting_queries->getApiAccount($account_api_name_piutang_lain_lain)->getRowArray();
+
+            $key = $getApiAccountPiutangLainLain['account_id'] . $this->generateRandomString() . date('YmdHis');
+
+            $temp_cashout_id = md5($key);
+
+            $input_dt_journal = [
+                'temp_key'             => $key,
+                'account_id'           => $getApiAccountPiutangLainLain['account_id'],
+                'debit_balance'        => 0,
+                'credit_balance'       => $row['hd_retur_total_dpp'],
+                'user_id'              => $user_id
+            ];
+
+            $savetemp = $this->M_accounting_queries->insertTempCashout($input_dt_journal);
+            $account_api_name_ppn_masukan = 'purchase_ppn';
+            $getApiAccountPPNMasukan = $this->M_accounting_queries->getApiAccount($account_api_name_ppn_masukan)->getRowArray();
+            $key = $getApiAccountPPNMasukan['account_id'] . $this->generateRandomString() . date('YmdHis');
+            $temp_cashout_id = md5($key);
+            $input_dt_journal = [
+                'temp_key'             => $key,
+                'account_id'           => $getApiAccountPPNMasukan['account_id'],
+                'debit_balance'        => 0,
+                'credit_balance'       => $row['hd_retur_total_ppn'],
+                'user_id'              => $user_id
+            ];
+
+            $savetemp = $this->M_accounting_queries->insertTempCashout($input_dt_journal);
+            $input_hd_journal = [
+                'journal_date'              => $row['hd_retur_date'],
+                'journal_remark'            => 'Retur Pembelian ' . $row['hd_retur_purchase_invoice'],
+                'journal_debit_balance'     => $row['hd_retur_total_transaction'],
+                'journal_credit_balance'    => $row['hd_retur_total_transaction'],
+                'user_id'                   => $user_id,
+                'store_code'                => 'UTM',
+                'store_id'                  => 1,
+            ];
+
+            $jdate      = $row['hd_retur_date'];
+            $edate      = explode('-', $jdate);
+            $jperiod    = $edate[1] . $edate[0];
+            $input_hd_journal['journal_period']  = $jperiod;
+            $savejournal = $this->M_accounting_queries->insertJournal($input_hd_journal);
+        }
     }
 
     public function savepaymentReturSalesAdmin()
@@ -943,7 +1020,7 @@ class Retur extends WebminController
 
             $getOrder = $this->M_retur->getRetur($hd_retur_purchase_id)->getRowArray();
 
-            if($getOrder['hd_retur_status'] != 'pending')
+            if($getOrder['hd_retur_status'] != 'Pending')
             {
                 $result = ['success' => FALSE, 'message' => 'Transaksi yang sudah selesai atau dibatalkan tidak dapat di ubah lagi'];
             }
@@ -1378,6 +1455,16 @@ class Retur extends WebminController
         resultJSON($result);
     }
 
+    private function generateRandomString($length = 5)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = ''; 
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
 
 
 
