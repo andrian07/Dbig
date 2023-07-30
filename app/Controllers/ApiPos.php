@@ -302,9 +302,10 @@ class ApiPos extends BaseController
                     'payments'          => $payments
                 ];
 
-                $total_sales_return_cogs          = 0;
-                $total_sales_return_dpp           = 0;
-                $total_sales_return_ppn           = 0;
+                $total_sales_return_cogs                = 0;
+                $total_sales_return_dpp                 = 0;
+                $total_sales_return_ppn                 = 0;
+                $total_sales_return_margin_allocation   = 0;
 
                 $getItemSalesReturn = $this->db->table('dt_pos_session_transaction')
                     ->select('dt_pos_sales_return.*,ms_product.product_name,ms_product.has_tax')
@@ -318,23 +319,26 @@ class ApiPos extends BaseController
                     ->getResultArray();
 
                 foreach ($getItemSalesReturn as $item) {
-                    $product_cogs               = floatval($item['product_cogs']);
-                    $sales_return_qty           = floatval($item['sales_return_qty']);
-                    $sales_return_price         = floatval($item['sales_return_price']);
-                    $sales_return_dpp           = floatval($item['sales_return_dpp']);
-                    $sales_return_ppn           = floatval($item['sales_return_ppn']);
+                    $product_cogs                           = floatval($item['product_cogs']);
+                    $sales_return_qty                       = floatval($item['sales_return_qty']);
+                    $sales_return_price                     = floatval($item['sales_return_price']);
+                    $sales_return_dpp                       = floatval($item['sales_return_dpp']);
+                    $sales_return_ppn                       = floatval($item['sales_return_ppn']);
+                    $margin_allocation                      = floatval($item['margin_allocation']);
 
-                    $total_sales_return_cogs    += $sales_return_qty * $product_cogs;
-                    $total_sales_return_dpp     += $sales_return_qty * $sales_return_dpp;
-                    $total_sales_return_ppn     += $sales_return_qty * $sales_return_ppn;
+                    $total_sales_return_cogs                += $sales_return_qty * $product_cogs;
+                    $total_sales_return_dpp                 += $sales_return_qty * $sales_return_dpp;
+                    $total_sales_return_ppn                 += $sales_return_qty * $sales_return_ppn;
+                    $total_sales_return_margin_allocation   += $sales_return_qty * $margin_allocation;
                 }
 
-                $sales_return_total = $total_sales_return_dpp + $total_sales_return_ppn;
+                $sales_return_total = $total_sales_return_dpp + $total_sales_return_ppn + $total_sales_return_margin_allocation;
                 $salesReturnData = [
-                    'sales_return_total'        => $sales_return_total,
-                    'sales_return_dpp'          => $total_sales_return_dpp,
-                    'sales_return_ppn'          => $total_sales_return_ppn,
-                    'sales_return_cogs'         => $total_sales_return_cogs
+                    'sales_return_total'                => $sales_return_total,
+                    'sales_return_dpp'                  => $total_sales_return_dpp,
+                    'sales_return_ppn'                  => $total_sales_return_ppn,
+                    'sales_return_cogs'                 => $total_sales_return_cogs,
+                    'sales_return_margin_allocation'    => $total_sales_return_margin_allocation
                 ];
 
 
@@ -350,10 +354,8 @@ class ApiPos extends BaseController
                 ];
             }
 
-            dd($postData);
-
             $urlOffline = 'http://localhost:8989/';
-            $urlOnline = 'https://https://accounting.dashboard-dbig.com/';
+            $urlOnline = 'https://accounting.dashboard-dbig.com/';
             $client = \Config\Services::curlrequest([
                 'baseURI' => $urlOffline,
             ]);
@@ -367,6 +369,7 @@ class ApiPos extends BaseController
 
             $status_code    = $postUpdate->getStatusCode();
             $status_reason  = $postUpdate->getReason();
+
             if ($status_code == 200) {
                 $contents = json_decode($postUpdate->getBody(), true);
                 if ($contents['success']) {
