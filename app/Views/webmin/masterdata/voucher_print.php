@@ -40,14 +40,14 @@
         padding: 0px 10px;
         vertical-align: top;
         text-align: right;
-        font-size: 20;
+        font-size: 12;
     }
 
     .voucher-exp-date {
         padding: 0px 0px;
         vertical-align: bottom;
         text-align: left;
-        font-size: 20;
+        font-size: 12;
     }
 
 
@@ -78,6 +78,7 @@
                 $iRight = ($i * 2) - 1; //1,3,5 
             ?>
                 <tr>
+                    <td width="2%"></td>
                     <td width="45%">
                         <?php if (isset($voucherData[$iLeft])) : ?>
                             <table class="voucher">
@@ -85,7 +86,7 @@
                                     <td class="voucher-code" style="height:100px;"><?= $voucherData[$iLeft]['voucher_code'] ?></td>
                                 </tr>
                                 <tr>
-                                    <td style="height:60px;">&nbsp;</td>
+                                    <td style="height:95px;">&nbsp;</td>
                                 </tr>
                                 <tr>
                                     <td class="voucher-exp-date" style="height:20px;">Exp Date : <?= indo_short_date($voucher_group['exp_date']) ?></td>
@@ -101,7 +102,7 @@
                                     <td class="voucher-code" style="height:100px;"><?= $voucherData[$iRight]['voucher_code'] ?></td>
                                 </tr>
                                 <tr>
-                                    <td style="height:60px;">&nbsp;</td>
+                                    <td style="height:95px;">&nbsp;</td>
                                 </tr>
                                 <tr>
                                     <td class="voucher-exp-date" style="height:20px;">Exp Date : <?= indo_short_date($voucher_group['exp_date']) ?></td>
@@ -110,7 +111,7 @@
                         <?php endif; ?>
 
                     </td>
-                    <td width="10%"></td>
+                    <td width="8%"></td>
                 </tr>
             <?php } ?>
         </table>
@@ -124,7 +125,7 @@
         for ($i = 1; $i <= 3; $i++) {
         ?>
             <tr>
-                <td width="10%"></td>
+                <td width="8%"></td>
                 <td width="45%">
                     <table class="voucher-detail">
                         <tr>
@@ -151,7 +152,7 @@
                         </tr>
                     </table>
                 </td>
-
+                <td width="2%"></td>
             </tr>
         <?php } ?>
     </table>

@@ -65,6 +65,7 @@
 
         .right-store-name {
             text-align: right;
+
         }
 
         p {
@@ -145,6 +146,7 @@
     </style>
 </head>
 
+
 <body>
     <?php
     $countPage = count($pages);
@@ -158,16 +160,16 @@
                     <table class="table table-condensed">
                         <tbody>
                             <tr>
-                                <td class="no-border center-store-name">
+                                <td class="no-border center-store-name" width="30%">
                                     <h4><?= COMPANY_NAME ?></h4>
                                     <p><?= COMPANY_ADDRESS ?></p>
                                     <p><?= COMPANY_PHONE ?></p>
                                 </td>
-                                <td class="no-border center-store-name invoice-number">
+                                <td class="no-border center-store-name invoice-number" width="25%">
                                     <p style="text-transform:uppercase; text-align: center;font-size: 20px;">SURAT JALAN</p>
-                                    <p style="font-size: 20px;text-align: center;"><?= esc($header['pos_sales_invoice']) ?></p>
+                                    <p style="font-size: 14px;text-align: center;"><?= esc($header['pos_sales_invoice']) ?></p>
                                 </td>
-                                <td class="no-border right-store-name">
+                                <td class="no-border right-store-name" width="45%" style="padding-left:5%;">
                                     <p><?= COMPANY_REGION ?>, <?= indo_date($header['pos_sales_date'], FALSE) ?></p>
                                     <p><?= esc($header['customer_name']) ?></p>
                                     <?php
@@ -202,7 +204,7 @@
                                     <td class="no-border"><?= esc($row['item_code']) ?></td>
                                     <td class="no-border product-name"><?= esc($product_name) ?></td>
                                     <td class="no-border"><?= esc($unit_name) ?></td>
-                                    <td class="no-border right"><?= numberFormat($sales_qty, true) ?></td>
+                                    <td class="no-border right"><?= numberFormat($sales_qty, false) ?></td>
                                 </tr>
                             <?php
                             endforeach;
@@ -222,10 +224,8 @@
                             </tr>
 
                             <tr>
-                                <td class="no-border">Hormat Kami, </td>
+                                <td class="no-border" style="padding-left: 2%;">Hormat Kami, </td>
                                 <td class="no-border" style="text-align:left;">Penerima, </td>
-                                <td></td>
-                                <td></td>
                                 <td class="right no-border" style="text-align:right;"></td>
                                 <td class="right no-border" style="text-align:right;"></td>
 
@@ -255,7 +255,7 @@
                                 <td class="no-border sign-border" colspan="2">
                                     <div class="ttd">
                                         <p class="ttd_word">----------------------------</p>
-                                        <p style="margin-left: -70px;">----------------------------</p>
+                                        <p style="margin-left: -30px;">----------------------------</p>
                                     </div>
                                 </td>
                                 <td class="right no-border"> </td>

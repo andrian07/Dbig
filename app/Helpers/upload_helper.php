@@ -47,3 +47,33 @@ if (!function_exists('upload_image')) {
         }
     }
 }
+
+
+if (!function_exists('upload_raw_image')) {
+    function upload_raw_image($_inputFileName = '', $_renameTo = '', $_configImageName = '')
+    {
+        $_config    = new \Config\MyApp();
+        $_request   = \Config\Services::request();
+
+        $file       = $_request->getFile($_inputFileName);
+        $ext        = $file->getClientExtension();
+
+        $filename = $_renameTo . '.' . $ext;
+
+        //init config//
+        $default_config = $_config->uploadImage['default'];
+        $custom_config = [];
+        if (!($_configImageName == '')) {
+            $custom_config = isset($_config->uploadImage[$_configImageName]) ? $_config->uploadImage[$_configImageName] : [];
+        }
+        $config = array_merge($default_config, $custom_config);
+
+        if ($file->isValid() && !$file->hasMoved()) {
+            // upload file as temp //
+            $file->move($config['upload_dir'], $filename);
+            return $filename;
+        } else {
+            return '';
+        }
+    }
+}

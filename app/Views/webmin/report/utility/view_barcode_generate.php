@@ -60,6 +60,8 @@ $assetsUrl = base_url('assets');
 
                                         </div>
                                     </div>
+
+
                                     <div class="col-sm-2">
                                         <!-- text input -->
 
@@ -76,6 +78,18 @@ $assetsUrl = base_url('assets');
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <!-- text input -->
+                                        <div class="form-group">
+                                            <label>Jenis Report:</label>
+                                            <select id="report_url" name="report_url" class="form-control">
+                                                <option value="<?= base_url('webmin/report/barcode-generate-v3') ?>">V3</option>
+                                                <option value="<?= base_url('webmin/report/barcode-generate-v4') ?>">V4</option>
+                                                <option value="<?= base_url('webmin/report/barcode-generate-v5') ?>">V5</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -147,6 +161,7 @@ $assetsUrl = base_url('assets');
 
         $('#btnsearch').click(function(e) {
             e.preventDefault();
+
             let item_id = $("#item_id").val();
             let barcode_type = $("#barcode_type").val();
             let print_count = $('#print_count').val();
@@ -154,10 +169,24 @@ $assetsUrl = base_url('assets');
                 item_id = '';
             }
 
-            let reportUrl = '<?= base_url('webmin/report/barcode-generate') ?>?';
+            let reportUrl = $('#report_url').val() + '?';
             reportUrl += 'item_id=' + item_id + '&barcode_type=' + barcode_type;
             reportUrl += '&print_count=' + print_count;
-            $('#preview').prop('src', reportUrl);
+
+            window.open(reportUrl, '_blank');
+
+
+            // let item_id = $("#item_id").val();
+            // let barcode_type = $("#barcode_type").val();
+            // let print_count = $('#print_count').val();
+            // if (item_id == null) {
+            //     item_id = '';
+            // }
+
+            // let reportUrl = '<?= base_url('webmin/report/barcode-generate') ?>?';
+            // reportUrl += 'item_id=' + item_id + '&barcode_type=' + barcode_type;
+            // reportUrl += '&print_count=' + print_count;
+            // $('#preview').prop('src', reportUrl);
         })
 
     })

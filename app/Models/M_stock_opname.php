@@ -179,8 +179,9 @@ class M_stock_opname extends Model
         return $builder->delete();
     }
 
-    public function insertOpname($data)
+    public function insertOpname($data, $return_opname_id = false)
     {
+        $opname_id = 0;
         $this->db->query('LOCK TABLES hd_opname WRITE,dt_opname WRITE,temp_opname WRITE,ms_product_stock WRITE,ms_warehouse_stock WRITE,last_record_number WRITE');
         $sqlUpdateLastNumber = NULL;
         $saveQueries = NULL;
@@ -381,7 +382,11 @@ class M_stock_opname extends Model
         $this->db->query('UNLOCK TABLES');
 
         saveQueries($saveQueries, 'stock_opname', $opname_id);
-        return $save;
+        if ($return_opname_id) {
+            return $opname_id;
+        } else {
+            return $save;
+        }
     }
 
 

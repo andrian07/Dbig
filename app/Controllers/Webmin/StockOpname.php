@@ -19,6 +19,7 @@ class StockOpname extends WebminController
 
     public function index()
     {
+
         $data = [
             'title'         => 'Stok Opname'
         ];
@@ -303,6 +304,95 @@ class StockOpname extends WebminController
         resultJSON($result);
     }
 
+
+
+    public function api_post_accounting_opname($opname_id)
+    {
+        $api_post_user_id = 12;
+        $getOpname = $this->M_stock_opname->getOpname($opname_id)->getRowArray();
+
+        if ($getOpname != null) {
+            // setup connection //
+            $db             = \Config\Database::connect('accounting');
+            $M_warehouse    = model('M_warehouse');
+            $M_journal      = model('Accounting/M_journal');
+
+
+            $getWarehouse   = $M_warehouse->getWarehouse($getOpname['warehouse_id'])->getRowArray();
+            $store_id       = $getWarehouse['store_id'];
+            $store_code     = $getWarehouse['store_code'];
+            $journal_date   = $getOpname['opname_date'];
+            $journal_period =  substr($journal_date, 5, 2) . substr($journal_date, 0, 4);
+            $journal_remark = 'Opname ' . $getOpname['opname_code'];
+
+
+            $listApiAccount = [];
+            $getApiAccount = $db->table('ms_account_api')->get()->getResultArray();
+            foreach ($getApiAccount as $cfg) {
+                $acc_name =  $cfg['account_api_name'];
+                $listApiAccount[$acc_name] = $cfg;
+            }
+
+            $hpp_account_id         = isset($listApiAccount['penjualan_hpp']) ? $listApiAccount['penjualan_hpp']['account_id'] : '0';
+            $hpp_account_name       = isset($listApiAccount['penjualan_hpp']) ? $listApiAccount['penjualan_hpp']['account_name'] : 'NO NAME';
+
+            $pbd_account_id         = isset($listApiAccount['purchase_persediaan']) ? $listApiAccount['purchase_persediaan']['account_id'] : '0';
+            $pbd_account_name       = isset($listApiAccount['purchase_persediaan']) ? $listApiAccount['purchase_persediaan']['account_name'] : 'NO NAME';
+
+            $opname_total           = floatval($getOpname['opname_total']);
+            if ($opname_total < 0 || $opname_total > 0) {
+                $total_journal  = 0;
+                $dtJournal      = [];
+
+                if ($opname_total < 0) {
+                    $total_journal  = $opname_total * -1;
+                    $dtJournal = [
+                        [
+                            'account_id'            => $hpp_account_id,
+                            'debit_balance'         => $total_journal,
+                            'credit_balance'        => 0
+                        ],
+                        [
+                            'account_id'            => $pbd_account_id,
+                            'debit_balance'         => 0,
+                            'credit_balance'        => $total_journal
+                        ]
+                    ];
+                } else if ($opname_total > 0) {
+                    $total_journal = $opname_total;
+                    $dtJournal = [
+                        [
+                            'account_id'            => $pbd_account_id,
+                            'debit_balance'         => $total_journal,
+                            'credit_balance'        => 0
+                        ],
+                        [
+                            'account_id'            => $hpp_account_id,
+                            'debit_balance'         => 0,
+                            'credit_balance'        => $total_journal
+                        ]
+                    ];
+                }
+
+                $hdJournal = [
+                    'store_code'                => $store_code,
+                    'store_id'                  => $store_id,
+                    'journal_period'            => $journal_period,
+                    'journal_date'              => $journal_date,
+                    'journal_remark'            => $journal_remark,
+                    'journal_debit_balance'     => $total_journal,
+                    'journal_credit_balance'    => $total_journal,
+                    'can_edit'                  => 'Y',
+                    'user_id'                   => $api_post_user_id,
+                ];
+                return $M_journal->insertJournal($hdJournal, $dtJournal);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function save()
     {
         $this->validationRequest(TRUE);
@@ -327,8 +417,9 @@ class StockOpname extends WebminController
             $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
         } else {
             if ($this->role->hasRole('stock_opname.add')) {
-                $save = $this->M_stock_opname->insertOpname($input);
-                if ($save) {
+                $opname_id = $this->M_stock_opname->insertOpname($input, true);
+                if ($opname_id > 0) {
+                    $this->api_post_accounting_opname($opname_id);
                     $result = ['success' => TRUE, 'message' => 'Data stok opname berhasil disimpan'];
                 } else {
                     $result = ['success' => FALSE, 'message' => 'Data stok opname gagal disimpan'];
