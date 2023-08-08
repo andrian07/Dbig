@@ -298,4 +298,13 @@ class M_receivable_repayment extends Model
         return $builder->orderBy('hd_sales_admin.sales_customer_id', 'ASC')->get();
     }
 
+    public function getReceivableRepaymentAccounting($payment_receivable_id)
+    {
+        $builder = $this->db->table($this->table_hd_payment_receivable);
+        $builder->select('*');
+        $builder->join('ms_customer', 'ms_customer.customer_id=hd_payment_receivable.payment_receivable_customer_id');
+        $builder->where('payment_receivable_id', $payment_receivable_id);
+        return $builder->get();
+    }
+
 }

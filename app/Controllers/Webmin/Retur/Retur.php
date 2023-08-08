@@ -353,37 +353,28 @@ class Retur extends WebminController
 
             $input['retur_user_id'] = $this->userLogin['user_id'];
 
+            $getTemp = $this->M_retur->getTemp($this->userLogin['user_id'])->getResultArray();
             $getReturCheck = $this->M_retur->getReturCheck($input['retur_purchase_invoice'], $input['retur_item_id'])->getResultArray();
-
             if($getReturCheck == null){
                 $dt_retur_qty = 0;
             }else{
                 $dt_retur_qty = floatval($getReturCheck[0]['dt_retur_qty']);
             }
-
             $qty_total = $dt_retur_qty + $input['retur_qty'];
-
             if($input['retur_qty_buy'] < $qty_total)
             {
                 $result = ['success' => FALSE, 'message' => 'Item Retur Melebihi Qty Beli'];
-
+            }else if($getTemp != null && $getTemp[0]['retur_purchase_invoice'] != $input['retur_purchase_invoice']){
+                $result = ['success' => FALSE, 'message' => 'No Pembelian Harus Sama'];
             }else{
-
                 $save = $this->M_retur->insertTemp($input);
-
                 if ($save) {
-
                     $result = ['success' => TRUE, 'message' => 'Data item berhasil ditambahkan'];
-
-                } else {
-
-                    $result = ['success' => FALSE, 'message' => 'Data item gagal ditambahkan'];
-
-                }
-            }
-
+                    } else {
+                     $result = ['success' => FALSE, 'message' => 'Data item gagal ditambahkan'];
+                    }
+            }  
         }
-
         $getTemp = $this->M_retur->getTemp($this->userLogin['user_id'])->getResultArray();
 
         $find_result = [];
@@ -659,18 +650,23 @@ class Retur extends WebminController
 
             if ($this->role->hasRole('retur_purchase.update_payment')) {
 
+                $getDtRetur = $this->M_retur->getDtRetur($input['hd_retur_purchase_id'])->getRowArray();
+                $getRemainingDebt = $this->M_retur->getRemainingDebt($getDtRetur['dt_retur_purchase_invoice'])->getRowArray();
+                if($input['payment_type'] == 'Ya' && $getRemainingDebt['purchase_remaining_debt'] < $input['hd_retur_total_transaction']){
+                    $result = ['success' => FALSE, 'message' => 'Sisa Hutang Lebih Kecil Dari Nilai Potong Nota'];
+                }else{
                 $save = $this->M_retur->updateRetur($input);
 
-                if ($save['success']) {
+                    if ($save['success']) {
 
-                    $saveaccounting = $this->save_retur_purchase_accounting($input, $input['hd_retur_purchase_id']);
+                        $saveaccounting = $this->save_retur_purchase_accounting($input, $input['hd_retur_purchase_id']);
+                        $result = ['success' => TRUE, 'message' => 'Data pembayaran retur berhasil disimpan', 'hd_retur_purchase_id ' => $save['hd_retur_purchase_id']];
 
-                    $result = ['success' => TRUE, 'message' => 'Data pembayaran retur berhasil disimpan', 'hd_retur_purchase_id ' => $save['hd_retur_purchase_id']];
+                    } else {
 
-                } else {
+                        $result = ['success' => FALSE, 'message' => 'Data pembayaran retur gagal disimpan'];
 
-                    $result = ['success' => FALSE, 'message' => 'Data pembayaran retur gagal disimpan'];
-
+                    }
                 }
 
             } else {
@@ -686,133 +682,77 @@ class Retur extends WebminController
         resultJSON($result);
 
     }
-
     public function save_retur_purchase_accounting($input, $hd_retur_purchase_id)
     {
-        $user_id = 6;
-        $api_module = 'returPurchase';
-        $contents = $this->M_retur->getRetur($hd_retur_purchase_id)->getResultArray();
-    
-        foreach ($contents as $row) {
-            
-            $account_api_name_piutang_lain_lain = 'purchase_piutang_lain_lain';
+        $contents = $this->M_retur->getReturAccounting($hd_retur_purchase_id)->getRowArray();
 
-            $getApiAccountPiutangLainLain = $this->M_accounting_queries->getApiAccount($account_api_name_piutang_lain_lain)->getRowArray();
-
-            $key = $getApiAccountPiutangLainLain['account_id'] . $this->generateRandomString() . date('YmdHis');
-
-            $input_dt_journal = [
-                    'temp_key'             => $key,
-                    'account_id'           => $getApiAccountPiutangLainLain['account_id'],
-                    'debit_balance'        => $row['hd_retur_total_transaction'],
-                    'credit_balance'       => 0,
-                    'user_id'              => $user_id
-            ];
-
-            $savetemp = $this->M_accounting_queries->insertJurnalApi($input_dt_journal);
-
-            $account_api_name_piutang_lain_lain = 'purchase_persediaan';
-
-            $getApiAccountPiutangLainLain = $this->M_accounting_queries->getApiAccount($account_api_name_piutang_lain_lain)->getRowArray();
-
-            $key = $getApiAccountPiutangLainLain['account_id'] . $this->generateRandomString() . date('YmdHis');
-
-            $temp_cashout_id = md5($key);
-
-            $input_dt_journal = [
-                'temp_key'             => $key,
-                'account_id'           => $getApiAccountPiutangLainLain['account_id'],
-                'debit_balance'        => 0,
-                'credit_balance'       => $row['hd_retur_total_dpp'],
-                'user_id'              => $user_id
-            ];
-
-            $savetemp = $this->M_accounting_queries->insertTempCashout($input_dt_journal);
-            $account_api_name_ppn_masukan = 'purchase_ppn';
-            $getApiAccountPPNMasukan = $this->M_accounting_queries->getApiAccount($account_api_name_ppn_masukan)->getRowArray();
-            $key = $getApiAccountPPNMasukan['account_id'] . $this->generateRandomString() . date('YmdHis');
-            $temp_cashout_id = md5($key);
-            $input_dt_journal = [
-                'temp_key'             => $key,
-                'account_id'           => $getApiAccountPPNMasukan['account_id'],
-                'debit_balance'        => 0,
-                'credit_balance'       => $row['hd_retur_total_ppn'],
-                'user_id'              => $user_id
-            ];
-
-            $savetemp = $this->M_accounting_queries->insertTempCashout($input_dt_journal);
-            $input_hd_journal = [
-                'journal_date'              => $row['hd_retur_date'],
-                'journal_remark'            => 'Retur Pembelian ' . $row['hd_retur_purchase_invoice'],
-                'journal_debit_balance'     => $row['hd_retur_total_transaction'],
-                'journal_credit_balance'    => $row['hd_retur_total_transaction'],
-                'user_id'                   => $user_id,
-                'store_code'                => 'UTM',
-                'store_id'                  => 1,
-            ];
-
-            $jdate      = $row['hd_retur_date'];
-            $edate      = explode('-', $jdate);
-            $jperiod    = $edate[1] . $edate[0];
-            $input_hd_journal['journal_period']  = $jperiod;
-            $savejournal = $this->M_accounting_queries->insertJournal($input_hd_journal);
-        }
-    }
-
-    public function savepaymentReturSalesAdmin()
-    {
-
-        $this->validationRequest(TRUE, 'POST');
-
-        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
-
-        $validation =  \Config\Services::validation();
-
-        $input = [
-            'sales_no'                               => $this->request->getPost('sales_no'),
-            'hd_retur_sales_admin_id'                => $this->request->getPost('hd_retur_sales_admin_id'),
-            'payment_type'                           => $this->request->getPost('payment_type'),
-            'hd_retur_total_transaction'             => $this->request->getPost('hd_retur_total_transaction'),
-            'user_id'                                => $this->userLogin['user_id']
+        $data_hd_journal = [
+            'store_code'             => $contents['store_code'],
+            'store_id'               => $contents['store_id'],
+            'trx_date'               => $contents['hd_retur_date'],
+            'remark'                 => $contents['hd_retur_purchase_invoice'],
+            'debit_balance'          => $contents['hd_retur_total_transaction'],
+            'credit_balance'         => $contents['hd_retur_total_transaction'],
         ];
-
-        $validation->setRules([
-            'hd_retur_sales_admin_id'         => ['rules' => 'required'],
-            'payment_type'                    => ['rules' => 'required'],
-            'hd_retur_total_transaction'      => ['rules' => 'required'],
-        ]);
-
-        if ($validation->run($input) === FALSE) {
-
-            $result = ['success' => FALSE, 'message' => 'Silahkan Input Semua Data Terlebih Dahulu'];
-
-        } else {
-
-            if ($this->role->hasRole('retur_sales_admin.update_payment')) {
-
-                $save = $this->M_retur->updateReturSalesAdmin($input);
-
-                if ($save['success']) {
-
-                    $result = ['success' => TRUE, 'message' => 'Data pembayaran retur berhasil disimpan', 'hd_retur_purchase_id ' => $save['hd_retur_sales_admin_id']];
-
-                } else {
-
-                    $result = ['success' => FALSE, 'message' => 'Data pembayaran retur gagal disimpan'];
-
-                }
-
-            } else {
-
-                $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menambah pembayaran retur'];
-
-            }
-
+        
+        if($contents['purchase_remaining_debt'] == 0){
+            $account_id_1 = 9;
+        }else{
+            $account_id_1 = 30;
         }
 
-        $result['csrfHash'] = csrf_hash();
+        if($contents['hd_retur_total_ppn'] > 0 ){
+            $data_dt_journal = [
+                [
+                    'account_id'             => $account_id_1,
+                    'debit_balance'          => $contents['hd_retur_total_transaction'],
+                    'credit_balance'         => 0
+                ],[
+                    'account_id'             => 11,
+                    'debit_balance'          => 0,
+                    'credit_balance'         => $contents['hd_retur_total_dpp']
+                ],[
+                    'account_id'             => 13,
+                    'debit_balance'          => 0,
+                    'credit_balance'         => $contents['hd_retur_total_ppn']
+                ]
+            ];
+        }else{
+            $data_dt_journal = [
+                [
+                    'account_id'             => $account_id_1,
+                    'debit_balance'          => $contents['hd_retur_total_transaction'],
+                    'credit_balance'         => 0
+                ],[
+                    'account_id'             => 11,
+                    'debit_balance'          => 0,
+                    'credit_balance'         => $contents['hd_retur_total_dpp']
+                ]
+            ];
+        }
+        $savejournal = $this->M_accounting_queries->insert_journal($data_hd_journal, $data_dt_journal);
+        $payment_type_code = 'kas';
 
-        resultJSON($result);
+        $data_hd_cashin = [
+                    'cashin_store_id'         => $contents['store_id'],
+                    'cashin_store_code'       => $contents['store_code'],
+                    'cashin_account_id'       => 2,
+                    'cashin_recipient_id'     => $contents['hd_retur_purchase_id'],
+                    'cashin_recipient_name'   => $contents['supplier_name'],
+                    'cashin_date'             => $contents['hd_retur_date'],
+                    'cashin_ref'              => $contents['hd_retur_purchase_invoice'],
+                    'cashin_journal_ref_id'   => $savejournal['journal_id'],
+                    'cashin_total_nominal'    => $contents['hd_retur_total_transaction'],
+                    'cashin_type'             => $payment_type_code,
+                    'cash_in_remark'          => $contents['hd_retur_purchase_invoice'],
+                    'cashin_created_by'       => 1
+            ];
+        $data_dt_cashin = [
+                    'dt_cashin_account_id'     => 2,
+                    'dt_cashin_account_name'   => 'KAS KECIL',
+                    'dt_cashin_nominal'        => $contents['hd_retur_total_transaction']
+            ];
+        $save_cashin = $this->M_accounting_queries->insert_cashin($data_hd_cashin, $data_dt_cashin);
 
     }
 

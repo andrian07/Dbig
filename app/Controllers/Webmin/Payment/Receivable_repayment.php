@@ -6,17 +6,20 @@ use Dompdf\Dompdf;
 use Config\App as AppConfig;
 use App\Models\M_receivable_repayment;
 use App\Controllers\Base\WebminController;
+use App\Models\Accounting\M_accounting_queries;
 
 
 class Receivable_repayment extends WebminController
 {
 
     protected $M_receivable_repayment;
+    protected $M_accounting_queries;
 
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);
         $this->M_receivable_repayment = new M_receivable_repayment;
+        $this->M_accounting_queries = new M_accounting_queries;
     }
 
     public function index()
@@ -230,6 +233,8 @@ class Receivable_repayment extends WebminController
 
                 if ($save['success']) {
 
+                    $saveaccounting = $this->save_receivable_repayment_accounting($input, $save['payment_receivable_id']);
+
                     $result = ['success' => TRUE, 'message' => 'Data pelunasan Piutang berhasil disimpan', 'payment_receivable_id' => $save['payment_receivable_id']];
 
                 } else {
@@ -251,6 +256,61 @@ class Receivable_repayment extends WebminController
         resultJSON($result);
     }
 
+    public function save_receivable_repayment_accounting($input, $payment_receivable_id)
+    {
+        $contents = $this->M_receivable_repayment->getReceivableRepaymentAccounting($payment_receivable_id)->getRowArray();
+        
+        $data_hd_journal = [
+            'store_code'             => 'UTM',
+            'store_id'               => 1,
+            'trx_date'               => $contents['payment_receivable_date'],
+            'remark'                 => $contents['payment_receivable_invoice'],
+            'debit_balance'          => $contents['payment_receivable_total_pay'],
+            'credit_balance'         => $contents['payment_receivable_total_pay'],
+        ];
+        
+        $get_account_bank = $this->M_accounting_queries->getaccount_bank($contents['payment_receivable_method_id'])->getRowArray();
+
+        $data_dt_journal = [
+            [
+                'account_id'             => 30,
+                'debit_balance'          => $contents['payment_receivable_total_pay'],
+                'credit_balance'         => 0
+            ],[
+                'account_id'             => $get_account_bank['account_id'],
+                'debit_balance'          => 0,
+                'credit_balance'         => $contents['payment_receivable_total_pay']
+            ]
+        ];
+        $savejournal = $this->M_accounting_queries->insert_journal($data_hd_journal, $data_dt_journal);
+
+        if($contents['payment_receivable_method_id'] == '1' || $contents['payment_receivable_method_id'] == '2'){
+                $payment_type_code = 'kas';
+        }else{
+                $payment_type_code = 'Bank';
+        }
+
+        $data_hd_cashout = [
+                    'cashout_store_id'         => 1,
+                    'cashout_store_code'       => 'UTM',
+                    'cashout_account_id'       => $contents['payment_receivable_method_id'],
+                    'cashout_recipient_id'     => $contents['payment_receivable_id'],
+                    'cashout_recipient_name'   => $contents['customer_name'],
+                    'cashout_date'             => $contents['payment_receivable_date'],
+                    'cashout_ref'              => $contents['payment_receivable_invoice'],
+                    'cashout_journal_ref_id'   => $savejournal['journal_id'],
+                    'cashout_total_nominal'    => $contents['payment_receivable_total_pay'],
+                    'cashout_type'             => $payment_type_code,
+                    'cash_out_remark'          => $contents['payment_receivable_invoice'],
+                    'cashout_created_by'       => 1
+            ];
+        $data_dt_cashout = [
+                    'dt_cashout_account_id'     => $get_account_bank['account_id'],
+                    'dt_cashout_account_name'   => $get_account_bank['account_name'],
+                    'dt_cashout_nominal'        => $contents['payment_receivable_total_pay']
+            ];
+        $save_cashout = $this->M_accounting_queries->insert_cashout($data_hd_cashout, $data_dt_cashout);
+    }
     public function getReceivableFooter()
     {
         $getReceivableFooter = $this->M_receivable_repayment->getReceivableFooter($this->userLogin['user_id'])->getResultArray();

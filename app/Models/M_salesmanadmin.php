@@ -124,6 +124,30 @@ class M_salesmanadmin extends Model
         return $builder->get();
     }
 
+    public function getSalesadminAccounting($sales_admin_id)
+    {
+
+        $builder = $this->db->table($this->table_hd_sales_admin);
+
+        $builder->select('*, sum(dt_purchase_cogs*dt_temp_qty) as total_hpp');
+
+        $builder->join('dt_sales_admin', 'dt_sales_admin.sales_admin_id  = hd_sales_admin.sales_admin_id');
+
+        $builder->join('user_account', 'user_account.user_id = hd_sales_admin.user_id');
+
+        $builder->join('ms_customer', 'ms_customer.customer_id  = hd_sales_admin.sales_customer_id');
+
+        $builder->join('ms_salesman', 'ms_salesman.salesman_id  = hd_sales_admin.sales_salesman_id');
+
+        $builder->join('ms_store', 'ms_store.store_id  = hd_sales_admin.sales_store_id');
+
+        $builder->join('ms_payment_method', 'ms_payment_method.payment_method_id  = hd_sales_admin.sales_payment_type');
+        
+        $builder->where(['hd_sales_admin.sales_admin_id' => $sales_admin_id ]);
+
+        return $builder->get();
+    }
+
     public function getOrderEfaktur($sales_admin_id = '')
     {
 

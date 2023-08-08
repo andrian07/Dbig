@@ -1188,7 +1188,6 @@ $assetsUrl = base_url('assets');
 
             e.preventDefault();
 
-
             let id = $(this).attr('data-id');
 
             let actUrl = base_url + '/webmin/retur/edit-retur-purchase/' + id;

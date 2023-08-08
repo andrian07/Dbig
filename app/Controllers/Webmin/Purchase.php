@@ -323,12 +323,10 @@ class Purchase extends WebminController
 
                 $input['purchase_user_id']= $this->userLogin['user_id'];
 
-                //$checkEd = $this->M_purchase->checkEd($this->userLogin['user_id'])->getResultArray();
-
                 $save = $this->M_purchase->insertPurchase($input); 
 
                 if ($save['success']) {
-
+                    
                     $saveaccounting = $this->save_purchase_accounting($input, $save['purchase_id']);
 
                     $result = ['success' => TRUE, 'message' => 'Data Pembelian berhasil disimpan', 'purchase_id ' => $save['purchase_id']];
@@ -354,156 +352,101 @@ class Purchase extends WebminController
     }
     
     public function save_purchase_accounting($input, $purchase_id)
-    {
-
-        $user_id = 4;
-        $api_module = 'purchase';
-
-        $contents = $this->M_purchase->getPurchaseAccounting($purchase_id)->getResultArray();
-
-        foreach ($contents as $row) {
-
-        $account_api_name_persediaan = 'purchase_persediaan';
-
-        $getApiAccountPersediaan = $this->M_accounting_queries->getApiAccount($account_api_name_persediaan)->getRowArray();
-
-        $key = $getApiAccountPersediaan['account_id'] . $this->generateRandomString() . date('YmdHis');
-
-        $temp_cashout_id = md5($key);
-
-        $input_temp_persediaan_dagang = [
-            'temp_cashout_id'           => $temp_cashout_id,
-            'temp_cashout_account_id'   => $getApiAccountPersediaan['account_id'],
-            'temp_cashout_account_name' => $getApiAccountPersediaan['account_name'],
-            'temp_cashout_nominal'      => $input['purchase_total_dpp'],
-            'temp_cashout_user_id'      => $user_id
+    {   
+        $contents = $this->M_purchase->getPurchaseAccounting($purchase_id)->getRowArray();
+        $data_hd_journal = [
+            'store_code'             => $contents['store_code'],
+            'store_id'               => $contents['store_id'],
+            'trx_date'               => $contents['purchase_date'],
+            'remark'                 => 'Pembelian Invoice '.$contents['purchase_invoice'],
+            'debit_balance'          => $contents['purchase_total'],
+            'credit_balance'         => $contents['purchase_total'],
         ];
-
-        $savetemp = $this->M_accounting_queries->insertTempCashout($input_temp_persediaan_dagang);
-
-        $account_api_name_PPN = 'purchase_ppn';
-
-        $getApiAccountPPN = $this->M_accounting_queries->getApiAccount($account_api_name_PPN)->getRowArray();
-
-        $key = $getApiAccountPersediaan['account_id'] . $this->generateRandomString() . date('YmdHis');
-
-        $temp_cashout_id = md5($key);
-
-        $input_temp_ppn = [
-            'temp_cashout_id'           => $temp_cashout_id,
-            'temp_cashout_account_id'   => $getApiAccountPPN['account_id'],
-            'temp_cashout_account_name' => $getApiAccountPPN['account_name'],
-            'temp_cashout_nominal'      => $input['purchase_total_ppn'],
-            'temp_cashout_user_id'      => $user_id
-        ];
-
-        $savetemp = $this->M_accounting_queries->insertTempCashout($input_temp_ppn);
-
-        if ($input['purchase_total_ongkir'] > 0) {
-
-            $account_api_name_Ongkir = 'purchase_ongkir';
-
-            $getApiAccountOngkir = $this->M_accounting_queries->getApiAccount($account_api_name_Ongkir)->getRowArray();
-
-            $key = $getApiAccountOngkir['account_id'] . $this->generateRandomString() . date('YmdHis');
-
-            $temp_cashout_id = md5($key);
-
-            $input_temp_ongkir = [
-                'temp_cashout_id'           => $temp_cashout_id,
-                'temp_cashout_account_id'   => $getApiAccountOngkir['account_id'],
-                'temp_cashout_account_name' => $getApiAccountOngkir['account_name'],
-                'temp_cashout_nominal'      => $input['purchase_total_ongkir'],
-                'temp_cashout_user_id'      => $user_id
+        
+        if($contents['purchase_total_ppn'] > 0){
+            $data_dt_journal = [
+                [
+                    'account_id'             => 11,
+                    'debit_balance'          => $contents['purchase_total_dpp'],
+                    'credit_balance'         => 0
+                ],[
+                    'account_id'             => 13,
+                    'debit_balance'          => $contents['purchase_total_ppn'],
+                    'credit_balance'         => 0
+                ],[
+                    'account_id'             => 30,
+                    'debit_balance'          => 0,
+                    'credit_balance'         => $contents['purchase_total']
+                ]
             ];
-
-            $savetemp = $this->M_accounting_queries->insertTempCashout($input_temp_ongkir);
+        }else{
+            $data_dt_journal = [
+                [
+                    'account_id'             => 11,
+                    'debit_balance'          => $contents['purchase_total_dpp'],
+                    'credit_balance'         => 0
+                ],[
+                    'account_id'             => 30,
+                    'debit_balance'          => 0,
+                    'credit_balance'         => $contents['purchase_total']
+                ]
+            ];
         }
+        $savejournal = $this->M_accounting_queries->insert_journal($data_hd_journal, $data_dt_journal);
 
-
-        $savetemp = $this->M_accounting_queries->insertTempCashout($input_temp_ppn);
-
-        $account_api_name_Hutang_dagang = 'purchase_hutang_dagang';
-
-        $getApiAccountHutangDagang = $this->M_accounting_queries->getApiAccount($account_api_name_Hutang_dagang)->getRowArray();
-        $input = [
-            'cashout_recipient_id'               => $row['supplier_id'],
-            'cashout_recipient_name'             => $row['supplier_name'],
-            'cashout_date'                       => $row['purchase_faktur_date'],
-            'cashout_ref'                        => $row['purchase_invoice'],
-            'cashout_total_nominal'              => $row['purchase_total'],
-            'cash_out_remark'                    => 'Pembelian Invoice ' . $row['purchase_invoice'],
-            'cashout_account_id'                 => $getApiAccountHutangDagang['account_id'],
-            'cashout_created_by'                 => $user_id,
-            'cashout_store_id'                   => $row['store_id'],
-            'store_code'                         => $row['store_code'],
-        ];
-
-        $savejurnal = $this->M_accounting_queries->insertJurnalApi($input);
-
-        if ($savejurnal) {
-
-            $result = ['success' => TRUE, 'message' => 'Data API berhasil ditambahkan'];
-
-            $input = [
-                'api_module'                => $api_module,
-                'api_last_record_id'        => $row['purchase_id'],
-                'api_last_return_result'    => 'success',
-                'api_last_return_message'   => 'success'
-            ];
-            //$savecashout = $this->M_accounting_queries->insertLog($input);
+        if($contents['purchase_down_payment'] > 0){
+            if($contents['purchase_payment_method_id'] == '1' || $contents['purchase_payment_method_id'] == '2'){
+                $payment_type_code = 'kas';
+            }else{
+                $payment_type_code = 'Bank';
             }
-        }
-
-        foreach ($contents as $row) {
-        if ($row['purchase_down_payment'] > 0) {
-
-            $account_api_name_Ongkir = 'purchase_hutang_dagang';
-
-            $getApiAccountOngkir = $this->M_accounting_queries->getApiAccount($account_api_name_Ongkir)->getRowArray();
-
-            $key = $getApiAccountOngkir['account_id'] . $this->generateRandomString() . date('YmdHis');
-
-            $temp_cashout_id = md5($key);
-
-            $input_temp_ongkir = [
-                'temp_cashout_id'           => $temp_cashout_id,
-                'temp_cashout_account_id'   => $getApiAccountOngkir['account_id'],
-                'temp_cashout_account_name' => $getApiAccountOngkir['account_name'],
-                'temp_cashout_nominal'      => $row['purchase_down_payment'],
-                'temp_cashout_user_id'      => $user_id
+            $data_hd_cashout = [
+                    'cashout_store_id'         => $contents['store_id'],
+                    'cashout_store_code'       => $contents['store_code'],
+                    'cashout_account_id'       => $contents['purchase_payment_method_id'],
+                    'cashout_recipient_id'     => $contents['purchase_supplier_id'],
+                    'cashout_recipient_name'   => $contents['supplier_name'],
+                    'cashout_date'             => $contents['purchase_date'],
+                    'cashout_ref'              => 'DP '.$contents['purchase_invoice'],
+                    'cashout_journal_ref_id'   => $savejournal['journal_id'],
+                    'cashout_total_nominal'    => $contents['purchase_down_payment'],
+                    'cashout_type'             => $payment_type_code,
+                    'cash_out_remark'          => 'DP '.$contents['purchase_invoice'],
+                    'cashout_created_by'       => 1
             ];
-
-            $savetemp = $this->M_accounting_queries->insertTempCashout($input_temp_ongkir);
-
-            $getApiAccountBank = $this->M_accounting_queries->getApiAccountBank($row['purchase_payment_method_id'])->getRowArray();
-
-            if ($row['purchase_payment_method_id'] == 1) {
-                $cashout_type = 'Kas';
-            } else {
-                $cashout_type = 'Bank';
-            }
-
-            $input = [
-                'cashout_recipient_id'               => $row['supplier_id'],
-                'cashout_recipient_name'             => $row['supplier_name'],
-                'cashout_date'                       => $row['purchase_faktur_date'],
-                'cashout_ref'                        => $row['purchase_invoice'],
-                'cashout_total_nominal'              => $row['purchase_down_payment'],
-                'cash_out_remark'                    => 'DP ' . $row['purchase_invoice'],
-                'cashout_account_id'                 => $getApiAccountBank['account_id'],
-                'cashout_created_by'                 => $user_id,
-                'cashout_store_id'                   => $row['store_id'],
-                'store_code'                         => $row['store_code'],
-                'cashout_type'                       => $cashout_type
+            $data_dt_cashout = [
+                    'dt_cashout_account_id'     => '30',
+                    'dt_cashout_account_name'   => 'HUTANG DAGANG',
+                    'dt_cashout_nominal'        => $contents['purchase_total_dpp']
             ];
+            $save_cashout = $this->M_accounting_queries->insert_cashout($data_hd_cashout, $data_dt_cashout);
 
-            $savecashout = $this->M_accounting_queries->insertCashOut($input);
+            $data_hd_journal = [
+                'store_code'             => $contents['store_code'],
+                'store_id'               => $contents['store_id'],
+                'trx_date'               => $contents['purchase_date'],
+                'remark'                 => 'DP '.$contents['purchase_invoice'],
+                'debit_balance'          => $contents['purchase_down_payment'],
+                'credit_balance'         => $contents['purchase_down_payment'],
+            ];
+            
+            $get_account_bank = $this->M_accounting_queries->getaccount_bank($contents['purchase_payment_method_id'])->getRowArray();
 
-            }
+            $data_dt_journal = [
+                [
+                    'account_id'             => 30,
+                    'debit_balance'          => $contents['purchase_total_dpp'],
+                    'credit_balance'         => 0
+                ],
+                [
+                    'account_id'             => $get_account_bank['account_id'],
+                    'debit_balance'          => 0,
+                    'credit_balance'         => $contents['purchase_total_dpp']
+                ]
+            ];
+            $savejournal = $this->M_accounting_queries->insert_journal($data_hd_journal, $data_dt_journal);
         }
     }
-
 
     public function deleteTemp($temp_purchase_id = '')
     {
@@ -728,8 +671,6 @@ class Purchase extends WebminController
 
         resultJSON($result);
     }
-
-
     //--------------------------------------------------------------------
 
 }

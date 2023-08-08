@@ -5,6 +5,7 @@ namespace App\Controllers\Webmin;
 
 use Dompdf\Dompdf;
 use Config\App as AppConfig;
+use App\Models\Accounting\M_accounting_queries;
 use App\Models\M_salesmanadmin;
 use App\Controllers\Base\WebminController;
 
@@ -14,10 +15,13 @@ class Sales_admin extends WebminController
 
     protected $M_salesmanadmin;
 
+    protected $M_accounting_queries;
+
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);
         $this->M_salesmanadmin = new M_salesmanadmin;
+        $this->M_accounting_queries = new M_accounting_queries;
     }
 
     public function index()
@@ -319,6 +323,8 @@ class Sales_admin extends WebminController
 
                     if ($save['success']) {
 
+                        $saveaccounting = $this->save_sales_admin_accounting($input, $save['sales_admin_id']);
+
                         $result = ['success' => TRUE, 'message' => 'Data Penjualan berhasil disimpan', 'sales_admin_id ' => $save['sales_admin_id']];
 
                     } else {
@@ -367,6 +373,114 @@ class Sales_admin extends WebminController
         $result['csrfHash'] = csrf_hash();
 
         resultJSON($result);
+    }
+
+    public function save_sales_admin_accounting($input, $sales_admin_id)
+    {
+        $contents = $this->M_salesmanadmin->getSalesadminAccounting($sales_admin_id)->getRowArray();
+        $data_hd_journal = [
+            'store_code'             => $contents['store_code'],
+            'store_id'               => $contents['store_id'],
+            'trx_date'               => $contents['sales_date'],
+            'remark'                 => 'Penjualan Proyek '.$contents['sales_admin_invoice'],
+            'debit_balance'          => $contents['sales_admin_grand_total'],
+            'credit_balance'         => $contents['sales_admin_grand_total'],
+        ];
+        
+        if($contents['sales_admin_ppn'] > 0){
+           
+            $data_dt_journal = [
+                [
+                    'account_id'             => 8,
+                    'debit_balance'          => $contents['sales_admin_grand_total'],
+                    'credit_balance'         => 0
+                ],[
+                    'account_id'             => 38,
+                    'debit_balance'          => 0,
+                    'credit_balance'         => $contents['sales_admin_ppn']
+                ],[
+                    'account_id'             => 51,
+                    'debit_balance'          => 0,
+                    'credit_balance'         => $contents['sales_admin_grand_total'] - $contents['sales_admin_ppn']
+                ],[
+                    'account_id'             => 113,
+                    'debit_balance'          => $contents['total_hpp'],
+                    'credit_balance'         => 0
+                ],[
+                    'account_id'             => 11,
+                    'debit_balance'          => 0,
+                    'credit_balance'         => $contents['total_hpp']
+                ]
+            ];
+        }else{
+            $data_dt_journal = [
+                [
+                    'account_id'             => 8,
+                    'debit_balance'          => $contents['sales_admin_grand_total'],
+                    'credit_balance'         => 0
+                ],[
+                    'account_id'             => 51,
+                    'debit_balance'          => 0,
+                    'credit_balance'         => $contents['sales_admin_grand_total'] - $contents['sales_admin_ppn']
+                ],[
+                    'account_id'             => 113,
+                    'debit_balance'          => $contents['total_hpp'],
+                    'credit_balance'         => 0
+                ],[
+                    'account_id'             => 11,
+                    'debit_balance'          => 0,
+                    'credit_balance'         => $contents['total_hpp']
+                ]
+            ];
+        }
+        //print_r($data_dt_journal);die();
+        $savejournal = $this->M_accounting_queries->insert_journal($data_hd_journal, $data_dt_journal);
+
+        if($contents['sales_admin_down_payment'] > 0){
+            $payment_type_code = 'kas';
+            $data_hd_cashin = [
+                    'cashin_store_id'         => $contents['store_id'],
+                    'cashin_store_code'       => $contents['store_code'],
+                    'cashin_account_id'       => 1,
+                    'cashin_recipient_id'     => $contents['sales_customer_id'],
+                    'cashin_recipient_name'   => $contents['customer_name'],
+                    'cashin_date'             => $contents['sales_date'],
+                    'cashin_ref'              => 'DP '.$contents['sales_admin_invoice'],
+                    'cashin_journal_ref_id'   => $savejournal['journal_id'],
+                    'cashin_total_nominal'    => $contents['sales_admin_down_payment'],
+                    'cashin_type'             => $payment_type_code,
+                    'cash_in_remark'          => 'DP '.$contents['sales_admin_invoice'],
+                    'cashin_created_by'       => 1
+            ];
+            $data_dt_cashin = [
+                    'dt_cashin_account_id'     => '2',
+                    'dt_cashin_account_name'   => 'KAS KECIL',
+                    'dt_cashin_nominal'        => $contents['sales_admin_down_payment']
+            ];
+            $save_cashout = $this->M_accounting_queries->insert_cashin($data_hd_cashin, $data_dt_cashin);
+
+            $data_hd_journal = [
+                'store_code'             => $contents['store_code'],
+                'store_id'               => $contents['store_id'],
+                'trx_date'               => $contents['sales_date'],
+                'remark'                 => 'DP '.$contents['sales_admin_invoice'],
+                'debit_balance'          => $contents['sales_admin_down_payment'],
+                'credit_balance'         => $contents['sales_admin_down_payment'],
+            ];
+
+            $data_dt_journal = [
+                [
+                    'account_id'             => 2,
+                    'debit_balance'          => $contents['sales_admin_down_payment'],
+                    'credit_balance'         => 0
+                ],[
+                    'account_id'             => 8,
+                    'debit_balance'          => 0,
+                    'credit_balance'         => $contents['sales_admin_down_payment']
+                ]
+            ];
+            $savejournal = $this->M_accounting_queries->insert_journal($data_hd_journal, $data_dt_journal);
+        }
     }
 
     public function getSalesAdminDetail($sales_admin_id)

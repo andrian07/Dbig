@@ -212,6 +212,17 @@ class M_retur extends Model
         ->get();
     }
 
+    public function getRemainingDebt($retur_purchase_invoice)
+    {
+        $builder = $this->db->table('hd_purchase');
+
+        return $builder->select('purchase_remaining_debt')
+
+        ->where('purchase_invoice', $retur_purchase_invoice)
+
+        ->get();
+    }
+
     public function getTemp($user_id)
     {
         $builder = $this->db->table($this->table_temp_retur_purchase);
@@ -887,6 +898,30 @@ class M_retur extends Model
         $builder = $this->db->table($this->table_hd_retur);
 
         return $builder->select('*, hd_retur_purchase.created_at as created_at')
+
+        ->join('user_account', 'user_account.user_id = hd_retur_purchase.created_by')
+
+        ->join('ms_supplier', 'ms_supplier.supplier_id = hd_retur_purchase.hd_retur_supplier_id')
+
+        ->where('hd_retur_purchase.hd_retur_purchase_id', $hd_retur_purchase_id)
+
+        ->get();
+    }
+
+    public function getReturAccounting($hd_retur_purchase_id)
+    {
+
+        $builder = $this->db->table($this->table_hd_retur);
+
+        return $builder->select('*, hd_retur_purchase.created_at as created_at')
+
+        ->join('dt_retur_purchase', 'dt_retur_purchase.hd_retur_purchase_id = hd_retur_purchase.hd_retur_purchase_id')
+
+        ->join('hd_purchase', 'hd_purchase.purchase_invoice = dt_retur_purchase.dt_retur_purchase_invoice')
+
+        ->join('ms_warehouse', 'ms_warehouse.warehouse_id = dt_retur_purchase.dt_retur_warehouse')
+
+        ->join('ms_store', 'ms_store.store_id = ms_warehouse.store_id')
 
         ->join('user_account', 'user_account.user_id = hd_retur_purchase.created_by')
 
