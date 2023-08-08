@@ -105,6 +105,202 @@ class Report extends WebminController
         }
     }
 
+    public function barcodeGenerateV3()
+    {
+
+        $item_id            = $this->request->getGet('item_id') != NULL ? $this->request->getGet('item_id') : '';
+        $print_count        = $this->request->getGet('print_count') != NULL ? intval($this->request->getGet('print_count')) : 1;
+        $barcode_type       = $this->request->getGet('barcode_type') != NULL ? $this->request->getGet('barcode_type') : 'auto';
+        $barcode_type_list  = $this->myConfig->barcodeType;
+
+
+        $M_product  = model('M_product');
+        $item_id    = explode(',', $item_id);
+        $getProductUnit = $M_product->getListProductUnit($item_id)->getRowArray();
+
+        if ($item_id == '') {
+            die('<h1>Harap Pilih Item Yang Akan Dicetak</h1>');
+        } else {
+            if ($getProductUnit == NULL) {
+                die("<h1>Item tidak ditemukan</h1>");
+            } else {
+                helper('barcode');
+                $item_code = $getProductUnit['item_code'];
+                $barcode = generate_barcode($item_code, $barcode_type);
+                if ($barcode == FALSE) {
+                    $bname =  $barcode_type_list[$barcode_type];
+                    die("<h1>Jenis barcode '$bname' tidak mendukung barcode \"$item_code\"</h1>");
+                } else {
+                    $print_item             = $getProductUnit;
+
+                    $products = [];
+                    for ($i = 1; $i <= $print_count; $i++) {
+                        $products[] = $print_item;
+                    }
+
+
+
+                    $data = [
+                        'title'         => 'Cetak Barcode',
+                        'print_item'    => $print_item,
+                        'print_count'   => $print_count,
+                        'barcode'       => $barcode,
+                    ];
+
+
+
+                    $htmlView = $this->renderView('report/utility/barcode_generate_v3', $data);
+
+                    $agent = $this->request->getUserAgent();
+                    $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE; // param export
+                    $fileType   = $this->request->getGet('file'); // jenis file pdf|xlsx 
+
+                    if (!in_array($fileType, ['pdf'])) {
+                        $fileType = 'pdf';
+                    }
+
+                    if ($agent->isMobile() && !$isDownload) {
+                        return $htmlView;
+                    } else {
+                        if ($fileType == 'pdf') {
+                            $dompdf = new Dompdf();
+                            $paper = [0.0, 0.0, 150, 70];
+                            $dompdf->loadHtml($htmlView);
+                            $dompdf->setPaper($paper, 'portait');
+                            $dompdf->render();
+                            $dompdf->stream('barcode.pdf', array("Attachment" => $isDownload));
+                            exit();
+                        } else {
+                            die('Export Excel Script');
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public function barcodeGenerateV4()
+    {
+        $item_id            = $this->request->getGet('item_id') != NULL ? $this->request->getGet('item_id') : '';
+        $print_count        = $this->request->getGet('print_count') != NULL ? intval($this->request->getGet('print_count')) : 1;
+        $barcode_type       = $this->request->getGet('barcode_type') != NULL ? $this->request->getGet('barcode_type') : 'auto';
+        $barcode_type_list  = $this->myConfig->barcodeType;
+
+
+        $M_product  = model('M_product');
+        $item_id    = explode(',', $item_id);
+        $getProductUnit = $M_product->getListProductUnit($item_id)->getRowArray();
+
+        if ($item_id == '') {
+            die('<h1>Harap Pilih Item Yang Akan Dicetak</h1>');
+        } else {
+            if ($getProductUnit == NULL) {
+                die("<h1>Item tidak ditemukan</h1>");
+            } else {
+                helper('barcode');
+                $item_code = $getProductUnit['item_code'];
+                $barcode = generate_barcode($item_code, $barcode_type);
+                if ($barcode == FALSE) {
+                    $bname =  $barcode_type_list[$barcode_type];
+                    die("<h1>Jenis barcode '$bname' tidak mendukung barcode \"$item_code\"</h1>");
+                } else {
+                    $print_item             = $getProductUnit;
+                    //$print_item['barcode']  = $barcode;
+
+                    $products = [];
+                    for ($i = 1; $i <= $print_count; $i++) {
+                        $products[] = $print_item;
+                    }
+
+                    $max_item_page  = 11;
+                    $pages          = array_chunk($products, $max_item_page);
+                    $max_page       = count($pages);
+
+
+                    $data = [
+                        'title'         => 'Cetak Barcode',
+                        'pages'         => $pages,
+                        'max_page'      => $max_page,
+                        'barcode'       => $barcode,
+                    ];
+
+
+
+                    $htmlView = $this->renderView('report/utility/barcode_generate_v4', $data);
+
+                    $agent = $this->request->getUserAgent();
+                    $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE; // param export
+                    $fileType   = $this->request->getGet('file'); // jenis file pdf|xlsx 
+
+                    if (!in_array($fileType, ['pdf'])) {
+                        $fileType = 'pdf';
+                    }
+
+                    if ($agent->isMobile() && !$isDownload) {
+                        return $htmlView;
+                    } else {
+                        if ($fileType == 'pdf') {
+                            $dompdf = new Dompdf();
+                            $dompdf->loadHtml($htmlView);
+                            $dompdf->setPaper('A4', 'portait');
+                            $dompdf->render();
+                            $dompdf->stream('barcode.pdf', array("Attachment" => $isDownload));
+                            exit();
+                        } else {
+                            die('Export Excel Script');
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public function barcodeGenerateV5()
+    {
+        $item_id            = $this->request->getGet('item_id') != NULL ? $this->request->getGet('item_id') : '';
+        $print_count        = $this->request->getGet('print_count') != NULL ? intval($this->request->getGet('print_count')) : 1;
+        $barcode_type       = $this->request->getGet('barcode_type') != NULL ? $this->request->getGet('barcode_type') : 'auto';
+        $barcode_type_list  = $this->myConfig->barcodeType;
+
+
+        $M_product  = model('M_product');
+        $item_id    = explode(',', $item_id);
+        $getProductUnit = $M_product->getListProductUnit($item_id)->getRowArray();
+
+        if ($item_id == '') {
+            die('<h1>Harap Pilih Item Yang Akan Dicetak</h1>');
+        } else {
+            if ($getProductUnit == NULL) {
+                die("<h1>Item tidak ditemukan</h1>");
+            } else {
+                helper('barcode');
+                $item_code = $getProductUnit['item_code'];
+                $barcode = generate_barcode($item_code, $barcode_type);
+                if ($barcode == FALSE) {
+                    $bname =  $barcode_type_list[$barcode_type];
+                    die("<h1>Jenis barcode '$bname' tidak mendukung barcode \"$item_code\"</h1>");
+                } else {
+                    $print_item             = $getProductUnit;
+
+                    $data = [
+                        'title'         => 'Cetak Barcode',
+                        'print_item'    => $print_item,
+                        'print_count'   => $print_count,
+                        'barcode'       => $barcode,
+                    ];
+
+                    $htmlView = $this->renderView('report/utility/barcode_generate_v5', $data);
+
+                    $agent = $this->request->getUserAgent();
+                    $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE; // param export
+                    $fileType   = $this->request->getGet('file'); // jenis file pdf|xlsx 
+
+                    return $htmlView;
+                }
+            }
+        }
+    }
+
     public function viewPriceTag()
     {
         $data = [

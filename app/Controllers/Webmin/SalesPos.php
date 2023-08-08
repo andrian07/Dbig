@@ -299,9 +299,6 @@ class SalesPos extends WebminController
                     'agent'     => $this->request->getUserAgent()
                 ];
 
-                if (isset($_GET['debug'])) {
-                    dd($data);
-                }
                 return view('webmin/sales_pos/dispatch_invoice', $data);
             }
         }
