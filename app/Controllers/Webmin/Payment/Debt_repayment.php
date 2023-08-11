@@ -315,11 +315,19 @@ class Debt_repayment extends WebminController
     {
         $contents = $this->M_debt_repayment->getDebtRepaymentAccounting($payment_debt_id)->getRowArray();
         
+        $invoice_data = [];
+        $contents_dt = $this->M_debt_repayment->getDebtDtRepaymentAccounting($payment_debt_id)->getResultArray();
+        $tempInvoice = [];
+        foreach ($contents_dt   as $row) {
+            $tempInvoice[] = $row['purchase_invoice'];
+        }
+        $invoiceString = implode(', ', $tempInvoice);
+
         $data_hd_journal = [
             'store_code'             => 'UTM',
             'store_id'               => 1,
             'trx_date'               => $contents['payment_debt_date'],
-            'remark'                 => $contents['payment_debt_invoice'],
+            'remark'                 => $contents['payment_debt_invoice'].' '.$invoiceString,
             'debit_balance'          => $contents['payment_debt_total_pay'],
             'credit_balance'         => $contents['payment_debt_total_pay'],
         ];
@@ -356,7 +364,7 @@ class Debt_repayment extends WebminController
                     'cashout_journal_ref_id'   => $savejournal['journal_id'],
                     'cashout_total_nominal'    => $contents['payment_debt_total_pay'],
                     'cashout_type'             => $payment_type_code,
-                    'cash_out_remark'          => $contents['payment_debt_invoice'],
+                    'cash_out_remark'          => $contents['payment_debt_invoice'].' '.$invoiceString,
                     'cashout_created_by'       => 1
             ];
         $data_dt_cashout = [
@@ -365,16 +373,12 @@ class Debt_repayment extends WebminController
                     'dt_cashout_nominal'        => $contents['payment_debt_total_pay']
             ];
         $save_cashout = $this->M_accounting_queries->insert_cashout($data_hd_cashout, $data_dt_cashout);
-        
     }
 
     public function getPaymentFooter()
     {
-
         $getPaymentFooter = $this->M_debt_repayment->getPaymentFooter($this->userLogin['user_id'])->getResultArray();
-
         $find_result = [];
-
         foreach ($getPaymentFooter as $k => $v) {
 
             $find_result[$k] = esc($v);

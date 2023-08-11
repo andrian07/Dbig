@@ -11,7 +11,11 @@ class M_debt_repayment extends Model
     protected $table_temp_payment_debt = 'temp_payment_debt';
     protected $hd_payment_debt = 'hd_payment_debt';
     protected $table_dt_payment_debt = 'dt_payment_debt';
+
     protected $table_warehouse       = 'ms_warehouse';
+
+    protected $dt_payment_debt = 'dt_payment_debt';
+
 
 
     public function insertTemp($data)
@@ -391,6 +395,15 @@ class M_debt_repayment extends Model
         $builder = $this->db->table($this->hd_payment_debt);
         $builder->select('*');
         $builder->join('ms_supplier', 'ms_supplier.supplier_id=hd_payment_debt.payment_debt_supplier_id');
+        $builder->where('payment_debt_id', $payment_debt_id);
+        return $builder->get();
+    }
+
+    public function getDebtDtRepaymentAccounting($payment_debt_id)
+    {
+        $builder = $this->db->table($this->dt_payment_debt);
+        $builder->select('purchase_invoice');
+        $builder->join('hd_purchase', 'hd_purchase.purchase_id=dt_payment_debt.dt_payment_debt_purchase_id');
         $builder->where('payment_debt_id', $payment_debt_id);
         return $builder->get();
     }

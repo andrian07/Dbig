@@ -302,6 +302,7 @@ class M_retur extends Model
         $hd_retur_purchase_id           = $input['hd_retur_purchase_id'];
         $hd_retur_payment               = $input['payment_type'];
         $hd_retur_total_transaction     = $input['hd_retur_total_transaction'];
+       
 
 
         $updateRetur = "update hd_retur_purchase SET hd_retur_payment = '".$hd_retur_payment."' WHERE hd_retur_purchase_id = '".$hd_retur_purchase_id."'";
@@ -320,10 +321,14 @@ class M_retur extends Model
         foreach ($getTotalRetur->getResultArray() as $row) {
            if($hd_retur_payment == 'Ya'){
             $get_purchase_retur_nominal = $this->db->table($this->table_hd_purchase)->select('purchase_retur_nominal')->where('purchase_invoice', $row['dt_retur_purchase_invoice'])->get()->getResultArray();
-
             $total_retur_purchase = $get_purchase_retur_nominal[0]['purchase_retur_nominal'] + $hd_retur_total_transaction;
-
-            $updateStatus =  $this->db->table($this->table_hd_purchase)->where('purchase_invoice', $row['dt_retur_purchase_invoice'])->update(['purchase_retur_nominal' => $total_retur_purchase]);
+            $remaining_debt_cal = $input['remaining_debt'] - $hd_retur_total_transaction;
+            $updatePurchase =  "update hd_purchase SET purchase_remaining_debt = '".$remaining_debt_cal."' WHERE purchase_invoice = '".$row['dt_retur_purchase_invoice']."'";
+            $this->db->query($updatePurchase);
+            if ($this->db->affectedRows() > 0) {
+                $saveQueries[] = $this->db->getLastQuery()->getQuery();
+    
+            }
         }
     }
 
@@ -928,6 +933,28 @@ class M_retur extends Model
         ->join('ms_supplier', 'ms_supplier.supplier_id = hd_retur_purchase.hd_retur_supplier_id')
 
         ->where('hd_retur_purchase.hd_retur_purchase_id', $hd_retur_purchase_id)
+
+        ->get();
+    }
+
+    public function getReturSalesAdminAccounting($hd_retur_sales_admin_id)
+    {
+
+        $builder = $this->db->table($this->table_hd_retur_sales_admin);
+
+        return $builder->select('*, hd_retur_sales_admin.created_at as created_at')
+
+        ->join('dt_retur_sales_admin', 'dt_retur_sales_admin.hd_retur_sales_admin_id = hd_retur_sales_admin.hd_retur_sales_admin_id')
+
+        ->join('hd_sales_admin', 'hd_sales_admin.sales_admin_id = hd_retur_sales_admin.sales_admin_id')
+
+        ->join('ms_store', 'ms_store.store_id = hd_retur_sales_admin.hd_retur_store_id')
+
+        ->join('user_account', 'user_account.user_id = hd_retur_sales_admin.created_by')
+
+        ->join('ms_customer', 'ms_customer.customer_id = hd_retur_sales_admin.hd_retur_customer_id')
+
+        ->where('hd_retur_sales_admin.hd_retur_sales_admin_id', $hd_retur_sales_admin_id)
 
         ->get();
     }
