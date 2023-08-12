@@ -247,18 +247,11 @@ $assetsUrl = base_url('assets');
                                         </div>
                                     </div>   
 
-                                    <div class="col-sm-12 col-md-2">
-                                        <!-- text input -->
-                                        <div class="form-group">
-                                            <label>Pot. Nota</label>
-                                            <input id="purchase_retur_nominal" name="purchase_retur_nominal" type="text" class="form-control text-right" value="0" readonly>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-12 col-md-2">
+                                    <div class="col-sm-12 col-md-4">
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Sisa Hutang</label>
+                                            <input id="purchase_retur_nominal" name="purchase_retur_nominal" type="text" class="form-control text-right" value="0" readonly style="display:none;">
                                             <input id="new_remaining_debt" name="new_remaining_debt" type="text" class="form-control text-right" data-parsley-vnewdebt value="0" readonly>
                                         </div>
                                     </div>
@@ -442,7 +435,7 @@ $assetsUrl = base_url('assets');
 
            let purchase_retur_nominal = val.purchase_retur_nominal;
 
-           let temp_payment_remaining  = val.purchase_remaining_debt - val.temp_payment_debt_nominal - val.purchase_retur_nominal - val.temp_payment_debt_discount;
+           let temp_payment_remaining  = val.purchase_remaining_debt - val.temp_payment_debt_nominal - val.temp_payment_debt_discount;
 
 
 
@@ -875,7 +868,7 @@ $assetsUrl = base_url('assets');
 
             purchase_retur_nominal.set(json.purchase_retur_nominal);
 
-            new_remaining_debt.set(json.purchase_remaining_debt - json.temp_payment_debt_nominal - json.purchase_retur_nominal);
+            new_remaining_debt.set(json.purchase_remaining_debt - json.temp_payment_debt_nominal);
 
             $('#repayment_total').focus();
 

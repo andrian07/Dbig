@@ -255,18 +255,11 @@ $assetsUrl = base_url('assets');
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-12 col-md-2">
-                                        <!-- text input -->
-                                        <div class="form-group">
-                                            <label>Pot. Nota</label>
-                                            <input id="sales_admin_retur_nominal" name="sales_admin_retur_nominal" type="text" class="form-control text-right" value="0" readonly>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-12 col-md-2">
+                                    <div class="col-sm-12 col-md-4">
                                         <!-- text input -->
                                         <div class="form-group">
                                             <label>Sisa Piutang</label>
+                                            <input id="sales_admin_retur_nominal" name="sales_admin_retur_nominal" type="hidden" class="form-control text-right" value="0" readonly>
                                             <input id="new_remaining_receivable" name="new_remaining_receivable" type="text" class="form-control text-right" data-parsley-vnewdebt value="0" readonly>
                                         </div>
                                     </div>
@@ -870,7 +863,7 @@ $assetsUrl = base_url('assets');
 
                 sales_admin_retur_nominal.set(json.sales_admin_retur_nominal);
 
-                new_remaining_receivable.set(json.sales_admin_remaining_payment - json.temp_payment_receivable_nominal - json.sales_admin_retur_nominal);
+                new_remaining_receivable.set(json.sales_admin_remaining_payment - json.temp_payment_receivable_nominal);
 
                 $('#repayment_total').focus();
 
@@ -917,7 +910,7 @@ $assetsUrl = base_url('assets');
 
                let sales_admin_retur_nominal = val.sales_admin_retur_nominal;
 
-               let temp_payment_remaining  = val.sales_admin_remaining_payment - val.temp_payment_receivable_nominal - val.sales_admin_retur_nominal - val.temp_payment_receivable_discount;
+               let temp_payment_remaining  = val.sales_admin_remaining_payment - val.temp_payment_receivable_nominal - val.temp_payment_receivable_discount;
 
 
                item = item.replaceAll('{row}', row)

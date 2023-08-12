@@ -630,10 +630,14 @@ class Retur extends WebminController
 
         $validation =  \Config\Services::validation();
 
+
         $input = [
             'hd_retur_purchase_id'                => $this->request->getPost('hd_retur_purchase_id'),
             'payment_type'                        => $this->request->getPost('payment_type'),
-            'hd_retur_total_transaction'          => $this->request->getPost('hd_retur_total_transaction')
+            'hd_retur_total_transaction'          => $this->request->getPost('hd_retur_total_transaction'),
+            'payment_bank'                        => $this->request->getPost('payment_bank'),
+            'payment_bank_name'                   => $this->request->getPost('payment_bank_name'),
+            'user_id'                             => $this->userLogin['user_id']
         ];
 
         $validation->setRules([
@@ -649,7 +653,11 @@ class Retur extends WebminController
         } else {
 
             if ($this->role->hasRole('retur_purchase.update_payment')) {
-
+                if($input['payment_bank'] == null){
+                    $input['payment_bank'] = 1;
+                }else{
+                    $input['payment_bank'] = $input['payment_bank'];
+                }
                 $getDtRetur = $this->M_retur->getDtRetur($input['hd_retur_purchase_id'])->getRowArray();
                 $getRemainingDebt = $this->M_retur->getRemainingDebt($getDtRetur['dt_retur_purchase_invoice'])->getRowArray();
                 if($input['payment_type'] == 'Ya' && $getRemainingDebt['purchase_remaining_debt'] < $input['hd_retur_total_transaction']){
@@ -658,7 +666,6 @@ class Retur extends WebminController
                     $input['remaining_debt'] = $getRemainingDebt['purchase_remaining_debt'];
                     $save = $this->M_retur->updateRetur($input);
                     if ($save['success']) {
-
                         $saveaccounting = $this->save_retur_purchase_accounting($input, $input['hd_retur_purchase_id']);
                         $result = ['success' => TRUE, 'message' => 'Data pembayaran retur berhasil disimpan', 'hd_retur_purchase_id ' => $save['hd_retur_purchase_id']];
 
@@ -731,29 +738,6 @@ class Retur extends WebminController
             ];
         }
         $savejournal = $this->M_accounting_queries->insert_journal($data_hd_journal, $data_dt_journal);
-        $payment_type_code = 'kas';
-
-        $data_hd_cashin = [
-                    'cashin_store_id'         => $contents['store_id'],
-                    'cashin_store_code'       => $contents['store_code'],
-                    'cashin_account_id'       => 2,
-                    'cashin_recipient_id'     => $contents['hd_retur_purchase_id'],
-                    'cashin_recipient_name'   => $contents['supplier_name'],
-                    'cashin_date'             => $contents['hd_retur_date'],
-                    'cashin_ref'              => $contents['hd_retur_purchase_invoice'],
-                    'cashin_journal_ref_id'   => $savejournal['journal_id'],
-                    'cashin_total_nominal'    => $contents['hd_retur_total_transaction'],
-                    'cashin_type'             => $payment_type_code,
-                    'cash_in_remark'          => $contents['hd_retur_purchase_invoice'],
-                    'cashin_created_by'       => 1
-            ];
-        $data_dt_cashin = [
-                    'dt_cashin_account_id'     => 2,
-                    'dt_cashin_account_name'   => 'KAS KECIL',
-                    'dt_cashin_nominal'        => $contents['hd_retur_total_transaction']
-            ];
-        $save_cashin = $this->M_accounting_queries->insert_cashin($data_hd_cashin, $data_dt_cashin);
-
     }
 
 
@@ -788,6 +772,7 @@ class Retur extends WebminController
 
             if ($this->role->hasRole('retur_sales_admin.update_payment')) {
 
+                
                 $save = $this->M_retur->updateReturSalesAdmin($input);
 
                 if ($save['success']) {
@@ -834,14 +819,14 @@ class Retur extends WebminController
                 [
                     'account_id'             => 52,
                     'debit_balance'          => 0,
-                    'credit_balance'         => $contents['sales_admin_retur_nominal'] - $contents['sales_admin_ppn']
+                    'credit_balance'         => $contents['hd_retur_total_dpp']
                 ],[
                     'account_id'             => 38,
                     'debit_balance'          => 0,
-                    'credit_balance'         => $contents['sales_admin_ppn']
+                    'credit_balance'         => $contents['hd_retur_total_ppn']
                 ],[
                     'account_id'             => 2,
-                    'debit_balance'          => $contents['sales_admin_retur_nominal'],
+                    'debit_balance'          => $contents['hd_retur_total_transaction'],
                     'credit_balance'         => 0
                 ]
             ];
@@ -850,37 +835,15 @@ class Retur extends WebminController
                 [
                     'account_id'             => 52,
                     'debit_balance'          => 0,
-                    'credit_balance'         => $contents['sales_admin_retur_nominal'] - $contents['sales_admin_ppn']
+                    'credit_balance'         => $contents['hd_retur_total_dpp']
                 ],[
                     'account_id'             => 13,
-                    'debit_balance'          => $contents['sales_admin_retur_nominal'],
+                    'debit_balance'          => $contents['hd_retur_total_transaction'],
                     'credit_balance'         => 0
                 ]
             ];
         }
         $savejournal = $this->M_accounting_queries->insert_journal($data_hd_journal, $data_dt_journal);
-        $payment_type_code = 'kas';
-
-        $data_hd_cashout = [
-                    'cashout_store_id'         => $contents['store_id'],
-                    'cashout_store_code'       => $contents['store_code'],
-                    'cashout_account_id'       => 2,
-                    'cashout_recipient_id'     => $contents['hd_retur_sales_admin_id'],
-                    'cashout_recipient_name'   => $contents['customer_name'],
-                    'cashout_date'             => $contents['hd_retur_date'],
-                    'cashout_ref'              => $contents['hd_retur_sales_admin_invoice'],
-                    'cashout_journal_ref_id'   => $savejournal['journal_id'],
-                    'cashout_total_nominal'    => $contents['hd_retur_total_transaction'],
-                    'cashout_type'             => $payment_type_code,
-                    'cash_out_remark'          => $contents['hd_retur_sales_admin_invoice'],
-                    'cashout_created_by'       => 1
-            ];
-        $data_dt_cashout = [
-                    'dt_cashout_account_id'     => 2,
-                    'dt_cashout_account_name'   => 'KAS KECIL',
-                    'dt_cashout_nominal'        => $contents['hd_retur_total_transaction']
-            ];
-        $save_cashin = $this->M_accounting_queries->insert_cashout($data_hd_cashout, $data_dt_cashout);
     }
 
     public function cancelInputReturSalesAdmin()

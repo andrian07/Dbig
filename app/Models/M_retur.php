@@ -19,6 +19,8 @@ class M_retur extends Model
     protected $table_hd_retur_sales_admin = 'hd_retur_sales_admin';
     protected $table_dt_retur_sales_admin = 'dt_retur_sales_admin';
     protected $table_hd_sales_admin = 'hd_sales_admin';
+    protected $hd_payment_debt = 'hd_payment_debt';
+    protected $dt_payment_debt = 'dt_payment_debt';
 
     public function insertTemp($data)
     {
@@ -302,22 +304,61 @@ class M_retur extends Model
         $hd_retur_purchase_id           = $input['hd_retur_purchase_id'];
         $hd_retur_payment               = $input['payment_type'];
         $hd_retur_total_transaction     = $input['hd_retur_total_transaction'];
+        $payment_bank                   = $input['payment_bank'];
+        $user_id                        = $input['user_id'];
+        $payment_bank_name              = $input['payment_bank_name'];
        
-
-
         $updateRetur = "update hd_retur_purchase SET hd_retur_payment = '".$hd_retur_payment."' WHERE hd_retur_purchase_id = '".$hd_retur_purchase_id."'";
-
         $this->db->query($updateRetur);
-
         if ($this->db->affectedRows() > 0) {
-
             $saveQueries[] = $this->db->getLastQuery()->getQuery();
-
         }
+        
+        /*
+        // SAVE DEBT HISTORY //
+        $get_purchase = $this->getReturAccounting($hd_retur_purchase_id)->getRowArray();
+        $data = [
+            'purchase_id'                => $get_purchase['purchase_id'],
+            'payment_debt_supplier_id'   => $get_purchase['supplier_id'],
+            'payment_debt_total_invoice' => $get_purchase['purchase_total'],
+            'payment_debt_total_pay'     => $hd_retur_total_transaction,
+            'payment_debt_method_id'     => $payment_bank,
+            'payment_debt_method_name'   => $payment_bank_name,
+            'payment_debt_date'          => date("Y/m/d"),
+            'user_id'                    => $user_id,
+        ];  
+        $maxCode = $this->db->table($this->hd_payment_debt)->select('payment_debt_id, payment_debt_invoice')->orderBy('payment_debt_id', 'desc')->limit(1)->get()->getRowArray();
+        $invoice_date =  date_format(date_create($data['payment_debt_date']),"y/m/d");
+        if ($maxCode == NULL) {
+            $data['payment_debt_invoice'] = 'PH/'.$invoice_date.'/'.'0000000001';
+        } else {
+            $invoice = substr($maxCode['payment_debt_invoice'], -10);
+            $data['payment_debt_invoice'] = 'PH/'.$invoice_date.'/'.substr('000000000' . strval(floatval($invoice) + 1), -10);
+        }
+        $count_invoice =  $this->count_invoice($data['user_id'])->getResultArray();
+        $data['payment_debt_total_invoice'] = $count_invoice[0]['total_invoice_pay'];
+        $this->db->table($this->hd_payment_debt)->insert($data);
+        $payment_debt_id  = $this->db->insertID();
+        if ($this->db->affectedRows() > 0) {
+           $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        }
+        $data_dt = [
+            'payment_debt_id'                => $payment_debt_id,
+            'dt_payment_debt_purchase_id'    => $get_purchase['purchase_id'],
+            'dt_payment_debt_discount'       => 0,
+            'dt_payment_debt_retur'          => 0,
+            'dt_payment_debt_desc'           => 'Retur Item',
+            'dt_payment_debt_nominal'        => $hd_retur_total_transaction,
+        ];
+        $this->db->table($this->dt_payment_debt)->insert($data_dt);
+        $payment_debt_id  = $this->db->insertID();
+        if ($this->db->affectedRows() > 0) {
+           $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        }
+        //END SAVE DEBT HISTORY //
+        */
 
         $getTotalRetur = $this->db->table($this->table_dt_retur)->select('dt_retur_purchase_invoice, sum(dt_retur_total) as total_retur')->where('hd_retur_purchase_id', $hd_retur_purchase_id)->groupby('dt_retur_purchase_invoice')->get();
-
-
         foreach ($getTotalRetur->getResultArray() as $row) {
            if($hd_retur_payment == 'Ya'){
             $get_purchase_retur_nominal = $this->db->table($this->table_hd_purchase)->select('purchase_retur_nominal')->where('purchase_invoice', $row['dt_retur_purchase_invoice'])->get()->getResultArray();
@@ -478,16 +519,19 @@ class M_retur extends Model
             $saveQueries[] = $this->db->getLastQuery()->getQuery();
 
         }
-
-
         $get_sales_admin = $this->db->table($this->table_hd_sales_admin)->select('*')->where('sales_admin_invoice', $sales_no)->get()->getRowArray();
              
         if($hd_retur_payment == 'Ya'){
-            $get_sales_admin_retur_nominal = $this->db->table($this->table_hd_sales_admin)->select('sales_admin_retur_nominal')->where('sales_admin_invoice', $sales_no)->get()->getRowArray();
-       
-            $total_retur_sales_admin = $get_sales_admin_retur_nominal['sales_admin_retur_nominal'] + $hd_retur_total_transaction;
 
-            $updateStatus =  $this->db->table($this->table_hd_sales_admin)->where('sales_admin_invoice', $sales_no)->update(['sales_admin_retur_nominal' => $total_retur_sales_admin]);
+            $get_sales_admin_retur_nominal = $this->db->table($this->table_hd_sales_admin)->select('sales_admin_retur_nominal, sales_admin_remaining_payment')->where('sales_admin_invoice', $sales_no)->get()->getRowArray();
+            $total_retur_sales_admin = $get_sales_admin_retur_nominal['sales_admin_retur_nominal'] + $hd_retur_total_transaction;
+            $remaining_repayment_cal = $get_sales_admin_retur_nominal['sales_admin_remaining_payment'] - $hd_retur_total_transaction;
+            $updateSalesAdmin =  "update hd_sales_admin SET sales_admin_remaining_payment = '".$remaining_repayment_cal."' WHERE sales_admin_invoice = '".$sales_no."'";
+            $this->db->query($updateSalesAdmin);
+            if ($this->db->affectedRows() > 0) {
+                $saveQueries[] = $this->db->getLastQuery()->getQuery();
+    
+            }
         }
 
         $updateStatus =  $this->db->table($this->table_hd_retur_sales_admin)->where('hd_retur_sales_admin_id', $hd_retur_sales_admin_id)->update(['hd_retur_status' => 'Selesai']);

@@ -734,6 +734,7 @@ $assetsUrl = base_url('assets');
             },
         });
 
+       
 
         $("#supplier_id").select2({
 
@@ -795,6 +796,8 @@ $assetsUrl = base_url('assets');
             },
             ],
         });
+
+        
 
         $('#purchase_no').autocomplete({   
 
@@ -1038,7 +1041,6 @@ $assetsUrl = base_url('assets');
                         payment_type: payment_type,
 
                         hd_retur_total_transaction:hd_retur_total_transaction_val
-
                     };
 
                     btnSubmit.prop('disabled', true);
@@ -1055,13 +1057,9 @@ $assetsUrl = base_url('assets');
 
                                     showInputPage(false);
 
-
-
                                     $('#payment_type').val('');
 
                                     $('#modal-addreturpayment').modal('hide');
-
-
 
                                 } else {
 

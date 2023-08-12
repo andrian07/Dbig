@@ -79,8 +79,8 @@ $assetsUrl = base_url('assets');
                                                 <div class="col-sm-12">
                                                     <select id="payment_type" name="payment_type" class="form-control">
                                                         <option></option>
-                                                        <option value="Ya">Potong Nota</option>
                                                         <option value="Tidak">Cash</option>
+                                                        <option value="Ya">Potong Nota</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -625,6 +625,8 @@ $assetsUrl = base_url('assets');
 
         // select2 //    
 
+       
+
         $("#store_id").select2({
             placeholder: '-- Pilih Store --',
             width: "100%",
@@ -668,6 +670,7 @@ $assetsUrl = base_url('assets');
                 },
             },
         }); 
+
 
         let tblretursalesadmin = $("#tblretursalesadmin").DataTable({
             processing: true,
