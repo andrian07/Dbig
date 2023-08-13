@@ -804,7 +804,7 @@ class Retur extends WebminController
     public function save_retur_salesadmin_accounting($input, $hd_retur_sales_admin_id)
     {
         $contents = $this->M_retur->getReturSalesAdminAccounting($hd_retur_sales_admin_id)->getRowArray();
-
+        
         $data_hd_journal = [
             'store_code'             => $contents['store_code'],
             'store_id'               => $contents['store_id'],
@@ -814,32 +814,53 @@ class Retur extends WebminController
             'credit_balance'         => $contents['hd_retur_total_transaction'],
         ];
         
+        if($contents['hd_retur_payment'] == 'Ya'){
+            $accoount_kas = 8;
+        }else{
+            $accoount_kas = 2;
+        }
         if($contents['hd_retur_total_ppn'] > 0 ){
             $data_dt_journal = [
                 [
-                    'account_id'             => 52,
+                    'account_id'             => 11,
+                    'debit_balance'          => $contents['hd_retur_total_dpp'],
+                    'credit_balance'         => 0
+                ],[
+                    'account_id'             => 113,
                     'debit_balance'          => 0,
                     'credit_balance'         => $contents['hd_retur_total_dpp']
                 ],[
-                    'account_id'             => 38,
-                    'debit_balance'          => 0,
-                    'credit_balance'         => $contents['hd_retur_total_ppn']
-                ],[
-                    'account_id'             => 2,
-                    'debit_balance'          => $contents['hd_retur_total_transaction'],
+                    'account_id'             => 52,
+                    'debit_balance'          => $contents['hd_retur_total_dpp'],
                     'credit_balance'         => 0
+                ],[
+                    'account_id'             => 38,
+                    'debit_balance'          => $contents['hd_retur_total_ppn'],
+                    'credit_balance'         => 0
+                ],[
+                    'account_id'             => $accoount_kas,
+                    'debit_balance'          => 0,
+                    'credit_balance'         => $contents['hd_retur_total_transaction']
                 ]
             ];
         }else{
             $data_dt_journal = [
                 [
-                    'account_id'             => 52,
+                    'account_id'             => 11,
+                    'debit_balance'          => $contents['hd_retur_total_dpp'],
+                    'credit_balance'         => 0
+                ],[
+                    'account_id'             => 113,
                     'debit_balance'          => 0,
                     'credit_balance'         => $contents['hd_retur_total_dpp']
                 ],[
-                    'account_id'             => 13,
-                    'debit_balance'          => $contents['hd_retur_total_transaction'],
+                    'account_id'             => 52,
+                    'debit_balance'          => $contents['hd_retur_total_dpp'],
                     'credit_balance'         => 0
+                ],[
+                    'account_id'             => $accoount_kas,
+                    'debit_balance'          => 0,
+                    'credit_balance'         => $contents['hd_retur_total_transaction']
                 ]
             ];
         }
