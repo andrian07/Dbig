@@ -430,6 +430,10 @@ $routes->group('webmin/product', ['filter' => 'webminauth'], static function ($r
     $routes->get('view-info-product', 'Webmin\Product::viewInfoProduct');
     $routes->post('info-product', 'Webmin\Product::infoProduct');
     $routes->get('info-product', 'Webmin\Product::infoProduct');
+
+    $routes->get('view-info-product-v2', 'Webmin\Product::viewInfoProductV2');
+    $routes->get('info-product-v2/(:any)', 'Webmin\Product::infoProductV2/$1');
+    $routes->get('search-product-v2', 'Webmin\Product::searchProductByName');
 });
 
 

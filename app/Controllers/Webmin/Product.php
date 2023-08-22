@@ -1812,8 +1812,63 @@ class Product extends WebminController
 
 
 
+    public function viewInfoProductV2()
+    {
+        $data = [
+            'title'             => 'Pencarian Produk',
+            'customer_group'    => $this->appConfig->get('default', 'customer_group')
+        ];
+        return $this->renderView('masterdata/product/view_info_product_v2', $data);
+    }
 
 
+    public function infoProductV2($item_code)
+    {
+        $checkBarcode = $this->M_product->getProductUnitByCode($item_code)->getRowArray();
+
+        if ($checkBarcode == null) {
+            $result = ['exist' => false, 'message' => 'Produk tidak ditemukan'];
+        } else {
+            $product_id = $checkBarcode['product_id'];
+
+            $getProduct     = $this->M_product->getProduct($product_id, true)->getRowArray();
+            $getProductunit = $this->M_product->getProductUnit($product_id)->getResultArray();
+            $getStock       = $this->M_product->getProductStock($product_id)->getResultArray();
+
+            $result = [
+                'exist'         => true,
+                'productData'   => $getProduct,
+                'unitData'      => $getProductunit,
+                'stockData'     => $getStock,
+                'message'       => 'Produk ditemukan'
+            ];
+        }
+        resultJSON($result);
+    }
+
+    public function searchProductByName()
+    {
+        $this->validationRequest(TRUE);
+        $keyword = $this->request->getGet('term');
+        $result = ['success' => FALSE, 'num_product' => 0, 'data' => [], 'message' => ''];
+        if (!($keyword == '' || $keyword == NULL)) {
+            $find =  $this->M_product->searchProductUnitByName($keyword, FALSE, 15)->getResultArray();
+            $find_result = [];
+            foreach ($find as $row) {
+                $diplay_text = $row['item_code'] . ' - ' . $row['product_name'] . ' (' . $row['unit_name'] . ')';
+                $find_result[] = [
+                    'id'                => $diplay_text,
+                    'value'             => $diplay_text,
+                    'item_id'           => $row['item_id'],
+                    'item_code'         => $row['item_code'],
+                    'unit_name'         => $row['unit_name']
+                ];
+            }
+
+            $result = ['success' => TRUE, 'num_product' => count($find_result), 'data' => $find_result, 'message' => ''];
+        }
+        resultJSON($result);
+    }
 
     //--------------------------------------------------------------------
 
