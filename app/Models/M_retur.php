@@ -286,7 +286,7 @@ class M_retur extends Model
     {
         $builder = $this->db->table($this->table_temp_retur_sales_admin);
 
-        return $builder->select('sum(retur_ppn) as total_retur_ppn, sum(retur_price - retur_disc - retur_disc_nota) as total_retur_dpp')
+        return $builder->select('sum(retur_ppn * retur_qty) as total_retur_ppn, sum((retur_price - retur_disc - retur_disc_nota) * retur_qty) as total_retur_dpp')
 
         ->where('temp_retur_sales_admin.retur_user_id', $user_id)
 
