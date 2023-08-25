@@ -308,23 +308,22 @@ class StockOpname extends WebminController
 
     public function api_post_accounting_opname($opname_id)
     {
-        $api_post_user_id = 12;
         $getOpname = $this->M_stock_opname->getOpname($opname_id)->getRowArray();
 
         if ($getOpname != null) {
             // setup connection //
-            $db             = \Config\Database::connect('accounting');
-            $M_warehouse    = model('M_warehouse');
-            $M_journal      = model('Accounting/M_journal');
+            $db                 = \Config\Database::connect('accounting');
+            $M_warehouse        = model('M_warehouse');
+            $M_journal          = model('Accounting/M_journal');
 
 
-            $getWarehouse   = $M_warehouse->getWarehouse($getOpname['warehouse_id'])->getRowArray();
-            $store_id       = $getWarehouse['store_id'];
-            $store_code     = $getWarehouse['store_code'];
-            $journal_date   = $getOpname['opname_date'];
-            $journal_period =  substr($journal_date, 5, 2) . substr($journal_date, 0, 4);
-            $journal_remark = 'Opname ' . $getOpname['opname_code'];
-
+            $getWarehouse       = $M_warehouse->getWarehouse($getOpname['warehouse_id'])->getRowArray();
+            $store_id           = $getWarehouse['store_id'];
+            $store_code         = $getWarehouse['store_code'];
+            $journal_date       = $getOpname['opname_date'];
+            $journal_period     = substr($journal_date, 5, 2) . substr($journal_date, 0, 4);
+            $journal_remark     = 'Opname ' . $getOpname['opname_code'];
+            $api_post_user_id   = intval($store_id) == 1 ? 2 : 3;
 
             $listApiAccount = [];
             $getApiAccount = $db->table('ms_account_api')->get()->getResultArray();
