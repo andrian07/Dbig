@@ -298,6 +298,23 @@ class M_receivable_repayment extends Model
         return $builder->orderBy('hd_sales_admin.sales_customer_id', 'ASC')->get();
     }
 
+    public function getReportDataReceivable($start_date, $end_date, $customer_id, $store_id)
+    {
+        $builder = $this->db->table('dt_payment_receivable')->select("sales_admin_invoice, payment_receivable_invoice, payment_receivable_date, customer_name, sales_admin_grand_total, dt_payment_receivable_discount, dt_payment_receivable_nominal");
+        $builder->join('hd_payment_receivable', 'hd_payment_receivable.payment_receivable_id  = dt_payment_receivable.payment_receivable_id');
+        $builder->join('hd_sales_admin', 'hd_sales_admin.sales_admin_id  = dt_payment_receivable.dt_payment_receivable_sales_id');
+        $builder->join('ms_customer', 'ms_customer.customer_id  = hd_sales_admin.sales_customer_id');
+        $builder->join('ms_store', 'ms_store.store_id = hd_sales_admin.sales_store_id');
+        if ($store_id != null) {
+            $builder->where('store_id', $store_id);
+        }
+        if ($customer_id != null) {
+            $builder->where('sales_customer_id', $customer_id);
+        }
+        $builder->where("(payment_receivable_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+        return $builder->orderBy('payment_receivable_date', 'ASC')->get();
+    }
+
     public function getReceivableRepaymentAccounting($payment_receivable_id)
     {
         $builder = $this->db->table($this->table_hd_payment_receivable);

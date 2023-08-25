@@ -121,7 +121,10 @@ $assetsUrl = base_url('assets');
     }
 
     $(document).ready(function() {
-
+        
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var id   = url.searchParams.get("update_date");
 
         let tblsafetystock = $("#tblsafetystock").DataTable({
             processing: true,
@@ -138,6 +141,11 @@ $assetsUrl = base_url('assets');
             ajax: {
                 url: base_url + '/webmin/purchase-order/list-auto-po',
                 type: "POST",
+                data: function(d) {
+                    return $.extend({}, d, {
+                        'id': id,
+                    });
+                },
                 error: function() {
                     notification.danger('Gagal memuat table, harap coba lagi');
                 },

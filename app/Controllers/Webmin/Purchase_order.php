@@ -704,15 +704,18 @@ public function autoPo()
 
 public function tbllistAutoPo()
 {
+    
     $this->validationRequest(TRUE);
     if ($this->role->hasRole('submission.view')) {
         helper('datatable');
+        $update_date  = $this->request->getPost('id');
         $table = new \App\Libraries\Datatables('list_purchase_order');
         $table->db->select('*');
         $table->db->join('ms_product', 'ms_product.product_id  = list_purchase_order.product_id');
         $table->db->join('ms_product_unit', 'ms_product_unit.product_id  = ms_product.product_id');
         $table->db->join('ms_unit', 'ms_unit.unit_id  = ms_product_unit.unit_id');
         $table->db->where('base_unit = "Y"');
+        $table->db->where('update_date = "'.$update_date.'"');
         $table->db->orderBy('list_purchase_order.product_id', 'desc');
         $table->renderColumn(function ($row, $i) {
             $column = [];

@@ -519,6 +519,8 @@ class ReportCustomer extends WebminController
         return $this->renderView('report/customer/view_customer_receivable_list', $data);
     }
 
+   
+
     public function customerReceivableList()
     {
         if ($this->role->hasRole('report.receivable_list')) {
@@ -642,31 +644,31 @@ class ReportCustomer extends WebminController
                     $sheet->getCell('D' . $iRow)->setValue(indo_short_date($row['sales_date'], FALSE));
                     $sheet->getCell('E' . $iRow)->setValue(indo_short_date($row['sales_due_date'], FALSE));
                     if($date_difference <= 30){
-                        $sheet->getCell('F' . $iRow)->setValue(numberFormat($sales_admin_remaining_payment));
+                        $sheet->getCell('F' . $iRow)->setValue($sales_admin_remaining_payment);
                     }else{
                         $sheet->getCell('F' . $iRow)->setValue(0);
                     }
                     if($date_difference >30 && $date_difference <= 60){
-                        $sheet->getCell('G' . $iRow)->setValue(numberFormat($sales_admin_remaining_payment));
+                        $sheet->getCell('G' . $iRow)->setValue($sales_admin_remaining_payment);
                     }else{
                         $sheet->getCell('G' . $iRow)->setValue(0);
                     }
                     if($date_difference >60 && $date_difference <= 90){
-                        $sheet->getCell('H' . $iRow)->setValue(numberFormat($sales_admin_remaining_payment));
+                        $sheet->getCell('H' . $iRow)->setValue($sales_admin_remaining_payment);
                     }else{
                         $sheet->getCell('H' . $iRow)->setValue(0);
                     }
                     if($date_difference >90 && $date_difference <= 180){
-                        $sheet->getCell('I' . $iRow)->setValue(numberFormat($sales_admin_remaining_payment));
+                        $sheet->getCell('I' . $iRow)->setValue($sales_admin_remaining_payment);
                     }else{
                         $sheet->getCell('I' . $iRow)->setValue(0);
                     }
                     if($date_difference > 180){
-                        $sheet->getCell('J' . $iRow)->setValue(numberFormat($sales_admin_remaining_payment));
+                        $sheet->getCell('J' . $iRow)->setValue($sales_admin_remaining_payment);
                     }else{
                         $sheet->getCell('J' . $iRow)->setValue(0);
                     }
-                    $sheet->getCell('K' . $iRow)->setValue(numberFormat($sales_admin_remaining_payment));
+                    $sheet->getCell('K' . $iRow)->setValue($sales_admin_remaining_payment);
 
                     $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
                     $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
@@ -704,7 +706,171 @@ class ReportCustomer extends WebminController
             echo "<h1>Anda tidak memiliki akses ke laman ini</h1>";
         }
     }
+    public function viewCustomerReceivableListReport()
+    {
+        $data = [
+            'title'         => 'Daftar Penerimaan Piutang',
+            'userLogin'     => $this->userLogin
+        ];
 
+        return $this->renderView('report/customer/view_customer_receivable_list_report', $data);
+    }
+
+    public function customerReceivableListReport()
+    {
+        if ($this->role->hasRole('report.receivable_list')) {
+
+            $M_receivable_repayment = model('M_receivable_repayment');
+
+            $start_date      = $this->request->getGet('start_date') != NULL ? $this->request->getGet('start_date') : date('Y-m') . '-01';
+            $end_date        = $this->request->getGet('end_date') != NULL ? $this->request->getGet('end_date') : date('Y-m-d');
+            $customer_id     = $this->request->getGet('customer_id');
+            $store_id        = $this->request->getGet('store_id');
+            $isDownload      = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
+            $fileType        = $this->request->getGet('file') == NULL ? 'pdf' : $this->request->getGet('file');
+            $agent           = $this->request->getUserAgent();
+
+            if (!in_array($fileType, ['pdf', 'xls'])) {
+                $fileType = 'pdf';
+            }
+
+            $getReportData = $M_receivable_repayment->getReportDataReceivable($start_date, $end_date, $customer_id, $store_id)->getResultArray();
+
+            if ($getReportData != null) {
+                if ($customer_id != null) {
+                    $customer_name = $getReportData[0]['customer_name'];
+                } else {
+                    $customer_name = '-';
+                }
+            } else {
+                $customer_name = '-';
+            }
+
+            if ($fileType == 'pdf') {
+                $cRow           = count($getReportData);
+                if ($cRow % 16 == 0) {
+                    $max_page_item  = 15;
+                } else {
+                    $max_page_item  = 16;
+                }
+                $receivabledata    = array_chunk($getReportData, $max_page_item);
+                
+                $data = [
+                    'title'                 => 'Laporan Piutang Customer',
+                    'start_date'            => $start_date,
+                    'end_date'              => $end_date,
+                    'customer_name'         => $customer_name,
+                    'pages'                 => $receivabledata,
+                    'maxPage'               => count($receivabledata),
+                    'userLogin'             => $this->userLogin
+                ];
+
+
+                $htmlView   = view('webmin/report/customer/customer_receivable_list_report', $data);
+
+                if ($agent->isMobile()  && !$isDownload) {
+                    return $htmlView;
+                } else {
+                    if ($fileType == 'pdf') {
+                        $dompdf = new Dompdf();
+                        $dompdf->loadHtml($htmlView);
+                        $dompdf->setPaper('A4', 'landscape');
+                        $dompdf->render();
+                        $dompdf->stream('daftar-penerimaan-piutang.pdf', array("Attachment" => $isDownload));
+                        exit();
+                    }
+                }
+            } else {
+                $total_format = [
+                    'font' => [
+                        'bold' => true,
+                    ],
+                    'borders' => [
+                        'top' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'right' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'left' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'bottom' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                    ],
+                ];
+
+                $font_bold = [
+                    'font' => [
+                        'bold' => true,
+                    ],
+                ];
+
+                $border_left_right = [
+                    'borders' => [
+                        'right' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'left' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                    ],
+                ];
+
+                $template = WRITEPATH . '/template/template_export_receivable_report.xlsx';
+                $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+
+                $sheet = $spreadsheet->setActiveSheetIndex(0);
+                $iRow = 8;
+
+                foreach ($getReportData as $row) {
+                    
+
+                    $payment_nominal = floatval($row['dt_payment_receivable_nominal'] - $row['dt_payment_receivable_discount']);
+                    $payment_discount = floatval($row['dt_payment_receivable_discount']);
+                    $payment_total = floatval($row['dt_payment_receivable_nominal']);
+
+                    $sheet->getCell('A' . $iRow)->setValue($row['sales_admin_invoice']);
+                    $sheet->getCell('B' . $iRow)->setValue($row['payment_receivable_invoice']);
+                    $sheet->getCell('C' . $iRow)->setValue(indo_short_date($row['payment_receivable_date'], FALSE));
+                    $sheet->getCell('D' . $iRow)->setValue($row['customer_name']);
+                    $sheet->getCell('E' . $iRow)->setValue(number_format($row['sales_admin_grand_total']));
+                    $sheet->getCell('F' . $iRow)->setValue(number_format($payment_nominal));
+                    $sheet->getCell('G' . $iRow)->setValue(number_format($payment_discount));
+                    $sheet->getCell('H' . $iRow)->setValue(number_format($payment_total));
+                
+                    $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('F' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('H' . $iRow)->applyFromArray($border_left_right);
+                    $iRow++;
+                }
+                //setting periode
+                $periode_text = indo_short_date($start_date) . ' s.d ' . indo_short_date($end_date);
+                $sheet->getCell('B1')->setValue($periode_text);
+                $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
+                $sheet->getCell('A1')->setValue($reportInfo);
+
+                $sheet->mergeCells('A1:H1');
+                $sheet->getStyle('A1:H1')->getAlignment()->setHorizontal('right');
+                $sheet->getStyle('A2:H2')->applyFromArray($font_bold);
+                $filename = 'Daftar Penerimaan Piutang';
+                header('Content-Type: application/vnd.ms-excel');
+                header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+                header('Cache-Control: max-age=0');
+                $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+                $writer->save('php://output');
+                exit();
+            }
+        } else {
+            echo "<h1>Anda tidak memiliki akses ke laman ini</h1>";
+        }
+    }
 
     public function viewCustomerReceivableReceipt()
     {
@@ -848,10 +1014,10 @@ class ReportCustomer extends WebminController
                     $sheet->getCell('C' . $iRow)->setValue($row['sales_admin_invoice']);
                     $sheet->getCell('D' . $iRow)->setValue(indo_short_date($row['sales_date'], FALSE));
                     $sheet->getCell('E' . $iRow)->setValue(indo_short_date($row['sales_due_date'], FALSE));
-                    $sheet->getCell('F' . $iRow)->setValue(numberFormat($sales_admin_grand_total));
-                    $sheet->getCell('G' . $iRow)->setValue(numberFormat($sales_admin_down_payment));
-                    $sheet->getCell('H' . $iRow)->setValue(numberFormat($total_pay));
-                    $sheet->getCell('I' . $iRow)->setValue(numberFormat($sales_admin_remaining_payment));
+                    $sheet->getCell('F' . $iRow)->setValue($sales_admin_grand_total);
+                    $sheet->getCell('G' . $iRow)->setValue($sales_admin_down_payment);
+                    $sheet->getCell('H' . $iRow)->setValue($total_pay);
+                    $sheet->getCell('I' . $iRow)->setValue($sales_admin_remaining_payment);
 
 
                     $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);

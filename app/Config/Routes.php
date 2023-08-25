@@ -926,16 +926,23 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 
     $routes->get('view-customer-receivable-list', 'Webmin\Report\ReportCustomer::viewCustomerReceivableList');
 
+    $routes->get('view-customer-receivable-list-report', 'Webmin\Report\ReportCustomer::viewCustomerReceivableListReport');
+
+    $routes->get('customer-receivable-list', 'Webmin\Report\ReportCustomer::customerReceivableList');
+    
     $routes->get('customer-receivable-list', 'Webmin\Report\ReportCustomer::customerReceivableList');
 
-    $routes->get('customer-receivable-receipt', 'Webmin\Report\ReportCustomer::customerReceivableReceipt');
+    $routes->get('customer-receivable-list-report', 'Webmin\Report\ReportCustomer::customerReceivableListReport');
 
     $routes->get('view-customer-receivable-receipt', 'Webmin\Report\ReportCustomer::viewCustomerReceivableReceipt');
 
     $routes->get('customer-receivable-receipt', 'Webmin\Report\ReportCustomer::customerReceivableReceipt');
 
     $routes->get('customer-mapping-list', 'Webmin\Report\ReportCustomer::customerMappingList');
+
     $routes->get('view-customer-mapping-list', 'Webmin\Report\ReportCustomer::viewCustomerMappingList');
+
+    
 
 
     /* Section  Inventory */
