@@ -191,7 +191,6 @@ class M_stock_transfer extends Model
                         //$this->db->query($sqlUpdateWarehouse);
 						
 						$getLastEdStockTo = $this->db->table($this->table_ms_warehouse_stock)->select('*')->where('product_id', $product_id)->where('stock > 0')->where('warehouse_id', $warehouse_id_to)->orderBy('exp_date', 'asc')->limit(1)->get()->getRowArray();
-						print_r($getLastEdStockTo);die();
 						if($getLastEdStockTo != null){
 							$stock_id_eds_plus     = $getLastEdStockTo['stock_id'];
 							$stock_eds_plus        = $getLastEdStockTo['stock'];
