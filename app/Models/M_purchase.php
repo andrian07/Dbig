@@ -246,13 +246,9 @@ class M_purchase extends Model
 
     public function insertPurchase($data)
     {
-
-
         $this->db->query('LOCK TABLES hd_purchase WRITE, dt_purchase WRITE');
 
         $this->db->transBegin();
-
-
 
         $saveQueries = NULL;
 
@@ -267,32 +263,24 @@ class M_purchase extends Model
 
         if ($maxCode == NULL) {
 
-
             $data['purchase_invoice'] = 'LBM/'.$warehouse_code.'/'.$invoice_date.'/'.'0000000001';
 
-
         } else {
-
 
             $invoice = substr($maxCode['purchase_invoice'], -10);
 
             $data['purchase_invoice'] = 'LBM/'.$warehouse_code.'/'.$invoice_date.'/'.substr('000000000' . strval(floatval($invoice) + 1), -10);
         }
 
-
         $this->db->table($this->table_hd_purchase)->insert($data);
 
         $purchase_id  = $this->db->insertID();
-
-
-
 
         if ($this->db->affectedRows() > 0) {
 
             $saveQueries[] = $this->db->getLastQuery()->getQuery();
 
         }
-
 
         $sqlDtOrder = "insert into dt_purchase(dt_purchase_po_id,dt_purchase_po_invoice,dt_purchase_invoice,dt_purchase_item_id,dt_purchase_qty,dt_purchase_ppn,dt_purchase_dicount_nota,dt_purchase_dpp,dt_purchase_price,dt_purchase_discount1,dt_purchase_discount1_percentage,dt_purchase_discount2,dt_purchase_discount2_percentage,dt_purchase_discount3,dt_purchase_discount3_percentage,dt_purchase_discount_total,dt_purchase_ongkir,dt_purchase_expire_date,dt_purchase_total,dt_purchase_supplier_id,dt_purchase_supplier_name,dt_purchase_user_id) VALUES";
 
@@ -303,18 +291,17 @@ class M_purchase extends Model
         $sqlUpdateWarehouse = "insert into ms_warehouse_stock (product_id , warehouse_id , purchase_id , exp_date, stock) VALUES";
 
         $sqlDtValues = [];
-        $vUpdateProduct = [];
-        $vUpdateStock = [];
-        $vUpdateWarehouse = [];
 
+        $vUpdateProduct = [];
+
+        $vUpdateStock = [];
+
+        $vUpdateWarehouse = [];
 
         $getTemp =  $this->getTemp($data['purchase_user_id']);
 
-
         foreach ($getTemp->getResultArray() as $row) {
 
-            //print_r($discount_nota_item);die();
-            //Detail Purchase Data
             $purchase_inv                          = $data['purchase_invoice'];
             $temp_purchase_po_id                   = $row['temp_purchase_po_id'];
             $temp_purchase_po_invoice              = $row['temp_purchase_po_invoice'];
@@ -338,7 +325,6 @@ class M_purchase extends Model
             $temp_purchase_user_id                 = $row['temp_purchase_user_id'];
             $price                                 = $temp_purchase_qty - $temp_purchase_discount_total;
             //End Detail Purchase Data
-            
             $get_dt_po = $this->db->table($this->table_dt_po)->select('detail_purchase_po_qty_pending, detail_purchase_po_recive')->where('purchase_order_id', $temp_purchase_po_id)->where('detail_purchase_po_item_id', $temp_purchase_item_id)->get()->getRowArray();
             if($get_dt_po == null){
             $detail_purchase_po_qty_pending = 0;
@@ -348,9 +334,7 @@ class M_purchase extends Model
             $detail_purchase_po_recive = $get_dt_po['detail_purchase_po_recive'] + $temp_purchase_qty;
             }
             $updateQtyPO =  $this->db->table($this->table_dt_po)->where('purchase_order_id', $temp_purchase_po_id)->where('detail_purchase_po_item_id', $temp_purchase_item_id)->update(['detail_purchase_po_recive' => $detail_purchase_po_recive,'detail_purchase_po_qty_pending' => $detail_purchase_po_qty_pending]);
-
             $getTotalItemPurchase = $this->db->table($this->table_temp_purchase)->select('sum(temp_purchase_qty * product_content) as qty')->join('ms_product_unit', 'ms_product_unit.item_id = temp_purchase.temp_purchase_item_id')->where('temp_purchase_user_id', $data['purchase_user_id'])->get()->getRowArray();
-
             $product_id             = $row['product_id'];
             $product_code           = $row['product_code'];
             $product_name           = $row['product_name'];
@@ -365,54 +349,44 @@ class M_purchase extends Model
             $deleted                = $row['deleted'];
             $base_cogs              = $row['base_cogs'];
             $warehouse_id           = $data['purchase_warehouse_id'];
-
-            
             $getStock = $this->db->table($this->table_ms_product_stock)->select('sum(stock) as stock')->where('product_id', $product_id)->get()->getRowArray();
             if($getStock['stock'] == null){
                 $stock              = 0;
             }else{
                 $stock              = $getStock['stock'];    
             }
-
             $get_price = $this->db->table($this->table_ms_product)->select('base_purchase_price')->where('product_id', $product_id)->get()->getRowArray();
             $product_content        = floatval($row['product_content']);
             $base_unit              = floatval($temp_purchase_qty * $product_content);
             $total_qty_all          = floatval($getTotalItemPurchase['qty']);
             $discount_per_item      = round(($row['temp_purchase_discount_total'] / $base_unit), 2);
             $discount_per_nota      = round(($data['purchase_total_discount'] / $total_qty_all), 2);
-
             $last_base_purchase_price   = floatval($get_price['base_purchase_price']);
             $new_base_purchase_price    = floatval($row['temp_purchase_price'] / $product_content - $discount_per_item - $discount_per_nota);
-
             if($new_base_purchase_price  > $last_base_purchase_price){
                 $base_purchase_price = $new_base_purchase_price;
             }else{
                 $base_purchase_price = $last_base_purchase_price;
             }
-
             $base_ongkir            = floatval($temp_purchase_ongkir / $base_unit);
-            $base_purchase_tax      = round(($base_purchase_price * 0.11), 2);
             $dt_ppn_cal             = round(($new_base_purchase_price * 0.11), 2);
+            if($has_tax == 'Y'){
             $new_cogs               = $new_base_purchase_price  +  $dt_ppn_cal + $base_ongkir;
+            $base_purchase_tax      = round(($base_purchase_price * 0.11), 2);
+            }else{
+            $new_cogs               = $new_base_purchase_price  + $base_ongkir;
+            $base_purchase_tax      = 0;
+            }
             $new_total_stock        = $stock + $temp_purchase_qty;
-
             $calcualtion_cogs       = round((($base_cogs * $stock) + ($new_cogs * $new_total_stock)) / ($stock + $new_total_stock), 2);
-
             $temp_discount_per_item        =  $temp_purchase_discount_total /  $temp_purchase_qty;
             $temp_discount_nota_per_item   =  $discount_per_nota  *  $product_content;
-
-
             $dt_ppn                 = $dt_ppn_cal * $base_unit;
             $dt_dpp                 = $new_base_purchase_price * $base_unit;
             $dt_discount_nota       = $temp_discount_nota_per_item * $temp_purchase_qty;
-
             $sqlDtValues[] = "('$temp_purchase_po_id','$temp_purchase_po_invoice','$purchase_inv','$temp_purchase_item_id','$temp_purchase_qty','$dt_ppn','$dt_discount_nota','$dt_dpp','$temp_purchase_price','$temp_purchase_discount1','$temp_purchase_discount1_percentage','$temp_purchase_discount2','$temp_purchase_discount2_percentage','$temp_purchase_discount3','$temp_purchase_discount3_percentage','$discount_per_nota','$temp_purchase_ongkir','$temp_purchase_expire_date','$temp_purchase_total','$temp_purchase_supplier_id','$temp_purchase_supplier_name','$temp_purchase_user_id')";
-
-
             $vUpdateProduct[] = "('$product_id', '$product_code', '$product_name', '$category_id', '$brand_id', '$base_purchase_price', '$base_purchase_tax', '$calcualtion_cogs', '$product_description', '$product_image', '$min_stock', '$has_tax', '$is_parcel', '$active', '$deleted')";
-
             $vUpdateStock[] = "('$product_id', '$warehouse_id', '$base_unit')";
-
             $vUpdateWarehouse[] = "('$product_id', '$warehouse_id', '$purchase_id', '$temp_purchase_expire_date', '$base_unit')";
         }
 
