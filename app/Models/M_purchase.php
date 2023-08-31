@@ -378,7 +378,7 @@ class M_purchase extends Model
             $base_purchase_tax      = 0;
             }
             $new_total_stock        = $stock + $temp_purchase_qty;
-            $calcualtion_cogs       = round((($base_cogs * $stock) + ($new_cogs * $new_total_stock)) / ($stock + $new_total_stock), 2);
+            $calcualtion_cogs       = round((($base_cogs * $stock) + ($new_cogs * $base_unit)) / $new_total_stock, 2);
             $temp_discount_per_item        =  $temp_purchase_discount_total /  $temp_purchase_qty;
             $temp_discount_nota_per_item   =  $discount_per_nota  *  $product_content;
             $dt_ppn                 = $dt_ppn_cal * $base_unit;
