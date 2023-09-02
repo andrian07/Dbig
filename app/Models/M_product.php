@@ -309,7 +309,7 @@ class M_product extends Model
     {
 
         $builder = $this->db->table('ms_product_unit');
-        $builder->select('ms_product_unit.*,ms_product.base_purchase_tax,ms_product.product_name,(ms_product.base_purchase_price*ms_product_unit.product_content) as purchase_price,(ms_product.base_purchase_tax*ms_product_unit.product_content) as purchase_tax,ms_unit.unit_name,ms_product.is_parcel, product_code')
+        $builder->select('ms_product_unit.*,ms_product.base_purchase_tax,ms_product.product_name,(ms_product.base_purchase_price*ms_product_unit.product_content) as purchase_price,(ms_product.base_purchase_tax*ms_product_unit.product_content) as purchase_tax,ms_unit.unit_name,ms_product.is_parcel, product_code, has_tax')
             ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
             ->join('ms_product_supplier', 'ms_product_supplier.product_id = ms_product.product_id')
             ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')

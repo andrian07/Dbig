@@ -116,6 +116,8 @@ class Purchase_order extends WebminController
                         'purchase_price'      => $row['purchase_price'],
 
                         'base_purchase_tax'   => $row['base_purchase_tax'],
+                        
+                        'has_tax'             => $row['has_tax'],
 
                     ];
 

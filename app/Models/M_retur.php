@@ -737,17 +737,14 @@ class M_retur extends Model
             $dt_retur_item_id                      = $row['retur_item_id'];
             $dt_retur_price                        = floatval($row['retur_price']);
             $dt_retur_ppn                          = floatval($row['retur_ppn']);
-
             $dt_retur_dpp                          = floatval($row['retur_dpp']);
             $dt_retur_disc                         = floatval($row['retur_disc']);
             $dt_retur_disc_nota                    = floatval($row['retur_disc_nota']);
             $dt_retur_ongkir                       = floatval($row['retur_ongkir']);
-
             $dt_retur_warehouse                    = $row['retur_warehouse'];
             $dt_retur_qty                          = floatval($row['retur_qty']);
             $dt_retur_qty_buy                      = floatval($row['retur_qty_buy']);
             $dt_retur_total                        = floatval($row['retur_total']);
-
 
             $getPurchase = $this->db->table($this->table_hd_purchase)->select('*')->where('purchase_invoice', $dt_retur_purchase_invoice)->get()->getRowArray();
 
@@ -758,8 +755,6 @@ class M_retur extends Model
             $base_purchase_stock    = $dt_retur_qty * $product_content;
 
             $purchase_id            = $getPurchase['purchase_id'];
-
-
 
             $getWarehouseStock = $this->db->table($this->table_warehouse_stock)->select('*')->where('purchase_id', $purchase_id)->where('product_id', $product_id)->get()->getRowArray();
 

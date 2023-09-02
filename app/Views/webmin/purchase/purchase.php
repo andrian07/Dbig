@@ -347,6 +347,7 @@ $assetsUrl = base_url('assets');
 
                                 <input id="temp_price" name="temp_price" type="text" class="form-control text-right" value="0" data-parsley-vprice required>
                                 <input id="temp_dpp" name="temp_dpp" type="hidden" class="form-control text-right" value="0">
+                                <input id="temp_has_tax" name="temp_has_tax" type="hidden" class="form-control text-right" value="0">
                                 <input id="temp_tax" name="temp_tax" type="hidden" class="form-control text-right" value="0">
                             </div>
 
@@ -1966,6 +1967,7 @@ $assetsUrl = base_url('assets');
 
                 temp_price.set(parseFloat(ui.item.purchase_price));
 
+                $('#temp_has_tax').val(ui.item.has_tax);
             },
 
         });
@@ -2265,9 +2267,14 @@ $assetsUrl = base_url('assets');
             let dpp = price_calculation - ppn;
             let qty_calculation = parseFloat(temp_qty.getNumericString());
             let subtotal_calculation = price_calculation * qty_calculation;
+            var has_tax_temp_val = $('#temp_has_tax').val();
             total_price.set(subtotal_calculation);
             temp_dpp.set(parseFloat(dpp.toFixed(2)));
-            temp_tax.set(parseFloat(ppn.toFixed(2)));
+            if(has_tax_temp_val == 'N'){
+                temp_tax.set(0); 
+            }else{
+                temp_tax.set(parseFloat(ppn.toFixed(2))); 
+            }
             temp_total.set(total_price.get() - total_temp_discount.get());
             
         }
