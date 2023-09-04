@@ -258,11 +258,8 @@ class M_salesmanadmin extends Model
 
         $sqlUpdateStock = "insert into ms_product_stock (product_id  , warehouse_id  , stock) VALUES";
 
-        //$sqlUpdateWarehouse = "insert into ms_warehouse_stock (stock_id,product_id , warehouse_id , purchase_id , exp_date, stock) VALUES";
-
         $sqlDtValues = [];
         $vUpdateStock = [];
-        $vUpdateWarehouse = [];
 
 
         $getTotalItem = $this->db->table($this->table_temp_sales_admin)->select('sum(temp_qty * product_content) as qty')->join('ms_product_unit', 'ms_product_unit.item_id = temp_sales_admin.item_id')->where('user_id', $data['user_id'])->get()->getRowArray();
@@ -303,59 +300,45 @@ class M_salesmanadmin extends Model
             $getWarehouse = $this->db->table($this->table_ms_warehouse)->select('warehouse_id')->where('store_id', $data['sales_store_id'])->get()->getRowArray();
 
             $warehouse_id =  $getWarehouse['warehouse_id'];
-
-
-            $getLastEd = $this->db->table($this->table_ms_warehouse_stock)->select('*')->where('product_id', $product_id)->where('stock > 0')->orderBy('exp_date', 'asc')->limit(1)->get()->getRowArray();
             
-            if($getLastEd != null){
-                $stock_id_ed     = $getLastEd['stock_id'];
-                $product_id_ed   = $getLastEd['product_id'];
-                $warehouse_id_ed = $getLastEd['warehouse_id'];
-                $purchase_id_ed  = $getLastEd['purchase_id'];
-                $exp_date_ed     = $getLastEd['exp_date'];
-                $stock_ed        = $getLastEd['stock'];
-            }
             $sqlDtValues[] = "('$sales_admin_id','$dt_item_id','$dt_temp_qty','$dt_purchase_price','$dt_purchase_tax','$dt_purchase_cogs','$dt_product_price','$dt_disc1','$dt_price_disc1_percentage','$dt_disc2','$dt_price_disc2_percentage','$dt_disc3','$dt_price_disc3_percentage','$dt_total_discount','$dt_total_dpp','$ppn_per_item','$dt_sales_price','$discount_per_nota','$user_id')";
 
             $vUpdateStock[] = "('$product_id', '$warehouse_id', '$base_purchase_stock')";
 
-            if($getLastEd != null){
-                $a = 0;
-                for($a = $base_purchase_stock; $a > 0; $a++){
+            $getWarehouseStock = $this->db->table('ms_warehouse_stock')
+            ->select('stock_id,stock')
+            ->where('product_id', $product_id)
+            ->where('warehouse_id', $warehouse_id)
+            ->orderBy('stock_id', 'asc')
+            ->get()
+            ->getResultArray();
 
-                    $getLastEdStock = $this->db->table($this->table_ms_warehouse_stock)->select('*')->where('product_id', $product_id)->where('stock > 0')->orderBy('exp_date', 'asc')->limit(1)->get()->getRowArray();
-
-
-                    if($getLastEdStock != null){
-                        $stock_id_eds     = $getLastEdStock['stock_id'];
-                        $stock_eds        = $getLastEdStock['stock'];
-
-
-                        $total_input = $stock_eds - $a;
-
-                        if($total_input < 0){
-                            $total_input = 0;
-                        }
-
-                        $sqlUpdateWarehouse = "update ms_warehouse_stock set stock = '".$total_input."' where stock_id = '".$stock_id_eds."'";
-                        $this->db->query($sqlUpdateWarehouse);
-                        $a = $base_purchase_stock - $stock_eds;
-                    }else{
-                        $a = -1;
-                    }
-
+            $stock = $base_purchase_stock;
+            foreach ($getWarehouseStock as $ws) {
+                $ws_stock_id    = $ws['stock_id'];
+                $ws_stock       = floatval($ws['stock']);
+                $ws_new_stock   = 0;
+                    // ws_stock = 12 <= 10 
+                if ($ws_stock <= $stock) {
+                        $ws_new_stock = 0;
+                        $stock =  $stock - $ws_stock;
+                } else {
+                        $ws_new_stock = $ws_stock - $stock;
+                        $stock = 0;
                 }
+                $warehouseStockData[] = [
+                        'stock_id'  => $ws_stock_id,
+                        'product_id' => $product_id,
+                        'stock'     => $ws_new_stock
+                ];
+                $sqlUpdateWarehouse = "update ms_warehouse_stock set stock = '".$ws_new_stock."' where stock_id = '".$ws_stock_id."'";
+                $this->db->query($sqlUpdateWarehouse);
             }
         }//
 
         $sqlDtSalesAdmin .= implode(',', $sqlDtValues);
 
         $sqlUpdateStock .= implode(',', $vUpdateStock). " ON DUPLICATE KEY UPDATE stock=stock-VALUES(stock)";
-
-        if($getLastEd != null){
-            $sqlUpdateWarehouse .= implode(',', $vUpdateWarehouse). " ON DUPLICATE KEY UPDATE stock_id=VALUES(stock_id),stock=stock-VALUES(stock)";
-        }
-
 
         $this->db->query($sqlDtSalesAdmin);
         if ($this->db->affectedRows() > 0) {
@@ -424,8 +407,6 @@ class M_salesmanadmin extends Model
 
     public function updatesalesmanadmin($data)
     {   
-
-
         $this->db->query('LOCK TABLES hd_sales_admin WRITE, dt_sales_admin WRITE, temp_sales_admin WRITE,ms_customer READ, ms_store READ, ms_product_unit READ, ms_product READ, ms_unit READ, ms_salesman READ, ms_payment_method READ, user_account READ, ms_warehouse READ, ms_warehouse_stock WRITE, ms_product_stock WRITE');
 
         $sales_admin_id = $data['sales_admin_id'];
@@ -499,18 +480,6 @@ class M_salesmanadmin extends Model
 
                 $warehouse_id =  $getWarehouse['warehouse_id'];
 
-
-                $getLastEd = $this->db->table($this->table_ms_warehouse_stock)->select('*')->where('product_id', $product_id)->where('stock > 0')->orderBy('exp_date', 'asc')->limit(1)->get()->getRowArray();
-
-                if($getLastEd != null){
-                    $stock_id_ed     = $getLastEd['stock_id'];
-                    $product_id_ed   = $getLastEd['product_id'];
-                    $warehouse_id_ed = $getLastEd['warehouse_id'];
-                    $purchase_id_ed  = $getLastEd['purchase_id'];
-                    $exp_date_ed     = $getLastEd['exp_date'];
-                    $stock_ed        = $getLastEd['stock'];
-                }
-
                 $new_product_stock = $getLastSales['dt_temp_qty'] - $base_purchase_stock;
                 
                 $sqlDtValues[] = "('$sales_admin_id','$dt_item_id','$dt_temp_qty','$dt_purchase_price','$dt_purchase_tax','$dt_purchase_cogs','$dt_product_price','$dt_disc1','$dt_price_disc1_percentage','$dt_disc2','$dt_price_disc2_percentage','$dt_disc3','$dt_price_disc3_percentage','$dt_total_discount','$dt_total_dpp','$dt_total_ppn','$dt_sales_price','$discount_per_nota','$user_id')";
@@ -519,37 +488,37 @@ class M_salesmanadmin extends Model
 
                 $sqlDtSalesAdmin .= implode(',', $sqlDtValues);
 
-            
-                    $sqlUpdateStock .= implode(',', $vUpdateStock). " ON DUPLICATE KEY UPDATE stock=stock+VALUES(stock)";
-                
+                $sqlUpdateStock .= implode(',', $vUpdateStock). " ON DUPLICATE KEY UPDATE stock=stock+VALUES(stock)";
 
-                if($getLastEd != null){
-                    $a = 0;
-                    for($a = $base_purchase_stock; $a > 0; $a++){
-                        $getLastEdStock = $this->db->table($this->table_ms_warehouse_stock)->select('*')->where('product_id', $product_id)->where('stock > 0')->orderBy('exp_date', 'asc')->limit(1)->get()->getRowArray();
-    
-                        if($getLastEdStock != null){
-                            $stock_id_eds     = $getLastEdStock['stock_id'];
-                            $stock_eds        = $getLastEdStock['stock'];
+                $getWarehouseStock = $this->db->table('ms_warehouse_stock')
+                    ->select('stock_id,stock')
+                    ->where('product_id', $product_id)
+                    ->where('warehouse_id', $warehouse_id)
+                    ->orderBy('stock_id', 'asc')
+                    ->get()
+                    ->getResultArray();
 
-                            
-                        
-                            $total_input = $stock_eds + $getLastSales['dt_temp_qty'] - $a;
-    
-                            if($total_input < 0){
-                                $total_input = 0;
-                            }      
-                           
-                            $sqlUpdateWarehouse = "update ms_warehouse_stock set stock = '".$total_input."' where stock_id = '".$stock_id_eds."'";
-                            $this->db->query($sqlUpdateWarehouse);
-                            $a = $base_purchase_stock - $stock_eds;
-                        }else{
-                            $a = -1;
+                    $stock = $base_purchase_stock;
+                    foreach ($getWarehouseStock as $ws) {
+                        $ws_stock_id    = $ws['stock_id'];
+                        $ws_stock       = floatval($ws['stock']);
+                        $ws_new_stock   = 0;
+                            // ws_stock = 12 <= 10 
+                        if ($ws_stock <= $stock) {
+                                $ws_new_stock = 0;
+                                $stock =  $stock - $ws_stock;
+                        } else {
+                                $ws_new_stock = $ws_stock - $stock;
+                                $stock = 0;
                         }
-    
+                        $warehouseStockData[] = [
+                                'stock_id'  => $ws_stock_id,
+                                'product_id' => $product_id,
+                                'stock'     => $ws_new_stock
+                        ];
+                        $sqlUpdateWarehouse = "update ms_warehouse_stock set stock = '".$ws_new_stock."' where stock_id = '".$ws_stock_id."'";
+                        $this->db->query($sqlUpdateWarehouse);
                     }
-                }
-
             }
 
             $delete_dt = $this->db->table($this->table_dt_sales_admin)->delete(['sales_admin_id' => $sales_admin_id ]);
