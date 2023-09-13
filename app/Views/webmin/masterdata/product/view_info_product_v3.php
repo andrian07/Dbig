@@ -114,54 +114,21 @@ $assetsUrl = base_url('assets');
                                                         <th rowspan="2">Barcode</th>
                                                         <th rowspan="2" class="" width="120px">Satuan</th>
                                                         <th rowspan="2" class="text-right">Isi</th>
-                                                        <th rowspan="2" class="text-right">DPP</th>
-                                                        <th rowspan="2" class="text-right">PPN</th>
-                                                        <th rowspan="2" class="text-right">Harga Beli</th>
-                                                        <th colspan="2" class="text-center">G1 - <?= isset($customer_group['G1']) ? $customer_group['G1'] : 'NO CONFIG' ?></th>
-                                                        <th colspan="2" class="text-center">G2 - <?= isset($customer_group['G2']) ? $customer_group['G2'] : 'NO CONFIG' ?></th>
-                                                        <th colspan="2" class="text-center">G3 - <?= isset($customer_group['G3']) ? $customer_group['G3'] : 'NO CONFIG' ?></th>
-                                                        <th colspan="2" class="text-center">G4 - <?= isset($customer_group['G4']) ? $customer_group['G4'] : 'NO CONFIG' ?></th>
-                                                        <th colspan="2" class="text-center">G5 - <?= isset($customer_group['G5']) ? $customer_group['G5'] : 'NO CONFIG' ?></th>
-                                                        <th colspan="2" class="text-center">G6 - <?= isset($customer_group['G6']) ? $customer_group['G6'] : 'NO CONFIG' ?></th>
-
-
+                                                        <th colspan="6" class="text-center">Harga Jual</th>
                                                         <th colspan="9" class="text-center">Diskon Seasonal</th>
-
-                                                        <!-- Sisa Margin -->
-                                                        <th colspan="2" class="text-center">G1 - <?= isset($customer_group['G1']) ? $customer_group['G1'] : 'NO CONFIG' ?></th>
-                                                        <th colspan="2" class="text-center">G2 - <?= isset($customer_group['G2']) ? $customer_group['G2'] : 'NO CONFIG' ?></th>
-                                                        <th colspan="2" class="text-center">G3 - <?= isset($customer_group['G3']) ? $customer_group['G3'] : 'NO CONFIG' ?></th>
-                                                        <th colspan="2" class="text-center">G4 - <?= isset($customer_group['G4']) ? $customer_group['G4'] : 'NO CONFIG' ?></th>
-                                                        <th colspan="2" class="text-center">G5 - <?= isset($customer_group['G5']) ? $customer_group['G5'] : 'NO CONFIG' ?></th>
-                                                        <th colspan="2" class="text-center">G6 - <?= isset($customer_group['G6']) ? $customer_group['G6'] : 'NO CONFIG' ?></th>
-
-                                                        <th colspan="7" class="text-center">Alokasi Margin</th>
-
-
-
-
-                                                        <th rowspan="2" class="text-center">Dijual</th>
-                                                        <th rowspan="2" class="text-center">Tampilkan&nbsp;Di<br>Mobile&nbsp;Apps</th>
-                                                        <th rowspan="2" class="text-center">Ijinkan<br>Ubah&nbsp;Harga</th>
                                                     </tr>
                                                     <tr>
-                                                        <!-- Margin-->
-                                                        <th class="text-right">Margin </th>
-                                                        <th class="text-right">Hrg.Jual</th>
-                                                        <th class="text-right">Margin </th>
-                                                        <th class="text-right">Hrg.Jual</th>
-                                                        <th class="text-right">Margin </th>
-                                                        <th class="text-right">Hrg.Jual</th>
-                                                        <th class="text-right">Margin </th>
-                                                        <th class="text-right">Hrg.Jual</th>
-                                                        <th class="text-right">Margin </th>
-                                                        <th class="text-right">Hrg.Jual</th>
-                                                        <th class="text-right">Margin </th>
-                                                        <th class="text-right">Hrg.Jual</th>
+                                                        <!-- Harga Jual -->
+                                                        <th class="text-right">G1 - <?= isset($customer_group['G1']) ? $customer_group['G1'] : 'NO CONFIG' ?></th>
+                                                        <th class="text-right">G2 - <?= isset($customer_group['G2']) ? $customer_group['G2'] : 'NO CONFIG' ?></th>
+                                                        <th class="text-right">G3 - <?= isset($customer_group['G3']) ? $customer_group['G3'] : 'NO CONFIG' ?></th>
+                                                        <th class="text-right">G4 - <?= isset($customer_group['G4']) ? $customer_group['G4'] : 'NO CONFIG' ?></th>
+                                                        <th class="text-right">G5 - <?= isset($customer_group['G5']) ? $customer_group['G5'] : 'NO CONFIG' ?></th>
+                                                        <th class="text-right">G6 - <?= isset($customer_group['G6']) ? $customer_group['G6'] : 'NO CONFIG' ?></th>
+
 
                                                         <!-- Diskon Seasonal -->
                                                         <th class="text-right">Diskon</th>
-
                                                         <th class="text-right">G1&nbsp;-&nbsp;<?= isset($customer_group['G1']) ? $customer_group['G1'] : 'NO CONFIG' ?></th>
                                                         <th class="text-right">G2&nbsp;-&nbsp;<?= isset($customer_group['G2']) ? $customer_group['G2'] : 'NO CONFIG' ?></th>
                                                         <th class="text-right">G3&nbsp;-&nbsp;<?= isset($customer_group['G3']) ? $customer_group['G3'] : 'NO CONFIG' ?></th>
@@ -170,33 +137,6 @@ $assetsUrl = base_url('assets');
                                                         <th class="text-right">G6&nbsp;-&nbsp;<?= isset($customer_group['G6']) ? $customer_group['G6'] : 'NO CONFIG' ?></th>
                                                         <th class="">Mulai&nbsp;Tanggal</th>
                                                         <th class="">S.d&nbsp;Tanggal</th>
-
-                                                        <!-- Margin-->
-                                                        <th class="text-right">Sisa&nbsp;Margin </th>
-                                                        <th class="text-right">Margin</th>
-                                                        <th class="text-right">Sisa&nbsp;Margin </th>
-                                                        <th class="text-right">Margin</th>
-                                                        <th class="text-right">Sisa&nbsp;Margin </th>
-                                                        <th class="text-right">Margin</th>
-                                                        <th class="text-right">Sisa&nbsp;Margin </th>
-                                                        <th class="text-right">Margin</th>
-                                                        <th class="text-right">Sisa.&nbsp;Margin </th>
-                                                        <th class="text-right">Margin</th>
-                                                        <th class="text-right">Sisa.&nbsp;Margin </th>
-                                                        <th class="text-right">Margin</th>
-
-                                                        <!-- Alokasi Margin -->
-                                                        <th class="text-right">Alokasi</th>
-                                                        <th class="text-right">G1&nbsp;-&nbsp;<?= isset($customer_group['G1']) ? $customer_group['G1'] : 'NO CONFIG' ?></th>
-                                                        <th class="text-right">G2&nbsp;-&nbsp;<?= isset($customer_group['G2']) ? $customer_group['G2'] : 'NO CONFIG' ?></th>
-                                                        <th class="text-right">G3&nbsp;-&nbsp;<?= isset($customer_group['G3']) ? $customer_group['G3'] : 'NO CONFIG' ?></th>
-                                                        <th class="text-right">G4&nbsp;-&nbsp;<?= isset($customer_group['G4']) ? $customer_group['G4'] : 'NO CONFIG' ?></th>
-                                                        <th class="text-right">G5&nbsp;-&nbsp;<?= isset($customer_group['G5']) ? $customer_group['G5'] : 'NO CONFIG' ?></th>
-                                                        <th class="text-right">G6&nbsp;-&nbsp;<?= isset($customer_group['G6']) ? $customer_group['G6'] : 'NO CONFIG' ?></th>
-
-
-
-
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -312,46 +252,19 @@ $assetsUrl = base_url('assets');
                     data: "product_content"
                 },
                 {
-                    data: "product_dpp"
-                },
-                {
-                    data: "product_ppn"
-                },
-                {
-                    data: "product_hpp"
-                },
-                {
-                    data: "G1_margin_rate"
-                },
-                {
                     data: "G1_sales_price"
-                },
-                {
-                    data: "G2_margin_rate"
                 },
                 {
                     data: "G2_sales_price"
                 },
                 {
-                    data: "G3_margin_rate"
-                },
-                {
                     data: "G3_sales_price"
-                },
-                {
-                    data: "G4_margin_rate"
                 },
                 {
                     data: "G4_sales_price"
                 },
                 {
-                    data: "G5_margin_rate"
-                },
-                {
                     data: "G5_sales_price"
-                },
-                {
-                    data: "G6_margin_rate"
                 },
                 {
                     data: "G6_sales_price"
@@ -383,73 +296,6 @@ $assetsUrl = base_url('assets');
                 {
                     data: "disc_end_date"
                 },
-                {
-                    data: "remain_margin_G1"
-                },
-                {
-                    data: "margin_G1"
-                },
-                {
-                    data: "remain_margin_G2"
-                },
-                {
-                    data: "margin_G2"
-                },
-                {
-                    data: "remain_margin_G3"
-                },
-                {
-                    data: "margin_G3"
-                },
-                {
-                    data: "remain_margin_G4"
-                },
-                {
-                    data: "margin_G4"
-                },
-                {
-                    data: "remain_margin_G5"
-                },
-                {
-                    data: "margin_G5"
-                },
-                {
-                    data: "remain_margin_G6"
-                },
-                {
-                    data: "margin_G6"
-                },
-                {
-                    data: "margin_allocation"
-                },
-                {
-                    data: "margin_allocation_G1"
-                },
-                {
-                    data: "margin_allocation_G2"
-                },
-                {
-                    data: "margin_allocation_G3"
-                },
-                {
-                    data: "margin_allocation_G4"
-                },
-                {
-                    data: "margin_allocation_G5"
-                },
-                {
-                    data: "margin_allocation_G6"
-                },
-                {
-                    data: "is_sale"
-                },
-                {
-                    data: "show_on_mobile_app"
-                },
-                {
-                    data: "allow_change_price"
-                },
-
             ],
             order: [
                 [0, 'asc']
@@ -458,7 +304,7 @@ $assetsUrl = base_url('assets');
                 "url": lang_datatables,
             },
             columnDefs: [{
-                targets: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45],
+                targets: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
                 className: "text-right",
             }, ],
         });
@@ -517,14 +363,9 @@ $assetsUrl = base_url('assets');
             let productUnitRows = [];
             let unitData = res.unitData;
             let base_unit_name = '';
-            let base_purchase_price = parseFloat(res.productData.base_purchase_price);
-            let base_purchase_tax = parseFloat(res.productData.base_purchase_tax);
 
             unitData.forEach(function(item, i) {
                 let product_content = parseFloat(item.product_content);
-                let product_dpp = base_purchase_price * product_content;
-                let product_ppn = base_purchase_tax * product_content;
-                let product_hpp = product_dpp + product_ppn;
 
                 let G1_sales_price = parseFloat(item.G1_sales_price);
                 let G2_sales_price = parseFloat(item.G2_sales_price);
@@ -532,13 +373,6 @@ $assetsUrl = base_url('assets');
                 let G4_sales_price = parseFloat(item.G4_sales_price);
                 let G5_sales_price = parseFloat(item.G5_sales_price);
                 let G6_sales_price = parseFloat(item.G6_sales_price);
-
-                let G1_margin_rate = calcPercentRate(product_hpp, G1_sales_price);
-                let G2_margin_rate = calcPercentRate(product_hpp, G2_sales_price);
-                let G3_margin_rate = calcPercentRate(product_hpp, G3_sales_price);
-                let G4_margin_rate = calcPercentRate(product_hpp, G4_sales_price);
-                let G5_margin_rate = calcPercentRate(product_hpp, G5_sales_price);
-                let G6_margin_rate = calcPercentRate(product_hpp, G6_sales_price);
 
                 let disc_seasonal = parseFloat(item.disc_seasonal);
 
@@ -549,33 +383,6 @@ $assetsUrl = base_url('assets');
                 let G5_promo_price = parseFloat(item.G5_promo_price);
                 let G6_promo_price = parseFloat(item.G6_promo_price);
 
-
-                let margin_G1 = G1_promo_price - product_hpp;
-                let margin_G2 = G2_promo_price - product_hpp;
-                let margin_G3 = G3_promo_price - product_hpp;
-                let margin_G4 = G4_promo_price - product_hpp;
-                let margin_G5 = G5_promo_price - product_hpp;
-                let margin_G6 = G6_promo_price - product_hpp;
-
-                let remain_margin_G1 = calcPercentRate(product_hpp, G1_promo_price);
-                let remain_margin_G2 = calcPercentRate(product_hpp, G2_promo_price);
-                let remain_margin_G3 = calcPercentRate(product_hpp, G3_promo_price);
-                let remain_margin_G4 = calcPercentRate(product_hpp, G4_promo_price);
-                let remain_margin_G5 = calcPercentRate(product_hpp, G5_promo_price);
-                let remain_margin_G6 = calcPercentRate(product_hpp, G6_promo_price);
-
-                let margin_allocation = parseFloat(item.margin_allocation);
-                let margin_allocation_G1 = (margin_allocation / 100) * margin_G1;
-                let margin_allocation_G2 = (margin_allocation / 100) * margin_G2;
-                let margin_allocation_G3 = (margin_allocation / 100) * margin_G3;
-                let margin_allocation_G4 = (margin_allocation / 100) * margin_G4;
-                let margin_allocation_G5 = (margin_allocation / 100) * margin_G5;
-                let margin_allocation_G6 = (margin_allocation / 100) * margin_G6;
-
-                let is_sale = item.is_sale == 'Y' ? badgeStatus.active : badgeStatus.notActive;
-                let show_on_mobile_app = item.show_on_mobile_app == 'Y' ? badgeStatus.active : badgeStatus.notActive;
-                let allow_change_price = item.allow_change_price == 'Y' ? badgeStatus.active : badgeStatus.notActive;
-
                 if (product_content == 1) {
                     base_unit_name = item.unit_name;
                 }
@@ -584,20 +391,11 @@ $assetsUrl = base_url('assets');
                     item_code: item.item_code,
                     unit_name: item.unit_name,
                     product_content: product_content,
-                    product_dpp: numberFormat(product_dpp, true),
-                    product_ppn: numberFormat(product_ppn, true),
-                    product_hpp: numberFormat(product_hpp, true),
-                    G1_margin_rate: numberFormat(G1_margin_rate, true),
                     G1_sales_price: numberFormat(G1_sales_price, true),
-                    G2_margin_rate: numberFormat(G2_margin_rate, true),
                     G2_sales_price: numberFormat(G2_sales_price, true),
-                    G3_margin_rate: numberFormat(G3_margin_rate, true),
                     G3_sales_price: numberFormat(G3_sales_price, true),
-                    G4_margin_rate: numberFormat(G4_margin_rate, true),
                     G4_sales_price: numberFormat(G4_sales_price, true),
-                    G5_margin_rate: numberFormat(G5_margin_rate, true),
                     G5_sales_price: numberFormat(G5_sales_price, true),
-                    G6_margin_rate: numberFormat(G6_margin_rate, true),
                     G6_sales_price: numberFormat(G6_sales_price, true),
                     disc_seasonal: numberFormat(disc_seasonal, true),
                     G1_promo_price: numberFormat(G1_promo_price, true),
@@ -607,29 +405,7 @@ $assetsUrl = base_url('assets');
                     G5_promo_price: numberFormat(G5_promo_price, true),
                     G6_promo_price: numberFormat(G6_promo_price, true),
                     disc_start_date: mysqlToIndoDate(item.disc_start_date),
-                    disc_end_date: mysqlToIndoDate(item.disc_end_date),
-                    remain_margin_G1: numberFormat(remain_margin_G1, true),
-                    margin_G1: numberFormat(margin_G1, true),
-                    remain_margin_G2: numberFormat(remain_margin_G2, true),
-                    margin_G2: numberFormat(margin_G2, true),
-                    remain_margin_G3: numberFormat(remain_margin_G3, true),
-                    margin_G3: numberFormat(margin_G3, true),
-                    remain_margin_G4: numberFormat(remain_margin_G4, true),
-                    margin_G4: numberFormat(margin_G4, true),
-                    remain_margin_G5: numberFormat(remain_margin_G5, true),
-                    margin_G5: numberFormat(margin_G5, true),
-                    remain_margin_G6: numberFormat(remain_margin_G6, true),
-                    margin_G6: numberFormat(margin_G6, true),
-                    margin_allocation: numberFormat(margin_allocation, true),
-                    margin_allocation_G1: numberFormat(margin_allocation_G1, false),
-                    margin_allocation_G2: numberFormat(margin_allocation_G2, false),
-                    margin_allocation_G3: numberFormat(margin_allocation_G3, false),
-                    margin_allocation_G4: numberFormat(margin_allocation_G4, false),
-                    margin_allocation_G5: numberFormat(margin_allocation_G5, false),
-                    margin_allocation_G6: numberFormat(margin_allocation_G6, false),
-                    is_sale: is_sale,
-                    show_on_mobile_app: show_on_mobile_app,
-                    allow_change_price: allow_change_price
+                    disc_end_date: mysqlToIndoDate(item.disc_end_date)
                 }
                 productUnitRows.push(unitRow);
             })

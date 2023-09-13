@@ -11,55 +11,39 @@
         box-sizing: border-box;
     }
 
-
-
-
     .voucher-list tr {
         margin: 0px;
-        padding: 0px;
+        padding: 0px 0px;
     }
 
     .voucher-list tr td {
         margin: 0px;
-        padding: 3px;
+        padding: 3px 3px;
     }
 
+    .container {
+        position: relative;
+    }
 
-    .voucher {
-        width: 100%;
+    .voucher-image {
         height: 220px;
+        width: 100%;
         margin: 0px 0px;
         border: 1px solid #000;
-        background-image: url("data:image/png;base64,<?= $voucher_cover ?>");
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-size: 100% 100%;
     }
 
-    .voucher-code {
-        padding: 0px 10px;
-        vertical-align: top;
-        text-align: right;
+    .voucher-data-code {
         font-size: 12;
+        position: absolute;
+        right: 10px;
+        top: 5px;
     }
 
-    .voucher-exp-date {
-        padding: 0px 0px;
-        vertical-align: bottom;
-        text-align: left;
+    .voucher-data-exp {
         font-size: 12;
-    }
-
-
-    .voucher-detail {
-        width: 100%;
-        height: 220px;
-        margin: 0px 0px;
-        border: 1px solid #000;
-        background-image: url("data:image/png;base64,<?= $voucher_backcover ?>");
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-size: 100% 100%;
+        position: absolute;
+        left: 10px;
+        top: 200px;
     }
 </style>
 <?= $this->endSection() ?>
@@ -79,39 +63,24 @@
             ?>
                 <tr>
                     <td width="2%"></td>
-                    <td width="45%">
+                    <td width="45%" class="container">
                         <?php if (isset($voucherData[$iLeft])) : ?>
-                            <table class="voucher">
-                                <tr>
-                                    <td class="voucher-code" style="height:100px;"><?= $voucherData[$iLeft]['voucher_code'] ?></td>
-                                </tr>
-                                <tr>
-                                    <td style="height:95px;">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td class="voucher-exp-date" style="height:20px;">Exp Date : <?= indo_short_date($voucher_group['exp_date']) ?></td>
-                                </tr>
-                            </table>
+                            <img class="voucher-image" src="data:image/png;base64,<?= $voucher_cover ?>" alt="cover.png">
+                            <p class="voucher-data-code"><?= $voucherData[$iLeft]['voucher_code'] ?></p>
+                            <p class="voucher-data-exp">Exp Date : <?= indo_short_date($voucher_group['exp_date']) ?></p>
                         <?php endif; ?>
-
                     </td>
-                    <td width="45%">
+                    <td width="1%"></td>
+                    <td width="45%" class="container">
                         <?php if (isset($voucherData[$iRight])) : ?>
-                            <table class="voucher">
-                                <tr>
-                                    <td class="voucher-code" style="height:100px;"><?= $voucherData[$iRight]['voucher_code'] ?></td>
-                                </tr>
-                                <tr>
-                                    <td style="height:95px;">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td class="voucher-exp-date" style="height:20px;">Exp Date : <?= indo_short_date($voucher_group['exp_date']) ?></td>
-                                </tr>
-                            </table>
+                            <img class="voucher-image" src="data:image/png;base64,<?= $voucher_cover ?>" alt="cover.png">
+                            <p class="voucher-data-code"><?= $voucherData[$iRight]['voucher_code'] ?></p>
+                            <p class="voucher-data-exp">Exp Date : <?= indo_short_date($voucher_group['exp_date']) ?></p>
+
                         <?php endif; ?>
 
                     </td>
-                    <td width="8%"></td>
+                    <td width="7%"></td>
                 </tr>
             <?php } ?>
         </table>
@@ -125,32 +94,13 @@
         for ($i = 1; $i <= 3; $i++) {
         ?>
             <tr>
-                <td width="8%"></td>
-                <td width="45%">
-                    <table class="voucher-detail">
-                        <tr>
-                            <td class="voucher-code" style="height:100px;">&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td style="height:60px;">&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td class="voucher-exp-date" style="height:20px;">&nbsp;</td>
-                        </tr>
-                    </table>
+                <td width="7%"></td>
+                <td width="45%" class="container">
+                    <img class="voucher-image" src="data:image/png;base64,<?= $voucher_backcover ?>" alt="backcover.png">
                 </td>
-                <td width="45%">
-                    <table class="voucher-detail">
-                        <tr>
-                            <td class="voucher-code" style="height:100px;">&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td style="height:60px;">&nbsp;</td>
-                        </tr>
-                        <tr>
-                            <td class="voucher-exp-date" style="height:20px;">&nbsp;</td>
-                        </tr>
-                    </table>
+                <td width="1%"></td>
+                <td width="45%" class="container">
+                    <img class="voucher-image" src="data:image/png;base64,<?= $voucher_backcover ?>" alt="backcover.png">
                 </td>
                 <td width="2%"></td>
             </tr>

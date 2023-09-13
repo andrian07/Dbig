@@ -434,6 +434,8 @@ $routes->group('webmin/product', ['filter' => 'webminauth'], static function ($r
     $routes->get('view-info-product-v2', 'Webmin\Product::viewInfoProductV2');
     $routes->get('info-product-v2/(:any)', 'Webmin\Product::infoProductV2/$1');
     $routes->get('search-product-v2', 'Webmin\Product::searchProductByName');
+
+    $routes->get('view-info-product-v3', 'Webmin\Product::viewInfoProductV3');
 });
 
 
@@ -467,17 +469,32 @@ $routes->group('webmin/voucher', ['filter' => 'webminauth'], static function ($r
 });
 
 
+// old version : non grouping //
+// $routes->group('webmin/stock-opname', ['filter' => 'webminauth'], static function ($routes) {
+//     $routes->get('/', 'Webmin\StockOpname::index');
+//     $routes->post('table', 'Webmin\StockOpname::table');
+//     $routes->post('opname-product', 'Webmin\StockOpname::opnameProduct');
+//     $routes->get('temp/(:num)', 'Webmin\StockOpname::temp/$1');
+//     $routes->get('temp-opname/(:num)/(:num)', 'Webmin\StockOpname::tempOpname/$1/$2');
+//     $routes->post('temp-update/(:num)', 'Webmin\StockOpname::tempUpdate/$1');
+//     $routes->get('temp-delete/(:num)', 'Webmin\StockOpname::tempDelete/$1');
+//     $routes->post('save', 'Webmin\StockOpname::save');
+//     $routes->get('detail/(:num)', 'Webmin\StockOpname::detail/$1');
+//     $routes->get('report/(:num)', 'Webmin\StockOpname::report/$1');
+// });
+
+
 $routes->group('webmin/stock-opname', ['filter' => 'webminauth'], static function ($routes) {
-    $routes->get('/', 'Webmin\StockOpname::index');
-    $routes->post('table', 'Webmin\StockOpname::table');
-    $routes->post('opname-product', 'Webmin\StockOpname::opnameProduct');
-    $routes->get('temp/(:num)', 'Webmin\StockOpname::temp/$1');
-    $routes->get('temp-opname/(:num)/(:num)', 'Webmin\StockOpname::tempOpname/$1/$2');
-    $routes->post('temp-update/(:num)', 'Webmin\StockOpname::tempUpdate/$1');
-    $routes->get('temp-delete/(:num)', 'Webmin\StockOpname::tempDelete/$1');
-    $routes->post('save', 'Webmin\StockOpname::save');
-    $routes->get('detail/(:num)', 'Webmin\StockOpname::detail/$1');
-    $routes->get('report/(:num)', 'Webmin\StockOpname::report/$1');
+    $routes->get('/', 'Webmin\StockOpnameV2::index');
+    $routes->post('table', 'Webmin\StockOpnameV2::table');
+    $routes->post('opname-product', 'Webmin\StockOpnameV2::opnameProduct');
+    $routes->get('temp/(:num)', 'Webmin\StockOpnameV2::temp/$1');
+    $routes->get('temp-opname/(:num)/(:num)', 'Webmin\StockOpnameV2::tempOpname/$1/$2');
+    $routes->post('temp-update/(:num)', 'Webmin\StockOpnameV2::tempUpdate/$1');
+    $routes->get('temp-delete/(:num)', 'Webmin\StockOpnameV2::tempDelete/$1');
+    $routes->post('save', 'Webmin\StockOpnameV2::save');
+    $routes->get('detail/(:num)', 'Webmin\StockOpnameV2::detail/$1');
+    $routes->get('report/(:num)', 'Webmin\StockOpnameV2::report/$1');
 });
 
 

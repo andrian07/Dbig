@@ -179,8 +179,8 @@ class Voucher extends WebminController
 
             if ($input['upload_image_cover'] != NULL) {
                 $renameTo       = 'cover_' . $base_upload_name;
-                //$uploadCover    = upload_image('upload_image_cover', $renameTo, 'voucher');
-                $uploadCover    = upload_raw_image('upload_image_cover', $renameTo, 'voucher');
+                $uploadCover    = upload_image('upload_image_cover', $renameTo, 'voucher');
+                //$uploadCover    = upload_raw_image('upload_image_cover', $renameTo, 'voucher');
 
 
                 if ($uploadCover != '') {
@@ -191,8 +191,8 @@ class Voucher extends WebminController
 
             if ($input['upload_image_backcover'] != NULL) {
                 $renameTo           = 'backcover_' . $base_upload_name;
-                //$uploadBackCover    = upload_image('upload_image_backcover', $renameTo, 'voucher');
-                $uploadBackCover    = upload_raw_image('upload_image_backcover', $renameTo, 'voucher');
+                $uploadBackCover    = upload_image('upload_image_backcover', $renameTo, 'voucher');
+                //$uploadBackCover    = upload_raw_image('upload_image_backcover', $renameTo, 'voucher');
 
                 if ($uploadBackCover != '') {
                     $isUploadBackCover                  = TRUE;

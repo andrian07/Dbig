@@ -1810,8 +1810,6 @@ class Product extends WebminController
         resultJSON($result);
     }
 
-
-
     public function viewInfoProductV2()
     {
         $data = [
@@ -1819,6 +1817,15 @@ class Product extends WebminController
             'customer_group'    => $this->appConfig->get('default', 'customer_group')
         ];
         return $this->renderView('masterdata/product/view_info_product_v2', $data);
+    }
+
+    public function viewInfoProductV3()
+    {
+        $data = [
+            'title'             => 'Pencarian Produk',
+            'customer_group'    => $this->appConfig->get('default', 'customer_group')
+        ];
+        return $this->renderView('masterdata/product/view_info_product_v3', $data);
     }
 
 

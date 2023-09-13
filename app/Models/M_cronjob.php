@@ -38,8 +38,8 @@ class M_cronjob extends Model
             $this->db->query('UNLOCK TABLES');
 
             logQueries($saveQueries, 'list_purchase_order', 0, 'CJ_UPDATE');
-            return $isSuccess;
         }
+        return $isSuccess;
     }
 
     public function insertListUpdateSafetyStock($listData, $insertDate)
