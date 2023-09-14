@@ -674,9 +674,7 @@ class Sales_admin extends WebminController
 
     public function downloadEFaktur()
     {
-
         $id = $this->request->getGet('id');
-
         $getHdData = $this->M_salesmanadmin->getOrderEfaktur($id)->getRowArray();
         $getDtData = $this->M_salesmanadmin->getDtSalesmanOrder($id)->getResultArray();
 
