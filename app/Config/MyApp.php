@@ -18,27 +18,12 @@ class MyApp extends BaseConfig
                 'view'   => ['text' => 'Lihat'],
             ]
         ],
-
-        'unit' => [
-            'text'   => 'Satuan',
+        'find_product' => [
+            'text'   => 'Cari Produk',
             'roles'   => [
                 'view'   => ['text' => 'Lihat'],
-                'add'    => ['text' => 'Tambah'],
-                'edit'   => ['text' => 'Ubah'],
-                'delete' => ['text' => 'Hapus'],
             ]
         ],
-
-        'category' => [
-            'text'   => 'Kategori',
-            'roles'   => [
-                'view'   => ['text' => 'Lihat'],
-                'add'    => ['text' => 'Tambah'],
-                'edit'   => ['text' => 'Ubah'],
-                'delete' => ['text' => 'Hapus'],
-            ]
-        ],
-
         'brand' => [
             'text'   => 'Brand',
             'roles'   => [
@@ -48,7 +33,24 @@ class MyApp extends BaseConfig
                 'delete' => ['text' => 'Hapus'],
             ]
         ],
-
+        'category' => [
+            'text'   => 'Kategori',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+                'add'    => ['text' => 'Tambah'],
+                'edit'   => ['text' => 'Ubah'],
+                'delete' => ['text' => 'Hapus'],
+            ]
+        ],
+        'unit' => [
+            'text'   => 'Satuan',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+                'add'    => ['text' => 'Tambah'],
+                'edit'   => ['text' => 'Ubah'],
+                'delete' => ['text' => 'Hapus'],
+            ]
+        ],
         'warehouse' => [
             'text'   => 'Gudang',
             'roles'   => [
@@ -58,47 +60,6 @@ class MyApp extends BaseConfig
                 'delete'    => ['text' => 'Hapus'],
             ]
         ],
-
-        'salesman' => [
-            'text'   => 'Salesman',
-            'roles'   => [
-                'view'      => ['text' => 'Lihat'],
-                'add'       => ['text' => 'Tambah'],
-                'edit'      => ['text' => 'Ubah'],
-                'delete'    => ['text' => 'Hapus'],
-            ]
-        ],
-
-        'mobilebanner' => [
-            'text'   => 'Mobile Banner',
-            'roles'   => [
-                'view'      => ['text' => 'Lihat'],
-                'add'       => ['text' => 'Tambah'],
-                'edit'      => ['text' => 'Ubah'],
-                'delete'    => ['text' => 'Hapus'],
-            ]
-        ],
-
-        'mobilepromo' => [
-            'text'   => 'Mobile Promo',
-            'roles'   => [
-                'view'      => ['text' => 'Lihat'],
-                'add'       => ['text' => 'Tambah'],
-                'edit'      => ['text' => 'Ubah'],
-                'delete'    => ['text' => 'Hapus'],
-            ]
-        ],
-
-        'mapping_area' => [
-            'text'   => 'Mapping Area',
-            'roles'   => [
-                'view'   => ['text' => 'Lihat'],
-                'add'    => ['text' => 'Tambah'],
-                'edit'   => ['text' => 'Ubah'],
-                'delete' => ['text' => 'Hapus'],
-            ]
-        ],
-
         'product' => [
             'text'   => 'Produk',
             'roles'   => [
@@ -107,7 +68,6 @@ class MyApp extends BaseConfig
                 'delete'    => ['text' => 'Hapus'],
             ]
         ],
-
         'supplier' => [
             'text'   => 'Supplier',
             'roles'   => [
@@ -117,7 +77,6 @@ class MyApp extends BaseConfig
                 'delete' => ['text' => 'Hapus'],
             ]
         ],
-
         'customer' => [
             'text'   => 'Customer',
             'roles'   => [
@@ -128,18 +87,53 @@ class MyApp extends BaseConfig
                 'reset_password'    => ['text' => 'Reset Password'],
             ]
         ],
+        'mapping_area' => [
+            'text'   => 'Mapping Area',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+                'add'    => ['text' => 'Tambah'],
+                'edit'   => ['text' => 'Ubah'],
+                'delete' => ['text' => 'Hapus'],
+            ]
+        ],
+        'salesman' => [
+            'text'   => 'Salesman',
+            'roles'   => [
+                'view'      => ['text' => 'Lihat'],
+                'add'       => ['text' => 'Tambah'],
+                'edit'      => ['text' => 'Ubah'],
+                'delete'    => ['text' => 'Hapus'],
+            ]
+        ],
 
+        'voucher'       => [
+            'text'      => 'Voucher',
+            'roles'     => [
+                'view'              => ['text' => 'Lihat'],
+                'add'               => ['text' => 'Tambah'],
+                'edit'              => ['text' => 'Ubah'],
+                'delete'            => ['text' => 'Hapus'],
+                'generate_voucher'  => ['text' => 'Generate Voucher']
+            ]
+        ],
 
-        'submission' => [
-            'text'   => 'Pengajuan Pembelian',
+        'stock_opname' => [
+            'text'   => 'Stok Opname',
+            'roles'   => [
+                'view'   => ['text' => 'Lihat'],
+                'add'    => ['text' => 'Tambah'],
+            ]
+        ],
+
+        'transfer_stock' => [
+            'text'   => 'Transfer Stock',
             'roles'   => [
                 'view'          => ['text' => 'Lihat'],
                 'add'           => ['text' => 'Tambah'],
                 'edit'          => ['text' => 'Ubah'],
-                'delete'        => ['text' => 'Hapus'],
-                'decline'       => ['text' => 'Tolak'],
             ]
         ],
+
 
         'point_reward' => [
             'text'   => 'Hadiah Point',
@@ -159,27 +153,16 @@ class MyApp extends BaseConfig
             ]
         ],
 
-        'voucher'       => [
-            'text'      => 'Voucher',
-            'roles'     => [
-                'view'              => ['text' => 'Lihat'],
-                'add'               => ['text' => 'Tambah'],
-                'edit'              => ['text' => 'Ubah'],
-                'delete'            => ['text' => 'Hapus'],
-                'generate_voucher'  => ['text' => 'Generate Voucher']
+        'submission' => [
+            'text'   => 'Pengajuan Pembelian',
+            'roles'   => [
+                'view'          => ['text' => 'Lihat'],
+                'add'           => ['text' => 'Tambah'],
+                'edit'          => ['text' => 'Ubah'],
+                'delete'        => ['text' => 'Hapus'],
+                'decline'       => ['text' => 'Tolak'],
             ]
         ],
-
-        'password_control' => [
-            'text'      => 'Password Control',
-            'roles'     => [
-                'view'              => ['text' => 'Lihat'],
-                'add'               => ['text' => 'Tambah'],
-                'edit'              => ['text' => 'Ubah'],
-                'delete'            => ['text' => 'Hapus'],
-            ]
-        ],
-
         'purchase_order' => [
             'text'   => 'Pesanan Pembelian',
             'roles'   => [
@@ -192,7 +175,14 @@ class MyApp extends BaseConfig
                 'cancel_order'  => ['text' => 'Pembatalan Pesanan'],
             ]
         ],
-
+        'purchase' => [
+            'text'   => 'Pembelian',
+            'roles'   => [
+                'view'      => ['text' => 'Lihat'],
+                'add'       => ['text' => 'Tambah'],
+                'repayment' => ['text' => 'Pelunasan Hutang']
+            ]
+        ],
         'retur_purchase' => [
             'text'   => 'Retur Pembelian',
             'roles'   => [
@@ -205,14 +195,35 @@ class MyApp extends BaseConfig
             ]
         ],
 
-        'retur_sales_admin' => [
-            'text'   => 'Retur Penjualan Admin',
+        // 
+        // 'purchase_return' => [
+        //     'text'   => 'Retur Pembelian',
+        //     'roles'   => [
+        //         'view'      => ['text' => 'Lihat'],
+        //         'add'       => ['text' => 'Tambah'],
+        //         'edit'      => ['text' => 'Ubah'],
+        //         'repayment' => ['text' => 'Pelunasan Retur'],
+        //     ]
+        // ],
+
+        'purchase_order_consignment' => [
+            'text'   => 'Input Pemesanan Konsinyasi',
+            'roles'   => [
+                'view'          => ['text' => 'Lihat'],
+                'add'           => ['text' => 'Tambah'],
+                'edit'          => ['text' => 'Ubah'],
+                'cancel_order'  => ['text' => 'Pembatalan Pesanan'],
+            ]
+        ],
+
+        'input_consignment' => [
+            'text'   => 'Input Pembelian Konsinyasi',
             'roles'   => [
                 'view'          => ['text' => 'Lihat'],
                 'add'           => ['text' => 'Tambah'],
                 'edit'          => ['text' => 'Ubah'],
                 'delete'        => ['text' => 'Hapus'],
-                'print'         => ['text' => 'Cetak']
+                'cancel_order'  => ['text' => 'Pembatalan Pesanan'],
             ]
         ],
 
@@ -236,62 +247,13 @@ class MyApp extends BaseConfig
             ]
         ],
 
-        'purchase_order_consignment' => [
-            'text'   => 'Input Pemesanan Konsinyasi',
-            'roles'   => [
-                'view'          => ['text' => 'Lihat'],
-                'add'           => ['text' => 'Tambah'],
-                'edit'          => ['text' => 'Ubah'],
-                'cancel_order'  => ['text' => 'Pembatalan Pesanan'],
-            ]
-        ],
 
-
-        'transfer_stock' => [
-            'text'   => 'Transfer Stock',
-            'roles'   => [
-                'view'          => ['text' => 'Lihat'],
-                'add'           => ['text' => 'Tambah'],
-                'edit'          => ['text' => 'Ubah'],
-            ]
-        ],
-
-        'input_consignment' => [
-            'text'   => 'Input Pembelian Konsinyasi',
-            'roles'   => [
-                'view'          => ['text' => 'Lihat'],
-                'add'           => ['text' => 'Tambah'],
-                'edit'          => ['text' => 'Ubah'],
-                'delete'        => ['text' => 'Hapus'],
-                'cancel_order'  => ['text' => 'Pembatalan Pesanan'],
-            ]
-        ],
-
-        'purchase' => [
-            'text'   => 'Pembelian',
-            'roles'   => [
-                'view'      => ['text' => 'Lihat'],
-                'add'       => ['text' => 'Tambah'],
-                'repayment' => ['text' => 'Pelunasan Hutang']
-            ]
-        ],
-
-        'purchase_return' => [
-            'text'   => 'Retur Pembelian',
-            'roles'   => [
-                'view'      => ['text' => 'Lihat'],
-                'add'       => ['text' => 'Tambah'],
-                'edit'      => ['text' => 'Ubah'],
-                'repayment' => ['text' => 'Pelunasan Retur'],
-            ]
-        ],
-
-        'sales' => [
-            'text'   => 'Penjualan',
-            'roles'   => [
-                'view'      => ['text' => 'Lihat'],
-            ]
-        ],
+        // 'sales' => [
+        //     'text'   => 'Penjualan',
+        //     'roles'   => [
+        //         'view'      => ['text' => 'Lihat'],
+        //     ]
+        // ],
 
         'sales_admin' => [
             'text'   => 'penjualan admin',
@@ -305,27 +267,30 @@ class MyApp extends BaseConfig
             ]
         ],
 
+
+        // 'sales_return' => [
+        //     'text'   => 'Retur Penjualan',
+        //     'roles'   => [
+        //         'view'      => ['text' => 'Lihat'],
+        //     ]
+        // ],
+
+        'retur_sales_admin' => [
+            'text'   => 'Retur Penjualan Admin',
+            'roles'   => [
+                'view'          => ['text' => 'Lihat'],
+                'add'           => ['text' => 'Tambah'],
+                'edit'          => ['text' => 'Ubah'],
+                'delete'        => ['text' => 'Hapus'],
+                'print'         => ['text' => 'Cetak']
+            ]
+        ],
+
         'sales_pos' => [
             'text'   => 'Penjualan POS',
             'roles'   => [
                 'view'      => ['text' => 'Lihat'],
                 'edit'      => ['text' => 'Ubah']
-            ]
-        ],
-
-
-        'sales_return' => [
-            'text'   => 'Retur Penjualan',
-            'roles'   => [
-                'view'      => ['text' => 'Lihat'],
-            ]
-        ],
-
-        'stock_opname' => [
-            'text'   => 'Stok Opname',
-            'roles'   => [
-                'view'   => ['text' => 'Lihat'],
-                'add'    => ['text' => 'Tambah'],
             ]
         ],
 
@@ -336,15 +301,27 @@ class MyApp extends BaseConfig
             ]
         ],
 
-        'password_control' => [
-            'text'   => 'Password Control',
+
+        'mobilebanner' => [
+            'text'   => 'Mobile Banner',
             'roles'   => [
-                'view'   => ['text' => 'Lihat'],
-                'add'    => ['text' => 'Tambah'],
-                'edit'   => ['text' => 'Ubah'],
-                'delete' => ['text' => 'Hapus'],
+                'view'      => ['text' => 'Lihat'],
+                'add'       => ['text' => 'Tambah'],
+                'edit'      => ['text' => 'Ubah'],
+                'delete'    => ['text' => 'Hapus'],
             ]
         ],
+
+        'mobilepromo' => [
+            'text'   => 'Mobile Promo',
+            'roles'   => [
+                'view'      => ['text' => 'Lihat'],
+                'add'       => ['text' => 'Tambah'],
+                'edit'      => ['text' => 'Ubah'],
+                'delete'    => ['text' => 'Hapus'],
+            ]
+        ],
+
 
         'user_group' => [
             'text'   => 'Grup Pengguna',
@@ -365,6 +342,16 @@ class MyApp extends BaseConfig
                 'delete' => ['text' => 'Hapus'],
                 'add_fingerprint'   => ['text' => 'Tambah Fingerprint'],
                 'reset_password'    => ['text' => 'Reset Password'],
+            ]
+        ],
+
+        'password_control' => [
+            'text'      => 'Password Control',
+            'roles'     => [
+                'view'              => ['text' => 'Lihat'],
+                'add'               => ['text' => 'Tambah'],
+                'edit'              => ['text' => 'Ubah'],
+                'delete'            => ['text' => 'Hapus'],
             ]
         ],
 
@@ -427,7 +414,6 @@ class MyApp extends BaseConfig
 
             ]
         ],
-
 
         'configs' => [
             'text'   => 'Pengaturan',
