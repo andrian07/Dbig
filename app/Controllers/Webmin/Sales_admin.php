@@ -380,7 +380,7 @@ class Sales_admin extends WebminController
         $contents = $this->M_salesmanadmin->getSalesadminAccounting($sales_admin_id)->getRowArray();
         $data_hd_journal = [
             'store_code'             => $contents['store_code'],
-            'store_id'               => $contents['store_id'],
+            'store_id'               => $contents['sales_store_id'],
             'trx_date'               => $contents['sales_date'],
             'remark'                 => 'Penjualan Proyek '.$contents['sales_admin_invoice'],
             'debit_balance'          => $contents['sales_admin_grand_total'],
@@ -653,8 +653,6 @@ class Sales_admin extends WebminController
                         'jurusan'   => $jurusan,
                         'angkatan'  => $angkatan
                     );  
-
-                    print_r($temp_data);die();
                 }
             }
             $this->load->model('ImportModel');
@@ -673,8 +671,9 @@ class Sales_admin extends WebminController
 
 
     public function downloadEFaktur()
-    {
+    {   
         $id = $this->request->getGet('id');
+        $noawal = $this->request->getGet('noawal');
         $getHdData = $this->M_salesmanadmin->getOrderEfaktur($id)->getRowArray();
         $getDtData = $this->M_salesmanadmin->getDtSalesmanOrder($id)->getResultArray();
 
@@ -720,7 +719,7 @@ class Sales_admin extends WebminController
             $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
 
             $sheet = $spreadsheet->setActiveSheetIndex(0);
-            $iRow = 6;
+            $iRow = 5;
 
             $total_dpp = floatval($getHdData['sales_admin_grand_total'] - $getHdData['sales_admin_ppn']);
             $total_ppn = floatval($getHdData['sales_admin_ppn']);
@@ -729,26 +728,43 @@ class Sales_admin extends WebminController
             $dp_dpp = floatval($getHdData['sales_admin_down_payment'] - $dp_ppn);
             $trx_date = indo_short_date($getHdData['sales_date']);
 
+            if($getHdData['customer_npwp'] != null){
+                $nonpwp = str_replace("-","",$getHdData['customer_npwp']);
+                $nonpwp = esc(str_replace(".","",$nonpwp));
+            }else{
+                $nonpwp = $getHdData['customer_nik'].'#NIK#NAMA#'.$getHdData['customer_name'];
+            }
+
+            $noawal_val = str_replace("-","",$noawal);
+            $noawal_val = substr($noawal_val, strpos($noawal_val, ".") + 1);
+            $noawal_val = str_replace(".","",$noawal_val);
+
             $sheet->getCell('A4')->setValue('FK');
-            $sheet->getCell('B4')->setValue('1');
+            $sheet->getCell('B4')->setValue('01');
             $sheet->getCell('C4')->setValue('0');
-            $sheet->getCell('D4')->setValue('72237067201');
+            $sheet->getCell('D4')->setValue(esc($noawal_val));
             $sheet->getCell('E4')->setValue('9');
-            $sheet->getCell('F4')->setValue('2022');
+            $sheet->getCell('F4')->setValue('2023');
             $sheet->getCell('G4')->setValue($trx_date);
-            $sheet->getCell('H4')->setValue(esc($getHdData['customer_npwp']));
+            $sheet->getCell('H4')->setValue($nonpwp);
             $sheet->getCell('I4')->setValue($getHdData['customer_name']);
             $sheet->getCell('J4')->setValue($getHdData['customer_address']);
             $sheet->getCell('K4')->setValue($total_dpp);
             $sheet->getCell('L4')->setValue($total_ppn);
             $sheet->getCell('M4')->setValue('0');
             $sheet->getCell('N4')->setValue('');
-            $sheet->getCell('O4')->setValue($total_dpp);
-            $sheet->getCell('P4')->setValue($total_ppn);
+            $sheet->getCell('O4')->setValue('0');
+            $sheet->getCell('P4')->setValue('0');
             $sheet->getCell('Q4')->setValue('0');
-            $sheet->getCell('R4')->setValue('');
+            $sheet->getCell('R4')->setValue('0');
+            $sheet->getCell('S4')->setValue($getHdData['sales_admin_invoice']);
+            $sheet->getCell('T4')->setValue('FAPR');
+            $sheet->getCell('U4')->setValue('CV DEPO BANGUNAN INDO GLOBAL');
+            $sheet->getCell('V4')->setValue('JL SUNGAI RAYA DALAM KOMP PERGUDANGAN CERIA I NO A-2 RT 006 RW 001 , KAB. KUBU RAYA');
+            $sheet->getCell('W4')->setValue('Albert Gunawan');
+            $sheet->getCell('X4')->setValue('KAB. KUBU RAYA');
 
-            $sheet->getCell('A5')->setValue('LT');
+            /*$sheet->getCell('A5')->setValue('LT');
             $sheet->getCell('B5')->setValue($getHdData['customer_npwp']);
             $sheet->getCell('C5')->setValue($getHdData['customer_name']);
             $sheet->getCell('D5')->setValue($getHdData['customer_address']);
@@ -762,14 +778,14 @@ class Sales_admin extends WebminController
             $sheet->getCell('L5')->setValue($getHdData['prov_name']);
             $sheet->getCell('M5')->setValue($getHdData['postal_code']);
             $sheet->getCell('N5')->setValue($getHdData['customer_phone']);
-
+            */
             foreach ($getDtData as $row) {
                 $base_price  = floatval($row['dt_sales_price'] / $row['dt_temp_qty']);
                 $qty = floatval($row['dt_temp_qty']);
                 $sales_price = floatval($row['dt_sales_price']);
                 $discount = floatval($row['dt_total_discount']);
                 $dpp = floatval($row['dt_total_dpp']);
-                $ppn = floatval($row['dt_total_dpp']);
+                $ppn = floatval($row['dt_total_ppn'] * $qty);
                 $tarif_ppnbm = floatval(0);
                 $ppnbm = floatval(0);
                 $sheet->getCell('A' . $iRow)->setValue('OF');
@@ -783,7 +799,6 @@ class Sales_admin extends WebminController
                 $sheet->getCell('I' . $iRow)->setValue($ppn, TRUE);
                 $sheet->getCell('J' . $iRow)->setValue($tarif_ppnbm, TRUE);
                 $sheet->getCell('K' . $iRow)->setValue($ppnbm, TRUE);
-
                 $iRow++;
             }
                 //setting periode
