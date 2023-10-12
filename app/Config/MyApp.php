@@ -359,59 +359,51 @@ class MyApp extends BaseConfig
             'text'   => 'Laporan',
             'roles'   => [
                 'view'                      => ['text' => 'Lihat'],
-                'product_list'              => ['text' => 'Daftar Produk'],
-                'point_exchange_list'       => ['text' => 'Daftar Penukaran Poin'],
-                'stock_opname_list'         => ['text' => 'Daftar Stok Opname'],
-                'customer_point_history_chart' => ['text' => 'Grafik Histori Poin Customer'],
 
-                'po_list'                   => ['text' => 'Daftar PO'],
-                'retur_list'                => ['text' => 'Daftar Retur'],
-                'purchase_list'             => ['text' => 'Daftar Pembelian'],
-                'supplier_purchase_list'    => ['text' => 'Daftar Pembelian Per Supplier'],
-                'purchase_repayment_list'   => ['text' => 'Daftar Pelunasan Pembelian'],
-                'purchase_debt_due_list'    => ['text' => 'Daftar Tagihan Jatuh Tempo'],
-                'product_purchase_recap'    => ['text' => 'Rekap Pembelian Produk'],
-                'product_purchase_history'  => ['text' => 'Histori Pembelian Produk'],
+                /* customer */
+                'customer_list'             => ['text' => 'Daftar Customer'],
+                'point_exchange_list'       => ['text' => 'Laporan Penukaran Poin'],
+                'receivable_list'           => ['text' => 'Laporan Aging Piutang'],
+                'receivable_list_report'    => ['text' => 'Laporan Penerimaan Piutang'],
+                'receivable_list_receipt'   => ['text' => 'Cetak Kwitansi Penagihan'],
+                'customer_mapping_list'     => ['text' => 'Daftar Mapping Customer'],
 
-                'debt_list'                        => ['text' => 'Daftar Hutang'],
-                'receivable_list'                  => ['text' => 'Daftar Piutang'],
-                'purchase_return_list'             => ['text' => 'Daftar Retur Pembelian'],
-                'product_purchase_return_recap'    => ['text' => 'Rekap Retur Pembelian Produk'],
+                /* inventory */
+                'stock_list'                => ['text' => 'Laporan Stok Produk'],
+                'safety_stock'              => ['text' => 'Laporan Safety Stok'],
+                'stock_card'                => ['text' => 'Kartu Stok'],
+                'stock_opname_list'         => ['text' => 'Laporan Stok Opname'],
+                'stock_transfer_list'       => ['text' => 'Laporan Stok Transfer'],
+                'dead_stock_list'           => ['text' => 'Laporan Dead Stock'],
+                'exp_stock_list'            => ['text' => 'Laporan Stok Kadaluarsa'],
+                'price_change_list'         => ['text' => 'Laporan Perubahan Harga Jual & Beli'],
 
-                /* sales section */
+                /* Laporan Pembelian */
+                'po_list'                   => ['text' => 'Laporan PO'],
+                'purchase_list'             => ['text' => 'Laporan Pembelian'],
+                'po_consignment_list'       => ['text' => 'Laporan PO Konsinyasi'],
+                'retur_purchase_list'       => ['text' => 'Laporan Retur Pembelian'],
 
-                /* pos sales */
-                'pos_sales_list'                    => ['text' => 'Laporan Penjualan Retail'],
-                'pos_sales_list_group_salesman'     => ['text' => 'Laporan Penjualan Retail Per Salesman'],
-                'pos_sales_list_group_payment'      => ['text' => 'Laporan Penjualan Retail Per Jenis Pembayaran'],
-                'pos_sales_list_group_brand'        => ['text' => 'Laporan Penjualan Retail Per Brand'],
-                'pos_sales_list_group_category'     => ['text' => 'Laporan Penjualan Retail Per Kategori'],
-                'pos_sales_list_group_customer'     => ['text' => 'Laporan Penjualan Retail Per Customer'],
-                'pos_sales_allocation_margin'       => ['text' => 'Laporan Alokasi Margin Penjualan Retail'],
-                /* end pos sales */
+                /* Laporan Hutang */
+                'debt_card_list'            => ['text' => 'Laporan Kartu Hutang'],
+                'pending_debt_list'         => ['text' => 'Laporan Sisa Hutang Belum Lunas'],
+                'debt_due_date_list'        => ['text' => 'Laporan Hutang Jatuh Tempo'],
+                'debt_list'                 => ['text' => 'Laporan Pembayaran Hutang'],
 
-                /*customer report */
-                'receivable_list'                   => ['text' => 'Laporan Piutang'],
-                'receivable_list_receipt'           => ['text' => 'Laporan Tagihan Piutang'],
+                /* Penjualan */
+                'pos_sales_list'                        => ['text' => 'Laporan Penjualan Retail'],
+                'pos_sales_list_group_customer'         => ['text' => 'Laporan Penjualan Retail Per Customer'],
+                'pos_sales_list_group_salesman'         => ['text' => 'Laporan Penjualan Retail Per Salesman'],
+                'pos_sales_list_group_brand'            => ['text' => 'Laporan Penjualan Retail Per Brand'],
+                'pos_sales_list_group_category'         => ['text' => 'Laporan Penjualan Retail Per Kategori'],
+                'pos_sales_list_group_payment'          => ['text' => 'Laporan Penjualan Retail Per Metode Pembayaran'],
+                'pos_sales_allocation_margin'           => ['text' => 'Laporan Alokasi Margin Penjualan Retail'],
+                'project_sales_list'                    => ['text' => 'Laporan Penjualan Proyek'],
+                'project_retur_sales_list'              => ['text' => 'Laporan Retur Penjualan Proyek'],
 
-                /* end customer report */
-
-                'sales_list'                        => ['text' => 'Daftar Penjualan'],
-                'user_sales_list'                   => ['text' => 'Daftar Penjualan Per User'],
-                'project_list'                      => ['text' => 'Daftar Penjualan Proyek'],
-                'retur_project_list'                => ['text' => 'Daftar Retur Penjualan Proyek'],
-                'user_sales_list'                   => ['text' => 'Daftar Penjualan Per User'],
-                'product_sales_recap'               => ['text' => 'Rekap Penjualan Produk'],
-                'category_product_sales_recap'      => ['text' => 'Rekap Penjualan Produk Per Kategori'],
-                'invoice_sales_recap'               => ['text' => 'Rekap Penjualan Per Nota'],
-                'invoice_sales_recap_group_date'    => ['text' => 'Rekap Penjualan Nota Harian'],
-                'income_recap'                      => ['text' => 'Laporan Laba Rugi'],
-                'sales_return_list'                 => ['text' => 'Daftar Retur Penjualan'],
-                'user_sales_return_list'            => ['text' => 'Daftar Retur Penjualan Per User'],
-
-                'accounting'                        => ['text' => 'Akuntansi'],
-                'stock_transfer'                    => ['text' => 'Daftar Transfer Stock'],
-
+                /* Utilitas */
+                'barcode_generate'                      => ['text' => 'Cetak Barcode'],
+                'price_tag'                             => ['text' => 'Cetak Label Harga'],
             ]
         ],
 
