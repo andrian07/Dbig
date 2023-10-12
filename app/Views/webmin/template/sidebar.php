@@ -41,7 +41,7 @@
 
 				<?php if ($role->hasRole('find_product.view')) : ?>
 					<li class="nav-item">
-						<a href="<?= base_url('webmin/product/view-info-product') ?>" class="nav-link">
+						<a href="<?= base_url('webmin/product/view-info-product-v3') ?>" class="nav-link">
 							<i class="nav-icon fas fa-search"></i>
 							<p>
 								Cari Produk
