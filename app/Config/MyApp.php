@@ -500,4 +500,12 @@ class MyApp extends BaseConfig
             'SMTPSecure'    => 'ssl'
         ]
     ];
+
+    public $telebot = [
+        'botBaseUrl'            => 'https://api.telegram.org/bot',
+        'botToken'              => '6680984388:AAFw0EmT1BjxpR8ZAUFr8bhzBCtt5jRgCWw',
+        'sendVerificationTo'    => [
+            'dbig_group'    => '-4073658050'
+        ] //chatIds
+    ];
 }

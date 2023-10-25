@@ -164,6 +164,7 @@ $routes->group('webmin', static function ($routes) {
 
 
 
+
 $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
     $routes->get('dashboard', 'Webmin\Dashboard::index');
     $routes->get('dashboard/delete-notification/(:num)', 'Webmin\Dashboard::deleteNotification/$1');
@@ -174,8 +175,6 @@ $routes->group('webmin', ['filter' => 'webminauth'], static function ($routes) {
 
     $routes->get('configs', 'Webmin\Configs::index');
 });
-
-
 
 $routes->group('webmin/category', ['filter' => 'webminauth'], static function ($routes) {
 
@@ -946,7 +945,7 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
     $routes->get('view-customer-receivable-list-report', 'Webmin\Report\ReportCustomer::viewCustomerReceivableListReport');
 
     $routes->get('customer-receivable-list', 'Webmin\Report\ReportCustomer::customerReceivableList');
-    
+
     $routes->get('customer-receivable-list', 'Webmin\Report\ReportCustomer::customerReceivableList');
 
     $routes->get('customer-receivable-list-report', 'Webmin\Report\ReportCustomer::customerReceivableListReport');
@@ -959,7 +958,7 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 
     $routes->get('view-customer-mapping-list', 'Webmin\Report\ReportCustomer::viewCustomerMappingList');
 
-    
+
 
 
     /* Section  Inventory */
@@ -1174,6 +1173,17 @@ $routes->group('cjob', static function ($routes) {
     $routes->get('update-po-safety-stock', 'CronJob::updatePOSafetyStock');
     $routes->get('update-safety-stock-balance', 'CronJob::updateSafetyStockBalance');
 });
+
+
+/* login verification */
+$routes->get('webmin/verification-login', 'Webmin\VerificationLogin::index', ['filter' => 'webminauth']);
+$routes->get('webmin/verification-login/check-status', 'Webmin\VerificationLogin::checkStatus', ['filter' => 'webminauth']);
+$routes->get('webmin-activation/(:any)', 'Webmin\VerificationLogin::activation/$1');
+
+
+
+
+
 /*
 
  * --------------------------------------------------------------------
