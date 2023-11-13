@@ -2858,36 +2858,12 @@ $assetsUrl = base_url('assets');
             item_margin_alocation_G6 = item_remain_margin_G6 * (ma / 100);
 
 
-            let rmG1 = 0;
-            let rmG2 = 0;
-            let rmG3 = 0;
-            let rmG4 = 0;
-            let rmG5 = 0;
-            let rmG6 = 0;
-
-            if (ppt > 0 || item_promo_price_G1 > 0) {
-                rmG1 = calcPercentRate(ppt, item_promo_price_G1);
-            }
-
-            if (ppt > 0 || item_promo_price_G2 > 0) {
-                rmG2 = calcPercentRate(ppt, item_promo_price_G2);
-            }
-
-            if (ppt > 0 || item_promo_price_G3 > 0) {
-                rmG3 = calcPercentRate(ppt, item_promo_price_G3);
-            }
-
-            if (ppt > 0 && item_promo_price_G4 > 0) {
-                rmG4 = calcPercentRate(ppt, item_promo_price_G4);
-            }
-
-            if (ppt > 0 && item_promo_price_G5 > 0) {
-                rmG5 = calcPercentRate(ppt, item_promo_price_G5);
-            }
-
-            if (ppt > 0 && item_promo_price_G6 > 0) {
-                rmG6 = calcPercentRate(ppt, item_promo_price_G6);
-            }
+            let rmG1 = calcPercentRate(ppt, item_promo_price_G1);
+            let rmG2 = calcPercentRate(ppt, item_promo_price_G2);
+            let rmG3 = calcPercentRate(ppt, item_promo_price_G3);
+            let rmG4 = calcPercentRate(ppt, item_promo_price_G4);
+            let rmG5 = calcPercentRate(ppt, item_promo_price_G5);
+            let rmG6 = calcPercentRate(ppt, item_promo_price_G6);
 
             if (rmG1 > 999) {
                 rmG1 = 999;
