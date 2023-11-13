@@ -1180,6 +1180,9 @@ $routes->get('webmin/verification-login', 'Webmin\VerificationLogin::index', ['f
 $routes->get('webmin/verification-login/check-status', 'Webmin\VerificationLogin::checkStatus', ['filter' => 'webminauth']);
 $routes->get('webmin-activation/(:any)', 'Webmin\VerificationLogin::activation/$1');
 
+$routes->get('telebot-webhook', 'TeleBot::index');
+$routes->post('telebot-webhook', 'TeleBot::webhook');
+
 
 
 

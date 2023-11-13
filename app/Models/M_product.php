@@ -1761,6 +1761,47 @@ class M_product extends Model
         return $builder->get();
     }
 
+    public function getListProductUnitByFilter($brand_id = [], $category_id = [], $supplier_id = [])
+    {
+        $product_id = [];
+        if (count($supplier_id) > 0) {
+            $subQuery = $this->db->table('ms_product_supplier');
+            $getProduct = $subQuery->select('product_id')->whereIn('supplier_id', $supplier_id)->get()->getResultArray();
+
+
+            foreach ($getProduct as $row) {
+                $product_id[] = $row['product_id'];
+            }
+        }
+
+        $builder =  $this->db->table('ms_product_unit')
+            ->select('ms_product.product_code,ms_product.product_name,ms_product_unit.*,(ms_product_unit.product_content*ms_product.base_purchase_price) as product_price,(ms_product_unit.product_content*ms_product.base_purchase_tax) as product_tax,ms_unit.unit_name,ms_brand.brand_name,ms_category.category_name,ms_product.base_purchase_price,ms_product.base_purchase_tax,ms_product.base_cogs,ms_product.has_tax,ms_product.is_parcel')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id')
+            ->join('ms_category', 'ms_category.category_id=ms_product.category_id')
+            ->where('ms_product.deleted', 'N');
+
+
+        if (count($brand_id) > 0) {
+            $builder->whereIn('ms_product.brand_id', $brand_id);
+        }
+
+        if (count($category_id) > 0) {
+            $builder->whereIn('ms_product.category_id', $category_id);
+        }
+
+        if (count($supplier_id) > 0) {
+            if (count($product_id) > 0) {
+                $builder->whereIn('ms_product.product_id', $product_id);
+            } else {
+                $builder->where('ms_product.product_id', -1);
+            }
+        }
+
+        return $builder->get();
+    }
+
     public function getListProductByID($product_ids = [])
     {
         $builder =  $this->db->table('ms_product')

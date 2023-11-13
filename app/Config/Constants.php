@@ -72,6 +72,11 @@ defined('DEV_USERNAME') || define('DEV_USERNAME', 'codeids');
 defined('DEV_PASSWORD') || define('DEV_PASSWORD', '12345678');
 
 /*
+| FOR TELEBOT
+*/
+defined('SEND_VERIFICATION_MESSAGE') || define('SEND_VERIFICATION_MESSAGE', TRUE);
+
+/*
 | FOR LOG QUERIES
 */
 defined('APP_LOG_QUERIES') || define('APP_LOG_QUERIES', TRUE);

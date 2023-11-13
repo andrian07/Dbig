@@ -505,7 +505,14 @@ class MyApp extends BaseConfig
         'botBaseUrl'            => 'https://api.telegram.org/bot',
         'botToken'              => '6680984388:AAFw0EmT1BjxpR8ZAUFr8bhzBCtt5jRgCWw',
         'sendVerificationTo'    => [
-            'dbig_group'    => '-4073658050'
-        ] //chatIds
+            //'dbig_group'    => '-4073658050'
+            'eric'          => '5927339770',
+        ], //chatIds
+        'allowedChatIds' => [
+            'dbig_group'    => '-4073658050',
+        ],
+        'devIds' => [
+            'eric'          => '5927339770',
+        ]
     ];
 }

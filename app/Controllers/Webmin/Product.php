@@ -1351,22 +1351,26 @@ class Product extends WebminController
 
     public function downloadProductData()
     {
-        $brand_id               = $this->request->getGet('brand_id') != NULL ? $this->request->getGet('brand_id') : '';
-        if ($brand_id == '') {
+        $brand_id                  = $this->request->getGet('brand_id') != NULL ? $this->request->getGet('brand_id') : '';
+        $category_id               = $this->request->getGet('category_id') != NULL ? $this->request->getGet('category_id') : '';
+        $supplier_id               = $this->request->getGet('supplier_id') != NULL ? $this->request->getGet('supplier_id') : '';
+        $valid = true;
+        if (!$valid) {
             die('<h1>Harap Pilih Brand Yang Akan Diexport</h1>');
         } else {
             $M_product  = model('M_product');
             $brand_id   = $brand_id == '' ? [] : explode(',', $brand_id);
-            $getProductUnit = $M_product->getListProductUnitByBrand($brand_id)->getResultArray();
+            $category_id   = $category_id == '' ? [] : explode(',', $category_id);
+            $supplier_id   = $supplier_id == '' ? [] : explode(',', $supplier_id);
+            $getProductUnit = $M_product->getListProductUnitByFilter($brand_id, $category_id, $supplier_id);
 
-            //dd($getProductUnit);
 
             $template = WRITEPATH . '/template/template_batch_update_product.xlsx';
             $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
 
             $sheet1  = $spreadsheet->setActiveSheetIndex(0);
             $iRow   = 3;
-            foreach ($getProductUnit as $row) {
+            foreach ($getProductUnit->getResultArray() as $row) {
                 $product_content        = floatval($row['product_content']);
                 $base_purchase_price    = floatval($row['base_purchase_price']);
                 $base_purchase_tax      = floatval($row['base_purchase_tax']);

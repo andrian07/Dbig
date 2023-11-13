@@ -61,7 +61,7 @@ class Auth extends BaseController
                 }
 
                 if (password_verify($input['password'], $getUser['user_password'])) {
-
+                    $exp_login = time() + 1800;
                     $agent = $this->request->getUserAgent();
 
                     $currentAgent = 'Unidentified User Agent';
@@ -83,6 +83,7 @@ class Auth extends BaseController
                         'login_platform'    => $platform,
                         'login_ip'          => $ip,
                         'is_valid'          => 'N',
+                        'expired_time'      => $exp_login,
                         'is_expired'        => 'N'
                     ];
 
@@ -93,7 +94,7 @@ class Auth extends BaseController
                         session()->setFlashdata('alert', ['type' => 'info', 'message' => 'Error! Coba lagi sesaat']);
                         return redirect()->to(base_url('webmin/auth'));
                     } else {
-                        $exp_login = time() + 1800;
+
                         $loginData = [
                             'user_code'     => $getUser['user_code'],
                             'user_name'     => $getUser['user_name'],
@@ -123,7 +124,7 @@ class Auth extends BaseController
                         $sendMessage .= "User : <b>" . $getUser['user_name'] . " - " . $getUser['user_realname'] . "</b>\n";
                         $sendMessage .= "IP : $ip\n";
                         $sendMessage .= "Agent : $currentAgent\n";
-                        $sendMessage .= "Agent : $platform\n";
+                        $sendMessage .= "Platform : $platform\n";
                         $sendMessage .= "\n";
                         $sendMessage .= "Kode Session : " . $saveLog['session_code'] . "\n";
                         $sendMessage .= "\n";

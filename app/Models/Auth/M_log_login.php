@@ -34,6 +34,17 @@ class M_log_login extends Model
         return $builder->get();
     }
 
+    public function getActiveSession()
+    {
+        $builder = $this->db->table('log_login');
+        $builder->select("log_login.*,user_account.user_name,user_account.user_realname")
+            ->join('user_account', 'user_account.user_id=log_login.user_id');
+
+        $builder->where('log_login.is_valid', 'N');
+        $builder->where('log_login.is_expired', 'N');
+        return $builder->get();
+    }
+
     public function getLogBySessionCode($session_code = '', $is_valid = '')
     {
         $builder = $this->db->table($this->table);

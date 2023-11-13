@@ -33,11 +33,27 @@ $assetsUrl = base_url('assets');
                 <div class="card-body">
                     <form>
                         <div class="row">
-                            <div class="col-md-9">
+                            <div class="col-md-6">
                                 <!-- text input -->
                                 <div class="form-group">
                                     <label>Brand:</label>
                                     <select id="brand_id" name="brand_id" class="form-control" multiple></select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>Kategori:</label>
+                                    <select id="category_id" name="category_id" class="form-control" multiple></select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <!-- text input -->
+                                <div class="form-group">
+                                    <label>Supplier:</label>
+                                    <select id="supplier_id" name="supplier_id" class="form-control" multiple></select>
                                 </div>
                             </div>
 
@@ -88,18 +104,77 @@ $assetsUrl = base_url('assets');
             },
         });
 
+        $("#supplier_id").select2({
+            placeholder: '-- Pilih --',
+            width: "100%",
+            allowClear: true,
+            ajax: {
+                url: base_url + "/webmin/select/supplier",
+                dataType: "json",
+                type: "GET",
+                delay: select2Delay,
+                data: function(params) {
+                    return {
+                        search: params.term,
+                    };
+                },
+                processResults: function(data, page) {
+                    return {
+                        results: data,
+                    };
+                },
+            },
+        });
+
+        $("#category_id").select2({
+            placeholder: '-- Pilih --',
+            width: "100%",
+            allowClear: true,
+            ajax: {
+                url: base_url + "/webmin/select/category",
+                dataType: "json",
+                type: "GET",
+                delay: select2Delay,
+                data: function(params) {
+                    return {
+                        search: params.term,
+                    };
+                },
+                processResults: function(data, page) {
+                    return {
+                        results: data,
+                    };
+                },
+            },
+        });
+
+
+        $('#brand_id').change(function(e) {
+            setSelect2("#supplier_id");
+            setSelect2("#category_id");
+        })
+
+        $('#supplier_id').change(function(e) {
+            setSelect2("#brand_id");
+            setSelect2("#category_id");
+        })
+
+        $('#category_id').change(function(e) {
+            setSelect2("#supplier_id");
+            setSelect2("#brand_id");
+        })
 
         $('#btnexport').click(function(e) {
             e.preventDefault();
             let brand_id = $('#brand_id').val();
-            if (brand_id == '' || brand_id == null) {
-                message.info('Harap pilih brand produk yang akan diexport');
-            } else {
-                let reportUrl = base_url + '/webmin/product/download-product-data?';
-                reportUrl += 'brand_id=' + brand_id;
+            let category_id = $('#category_id').val();
+            let supplier_id = $('#supplier_id').val();
 
-                window.open(reportUrl, '_blank');
-            }
+            let reportUrl = base_url + '/webmin/product/download-product-data?v=1';
+            reportUrl += '&brand_id=' + brand_id;
+            reportUrl += '&category_id=' + category_id;
+            reportUrl += '&supplier_id=' + supplier_id;
+            window.open(reportUrl, '_blank');
         })
 
         $('#btnimport').click(function(e) {
