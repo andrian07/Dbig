@@ -968,14 +968,14 @@ $assetsUrl = base_url('assets');
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group input-price">
                                         <label for="purchase_price" class="col-sm-12">DPP</label>
                                         <div class="col-sm-12">
-                                            <input id="purchase_price" name="purchase_price" type="text" class="form-control text-right" value="0" />
+                                            <input id="purchase_price" name="purchase_price" type="text" class="form-control text-right" value="0" readonly />
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group input-price">
                                         <label for="purchase_tax" class="col-sm-12">PPN <?= PPN_TEXT ?></label>
                                         <div class="col-sm-12">
                                             <input id="purchase_tax" name="purchase_tax" type="text" class="form-control text-right" readonly value="0" />
@@ -983,9 +983,9 @@ $assetsUrl = base_url('assets');
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="purchase_price_with_tax" class="col-sm-12">Harga Beli</label>
+                                        <label for="purchase_price_with_tax" class="col-sm-12">Harga Beli + Ongkir</label>
                                         <div class="col-sm-12">
-                                            <input id="purchase_price_with_tax" name="purchase_price_with_tax" type="text" class="form-control text-right" value="0" readonly />
+                                            <input id="purchase_price_with_tax" name="purchase_price_with_tax" type="text" class="form-control text-right" value="0" />
                                         </div>
                                     </div>
 
@@ -1213,6 +1213,9 @@ $assetsUrl = base_url('assets');
 <?= $this->section('js') ?>
 <script>
     $(document).ready(function() {
+        $('.input-price').hide();
+
+
         const default_allocation_margin = 50;
         const noImage = '<?= base_url('assets/images/no-image.PNG') ?>';
         const badgeStatus = {
@@ -1996,18 +1999,30 @@ $assetsUrl = base_url('assets');
             reCalcMarginRate();
         })
 
-        $('#purchase_price').on('change', function(e) {
-            if (item_purchase_price.getNumericString() == '' || item_purchase_price.getNumericString() == null) {
-                item_purchase_price.set(0);
+        $('#purchase_price_with_tax').on('change', function(e) {
+            let ppt = 0;
+            if (item_purchase_price_with_tax.getNumericString() == '' || item_purchase_price_with_tax.getNumericString() == null) {
+                item_purchase_price_with_tax.set(0);
+            } else {
+                ppt = parseFloat(item_purchase_price_with_tax.getNumericString());
             }
-            let pp = parseFloat(item_purchase_price.getNumericString());
-            let pt = 0;
-            if (item_has_tax == 'Y') {
-                pt = pp * PPN;
+
+            let dpp = 0;
+            let ppn = 0;
+            if (ppt > 0) {
+                if (item_has_tax == 'Y') {
+                    dpp = (100 / 111) * ppt;
+                    ppn = ppt - dpp;
+
+                    dpp = Number(dpp.toFixed(2));
+                    ppn = Number(ppn.toFixed(2));
+                } else {
+                    dpp = ppt;
+                }
             }
-            let ppt = pp + pt;
-            item_purchase_tax.set(pt);
-            item_purchase_price_with_tax.set(ppt);
+
+            item_purchase_price.set(dpp);
+            item_purchase_tax.set(ppn);
             reCalcMarginRate();
         })
 
