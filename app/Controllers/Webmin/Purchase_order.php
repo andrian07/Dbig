@@ -42,26 +42,26 @@ class Purchase_order extends WebminController
                 $column[] = $i;
                 $column[] = esc($row['purchase_order_invoice']);
                 $column[] = indo_short_date($row['purchase_order_date']);
-                if($row['purchase_order_total_ppn'] > 0){
+                if ($row['purchase_order_total_ppn'] > 0) {
                     $column[] = '<span class="badge badge-warning">BKP</span>';
-                }else{
+                } else {
                     $column[] = '<span class="badge badge-primary">Non BKP</span>';
                 }
                 $column[] = esc($row['supplier_name']);
-                $column[] = esc('Rp. '.number_format($row['purchase_order_total']));
-                if($row['purchase_order_status'] == 'Selesai'){
+                $column[] = esc('Rp. ' . number_format($row['purchase_order_total']));
+                if ($row['purchase_order_status'] == 'Selesai') {
                     $column[] = '<span class="badge badge-success">Selesai</span>';
-                }else if($row['purchase_order_status'] == 'Pending'){
+                } else if ($row['purchase_order_status'] == 'Pending') {
                     $column[] = '<span class="badge badge-primary">Pending</span>';
-                }else{
+                } else {
                     $column[] = '<span class="badge badge-danger">Batal</span>';
                 }
 
                 $column[] = esc($row['purchase_order_item_status']);
                 $btns = [];
                 $prop =  'data-id="' . $row['purchase_order_id'] . '" data-name="' . esc($row['purchase_order_invoice']) . '"';
-                $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/purchase-order/get-purchase-order-detail/'.$row['purchase_order_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
-                $btns[] = '<button data-id="'.$row['purchase_order_id'] .'" data-name="'. esc($row['purchase_order_invoice']) .'" class="margins btn btn-sm btn-primary mb-2 btnstatus" data-toggle="tooltip" data-placement="top" data-title="Status" data-original-title="" title=""><i class="fas fa-truck-loading"></i></button>';
+                $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="' . base_url() . '/webmin/purchase-order/get-purchase-order-detail/' . $row['purchase_order_id'] . '" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
+                $btns[] = '<button data-id="' . $row['purchase_order_id'] . '" data-name="' . esc($row['purchase_order_invoice']) . '" class="margins btn btn-sm btn-primary mb-2 btnstatus" data-toggle="tooltip" data-placement="top" data-title="Status" data-original-title="" title=""><i class="fas fa-truck-loading"></i></button>';
                 $btns[] = button_edit($prop);
                 $btns[] = button_delete($prop);
                 $btns[] = button_print($prop);
@@ -69,8 +69,8 @@ class Purchase_order extends WebminController
                 return $column;
             });
 
-            $table->orderColumn  = ['', 'purchase_order_invoice', 'purchase_order_date','','purchase_order_status',''];
-            $table->searchColumn = ['purchase_order_invoice', 'purchase_order_date','purchase_order_status'];
+            $table->orderColumn  = ['', 'purchase_order_invoice', 'purchase_order_date', '', 'purchase_order_status', ''];
+            $table->searchColumn = ['purchase_order_invoice', 'purchase_order_date', 'purchase_order_status'];
             $table->generate();
         }
     }
@@ -84,11 +84,10 @@ class Purchase_order extends WebminController
 
         $keyword = $this->request->getGet('term');
 
-        if($supplier == 'null'){
+        if ($supplier == 'null') {
 
             $result = ['success' => FALSE, 'num_product' => 0, 'data' => [], 'message' => 'Silahkan Isi Nama Supplier Terlebih Dahulu'];
-
-        }else{
+        } else {
 
             $result = ['success' => FALSE, 'num_product' => 0, 'data' => [], 'message' => ''];
 
@@ -109,22 +108,20 @@ class Purchase_order extends WebminController
 
                         'id'                  => $diplay_text,
 
-                        'value'               => $row['product_code'].' - '.$diplay_text.'('.$row['unit_name'].')',
+                        'value'               => $row['product_code'] . ' - ' . $diplay_text . '(' . $row['unit_name'] . ')',
 
                         'item_id'             => $row['item_id'],
 
                         'purchase_price'      => $row['purchase_price'],
 
                         'base_purchase_tax'   => $row['base_purchase_tax'],
-                        
+
                         'has_tax'             => $row['has_tax'],
 
                     ];
-
                 }
 
                 $result = ['success' => TRUE, 'num_product' => count($find_result), 'data' => $find_result, 'message' => ''];
-
             }
         }
 
@@ -143,9 +140,9 @@ class Purchase_order extends WebminController
                 $result = ['success' => FALSE, 'message' => 'Transaksi dengan id invoice <b>' . $submission_id . '</b> tidak ditemukan'];
             } else {
                 $checkNullItem = $M_submission->checkNullItem($submission_id)->getRowArray();
-                if($checkNullItem != null){
+                if ($checkNullItem != null) {
                     $result = ['success' => FALSE, 'message' => 'Silahkan Lengkapi Data Produk Terlebih Dahulu'];
-                }else{
+                } else {
                     $result = ['success' => TRUE, 'header' => $getOrder,  'message' => ''];
                 }
             }
@@ -159,7 +156,6 @@ class Purchase_order extends WebminController
         if ($purchase_order_id == '') {
 
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-
         } else {
 
             $getOrder =  $this->M_purchase_order->getPurchaseOrder($purchase_order_id)->getRowArray();
@@ -167,7 +163,6 @@ class Purchase_order extends WebminController
             if ($getOrder == NULL) {
 
                 throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-
             } else {
 
                 $invoice_num = $getOrder['purchase_order_invoice'];
@@ -183,11 +178,8 @@ class Purchase_order extends WebminController
                 ];
 
                 return view('webmin/purchase/purchaseorder_detail', $data);
-
             }
-
         }
-
     }
 
     public function getbyid($purchase_order_id = '')
@@ -226,7 +218,6 @@ class Purchase_order extends WebminController
             if ($getOrder == NULL) {
 
                 $result = ['success' => FALSE, 'message' => 'Transaksi dengan No invoice <b>' . $purchase_order_id . '</b> tidak ditemukan'];
-
             } else {
 
                 $purchase_order_invoice = $getOrder['purchase_order_invoice'];
@@ -246,17 +237,13 @@ class Purchase_order extends WebminController
                 foreach ($getTemp as $k => $v) {
 
                     $find_result[$k] = esc($v);
-
                 }
 
                 $result = ['success' => TRUE, 'header' => $getOrder, 'data' => $find_result, 'message' => ''];
-
-
             }
-
         }
         $result['csrfHash'] = csrf_hash();
-        
+
         resultJSON($result);
     }
 
@@ -273,7 +260,6 @@ class Purchase_order extends WebminController
             if ($getOrder == NULL) {
 
                 $result = ['success' => FALSE, 'message' => 'Transaksi dengan No invoice <b>' . $purchase_order_id . '</b> tidak ditemukan'];
-
             } else {
 
                 $user_id = $this->userLogin['user_id'];
@@ -283,16 +269,15 @@ class Purchase_order extends WebminController
                 $cancelOrder = $this->M_purchase_order->cancelOrder($purchase_order_invoice, $purchase_order_id);
 
                 $result = ['success' => TRUE, 'message' => 'Pengajuan Berhasil Di Batalkan'];
-
             }
-
-        }   
+        }
 
         $result['csrfHash'] = csrf_hash();
         resultJSON($result);
     }
 
-    public function tempadd(){
+    public function tempadd()
+    {
 
         $this->validationRequest(TRUE, 'POST');
 
@@ -324,7 +309,7 @@ class Purchase_order extends WebminController
             'temp_po_discount_total'            => $this->request->getPost('total_temp_discount'),
 
         ];
-        
+
 
 
 
@@ -342,7 +327,6 @@ class Purchase_order extends WebminController
         if ($validation->run($input) === FALSE) {
 
             $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
-
         } else {
 
             $input['temp_po_user_id'] = $this->userLogin['user_id'];
@@ -352,22 +336,17 @@ class Purchase_order extends WebminController
 
             if ($save) {
 
-                if($this->request->getPost('temp_po_id') == null){
+                if ($this->request->getPost('temp_po_id') == null) {
 
                     $result = ['success' => TRUE, 'message' => 'Data item berhasil ditambahkan'];
-
-                }else{
+                } else {
 
                     $result = ['success' => TRUE, 'message' => 'Data item berhasil Diubah'];
-
                 }
-
             } else {
 
                 $result = ['success' => FALSE, 'message' => 'Data item gagal ditambahkan'];
-
             }
-
         }
 
         $getTemp = $this->M_purchase_order->getTemp($this->userLogin['user_id'])->getResultArray();
@@ -377,7 +356,6 @@ class Purchase_order extends WebminController
         foreach ($getTemp as $k => $v) {
 
             $find_result[$k] = esc($v);
-
         }
 
         $result['data'] = $find_result;
@@ -395,259 +373,239 @@ class Purchase_order extends WebminController
             if ($temp_po_id != '') {
                 $delete = $this->M_purchase_order->deletetemp($temp_po_id);
                 if ($delete) {
-                 $getTemp = $this->M_purchase_order->getTemp($this->userLogin['user_id'])->getResultArray();
-                 $find_result = [];
-                 foreach ($getTemp as $k => $v) {
-                     $find_result[$k] = esc($v);
-                 }
-                 $result['data'] = $find_result;
-                 $result['csrfHash'] = csrf_hash();
-                 $result['success'] = 'TRUE';
-                 $result['message'] = 'Data Berhasil Di Hapus';
-             } else {
-                $result = ['success' => FALSE, 'message' => 'Data Gagal Di Hapus'];
+                    $getTemp = $this->M_purchase_order->getTemp($this->userLogin['user_id'])->getResultArray();
+                    $find_result = [];
+                    foreach ($getTemp as $k => $v) {
+                        $find_result[$k] = esc($v);
+                    }
+                    $result['data'] = $find_result;
+                    $result['csrfHash'] = csrf_hash();
+                    $result['success'] = 'TRUE';
+                    $result['message'] = 'Data Berhasil Di Hapus';
+                } else {
+                    $result = ['success' => FALSE, 'message' => 'Data Gagal Di Hapus'];
+                }
             }
+        } else {
+            $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menghapus data ini'];
         }
-    } else {
-        $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menghapus data ini'];
-    }
-    resultJSON($result);
-}
-
-
-public function getPoTemp(){
-
-    $getTemp = $this->M_purchase_order->getTemp($this->userLogin['user_id'])->getResultArray();
-
-    $find_result = [];
-
-    foreach ($getTemp as $k => $v) {
-
-        $find_result[$k] = esc($v);
-
+        resultJSON($result);
     }
 
-    $result['data'] = $find_result;
 
-    $result['csrfHash'] = csrf_hash();
+    public function getPoTemp()
+    {
 
-    $result['success'] = 'TRUE';
+        $getTemp = $this->M_purchase_order->getTemp($this->userLogin['user_id'])->getResultArray();
 
-    resultJSON($result);
+        $find_result = [];
 
-}
+        foreach ($getTemp as $k => $v) {
 
-public function getPoFooter(){
+            $find_result[$k] = esc($v);
+        }
 
+        $result['data'] = $find_result;
 
-    $getFooter = $this->M_purchase_order->getFooter($this->userLogin['user_id'])->getResultArray();
+        $result['csrfHash'] = csrf_hash();
 
-    $find_result = [];
+        $result['success'] = 'TRUE';
 
-    foreach ($getFooter as $k => $v) {
-
-        $find_result[$k] = esc($v);
-
+        resultJSON($result);
     }
 
-    $result['data'] = $find_result;
+    public function getPoFooter()
+    {
 
-    $result['csrfHash'] = csrf_hash();
 
-    $result['success'] = 'TRUE';
+        $getFooter = $this->M_purchase_order->getFooter($this->userLogin['user_id'])->getResultArray();
 
-    resultJSON($result);
+        $find_result = [];
 
-}
+        foreach ($getFooter as $k => $v) {
 
-public function clearTemp()
-{
-    $this->M_purchase_order->clearTemp($this->userLogin['user_id']);
+            $find_result[$k] = esc($v);
+        }
 
-    $result['csrfHash'] = csrf_hash();
+        $result['data'] = $find_result;
 
-    $result['success'] = 'TRUE';
+        $result['csrfHash'] = csrf_hash();
 
-    resultJSON($result);
-}
+        $result['success'] = 'TRUE';
 
-public function getTax(){
-
-    $getTax = $this->M_purchase_order->getTax($this->userLogin['user_id'])->getResultArray();
-
-    $find_result = [];
-
-    foreach ($getTax as $k => $v) {
-
-        $find_result[$k] = esc($v);
-
+        resultJSON($result);
     }
 
-    $result['data'] = $find_result;
+    public function clearTemp()
+    {
+        $this->M_purchase_order->clearTemp($this->userLogin['user_id']);
 
-    $result['csrfHash'] = csrf_hash();
+        $result['csrfHash'] = csrf_hash();
 
-    $result['success'] = 'TRUE';
+        $result['success'] = 'TRUE';
 
-    resultJSON($result);
-
-}
-
-public function save($type)
-{
-
-    $this->validationRequest(TRUE, 'POST');
-
-    $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
-
-    $validation =  \Config\Services::validation();
-
-
-    if($this->request->getPost('purchase_show_tax_desc') == 'on'){
-        $purchase_show_tax_desc = 'Y';
-    }else{
-        $purchase_show_tax_desc = 'N';
+        resultJSON($result);
     }
 
-    $input = [
-        'purchase_order_id'                       => $this->request->getPost('purchase_order_id'),
-        'purchase_order_date'                     => $this->request->getPost('purchase_order_date'),
-        'purchase_order_supplier_id'              => $this->request->getPost('purchase_order_supplier_id'),
-        'purchase_order_warehouse_id'             => $this->request->getPost('purchase_order_warehouse_id'),
-        'purchase_order_remark'                   => $this->request->getPost('purchase_order_remark'),
-        'purchase_show_tax_desc'                  => $purchase_show_tax_desc,
-        'purchase_order_sub_total'                => $this->request->getPost('purchase_order_sub_total'),
-        'purchase_order_discount1'                => $this->request->getPost('purchase_order_discount1'),
-        'purchase_order_discount2'                => $this->request->getPost('purchase_order_discount2'),
-        'purchase_order_discount3'                => $this->request->getPost('purchase_order_discount3'),
-        'purchase_order_discount1_percentage'     => $this->request->getPost('purchase_order_discount1_percentage'),
-        'purchase_order_discount2_percentage'     => $this->request->getPost('purchase_order_discount2_percentage'),
-        'purchase_order_discount3_percentage'     => $this->request->getPost('purchase_order_discount3_percentage'),
-        'purchase_order_total_discount'           => $this->request->getPost('purchase_order_total_discount'),
-        'purchase_order_total_dpp'                => $this->request->getPost('purchase_order_dpp'),
-        'purchase_order_total_ppn'                => $this->request->getPost('purchase_order_total_ppn'),
-        'purchase_order_total_ongkir'             => $this->request->getPost('purchase_order_total_ongkir'),
-        'purchase_order_total'                    => $this->request->getPost('purchase_order_total')
-    ];
+    public function getTax()
+    {
 
-    $validation->setRules([
-        'purchase_order_date'            => ['rules' => 'required'],
-        'purchase_order_supplier_id'     => ['rules' => 'required'],
-        'purchase_order_warehouse_id'     => ['rules' => 'required'],
-        'purchase_order_remark'          => ['rules' => 'max_length[500]']
-    ]);
+        $getTax = $this->M_purchase_order->getTax($this->userLogin['user_id'])->getResultArray();
 
-    if ($validation->run($input) === FALSE) {
+        $find_result = [];
+
+        foreach ($getTax as $k => $v) {
+
+            $find_result[$k] = esc($v);
+        }
+
+        $result['data'] = $find_result;
+
+        $result['csrfHash'] = csrf_hash();
+
+        $result['success'] = 'TRUE';
+
+        resultJSON($result);
+    }
+
+    public function save($type)
+    {
+
+        $this->validationRequest(TRUE, 'POST');
 
         $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
 
-    } else {
+        $validation =  \Config\Services::validation();
 
-        if ($type == 'add') {
 
-            if ($this->role->hasRole('purchase_order.add')) {
-
-                unset($input['purchase_order_id']);
-
-                $input['purchase_order_user_id']= $this->userLogin['user_id'];
-
-                $input['purchase_order_status'] = 'Pending';
-
-                $save = $this->M_purchase_order->insertPurchaseOrder($input);
-
-                if ($save['success']) {
-
-                    $result = ['success' => TRUE, 'message' => 'Data pengajuan berhasil disimpan', 'purchase_order_id' => $save['purchase_order_id']];
-
-                } else {
-
-                    $result = ['success' => FALSE, 'message' => 'Data pengajuan gagal disimpan'];
-
-                    
-                }
-
-            } else {
-
-                $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menambah pengajuan'];
-
-            }
-
-        } else if ($type == 'edit') {
-
-            if ($this->role->hasRole('purchase_order.edit')) {
-
-                $input['user_id']       = $this->userLogin['user_id'];
-
-                $getOrder = $this->M_purchase_order->getOrder($input['purchase_order_id'])->getRowArray();
-
-                $save = $this->M_purchase_order->updateOrder($input);
-
-                if ($save['success']) {
-
-                    $result = ['success' => TRUE, 'message' => 'Data pesanan berhasil diperbarui', 'purchase_order_id' => $save['purchase_order_id']];
-
-                } else {
-
-                    $result = ['success' => FALSE, 'message' => 'Data pesanan gagal diperbarui'];
-
-                }
-
-            } else {
-
-                $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk mengubah pesanan pembelian'];
-
-            }
-
+        if ($this->request->getPost('purchase_show_tax_desc') == 'on') {
+            $purchase_show_tax_desc = 'Y';
+        } else {
+            $purchase_show_tax_desc = 'N';
         }
 
+        $input = [
+            'purchase_order_id'                       => $this->request->getPost('purchase_order_id'),
+            'purchase_order_date'                     => $this->request->getPost('purchase_order_date'),
+            'purchase_order_supplier_id'              => $this->request->getPost('purchase_order_supplier_id'),
+            'purchase_order_warehouse_id'             => $this->request->getPost('purchase_order_warehouse_id'),
+            'purchase_order_remark'                   => $this->request->getPost('purchase_order_remark'),
+            'purchase_show_tax_desc'                  => $purchase_show_tax_desc,
+            'purchase_order_sub_total'                => $this->request->getPost('purchase_order_sub_total'),
+            'purchase_order_discount1'                => $this->request->getPost('purchase_order_discount1'),
+            'purchase_order_discount2'                => $this->request->getPost('purchase_order_discount2'),
+            'purchase_order_discount3'                => $this->request->getPost('purchase_order_discount3'),
+            'purchase_order_discount1_percentage'     => $this->request->getPost('purchase_order_discount1_percentage'),
+            'purchase_order_discount2_percentage'     => $this->request->getPost('purchase_order_discount2_percentage'),
+            'purchase_order_discount3_percentage'     => $this->request->getPost('purchase_order_discount3_percentage'),
+            'purchase_order_total_discount'           => $this->request->getPost('purchase_order_total_discount'),
+            'purchase_order_total_dpp'                => $this->request->getPost('purchase_order_dpp'),
+            'purchase_order_total_ppn'                => $this->request->getPost('purchase_order_total_ppn'),
+            'purchase_order_total_ongkir'             => $this->request->getPost('purchase_order_total_ongkir'),
+            'purchase_order_total'                    => $this->request->getPost('purchase_order_total')
+        ];
 
-    }
+        $validation->setRules([
+            'purchase_order_date'            => ['rules' => 'required'],
+            'purchase_order_supplier_id'     => ['rules' => 'required'],
+            'purchase_order_warehouse_id'     => ['rules' => 'required'],
+            'purchase_order_remark'          => ['rules' => 'max_length[500]']
+        ]);
 
-    $result['csrfHash'] = csrf_hash();
+        if ($validation->run($input) === FALSE) {
 
-    resultJSON($result);
-
-}
-
-public function UpdateStatusItem()
-{
-    $this->validationRequest(TRUE, 'POST');
-
-    $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
-
-    $validation =  \Config\Services::validation();
-
-    $input = [
-
-        'purchase_order_id_status'      => $this->request->getPost('purchase_order_id_status'),
-        'purchase_order_item_status'    => $this->request->getPost('purchase_order_item_status')
-    ];
-
-    if ($this->role->hasRole('purchase_order.status')) {
-
-        $getOrder = $this->M_purchase_order->getOrder($input['purchase_order_id_status'])->getRowArray();
-
-        if ($getOrder == NULL) {
-
-            $result = ['success' => FALSE, 'message' => 'Transaksi tidak ditemukan'];
-
+            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
         } else {
 
-            $UpdateStatusItem = $this->M_purchase_order->UpdateStatusItem($input);
+            if ($type == 'add') {
 
-            $result = ['success' => TRUE, 'message' => 'Update Status Berhasil'];
+                if ($this->role->hasRole('purchase_order.add')) {
 
+                    unset($input['purchase_order_id']);
+
+                    $input['purchase_order_user_id'] = $this->userLogin['user_id'];
+
+                    $input['purchase_order_status'] = 'Pending';
+
+                    $save = $this->M_purchase_order->insertPurchaseOrder($input);
+
+                    if ($save['success']) {
+
+                        $result = ['success' => TRUE, 'message' => 'Data pengajuan berhasil disimpan', 'purchase_order_id' => $save['purchase_order_id']];
+                    } else {
+
+                        $result = ['success' => FALSE, 'message' => 'Data pengajuan gagal disimpan'];
+                    }
+                } else {
+
+                    $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menambah pengajuan'];
+                }
+            } else if ($type == 'edit') {
+
+                if ($this->role->hasRole('purchase_order.edit')) {
+
+                    $input['user_id']       = $this->userLogin['user_id'];
+
+                    $getOrder = $this->M_purchase_order->getOrder($input['purchase_order_id'])->getRowArray();
+
+                    $save = $this->M_purchase_order->updateOrder($input);
+
+                    if ($save['success']) {
+
+                        $result = ['success' => TRUE, 'message' => 'Data pesanan berhasil diperbarui', 'purchase_order_id' => $save['purchase_order_id']];
+                    } else {
+
+                        $result = ['success' => FALSE, 'message' => 'Data pesanan gagal diperbarui'];
+                    }
+                } else {
+
+                    $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk mengubah pesanan pembelian'];
+                }
+            }
         }
+
+        $result['csrfHash'] = csrf_hash();
+
+        resultJSON($result);
     }
 
-    $result['csrfHash'] = csrf_hash();
-    resultJSON($result);
-}
+    public function UpdateStatusItem()
+    {
+        $this->validationRequest(TRUE, 'POST');
+
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+        $validation =  \Config\Services::validation();
+
+        $input = [
+
+            'purchase_order_id_status'      => $this->request->getPost('purchase_order_id_status'),
+            'purchase_order_item_status'    => $this->request->getPost('purchase_order_item_status')
+        ];
+
+        if ($this->role->hasRole('purchase_order.status')) {
+
+            $getOrder = $this->M_purchase_order->getOrder($input['purchase_order_id_status'])->getRowArray();
+
+            if ($getOrder == NULL) {
+
+                $result = ['success' => FALSE, 'message' => 'Transaksi tidak ditemukan'];
+            } else {
+
+                $UpdateStatusItem = $this->M_purchase_order->UpdateStatusItem($input);
+
+                $result = ['success' => TRUE, 'message' => 'Update Status Berhasil'];
+            }
+        }
+
+        $result['csrfHash'] = csrf_hash();
+        resultJSON($result);
+    }
 
 
-public function printinvoice($purchase_order_id = "")
-{
-    /*
+    public function printinvoice($purchase_order_id = "")
+    {
+        /*
     $export = $this->request->getGet('export');
     if ($export == 'pdf') {
         $dompdf = new Dompdf();
@@ -664,86 +622,181 @@ public function printinvoice($purchase_order_id = "")
         $dompdf->stream('invoice');
     } else {
     */
-       if ($purchase_order_id == '') {
-
-        throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-
-    } else {
-
-        $getOrder =  $this->M_purchase_order->getPurchaseOrder($purchase_order_id)->getRowArray();
-
-        if ($getOrder == NULL) {
+        if ($purchase_order_id == '') {
 
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-
         } else {
 
-            $invoice_num = $getOrder['purchase_order_invoice'];
+            $getOrder =  $this->M_purchase_order->getPurchaseOrder($purchase_order_id)->getRowArray();
 
-            $data = [
+            if ($getOrder == NULL) {
 
-                'hdPO' => $getOrder,
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            } else {
 
-                'dtPO' => $this->M_purchase_order->getDtPurchaseOrder($purchase_order_id)->getResultArray()
+                $invoice_num = $getOrder['purchase_order_invoice'];
 
+                $data = [
+
+                    'hdPO' => $getOrder,
+
+                    'dtPO' => $this->M_purchase_order->getDtPurchaseOrder($purchase_order_id)->getResultArray()
+
+                ];
+
+                return $this->renderView('purchase/purchaseorder_invoice', $data);
+            }
+        }
+    }
+
+
+    public function autoPo()
+    {
+        $data = [
+            'title'         => 'Pengajuan Produk Dibawah Safety Stok'
+        ];
+        return $this->renderView('purchase/submission_system', $data);
+    }
+
+    public function tbllistAutoPo()
+    {
+
+        $this->validationRequest(TRUE);
+        if ($this->role->hasRole('submission.view')) {
+            helper('datatable');
+            $update_date  = $this->request->getPost('id');
+            $table = new \App\Libraries\Datatables('list_auto_po AS po');
+
+            $aSelect = [
+                'po.product_id',
+                'p.product_code',
+                'p.product_name',
+                'pu.item_id',
+                'pu.item_code',
+                'u.unit_name',
+                'po.min_stock',
+                'po.stock',
+                'po.order_stock',
+                'po.update_date',
+                'po.status',
+                'po.outstanding',
+                'po.submission_no'
             ];
 
-            return $this->renderView('purchase/purchaseorder_invoice', $data);
+            $table->db->select($aSelect);
+            $table->db->join('ms_product AS p', 'p.product_id  = po.product_id');
+            $table->db->join('ms_product_unit AS pu', 'pu.product_id  = p.product_id');
+            $table->db->join('ms_unit AS u', 'u.unit_id  = pu.unit_id');
+            $table->db->where('pu.base_unit = "Y"');
+            $table->db->orderBy('po.product_id', 'desc');
+            $table->renderColumn(function ($row, $i) {
+                $column = [];
+                $column[] = $i;
+                $column[] = esc($row['item_code'] . '-' . $row['product_name'] . '(' . $row['unit_name'] . ')');
+                $column[] = esc($row['min_stock']);
+                $column[] = esc($row['stock']);
+                $column[] = esc($row['order_stock']);
+
+                if ($row['outstanding'] == 'Y') {
+                    $column[] = '<span class="badge badge-success"><i class="fas fa-check-circle"></i></span>';
+                } else {
+                    $column[] = '<span class="badge badge-danger"><i class="fas fa-times-circle"></i></span>';
+                }
+
+                $column[] = esc($row['submission_no']);
+                if ($row['status'] == 'Success') {
+                    $column[] = '<span class="badge badge-success">Selesai</span>';
+                } else if ($row['status'] == 'Pending') {
+                    $column[] = '<span class="badge badge-primary">Pending</span>';
+                } else {
+                    $column[] = '<span class="badge badge-danger">Batal</span>';
+                }
+                $btns = [];
+                $btns[] = '<button data-id="' . $row['item_id'] . '" data-prod="' . $row['product_id'] . '" data-name="' . esc($row['item_code'] . '-' . $row['product_name'] . '(' . $row['unit_name'] . ')') . '" data-qty="' . $row['order_stock'] . '"  data-dates="' . $row['update_date'] . '" class="margins btn btn-sm btn-success mb-2 btnorder" data-toggle="tooltip" data-placement="top" data-title="Order" data-original-title="" title=""><i class="fas fa-check"></i></button>';
+
+                $prop =  'data-id="' . $row['product_id'] . '" data-name="' . esc($row['product_name']) . '" data-outstanding="' . $row['outstanding'] . '" data-status="' . $row['status'] . '"';
+                $btns[] = button_edit($prop);
+
+                $column[] = implode('&nbsp;', $btns);
+                return $column;
+            });
+
+            $table->orderColumn  = ['', 'product_name', ''];
+            $table->searchColumn = ['product_name'];
+            $table->generate();
+        }
+    }
+
+    public function editAutoPo()
+    {
+        $validation =  \Config\Services::validation();
+        $input = [
+            'product_id'          => $this->request->getPost('product_id'),
+            'outstanding'         => $this->request->getPost('outstanding'),
+        ];
+
+        $validation->setRules([
+            'product_id'        => ['rules' => 'required'],
+            'outstanding'       => ['rules' => 'required']
+        ]);
+
+
+        if ($validation->run($input) === FALSE) {
+            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+        } else {
+            $M_cronjob = model('M_cronjob');
+            $save =  $M_cronjob->updateListPurchaseOrder($input);
+            if ($save) {
+                $result = ['success' => true, 'message' => 'Berhasil menyimpan data'];
+            } else {
+                $result = ['success' => false, 'message' => 'Gagal menyimpan data'];
+            }
         }
 
+        resultJSON($result);
     }
-    
-}
 
 
-public function autoPo()
-{
-    $data = [
-        'title'         => 'Pengajuan Produk Dibawah Safety Stok'
-    ];
-    return $this->renderView('purchase/submission_system', $data);
-}
+    public function tbllistAutoPo_bak()
+    {
 
-public function tbllistAutoPo()
-{
-    
-    $this->validationRequest(TRUE);
-    if ($this->role->hasRole('submission.view')) {
-        helper('datatable');
-        $update_date  = $this->request->getPost('id');
-        $table = new \App\Libraries\Datatables('list_purchase_order');
-        $table->db->select('*');
-        $table->db->join('ms_product', 'ms_product.product_id  = list_purchase_order.product_id');
-        $table->db->join('ms_product_unit', 'ms_product_unit.product_id  = ms_product.product_id');
-        $table->db->join('ms_unit', 'ms_unit.unit_id  = ms_product_unit.unit_id');
-        $table->db->where('base_unit = "Y"');
-        $table->db->where('update_date = "'.$update_date.'"');
-        $table->db->orderBy('list_purchase_order.product_id', 'desc');
-        $table->renderColumn(function ($row, $i) {
-            $column = [];
-            $column[] = $i;
-            $column[] = esc($row['item_code'].'-'.$row['product_name'].'('.$row['unit_name'].')');
-            $column[] = esc($row['min_stock']);
-            $column[] = esc($row['stock']);
-            $column[] = esc($row['order_stock']);
-            if($row['status'] == 'Success'){
-                $column[] = '<span class="badge badge-success">Selesai</span>';
-            }else if($row['status'] == 'Pending'){
-                $column[] = '<span class="badge badge-primary">Pending</span>';
-            }else{
-                $column[] = '<span class="badge badge-danger">Batal</span>';
-            }
-            $btns = [];
-            $btns[] = '<button data-id="'.$row['item_id'].'" data-prod="'.$row['product_id'].'" data-name="'. esc($row['item_code'].'-'.$row['product_name'].'('.$row['unit_name'].')').'" data-qty="'.$row['order_stock'].'"  data-dates="'.$row['update_date'].'" class="margins btn btn-sm btn-success mb-2 btnorder" data-toggle="tooltip" data-placement="top" data-title="Order" data-original-title="" title=""><i class="fas fa-check"></i></button>';
-            $column[] = implode('&nbsp;', $btns);
-            return $column;
-        });
+        $this->validationRequest(TRUE);
+        if ($this->role->hasRole('submission.view')) {
+            helper('datatable');
+            $update_date  = $this->request->getPost('id');
+            $table = new \App\Libraries\Datatables('list_purchase_order');
+            $table->db->select('*');
+            $table->db->join('ms_product', 'ms_product.product_id  = list_purchase_order.product_id');
+            $table->db->join('ms_product_unit', 'ms_product_unit.product_id  = ms_product.product_id');
+            $table->db->join('ms_unit', 'ms_unit.unit_id  = ms_product_unit.unit_id');
+            $table->db->where('base_unit = "Y"');
+            $table->db->where('update_date = "' . $update_date . '"');
+            $table->db->orderBy('list_purchase_order.product_id', 'desc');
+            $table->renderColumn(function ($row, $i) {
+                $column = [];
+                $column[] = $i;
+                $column[] = esc($row['item_code'] . '-' . $row['product_name'] . '(' . $row['unit_name'] . ')');
+                $column[] = esc($row['min_stock']);
+                $column[] = esc($row['stock']);
+                $column[] = esc($row['order_stock']);
+                if ($row['status'] == 'Success') {
+                    $column[] = '<span class="badge badge-success">Selesai</span>';
+                } else if ($row['status'] == 'Pending') {
+                    $column[] = '<span class="badge badge-primary">Pending</span>';
+                } else {
+                    $column[] = '<span class="badge badge-danger">Batal</span>';
+                }
+                $btns = [];
+                $btns[] = '<button data-id="' . $row['item_id'] . '" data-prod="' . $row['product_id'] . '" data-name="' . esc($row['item_code'] . '-' . $row['product_name'] . '(' . $row['unit_name'] . ')') . '" data-qty="' . $row['order_stock'] . '"  data-dates="' . $row['update_date'] . '" class="margins btn btn-sm btn-success mb-2 btnorder" data-toggle="tooltip" data-placement="top" data-title="Order" data-original-title="" title=""><i class="fas fa-check"></i></button>';
+                $column[] = implode('&nbsp;', $btns);
+                return $column;
+            });
 
-        $table->orderColumn  = ['', 'product_name',''];
-        $table->searchColumn = ['product_name'];
-        $table->generate();
+            $table->orderColumn  = ['', 'product_name', ''];
+            $table->searchColumn = ['product_name'];
+            $table->generate();
+        }
     }
-}
 
     //--------------------------------------------------------------------
 

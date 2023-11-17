@@ -592,8 +592,8 @@ $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static funct
     $routes->post('update-status-item', 'Webmin\Purchase_order::UpdateStatusItem');
 
     $routes->get('auto-po', 'Webmin\Purchase_order::autoPo');
-
-    $routes->POST('list-auto-po', 'Webmin\Purchase_order::tbllistAutoPo');
+    $routes->post('list-auto-po', 'Webmin\Purchase_order::tbllistAutoPo');
+    $routes->post('edit-auto-po', 'Webmin\Purchase_order::editAutoPo');
 });
 
 

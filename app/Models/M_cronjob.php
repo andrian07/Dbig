@@ -8,20 +8,69 @@ class M_cronjob extends Model
 {
     protected $table = 'list_purchase_order';
 
-    public function insertListPurchaseOrder($orderData, $insertDate)
+    // public function insertListPurchaseOrder($orderData, $insertDate)
+    // {
+    //     $isSuccess = true;
+    //     if (count($orderData) > 0) {
+    //         $saveQueries = NULL;
+    //         $this->db->query('LOCK TABLES list_purchase_order WRITE');
+    //         $this->db->transBegin();
+    //         $max_insert = 500;
+
+    //         //$this->db->table('list_purchase_order')->where('update_date', $insertDate)->delete();
+
+    //         $batchUpdate = array_chunk($orderData, $max_insert);
+    //         foreach ($batchUpdate as $batch) {
+    //             $this->db->table('list_purchase_order')->ignore()->insertBatch($batch);
+    //             if ($this->db->affectedRows() > 0) {
+    //                 $saveQueries[] = $this->db->getLastQuery()->getQuery();
+    //             }
+    //         }
+
+    //         if ($this->db->transStatus() === false) {
+    //             $this->db->transRollback();
+    //             $isSuccess = false;
+    //             $saveQueries = NULL;
+    //         } else {
+    //             $this->db->transCommit();
+    //         }
+
+    //         $this->db->query('UNLOCK TABLES');
+
+    //         logQueries($saveQueries, 'list_purchase_order', 0, 'CJ_UPDATE');
+    //     }
+    //     return $isSuccess;
+    // }
+
+    public function insertListPurchaseOrderV2($orderData)
     {
         $isSuccess = true;
         if (count($orderData) > 0) {
             $saveQueries = NULL;
-            $this->db->query('LOCK TABLES list_purchase_order WRITE');
+            $this->db->query('LOCK TABLES list_auto_po WRITE');
             $this->db->transBegin();
-            $max_insert = 500;
+            $max_insert = 200;
 
-            //$this->db->table('list_purchase_order')->where('update_date', $insertDate)->delete();
+            $queueInsert = array_chunk($orderData, $max_insert);
+            foreach ($queueInsert as $queue) {
+                $qInsert = "INSERT INTO list_auto_po(product_id,min_stock,stock,order_stock,update_date,status,outstanding,submission_no) VALUES";
+                $values = [];
 
-            $batchUpdate = array_chunk($orderData, $max_insert);
-            foreach ($batchUpdate as $batch) {
-                $this->db->table('list_purchase_order')->ignore()->insertBatch($batch);
+                foreach ($queue as $row) {
+                    $product_id     = $row['product_id'];
+                    $min_stock      = $row['min_stock'];
+                    $stock          = $row['stock'];
+                    $order_stock    = $row['order_stock'];
+                    $update_date    = $row['update_date'];
+                    $status         = $row['status'];
+                    $outstanding    = $row['outstanding'];
+
+                    $values[] = "('$product_id','$min_stock','$stock','$order_stock','$update_date','$status','$outstanding','')";
+                }
+
+                $qInsert =  $qInsert . implode(",", $values) . " ON DUPLICATE KEY UPDATE min_stock=VALUES(min_stock),stock=VALUES(stock)";
+
+                $this->db->query($qInsert);
                 if ($this->db->affectedRows() > 0) {
                     $saveQueries[] = $this->db->getLastQuery()->getQuery();
                 }
@@ -41,6 +90,22 @@ class M_cronjob extends Model
         }
         return $isSuccess;
     }
+
+    public function updateListPurchaseOrder($order_data)
+    {
+        $saveQueries = NULL;
+        $update = $this->db->table('list_auto_po')->update($order_data, ['product_id' => $order_data['product_id']]);
+
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        }
+
+        logQueries($saveQueries, 'list_purchase_order', 0, 'UPDATE');
+        return $update;
+    }
+
+
+
 
     public function insertListUpdateSafetyStock($listData, $insertDate)
     {

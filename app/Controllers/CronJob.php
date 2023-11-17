@@ -39,6 +39,8 @@ class CronJob extends BaseController
 
         $getMinStockProduct = $M_product->getReportMinStockProduct()->getResultArray();
 
+
+
         $orderData = [];
         foreach ($getMinStockProduct as $row) {
             $product_id         = $row['product_id'];
@@ -53,17 +55,20 @@ class CronJob extends BaseController
                 'stock'         => $stock_total,
                 'order_stock'   => $order_stock,
                 'update_date'   => $today,
-                'status'        => 'Pending'
+                'status'        => 'Pending',
+                'outstanding'   => 'N',
+                'submission_no' => ''
             ];
         }
 
         $countProduct = count($orderData);
-        $insertOrder = $M_cronjob->insertListPurchaseOrder($orderData, $today);
+
+        $insertOrder = $M_cronjob->insertListPurchaseOrderV2($orderData);
 
         if ($insertOrder) {
             // set notification //
             $notifData = [
-                'notification_date' => date('Y-m-d'),
+                'notification_date' =>  $today,
                 'notification_text' => "Terdapat <b>$countProduct</b> produk dibawah safety stok",
                 'notification_view_url' => base_url('webmin/purchase-order/auto-po?update_date=' . $today),
             ];
