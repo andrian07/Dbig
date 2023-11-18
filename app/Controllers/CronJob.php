@@ -123,7 +123,7 @@ class CronJob extends BaseController
                 $pid = 'P' . $row['product_id'];
                 $updateList[$pid] = [
                     'product_id'    => $row['product_id'],
-                    'min_stock'     => floatval($row['min_stock'])
+                    'new_min_stock' => floatval($row['new_min_stock'])
                 ];
             }
         }
@@ -137,8 +137,8 @@ class CronJob extends BaseController
             $salesStock = floatval($row['sales_stock']);
             $new_min_stock = ceil($salesStock / $monthCount);
             if (isset($updateList[$pid])) {
-                $old_min_stock = $updateList[$pid]['min_stock'];
-                $updateList[$pid]['min_stock'] = $new_min_stock;
+                $old_min_stock = $updateList[$pid]['new_min_stock'];
+                $updateList[$pid]['new_min_stock'] = $new_min_stock;
 
                 $listUpdateSafetyStock[] = [
                     'product_id'        => $row['product_id'],

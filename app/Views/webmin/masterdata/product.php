@@ -886,6 +886,13 @@ $assetsUrl = base_url('assets');
                                     </div>
 
                                     <div class="form-group">
+                                        <label for="new_min_stock" class="col-sm-12">Avr. Min Stok Penjualan 3 Bln</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" id="new_min_stock" name="new_min_stock" placeholder="min.stok" value="" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="min_stock" class="col-sm-12">Min.Stok</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" id="min_stock" name="min_stock" placeholder="min.stok" value="" required>
@@ -979,6 +986,13 @@ $assetsUrl = base_url('assets');
                                         <label for="purchase_tax" class="col-sm-12">PPN <?= PPN_TEXT ?></label>
                                         <div class="col-sm-12">
                                             <input id="purchase_tax" name="purchase_tax" type="text" class="form-control text-right" readonly value="0" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="price_info" class="col-sm-12">Harga Beli Tanpa Ongkir</label>
+                                        <div class="col-sm-12">
+                                            <input id="price_info" name="price_info" type="text" class="form-control text-right" value="0" />
                                         </div>
                                     </div>
 
@@ -1395,7 +1409,7 @@ $assetsUrl = base_url('assets');
         let old_base_cogs = 0;
         let base_cogs = new AutoNumeric('#base_cogs', configRp);
         let min_stock = new AutoNumeric('#min_stock', configQty);
-
+        let new_min_stock = new AutoNumeric('#new_min_stock', configQty);
 
         $("#category_id").select2({
             placeholder: '-- Pilih Kategori --',
@@ -1638,6 +1652,7 @@ $assetsUrl = base_url('assets');
             old_base_cogs = 0;
             base_cogs.set(0);
             min_stock.set(10);
+            new_min_stock.set(0);
             $('#modal-product').modal(configModal);
         }
 
@@ -1681,6 +1696,7 @@ $assetsUrl = base_url('assets');
             old_base_cogs = parseFloat(data.base_cogs);
             base_cogs.set(old_base_cogs);
             min_stock.set(parseFloat(data.min_stock));
+            new_min_stock.set(parseFloat(data.new_min_stock));
 
             if (data.sales_point == 'Y') {
                 $('#sales_point').prop('checked', true);
@@ -1838,12 +1854,15 @@ $assetsUrl = base_url('assets');
         let setup_product_id = 0;
         let base_purchase_price = 0;
         let base_purchase_tax = 0;
+        let base_price_info = 0;
         let item_has_tax = '';
 
         let item_product_content = new AutoNumeric('#product_content', configQty);
         let item_purchase_price = new AutoNumeric('#purchase_price', configRp);
         let item_purchase_tax = new AutoNumeric('#purchase_tax', configRp);
         let item_purchase_price_with_tax = new AutoNumeric('#purchase_price_with_tax', configRp);
+
+        let item_price_info = new AutoNumeric('#price_info', configRp);
 
         let item_margin_rate_G1 = new AutoNumeric('#margin_rate_G1', configMargin);
         let item_sales_price_G1 = new AutoNumeric('#sales_price_G1', configRp);
@@ -1988,6 +2007,7 @@ $assetsUrl = base_url('assets');
 
             let pp = pc * base_purchase_price;
             let pt = 0;
+            let pi = pc * base_price_info;
             if (item_has_tax == 'Y') {
                 pt = pp * PPN;
             }
@@ -1996,6 +2016,7 @@ $assetsUrl = base_url('assets');
             item_purchase_price.set(pp);
             item_purchase_tax.set(pt);
             item_purchase_price_with_tax.set(ppt);
+            item_price_info.set(pi);
             reCalcMarginRate();
         })
 
@@ -2669,8 +2690,11 @@ $assetsUrl = base_url('assets');
             item_purchase_price.set(base_purchase_price);
             item_purchase_tax.set(base_purchase_tax);
 
+
             let ppwt = base_purchase_price + base_purchase_tax;
             item_purchase_price_with_tax.set(ppwt);
+
+            item_price_info.set(base_price_info);
 
             item_margin_rate_G1.set(0);
             item_sales_price_G1.set(0);
@@ -2782,6 +2806,7 @@ $assetsUrl = base_url('assets');
             let ppt = pp + pt;
             item_purchase_price_with_tax.set(ppt);
 
+            item_price_info.set(parseFloat(data.price_info));
             let spG1 = parseFloat(data.G1_sales_price);
             let spG2 = parseFloat(data.G2_sales_price);
             let spG3 = parseFloat(data.G3_sales_price);
@@ -2988,6 +3013,7 @@ $assetsUrl = base_url('assets');
                 if (item.base_unit == 'Y') {
                     template = $('#item_base_unit_template').html();
                     base_unit = item.unit_name;
+
                 } else {
                     template = $('#item_unit_template').html();
                 }
@@ -2996,11 +3022,13 @@ $assetsUrl = base_url('assets');
 
                 let pp = parseFloat(item.product_price);
                 let pt = parseFloat(item.product_tax);
+                let pi = parseFloat(item.price_info);
                 let net_price = pp + pt;
 
                 if (item.base_unit == 'Y') {
                     base_purchase_price = pp;
                     base_purchase_tax = pt;
+                    base_price_info = pi;
                 }
 
                 let sp_G1 = parseFloat(item.G1_sales_price);
@@ -3212,6 +3240,7 @@ $assetsUrl = base_url('assets');
                             product_content: parseFloat(item_product_content.getNumericString()),
                             purchase_price: parseFloat(item_purchase_price.getNumericString()),
                             purchase_tax: parseFloat(item_purchase_tax.getNumericString()),
+                            price_info: parseFloat(item_price_info.getNumericString()),
                             G1_margin_rate: parseFloat(item_margin_rate_G1.getNumericString()),
                             G1_sales_price: parseFloat(item_sales_price_G1.getNumericString()),
                             G2_margin_rate: parseFloat(item_margin_rate_G2.getNumericString()),

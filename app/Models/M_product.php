@@ -41,7 +41,7 @@ class M_product extends Model
     public function getProductUnit($product_id)
     {
         return $this->db->table('ms_product_unit')
-            ->select('ms_product_unit.*,(ms_product_unit.product_content*ms_product.base_purchase_price) as product_price,(ms_product_unit.product_content*ms_product.base_purchase_tax) as product_tax,ms_unit.unit_name')
+            ->select('ms_product_unit.*,(ms_product_unit.product_content*ms_product.base_purchase_price) as product_price,(ms_product_unit.product_content*ms_product.base_purchase_tax) as product_tax,(ms_product_unit.product_content*ms_product.price_info) as price_info,ms_unit.unit_name')
             ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
             ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
             ->where('ms_product_unit.product_id', $product_id)
@@ -387,13 +387,16 @@ class M_product extends Model
         $product_content    = floatval($data['product_content']);
         $purchase_price     = floatval($data['purchase_price']);
         $purchase_tax       = floatval($data['purchase_tax']);
+        $price_info         = floatval($data['price_info']);
 
 
         $base_purchase_price = round(($purchase_price / $product_content), 2);
         $base_purchase_tax   = round(($purchase_tax / $product_content), 2);
+        $base_price_info     = round(($price_info / $product_content), 2);
 
         unset($data['purchase_price']);
         unset($data['purchase_tax']);
+        unset($data['price_info']);
         $data['base_unit'] = 'N';
 
 
@@ -411,7 +414,8 @@ class M_product extends Model
 
         $update_data = [
             'base_purchase_price'   => $base_purchase_price,
-            'base_purchase_tax'     => $base_purchase_tax
+            'base_purchase_tax'     => $base_purchase_tax,
+            'price_info'            => $base_price_info
         ];
 
         $this->db->table($this->table)->update($update_data, ['product_id' => $product_id]);
@@ -445,13 +449,18 @@ class M_product extends Model
         $product_content    = floatval($data['product_content']);
         $purchase_price     = floatval($data['purchase_price']);
         $purchase_tax       = floatval($data['purchase_tax']);
+        $price_info         = floatval($data['price_info']);
 
 
-        $base_purchase_price = round(($purchase_price / $product_content), 2);
-        $base_purchase_tax   = round(($purchase_tax / $product_content), 2);
+
+
+        $base_purchase_price    = round(($purchase_price / $product_content), 2);
+        $base_purchase_tax      = round(($purchase_tax / $product_content), 2);
+        $base_price_info        = round(($price_info / $product_content), 2);
 
         unset($data['purchase_price']);
         unset($data['purchase_tax']);
+        unset($data['price_info']);
 
         $getOldData = $this->db->table($this->tProductUnit)->where('item_id', $item_id)->get()->getRowArray();
         $this->db->transBegin();
@@ -467,7 +476,8 @@ class M_product extends Model
 
         $update_data = [
             'base_purchase_price'   => $base_purchase_price,
-            'base_purchase_tax'     => $base_purchase_tax
+            'base_purchase_tax'     => $base_purchase_tax,
+            'price_info'            => $base_price_info
         ];
 
         $this->db->table($this->table)->update($update_data, ['product_id' => $product_id]);

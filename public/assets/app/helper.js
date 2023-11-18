@@ -15,6 +15,10 @@ function threeDigitRound(value) {
 
 function calcPercentRate(start_value, end_value) {
   // calcPercentRate(10000, 11000)  => 10
+  if (start_value == 0 && end_value == 0) {
+    return 0;
+  }
+
   if (start_value == 0) {
     return 100;
   } else {

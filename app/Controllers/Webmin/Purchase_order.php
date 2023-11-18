@@ -684,37 +684,12 @@ class Purchase_order extends WebminController
     }
 
 
-    public function printmemo($purchase_order_id = "")
-    {
-        if ($purchase_order_id == '') {
 
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-        } else {
-
-            $getOrder =  $this->M_purchase_order->getPurchaseOrder($purchase_order_id)->getRowArray();
-
-            if ($getOrder == NULL) {
-
-                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
-            } else {
-
-                $invoice_num = $getOrder['purchase_order_invoice'];
-
-                $data = [
-
-                    'hdPO' => $getOrder,
-
-                    'dtPO' => $this->M_purchase_order->getDtPurchaseOrder($purchase_order_id)->getResultArray()
-
-                ];
-
-                return $this->renderView('purchase/purchaseorder_memo', $data);
-            }
-        }
-    }
 
     public function autoPo()
     {
+        $M_cronjob = model('M_cronjob');
+        $M_cronjob->checkPoStock();
         $data = [
             'title'         => 'Pengajuan Produk Dibawah Safety Stok'
         ];
@@ -723,7 +698,6 @@ class Purchase_order extends WebminController
 
     public function tbllistAutoPo()
     {
-
         $this->validationRequest(TRUE);
         if ($this->role->hasRole('submission.view')) {
             helper('datatable');
@@ -783,8 +757,8 @@ class Purchase_order extends WebminController
                 return $column;
             });
 
-            $table->orderColumn  = ['', 'product_name', ''];
-            $table->searchColumn = ['product_name'];
+            $table->orderColumn  = ['', 'p.product_name', 'po.min_stock', 'po.stock', 'po.order_stock', 'po.outstanding', 'po.submission_no', 'po.status', ''];
+            $table->searchColumn = ['p.product_name'];
             $table->generate();
         }
     }

@@ -104,6 +104,10 @@ class M_cronjob extends Model
         return $update;
     }
 
+    public function checkPoStock()
+    {
+        return true;
+    }
 
 
 
@@ -159,17 +163,17 @@ class M_cronjob extends Model
             $this->db->query('LOCK TABLES ms_product WRITE');
             $this->db->transBegin();
             $max_insert = 500;
-            $base_sql = "INSERT INTO ms_product(product_id,min_stock) VALUES";
+            $base_sql = "INSERT INTO ms_product(product_id,new_min_stock) VALUES";
             $batchUpdate = array_chunk($productData, $max_insert);
             foreach ($batchUpdate as $batch) {
                 $values = [];
                 foreach ($batch as $row) {
                     $product_id = $row['product_id'];
-                    $min_stock  = $row['min_stock'];
-                    $values[] = "('$product_id','$min_stock')";
+                    $new_min_stock  = $row['new_min_stock'];
+                    $values[] = "('$product_id','$new_min_stock')";
                 }
 
-                $sqltext = $base_sql . implode(',', $values) . ' ON DUPLICATE KEY UPDATE min_stock=VALUES(min_stock)';
+                $sqltext = $base_sql . implode(',', $values) . ' ON DUPLICATE KEY UPDATE new_min_stock=VALUES(new_min_stock)';
                 $this->db->query($sqltext);
                 if ($this->db->affectedRows() > 0) {
                     $saveQueries[] = $this->db->getLastQuery()->getQuery();
