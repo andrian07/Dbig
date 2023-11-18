@@ -6,7 +6,6 @@ use App\Controllers\Base\BaseController;
 
 class CronJob extends BaseController
 {
-
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);

@@ -106,6 +106,38 @@ class M_cronjob extends Model
 
     public function checkPoStock()
     {
+
+        $subQuery =  $this->db->table("ms_product_stock AS ps")
+            ->select("ps.product_id,sum(ps.stock) as stock")
+            ->groupBy('ps.product_id')
+            ->getCompiledSelect();
+
+        $builder = $this->db->table('list_auto_po AS po');
+        $builder->select("po.product_id,po.min_stock,IFNULL(vps.stock,0) AS real_stock");
+        $builder->join("($subQuery) AS vps", "vps.product_id=po.product_id", "left");
+
+        $getPo = $builder->get()->getResultArray();
+        $listDelete = [];
+
+        foreach ($getPo as $row) {
+            $product_id = $row['product_id'];
+            $real_stock = floatval($row['real_stock']);
+            $min_Stock  = floatval($row['min_stock']);
+
+            if ($real_stock >= $min_Stock) {
+                $listDelete[] = $product_id;
+            }
+        }
+
+        if (count($listDelete) > 0) {
+            $queueDelete = array_chunk($listDelete, 500);
+            foreach ($queueDelete as $queue) {
+                $this->db->table('list_auto_po')->whereIn('product_id', $queue)->delete();
+            }
+        }
+
+
+
         return true;
     }
 
