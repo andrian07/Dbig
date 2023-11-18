@@ -293,7 +293,7 @@ public function getDtPurchaseOrder($purchase_order_id){
 
     $builder = $this->db->table($this->table_dt_po);
 
-    return $builder->select('*')
+    return $builder->select('*, (SELECT sum(dt_temp_qty) AS total_item FROM dt_sales_admin where dt_item_id = dt_purchase_order.detail_purchase_po_item_id) as total_sales_3_month, (SELECT sum(stock) AS stock_item FROM ms_product_stock where product_id = ms_product.product_id) as last_stock')
 
     ->join('ms_product_unit', 'ms_product_unit.item_id = dt_purchase_order.detail_purchase_po_item_id')
 

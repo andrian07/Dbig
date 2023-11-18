@@ -575,6 +575,8 @@ $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static funct
 
     $routes->get('printinvoice/(:alphanum)', 'Webmin\Purchase_order::printinvoice/$1');
 
+    $routes->get('printmemo/(:alphanum)', 'Webmin\Purchase_order::printmemo/$1');
+
     $routes->get('get-purchase-order-detail/(:alphanum)', 'Webmin\Purchase_order::getPurchaseOrderDetail/$1');
 
     $routes->get('edit-order/(:alphanum)', 'Webmin\Purchase_order::editOrder/$1');
@@ -840,6 +842,7 @@ $routes->group('webmin/payment', ['filter' => 'webminauth'], static function ($r
 
     $routes->get('get-receivable-history-detail/(:alphanum)', 'Webmin\Payment\Receivable_repayment::getReceivableHistoryDetail/$1');
 
+    $routes->get('delete-repayment-debt/(:num)', 'Webmin\Payment\Debt_repayment::deleteDebtRepayment/$1');
 
     /* End Pelunasan Hutang */
 

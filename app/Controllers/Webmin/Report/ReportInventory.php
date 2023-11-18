@@ -462,16 +462,17 @@ class ReportInventory extends WebminController
             $iRow = 7;
             $sheet->getCell('A' . $iRow)->setValue('KODE PRODUK');
             $sheet->getCell('B' . $iRow)->setValue('NAMA PRODUK');
-            $sheet->getCell('C' . $iRow)->setValue('KATEGORI');
-            $sheet->getCell('D' . $iRow)->setValue('MEREK');
-            $sheet->getCell('E' . $iRow)->setValue('PPN');
-            $sheet->getCell('F' . $iRow)->setValue('KODE GUDANG');
-            $sheet->getCell('G' . $iRow)->setValue('NAMA GUDANG');
-            $sheet->getCell('H' . $iRow)->setValue('SAFETY STOK');
-            $sheet->getCell('I' . $iRow)->setValue('STOK AWAL');
-            $sheet->getCell('J' . $iRow)->setValue('STOK MASUK');
-            $sheet->getCell('K' . $iRow)->setValue('STOK KELUAR');
-            $sheet->getCell('L' . $iRow)->setValue('STOK AKHIR');
+            $sheet->getCell('C' . $iRow)->setValue('Supplier');
+            $sheet->getCell('D' . $iRow)->setValue('KATEGORI');
+            $sheet->getCell('E' . $iRow)->setValue('MEREK');
+            $sheet->getCell('F' . $iRow)->setValue('PPN');
+            $sheet->getCell('G' . $iRow)->setValue('KODE GUDANG');
+            $sheet->getCell('H' . $iRow)->setValue('NAMA GUDANG');
+            $sheet->getCell('I' . $iRow)->setValue('SAFETY STOK');
+            $sheet->getCell('J' . $iRow)->setValue('STOK AWAL');
+            $sheet->getCell('K' . $iRow)->setValue('STOK MASUK');
+            $sheet->getCell('L' . $iRow)->setValue('STOK KELUAR');
+            $sheet->getCell('M' . $iRow)->setValue('STOK AKHIR');
 
             $sheet->getStyle('A' . $iRow)->applyFromArray($header_format);
             $sheet->getStyle('B' . $iRow)->applyFromArray($header_format);
@@ -485,6 +486,7 @@ class ReportInventory extends WebminController
             $sheet->getStyle('J' . $iRow)->applyFromArray($header_format);
             $sheet->getStyle('K' . $iRow)->applyFromArray($header_format);
             $sheet->getStyle('L' . $iRow)->applyFromArray($header_format);
+            $sheet->getStyle('M' . $iRow)->applyFromArray($header_format);
             $iRow++;
 
             foreach ($getProduct as $product) {
@@ -500,16 +502,17 @@ class ReportInventory extends WebminController
                     //paste to excel
                     $sheet->getCell('A' . $iRow)->setValue($product['product_code']);
                     $sheet->getCell('B' . $iRow)->setValue($product['product_name']);
-                    $sheet->getCell('C' . $iRow)->setValue($product['category_name']);
-                    $sheet->getCell('D' . $iRow)->setValue($product['brand_name']);
-                    $sheet->getCell('E' . $iRow)->setValue($product['has_tax']);
-                    $sheet->getCell('F' . $iRow)->setValue($warehouse['warehouse_code']);
-                    $sheet->getCell('G' . $iRow)->setValue($warehouse['warehouse_name']);
-                    $sheet->getCell('H' . $iRow)->setValue($product['min_stock']);
-                    $sheet->getCell('I' . $iRow)->setValue($stock_init);
-                    $sheet->getCell('J' . $iRow)->setValue($stock_in);
-                    $sheet->getCell('K' . $iRow)->setValue($stock_out);
-                    $sheet->getCell('L' . $iRow)->setValue($stock_final);
+                    $sheet->getCell('C' . $iRow)->setValue($product['supplier_code'].'-'.$product['supplier_name']);
+                    $sheet->getCell('D' . $iRow)->setValue($product['category_name']);
+                    $sheet->getCell('E' . $iRow)->setValue($product['brand_name']);
+                    $sheet->getCell('F' . $iRow)->setValue($product['has_tax']);
+                    $sheet->getCell('G' . $iRow)->setValue($warehouse['warehouse_code']);
+                    $sheet->getCell('H' . $iRow)->setValue($warehouse['warehouse_name']);
+                    $sheet->getCell('I' . $iRow)->setValue($product['min_stock']);
+                    $sheet->getCell('J' . $iRow)->setValue($stock_init);
+                    $sheet->getCell('K' . $iRow)->setValue($stock_in);
+                    $sheet->getCell('L' . $iRow)->setValue($stock_out);
+                    $sheet->getCell('M' . $iRow)->setValue($stock_final);
 
 
                     $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
@@ -524,6 +527,7 @@ class ReportInventory extends WebminController
                     $sheet->getStyle('J' . $iRow)->applyFromArray($border_left_right);
                     $sheet->getStyle('K' . $iRow)->applyFromArray($border_left_right);
                     $sheet->getStyle('L' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('M' . $iRow)->applyFromArray($border_left_right);
                     $iRow++;
                 }
             }
@@ -542,6 +546,7 @@ class ReportInventory extends WebminController
             $sheet->getStyle('J' . $iRow)->applyFromArray($border_top);
             $sheet->getStyle('K' . $iRow)->applyFromArray($border_top);
             $sheet->getStyle('L' . $iRow)->applyFromArray($border_top);
+            $sheet->getStyle('M' . $iRow)->applyFromArray($border_top);
 
 
             //setting periode
@@ -571,19 +576,19 @@ class ReportInventory extends WebminController
             $sheet->getCell('A2')->setValue(COMPANY_NAME);
             $sheet->getCell('A1')->setValue($reportInfo);
 
-            $sheet->mergeCells('A4:L4');
-            $sheet->mergeCells('A3:L3');
-            $sheet->mergeCells('A2:L2');
-            $sheet->mergeCells('A1:L1');
+            $sheet->mergeCells('A4:M4');
+            $sheet->mergeCells('A3:M3');
+            $sheet->mergeCells('A2:M2');
+            $sheet->mergeCells('A1:M1');
 
-            $sheet->getStyle('A4:K4')->getAlignment()->setHorizontal('center');
-            $sheet->getStyle('A3:K3')->getAlignment()->setHorizontal('center');
-            $sheet->getStyle('A2:K2')->getAlignment()->setHorizontal('center');
-            $sheet->getStyle('A1:K1')->getAlignment()->setHorizontal('right');
+            $sheet->getStyle('A4:L4')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A3:L3')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A2:L2')->getAlignment()->setHorizontal('center');
+            $sheet->getStyle('A1:L1')->getAlignment()->setHorizontal('right');
 
-            $sheet->getStyle('A4:L4')->applyFromArray($font_bold);
-            $sheet->getStyle('A3:L3')->applyFromArray($font_bold);
-            $sheet->getStyle('A2:L2')->applyFromArray($font_bold);
+            $sheet->getStyle('A4:M4')->applyFromArray($font_bold);
+            $sheet->getStyle('A3:M3')->applyFromArray($font_bold);
+            $sheet->getStyle('A2:M2')->applyFromArray($font_bold);
 
             $sheet->getColumnDimension('A')->setAutoSize(true);
             $sheet->getColumnDimension('B')->setAutoSize(true);
@@ -597,6 +602,7 @@ class ReportInventory extends WebminController
             $sheet->getColumnDimension('J')->setAutoSize(true);
             $sheet->getColumnDimension('K')->setAutoSize(true);
             $sheet->getColumnDimension('L')->setAutoSize(true);
+            $sheet->getColumnDimension('M')->setAutoSize(true);
 
 
             $filename = 'stock_list_v2';

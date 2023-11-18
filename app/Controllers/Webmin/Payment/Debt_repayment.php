@@ -81,7 +81,7 @@ class Debt_repayment extends WebminController
             helper('datatable');
 
             $table = new \App\Libraries\Datatables('hd_payment_debt');
-            $table->db->select('payment_debt_id,payment_debt_invoice, supplier_name, payment_debt_date, payment_debt_method_name,payment_debt_total_invoice,payment_debt_total_pay');
+            $table->db->select('payment_debt_id,payment_debt_invoice, supplier_name, payment_debt_date, payment_debt_method_name,payment_debt_total_invoice,payment_debt_total_pay,status');
             $table->db->join('ms_supplier', 'ms_supplier.supplier_id  = hd_payment_debt.payment_debt_supplier_id');
             $table->db->orderBy('payment_debt_id', 'desc');
             $table->renderColumn(function ($row, $i) {
@@ -93,8 +93,15 @@ class Debt_repayment extends WebminController
                 $column[] = esc($row['payment_debt_method_name']);
                 $column[] = esc($row['payment_debt_total_invoice']);
                 $column[] = 'Rp. '.esc(number_format($row['payment_debt_total_pay']));
+                if($row['status'] == 'Y'){
+                    $column[] = '<span class="badge badge-success">Done</span>';
+                }else{
+                    $column[] = '<span class="badge badge-danger">Cancel</span>';
+                }
                 $btns = [];
+                $prop =  'data-id="' . $row['payment_debt_id'] . '" data-name="' . esc($row['payment_debt_invoice']) . '"';
                 $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/payment/get-debt-history-detail/'.$row['payment_debt_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
+                $btns[] = button_delete($prop);
                 $column[] = implode('&nbsp;', $btns);
                 return $column;
             });
@@ -391,6 +398,36 @@ class Debt_repayment extends WebminController
 
         $result['success'] = 'TRUE';
 
+        resultJSON($result);
+    }
+
+    public function deleteDebtRepayment($id)
+    {
+        $this->validationRequest(TRUE, 'GET');
+
+        $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk Membatalkan Pembayaran Hutang'];
+
+        if ($this->role->hasRole('debt_repayment.delete')) {
+
+            $getDebtByPaymentDebtId = $this->M_debt_repayment->getDebtByPaymentDebtId($id)->getRowArray();
+
+            if ($getDebtByPaymentDebtId == NULL) {
+
+                $result = ['success' => FALSE, 'message' => 'Transaksi dengan No Pembayaran <b>' . $id . '</b> tidak ditemukan'];
+
+            } else {
+
+                $user_id = $this->userLogin['user_id'];
+
+                $cancelRepaymentDebt = $this->M_debt_repayment->cancelRepaymentDebt($id);
+
+                $result = ['success' => TRUE, 'message' => 'Pengajuan Berhasil Di Batalkan'];
+
+            }
+
+        }   
+
+        $result['csrfHash'] = csrf_hash();
         resultJSON($result);
     }
 

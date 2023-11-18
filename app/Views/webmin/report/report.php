@@ -109,7 +109,7 @@ $report_role = $user_role['report'];
                     }
                 }
 
-                if ($showMenuReportInventory) :
+                if ($listReportInventory) :
                 ?>
                     <div class="col-md-4">
                         <div class="card card-primary">

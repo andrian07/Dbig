@@ -552,10 +552,29 @@ $assetsUrl = base_url('assets');
                                         </div>
                                     </div>
 
-                                    <textarea id="purchase_order_remark" name="purchase_order_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="10">- UNTUK SETIAP MOTIF KERAMIK/ GRANIT HARAP DAPAT DIMUATKAN DENGAN NOMOR SERI YANG SAMA
+                                    <textarea id="purchase_order_remark" name="purchase_order_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="8">- UNTUK SETIAP MOTIF KERAMIK/ GRANIT HARAP DAPAT DIMUATKAN DENGAN NOMOR SERI YANG SAMA
 - Kami meminta support dari Bapak/Ibu jika terdapat brosur & souvenir Sehingga bisa membantu memasarkan produk ke konsumen
 - Kami juga mengharapakan jika untuk keramik bisa mensupport rak display dan sample keramik untuk display
                                     </textarea>
+
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <div class="col-sm-12">
+
+
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <div class="col-sm-12">
+                                                <label class="form-check-label" for="show_tax_desc">Memo:</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <textarea id="purchase_order_remark2" name="purchase_order_remark2" class="form-control" placeholder="Catatan" maxlength="500" rows="5"></textarea>
 
                                 </div>
 
@@ -1070,7 +1089,6 @@ $assetsUrl = base_url('assets');
                                         cleardiscount();
                                         clearItemInput();
                                     }else{
-                                        console.log(header);
                                         $('#item_id').val(header.submission_item_id);
                                         $('#product_name').val(header.submission_product_name);
                                         temp_price.set(header.base_purchase_price * header.product_content);
@@ -1239,6 +1257,8 @@ $assetsUrl = base_url('assets');
                     purchase_order_warehouse_id: warehouse,
 
                     purchase_order_remark: $('#purchase_order_remark').val(),
+
+                    purchase_order_remark2: $('#purchase_order_remark2').val(),
 
                     purchase_show_tax_desc: $('#show_tax_desc:checked').val(),
 
@@ -1428,7 +1448,6 @@ $('#btnadd_temp').click(function(e) {
 
                    if (response.result.success) {
 
-
                        $('#product_name').focus();
 
                        setSelect2('#supplier_id', supplier_id, supplier_name);
@@ -1599,6 +1618,8 @@ $("#tblpurchaseorders").on('click', '.btnedit', function(e) {
 
                     let purchase_show_tax_desc = header.purchase_show_tax_desc;
 
+                    let purchase_order_remark2 = header.purchase_order_remark2.replace("<br />", '\n');
+
                     if (header.purchase_order_status == 'Pending') {
 
                         $('#title-frmpurchaseorder').html('Ubah Pengajuan Pesanan');
@@ -1618,6 +1639,8 @@ $("#tblpurchaseorders").on('click', '.btnedit', function(e) {
                         $('#purchase_order_id').val(header.purchase_order_id);
 
                         $('#purchase_order_remark').val(header.purchase_order_remark);
+
+                        $('#purchase_order_remark2').val(purchase_order_remark2);
 
                         if(purchase_show_tax_desc == 'Y'){
                             $('#show_tax_desc').prop('checked', true);
@@ -1748,8 +1771,6 @@ ajax_get(actUrl, null, {
 
     success: function(response) {
 
-        console.log(response);
-
         if (response.success) {
 
             if (response.result.success) {
@@ -1851,6 +1872,11 @@ $("#tbltemp").on('click', '.btnedit', function(e) {
 
 function loadTempData(items) {
 
+    if(items['length'] < 1){
+
+                 setSelect2('#supplier_id', "", "");
+                 $('#supplier_id').prop('disabled', false);
+    }
  let template = $('#template_row_temp').html();
 
  let tbody = '';
@@ -1888,7 +1914,7 @@ function loadTempData(items) {
      let temp_po_total = val.temp_po_total;
 
      let has_tax = val.has_tax;
-
+    
 
 
      item = item.replaceAll('{row}', row)
@@ -1918,6 +1944,9 @@ function loadTempData(items) {
      tbody += item;
 
      row++;
+
+
+   
 
  });
 
@@ -2535,8 +2564,6 @@ $("#tblpurchaseorders").on('click', '.btndelete', function(e) {
 
                             notification.success(response.result.message);
 
-
-
                         } else {
 
                             message.error(response.result.message);
@@ -2569,20 +2596,29 @@ $("#tblpurchaseorders").on('click', '.btnprint', function(e) {
 
 })
 
+$("#tblpurchaseorders").on('click', '.btnprint-memo', function(e) {
+
+    e.preventDefault();
+
+    let id = $(this).attr('data-id');
+
+    let actUrl = base_url + '/webmin/purchase-order/printmemo/' + id;
+
+    window.open(actUrl, '_blank').focus();
+
+})
+
 
 function setfootervalue(){
     let actUrl = base_url + '/webmin/purchase-order/get-po-footer';
     ajax_get(actUrl, null, {
         success: function(response) { 
-
             if (response.result.success == 'TRUE') {
-
                 if(response.result.data.length > 0){
                     if(response.result.data[0].subTotal == 'null'){
                         footer_sub_total.set(0);
                         footer_total_ongkir.set(0);
                     }else{
-
                         footer_sub_total.set(response.result.data[0].subTotal);
                         footer_total_ongkir.set(response.result.data[0].totalOngkir);
                     }

@@ -24,24 +24,34 @@ $assetsUrl = base_url('assets');
 				<P>Telepon: +62 561 6733572 <?php echo str_repeat('&nbsp;', 3);?> Email:dbig.depo@gmail.com</P>
 			</div>
 		</div>
+        
 		<div class="letterhead-border"><?php echo  str_repeat('&nbsp;', 2);?></div>
-
-		<div class="content-invoice">
-			<h3 class="text-center">PURCHASE ORDER</h3>
-			<table class="info-date">
+        
+        
+       
+        <div class="content-invoice" style="margin-top:10px;margin-bottom:40px;height: 40px;">
+            <div class="col-md-6">
+            <table class="info-date item" style="width:40%;">
 				<tr>
-					<td>Date</td><td>:</td><td><?= indo_date($hdPO['purchase_order_date']) ?></td>
+					<th colspan="2" style="text-align: center;">DBIG <?= esc($hdPO['purchase_order_invoice']) ?></th>
+				</tr>
+                <tr>
+					<td style="text-align: center;">Tgl</td><td style="text-align: center;"><?= indo_date($hdPO['purchase_order_date']) ?></td>
 				</tr>
 				<tr>
-					<td>PO</td><td>:</td><td><?= esc($hdPO['purchase_order_invoice']) ?></td>
+					<th colspan="2" style="text-align: center;"><?= esc($hdPO['user_name']) ?></th>
 				</tr>
 			</table>
+            </div>
 
-			<div class="address-content">
+        </div>
+		<div class="content-invoice">
+			<h3 class="text-center">MEMO PENGAMBILAN BARANG</h3>
+			<div class="address-content" style="margin-top:-20px;">
 				<div class="left address-content-left">
 					<h4 style="text-decoration: underline;">Kepada Yth</h4>
 					<h4 style="margin-top: -19px;"><?= esc($hdPO['supplier_name']) ?></h4>
-					<P style="width: 80%;"><?= esc($hdPO['supplier_address']) ?></P>
+                    <p style="width: 80%;"><?= nl2br($hdPO['purchase_order_remark2']) ?></p>
 				</div>
 				<div class="right address-content-right">
 					<h4 style="text-decoration: underline;">Dari </h4>
@@ -49,16 +59,14 @@ $assetsUrl = base_url('assets');
 					<p> <?= COMPANY_ADDRESS ?> <br />Kab. Kubu Raya, Kalimantan Barat <br /> Telp. +62 561 6733572</p>
 				</div>
 			</div>
-
+            <p style="margin-top:155px;font-size:15px;">Mohon di berikan barang-barang yang tertera di bawah ini:</p>    
 			<table class="item">
 				<thead>
 					<tr>
 						<th>No</th>
-						<th>Kode</th>
-						<th>Description(Jenis Barang)</th>
-						<th colspan="2">Qty</th>
-						<th>Harga</th>
-						<th>Total</th>
+						<th>Nama Barang</th>
+						<th>QTY</th>
+						<th>SAT</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -77,19 +85,13 @@ $assetsUrl = base_url('assets');
 
 						<tr>
 
-							<td><?php echo $number; ?></td>
+							<td class="text-center"><?php echo $number; ?></td>
 
-							<td><?= esc($row['product_code']) ?></td>
-
-							<td><?= esc($row['product_name']) ?></td>
+							<td class="text-center"><?= esc($row['product_name']) ?></td>
 
 							<td class="text-center"><?= numberFormat($detail_purchase_po_qty, TRUE) ?></td>
 
 							<td class="text-center"><?= esc($row['unit_name']) ?></td>
-
-							<td class="text-center">Rp. <?= numberFormat($detail_purchase_po_price, TRUE) ?></td>
-
-							<td class="text-center">Rp <?= numberFormat($detail_purchase_po_total, TRUE) ?></td>
 
 						</tr>
 
@@ -101,44 +103,23 @@ $assetsUrl = base_url('assets');
 					?>
 	
 				</tbody>
-				<tfoot>
-					<tr>
-						<td colspan="5"></td>
-						<th>Grand Total</th>
-						<th class="text-center"><?= 'Rp. '.numberFormat($hdPO['purchase_order_total']) ?></th>
-					</tr>
-				</tfoot>
+		
 			</table>
 		</div>
-		
-		<?php if($hdPO['purchase_show_tax_desc'] == 'Y'){ ?>
-		<p>- FAKTUR PAJAK STANDAR DIBUKA A/N : CV.DEPO BANGUNAN INDO GLOBAL <br /> 
-			- NPWP         : 92.233.181.4-704.000
-		</p>
-		<?php } ?>
-
-		<p class="note" style="white-space: pre-line;">
-			NOTE : <br />
-			<?= $hdPO['purchase_order_remark'] ?>
-		</p>
-
-		<p>Penerima : CV DEPO BANGUNAN INDO GLOBAL <br />Tlp (+62 561 6733572) / Hp (0822 1999 6819 / SESE )<br />Untuk Semua Koresponden Dikirim Ke Alamat : Jalan Sungai Raya Dalam Ruko Ceria No. A2-A3 </p>
 
 		<div class="ttd-div">
-			<p class="text-right" style="margin-right: 130px;">Hormat Kami,</p>
-			<table class="ttd" style="margin-top: -10px;">
+			<table class="ttd" style="margin-top: -10px; width:50%;    margin-left: 402px;">
 				<tr>
-					<td class="text-center">Dibuat Oleh,</td><td class="text-center">Disetujui Oleh ,</td>
+					<td class="text-center">Dibuat Oleh,</td><td class="text-center">Memo Diterima Oleh,</td>
 				</tr>
 				<tr>
-					<td style="height: 80px;"><img src="<?= $assetsUrl ?>/images/TTD_Bag_Pembelian.png" style="width: 80%;"></td><td><img src="<?= $assetsUrl ?>/images/TTD_Direktur.png" style="width: 80%;">
+					<td style="height: 80px;"><img src="<?= $assetsUrl ?>/images/TTD_Bag_Pembelian.png" style="width: 80%;"></td><td>
 				</td>
 				</tr>
 				<tr>
-					<td class="text-center">Bag.Pembelian</td><td class="text-center">Direktur</td>
+					<td class="text-center">Bag.Pembelian</td><td class="text-center"><?= esc($hdPO['supplier_name']) ?></td>
 				</tr>
 			</table>
-			<p class="text-right" style="text-decoration: underline; margin-right: 60px; font-size: 17px;margin-top: 5px;">CV. Depo Bangunan Indo Global</p>
 		</div>
 	</div>
 </body>
