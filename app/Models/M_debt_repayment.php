@@ -151,6 +151,44 @@ class M_debt_repayment extends Model
 
     }
 
+    public function cancelRepaymentDebt($id)
+    {
+        $this->db->query('LOCK TABLES hd_payment_debt WRITE');
+
+        $this->db->transBegin();
+
+        $saveQueries = NULL;
+        
+        $sqlupdate = "update hd_payment_debt set status = 'N' where payment_debt_id = '".$id."'";
+
+        $this->db->query($sqlupdate);
+
+        if ($this->db->affectedRows() > 0) {
+           $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        }
+
+        if ($this->db->transStatus() === false) {
+
+            $saveQueries = NULL;
+
+            $this->db->transRollback();
+
+            $save = ['success' => FALSE, 'payment_debt_id' => 0];
+
+        } else {
+
+            $this->db->transCommit();
+
+            $save = ['success' => TRUE, 'payment_debt_id' => $id ];
+
+        }
+
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'cancel paymentdebt', $id);
+        
+        return $save;
+    }
     public function insertPayment($data)
     {
 
@@ -348,6 +386,13 @@ class M_debt_repayment extends Model
         $builder->union($union);
 
         return $this->db->newQuery()->fromSubquery($builder, 'q')->orderBy('date_inv', 'ASC')->get();
+    }
+
+    public function getDebtByPaymentDebtId($id)
+    {
+        $builder = $this->db->table('hd_payment_debt')->select("*");
+        $builder->where("payment_debt_id", $id);
+        return $builder->get();
     }
 
     public function getDebt($purchase_invoice, $start_date, $end_date, $supplier_id)

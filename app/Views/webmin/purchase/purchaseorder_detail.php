@@ -140,6 +140,10 @@ $assetsUrl = base_url('assets');
 
                                 <th class="text-right">Qty</th>
 
+                                <th class="text-right">Penj 3 Bulan</th>
+
+                                <th class="text-right">Sisa Stok</th>
+
                                 <th class="text-right">Diskon</th>
 
                                 <th class="text-right">Ongkir</th>
@@ -163,6 +167,8 @@ $assetsUrl = base_url('assets');
                                 $detail_purchase_po_total_discount = floatval($row['detail_purchase_po_total_discount']);
                                 $detail_purchase_po_ongkir = floatval($row['detail_purchase_po_ongkir']);
                                 $detail_purchase_po_total = floatval($row['detail_purchase_po_total']);
+                                $detial_total_sales_3_month = floatval($row['total_sales_3_month']);
+                                $detial_last_stock = floatval($row['last_stock']);
                                 ?>
 
                                 <tr>
@@ -174,6 +180,10 @@ $assetsUrl = base_url('assets');
                                     <th class="text-right">Rp <?= numberFormat($detail_purchase_po_price, TRUE) ?></th>
 
                                     <th class="text-right"><?= numberFormat($detail_purchase_po_qty, TRUE) ?></th>
+
+                                    <th class="text-right"><?= numberFormat($detial_total_sales_3_month, TRUE) ?></th>
+
+                                    <th class="text-right"><?= numberFormat($detial_last_stock, TRUE) ?></th>
 
                                     <th class="text-right">Rp <?= numberFormat($detail_purchase_po_total_discount, TRUE) ?></th>
 

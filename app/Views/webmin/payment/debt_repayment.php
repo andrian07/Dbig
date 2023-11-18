@@ -77,7 +77,8 @@ $assetsUrl = base_url('assets');
                                                         <th data-priority="5">Metode Pembayaran</th>
                                                         <th data-priority="6">Jumlah Nota</th>
                                                         <th data-priority="7">Total Pembayaran</th>
-                                                        <th data-priority="8">Aksi</th>
+                                                        <th data-priority="8">Status</th>
+                                                        <th data-priority="9">Aksi</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -85,10 +86,6 @@ $assetsUrl = base_url('assets');
                                     </div>
                                 </div>
                             </div>
-
-
-
-
                             <!-- /.tab-content -->
                         </div><!-- /.card-body -->
                     </div>
@@ -540,7 +537,91 @@ $assetsUrl = base_url('assets');
 
  };
 
+$("#tbltemp").on('click', '.btndelete', function(e) {
 
+    e.preventDefault();
+
+    let id = $(this).attr('data-id');
+
+    let actUrl = base_url + '/webmin/purchase-order/temp-delete/' + id;
+
+    ajax_get(actUrl, null, {
+
+        success: function(response) {
+
+            if (response.success) {
+
+                if (response.result.success) {
+
+                    notification.success(response.result.message);
+
+                } else {
+
+                    message.error(response.result.message);
+
+                }
+
+                setfootervalue();
+
+                loadTempData(response.result.data);
+
+            }
+
+        },
+
+        error: function(response) {
+
+            getTemp();
+
+        }
+
+    })
+
+}) 
+
+$("#tblrepaymenthistory").on('click', '.btndelete', function(e) {
+
+e.preventDefault();
+
+let id = $(this).attr('data-id');
+
+message.question('Yakin ingin membatalkan Pelunasan Hutang ini?').then(function(answer) {
+
+    let yes = parseMessageResult(answer);
+
+    if (yes) {
+
+        let actUrl = base_url + '/webmin/payment/delete-repayment-debt/' + id;
+
+        ajax_get(actUrl, null, {
+
+            success: function(response) {
+
+                if (response.success) {
+
+                    if (response.result.success) {
+
+                        notification.success(response.result.message);
+
+                    } else {
+
+                        message.error(response.result.message);
+
+                    }
+
+                    updateTable();
+
+                }
+
+            }
+
+        })
+
+    }
+
+})
+
+})
 
  let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
 

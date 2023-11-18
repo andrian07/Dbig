@@ -60,11 +60,13 @@ class Purchase_order extends WebminController
                 $column[] = esc($row['purchase_order_item_status']);
                 $btns = [];
                 $prop =  'data-id="' . $row['purchase_order_id'] . '" data-name="' . esc($row['purchase_order_invoice']) . '"';
+
                 $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="' . base_url() . '/webmin/purchase-order/get-purchase-order-detail/' . $row['purchase_order_id'] . '" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
                 $btns[] = '<button data-id="' . $row['purchase_order_id'] . '" data-name="' . esc($row['purchase_order_invoice']) . '" class="margins btn btn-sm btn-primary mb-2 btnstatus" data-toggle="tooltip" data-placement="top" data-title="Status" data-original-title="" title=""><i class="fas fa-truck-loading"></i></button>';
                 $btns[] = button_edit($prop);
                 $btns[] = button_delete($prop);
                 $btns[] = button_print($prop);
+                $btns[] = '<button data-id="' . $row['purchase_order_id'] . '" data-name="' . $row['purchase_order_id'] . '" class="btn btn-sm btn-default btnprint-memo" data-toggle="tooltip" data-placement="top" data-title="Print Memo" data-original-title="" title=""><i class="fas fa-sticky-note"></i></button>';
                 $column[] = implode('&nbsp;', $btns);
                 return $column;
             });
@@ -490,6 +492,7 @@ class Purchase_order extends WebminController
             'purchase_order_supplier_id'              => $this->request->getPost('purchase_order_supplier_id'),
             'purchase_order_warehouse_id'             => $this->request->getPost('purchase_order_warehouse_id'),
             'purchase_order_remark'                   => $this->request->getPost('purchase_order_remark'),
+            'purchase_order_remark2'                  => $this->request->getPost('purchase_order_remark2'),
             'purchase_show_tax_desc'                  => $purchase_show_tax_desc,
             'purchase_order_sub_total'                => $this->request->getPost('purchase_order_sub_total'),
             'purchase_order_discount1'                => $this->request->getPost('purchase_order_discount1'),
@@ -509,7 +512,8 @@ class Purchase_order extends WebminController
             'purchase_order_date'            => ['rules' => 'required'],
             'purchase_order_supplier_id'     => ['rules' => 'required'],
             'purchase_order_warehouse_id'     => ['rules' => 'required'],
-            'purchase_order_remark'          => ['rules' => 'max_length[500]']
+            'purchase_order_remark'          => ['rules' => 'max_length[500]'],
+            'purchase_order_remark2'         => ['rules' => 'max_length[500]']
         ]);
 
         if ($validation->run($input) === FALSE) {
@@ -650,6 +654,65 @@ class Purchase_order extends WebminController
     }
 
 
+    public function printmemo($purchase_order_id = "")
+    {
+        if ($purchase_order_id == '') {
+
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        } else {
+
+            $getOrder =  $this->M_purchase_order->getPurchaseOrder($purchase_order_id)->getRowArray();
+
+            if ($getOrder == NULL) {
+
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            } else {
+
+                $invoice_num = $getOrder['purchase_order_invoice'];
+
+                $data = [
+
+                    'hdPO' => $getOrder,
+
+                    'dtPO' => $this->M_purchase_order->getDtPurchaseOrder($purchase_order_id)->getResultArray()
+
+                ];
+
+                return $this->renderView('purchase/purchaseorder_memo', $data);
+            }
+        }
+    }
+
+
+    public function printmemo($purchase_order_id = "")
+    {
+        if ($purchase_order_id == '') {
+
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        } else {
+
+            $getOrder =  $this->M_purchase_order->getPurchaseOrder($purchase_order_id)->getRowArray();
+
+            if ($getOrder == NULL) {
+
+                throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+            } else {
+
+                $invoice_num = $getOrder['purchase_order_invoice'];
+
+                $data = [
+
+                    'hdPO' => $getOrder,
+
+                    'dtPO' => $this->M_purchase_order->getDtPurchaseOrder($purchase_order_id)->getResultArray()
+
+                ];
+
+                return $this->renderView('purchase/purchaseorder_memo', $data);
+            }
+        }
+    }
+
     public function autoPo()
     {
         $data = [
@@ -664,7 +727,6 @@ class Purchase_order extends WebminController
         $this->validationRequest(TRUE);
         if ($this->role->hasRole('submission.view')) {
             helper('datatable');
-            $update_date  = $this->request->getPost('id');
             $table = new \App\Libraries\Datatables('list_auto_po AS po');
 
             $aSelect = [

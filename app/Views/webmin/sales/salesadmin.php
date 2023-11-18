@@ -29,7 +29,39 @@ $assetsUrl = base_url('assets');
 
     </section>
 
-
+    <!--  Modal Efaktur -->
+    <div class="modal fade" id="modal-efaktur">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="title-efaktur"></h4>
+                    <button type="button" class="close close-modal-efaktur">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="frmefaktur" class="form-horizontal">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <label for="no_awal_ppn" class="col-sm-12">No Awal PPN</label>
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control" id="no_awal_ppn" name="no_awal_ppn" value="0">
+                                    <input type="hidden" class="form-control" id="trx-id" name="trx-id">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button id="btncancel" class="btn btn-danger close-modal-efaktur"><i class="fas fa-times-circle"></i> Batal</button>
+                        <button id="btnefaktur" class="btn btn-success"><i class="fas fa-save"></i>Cetak</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- Efaktur -->
 
 
     <!-- Main content -->
@@ -164,19 +196,19 @@ $assetsUrl = base_url('assets');
 
                                     <div class="col-sm-3">
 
-                                       <input id="sales_admin_id" name="sales_admin_id" type="hidden" class="form-control">
+                                     <input id="sales_admin_id" name="sales_admin_id" type="hidden" class="form-control">
 
-                                       <input id="sales_admin_invoice" name="sales_admin_invoice" type="text" class="form-control" value="AUTO" readonly>
+                                     <input id="sales_admin_invoice" name="sales_admin_invoice" type="text" class="form-control" value="AUTO" readonly>
 
-                                   </div>
+                                 </div>
 
-                                   <div class="col-md-1">
+                                 <div class="col-md-1">
 
-                                   </div>
+                                 </div>
 
-                                   <label for="due_date" class="col-sm-1 col-form-label text-right">Tempo :</label>
+                                 <label for="due_date" class="col-sm-1 col-form-label text-right">Tempo :</label>
 
-                                   <div class="col-sm-3">
+                                 <div class="col-sm-3">
                                     <input id="due_date" name="due_date" type="date" class="form-control">
 
                                 </div>
@@ -289,9 +321,9 @@ $assetsUrl = base_url('assets');
 
                             <div class="row well well-sm">
 
-                               <input id="temp_sales_admin_id" name="temp_sales_admin_id" type="hidden" value="">
+                             <input id="temp_sales_admin_id" name="temp_sales_admin_id" type="hidden" value="">
 
-                               <div class="col-sm-3">
+                             <div class="col-sm-3">
 
                                 <!-- text input -->
 
@@ -437,52 +469,52 @@ $assetsUrl = base_url('assets');
 
                             <template id="template_row_temp">
 
-                             <tr>
+                               <tr>
 
-                                 <td>{row}</td>
+                                   <td>{row}</td>
 
-                                 <td>{item_code}</td>
+                                   <td>{item_code}</td>
 
-                                 <td>{product_name}</td>
+                                   <td>{product_name}</td>
 
-                                 <td>{temp_qty}</td>
+                                   <td>{temp_qty}</td>
 
-                                 <td>{temp_sales_price}</td>
+                                   <td>{temp_sales_price}</td>
 
-                                 <td>{discount}</td>
+                                   <td>{discount}</td>
 
-                                 <td>{total}</td>
+                                   <td>{total}</td>
 
-                                 <td>
+                                   <td>
 
-                                     <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                       <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
-                                         <i class="fas fa-edit"></i>
+                                           <i class="fas fa-edit"></i>
 
-                                     </button>
+                                       </button>
 
-                                     &nbsp;
+                                       &nbsp;
 
-                                     <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+                                       <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
 
-                                         <i class="fas fa-minus"></i>
+                                           <i class="fas fa-minus"></i>
 
-                                     </button>
+                                       </button>
 
-                                 </td>
+                                   </td>
 
-                             </tr>
+                               </tr>
 
-                         </template>
-
-
-                     </div>
-
-                 </div>
+                           </template>
 
 
+                       </div>
 
-                 <div class="row form-space">
+                   </div>
+
+
+
+                   <div class="row form-space">
 
                     <div class="col-lg-6">
 
@@ -703,6 +735,8 @@ $assetsUrl = base_url('assets');
     <!-- /.modal-dialog -->
 </div>
 <!-- Footer Modal Discount -->
+
+
 </section>
 
 </div>
@@ -814,7 +848,6 @@ $assetsUrl = base_url('assets');
         // init component //
 
         function _initButton() {
-
             $('#btnadd').prop('disabled', !hasRole('sales_admin.add'));
             $('.btnedit').prop('disabled', !hasRole('sales_admin.edit'));
             $('.btndelete').prop('disabled', !hasRole('sales_admin.delete'));
@@ -918,41 +951,41 @@ $assetsUrl = base_url('assets');
         
         $('#product_name').autocomplete({   
 
-           minLength: 2,
+         minLength: 2,
 
-           source: function(req, add) {
+         source: function(req, add) {
 
-               $.ajax({
+             $.ajax({
 
-                   url: base_url + '/webmin/sales-admin/search-product',
+                 url: base_url + '/webmin/sales-admin/search-product',
 
-                   dataType: 'json',
+                 dataType: 'json',
 
-                   type: 'GET',
+                 type: 'GET',
 
-                   data: req,
+                 data: req,
 
-                   success: function(res) {
+                 success: function(res) {
 
-                       if (res.success == true) {
+                     if (res.success == true) {
 
                         add(res.data);
 
                     }else{
 
-                     message.error(res.message);
+                       message.error(res.message);
 
-                     $('#product_name').val('');
+                       $('#product_name').val('');
 
-                 }
+                   }
 
-             },
+               },
 
-         });
+           });
 
-           },
+         },
 
-           select: function(event, ui) {
+         select: function(event, ui) {
 
             $('#item_id').val(ui.item.item_id);   
 
@@ -1010,54 +1043,54 @@ $assetsUrl = base_url('assets');
 
         const config_tbltemp = {
 
-         pageLength: 10,
+           pageLength: 10,
 
-         autoWidth: false,
+           autoWidth: false,
 
-         select: true,
+           select: true,
 
-         responsive: true,
+           responsive: true,
 
-         fixedColumns: true,
+           fixedColumns: true,
 
-         order: [
+           order: [
 
-         [0, 'desc']
+           [0, 'desc']
 
-         ],
+           ],
 
-         "language": {
+           "language": {
 
-             "url": lang_datatables,
+               "url": lang_datatables,
 
-         },
-         "columnDefs": [{
+           },
+           "columnDefs": [{
 
-             width: 100
+               width: 100
 
-         },
-         {
+           },
+           {
 
-             targets: [0,7],
+               targets: [0,7],
 
-             orderable: false,
+               orderable: false,
 
-             searchable: false,
+               searchable: false,
 
-         },
-         {
+           },
+           {
 
-             targets: [0, 2, 3, 4, 5, 6],
+               targets: [0, 2, 3, 4, 5, 6],
 
-             className: "text-right",
+               className: "text-right",
 
-         }
+           }
 
-         ]
+           ]
 
-     };
+       };
 
-     let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+       let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
 
         //End Table //
 
@@ -1248,102 +1281,102 @@ $("#tblsalesadmin").on('click', '.btnprint', function(e) {
 
 function loadTempData(items) {
 
- let template = $('#template_row_temp').html();
+   let template = $('#template_row_temp').html();
 
- let tbody = '';
+   let tbody = '';
 
- let row = 1;
+   let row = 1;
 
- let temp_total_order = 0;
+   let temp_total_order = 0;
 
- items.forEach((val, key) => {
+   items.forEach((val, key) => {
 
-     let item = template;
+       let item = template;
 
-     let data_json = htmlEntities.encode(JSON.stringify(val));
+       let data_json = htmlEntities.encode(JSON.stringify(val));
 
-     let temp_id = val.temp_sales_admin_id;
+       let temp_id = val.temp_sales_admin_id;
 
-     let item_id = val.item_id;
+       let item_id = val.item_id;
 
-     let item_code  = val.item_code;
+       let item_code  = val.item_code;
 
-     let temp_qty = parseFloat(val.temp_qty);
+       let temp_qty = parseFloat(val.temp_qty);
 
-     let product_name = val.product_name+'('+val.unit_name+')';
+       let product_name = val.product_name+'('+val.unit_name+')';
 
-     let temp_purchase_price = val.temp_purchase_price;
+       let temp_purchase_price = val.temp_purchase_price;
 
-     let temp_purchase_tax  = val.temp_purchase_tax;
+       let temp_purchase_tax  = val.temp_purchase_tax;
 
-     let temp_purchase_cogs  = val.temp_purchase_cogs;
+       let temp_purchase_cogs  = val.temp_purchase_cogs;
 
-     let temp_product_price  = val.temp_product_price;
+       let temp_product_price  = val.temp_product_price;
 
-     let temp_disc1 = val.temp_disc1;
+       let temp_disc1 = val.temp_disc1;
 
-     let temp_price_disc1_percentage = val.temp_price_disc1_percentage;
+       let temp_price_disc1_percentage = val.temp_price_disc1_percentage;
 
-     let temp_disc2 = val.temp_disc2;
+       let temp_disc2 = val.temp_disc2;
 
-     let temp_price_disc2_percentage = val.temp_price_disc2_percentage;
+       let temp_price_disc2_percentage = val.temp_price_disc2_percentage;
 
-     let temp_disc3 = val.temp_disc3;
+       let temp_disc3 = val.temp_disc3;
 
-     let temp_price_disc3_percentage = val.temp_price_disc3_percentage;
+       let temp_price_disc3_percentage = val.temp_price_disc3_percentage;
 
-     let temp_total_discount = val.temp_total_discount;
+       let temp_total_discount = val.temp_total_discount;
 
-     let temp_total = val.temp_sales_price;
+       let temp_total = val.temp_sales_price;
 
-     item = item.replaceAll('{row}', row)
+       item = item.replaceAll('{row}', row)
 
-     .replaceAll('{temp_id}', temp_id)
+       .replaceAll('{temp_id}', temp_id)
 
-     .replaceAll('{item_code}', item_code)
+       .replaceAll('{item_code}', item_code)
 
-     .replaceAll('{product_name}', product_name)
+       .replaceAll('{product_name}', product_name)
 
-     .replaceAll('{temp_qty}', numberFormat(temp_qty, true))
+       .replaceAll('{temp_qty}', numberFormat(temp_qty, true))
 
-     .replaceAll('{temp_sales_price}', numberFormat(temp_product_price, true))
+       .replaceAll('{temp_sales_price}', numberFormat(temp_product_price, true))
 
-     .replaceAll('{discount}', numberFormat(temp_total_discount, true))
+       .replaceAll('{discount}', numberFormat(temp_total_discount, true))
 
-     .replaceAll('{total}', numberFormat(temp_total, true))
+       .replaceAll('{total}', numberFormat(temp_total, true))
 
-     .replaceAll('{data_json}', data_json);
+       .replaceAll('{data_json}', data_json);
 
-     tbody += item;
+       tbody += item;
 
-     row++;
+       row++;
 
- });
-
-
- if ($.fn.DataTable.isDataTable('#tbltemp')) {
-
-     $('#tbltemp').DataTable().destroy();
-
- }
+   });
 
 
+   if ($.fn.DataTable.isDataTable('#tbltemp')) {
 
- $('#tbltemp tbody').html('');
+       $('#tbltemp').DataTable().destroy();
 
- $('#tbltemp tbody').html(tbody);
-
- tbltemp = $('#tbltemp').DataTable(config_tbltemp);
-
- clearItemInput();
+   }
 
 
 
- setfootervalue();
+   $('#tbltemp tbody').html('');
+
+   $('#tbltemp tbody').html(tbody);
+
+   tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+
+   clearItemInput();
 
 
 
- _initTooltip();
+   setfootervalue();
+
+
+
+   _initTooltip();
 
 }
 
@@ -1465,6 +1498,13 @@ function footerdiscountMode(data) {
     $('#modal-footerdiscount').modal(configModal);
 }
 
+function efakturMode(id) {
+    let form = $('#frmefaktur');
+    $('#title-efaktur').html('Cetak Faktur');
+    $('#trx-id').val(id);
+    $('#modal-efaktur').modal(configModal);
+}
+
 
 $('.close-modal-temp').click(function(e) {
     e.preventDefault();
@@ -1488,6 +1528,16 @@ $('.close-modal-footer').click(function(e) {
         })
 })
 
+$('.close-modal-efaktur').click(function(e) {
+    e.preventDefault();
+    message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
+        let yes = parseMessageResult(answer);
+        if (yes) {
+            $('#modal-efaktur').modal('hide');
+        }
+    })
+})
+
 
 $('#temp_qty').on('change', function() {
     calculation_temp_total();
@@ -1505,7 +1555,7 @@ $('#temp_price').on('change', function() {
 
 
 $('#edit_temp_discount_percentage1').on('change', function() {
- if(temp_qty.get() < 1){
+   if(temp_qty.get() < 1){
     Swal.fire({
       icon: 'error',
       title: 'Oops...',
@@ -1575,7 +1625,7 @@ $('#edit_temp_discount_percentage3').on('change', function() {
 });
 
 $('#edit_temp_discount3').on('change', function() {
- if(edit_temp_discount2.get() < 1){
+   if(edit_temp_discount2.get() < 1){
     Swal.fire({
       icon: 'error',
       title: 'Oops...',
@@ -1721,111 +1771,111 @@ function cleardiscountfooter() {
 
 $('#btnadd_temp').click(function(e) {
 
- e.preventDefault();
+   e.preventDefault();
 
- let purchase_price = parseFloat(temp_purchase_price.getNumericString());
+   let purchase_price = parseFloat(temp_purchase_price.getNumericString());
 
- let purchase_tax = parseFloat(temp_purchase_tax.getNumericString());
+   let purchase_tax = parseFloat(temp_purchase_tax.getNumericString());
 
- let purchase_cogs = parseFloat(temp_purchase_cogs.getNumericString());
+   let purchase_cogs = parseFloat(temp_purchase_cogs.getNumericString());
 
- let price = parseFloat(temp_price.getNumericString());
+   let price = parseFloat(temp_price.getNumericString());
 
- let qty = parseFloat(temp_qty.getNumericString());
+   let qty = parseFloat(temp_qty.getNumericString());
 
- let discount1 = parseFloat(temp_discount1.getNumericString());
+   let discount1 = parseFloat(temp_discount1.getNumericString());
 
- let discount2 = parseFloat(temp_discount2.getNumericString());
+   let discount2 = parseFloat(temp_discount2.getNumericString());
 
- let discount3 = parseFloat(temp_discount3.getNumericString());
+   let discount3 = parseFloat(temp_discount3.getNumericString());
 
- let discount_percentage1 = parseFloat(temp_discount_percentage1.getNumericString());
+   let discount_percentage1 = parseFloat(temp_discount_percentage1.getNumericString());
 
- let discount_percentage2 = parseFloat(temp_discount_percentage2.getNumericString());
+   let discount_percentage2 = parseFloat(temp_discount_percentage2.getNumericString());
 
- let discount_percentage3 = parseFloat(temp_discount_percentage3.getNumericString());
+   let discount_percentage3 = parseFloat(temp_discount_percentage3.getNumericString());
 
- let total_discount = parseFloat(total_temp_discount.getNumericString());
+   let total_discount = parseFloat(total_temp_discount.getNumericString());
 
- let total = parseFloat(temp_total.getNumericString());
+   let total = parseFloat(temp_total.getNumericString());
 
- let btnSubmit = $('#btnadd_temp');
+   let btnSubmit = $('#btnadd_temp');
 
- let form = $('#frmaddtemp');
+   let form = $('#frmaddtemp');
 
- form.parsley().validate();
+   form.parsley().validate();
 
- if (form.parsley().isValid()) {
+   if (form.parsley().isValid()) {
 
-     let actUrl = base_url + '/webmin/sales-admin/temp-add';
+       let actUrl = base_url + '/webmin/sales-admin/temp-add';
 
-     let formValues = {
+       let formValues = {
 
-         temp_sales_admin_id: $('#temp_sales_admin_id').val(),
+           temp_sales_admin_id: $('#temp_sales_admin_id').val(),
 
-         item_id: $('#item_id').val(),
+           item_id: $('#item_id').val(),
 
-         temp_purchase_price: purchase_price,
+           temp_purchase_price: purchase_price,
 
-         temp_purchase_tax: purchase_tax,
+           temp_purchase_tax: purchase_tax,
 
-         temp_purchase_cogs: purchase_cogs,
+           temp_purchase_cogs: purchase_cogs,
 
-         temp_price: price,
+           temp_price: price,
 
-         temp_qty: qty,
+           temp_qty: qty,
 
-         temp_discount1: discount1,
+           temp_discount1: discount1,
 
-         temp_discount2: discount2,
+           temp_discount2: discount2,
 
-         temp_discount3: discount3,
+           temp_discount3: discount3,
 
-         temp_discount_percentage1: discount_percentage1,
+           temp_discount_percentage1: discount_percentage1,
 
-         temp_discount_percentage2: discount_percentage2,
+           temp_discount_percentage2: discount_percentage2,
 
-         temp_discount_percentage3: discount_percentage3,
+           temp_discount_percentage3: discount_percentage3,
 
-         total_temp_discount: total_discount,
+           total_temp_discount: total_discount,
 
-         temp_total: total
+           temp_total: total
 
-     };
+       };
 
-     btnSubmit.prop('disabled', true);
+       btnSubmit.prop('disabled', true);
 
-     ajax_post(actUrl, formValues, {
+       ajax_post(actUrl, formValues, {
 
-         success: function(response) {
+           success: function(response) {
 
-             if (response.success) {
+               if (response.success) {
 
-                 if (response.result.success) {
+                   if (response.result.success) {
 
-                     notification.success(response.result.message);
+                       notification.success(response.result.message);
 
-                 } else {
+                   } else {
 
-                     message.error(response.result.message);
+                       message.error(response.result.message);
 
-                 }
+                   }
 
-                 clearItemInput();
-                 loadTempData(response.result.data);
-             }
+                   clearItemInput();
+                   loadTempData(response.result.data);
+               }
 
-             btnSubmit.prop('disabled', false);
+               btnSubmit.prop('disabled', false);
 
-         },
+           },
 
-         error: function(response) {
+           error: function(response) {
 
-             btnSubmit.prop('disabled', false);
+               btnSubmit.prop('disabled', false);
 
-         }
-     });
- }
+           }
+       });
+   }
 })
 
 Parsley.addMessages('id', {
@@ -1907,13 +1957,13 @@ window.Parsley.addValidator("vqty", {
 
 $("#tbltemp").on('click', '.btnedit', function(e) {
 
- e.preventDefault();
+   e.preventDefault();
 
- let json_data = $(this).attr('data-json');
+   let json_data = $(this).attr('data-json');
 
- let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
+   let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
 
- if (is_json) {
+   if (is_json) {
 
     $('#temp_sales_admin_id').val(json.temp_sales_admin_id);
 
@@ -2001,9 +2051,9 @@ $("#tbltemp").on('click', '.btndelete', function(e) {
 
 $('#btnadd').click(function(e) {
 
- e.preventDefault();
- let actUrl = base_url + '/webmin/sales-admin/get-salesadmin-temp';
- ajax_get(actUrl, null, {
+   e.preventDefault();
+   let actUrl = base_url + '/webmin/sales-admin/get-salesadmin-temp';
+   ajax_get(actUrl, null, {
     success: function(response) {   
         if (response.result.success == 'TRUE') {
             let form = $('#frmsalesadmin');
@@ -2020,15 +2070,12 @@ $('#btnadd').click(function(e) {
             loadTempData(items);
             showInputPage(true);
         } else {
-           message.error(response.result.message);
-       }
+         message.error(response.result.message);
+     }
 
-   }
+ }
 })
 })
-
-
-
 
 $("#btnexcellimport").click(function(e) {
     e.preventDefault();
@@ -2048,50 +2095,50 @@ $("#btnexcellimport").click(function(e) {
 
 function clearItemInput() {
 
-   let form = $('#frmaddtemp');
+ let form = $('#frmaddtemp');
 
-   form.parsley().reset();
+ form.parsley().reset();
 
-   $('#item_id').val('');
+ $('#item_id').val('');
 
-   $('#product_name').val('');
+ $('#product_name').val('');
 
-   temp_purchase_price.set(0);
+ temp_purchase_price.set(0);
 
-   temp_purchase_tax.set(0);
+ temp_purchase_tax.set(0);
 
-   temp_price.set(0);
+ temp_price.set(0);
 
-   temp_qty.set(0);
+ temp_qty.set(0);
 
-   temp_total.set(0);
+ temp_total.set(0);
 
-   cleardiscount();
+ cleardiscount();
 
 }
 
 
 function clearAll() {
 
-   let form = $('#frmaddtemp');
+ let form = $('#frmaddtemp');
 
-   form.parsley().reset();
+ form.parsley().reset();
 
-   setSelect2('#customer_id', '', '');
+ setSelect2('#customer_id', '', '');
 
-   setSelect2('#payment_type', '', '');
+ setSelect2('#payment_type', '', '');
 
-   setSelect2('#salesman_id', '', '');
+ setSelect2('#salesman_id', '', '');
 
-   setSelect2('#store_id', '', '');
+ setSelect2('#store_id', '', '');
 
-   $('#due_date').val('');
+ $('#due_date').val('');
 
-   clearItemInput()
+ clearItemInput()
 
-   cleardiscount();
+ cleardiscount();
 
-   cleardiscountfooter();
+ cleardiscountfooter();
 
 }
 
@@ -2316,7 +2363,7 @@ $('#btnsave').click(function(e) {
 
 function updateTable() {
 
- tblsalesadmin.ajax.reload(null, false);
+   tblsalesadmin.ajax.reload(null, false);
 
 }
 
@@ -2327,10 +2374,27 @@ showInputPage(false);
 $("#tblsalesadmin").on('click', '.btndownloadfaktur', function(e) {
     e.preventDefault();
     let id = $(this).attr('data-id');
+    efakturMode(id);
+})
+
+
+$("#tblsalesadmin").on('click', '.btndownloadfaktur', function(e) {
+    e.preventDefault();
+    let id = $('#trx-id').val();
+    let noawal = $('#no_awal_ppn').val();
+    let reportUrl = '<?= base_url('webmin/sales-admin/download-e-faktur') ?>?';
+    reportUrl += '&id=' + id;
+    reportUrl += '&noawal=' + noawal;
+    window.open(reportUrl, '_blank');
+})
+
+/*$("#tblsalesadmin").on('click', '.btndownloadfaktur', function(e) {
+    e.preventDefault();
+    let id = $(this).attr('data-id');
     let reportUrl = '<?= base_url('webmin/sales-admin/download-e-faktur') ?>?';
     reportUrl += '&id=' + id;
     window.open(reportUrl, '_blank');
-})
+})*/
 
 })
 

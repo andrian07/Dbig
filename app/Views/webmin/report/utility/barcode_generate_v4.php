@@ -115,13 +115,11 @@
 
 
         .title {
-            width: 98%;
+            width: 95%;
             height: 24px;
             margin: 0px auto;
             font-size: 9px;
 
-            overflow: hidden;
-            text-overflow: ellipsis;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -147,7 +145,7 @@
                 <?php
                 foreach ($pageData as $row) {
                 ?>
-                    <div class="barcode-label">
+                    <div class="barcode-label" style="margin-bottom:10px;">
                         <img src="data:image/svg+xml;base64,<?= base64_encode($ubarcode)  ?>" />
                         <p class="barcode-text"><?= esc($row['item_code']) ?><br></p>
                         <div class="title">

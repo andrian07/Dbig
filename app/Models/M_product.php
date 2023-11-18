@@ -931,10 +931,11 @@ class M_product extends Model
     public function getReportProductList($has_tax = '', $show_deleted = FALSE)
     {
         $builder = $this->db->table($this->table);
-        $builder->select('ms_product.*,ms_brand.brand_name,ms_category.category_name');
+        $builder->select('ms_product.*,ms_brand.brand_name,ms_category.category_name,supplier_code,supplier_name');
         $builder->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id');
         $builder->join('ms_category', 'ms_category.category_id=ms_product.category_id');
-
+        $builder->join('ms_product_supplier', 'ms_product_supplier.product_id=ms_product.product_id');
+        $builder->join('ms_supplier', 'ms_supplier.supplier_id=ms_product_supplier.supplier_id');
         if ($has_tax  != '') {
             $builder->where('ms_product.has_tax', $has_tax);
         }

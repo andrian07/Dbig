@@ -183,15 +183,20 @@ class M_stock_transfer extends Model
 					$ws_ed = $ws['exp_date'];
                             // ws_stock = 12 <= 10 
                     if ($ws_stock <= $stock) {
+						$stock_inp = $stock;
                         $ws_new_stock = 0;
                         $stock =  $stock - $ws_stock;
-						$sqlUpdateWarehousplus = "INSERT INTO `ms_warehouse_stock` (`product_id`, `warehouse_id`, `purchase_id`, `exp_date`, `stock`) VALUES ($product_id, $warehouse_id_to, '', $ws_ed, $stock);";
-						$this->db->query($sqlUpdateWarehousplus);
+						
                     } else {
                         $ws_new_stock = $ws_stock - $stock;
+						$stock_inp = $stock;
                         $stock = 0;
                     }
 					
+					$sqlUpdateWarehousplus = "INSERT INTO `ms_warehouse_stock` (`product_id`, `warehouse_id`, `purchase_id`, `exp_date`, `stock`) VALUES ($product_id, $warehouse_id_to,'', $ws_ed, $stock_inp);";
+					if($stock_inp > 0 || $stock_inp !=  null){
+						$this->db->query($sqlUpdateWarehousplus);	
+					}
                     $sqlUpdateWarehouseminus = "update ms_warehouse_stock set stock = '".$ws_new_stock."' where stock_id = '".$ws_stock_id."'";
                     $this->db->query($sqlUpdateWarehouseminus);
                 }
