@@ -11,9 +11,7 @@ class M_debt_repayment extends Model
     protected $table_temp_payment_debt = 'temp_payment_debt';
     protected $hd_payment_debt = 'hd_payment_debt';
     protected $table_dt_payment_debt = 'dt_payment_debt';
-
-    protected $table_warehouse       = 'ms_warehouse';
-
+    protected $table_warehouse = 'ms_warehouse';
     protected $dt_payment_debt = 'dt_payment_debt';
 
 
@@ -151,6 +149,67 @@ class M_debt_repayment extends Model
 
     }
 
+    public function get_last_total($purchase_id)
+    {
+        $builder = $this->db->table($this->table_hd_purchase);
+
+        return $builder->select('purchase_remaining_debt')
+
+        ->where('purchase_id', $purchase_id)
+
+        ->get();
+    }
+
+    public function get_detail_cancel($id)
+    {
+        $builder = $this->db->table($this->table_dt_payment_debt);
+
+        return $builder->select('dt_payment_debt_purchase_id, dt_payment_debt_nominal')
+
+        ->where('payment_debt_id', $id)
+
+        ->get();
+    }
+
+    public function save_update_return_debt($new_nominal, $purchase_id)
+    {
+        $this->db->query('LOCK TABLES hd_purchase WRITE');
+
+        $this->db->transBegin();
+
+        $saveQueries = NULL;
+        
+        $sqlupdate = "update hd_purchase set purchase_remaining_debt = '".$new_nominal."' where purchase_id = '".$purchase_id."'";
+
+        $this->db->query($sqlupdate);
+
+        if ($this->db->affectedRows() > 0) {
+           $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        }
+
+        if ($this->db->transStatus() === false) {
+
+            $saveQueries = NULL;
+
+            $this->db->transRollback();
+
+            $save = ['success' => FALSE, 'purchase_id' => 0];
+
+        } else {
+
+            $this->db->transCommit();
+
+            $save = ['success' => TRUE, 'purchase_id' => $purchase_id ];
+
+        }
+
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'cancel nominal debt', $purchase_id);
+        
+        return $save;
+    }
+
     public function cancelRepaymentDebt($id)
     {
         $this->db->query('LOCK TABLES hd_payment_debt WRITE');
@@ -189,6 +248,8 @@ class M_debt_repayment extends Model
         
         return $save;
     }
+
+
     public function insertPayment($data)
     {
 

@@ -421,6 +421,21 @@ class Debt_repayment extends WebminController
 
                 $cancelRepaymentDebt = $this->M_debt_repayment->cancelRepaymentDebt($id);
 
+                $get_detail_cancel = $this->M_debt_repayment->get_detail_cancel($id)->getResultArray();
+                foreach($get_detail_cancel as $row){
+                    $dt_payment_debt_nominal = $row['dt_payment_debt_nominal'];
+                    $purchase_id = $row['dt_payment_debt_purchase_id'];
+                    $get_last_total = $this->M_debt_repayment->get_last_total($purchase_id)->getRowArray();
+                    $last_nominal = $get_last_total['purchase_remaining_debt'];
+                    $new_nominal = $dt_payment_debt_nominal + $last_nominal;
+                    $save_update_return_debt = $this->M_debt_repayment->save_update_return_debt($new_nominal, $purchase_id); 
+                }
+
+                $payment_debt_invoice = $getDebtByPaymentDebtId['payment_debt_invoice'];
+                
+                $cancelcashout = $this->M_accounting_queries->cancel_cashout($payment_debt_invoice);
+                $canceljournal = $this->M_accounting_queries->cancel_journal($payment_debt_invoice);
+
                 $result = ['success' => TRUE, 'message' => 'Pengajuan Berhasil Di Batalkan'];
 
             }

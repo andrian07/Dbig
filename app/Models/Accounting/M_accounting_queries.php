@@ -230,5 +230,22 @@ class M_accounting_queries extends Model
         ->get();
     }
 
+    public function cancel_cashout($payment_debt_invoice)
+    {
+
+        $sqlupdate = "update hd_cashout set cashout_is_deleted = 'Y' where cashout_ref = '".$payment_debt_invoice."'";
+
+        $this->db->query($sqlupdate);
+    }
+
+    public function cancel_journal($payment_debt_invoice)
+    {
+
+        $sqlupdate = "update hd_journal set deleted = 'Y' where journal_remark like '%".$payment_debt_invoice."%'";
+
+        $this->db->query($sqlupdate);
+
+    }
+
 
 }
