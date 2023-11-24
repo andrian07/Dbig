@@ -151,14 +151,14 @@ class CronJob extends BaseController
 
         $updateMinStock = $M_cronjob->updateMinStock($updateList);
         if ($updateMinStock) {
-            $M_cronjob->insertListUpdateSafetyStock($listUpdateSafetyStock, $today);
-            // set notification //
-            $notifData = [
-                'notification_date'     => $today,
-                'notification_text'     => "Info update safety stok <b>" . count($listUpdateSafetyStock) . "</b> produk",
-                'notification_view_url' => base_url('webmin/product/info-update-safety?update_date=' . $today),
-            ];
-            $M_admin_notification->insertNotification($notifData);
+            // $M_cronjob->insertListUpdateSafetyStock($listUpdateSafetyStock, $today);
+            // // set notification //
+            // $notifData = [
+            //     'notification_date'     => $today,
+            //     'notification_text'     => "Info update safety stok <b>" . count($listUpdateSafetyStock) . "</b> produk",
+            //     'notification_view_url' => base_url('webmin/product/info-update-safety?update_date=' . $today),
+            // ];
+            // $M_admin_notification->insertNotification($notifData);
 
             if ($isUserRequest) {
                 return redirect()->to(base_url('webmin/dashboard'));

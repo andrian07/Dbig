@@ -1786,7 +1786,7 @@ class M_product extends Model
         }
 
         $builder =  $this->db->table('ms_product_unit')
-            ->select('ms_product.product_code,ms_product.product_name,ms_product_unit.*,(ms_product_unit.product_content*ms_product.base_purchase_price) as product_price,(ms_product_unit.product_content*ms_product.base_purchase_tax) as product_tax,ms_unit.unit_name,ms_brand.brand_name,ms_category.category_name,ms_product.base_purchase_price,ms_product.base_purchase_tax,ms_product.base_cogs,ms_product.has_tax,ms_product.is_parcel')
+            ->select('ms_product.product_code,ms_product.product_name,ms_product_unit.*,(ms_product_unit.product_content*ms_product.price_info) as price_info,(ms_product_unit.product_content*ms_product.base_purchase_price) as product_price,(ms_product_unit.product_content*ms_product.base_purchase_tax) as product_tax,ms_unit.unit_name,ms_brand.brand_name,ms_category.category_name,ms_product.base_purchase_price,ms_product.base_purchase_tax,ms_product.base_cogs,ms_product.price_info AS base_price_info,ms_product.has_tax,ms_product.is_parcel')
             ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
             ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
             ->join('ms_brand', 'ms_brand.brand_id=ms_product.brand_id')

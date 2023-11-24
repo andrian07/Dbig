@@ -12,7 +12,7 @@ class M_supplier extends Model
     {
         $builder = $this->db->table($this->table);
         $builder->select('ms_supplier.*,ms_mapping_area.mapping_code,ms_mapping_area.mapping_address')
-            ->join('ms_mapping_area', 'ms_mapping_area.mapping_id=ms_supplier.mapping_id');
+            ->join('ms_mapping_area', 'ms_mapping_area.mapping_id=ms_supplier.mapping_id', 'LEFT');
 
         if ($supplier_id  != '') {
             $builder->where('ms_supplier.supplier_id', $supplier_id);
