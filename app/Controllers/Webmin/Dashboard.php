@@ -15,6 +15,9 @@ class Dashboard extends WebminController
 
     public function index()
     {
+
+
+
         $M_admin_notification = model('M_admin_notification');
 
         $getNotification = $M_admin_notification->getNotification()->getResultArray();
