@@ -61,6 +61,13 @@ class Auth extends BaseController
                 }
 
                 if (password_verify($input['password'], $getUser['user_password'])) {
+                    $SEND_LOGIN_VERIFICATION = env('SEND_LOGIN_VERIFICATION', false);
+                    $is_valid = 'N';
+
+                    if ($SEND_LOGIN_VERIFICATION == false) {
+                        $is_valid = 'Y';
+                    }
+
                     $exp_login = time() + 1800;
                     $agent = $this->request->getUserAgent();
 
@@ -82,7 +89,7 @@ class Auth extends BaseController
                         'login_agent'       => $currentAgent,
                         'login_platform'    => $platform,
                         'login_ip'          => $ip,
-                        'is_valid'          => 'N',
+                        'is_valid'          => $is_valid,
                         'expired_time'      => $exp_login,
                         'is_expired'        => 'N'
                     ];
@@ -101,37 +108,40 @@ class Auth extends BaseController
                             'group'         => $getUser['user_group'],
                             'login_id'      => $saveLog['login_id'],
                             'session_code'  => $saveLog['session_code'],
-                            'is_valid'      => 'N',
+                            'is_valid'      => $is_valid,
                             'exp_login'     => $exp_login
                         ];
                         session()->set('user_login', $loginData);
 
+                        if ($SEND_LOGIN_VERIFICATION) {
+                            $params = [
+                                'login_id'          => $saveLog['login_id'],
+                                'session_code'      => $saveLog['session_code'],
+                                'exp_time'          => $exp_login
+                            ];
+                            $toJson = json_encode($params);
+                            $strEncode = strEncode($toJson);
+                            $verificationUrl = base_url("webmin-activation/$strEncode") . "?session_code=" . $saveLog['session_code'];
 
-                        $params = [
-                            'login_id'          => $saveLog['login_id'],
-                            'session_code'      => $saveLog['session_code'],
-                            'exp_time'          => $exp_login
-                        ];
-                        $toJson = json_encode($params);
-                        $strEncode = strEncode($toJson);
-                        $verificationUrl = base_url("webmin-activation/$strEncode") . "?session_code=" . $saveLog['session_code'];
+                            //send telegram url//
+                            $_config        = new \Config\MyApp();
+                            $to             = $_config->telebot['sendVerificationTo'];
+                            $sendMessage    = '';
+                            $sendMessage = "Permintaan Login\n";
+                            $sendMessage .= "User : <b>" . $getUser['user_name'] . " - " . $getUser['user_realname'] . "</b>\n";
+                            $sendMessage .= "IP : $ip\n";
+                            $sendMessage .= "Agent : $currentAgent\n";
+                            $sendMessage .= "Platform : $platform\n";
+                            $sendMessage .= "\n";
+                            $sendMessage .= "Kode Session : " . $saveLog['session_code'] . "\n";
+                            $sendMessage .= "\n";
+                            $sendMessage .= "Link Aktivasi : <b><a href=\"$verificationUrl\">Klik Disini</a></b>";
 
-                        //send telegram url//
-                        $_config        = new \Config\MyApp();
-                        $to             = $_config->telebot['sendVerificationTo'];
-                        $sendMessage    = '';
-                        $sendMessage = "Permintaan Login\n";
-                        $sendMessage .= "User : <b>" . $getUser['user_name'] . " - " . $getUser['user_realname'] . "</b>\n";
-                        $sendMessage .= "IP : $ip\n";
-                        $sendMessage .= "Agent : $currentAgent\n";
-                        $sendMessage .= "Platform : $platform\n";
-                        $sendMessage .= "\n";
-                        $sendMessage .= "Kode Session : " . $saveLog['session_code'] . "\n";
-                        $sendMessage .= "\n";
-                        $sendMessage .= "Link Aktivasi : <b><a href=\"$verificationUrl\">Klik Disini</a></b>";
-
-                        send_telegram_message($to, $sendMessage);
-                        return redirect()->to(base_url('webmin/verification-login'));
+                            send_telegram_message($to, $sendMessage);
+                            return redirect()->to(base_url('webmin/verification-login'));
+                        } else {
+                            return redirect()->to(base_url('webmin/dashboard'));
+                        }
                     }
                 } else {
                     session()->setFlashdata('input', $this->request->getPost());
