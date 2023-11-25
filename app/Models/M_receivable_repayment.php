@@ -298,6 +298,113 @@ class M_receivable_repayment extends Model
         return $builder->orderBy('hd_sales_admin.sales_customer_id', 'ASC')->get();
     }
 
+    public function getReceivableByPaymentReceivableId($id)
+    {
+        $builder = $this->db->table('hd_payment_receivable')->select("*");
+        $builder->where("payment_receivable_id", $id);
+        return $builder->get();
+    }
+
+    public function cancelRepaymentReceivable($id)
+    {
+        $this->db->query('LOCK TABLES hd_payment_receivable WRITE');
+
+        $this->db->transBegin();
+
+        $saveQueries = NULL;
+        
+        $sqlupdate = "update hd_payment_receivable set status = 'N' where payment_receivable_id = '".$id."'";
+
+        $this->db->query($sqlupdate);
+
+        if ($this->db->affectedRows() > 0) {
+           $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        }
+
+        if ($this->db->transStatus() === false) {
+
+            $saveQueries = NULL;
+
+            $this->db->transRollback();
+
+            $save = ['success' => FALSE, 'payment_receivable_id' => 0];
+
+        } else {
+
+            $this->db->transCommit();
+
+            $save = ['success' => TRUE, 'payment_receivable_id' => $id ];
+
+        }
+
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'cancel payment receivable', $id);
+        
+        return $save;
+    }
+    
+    public function get_detail_cancel($id)
+    {
+        $builder = $this->db->table($this->table_dt_payment_receivable);
+
+        return $builder->select('dt_payment_receivable_sales_id, dt_payment_receivable_nominal')
+
+        ->where('payment_receivable_id', $id)
+
+        ->get();
+    }
+
+    public function get_last_total($sales_admin_id)
+    {
+        $builder = $this->db->table($this->table_hd_sales_admin);
+
+        return $builder->select('sales_admin_remaining_payment')
+
+        ->where('sales_admin_id', $sales_admin_id)
+
+        ->get();
+    }
+    
+    public function save_update_return_receivable($new_nominal, $sales_admin_id)
+    {
+        $this->db->query('LOCK TABLES hd_sales_admin WRITE');
+
+        $this->db->transBegin();
+
+        $saveQueries = NULL;
+        
+        $sqlupdate = "update hd_sales_admin set sales_admin_remaining_payment = '".$new_nominal."' where sales_admin_id = '".$sales_admin_id."'";
+
+        $this->db->query($sqlupdate);
+
+        if ($this->db->affectedRows() > 0) {
+           $saveQueries[] = $this->db->getLastQuery()->getQuery();
+        }
+
+        if ($this->db->transStatus() === false) {
+
+            $saveQueries = NULL;
+
+            $this->db->transRollback();
+
+            $save = ['success' => FALSE, 'sales_admin_id' => 0];
+
+        } else {
+
+            $this->db->transCommit();
+
+            $save = ['success' => TRUE, 'sales_admin_id' => $sales_admin_id ];
+
+        }
+
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'cancel nominal receivable', $sales_admin_id);
+        
+        return $save;
+    }
+
     public function getReportDataReceivable($start_date, $end_date, $customer_id, $store_id)
     {
         $builder = $this->db->table('dt_payment_receivable')->select("sales_admin_invoice, payment_receivable_invoice, payment_receivable_date, customer_name, sales_admin_grand_total, dt_payment_receivable_discount, dt_payment_receivable_nominal");

@@ -81,7 +81,8 @@ $assetsUrl = base_url('assets');
                                                         <th data-priority="5">Metode Pembayaran</th>
                                                         <th data-priority="6">Jumlah Nota</th>
                                                         <th data-priority="7">Total Pembayaran</th>
-                                                        <th data-priority="8">Aksi</th>
+                                                        <th data-priority="8">Status</th>
+                                                        <th data-priority="9">Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -1053,6 +1054,50 @@ $assetsUrl = base_url('assets');
             }
         });
     }
+
+    $("#tblreceivablerepaymenthistory").on('click', '.btndelete', function(e) {
+
+    e.preventDefault();
+
+    let id = $(this).attr('data-id');
+
+    message.question('Yakin ingin membatalkan Pelunasan Hutang ini?').then(function(answer) {
+
+        let yes = parseMessageResult(answer);
+
+        if (yes) {
+
+            let actUrl = base_url + '/webmin/payment/delete-repayment-receivable/' + id;
+
+            ajax_get(actUrl, null, {
+
+                success: function(response) {
+
+                    if (response.success) {
+
+                        if (response.result.success) {
+
+                            notification.success(response.result.message);
+
+                        } else {
+
+                            message.error(response.result.message);
+
+                        }
+
+                        updateTable();
+
+                    }
+
+                }
+
+            })
+
+        }
+
+    })
+
+    })
 
     function updateTable() {
 

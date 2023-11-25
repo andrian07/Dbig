@@ -862,6 +862,8 @@ $routes->group('webmin/payment', ['filter' => 'webminauth'], static function ($r
 
     $routes->post('tblreceivablehistory', 'Webmin\Payment\Receivable_repayment::tbl_receivablehistory');
 
+    $routes->get('delete-repayment-receivable/(:num)', 'Webmin\Payment\Receivable_repayment::deleteReceivableRepayment/$1');
+
 
 
 

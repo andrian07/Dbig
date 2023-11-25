@@ -68,7 +68,7 @@ class Receivable_repayment extends WebminController
         if ($this->role->hasRole('receivable_repayment.view')) {
             helper('datatable');
             $table = new \App\Libraries\Datatables('hd_payment_receivable');
-            $table->db->select('payment_receivable_id,payment_receivable_invoice, customer_name, payment_receivable_date, payment_receivable_method_name, payment_receivable_total_invoice, payment_receivable_total_pay');
+            $table->db->select('payment_receivable_id,payment_receivable_invoice, customer_name, payment_receivable_date, payment_receivable_method_name, payment_receivable_total_invoice, payment_receivable_total_pay,status');
             $table->db->join('ms_customer', 'ms_customer.customer_id  = hd_payment_receivable.payment_receivable_customer_id');
             $table->db->orderBy('payment_receivable_id', 'desc');
             $table->renderColumn(function ($row, $i) {
@@ -80,9 +80,15 @@ class Receivable_repayment extends WebminController
                 $column[] = esc($row['payment_receivable_method_name']);
                 $column[] = esc($row['payment_receivable_total_invoice']);
                 $column[] = 'Rp. '.esc(number_format($row['payment_receivable_total_pay']));
+                if($row['status'] == 'Y'){
+                    $column[] = '<span class="badge badge-success">Done</span>';
+                }else{
+                    $column[] = '<span class="badge badge-danger">Cancel</span>';
+                }
                 $btns = [];
-
-                 $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/payment/get-receivable-history-detail/'.$row['payment_receivable_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
+                $prop =  'data-id="' . $row['payment_receivable_id'] . '" data-name="' . esc($row['payment_receivable_invoice']) . '"';
+                $btns[] = '<a href="javascript:;" data-fancybox data-type="iframe" data-src="'.base_url().'/webmin/payment/get-receivable-history-detail/'.$row['payment_receivable_id'].'" class="margins btn btn-sm btn-default mb-2" data-toggle="tooltip" data-placement="top" data-title="Detail"><i class="fas fa-eye"></i></a>';
+                $btns[] = button_delete($prop);
                 $column[] = implode('&nbsp;', $btns);
                 return $column;
             });
@@ -364,6 +370,52 @@ class Receivable_repayment extends WebminController
 
         }
 
+    }
+
+
+    public function deleteReceivableRepayment($id)
+    {
+        $this->validationRequest(TRUE, 'GET');
+
+        $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk Membatalkan Pembayaran Piutang'];
+
+        if ($this->role->hasRole('receivable_repayment.delete')) {
+
+            $getReceivableByPaymentReceivableId = $this->M_receivable_repayment->getReceivableByPaymentReceivableId($id)->getRowArray();
+
+            if ($getReceivableByPaymentReceivableId == NULL) {
+
+                $result = ['success' => FALSE, 'message' => 'Transaksi dengan No Pembayaran <b>' . $id . '</b> tidak ditemukan'];
+
+            } else {
+
+                $user_id = $this->userLogin['user_id'];
+
+                $cancelRepaymentReceivable = $this->M_receivable_repayment->cancelRepaymentReceivable($id);
+
+                $get_detail_cancel = $this->M_receivable_repayment->get_detail_cancel($id)->getResultArray();
+                foreach($get_detail_cancel as $row){
+                    $dt_payment_receivable_nominal = $row['dt_payment_receivable_nominal'];
+                    $sales_admin_id = $row['dt_payment_receivable_sales_id'];
+                    $get_last_total = $this->M_receivable_repayment->get_last_total($sales_admin_id)->getRowArray();
+                    $last_nominal = $get_last_total['sales_admin_remaining_payment'];
+                    $new_nominal = $dt_payment_receivable_nominal + $last_nominal;
+                    $save_update_return_receivable = $this->M_receivable_repayment->save_update_return_receivable($new_nominal, $sales_admin_id); 
+                }
+
+                $payment_debt_invoice = $getReceivableByPaymentReceivableId['payment_receivable_invoice'];
+                
+                $cancelcashout = $this->M_accounting_queries->cancel_cashout($payment_debt_invoice);
+                $canceljournal = $this->M_accounting_queries->cancel_journal($payment_debt_invoice);
+
+                $result = ['success' => TRUE, 'message' => 'Pengajuan Berhasil Di Batalkan'];
+
+            }
+
+        }   
+
+        $result['csrfHash'] = csrf_hash();
+        resultJSON($result);
     }
 
  

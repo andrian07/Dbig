@@ -237,7 +237,6 @@ class M_accounting_queries extends Model
 
         $this->db->query($sqlupdate);
     }
-
     public function cancel_journal($payment_debt_invoice)
     {
 
