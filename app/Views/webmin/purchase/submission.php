@@ -339,13 +339,32 @@ $assetsUrl = base_url('assets');
 
         $('#btnadd').click(function(e) {
             e.preventDefault();
-            let form = $('#frmaddsubmission');
-            $('#title-addsubmission').html('Tambah Pengajuan');
-            $('#modal-addsubmission').modal(configModal);
-            clearItemInput();
-            formMode = 'add';
-
+            let actUrl = base_url + '/webmin/purchase-order/get-po-temp';
+            ajax_get(actUrl, null, {
+                success: function(response) {   
+                    if (response.result.success == 'TRUE') {
+                    let form = $('#frmpurchaseorder');
+                    let items = response.result.data;
+                    $('#title-frmpurchaseorder').html('Pengajuan Pesanan');
+                    formMode = 'add';
+                    setSelect2('#supplier_id', "", "");
+                    $('#supplier_id').prop("disabled", false);
+                    loadTempData(items);
+                    if(items.length != 0){
+                        let supplier_ids = items[0].temp_po_supplier_id;
+                        let supplier_names = items[0].temp_po_supplier_name;
+                        setSelect2('#supplier_id', supplier_ids, supplier_names);
+                        $('#supplier_id').attr("disabled", true);
+                    }
+                    clearItemInput();
+                    showInputPage(true);
+                    } else {
+                        message.error(response.result.message);
+                    }
+                }
+            })
         })
+    
 
         $('.close-modal-addsubmission').click(function(e) {
             e.preventDefault();

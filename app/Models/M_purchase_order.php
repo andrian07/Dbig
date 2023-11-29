@@ -12,6 +12,7 @@ class M_purchase_order extends Model
     protected $logUpdate   = 'log_transaction_edit_queries';
     protected $table_hd_submission   = 'hd_submission';
     protected $table_warehouse       = 'ms_warehouse';
+    protected $list_auto_po       = 'list_auto_po';
 
 
     public function getOrder($purchase_order_id = '')
@@ -146,6 +147,8 @@ class M_purchase_order extends Model
 
             $sqlDtValues[] = "('$purchase_order_id','$detail_purchase_submission_id','$detail_purchase_submission_invoice','$detail_purchase_po_item_id','$detail_purchase_po_qty','$detail_purchase_po_ppn','$detail_purchase_po_dpp','$detail_purchase_po_price','$detail_purchase_po_discount1','$detail_purchase_po_discount1_percentage','$detail_purchase_po_discount2','$detail_purchase_po_discount2_percentage','$detail_purchase_po_discount3','$detail_purchase_po_discount3_percentage','$detail_purchase_po_total_discount','$detail_purchase_po_ongkir','$detail_purchase_po_expire_date','$detail_purchase_po_total','$$detail_purchase_po_recive','$detail_purchase_po_qty_pending')";
 
+            $update_outstanding =  $this->db->table($this->list_auto_po)->where('product_id ', $row['temp_po_item_id'])->update(['outstanding' => 'Y']);
+            
             if($detail_purchase_submission_id != null){
                 $updateStatus =  $this->db->table($this->table_hd_submission)->where('submission_id ', $detail_purchase_submission_id)->update(['submission_status' => 'Accept']);
             }

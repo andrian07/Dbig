@@ -10,6 +10,7 @@ use App\Controllers\Base\WebminController;
 class UserAccount extends WebminController
 {
     protected $M_user_account;
+    protected $M_user_group;
 
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
