@@ -1007,6 +1007,10 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
 
 
     /* section purchase */
+    
+    $routes->get('view-memo-po', 'Webmin\Report\ReportPurchase::viewMemoPo');
+
+    $routes->get('memo-po-list', 'Webmin\Report\ReportPurchase::MemoPoList');
 
     $routes->get('view-po-list', 'Webmin\Report\ReportPurchase::viewPOList');
 
@@ -1015,6 +1019,7 @@ $routes->group('webmin/report', ['filter' => 'webminauth'], static function ($ro
     $routes->get('view-purchase-list', 'Webmin\Report\ReportPurchase::viewPurchaseList');
 
     $routes->get('purchase-list', 'Webmin\Report\ReportPurchase::PurchaseList');
+    
 
 
     /* end section purchase */

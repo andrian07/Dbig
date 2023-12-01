@@ -173,6 +173,7 @@ $report_role = $user_role['report'];
                     'purchase_list',
                     'po_consignment_list',
                     'retur_purchase_list',
+                    'memo_po',
                 ];
 
                 foreach ($listReportPurchase as $report_name) {
@@ -212,6 +213,9 @@ $report_role = $user_role['report'];
 
                                     <?php if ($role->hasRole('report.retur_purchase_list')) : ?>
                                         <li class="list-group-item"><a href="<?= base_url('webmin/report/view-retur-purchase-list') ?>" class="text-primary">Laporan Retur Pembelian</a></li>
+                                    <?php endif ?>
+                                    <?php if ($role->hasRole('report.memo_po')) : ?>
+                                        <li class="list-group-item"><a href="<?= base_url('webmin/report/view-memo-po') ?>" class="text-primary">Laporan Perjalanan Gudang</a></li>
                                     <?php endif ?>
                                 </ul>
                             </div>

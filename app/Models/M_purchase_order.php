@@ -561,4 +561,24 @@ public function getReportData($start_date, $end_date, $warehouse, $product_tax, 
     return $builder->orderBy('created_at', 'ASC')->get();
 }
 
+public function getMemoPO($start_date, $end_date, $no_po)
+{
+    $builder = $this->db->table('hd_purchase_order')->select("purchase_order_invoice, purchase_order_date, product_code, ,item_code, product_name, has_tax, supplier_code, supplier_name, store_name, detail_purchase_po_price, detail_purchase_po_dpp, detail_purchase_po_ppn, detail_purchase_po_total, detail_purchase_po_ongkir, detail_purchase_po_qty, detail_purchase_po_recive, purchase_order_total_ppn, unit_name, warehouse_name, purchase_invoice, purchase_date, hd_purchase_order.created_at, a.user_name as po_user, b.user_name as purchase_user");
+    $builder->join('dt_purchase_order', 'dt_purchase_order.purchase_order_id = hd_purchase_order.purchase_order_id');
+    $builder->join('ms_supplier', 'ms_supplier.supplier_id  = hd_purchase_order.purchase_order_supplier_id');
+    $builder->join('ms_warehouse', 'ms_warehouse.warehouse_id = hd_purchase_order.purchase_order_warehouse_id');
+    $builder->join('ms_store', 'ms_store.store_id = ms_warehouse.store_id');
+    $builder->join('ms_product_unit', 'ms_product_unit.item_id = dt_purchase_order.detail_purchase_po_item_id');
+    $builder->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id');
+    $builder->join('ms_product', 'ms_product.product_id = ms_product_unit.product_id');
+    $builder->join('user_account a', 'a.user_id = hd_purchase_order.purchase_order_user_id');
+    $builder->join('hd_purchase', 'hd_purchase.purchase_po_invoice = hd_purchase_order.purchase_order_invoice', 'left');
+    $builder->join('user_account b', 'b.user_id = hd_purchase.purchase_user_id', 'left');
+    $builder->where("(purchase_order_date BETWEEN CAST('$start_date' AS DATE) AND CAST('$end_date' AS DATE))");
+    if ($no_po != null) {
+        $builder->where('purchase_order_invoice', $no_po);
+    }
+    return $builder->orderBy('created_at', 'ASC')->get();
+}
+
 }

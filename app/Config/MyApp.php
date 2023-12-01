@@ -383,6 +383,7 @@ class MyApp extends BaseConfig
                 'purchase_list'             => ['text' => 'Laporan Pembelian'],
                 'po_consignment_list'       => ['text' => 'Laporan PO Konsinyasi'],
                 'retur_purchase_list'       => ['text' => 'Laporan Retur Pembelian'],
+                'memo_po'                   => ['text' => 'Laporan Memo Pengambilan Barang'],
 
                 /* Laporan Hutang */
                 'debt_card_list'            => ['text' => 'Laporan Kartu Hutang'],

@@ -1235,6 +1235,192 @@ class ReportPurchase extends WebminController
         }
     }
 
+
+    public function viewMemoPo()
+    {
+        $data = [
+            'title'         => 'Laporan Perjalanan Gudang',
+        ];
+
+        return $this->renderView('report/purchase/view_memo_po', $data, 'report.memo_po');
+    }
+
+    public function MemoPoList()
+    {
+        if ($this->role->hasRole('report.memo_po')) {
+
+            $M_purchase_order = model('M_purchase_order');
+
+            $start_date = $this->request->getGet('start_date') != NULL ? $this->request->getGet('start_date') : date('Y-m') . '-01';
+            $end_date   = $this->request->getGet('end_date') != NULL ? $this->request->getGet('end_date') : date('Y-m-d');
+            $no_po = $this->request->getGet('no_po');
+            $isDownload = $this->request->getGet('download') == 'Y' ? TRUE : FALSE;
+            $fileType   = $this->request->getGet('file') == NULL ? 'pdf' : $this->request->getGet('file');
+            $agent      = $this->request->getUserAgent();
+
+
+            if (!in_array($fileType, ['pdf', 'xls'])) {
+                $fileType = 'pdf';
+            }
+
+            $getReportData = $M_purchase_order->getMemoPO($start_date, $end_date, $no_po)->getResultArray();
+
+            if($getReportData != null){
+                if($no_po != null){
+                    $purchase_order_invoice = $getReportData[0]['purchase_order_invoice'];
+                }else{
+                    $purchase_order_invoice = '-';
+                }
+            }else{
+                $purchase_order_invoice = '-';
+            }
+
+            if ($fileType == 'pdf') {
+                $cRow           = count($getReportData);
+                if ($cRow % 16 == 0) {
+                    $max_page_item  = 15;
+                } else {
+                    $max_page_item  = 16;
+                }
+                $memoData    = array_chunk($getReportData, $max_page_item);
+                $data = [
+                    'title'                 => 'Laporan Perjalanan Gudang',
+                    'start_date'            => $start_date,
+                    'end_date'              => $end_date,
+                    'no_po'                 => $purchase_order_invoice,
+                    'pages'                 => $memoData,
+                    'maxPage'               => count($memoData),
+                    'userLogin'             => $this->userLogin
+                ];
+
+                $htmlView   = view('webmin/report/purchase/memo_list', $data);
+
+                if ($agent->isMobile()  && !$isDownload) {
+                    return $htmlView;
+                } else {
+                    if ($fileType == 'pdf') {
+                        $dompdf = new Dompdf();
+                        $dompdf->loadHtml($htmlView);
+                        $dompdf->setPaper('A4', 'landscape');
+                        $dompdf->render();
+                        $dompdf->stream('po.pdf', array("Attachment" => $isDownload));
+                        exit();
+                    }
+                }
+            } else {
+                $total_format = [
+                    'font' => [
+                        'bold' => true,
+                    ],
+                    'borders' => [
+                        'top' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'right' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'left' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'bottom' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                    ],
+                ];
+
+                $font_bold = [
+                    'font' => [
+                        'bold' => true,
+                    ],
+                ];
+
+                $border_left_right = [
+                    'borders' => [
+                        'right' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                        'left' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                    ],
+                ];
+
+                $template = WRITEPATH . '/template/template_export_memo.xlsx';
+                $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($template);
+
+                $sheet = $spreadsheet->setActiveSheetIndex(0);
+                $iRow = 8;
+                $last_purchase_order_invoice = '';
+
+                foreach ($getReportData as $row) {
+                    
+                    $detail_purchase_po_qty = floatval($row['detail_purchase_po_qty']);
+
+                    $ccode = $last_purchase_order_invoice == $row['purchase_order_invoice'] ? '' : esc($row['purchase_order_invoice']);
+
+                    $sheet->getCell('A' . $iRow)->setValue($ccode);
+                    $sheet->getCell('B' . $iRow)->setValue(indo_short_date($row['purchase_order_date']));
+                    $sheet->getCell('C' . $iRow)->setValue($row['store_name']);
+                    $sheet->getCell('D' . $iRow)->setValue($row['supplier_name']);
+                    $sheet->getCell('E' . $iRow)->setValue($row['po_user']);
+                    $sheet->getCell('F' . $iRow)->setValue($row['product_code']);
+                    $sheet->getCell('G' . $iRow)->setValue($row['product_name']);
+                    $sheet->getCell('H' . $iRow)->setValue($detail_purchase_po_qty);
+                    $sheet->getCell('I' . $iRow)->setValue($row['warehouse_name']);
+                    $sheet->getCell('J' . $iRow)->setValue($row['purchase_invoice']);
+                    $sheet->getCell('K' . $iRow)->setValue($row['purchase_date']);
+                    $sheet->getCell('L' . $iRow)->setValue($row['purchase_user']);
+
+                    $sheet->getStyle('A' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('B' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('C' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('D' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('E' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('F' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('G' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('H' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('I' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('J' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('K' . $iRow)->applyFromArray($border_left_right);
+                    $sheet->getStyle('L' . $iRow)->applyFromArray($border_left_right);
+
+                    $last_purchase_order_invoice = $row['purchase_order_invoice'];
+                    $iRow++;
+                }
+
+
+
+
+                //setting periode
+                $periode_text = indo_short_date($start_date) . ' s.d ' . indo_short_date($end_date);
+                $sheet->getCell('B5')->setValue($periode_text);
+                //setting excel header//
+                // A4-G4 = Store Phone
+                // A3-G3 = Store Address
+                // A2-G2 = Store Name
+                // A1-G1 = Print By
+                $reportInfo = 'Dicetak oleh ' . $this->userLogin['user_realname'] . ' pada tanggal ' . indo_date(date('Y-m-d H:i:s'), FALSE);
+                $sheet->getCell('A1')->setValue($reportInfo);
+
+                $sheet->mergeCells('A1:L1');
+
+                $sheet->getStyle('A1:L1')->getAlignment()->setHorizontal('right');
+
+                $sheet->getStyle('A2:L2')->applyFromArray($font_bold);
+
+
+                $filename = 'PO';
+                header('Content-Type: application/vnd.ms-excel');
+                header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+                header('Cache-Control: max-age=0');
+                $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+                $writer->save('php://output');
+                exit();
+            }
+        } else {
+            echo "<h1>Anda tidak memiliki akses ke laman ini</h1>";
+        }
+    }
     //--------------------------------------------------------------------
 
 }
