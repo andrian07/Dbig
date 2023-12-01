@@ -67,13 +67,14 @@ $assetsUrl = base_url('assets');
                                         <th data-priority="4">Stok Saat Ini</th>
 
                                         <th data-priority="5">Total Order</th>
+                                        <th data-priority="6">Avg Sales 3Bln</th>
 
-                                        <th data-priority="6">Outstanding</th>
-                                        <th data-priority="7">No Pengajuan</th>
+                                        <th data-priority="7">Outstanding</th>
+                                        <th data-priority="8">No Pengajuan</th>
 
-                                        <th data-priority="8">Status</th>
+                                        <th data-priority="9">Status</th>
 
-                                        <th data-priority="9">Aksi</th>
+                                        <th data-priority="10">Aksi</th>
 
                                     </tr>
 
@@ -196,10 +197,10 @@ $assetsUrl = base_url('assets');
             },
             columnDefs: [{
                     width: 100,
-                    targets: [8]
+                    targets: [9]
                 },
                 {
-                    targets: [0, 8],
+                    targets: [0, 9],
                     orderable: false,
                     searchable: false,
                 },

@@ -53,7 +53,7 @@ class M_cronjob extends Model
 
             $queueInsert = array_chunk($orderData, $max_insert);
             foreach ($queueInsert as $queue) {
-                $qInsert = "INSERT INTO list_auto_po(product_id,min_stock,stock,order_stock,update_date,status,outstanding,submission_no) VALUES";
+                $qInsert = "INSERT INTO list_auto_po(product_id,min_stock,stock,order_stock,avg_sales,update_date,status,outstanding,submission_no) VALUES";
                 $values = [];
 
                 foreach ($queue as $row) {
@@ -61,14 +61,16 @@ class M_cronjob extends Model
                     $min_stock      = $row['min_stock'];
                     $stock          = $row['stock'];
                     $order_stock    = $row['order_stock'];
+                    $avg_sales      = $row['avg_sales'];
                     $update_date    = $row['update_date'];
                     $status         = $row['status'];
                     $outstanding    = $row['outstanding'];
 
-                    $values[] = "('$product_id','$min_stock','$stock','$order_stock','$update_date','$status','$outstanding','')";
+
+                    $values[] = "('$product_id','$min_stock','$stock','$order_stock','$avg_sales','$update_date','$status','$outstanding','')";
                 }
 
-                $qInsert =  $qInsert . implode(",", $values) . " ON DUPLICATE KEY UPDATE min_stock=VALUES(min_stock),stock=VALUES(stock)";
+                $qInsert =  $qInsert . implode(",", $values) . " ON DUPLICATE KEY UPDATE update_date=VALUES(update_date),min_stock=VALUES(min_stock),stock=VALUES(stock),order_stock=VALUES(order_stock),avg_sales=VALUES(avg_sales)";
 
                 $this->db->query($qInsert);
                 if ($this->db->affectedRows() > 0) {

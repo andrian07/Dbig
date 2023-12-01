@@ -17,6 +17,18 @@ class CronJob extends BaseController
         echo "CronJob Controller";
     }
 
+    public function daily01()
+    {
+        //update safety stock
+        $this->updateSafetyStockBalance();
+    }
+
+    public function daily02()
+    {
+        //update voucher
+        $this->updateVoucher();
+    }
+
     public function updateVoucher()
     {
         // set expired voucher //    
@@ -30,29 +42,30 @@ class CronJob extends BaseController
 
     public function updatePOSafetyStock()
     {
+
         $isUserRequest          = $this->request->getGet('user_request') == null ? false : true;
         $today                  = date('Y-m-d');
         $M_cronjob              = model('M_cronjob');
         $M_admin_notification   = model('M_admin_notification');
         $M_product              = model('M_product');
 
-        $getMinStockProduct = $M_product->getReportMinStockProduct()->getResultArray();
 
-
+        $getListAutoPO = $M_product->getReportListAutoPO();
 
         $orderData = [];
-        foreach ($getMinStockProduct as $row) {
+        foreach ($getListAutoPO as $row) {
             $product_id         = $row['product_id'];
             $stock_total        = floatval($row['stock_total']);
             $min_stock          = floatval($row['min_stock']);
             $percent_stock      = $min_stock == 0 ? 0 : (($stock_total / $min_stock) * 100);
             $order_stock        = $percent_stock >= 50 ? ceil($min_stock * 0.5) : $min_stock;
-
+            $avg_sales          = floatval($row['avg_sales']);
             $orderData[] = [
                 'product_id'    => $product_id,
                 'min_stock'     => $min_stock,
                 'stock'         => $stock_total,
                 'order_stock'   => $order_stock,
+                'avg_sales'     => $avg_sales,
                 'update_date'   => $today,
                 'status'        => 'Pending',
                 'outstanding'   => 'N',
@@ -69,7 +82,7 @@ class CronJob extends BaseController
             $notifData = [
                 'notification_date' =>  $today,
                 'notification_text' => "Terdapat <b>$countProduct</b> produk dibawah safety stok",
-                'notification_view_url' => base_url('webmin/purchase-order/auto-po?update_date=' . $today),
+                'notification_view_url' => base_url('webmin/purchase-order/auto-po'),
             ];
             $M_admin_notification->insertNotification($notifData);
 

@@ -1840,6 +1840,49 @@ class M_product extends Model
         return $builder->get();
     }
 
+    public function getReportListAutoPO()
+    {
+        $subQueryStock = $this->db->table('ms_product_stock')
+            ->select("product_id,SUM(stock) AS stock_total", false)
+            ->groupBy('product_id')
+            ->getCompiledSelect();
+
+        $builder = $this->db->table('ms_product');
+        $builder->select("ms_product.product_id,ms_product.product_code,ms_product.product_name,ms_product.min_stock,IFNULL(product_stock.stock_total,0) AS stock_total", false);
+        $builder->join("($subQueryStock) AS product_stock", 'product_stock.product_id=ms_product.product_id', 'LEFT', false);
+        $builder->where('IFNULL(product_stock.stock_total,0)<ms_product.min_stock', null, false);
+
+
+        $getListPO = $builder->get()->getResultArray();
+        $list_product_id = [];
+        $result = [];
+        foreach ($getListPO as $row) {
+            $pid = 'P' . $row['product_id'];
+            $list_product_id[] = $row['product_id'];
+            $result[$pid] = $row;
+            $result[$pid]['avg_sales'] = 0;
+        }
+
+        $queueList      = array_chunk($list_product_id, 200);
+        $today          = date('Y-m-d');
+        $start_date     = date("Y-m-d", strtotime("-3 months"));
+        $monthCount     = 3;
+        foreach ($queueList as $queue) {
+            $getSalesStock = $this->getSalesStockByProduct($queue, $start_date, $today);
+            foreach ($getSalesStock as $row) {
+                $pid = 'P' . $row['product_id'];
+                $salesStock = floatval($row['sales_stock']);
+                $result[$pid]['avg_sales'] = ceil($salesStock / $monthCount);
+            }
+        }
+
+
+
+
+        return $result;
+    }
+
+
     public function getSalesStockByProduct($product_ids = [], $start_date, $end_date)
     {
         // subquery output product_id,sales_stock

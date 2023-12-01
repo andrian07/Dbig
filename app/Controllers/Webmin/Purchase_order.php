@@ -711,6 +711,7 @@ class Purchase_order extends WebminController
                 'pu.item_code',
                 'u.unit_name',
                 'po.min_stock',
+                'po.avg_sales',
                 'po.stock',
                 'po.order_stock',
                 'po.update_date',
@@ -732,6 +733,8 @@ class Purchase_order extends WebminController
                 $column[] = esc($row['min_stock']);
                 $column[] = esc($row['stock']);
                 $column[] = esc($row['order_stock']);
+                $column[] = esc($row['avg_sales']);
+
 
                 if ($row['outstanding'] == 'Y') {
                     $column[] = '<span class="badge badge-success"><i class="fas fa-check-circle"></i></span>';
