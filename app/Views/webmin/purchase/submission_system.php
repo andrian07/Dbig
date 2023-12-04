@@ -53,34 +53,22 @@ $assetsUrl = base_url('assets');
                         <div class="card-body">
 
                             <table id="tblsafetystock" class="table table-bordered table-hover" width="100%">
-
                                 <thead>
-
                                     <tr>
-
                                         <th data-priority="1">#</th>
-
-                                        <th data-priority="2">Nama Produk</th>
-
-                                        <th data-priority="3">Minimal Stok</th>
-
-                                        <th data-priority="4">Stok Saat Ini</th>
-
-                                        <th data-priority="5">Total Order</th>
-                                        <th data-priority="6">Avg Sales 3Bln</th>
-
-                                        <th data-priority="7">Outstanding</th>
-                                        <th data-priority="8">No Pengajuan</th>
-
-                                        <th data-priority="9">Status</th>
-
-                                        <th data-priority="10">Aksi</th>
-
+                                        <th data-priority="2">Tanggal</th>
+                                        <th data-priority="3">Nama Produk</th>
+                                        <th data-priority="4">Minimal Stok</th>
+                                        <th data-priority="5">Stok Saat Ini</th>
+                                        <th data-priority="6">Total Order</th>
+                                        <th data-priority="7">Avg Sales 3Bln</th>
+                                        <th data-priority="8">Outstanding</th>
+                                        <th data-priority="9">No Pengajuan</th>
+                                        <th data-priority="10">Status</th>
+                                        <th data-priority="11">Aksi</th>
                                     </tr>
-
                                 </thead>
-
-
+                                <tbody></tbody>
                             </table>
 
                             <!-- /.tab-content -->
@@ -197,10 +185,10 @@ $assetsUrl = base_url('assets');
             },
             columnDefs: [{
                     width: 100,
-                    targets: [9]
+                    targets: [10]
                 },
                 {
-                    targets: [0, 9],
+                    targets: [0, 10],
                     orderable: false,
                     searchable: false,
                 },
