@@ -273,6 +273,27 @@ class Submission extends WebminController
 
     }
 
+    public function getSubmissionTemp()
+    {
+
+        $getTemp = $this->M_submission->getTemp($this->userLogin['user_id'])->getResultArray();
+
+        $find_result = [];
+
+        foreach ($getTemp as $k => $v) {
+
+            $find_result[$k] = esc($v);
+        }
+
+        $result['data'] = $find_result;
+
+        $result['csrfHash'] = csrf_hash();
+
+        $result['success'] = 'TRUE';
+
+        resultJSON($result);
+    }
+
     public function cancelOrder($submission_id = '')
     {
 

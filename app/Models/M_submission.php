@@ -198,6 +198,26 @@ class M_submission extends Model
 
         return $builder->get();
     }
+    
+
+    public function getTemp($user_id)
+    {
+        $builder = $this->db->table($this->table_temp_submission);
+
+        return $builder->select('*')
+
+        ->join('ms_product_unit', 'ms_product_unit.item_id = temp_submission.temp_submission_item_id')
+
+        ->join('ms_product', 'ms_product.product_id = ms_product_unit.product_id')
+
+        ->join('ms_unit', 'ms_unit.unit_id = ms_product_unit.unit_id')
+
+        ->where('temp_submission.temp_submission_user_id', $user_id)
+
+        ->orderBy('temp_submission.temp_submission_update_at', 'ASC')
+
+        ->get();
+    }
 
     public function updateOrder($data)
 

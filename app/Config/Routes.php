@@ -620,6 +620,8 @@ $routes->group('webmin/submission', ['filter' => 'webminauth'], static function 
 
     $routes->get('get-submission-detail/(:alphanum)', 'Webmin\Submission::getSubmissionDetail/$1');
 
+    $routes->get('get-submission-temp', 'Webmin\Submission::getSubmissionTemp');
+
     $routes->get('getbyid/(:num)', 'Webmin\Submission::getById/$1');
 
     $routes->post('create-submission-system', 'Webmin\Submission::createSubmissionSystem');

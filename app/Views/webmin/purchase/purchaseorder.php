@@ -1871,23 +1871,22 @@ $("#tbltemp").on('click', '.btnedit', function(e) {
 
 
 function loadTempData(items) {
-
+    
     if(items['length'] < 1){
-
-                 setSelect2('#supplier_id', "", "");
-                 $('#supplier_id').prop('disabled', false);
+        setSelect2('#supplier_id', "", "");
+        $('#supplier_id').prop('disabled', false);
     }
- let template = $('#template_row_temp').html();
+    let template = $('#teåplate_row_temp').html();
 
- let tbody = '';
+    let tbody = '';
 
- let row = 1;
+    let row = 1;
 
- let temp_total_order = 0;
+    let temp_total_order = 0;
 
- items.forEach((val, key) => {
+    items.forEach((val, key) => {
 
-     let item = template;
+    let item = template;
 
      let data_json = htmlEntities.encode(JSON.stringify(val));
 
@@ -1944,9 +1943,6 @@ function loadTempData(items) {
      tbody += item;
 
      row++;
-
-
-   
 
  });
 
@@ -2490,54 +2486,31 @@ $('#btndiscfooter').click(function(e) {
 
 
 function updateTableHeader() {
-
- tblpurchaseorders.ajax.reload(null, false);
-
+    tblpurchaseorders.ajax.reload(null, false);
 }
 
 
 function clearItemInput() {
-
- let form = $('#frmaddtemp');
-
- form.parsley().reset();
-
- $('#item_id').val('');
-
- $('#product_name').val('');
-
- $('#temp_ed_date').val('');
-
- temp_qty.set('0.00');
-
- temp_ongkir.set(0);
-
- temp_price.set(0);
-
- temp_total.set(0);
-
- temp_dpp.set(0);
-
- temp_tax.set(0);
-
- edit_temp_discount_percentage1.set('0.00%');
-
- edit_temp_discount_percentage2.set('0.00%');
-
- edit_temp_discount_percentage3.set('0.00%');
-
- edit_temp_discount1.set(0);
-
- edit_temp_discount2.set(0);
-
- edit_temp_discount3.set(0);
-
- total_temp_discount.set(0);
-
- $('#temp_desc').val('');
-
- setSelect2('#nosubmission','','');
-
+    let form = $('#frmaddtemp');
+    form.parsley().reset();
+    $('#item_id').val('');
+    $('#product_name').val('');
+    $('#temp_ed_date').val('');
+    temp_qty.set('0.00');
+    temp_ongkir.set(0);
+    temp_price.set(0);
+    temp_total.set(0);
+    temp_dpp.set(0);
+    temp_tax.set(0);
+    edit_temp_discount_percentage1.set('0.00%');
+    edit_temp_discount_percentage2.set('0.00%');
+    edit_temp_discount_percentage3.set('0.00%');
+    edit_temp_discount1.set(0);
+    edit_temp_discount2.set(0);
+    edit_temp_discount3.set(0);
+    total_temp_discount.set(0);
+    $('#temp_desc').val('');
+    setSelect2('#nosubmission','','');
 }
 
 $("#tblpurchaseorders").on('click', '.btndelete', function(e) {

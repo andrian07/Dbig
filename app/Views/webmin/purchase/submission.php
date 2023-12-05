@@ -127,28 +127,32 @@ $assetsUrl = base_url('assets');
                                 <label for="submission_order_invoice" class="col-sm-12">No Invoice:</label>
                                 <div class="col-sm-12">
                                     <input type="hidden" id="submission_id" name="submission_id">
-                                    <input id="submission_order_invoice" name="submission_order_invoice" type="text" class="form-control" value="AUTO" readonly>
+                                    <input id="submission_order_invoice" name="submission_order_invoice" type="text"
+                                        class="form-control" value="AUTO" readonly>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="submission_order_date" class="col-sm-12">Tanggal:</label>
                                 <div class="col-sm-12">
-                                    <input id="submission_order_date" name="submission_order_date" type="date" class="form-control" value="<?= date('Y-m-d') ?>" readonly>
+                                    <input id="submission_order_date" name="submission_order_date" type="date"
+                                        class="form-control" value="<?= date('Y-m-d') ?>" readonly>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="warehouse" class="col-sm-1 col-form-label text-right">Gudang:</label>
                                 <div class="col-sm-12">
-                                    <select id="warehouse" type="text" class="form-control" data-parsley-vwarehousecode required></select>
+                                    <select id="warehouses" type="text" class="form-control" data-parsley-vwarehousecode
+                                        required></select>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="submission_type" class="col-sm-1 col-form-label text-right">Tipe:</label>
                                 <div class="col-sm-12">
-                                    <select id="submission_type" type="text" class="form-control" data-parsley-vsubmissiontype required>
+                                    <select id="submission_type" type="text" class="form-control"
+                                        data-parsley-vsubmissiontype required>
                                         <option value="Pembelian">Pembelian</option>
                                         <option value="Konsinyasi">Konsinyasi</option>
                                     </select>
@@ -158,14 +162,16 @@ $assetsUrl = base_url('assets');
                             <div class="form-group">
                                 <label for="salesman_id" class="col-sm-1 col-form-label text-right">Sales:</label>
                                 <div class="col-sm-12">
-                                    <select id="salesman_id" type="text" class="form-control" data-parsley-vsalesman required></select>
+                                    <select id="salesman_id" type="text" class="form-control" data-parsley-vsalesman
+                                        required></select>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="display_user" class="col-sm-1 col-form-label text-right">User:</label>
                                 <div class="col-sm-12">
-                                    <input id="display_user" type="text" class="form-control" value="<?= $user['user_realname'] ?>" readonly>
+                                    <input id="display_user" type="text" class="form-control"
+                                        value="<?= $user['user_realname'] ?>" readonly>
                                 </div>
                             </div>
                         </div>
@@ -175,59 +181,63 @@ $assetsUrl = base_url('assets');
 
 
                             <div class="form-group">
-                             <label for="temp_status" class="col-sm-12">Status:</label>
-                             <div class="col-sm-12">
-                                <select id="temp_status" name="temp_status" class="form-control" data-parsley-vtempstatus required> 
-                                    <option></option>
-                                    <option value="Urgent">Urgent</option>
-                                    <option value="New">New</option>
-                                    <option value="Restock">Restock</option>
-                                </select>
+                                <label for="temp_status" class="col-sm-12">Status:</label>
+                                <div class="col-sm-12">
+                                    <select id="temp_status" name="temp_status" class="form-control"
+                                        data-parsley-vtempstatus required>
+                                        <option></option>
+                                        <option value="Urgent">Urgent</option>
+                                        <option value="New">New</option>
+                                        <option value="Restock">Restock</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                         <label for="item_code" class="col-sm-12">Produk Code:</label>
-                         <div class="col-sm-12">
-                            <input id="item_id" name="item_id" class="form-control" type="hidden">
-                            <input id="item_code" name="item_code" class="form-control" type="text" readonly>
+                            <div class="form-group">
+                                <label for="item_code" class="col-sm-12">Produk Code:</label>
+                                <div class="col-sm-12">
+                                    <input id="item_id" name="item_id" class="form-control" type="hidden">
+                                    <input id="item_code" name="item_code" class="form-control" type="text" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="product_name" class="col-sm-12">Produk:</label>
+                                <div class="col-sm-12">
+                                    <input id="product_name" name="product_name" type="text" class="form-control"
+                                        placeholder="ketikkan nama produk" value="" data-parsley-vproductname required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="temp_qty" class="col-sm-12">Qty:</label>
+                                <div class="col-sm-12">
+                                    <input id="temp_qty" name="temp_qty" class="form-control" value="0"
+                                        data-parsley-vqty required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="desc" class="col-sm-12">Keterangan:</label>
+                                <div class="col-sm-12">
+                                    <textarea id="desc" name="desc" type="text" class="form-control"></textarea>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
-
-                    <div class="form-group">
-                     <label for="product_name" class="col-sm-12">Produk:</label>
-                     <div class="col-sm-12">
-                        <input id="product_name" name="product_name" type="text" class="form-control" placeholder="ketikkan nama produk" value="" data-parsley-vproductname required>
-                    </div>
                 </div>
-
-                <div class="form-group">
-                 <label for="temp_qty" class="col-sm-12">Qty:</label>
-                 <div class="col-sm-12">
-                    <input id="temp_qty" name="temp_qty"  class="form-control" value="0" data-parsley-vqty required>
+                <div class="modal-footer justify-content-between">
+                    <button class="btn btn-danger close-modal-addsubmission"><i class="fas fa-times-circle"></i>
+                        Batal</button>
+                    <button id="btnsave_submission" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
                 </div>
-            </div>
-
-            <div class="form-group">
-             <label for="desc" class="col-sm-12">Keterangan:</label>
-             <div class="col-sm-12">
-                <textarea id="desc" name="desc" type="text" class="form-control"></textarea>
-            </div>
+            </form>
         </div>
-
-
+        <!-- /.modal-content -->
     </div>
-</div>
-</div>
-<div class="modal-footer justify-content-between">
-    <button class="btn btn-danger close-modal-addsubmission"><i class="fas fa-times-circle"></i> Batal</button>
-    <button id="btnsave_submission" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
-</div>
-</form>
-</div>
-<!-- /.modal-content -->
-</div>
-<!-- /.modal-dialog -->
+    <!-- /.modal-dialog -->
 </div>
 <!-- end submission -->
 
@@ -246,31 +256,752 @@ $assetsUrl = base_url('assets');
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
-                         <div class="form-group">
-                             <label for="desc" class="col-sm-12">Keterangan:</label>
-                             <div class="col-sm-12">
-                                <input type="hidden" id="submission_id_decline" name="submission_id_decline">
-                                <textarea id="desc_decline" name="desc_decline" type="text" class="form-control"></textarea>
+                            <div class="form-group">
+                                <label for="desc" class="col-sm-12">Keterangan:</label>
+                                <div class="col-sm-12">
+                                    <input type="hidden" id="submission_id_decline" name="submission_id_decline">
+                                    <textarea id="desc_decline" name="desc_decline" type="text"
+                                        class="form-control"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button class="btn btn-danger close-modal-decline"><i class="fas fa-times-circle"></i> Batal</button>
-                <button id="btn_decline" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
-            </div>
-        </form>
+                <div class="modal-footer justify-content-between">
+                    <button class="btn btn-danger close-modal-decline"><i class="fas fa-times-circle"></i>
+                        Batal</button>
+                    <button id="btn_decline" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-content -->
-</div>
-<!-- /.modal-dialog -->
+    <!-- /.modal-dialog -->
 </div>
 
 <!-- end Decline -->
 
 
 <!-- /.content -->
+
+<div id="submission_input">
+
+    <section class="content-header">
+
+        <div class="container-fluid">
+
+            <div class="row mb-2">
+
+                <div class="col-sm-6">
+
+                    <h1 id="title-frmsubmission">Tambah Pengajuan</h1>
+
+                </div>
+
+                <div class="col-sm-6"></div>
+
+            </div>
+
+        </div><!-- /.container-fluid -->
+
+    </section>
+
+
+
+    <!-- Main content -->
+
+    <section class="content">
+
+        <div class="container-fluid">
+
+            <div class="row">
+
+                <!-- /.col -->
+
+                <div class="col-md-12">
+
+                    <div class="card">
+
+                        <div class="card-body">
+
+
+                            <form id="frmsubmission" class="form-horizontal form-space">
+
+                                <div class="form-group row">
+
+                                    <label for="noinvoice" class="col-sm-1 col-form-label text-right">No Invoice
+                                        :</label>
+
+                                    <div class="col-sm-3">
+
+                                        <input id="purchase_order_invoice" name="purchase_order_invoice" type="text"
+                                            class="form-control" value="AUTO" readonly>
+                                        <input id="purchase_order_id" name="purchase_order_id" type="hidden"
+                                            class="form-control">
+
+                                    </div>
+
+                                    <div class="col-md-4"></div>
+                                    <label for="tanggal" class="col-sm-1 col-form-label text-right">Tanggal :</label>
+
+                                    <div class="col-sm-3">
+
+                                        <input id="purchase_order_date" name="purchase_order_date" type="date"
+                                            class="form-control" value="<?= date('Y-m-d') ?>" readonly>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+
+                                    <label for="supplier_id" class="col-sm-1 col-form-label text-right">Supplier
+                                        :</label>
+
+                                    <div class="col-sm-3">
+
+                                        <select id="supplier_id" name="supplier_id" class="form-control"></select>
+
+                                    </div>
+
+
+                                    <div class="col-md-4"></div>
+
+                                    <label for="user" class="col-sm-1 col-form-label text-right">Gudang :</label>
+
+                                    <div class="col-sm-3">
+
+                                    <select id="warehouse" type="text" class="form-control" data-parsley-vwarehousecode
+                                        required></select>
+
+                                    </div>
+
+                                </div>
+
+                                
+                                <div class="form-group row">
+
+                                    <label for="has_tax" class="col-sm-1 col-form-label text-right">Tipe :</label>
+
+                                    <div class="col-sm-3">
+                                        <select id="submission_type" type="text" class="form-control"
+                                            data-parsley-vsubmissiontype required>
+                                            <option value="Pembelian">Pembelian</option>
+                                            <option value="Konsinyasi">Konsinyasi</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-4"></div>
+
+                                    <label for="user" class="col-sm-1 col-form-label text-right">User :</label>
+
+                                    <div class="col-sm-3">
+
+                                        <input id="display_user" type="text" class="form-control"
+                                            value="<?= $user['user_realname'] ?>" readonly>
+
+                                    </div>
+
+                                </div>
+
+
+                            </form>
+
+
+
+
+                        </div><!-- /.card-body -->
+
+                    </div>
+
+                    <!-- /.card -->
+
+                </div>
+
+                <!-- /.col -->
+
+            </div>
+
+            <!-- /.row -->
+
+        </div><!-- /.container-fluid -->
+
+
+
+
+
+        <div class="container-fluid">
+
+            <div class="row">
+
+                <!-- /.col -->
+
+                <div class="col-md-12">
+
+                    <div class="card">
+
+                        <div class="card-body">
+
+                            <form id="frmaddtemp" class="mb-2">
+
+                                <div class="row well well-sm">
+
+                                    <input id="temp_po_id" name="temp_po_id" type="hidden" value="">
+
+                                    <input id="item_id" name="item_id" type="hidden" value="">
+
+
+                                    <div class="col-md-3">
+
+                                        <label>No Pengajuan:</label>
+
+                                        <select id="nosubmission" name="nosubmission" class="form-control"></select>
+
+                                        <input id="submission_id" type="hidden" name="submission_id">
+
+                                        <input id="submission_inv" type="hidden" name="submission_inv">
+                                    </div>
+
+                                    <div class="col-sm-4">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Produk</label>
+
+                                            <input id="product_name" name="product_name" type="text"
+                                                class="form-control" placeholder="ketikkan nama produk" value=""
+                                                data-parsley-vproductname required>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-2">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Harga Beli Per Unit</label>
+
+                                            <input id="temp_price" name="temp_price" class="form-control text-right"
+                                                value="0" data-parsley-vprice required>
+                                            <input id="temp_dpp" name="temp_dpp" type="hidden"
+                                                class="form-control text-right" value="0" required>
+                                            <input id="temp_tax" name="temp_tax" type="hidden"
+                                                class="form-control text-right" value="0" readonly required>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-sm-2">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Qty</label>
+
+                                            <input id="temp_qty" name="temp_qty" type="text"
+                                                class="form-control text-right" value="0" data-parsley-vqty required>
+                                            <input id="total_price" name="total_price" type="hidden"
+                                                class="form-control text-right" value="0" required>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-5"></div>
+
+                                    <div class="col-sm-2">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Ongkir</label>
+
+                                            <input id="temp_ongkir" name="temp_ongkir" type="text"
+                                                class="form-control text-right" value="0">
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-2" style="display:none;">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Discount</label>
+
+                                            <input id="temp_discount1" name="temp_discount1" type="hidden"
+                                                class="form-control text-right" value="0" readonly>
+                                            <input id="temp_discount2" name="temp_discount2" type="hidden"
+                                                class="form-control text-right" value="0" readonly>
+                                            <input id="temp_discount3" name="temp_discount3" type="hidden"
+                                                class="form-control text-right" value="0" readonly>
+                                            <input id="temp_discount_percentage1" name="temp_discount_percentage1"
+                                                type="hidden" class="form-control text-right" value="0" readonly>
+                                            <input id="temp_discount_percentage2" name="temp_discount_percentage2"
+                                                type="hidden" class="form-control text-right" value="0" readonly>
+                                            <input id="temp_discount_percentage3" name="temp_discount_percentage3"
+                                                type="hidden" class="form-control text-right" value="0" readonly>
+                                            <input id="total_temp_discount" name="total_temp_discount" type="text"
+                                                class="form-control text-right" value="0" readonly>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-sm-2" style="display:none;">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Expire Date</label>
+
+                                            <input id="temp_ed_date" name="temp_ed_date" type="date"
+                                                class="form-control">
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-sm-4">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Total</label>
+
+                                            <input id="temp_total" name="temp_total" type="text"
+                                                class="form-control text-right" value="0" readonly>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-1" style="padding-right: 62px;">
+
+                                        <!-- text input -->
+
+                                        <label>&nbsp;</label>
+
+                                        <div class="form-group">
+
+                                            <button id="btnadd_temp"
+                                                class="btn btn-md btn-primary rounded-circle float-right"><i
+                                                    class="fas fa-plus"></i></button>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </form>
+
+
+
+                            <div class="row mb-2">
+
+                                <div class="col-12">
+
+                                    <table id="tbltemp" class="table table-bordered table-hover" width="100%">
+
+                                        <thead>
+
+                                            <tr>
+
+                                                <th data-priority="1">#</th>
+
+                                                <th data-priority="2">No Pengajuan</th>
+
+                                                <th data-priority="3">Kode Item</th>
+
+                                                <th data-priority="4" width="25%;">Produk</th>
+
+                                                <th data-priority="5">Harga Satuan</th>
+
+                                                <th data-priority="6">Qty</th>
+
+                                                <th data-priority="7">Diskon</th>
+
+                                                <th data-priority="8">Ongkir</th>
+
+                                                <th data-priority="9">E.D</th>
+
+                                                <th data-priority="10">Total</th>
+
+                                                <th data-priority="11">Aksi</th>
+
+                                            </tr>
+
+                                        </thead>
+
+                                        <tbody></tbody>
+
+                                    </table>
+
+                                    <template id="template_row_temp">
+
+                                        <tr>
+
+                                            <td>{row}</td>
+
+                                            <td>{submission_invoice}</td>
+
+                                            <td>{item_code}</td>
+
+                                            <td>{product_name}</td>
+
+                                            <td>{temp_price}</td>
+
+                                            <td>{temp_qty}</td>
+
+                                            <td>{temp_disc}</td>
+
+                                            <td>{temp_ongkir}</td>
+
+                                            <td>{temp_ed}</td>
+
+                                            <td>{temp_total}</td>
+
+                                            <td>
+
+                                                <button data-id="{temp_id}" data-json="{data_json}"
+                                                    class="btn btn-sm btn-warning btnedit rounded-circle"
+                                                    data-toggle="tooltip" data-placement="top" data-title="Edit">
+
+                                                    <i class="fas fa-edit"></i>
+
+                                                </button>
+
+                                                &nbsp;
+
+                                                <button data-id="{temp_id}"
+                                                    class="btn btn-sm btn-danger btndelete rounded-circle"
+                                                    data-toggle="tooltip" data-placement="top" data-title="Hapus">
+
+                                                    <i class="fas fa-minus"></i>
+
+                                                </button>
+
+                                            </td>
+
+                                        </tr>
+
+                                    </template>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="row form-space">
+
+                                <div class="col-lg-6">
+
+                                    <div class="form-group">
+
+                                        <div class="col-sm-12">
+
+
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <div class="col-sm-12">
+                                                        <input type="checkbox" class="form-check-input"
+                                                            id="show_tax_desc">
+                                                        <label class="form-check-label" for="show_tax_desc">Tampilkan
+                                                            Faktur</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <textarea id="purchase_order_remark" name="purchase_order_remark"
+                                                class="form-control" placeholder="Catatan" maxlength="500" rows="8">- UNTUK SETIAP MOTIF KERAMIK/ GRANIT HARAP DAPAT DIMUATKAN DENGAN NOMOR SERI YANG SAMA
+- Kami meminta support dari Bapak/Ibu jika terdapat brosur & souvenir Sehingga bisa membantu memasarkan produk ke konsumen
+- Kami juga mengharapakan jika untuk keramik bisa mensupport rak display dan sample keramik untuk display
+                                    </textarea>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <div class="col-sm-12">
+
+
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <div class="col-sm-12">
+                                                        <label class="form-check-label"
+                                                            for="show_tax_desc">Memo:</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <textarea id="purchase_order_remark2" name="purchase_order_remark2"
+                                                class="form-control" placeholder="Catatan" maxlength="500"
+                                                rows="5"></textarea>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-lg-6 text-right">
+
+                                    <div class="form-group row">
+                                        <label for="footer_sub_total" class="col-sm-7 col-form-label text-right:">Sub
+                                            Total:</label>
+                                        <div class="col-sm-5">
+                                            <input id="footer_sub_total" name="footer_sub_total" type="text"
+                                                class="form-control text-right" value="0" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row" style="display:none;">
+                                        <label for="footer_total_discount"
+                                            class="col-sm-7 col-form-label text-right:">Discount :</label>
+                                        <div class="col-sm-4">
+                                            <input id="footer_discount1" name="footer_discount1" type="hidden"
+                                                class="form-control text-right" value="0" readonly>
+                                            <input id="footer_discount2" name="footer_discount2" type="hidden"
+                                                class="form-control text-right" value="0" readonly>
+                                            <input id="footer_discount3" name="footer_discount3" type="hidden"
+                                                class="form-control text-right" value="0" readonly>
+                                            <input id="footer_discount_percentage1" name="footer_discount_percentage1"
+                                                type="hidden" class="form-control text-right" value="0" readonly>
+                                            <input id="footer_discount_percentage2" name="footer_discount_percentage2"
+                                                type="hidden" class="form-control text-right" value="0" readonly>
+                                            <input id="footer_discount_percentage3" name="footer_discount_percentage3"
+                                                type="hidden" class="form-control text-right" value="0" readonly>
+                                            <input id="footer_total_discount" name="footer_total_discount" type="text"
+                                                class="form-control text-right" value="0" readonly>
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <button id="btnaddfooterdiscount" class="btn btn-warning"><i
+                                                    class="fas fa-tags"></i></button>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="footer_dpp" class="col-sm-7 col-form-label text-right:">DPP
+                                            :</label>
+                                        <div class="col-sm-5">
+                                            <input id="footer_dpp" name="footer_dpp" type="text"
+                                                class="form-control text-right" value="0" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="footer_total_ppn" class="col-sm-7 col-form-label text-right:">PPN
+                                            <?= PPN_TEXT ?> :
+                                        </label>
+                                        <div class="col-sm-5">
+                                            <input id="footer_total_ppn" name="footer_total_ppn" type="text"
+                                                class="form-control text-right" value="0" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="footer_total_ongkir"
+                                            class="col-sm-7 col-form-label text-right:">Ongkir:</label>
+                                        <div class="col-sm-5">
+                                            <input id="footer_total_ongkir" name="footer_total_ongkir" type="text"
+                                                class="form-control text-right" value="0" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="footer_total_invoice"
+                                            class="col-sm-7 col-form-label text-right:">Grand Total :</label>
+                                        <div class="col-sm-5">
+                                            <input id="footer_total_invoice" name="footer_total_invoice" type="text"
+                                                class="form-control text-right" value="0" readonly>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row">
+                                        <div class="col-sm-12">
+                                            <button id="btncancel" class="btn btn-danger"><i
+                                                    class="fas fa-times-circle"></i> Batal</button>
+                                            <button id="btnsave" class="btn btn-success button-header-custom-save"><i
+                                                    class="fas fa-save"></i> Simpan</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- /.card -->
+
+                </div>
+
+                <!-- /.col -->
+
+            </div>
+
+            <!-- /.row -->
+
+        </div><!-- /.container-fluid -->
+
+        <!-- Temp Modal Discount -->
+        <div class="modal fade" id="modal-tempdiscount">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="title-frmtempdiscount"></h4>
+                        <button type="button" class="close close-modal-temp">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="frmtempdiscount" class="form-horizontal">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="row">
+                                    <label for="edit_temp_discount1_lbl" class="col-sm-12">Discount 1</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="edit_temp_discount_percentage1"
+                                            name="edit_temp_discount_percentage1" value="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="edit_temp_discount1"
+                                            name="edit_temp_discount1" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label for="edit_temp_discount2_lbl" class="col-sm-12">Discount 2</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="edit_temp_discount_percentage2"
+                                            name="edit_temp_discount_percentage2" value="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="edit_temp_discount2"
+                                            name="edit_temp_discount2" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label for="edit_temp_discount2_lbl" class="col-sm-12">Discount 3</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="edit_temp_discount_percentage3"
+                                            name="edit_temp_discount_percentage3" value="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="edit_temp_discount3"
+                                            name="edit_temp_discount3" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button id="btncancel" class="btn btn-danger close-modal-temp"><i
+                                    class="fas fa-times-circle"></i> Batal</button>
+                            <button id="btndisc" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- End Temp Modal Discount -->
+
+        <!-- Footer Modal Discount -->
+        <div class="modal fade" id="modal-footerdiscount">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="title-frmfooterdiscount"></h4>
+                        <button type="button" class="close close-modal-footer">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="frmfooterdiscount" class="form-horizontal">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="row">
+                                    <label for="edit_footer_discount1_lbl" class="col-sm-12">Discount 1</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="edit_footer_discount_percentage1"
+                                            name="edit_footer_discount_percentage1" value="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="edit_footer_discount1"
+                                            name="edit_footer_discount1" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label for="edit_footer_discount2_lbl" class="col-sm-12">Discount 2</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="edit_footer_discount_percentage2"
+                                            name="edit_footer_discount_percentage2" value="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="edit_footer_discount2"
+                                            name="edit_footer_discount2" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label for="edit_footer_discount3_lbl" class="col-sm-12">Discount 3</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="edit_footer_discount_percentage3"
+                                            name="edit_footer_discount_percentage3" value="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="edit_footer_discount3"
+                                            name="edit_footer_discount3" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button id="btncancel" class="btn btn-danger close-modal-footer"><i
+                                    class="fas fa-times-circle"></i> Batal</button>
+                            <button id="btndiscfooter" class="btn btn-success"><i class="fas fa-save"></i>
+                                Simpan</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- Footer Modal Discount -->
+
+
+    </section>
+
+
+
+</div>
 
 <?= $this->endSection() ?>
 
@@ -282,20 +1013,36 @@ $assetsUrl = base_url('assets');
 
 
 
-    $(document).ready(function() {
+    $(document).ready(function () {
 
         let temp_qty = new AutoNumeric('#temp_qty', configQty);
 
 
-       // init component //
+        // init component //
 
-       function _initButton() {
-         $('#btnadd').prop('disabled', !hasRole('submission.add'));
-         $('.btnedit').prop('disabled', !hasRole('submission.edit'));
-         $('.btndelete').prop('disabled', !hasRole('submission.delete'));
-         $('.btndecline').prop('disabled', !hasRole('submission.decline'));
-     }
+        function _initButton() {
+            $('#btnadd').prop('disabled', !hasRole('submission.add'));
+            $('.btnedit').prop('disabled', !hasRole('submission.edit'));
+            $('.btndelete').prop('disabled', !hasRole('submission.delete'));
+            $('.btndecline').prop('disabled', !hasRole('submission.decline'));
+        }
 
+        function showInputPage(x) {
+
+            if (x) {
+
+                $('#submission_list').hide();
+
+                $('#submission_input').show();
+
+            } else {
+
+                $('#submission_list').show();
+
+                $('#submission_input').hide();
+
+            }
+        }
         // select2 //
 
         let tblhdsubmission = $("#tblhdsubmission").DataTable({
@@ -305,7 +1052,7 @@ $assetsUrl = base_url('assets');
             responsive: true,
             fixedColumns: true,
             order: [
-            [1, 'asc']
+                [1, 'asc']
             ],
             language: {
                 url: lang_datatables,
@@ -313,11 +1060,11 @@ $assetsUrl = base_url('assets');
             ajax: {
                 url: base_url + '/webmin/submission/tblhdsubmission',
                 type: "POST",
-                error: function() {
+                error: function () {
                     notification.danger('Gagal memuat table, harap coba lagi');
                 },
             },
-            drawCallback: function(settings) {
+            drawCallback: function (settings) {
                 _initTooltip();
                 _initButton();
             },
@@ -336,39 +1083,183 @@ $assetsUrl = base_url('assets');
             ],
         });
 
+        function loadTempData(items) {
 
-        $('#btnadd').click(function(e) {
+            if (items['length'] < 1) {
+                setSelect2('#supplier_id', "", "");
+                $('#supplier_id').prop('disabled', false);
+            }
+            let template = $('#teåplate_row_temp').html();
+
+            let tbody = '';
+
+            let row = 1;
+
+            let temp_total_order = 0;
+
+            items.forEach((val, key) => {
+
+                let item = template;
+
+                let data_json = htmlEntities.encode(JSON.stringify(val));
+
+                let temp_po_id = val.temp_po_id;
+
+                let temp_po_submission_invoice = val.temp_po_submission_invoice;
+
+                let temp_po_item_id = val.temp_po_item_id;
+
+                let item_code = val.item_code;
+
+                let product_name = val.product_name + '(' + val.unit_name + ')';
+
+                let temp_po_price = val.temp_po_price;
+
+                let temp_po_qty = parseFloat(val.temp_po_qty);
+
+                let temp_po_total_disc = val.temp_total_discount;
+
+                let temp_po_ongkir = val.temp_po_ongkir;
+
+                let temp_po_expire_date = val.temp_po_expire_date;
+
+                let temp_po_total = val.temp_po_total;
+
+                let has_tax = val.has_tax;
+
+
+
+                item = item.replaceAll('{row}', row)
+
+                    .replaceAll('{submission_invoice}', temp_po_submission_invoice)
+
+                    .replaceAll('{item_code}', item_code)
+
+                    .replaceAll('{product_name}', product_name)
+
+                    .replaceAll('{temp_price}', numberFormat(temp_po_price, true))
+
+                    .replaceAll('{temp_qty}', numberFormat(temp_po_qty, true))
+
+                    .replaceAll('{temp_disc}', numberFormat(temp_po_total_disc, true))
+
+                    .replaceAll('{temp_ongkir}', numberFormat(temp_po_ongkir, true))
+
+                    .replaceAll('{temp_ed}', temp_po_expire_date)
+
+                    .replaceAll('{temp_total}', numberFormat(temp_po_total, true))
+
+                    .replaceAll('{temp_id}', temp_po_id)
+
+                    .replaceAll('{data_json}', data_json);
+
+                tbody += item;
+
+                row++;
+
+            });
+
+            if ($.fn.DataTable.isDataTable('#tbltemp')) {
+
+                $('#tbltemp').DataTable().destroy();
+
+            }
+
+            $('#tbltemp tbody').html('');
+
+            $('#tbltemp tbody').html(tbody);
+
+            tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+
+            clearItemInput();
+
+            _initTooltip();
+
+        }
+
+        const config_tbltemp = {
+
+            pageLength: 10,
+
+            autoWidth: false,
+
+            select: true,
+
+            responsive: true,
+
+            fixedColumns: true,
+
+            order: [
+
+                [0, 'desc']
+
+            ],
+
+            "language": {
+
+                "url": lang_datatables,
+
+            },
+            "columnDefs": [{
+
+                width: 100
+
+            },
+            {
+
+                targets: [0, 9],
+
+                orderable: false,
+
+                searchable: false,
+
+            },
+            {
+
+                targets: [0, 2, 3, 4, 5, 6],
+
+                className: "text-right",
+
+            }
+
+            ]
+
+        };
+
+        let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+
+        $('#btnadd').click(function (e) {
             e.preventDefault();
-            let actUrl = base_url + '/webmin/purchase-order/get-po-temp';
+            let actUrl = base_url + '/webmin/submission/get-submission-temp';
             ajax_get(actUrl, null, {
-                success: function(response) {   
+                success: function (response) {
                     if (response.result.success == 'TRUE') {
-                    let form = $('#frmpurchaseorder');
-                    let items = response.result.data;
-                    $('#title-frmpurchaseorder').html('Pengajuan Pesanan');
-                    formMode = 'add';
-                    setSelect2('#supplier_id', "", "");
-                    $('#supplier_id').prop("disabled", false);
-                    loadTempData(items);
-                    if(items.length != 0){
-                        let supplier_ids = items[0].temp_po_supplier_id;
-                        let supplier_names = items[0].temp_po_supplier_name;
-                        setSelect2('#supplier_id', supplier_ids, supplier_names);
-                        $('#supplier_id').attr("disabled", true);
-                    }
-                    clearItemInput();
-                    showInputPage(true);
+                        let form = $('#frmsubmission');
+                        let items = response.result.data;
+                        $('#title-frmsubmission').html('Pengajuan');
+                        formMode = 'add';
+                        setSelect2('#supplier_id', "", "");
+                        $('#supplier_id').prop("disabled", false);
+                        loadTempData(items);
+                        if (items.length != 0) {
+                            let supplier_ids = items[0].temp_po_supplier_id;
+                            let supplier_names = items[0].temp_po_supplier_name;
+                            setSelect2('#supplier_id', supplier_ids, supplier_names);
+                            $('#supplier_id').attr("disabled", true);
+                        }
+                        clearItemInput();
+                        showInputPage(true);
                     } else {
                         message.error(response.result.message);
                     }
                 }
             })
         })
-    
 
-        $('.close-modal-addsubmission').click(function(e) {
+
+        $('.close-modal-addsubmission').click(function (e) {
             e.preventDefault();
-            message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
+            message.question('Yakin ingin menutup halaman ini?').then(function (answer) {
                 let yes = parseMessageResult(answer);
                 if (yes) {
                     $('#modal-addsubmission').modal('hide');
@@ -376,9 +1267,9 @@ $assetsUrl = base_url('assets');
             })
         })
 
-        $('.close-modal-decline').click(function(e) {
+        $('.close-modal-decline').click(function (e) {
             e.preventDefault();
-            message.question('Yakin ingin menutup halaman ini?').then(function(answer) {
+            message.question('Yakin ingin menutup halaman ini?').then(function (answer) {
                 let yes = parseMessageResult(answer);
                 if (yes) {
                     $('#modal-decline').modal('hide');
@@ -386,17 +1277,17 @@ $assetsUrl = base_url('assets');
             })
         })
 
-        $("#tblhdsubmission").on('click', '.btnedit', function(e) {
+        $("#tblhdsubmission").on('click', '.btnedit', function (e) {
             e.preventDefault();
             let id = $(this).attr('data-id');
             let actUrl = base_url + '/webmin/submission/getbyid/' + id;
             ajax_get(actUrl, null, {
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
-                        if (response.result.exist){
-                            if(response.result.data.submission_status == 'Pending'){
+                        if (response.result.exist) {
+                            if (response.result.data.submission_status == 'Pending') {
                                 editMode(response.result.data);
-                            }else{
+                            } else {
                                 message.info('Pesanan yang sudah selesai atau dibatalkan tidak dapat di ubah lagi');
                             }
                         } else {
@@ -416,8 +1307,8 @@ $assetsUrl = base_url('assets');
             $('#submission_id').val(htmlEntities.decode(data.submission_id));
             $('#submission_order_invoice').val(htmlEntities.decode(data.submission_inv));
             $('#submission_order_date').val(htmlEntities.decode(data.submission_date));
-            setSelect2("#warehouse",htmlEntities.decode(data.submission_warehouse_id),htmlEntities.decode(data.warehouse_code)+' - '+htmlEntities.decode(data.warehouse_name));
-            setSelect2("#salesman_id",htmlEntities.decode(data.submission_salesman_id),htmlEntities.decode(data.salesman_code)+' - '+htmlEntities.decode(data.salesman_name));
+            setSelect2("#warehouse", htmlEntities.decode(data.submission_warehouse_id), htmlEntities.decode(data.warehouse_code) + ' - ' + htmlEntities.decode(data.warehouse_name));
+            setSelect2("#salesman_id", htmlEntities.decode(data.submission_salesman_id), htmlEntities.decode(data.salesman_code) + ' - ' + htmlEntities.decode(data.salesman_name));
             $('#temp_status').val(htmlEntities.decode(data.submission_item_status));
             $('#submission_type').val(htmlEntities.decode(data.submission_type));
             $('#item_code').val(htmlEntities.decode(data.item_code));
@@ -428,17 +1319,17 @@ $assetsUrl = base_url('assets');
             $('#modal-addsubmission').modal(configModal);
         }
 
-        $("#tblhdsubmission").on('click', '.btndecline', function(e) {
+        $("#tblhdsubmission").on('click', '.btndecline', function (e) {
             e.preventDefault();
             let id = $(this).attr('data-id');
             let actUrl = base_url + '/webmin/submission/getbyid/' + id;
             ajax_get(actUrl, null, {
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
-                        if (response.result.exist){
-                            if(response.result.data.submission_status == 'Pending'){
+                        if (response.result.exist) {
+                            if (response.result.data.submission_status == 'Pending') {
                                 declineMode(response.result.data);
-                            }else{
+                            } else {
                                 message.info('Pesanan yang sudah selesai atau dibatalkan tidak dapat di ubah lagi');
                             }
                         } else {
@@ -458,63 +1349,63 @@ $assetsUrl = base_url('assets');
             $('#modal-decline').modal(configModal);
         }
 
-        $('#product_name').autocomplete({   
+        $('#product_name').autocomplete({
 
             minLength: 2,
 
-            source: function(req, add) {
+            source: function (req, add) {
 
-               $.ajax({
+                $.ajax({
 
-                   url: base_url + '/webmin/submission/search-product-submission',
+                    url: base_url + '/webmin/submission/search-product-submission',
 
-                   dataType: 'json',
+                    dataType: 'json',
 
-                   type: 'GET',
+                    type: 'GET',
 
-                   data: req,
+                    data: req,
 
-                   success: function(res) {
+                    success: function (res) {
 
-                       if (res.success == true) {
+                        if (res.success == true) {
 
-                        add(res.data);
+                            add(res.data);
 
-                    }else{
+                        } else {
 
-                     message.error(res.message);
+                            message.error(res.message);
 
-                     $('#product_name').val('');
+                            $('#product_name').val('');
 
-                 }
+                        }
 
-             },
+                    },
 
-         });
+                });
 
-           },
+            },
 
-           select: function(event, ui) {
+            select: function (event, ui) {
 
-            $('#item_id').val(ui.item.item_id);
+                $('#item_id').val(ui.item.item_id);
 
-            $('#item_code').val(ui.item.item_code);
+                $('#item_code').val(ui.item.item_code);
 
-        },
+            },
 
-    });
+        });
 
-        
 
-        $("#tblhdsubmission").on('click', '.btndelete', function(e) {
+
+        $("#tblhdsubmission").on('click', '.btndelete', function (e) {
 
             e.preventDefault();
 
             let id = $(this).attr('data-id');
-            
+
             let submission_id_decline = $('#submission_id_decline').val();
 
-            message.question('Yakin ingin Menolak pengajuan ini?').then(function(answer) {
+            message.question('Yakin ingin Menolak pengajuan ini?').then(function (answer) {
 
                 let yes = parseMessageResult(answer);
 
@@ -524,7 +1415,7 @@ $assetsUrl = base_url('assets');
 
                     ajax_get(actUrl, null, {
 
-                        success: function(response) {
+                        success: function (response) {
 
                             if (response.success) {
 
@@ -552,7 +1443,7 @@ $assetsUrl = base_url('assets');
 
         })
 
-        $('#btn_decline').click(function(e) {
+        $('#btn_decline').click(function (e) {
 
             e.preventDefault();
 
@@ -564,7 +1455,7 @@ $assetsUrl = base_url('assets');
 
             let actUrl = base_url + '/webmin/submission/decline-order';
 
-            message.question(question).then(function(answer) {
+            message.question(question).then(function (answer) {
 
                 let yes = parseMessageResult(answer);
 
@@ -582,7 +1473,7 @@ $assetsUrl = base_url('assets');
 
                     ajax_post(actUrl, formValues, {
 
-                        success: function(response) {
+                        success: function (response) {
 
                             if (response.success) {
 
@@ -606,7 +1497,7 @@ $assetsUrl = base_url('assets');
 
                         },
 
-                        error: function(response) {
+                        error: function (response) {
 
                             btnSubmit.prop('disabled', false);
 
@@ -628,12 +1519,12 @@ $assetsUrl = base_url('assets');
                 dataType: "json",
                 type: "GET",
                 delay: select2Delay,
-                data: function(params) {
+                data: function (params) {
                     return {
                         search: params.term,
                     };
                 },
-                processResults: function(data, page) {
+                processResults: function (data, page) {
                     return {
                         results: data,
                     };
@@ -650,12 +1541,12 @@ $assetsUrl = base_url('assets');
                 dataType: "json",
                 type: "GET",
                 delay: select2Delay,
-                data: function(params) {
+                data: function (params) {
                     return {
                         search: params.term,
                     };
                 },
-                processResults: function(data, page) {
+                processResults: function (data, page) {
                     return {
                         results: data,
                     };
@@ -663,9 +1554,9 @@ $assetsUrl = base_url('assets');
             },
         });
 
-        
 
-        $('#btnsave_submission').click(function(e) {
+
+        $('#btnsave_submission').click(function (e) {
 
             e.preventDefault();
 
@@ -692,7 +1583,7 @@ $assetsUrl = base_url('assets');
 
                 }
 
-                message.question(question).then(function(answer) {
+                message.question(question).then(function (answer) {
 
 
                     let yes = parseMessageResult(answer);
@@ -717,9 +1608,9 @@ $assetsUrl = base_url('assets');
 
                             product_name: $('#product_name').val(),
 
-                            qty:qty,
+                            qty: qty,
 
-                            desc:$('#desc').val(),
+                            desc: $('#desc').val(),
 
                         };
 
@@ -727,7 +1618,7 @@ $assetsUrl = base_url('assets');
 
                         ajax_post(actUrl, formValues, {
 
-                            success: function(response) {
+                            success: function (response) {
 
                                 if (response.success) {
 
@@ -757,19 +1648,19 @@ $assetsUrl = base_url('assets');
 
                                 updateTableHeader();
 
-                        //window.location.href = base_url + '/webmin/submission/';
+                                //window.location.href = base_url + '/webmin/submission/';
 
-                    },
+                            },
 
-                    error: function(response) {
+                            error: function (response) {
 
-                        btnSubmit.prop('disabled', false);
+                                btnSubmit.prop('disabled', false);
 
-                        updateTable();
+                                updateTable();
 
-                    }
+                            }
 
-                });
+                        });
 
                     }
 
@@ -800,7 +1691,7 @@ $assetsUrl = base_url('assets');
 
         window.Parsley.addValidator("vwarehousecode", {
 
-            validateString: function(value) {
+            validateString: function (value) {
 
                 if ($('#warehouse').val() == '') {
 
@@ -817,7 +1708,7 @@ $assetsUrl = base_url('assets');
 
         window.Parsley.addValidator("vsubmissiontype", {
 
-            validateString: function(value) {
+            validateString: function (value) {
 
                 if ($('#submissiontype').val() == '') {
 
@@ -834,7 +1725,7 @@ $assetsUrl = base_url('assets');
 
         window.Parsley.addValidator("vsalesman", {
 
-            validateString: function(value) {
+            validateString: function (value) {
 
                 if ($('#salesman_id').val() == '') {
 
@@ -852,7 +1743,7 @@ $assetsUrl = base_url('assets');
 
         window.Parsley.addValidator("vproductname", {
 
-            validateString: function(value) {
+            validateString: function (value) {
 
                 if ($('#product_name').val() == '') {
 
@@ -869,7 +1760,7 @@ $assetsUrl = base_url('assets');
 
         window.Parsley.addValidator("vtempstatus", {
 
-            validateString: function(value) {
+            validateString: function (value) {
 
                 if ($('#temp_status').val() == '') {
 
@@ -886,7 +1777,7 @@ $assetsUrl = base_url('assets');
 
         window.Parsley.addValidator("vprice", {
 
-            validateString: function(value) {
+            validateString: function (value) {
 
                 let vprice = parseFloat(temp_price.getNumericString());
 
@@ -908,7 +1799,7 @@ $assetsUrl = base_url('assets');
 
         window.Parsley.addValidator("vqty", {
 
-            validateString: function(value) {
+            validateString: function (value) {
 
                 let vqty = parseFloat(temp_qty.getNumericString());
 
@@ -927,38 +1818,40 @@ $assetsUrl = base_url('assets');
 
         function updateTableHeader() {
 
-           tblhdsubmission.ajax.reload(null, false);
+            tblhdsubmission.ajax.reload(null, false);
 
-       }
+        }
 
-       function clearItemInput() {
+        function clearItemInput() {
 
-           let form = $('#frmaddsubmission');
+            let form = $('#frmaddsubmission');
 
-           form.parsley().reset();
+            form.parsley().reset();
 
-           setSelect2("#warehouse", '', '');
+            setSelect2("#warehouse", '', '');
 
-           setSelect2("#salesman_id", '', '');
+            setSelect2("#salesman_id", '', '');
 
-           $('#temp_status').val('');
+            $('#temp_status').val('');
 
-           $('#item_id').val('');
+            $('#item_id').val('');
 
-           $('#item_code').val('');
+            $('#item_code').val('');
 
-           $('#product_name').val('');
+            $('#product_name').val('');
 
-           temp_qty.set(0);
+            temp_qty.set(0);
 
-           $('#desc').val('');
+            $('#desc').val('');
 
-       }
+        }
 
 
-       _initButton();
+        _initButton();
 
-   })
+        showInputPage(false);
+
+    })
 
 </script>
 
