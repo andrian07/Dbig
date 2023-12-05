@@ -707,13 +707,16 @@ class Purchase_order extends WebminController
                 'po.product_id',
                 'p.product_code',
                 'p.product_name',
+                'po.update_date',
                 'pu.item_id',
                 'pu.item_code',
                 'u.unit_name',
                 'po.min_stock',
+
                 'po.avg_sales',
                 'po.stock',
                 'po.order_stock',
+                'po.has_order',
                 'po.update_date',
                 'po.status',
                 'po.outstanding',
@@ -729,11 +732,20 @@ class Purchase_order extends WebminController
             $table->renderColumn(function ($row, $i) {
                 $column = [];
                 $column[] = $i;
+                $column[] = indo_short_date($row['update_date']);
                 $column[] = esc($row['item_code'] . '-' . $row['product_name'] . '(' . $row['unit_name'] . ')');
-                $column[] = esc($row['min_stock']);
-                $column[] = esc($row['stock']);
-                $column[] = esc($row['order_stock']);
-                $column[] = esc($row['avg_sales']);
+                $column[] = numberFormat($row['min_stock'], true);
+                $column[] = numberFormat($row['stock'], true);
+
+                $order_stock    = floatval($row['order_stock']);
+                $has_order      = floatval($row['has_order']);
+                $display_order  = $order_stock - $has_order;
+                if ($display_order < 0) {
+                    $display_order = 0;
+                }
+
+                $column[] = numberFormat($display_order, true);
+                $column[] = numberFormat($row['avg_sales'], true);
 
 
                 if ($row['outstanding'] == 'Y') {
@@ -760,7 +772,7 @@ class Purchase_order extends WebminController
                 return $column;
             });
 
-            $table->orderColumn  = ['', 'p.product_name', 'po.min_stock', 'po.stock', 'po.order_stock', 'po.outstanding', 'po.submission_no', 'po.status', ''];
+            $table->orderColumn  = ['', 'po.update_date', 'p.product_name', 'po.min_stock', 'po.stock', 'po.order_stock', 'po.outstanding', 'po.submission_no', 'po.status', ''];
             $table->searchColumn = ['p.product_name'];
             $table->generate();
         }

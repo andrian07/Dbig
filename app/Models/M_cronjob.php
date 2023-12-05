@@ -53,7 +53,7 @@ class M_cronjob extends Model
 
             $queueInsert = array_chunk($orderData, $max_insert);
             foreach ($queueInsert as $queue) {
-                $qInsert = "INSERT INTO list_auto_po(product_id,min_stock,stock,order_stock,avg_sales,update_date,status,outstanding,submission_no) VALUES";
+                $qInsert = "INSERT INTO list_auto_po(product_id,min_stock,stock,order_stock,has_order,avg_sales,update_date,status,outstanding,submission_no) VALUES";
                 $values = [];
 
                 foreach ($queue as $row) {
@@ -67,10 +67,10 @@ class M_cronjob extends Model
                     $outstanding    = $row['outstanding'];
 
 
-                    $values[] = "('$product_id','$min_stock','$stock','$order_stock','$avg_sales','$update_date','$status','$outstanding','')";
+                    $values[] = "('$product_id','$min_stock','$stock','$order_stock','0','$avg_sales','$update_date','$status','$outstanding','')";
                 }
 
-                $qInsert =  $qInsert . implode(",", $values) . " ON DUPLICATE KEY UPDATE update_date=VALUES(update_date),min_stock=VALUES(min_stock),stock=VALUES(stock),order_stock=VALUES(order_stock),avg_sales=VALUES(avg_sales)";
+                $qInsert =  $qInsert . implode(",", $values) . " ON DUPLICATE KEY UPDATE min_stock=VALUES(min_stock),stock=VALUES(stock),order_stock=VALUES(order_stock),avg_sales=VALUES(avg_sales)";
 
                 $this->db->query($qInsert);
                 if ($this->db->affectedRows() > 0) {
@@ -122,11 +122,11 @@ class M_cronjob extends Model
         $listDelete = [];
 
         foreach ($getPo as $row) {
-            $product_id = $row['product_id'];
-            $real_stock = floatval($row['real_stock']);
-            $min_Stock  = floatval($row['min_stock']);
+            $product_id     = $row['product_id'];
+            $real_stock     = floatval($row['real_stock']);
+            $min_stock      = floatval($row['min_stock']);
 
-            if ($real_stock >= $min_Stock) {
+            if ($real_stock >= $min_stock) {
                 $listDelete[] = $product_id;
             }
         }
