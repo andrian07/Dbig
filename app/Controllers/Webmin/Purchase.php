@@ -401,23 +401,23 @@ class Purchase extends WebminController
                 $payment_type_code = 'Bank';
             }
             $data_hd_cashout = [
-                    'cashout_store_id'         => $contents['store_id'],
-                    'cashout_store_code'       => $contents['store_code'],
-                    'cashout_account_id'       => $contents['purchase_payment_method_id'],
-                    'cashout_recipient_id'     => $contents['purchase_supplier_id'],
-                    'cashout_recipient_name'   => $contents['supplier_name'],
-                    'cashout_date'             => $contents['purchase_date'],
-                    'cashout_ref'              => 'DP '.$contents['purchase_invoice'],
-                    'cashout_journal_ref_id'   => $savejournal['journal_id'],
-                    'cashout_total_nominal'    => $contents['purchase_down_payment'],
-                    'cashout_type'             => $payment_type_code,
-                    'cash_out_remark'          => 'DP '.$contents['purchase_invoice'],
-                    'cashout_created_by'       => 1
+                'cashout_store_id'         => $contents['store_id'],
+                'cashout_store_code'       => $contents['store_code'],
+                'cashout_account_id'       => $contents['purchase_payment_method_id'],
+                'cashout_recipient_id'     => $contents['purchase_supplier_id'],
+                'cashout_recipient_name'   => $contents['supplier_name'],
+                'cashout_date'             => $contents['purchase_date'],
+                'cashout_ref'              => 'DP '.$contents['purchase_invoice'],
+                'cashout_journal_ref_id'   => $savejournal['journal_id'],
+                'cashout_total_nominal'    => $contents['purchase_down_payment'],
+                'cashout_type'             => $payment_type_code,
+                'cash_out_remark'          => 'DP '.$contents['purchase_invoice'],
+                'cashout_created_by'       => 1
             ];
             $data_dt_cashout = [
-                    'dt_cashout_account_id'     => '30',
-                    'dt_cashout_account_name'   => 'HUTANG DAGANG',
-                    'dt_cashout_nominal'        => $contents['purchase_total_dpp']
+                'dt_cashout_account_id'     => '30',
+                'dt_cashout_account_name'   => 'HUTANG DAGANG',
+                'dt_cashout_nominal'        => $contents['purchase_total_dpp']
             ];
             $save_cashout = $this->M_accounting_queries->insert_cashout($data_hd_cashout, $data_dt_cashout);
 

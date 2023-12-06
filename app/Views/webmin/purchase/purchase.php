@@ -212,13 +212,13 @@ $assetsUrl = base_url('assets');
 
                                 <div class="col-sm-2">
 
-                                 <select id="warehouse" type="text" class="form-control"></select>
+                                   <select id="warehouse" type="text" class="form-control"></select>
 
-                             </div>
-                         </div>
+                               </div>
+                           </div>
 
 
-                         <div class="form-group row">
+                           <div class="form-group row">
 
                             <label for="supplier_id" class="col-sm-1 col-form-label text-right">Supplier :</label>
 
@@ -314,7 +314,7 @@ $assetsUrl = base_url('assets');
 
                 <div class="card-body">
 
-                   <form id="frmaddtemp" class="mb-2">
+                 <form id="frmaddtemp" class="mb-2">
 
                     <div class="row well well-sm">
 
@@ -495,55 +495,55 @@ $assetsUrl = base_url('assets');
 
                         <template id="template_row_temp">
 
-                         <tr>
+                           <tr>
 
-                             <td>{row}</td>
+                               <td>{row}</td>
 
-                             <td>{item_code}</td>
+                               <td>{item_code}</td>
 
-                             <td>{product_name}</td>
+                               <td>{product_name}</td>
 
-                             <td>{temp_price}</td>
+                               <td>{temp_price}</td>
 
-                             <td>{temp_qty}</td>
+                               <td>{temp_qty}</td>
 
-                             <td>{temp_disc}</td>
+                               <td>{temp_disc}</td>
 
-                             <td>{temp_ongkir}</td>
+                               <td>{temp_ongkir}</td>
 
-                             <td>{temp_ed}</td>
+                               <td>{temp_ed}</td>
 
-                             <td>{temp_total}</td>
+                               <td>{temp_total}</td>
 
-                             <td>
+                               <td>
 
-                                 <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                   <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
-                                     <i class="fas fa-edit"></i>
+                                       <i class="fas fa-edit"></i>
 
-                                 </button>
+                                   </button>
 
-                                 &nbsp;
+                                   &nbsp;
 
-                                 <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+                                   <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
 
-                                     <i class="fas fa-minus"></i>
+                                       <i class="fas fa-minus"></i>
 
-                                 </button>
+                                   </button>
 
-                             </td>
+                               </td>
 
-                         </tr>
+                           </tr>
 
-                     </template>
+                       </template>
 
-                 </div>
+                   </div>
 
-             </div>
+               </div>
 
 
 
-             <div class="row form-space">
+               <div class="row form-space">
 
                 <div class="col-lg-6">
 
@@ -1050,109 +1050,109 @@ $assetsUrl = base_url('assets');
 
                 ajax_post(actUrl, formValues, {
 
-                 success: function(response) {
+                   success: function(response) {
 
-                     if (response.success) {
+                       if (response.success) {
 
 
-                         if (response.result.success) {
+                           if (response.result.success) {
 
-                             $('#product_name').focus();
+                               $('#product_name').focus();
 
-                             setSelect2('#supplier_id', supplier_id, supplier_name);
+                               setSelect2('#supplier_id', supplier_id, supplier_name);
 
-                             $('#supplier_id').attr("disabled", true);
+                               $('#supplier_id').attr("disabled", true);
 
-                             notification.success(response.result.message);
+                               notification.success(response.result.message);
 
-                         } else {
+                           } else {
 
-                             message.error(response.result.message);
+                               message.error(response.result.message);
 
-                         }
+                           }
 
-                         clearItemInput();
-                         loadTempData(response.result.data);
+                           clearItemInput();
+                           loadTempData(response.result.data);
 
-                     }
+                       }
 
-                     btnSubmit.prop('disabled', false);
+                       btnSubmit.prop('disabled', false);
 
-                 },
+                   },
 
-                 error: function(response) {
+                   error: function(response) {
 
-                     btnSubmit.prop('disabled', false);
+                       btnSubmit.prop('disabled', false);
 
-                 }
-             });
+                   }
+               });
             }
         })
 
 
         $("#tbltemp").on('click', '.btnedit', function(e) {
 
-           e.preventDefault();
+         e.preventDefault();
 
-           let json_data = $(this).attr('data-json');
+         let json_data = $(this).attr('data-json');
 
-           let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
+         let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
 
-           if (is_json) {
+         if (is_json) {
 
-               $('#temp_purchase_id').val(json.temp_purchase_id);
+             $('#temp_purchase_id').val(json.temp_purchase_id);
 
-               $('#item_id').val(json.temp_purchase_item_id);
+             $('#item_id').val(json.temp_purchase_item_id);
 
-               $('#product_name').val(json.product_name);
+             $('#product_name').val(json.product_name);
 
-               temp_price.set(json.temp_purchase_price);
+             temp_price.set(json.temp_purchase_price);
 
-               temp_qty.set(json.temp_purchase_qty);
+             temp_qty.set(json.temp_purchase_qty);
 
-               temp_ongkir.set(json.temp_purchase_ongkir);
+             temp_ongkir.set(json.temp_purchase_ongkir);
 
-               temp_discount1.set(json.temp_purchase_discount1);
+             temp_discount1.set(json.temp_purchase_discount1);
 
-               temp_discount2.set(json.temp_purchase_discount2);
+             temp_discount2.set(json.temp_purchase_discount2);
 
-               temp_discount3.set(json.temp_purchase_discount3);
+             temp_discount3.set(json.temp_purchase_discount3);
 
-               temp_discount_percentage1.set(json.temp_purchase_discount1_percentage);
+             temp_discount_percentage1.set(json.temp_purchase_discount1_percentage);
 
-               temp_discount_percentage2.set(json.temp_purchase_discount2_percentage);
+             temp_discount_percentage2.set(json.temp_purchase_discount2_percentage);
 
-               temp_discount_percentage3.set(json.temp_purchase_discount3_percentage);
+             temp_discount_percentage3.set(json.temp_purchase_discount3_percentage);
 
-               total_price.set(json.temp_purchase_qty * json.temp_purchase_price);
+             total_price.set(json.temp_purchase_qty * json.temp_purchase_price);
 
-               total_temp_discount.set(json.temp_purchase_discount_total);
+             total_temp_discount.set(json.temp_purchase_discount_total);
 
-               $('#temp_ed_date').val(json.temp_purchase_expire_date);
+             $('#temp_ed_date').val(json.temp_purchase_expire_date);
 
-               $('#temp_po_id').val(json.temp_purchase_id );
+             $('#temp_po_id').val(json.temp_purchase_id );
 
-               $('#temp_tax').val(json.temp_purchase_ppn);
+             $('#temp_tax').val(json.temp_purchase_ppn);
 
-               temp_total.set(json.temp_purchase_total);
+             temp_total.set(json.temp_purchase_total);
 
-               temp_dpp.set(json.temp_purchase_dpp);
+             temp_dpp.set(json.temp_purchase_dpp);
 
-               temp_tax.set(json.temp_purchase_ppn);
+             temp_tax.set(json.temp_purchase_ppn);
 
-               $('#temp_qty').focus();
+             $('#temp_qty').focus();
 
-               $('#supplier_id').attr("disabled", true);
+             $('#supplier_id').attr("disabled", true);
 
-           } else {
+         } else {
 
-               getTemp();
+             getTemp();
 
-               message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
+             message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
 
-           }
+         }
 
-       })  
+     })  
 
 
 
@@ -1436,22 +1436,22 @@ $assetsUrl = base_url('assets');
 
         function clearHeader()
         {
-           setSelect2("#no_po_purchase", '','');
+         setSelect2("#no_po_purchase", '','');
 
-           setSelect2("#supplier_id", '','');
+         setSelect2("#supplier_id", '','');
 
-           setSelect2("#payment_type", '','');
+         setSelect2("#payment_type", '','');
 
-           setSelect2("#warehouse", '', '');
+         setSelect2("#warehouse", '', '');
 
-           $("#due_date").val("");
+         $("#due_date").val("");
 
-           $("#faktur_date").val("");
+         $("#faktur_date").val("");
 
-           $("#no_invoice_suplier").val("");
-       }
+         $("#no_invoice_suplier").val("");
+     }
 
-       function cleardiscount() {
+     function cleardiscount() {
         temp_discount1.set(0);
         temp_discount2.set(0);
         temp_discount3.set(0);
@@ -1510,11 +1510,11 @@ $assetsUrl = base_url('assets');
 
                 if (response.result.success == 'TRUE') {
                     if(response.result.data.length > 0){
-                       $('#has_tax').val('Pajak');
-                   }else{
-                       $('#has_tax').val('Non Pajak');
-                   }
-               } else {
+                     $('#has_tax').val('Pajak');
+                 }else{
+                     $('#has_tax').val('Non Pajak');
+                 }
+             } else {
                 message.error(response.result.message);
             }
         }
@@ -1864,7 +1864,7 @@ $assetsUrl = base_url('assets');
 
                                     $('#supplier_id').prop('disabled', true);
 
-                                      cleardiscountfooter();
+                                    cleardiscountfooter();
 
                                 }
 
@@ -1874,7 +1874,7 @@ $assetsUrl = base_url('assets');
 
                                 clearItemInput();
 
-                              
+                                
 
                             } else {
 
@@ -1943,7 +1943,7 @@ $assetsUrl = base_url('assets');
 
                     success: function(res) {
 
-                       if (res.success == true) {
+                     if (res.success == true) {
 
                         add(res.data);
 
@@ -2083,7 +2083,7 @@ $assetsUrl = base_url('assets');
             cleardiscount();
             cleardiscountfooter();
             calculation_temp_total();
-           
+            
         });
 
         
@@ -2348,62 +2348,62 @@ $assetsUrl = base_url('assets');
 
         const config_tbltemp = {
 
-           pageLength: 10,
+         pageLength: 10,
 
-           autoWidth: false,
+         autoWidth: false,
 
-           select: true,
+         select: true,
 
-           responsive: true,
+         responsive: true,
 
-           fixedColumns: true,
+         fixedColumns: true,
 
-           order: [
+         order: [
 
-           [0, 'desc']
+         [0, 'desc']
 
-           ],
+         ],
 
-           "language": {
+         "language": {
 
-               "url": lang_datatables,
+             "url": lang_datatables,
 
-           },
-           "columnDefs": [{
+         },
+         "columnDefs": [{
 
-               width: 100,
+             width: 100,
 
-               targets: 6
+             targets: 6
 
-           },
-           {
+         },
+         {
 
-               targets: [8],
+             targets: [8],
 
-               orderable: false,
+             orderable: false,
 
-               searchable: false,
+             searchable: false,
 
-           },
-           {
+         },
+         {
 
-               targets: [0, 2, 3, 4, 5, 6],
+             targets: [0, 2, 3, 4, 5, 6],
 
-               className: "text-right",
+             className: "text-right",
 
-           }
+         }
 
-           ]
+         ]
 
-       };
+     };
 
-       let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+     let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
 
-       _initButton();
+     _initButton();
 
-       showInputPage(false);
+     showInputPage(false);
 
-   })
+ })
 
 </script>
 

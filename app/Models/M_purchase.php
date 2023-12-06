@@ -15,6 +15,7 @@ class M_purchase extends Model
     protected $table_ms_product_stock   = 'ms_product_stock';
     protected $table_ms_product         = 'ms_product';
     protected $table_ms_product_unit    = 'ms_product_unit';
+    protected $list_auto_po       = 'list_auto_po';
 
     public function insertTemp($data)
     {
@@ -388,6 +389,12 @@ class M_purchase extends Model
             $vUpdateProduct[] = "('$product_id', '$product_code', '$product_name', '$category_id', '$brand_id', '$base_purchase_price', '$base_purchase_tax', '$calcualtion_cogs', '$product_description', '$product_image', '$min_stock', '$has_tax', '$is_parcel', '$active', '$deleted')";
             $vUpdateStock[] = "('$product_id', '$warehouse_id', '$base_unit')";
             $vUpdateWarehouse[] = "('$product_id', '$warehouse_id', '$purchase_id', '$temp_purchase_expire_date', '$base_unit')";
+
+            $get_last_outstanding_order = $this->db->table($this->list_auto_po)->select('has_order')->where('product_id ', $temp_purchase_item_id)->get()->getRowArray();
+
+            $new_outstanding_order = $get_last_outstanding_order['has_order'] + $temp_purchase_qty;
+
+            $update_outstanding =  $this->db->table($this->list_auto_po)->where('product_id ', $temp_purchase_item_id)->update(['outstanding' => 'N', 'has_order' => $new_outstanding_order]);
         }
 
         $sqlDtOrder .= implode(',', $sqlDtValues);
