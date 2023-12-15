@@ -249,6 +249,57 @@ class Purchase_order extends WebminController
         resultJSON($result);
     }
 
+
+    public function copySubmission($submission_id = '')
+    {
+
+        $this->validationRequest(TRUE, 'GET');
+
+        $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk mengubah pesanan pembelian'];
+
+
+        $M_submission = model('M_submission');
+
+        if ($this->role->hasRole('purchase_order.add')) {
+
+            $getOrder = $M_submission->getOrder($submission_id)->getRowArray();
+
+            if ($getOrder == NULL) {
+
+                $result = ['success' => FALSE, 'message' => 'Transaksi Tidak Ditemukan'];
+
+            } else {
+
+                $check_tax = $this->M_purchase_order->check_tax($submission_id)->getRowArray();
+                if($check_tax['has_tax'] == 'Y'){
+                    $tax = 'Y';
+                }else{
+                    $tax = 'N';
+                }
+
+                $datacopy = [
+                    'user_id'        => $this->userLogin['user_id'],
+                    'submission_id'  => $submission_id,
+                    'tax'            => $tax
+                ];
+
+                $getTemp = $this->M_purchase_order->copySubmissionToTemp($datacopy)->getResultArray();
+
+                $find_result = [];
+
+                foreach ($getTemp as $k => $v) {
+
+                    $find_result[$k] = esc($v);
+                }
+
+                $result = ['success' => TRUE, 'header' => $getOrder, 'data' => $find_result, 'message' => ''];
+            }
+        }
+        $result['csrfHash'] = csrf_hash();
+
+        resultJSON($result);
+    }
+
     public function cancelOrder($purchase_order_id = '')
     {
         $this->validationRequest(TRUE, 'GET');
@@ -493,6 +544,7 @@ class Purchase_order extends WebminController
             'purchase_order_warehouse_id'             => $this->request->getPost('purchase_order_warehouse_id'),
             'purchase_order_remark'                   => $this->request->getPost('purchase_order_remark'),
             'purchase_order_remark2'                  => $this->request->getPost('purchase_order_remark2'),
+            'purchase_order_remark3'                  => $this->request->getPost('purchase_order_remark3'),
             'purchase_show_tax_desc'                  => $purchase_show_tax_desc,
             'purchase_order_sub_total'                => $this->request->getPost('purchase_order_sub_total'),
             'purchase_order_discount1'                => $this->request->getPost('purchase_order_discount1'),
@@ -513,7 +565,8 @@ class Purchase_order extends WebminController
             'purchase_order_supplier_id'     => ['rules' => 'required'],
             'purchase_order_warehouse_id'     => ['rules' => 'required'],
             'purchase_order_remark'          => ['rules' => 'max_length[500]'],
-            'purchase_order_remark2'         => ['rules' => 'max_length[500]']
+            'purchase_order_remark2'         => ['rules' => 'max_length[500]'],
+            'purchase_order_remark3'         => ['rules' => 'max_length[500]']
         ]);
 
         if ($validation->run($input) === FALSE) {

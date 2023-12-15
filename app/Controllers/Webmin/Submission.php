@@ -27,7 +27,6 @@ class Submission extends WebminController
 
     //--------------------------------------------------------------------
 
-
     public function tblhdsubmission()
     {
 
@@ -36,7 +35,7 @@ class Submission extends WebminController
             helper('datatable');
 
             $table = new \App\Libraries\Datatables('hd_submission');
-            $table->db->select('submission_id, submission_inv, submission_date, user_realname, submission_desc, submission_status, submission_admin_remark ,hd_submission.created_at,submission_product_name');
+            $table->db->select('submission_id, submission_inv, submission_date, user_realname, submission_desc, submission_status, ,hd_submission.created_at, submission_admin_remark_cancel');
             $table->db->join('user_account', 'user_account.user_id = hd_submission.submission_user_id');
             $table->db->orderBy('hd_submission.created_at', 'desc');
             $table->renderColumn(function ($row, $i) {
@@ -45,18 +44,17 @@ class Submission extends WebminController
                 $column[] = esc($row['submission_inv']);
                 $column[] = indo_short_date($row['submission_date'], FALSE);
                 $column[] = esc($row['user_realname']);
-                $column[] = esc($row['submission_product_name']);
                 $column[] = esc($row['submission_desc']);
                 if($row['submission_status'] == 'Pending'){
-                $column[] = '<span class="badge badge-primary">Pending</span>';
+                    $column[] = '<span class="badge badge-primary">Pending</span>';
                 }else if($row['submission_status'] == 'Accept'){
-                $column[] = '<span class="badge badge-success">Diterima</span>';
+                    $column[] = '<span class="badge badge-success">Diterima</span>';
                 }else if($row['submission_status'] == 'Decline'){
-                $column[] = '<span class="badge badge-danger">Ditolak</span>'; 
+                    $column[] = '<span class="badge badge-danger">Ditolak</span>'; 
                 }else{
-                $column[] = '<span class="badge badge-danger">Dibatalkan</span>';  
+                    $column[] = '<span class="badge badge-danger">Dibatalkan</span>';  
                 }
-                $column[] = esc($row['submission_admin_remark']);
+                $column[] = esc($row['submission_admin_remark_cancel']);
                 $btns = [];
                 $prop =  'data-id="'.$row['submission_id'].'" data-name="'.esc($row['submission_inv']).'"';
                 $btns[] = button_edit($prop);
@@ -75,7 +73,142 @@ class Submission extends WebminController
     }
 
 
+    public function tempadd(){
 
+        $this->validationRequest(TRUE, 'POST');
+
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+        $validation =  \Config\Services::validation();
+        
+        $input = [
+            'temp_submission_item_id'               => $this->request->getPost('item_id'),
+            'temp_submission_item_name'             => $this->request->getPost('product_name'),
+            'temp_submission_qty'                   => $this->request->getPost('temp_qty'),
+            'temp_submission_supplier_id'           => $this->request->getPost('supplier_id'),
+            'temp_submission_supplier_name'         => $this->request->getPost('supplier_name'),
+            'temp_submission_salesman_id'           => $this->request->getPost('salesman_id'),
+            'temp_submission_salesman_name'         => $this->request->getPost('salesman_name'),
+            'temp_submission_warehouse_id'          => $this->request->getPost('warehouse_id'),
+            'temp_submission_warehouse_name'        => $this->request->getPost('warehouse_name'),
+        ];
+
+        $validation->setRules([
+            'temp_submission_item_id'           => ['rules' => 'required'],
+            'temp_submission_qty'               => ['rules' => 'required|greater_than[0]'],
+            'temp_submission_supplier_id'       => ['rules' => 'required|greater_than[0]'],
+            'temp_submission_supplier_name'     => ['rules' => 'required']
+        ]);
+
+
+        if ($validation->run($input) === FALSE) {
+
+            $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+        } else {
+
+            $input['temp_submission_user_id'] = $this->userLogin['user_id'];
+
+
+            $save = $this->M_submission->insertTemp($input);
+
+            if ($save) {
+
+                if($this->request->getPost('temp_submission_id') == null){
+
+                    $result = ['success' => TRUE, 'message' => 'Data item berhasil ditambahkan'];
+
+                }else{
+
+                    $result = ['success' => TRUE, 'message' => 'Data item berhasil Diubah'];
+
+                }
+
+            } else {
+
+                $result = ['success' => FALSE, 'message' => 'Data item gagal ditambahkan'];
+
+            }
+
+        }
+
+        $getTemp = $this->M_submission->getTemp($this->userLogin['user_id'])->getResultArray();
+
+        $find_result = [];
+
+        foreach ($getTemp as $k => $v) {
+
+            $find_result[$k] = esc($v);
+
+        }
+
+        $result['data'] = $find_result;
+
+        $result['csrfHash'] = csrf_hash();
+
+        resultJSON($result);
+    }
+
+
+    public function deleteTemp($temp_submission_id = '')
+    {
+        //$this->validationRequest(TRUE);
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+        if ($this->role->hasRole('submission.delete')) {
+
+            if ($temp_submission_id != '') {
+
+                $delete = $this->M_submission->deletetemp($temp_submission_id);
+
+                if ($delete) {
+
+                    $getTemp = $this->M_submission->getTemp($this->userLogin['user_id'])->getResultArray();
+
+                    $find_result = [];
+
+                    foreach ($getTemp as $k => $v) {
+
+                        $find_result[$k] = esc($v);
+
+                    }
+
+                    $result['data'] = $find_result;
+
+                    $result['csrfHash'] = csrf_hash();
+
+                    $result['success'] = 'TRUE';
+
+                    $result['message'] = 'Data Berhasil Di Hapus';
+
+                } else {
+                    $result = ['success' => FALSE, 'message' => 'Data Gagal Di Hapus'];
+                }
+            }
+        } else {
+            $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk menghapus data ini'];
+        }
+        resultJSON($result);
+    }
+
+    public function clearTemp($temp_submission_id = '')
+    {
+        //$this->validationRequest(TRUE);
+        $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
+
+        $user_id = $this->userLogin['user_id'];
+
+        $this->clearTemp($user_id);
+
+        $result['csrfHash'] = csrf_hash();
+
+        $result['success'] = 'TRUE';
+
+        $result['message'] = 'Data Berhasil Di Hapus';
+
+        
+        resultJSON($result);
+    }
 
     public function search_product()
 
@@ -121,7 +254,7 @@ class Submission extends WebminController
 
     }
 
-   
+
     public function searchProductSubmission()
     {
 
@@ -175,6 +308,57 @@ class Submission extends WebminController
 
 
 
+    public function editSubmision($submission_id = '')
+    {
+
+        $this->validationRequest(TRUE, 'GET');
+
+        $result = ['success' => FALSE, 'message' => 'Anda tidak memiliki akses untuk mengubah Pengajuan pembelian'];
+
+        if ($this->role->hasRole('submission.edit')) {
+
+            $getOrder = $this->M_submission->getOrder($submission_id)->getRowArray();
+
+            //print_r($getOrder);die();
+
+            if ($getOrder == NULL) {
+
+                $result = ['success' => FALSE, 'message' => 'Transaksi dengan No invoice <b>' . $submission_id . '</b> tidak ditemukan'];
+            } else {
+
+                $submission_inv = $getOrder['submission_inv'];
+
+                $datacopy = [
+                    'submission_id'                             => $submission_id,
+                    'user_id'                                   => $this->userLogin['user_id'],
+                    'temp_submission_supplier_id'               => $getOrder['submission_supplier_id'],
+                    'temp_submission_supplier_name'             => $getOrder['supplier_name'],
+                    'temp_submission_salesman_id'               => $getOrder['submission_salesman_id'],
+                    'temp_submission_salesman_name'             => $getOrder['salesman_name'],
+                    'temp_submission_warehouse_id'              => $getOrder['submission_warehouse_id'],
+                    'temp_submission_warehouse_name'            => $getOrder['warehouse_name'],
+                    'temp_submission_status'                    => $getOrder['submission_item_status']
+                ];
+
+                $getTemp = $this->M_submission->copyDtSubmisionToTemp($datacopy)->getResultArray();
+
+
+                $find_result = [];
+
+                foreach ($getTemp as $k => $v) {
+
+                    $find_result[$k] = esc($v);
+                }
+
+                $result = ['success' => TRUE, 'header' => $getOrder, 'data' => $find_result, 'message' => ''];
+            }
+        }
+        $result['csrfHash'] = csrf_hash();
+
+        resultJSON($result);
+    }
+
+
     public function save($type)
     {
 
@@ -190,19 +374,17 @@ class Submission extends WebminController
             'submission_id'              => $this->request->getPost('submission_id'),
             'submission_warehouse_id'    => $this->request->getPost('submission_warehouse_id'),
             'submission_type'            => $this->request->getPost('submission_type'),
-            'submission_item_id'         => $this->request->getPost('item_id'),
-            'submission_product_name'    => $this->request->getPost('product_name'),
-            'submission_qty'             => $this->request->getPost('qty'),
             'submission_item_status'     => $this->request->getPost('temp_status'), 
             'submission_date'            => $this->request->getPost('submission_order_date'),
             'submission_salesman_id'     => $this->request->getPost('salesman_id'),
+            'submission_supplier_id'     => $this->request->getPost('supplier_id'),
             'submission_desc'            => $this->request->getPost('desc')
         ];
 
         $validation->setRules([
             'submission_warehouse_id'        => ['rules' => 'required'],
+            'submission_type'                => ['rules' => 'required'],
             'submission_desc'                => ['rules' => 'max_length[500]'],
-            'submission_item_id'             => ['rules' => 'required'],
         ]);
 
         if ($validation->run($input) === FALSE) {
@@ -244,6 +426,8 @@ class Submission extends WebminController
                 if ($this->role->hasRole('submission.edit')) {
 
                     $input['submission_user_id'] = $this->userLogin['user_id'];
+
+                    $input['submission_inv'] = $this->request->getPost('submission_inv');
 
                     $save = $this->M_submission->updateOrder($input);
 
@@ -343,8 +527,8 @@ class Submission extends WebminController
 
         $input = [
 
-            'submission_id_decline'      => $this->request->getPost('submission_id_decline'),
-            'submission_admin_remark'    => $this->request->getPost('desc_decline')
+            'submission_id_decline'             => $this->request->getPost('submission_id_decline'),
+            'submission_admin_remark_cancel'    => $this->request->getPost('desc_decline')
         ];
 
         if ($this->role->hasRole('submission.decline')) {
@@ -383,6 +567,8 @@ class Submission extends WebminController
 
             $getOrder =  $this->M_submission->getSubmissiondetaildata($submission_id)->getRowArray();
 
+            $getDtOrder =  $this->M_submission->getSubmissiondetaildata($submission_id)->getResultArray();
+
             if ($getOrder == NULL) {
 
                 throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
@@ -392,6 +578,8 @@ class Submission extends WebminController
                 $data = [
 
                     'hdsubmission' => $getOrder,
+
+                    'dtsubmision' => $getDtOrder,
 
                     'logupdate' => $this->M_submission->getLogEditOrder($submission_id)->getResultArray()
 
@@ -438,7 +626,7 @@ class Submission extends WebminController
         $validation =  \Config\Services::validation();
 
         $input = [
-            
+
             'submission_warehouse_id'    => $this->request->getPost('submission_warehouse_id'),
             'submission_type'            => $this->request->getPost('submission_type'),
             'submission_item_id'         => $this->request->getPost('item_id'),

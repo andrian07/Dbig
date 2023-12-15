@@ -224,9 +224,18 @@
                             </tr>
 
                             <tr>
-                                <td class="no-border" style="padding-left: 2%;">Hormat Kami, </td>
-                                <td class="no-border" style="text-align:left;">Penerima, </td>
-                                <td class="right no-border" style="text-align:right;"></td>
+                                <td class="no-border" style="padding-left: 2%; text-align:center;">
+                                        Hormat Kami, <br /><br /><br /><br /><br /><br />
+                                        ----------------------------
+                                </td>
+                                <td class="no-border" style="text-align:center;">Penerima, 
+                                <br /><br /><br /><br /><br /><br />
+                                        ----------------------------
+                                </td>
+                                <td class="no-border" style="text-align:center;">Gudang,
+                                <br /><br /><br /><br /><br /><br />
+                                        ----------------------------
+                                </td>
                                 <td class="right no-border" style="text-align:right;"></td>
 
                             </tr>
@@ -251,17 +260,20 @@
                                 <td class="right no-border" style="text-align:right;"></td>
                             </tr>
 
+                            <?php /*
                             <tr>
                                 <td class="no-border sign-border" colspan="2">
                                     <div class="ttd">
                                         <p class="ttd_word">----------------------------</p>
                                         <p style="margin-left: -30px;">----------------------------</p>
+                                        <p style="padding-left:">----------------------------</p>
                                     </div>
                                 </td>
                                 <td class="right no-border"> </td>
                                 <td class="no-border"></td>
                                 <td class="no-border"></td>
                             </tr>
+                            */ ?>
 
 
 

@@ -376,6 +376,39 @@ public function copyDtOrderToTemp($datacopy)
     return $this->getTemp($user_id);
 }
 
+public function copySubmissionToTemp($datacopy)
+{
+    $user_id = $datacopy['user_id'];
+    $submission_id = $datacopy['submission_id'];
+    $tax = $datacopy['tax'];
+    if($tax == 'Y'){
+        $cal_tax = 11;
+    }else{
+        $cal_tax = 1;
+    }
+
+    $this->clearTemp($user_id);
+
+    $sqlText = "INSERT INTO temp_purchase_order(temp_po_submission_id,temp_po_submission_invoice,temp_po_item_id,temp_po_qty,temp_po_ppn,temp_po_dpp,temp_po_price,temp_po_discount1,temp_po_discount1_percentage,temp_po_discount2,temp_po_discount2_percentage,temp_po_discount3,temp_po_discount3_percentage,temp_po_discount_total,temp_po_ongkir,temp_po_expire_date,temp_po_total,temp_po_supplier_id,temp_po_supplier_name,temp_po_user_id) ";
+
+    $sqlText .= "select submission_id,submission_inv,dt_submission_item_id, dt_submission_qty, base_purchase_price * ".$cal_tax." / 100 as price_ppn, base_purchase_price - (base_purchase_price * ".$cal_tax." / 100) as price_dpp, base_purchase_price,0,0,0,0,0,0,0,0,'',base_purchase_price * dt_submission_qty as total_temp,supplier_id,supplier_name,'".$user_id."' as user_id";
+
+    $sqlText .= " FROM hd_submission a, dt_submission b, ms_product_unit c, ms_product d, ms_supplier e WHERE a.submission_id = b.dt_hd_submision_id and b.dt_submission_item_id = c.item_id and c.product_id = d.product_id and a.submission_supplier_id = e.supplier_id and submission_id = '$submission_id'";
+
+    $this->db->query($sqlText);
+
+    return $this->getTemp($user_id);
+}
+
+public function check_tax($submission_id)
+{
+    $builder = $this->db->table('dt_submission')->select("has_tax");
+    $builder->join('ms_product_unit', 'ms_product_unit.item_id = dt_submission.dt_submission_item_id');
+    $builder->join('ms_product', 'ms_product.product_id = ms_product_unit.product_id');
+    $builder->where("dt_hd_submision_id", $submission_id);
+    return $builder->get();
+}
+
 public function clearUpdateDetail($purchase_order_id){
 
     return $this->db->table($this->table_dt_po)

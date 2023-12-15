@@ -70,15 +70,13 @@ $assetsUrl = base_url('assets');
 
                                         <th data-priority="4">Diajukan</th>
 
-                                        <th data-priority="5">Nama Produk</th>
+                                        <th data-priority="5">Keterangan</th>
 
-                                        <th data-priority="6">Keterangan</th>
+                                        <th data-priority="6">Status</th>
 
-                                        <th data-priority="7">Status</th>
+                                        <th data-priority="7">Catatan Ditolak</th>
 
-                                        <th data-priority="8">Catatan Admin</th>
-
-                                        <th data-priority="9">Aksi</th>
+                                        <th data-priority="8">Aksi</th>
 
                                     </tr>
 
@@ -109,137 +107,6 @@ $assetsUrl = base_url('assets');
 
 </div>
 
-<!-- add submission -->
-<div class="modal fade" id="modal-addsubmission">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="title-addsubmission"></h4>
-                <button type="button" class="close close-modal-addsubmission">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="frmaddsubmission" class="form-horizontal">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6 border-right border-primary">
-                            <div class="form-group">
-                                <label for="submission_order_invoice" class="col-sm-12">No Invoice:</label>
-                                <div class="col-sm-12">
-                                    <input type="hidden" id="submission_id" name="submission_id">
-                                    <input id="submission_order_invoice" name="submission_order_invoice" type="text"
-                                    class="form-control" value="AUTO" readonly>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="submission_order_date" class="col-sm-12">Tanggal:</label>
-                                <div class="col-sm-12">
-                                    <input id="submission_order_date" name="submission_order_date" type="date"
-                                    class="form-control" value="<?= date('Y-m-d') ?>" readonly>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="warehouse" class="col-sm-1 col-form-label text-right">Gudang:</label>
-                                <div class="col-sm-12">
-                                    <select id="warehouses" type="text" class="form-control" data-parsley-vwarehousecode
-                                    required></select>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="submission_type" class="col-sm-1 col-form-label text-right">Tipe:</label>
-                                <div class="col-sm-12">
-                                    <select id="submission_type" type="text" class="form-control"
-                                    data-parsley-vsubmissiontype required>
-                                    <option value="Pembelian">Pembelian</option>
-                                    <option value="Konsinyasi">Konsinyasi</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="salesman_ids" class="col-sm-1 col-form-label text-right">Sales:</label>
-                            <div class="col-sm-12">
-                                <select id="salesman_ids" type="text" class="form-control" data-parsley-vsalesman
-                                required></select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="display_user" class="col-sm-1 col-form-label text-right">User:</label>
-                            <div class="col-sm-12">
-                                <input id="display_user" type="text" class="form-control"
-                                value="<?= $user['user_realname'] ?>" readonly>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-
-
-
-                        <div class="form-group">
-                            <label for="temp_status" class="col-sm-12">Status:</label>
-                            <div class="col-sm-12">
-                                <select id="temp_status" name="temp_status" class="form-control"
-                                data-parsley-vtempstatus required>
-                                <option></option>
-                                <option value="Urgent">Urgent</option>
-                                <option value="New">New</option>
-                                <option value="Restock">Restock</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="item_code" class="col-sm-12">Produk Code:</label>
-                        <div class="col-sm-12">
-                            <input id="item_id" name="item_id" class="form-control" type="hidden">
-                            <input id="item_code" name="item_code" class="form-control" type="text" readonly>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="product_name" class="col-sm-12">Produk:</label>
-                        <div class="col-sm-12">
-                            <input id="product_name" name="product_name" type="text" class="form-control"
-                            placeholder="ketikkan nama produk" value="" data-parsley-vproductname required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="temp_qtys" class="col-sm-12">Qty:</label>
-                        <div class="col-sm-12">
-                            <input id="temp_qtys" name="temp_qty" class="form-control" value="0"
-                            data-parsley-vqty required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="desc" class="col-sm-12">Keterangan:</label>
-                        <div class="col-sm-12">
-                            <textarea id="desc" name="desc" type="text" class="form-control"></textarea>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer justify-content-between">
-            <button class="btn btn-danger close-modal-addsubmission"><i class="fas fa-times-circle"></i>
-            Batal</button>
-            <button id="btnsave_submission" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
-        </div>
-    </form>
-</div>
-<!-- /.modal-content -->
-</div>
-<!-- /.modal-dialog -->
-</div>
-<!-- end submission -->
 
 
 <!-- decline -->
@@ -325,7 +192,7 @@ $assetsUrl = base_url('assets');
                         <div class="card-body">
 
 
-                            <form id="frmsubmission" class="form-horizontal form-space">
+                            <form id="frmaddsubmission" class="form-horizontal form-space">
 
                                 <div class="form-group row">
 
@@ -334,9 +201,9 @@ $assetsUrl = base_url('assets');
 
                                     <div class="col-sm-3">
 
-                                        <input id="purchase_order_invoice" name="purchase_order_invoice" type="text"
+                                        <input id="submission_inv" name="submission_inv" type="text"
                                         class="form-control" value="AUTO" readonly>
-                                        <input id="purchase_order_id" name="purchase_order_id" type="hidden"
+                                        <input id="submission_id" name="purchase_order_id" type="hidden"
                                         class="form-control">
 
                                     </div>
@@ -346,7 +213,7 @@ $assetsUrl = base_url('assets');
 
                                     <div class="col-sm-3">
 
-                                        <input id="purchase_order_date" name="purchase_order_date" type="date"
+                                        <input id="submission_order_date" name="submission_order_date" type="date"
                                         class="form-control" value="<?= date('Y-m-d') ?>" readonly>
 
                                     </div>
@@ -414,108 +281,99 @@ $assetsUrl = base_url('assets');
                                     <select id="salesman_id" type="text" class="form-control"></select>
                                 </div>
 
-                                <div class="col-md-8"></div>
-
+                                <div class="col-md-4"></div>
+                                
+                                <label for="status" class="col-sm-1 col-form-label text-right">Status :</label>
+                                <div class="col-sm-3">
+                                    <select id="temp_status" name="temp_status" class="form-control"
+                                    data-parsley-vtempstatus required>
+                                    <option></option>
+                                    <option value="Urgent">Urgent</option>
+                                    <option value="New">New</option>
+                                    <option value="Restock">Restock</option>
+                                </select>
                             </div>
 
-
-                        </form>
-
+                        </div>
 
 
+                    </form>
 
-                    </div><!-- /.card-body -->
 
-                </div>
 
-                <!-- /.card -->
+
+                </div><!-- /.card-body -->
 
             </div>
 
-            <!-- /.col -->
+            <!-- /.card -->
 
         </div>
 
-        <!-- /.row -->
+        <!-- /.col -->
 
-    </div><!-- /.container-fluid -->
+    </div>
+
+    <!-- /.row -->
+
+</div><!-- /.container-fluid -->
 
 
 
 
 
-    <div class="container-fluid">
+<div class="container-fluid">
 
-        <div class="row">
+    <div class="row">
 
-            <!-- /.col -->
+        <!-- /.col -->
 
-            <div class="col-md-12">
+        <div class="col-md-12">
 
-                <div class="card">
+            <div class="card">
 
-                    <div class="card-body">
+                <div class="card-body">
 
-                        <form id="frmaddtemp" class="mb-2">
+                    <form id="frmaddtemp" class="mb-2">
 
-                            <div class="row well well-sm">
+                        <div class="row well well-sm">
 
-                                <input id="temp_po_id" name="temp_po_id" type="hidden" value="">
+                            <input id="temp_submission_id" name="temp_submission_id" type="hidden" value="">
 
-                                <input id="item_id" name="item_id" type="hidden" value="">
+                            <input id="item_id" name="item_id" type="hidden" value="">
 
-                                <div class="col-sm-4">
+                            <div class="col-sm-4">
 
-                                    <!-- text input -->
+                                <!-- text input -->
 
-                                    <div class="form-group">
+                                <div class="form-group">
 
-                                        <label>Produk</label>
+                                    <label>Produk</label>
 
-                                        <input id="product_name" name="product_name" type="text"
-                                        class="form-control" placeholder="ketikkan nama produk" value=""
-                                        data-parsley-vproductname required>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Qty</label>
-
-                                        <input id="temp_qty" name="temp_qty" type="text"
-                                        class="form-control text-right" value="0" data-parsley-vqty required>
-                                        <input id="total_price" name="total_price" type="hidden"
-                                        class="form-control text-right" value="0" required>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-2">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Status</label>
-
-                                        <select id="temp_status" name="temp_status" class="form-control"
-                                        data-parsley-vtempstatus required>
-                                        <option></option>
-                                        <option value="Urgent">Urgent</option>
-                                        <option value="New">New</option>
-                                        <option value="Restock">Restock</option>
-                                    </select>
+                                    <input id="product_name" name="product_name" type="text"
+                                    class="form-control" placeholder="ketikkan nama produk" value=""
+                                    data-parsley-vproductname required>
 
                                 </div>
 
                             </div>
+
+                            <div class="col-sm-2">
+
+                                <!-- text input -->
+
+                                <div class="form-group">
+
+                                    <label>Qty</label>
+
+                                    <input id="temp_qty" name="temp_qty" type="text"
+                                    class="form-control text-right" value="0" data-parsley-vqty required>
+
+                                </div>
+
+                            </div>
+
+
 
 
                             <div class="col-sm-1" style="padding-right: 62px;">
@@ -552,11 +410,11 @@ $assetsUrl = base_url('assets');
 
                                         <th data-priority="1">#</th>
 
-                                        <th data-priority="2" width="25%;">Product</th>
+                                        <th data-priority="2">Item Code</th>
 
-                                        <th data-priority="3">Qty</th>
+                                        <th data-priority="3" width="25%;">Product</th>                                        
 
-                                        <th data-priority="4">Status</th>
+                                        <th data-priority="4">Qty</th>
 
                                         <th data-priority="5">Aksi</th>
 
@@ -574,33 +432,23 @@ $assetsUrl = base_url('assets');
 
                                     <td>{row}</td>
 
-                                    <td>{submission_invoice}</td>
-
                                     <td>{item_code}</td>
 
                                     <td>{product_name}</td>
 
-                                    <td>{product_name}</td>
-
+                                    <td>{temp_qty}</td>
 
                                     <td>
-
                                         <button data-id="{temp_id}" data-json="{data_json}"
                                         class="btn btn-sm btn-warning btnedit rounded-circle"
                                         data-toggle="tooltip" data-placement="top" data-title="Edit">
-
                                         <i class="fas fa-edit"></i>
-
                                     </button>
-
-                                    &nbsp;
 
                                     <button data-id="{temp_id}"
                                     class="btn btn-sm btn-danger btndelete rounded-circle"
                                     data-toggle="tooltip" data-placement="top" data-title="Hapus">
-
                                     <i class="fas fa-minus"></i>
-
                                 </button>
 
                             </td>
@@ -623,181 +471,47 @@ $assetsUrl = base_url('assets');
 
                         <div class="col-sm-12">
 
-                            <textarea id="purchase_order_remark" name="purchase_order_remark"
-                            class="form-control" placeholder="Catatan" maxlength="500" rows="5">
-                        </textarea>
+                            <textarea id="submission_desc" name="submission_desc" class="form-control" placeholder="Catatan" maxlength="500" rows="3"></textarea>
 
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-lg-6 text-right">
-
-                <div class="form-group row">
-                    <div class="col-sm-12">
-                        <button id="btncancel" class="btn btn-danger"><i
-                            class="fas fa-times-circle"></i> Batal</button>
-                            <button id="btnsave" class="btn btn-success button-header-custom-save"><i
-                                class="fas fa-save"></i> Simpan</button>
-                            </div>
                         </div>
 
                     </div>
 
+                </div>
+
+                <div class="col-lg-6 text-right">
+
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <button id="btncancel" class="btn btn-danger"><i
+                                class="fas fa-times-circle"></i> Batal</button>
+                                <button id="btnsave_submission" class="btn btn-success button-header-custom-save"><i
+                                    class="fas fa-save"></i> Simpan</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
 
                 </div>
 
             </div>
 
+            <!-- /.card -->
+
         </div>
 
-        <!-- /.card -->
+        <!-- /.col -->
 
     </div>
 
-    <!-- /.col -->
-
-</div>
-
-<!-- /.row -->
+    <!-- /.row -->
 
 </div><!-- /.container-fluid -->
 
-<!-- Temp Modal Discount -->
-<div class="modal fade" id="modal-tempdiscount">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="title-frmtempdiscount"></h4>
-                <button type="button" class="close close-modal-temp">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="frmtempdiscount" class="form-horizontal">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="row">
-                            <label for="edit_temp_discount1_lbl" class="col-sm-12">Discount 1</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_temp_discount_percentage1"
-                                name="edit_temp_discount_percentage1" value="0">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_temp_discount1"
-                                name="edit_temp_discount1" value="0">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label for="edit_temp_discount2_lbl" class="col-sm-12">Discount 2</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_temp_discount_percentage2"
-                                name="edit_temp_discount_percentage2" value="0">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_temp_discount2"
-                                name="edit_temp_discount2" value="0">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label for="edit_temp_discount2_lbl" class="col-sm-12">Discount 3</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_temp_discount_percentage3"
-                                name="edit_temp_discount_percentage3" value="0">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_temp_discount3"
-                                name="edit_temp_discount3" value="0">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button id="btncancel" class="btn btn-danger close-modal-temp"><i
-                        class="fas fa-times-circle"></i> Batal</button>
-                        <button id="btndisc" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
-                    </div>
-                </form>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- End Temp Modal Discount -->
-
-    <!-- Footer Modal Discount -->
-    <div class="modal fade" id="modal-footerdiscount">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="title-frmfooterdiscount"></h4>
-                    <button type="button" class="close close-modal-footer">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="frmfooterdiscount" class="form-horizontal">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <div class="row">
-                                <label for="edit_footer_discount1_lbl" class="col-sm-12">Discount 1</label>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" id="edit_footer_discount_percentage1"
-                                    name="edit_footer_discount_percentage1" value="0">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" id="edit_footer_discount1"
-                                    name="edit_footer_discount1" value="0">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <label for="edit_footer_discount2_lbl" class="col-sm-12">Discount 2</label>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" id="edit_footer_discount_percentage2"
-                                    name="edit_footer_discount_percentage2" value="0">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" id="edit_footer_discount2"
-                                    name="edit_footer_discount2" value="0">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <label for="edit_footer_discount3_lbl" class="col-sm-12">Discount 3</label>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" id="edit_footer_discount_percentage3"
-                                    name="edit_footer_discount_percentage3" value="0">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" id="edit_footer_discount3"
-                                    name="edit_footer_discount3" value="0">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button id="btncancel" class="btn btn-danger close-modal-footer"><i
-                            class="fas fa-times-circle"></i> Batal</button>
-                            <button id="btndiscfooter" class="btn btn-success"><i class="fas fa-save"></i>
-                            Simpan</button>
-                        </div>
-                    </form>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- Footer Modal Discount -->
-
-
-    </section>
+</section>
 
 
 
@@ -872,7 +586,7 @@ $assetsUrl = base_url('assets');
                 width: 100
             },
             {
-                targets: [0, 8],
+                targets: [0, 7],
                 orderable: false,
                 searchable: false,
             },
@@ -889,7 +603,7 @@ $assetsUrl = base_url('assets');
                 setSelect2('#supplier_id', "", "");
                 $('#supplier_id').prop('disabled', false);
             }
-            let template = $('#teåplate_row_temp').html();
+            let template = $('#template_row_temp').html();
 
             let tbody = '';
 
@@ -903,53 +617,23 @@ $assetsUrl = base_url('assets');
 
                 let data_json = htmlEntities.encode(JSON.stringify(val));
 
-                let temp_po_id = val.temp_po_id;
-
-                let temp_po_submission_invoice = val.temp_po_submission_invoice;
-
-                let temp_po_item_id = val.temp_po_item_id;
+                let temp_submission_id = val.temp_submission_id;
 
                 let item_code = val.item_code;
 
-                let product_name = val.product_name + '(' + val.unit_name + ')';
+                let product_name = val.product_name+'('+val.unit_name+')';
 
-                let temp_po_price = val.temp_po_price;
-
-                let temp_po_qty = parseFloat(val.temp_po_qty);
-
-                let temp_po_total_disc = val.temp_total_discount;
-
-                let temp_po_ongkir = val.temp_po_ongkir;
-
-                let temp_po_expire_date = val.temp_po_expire_date;
-
-                let temp_po_total = val.temp_po_total;
-
-                let has_tax = val.has_tax;
-
-
+                let temp_submission_qty = parseFloat(val.temp_submission_qty);
 
                 item = item.replaceAll('{row}', row)
-
-                .replaceAll('{submission_invoice}', temp_po_submission_invoice)
 
                 .replaceAll('{item_code}', item_code)
 
                 .replaceAll('{product_name}', product_name)
 
-                .replaceAll('{temp_price}', numberFormat(temp_po_price, true))
+                .replaceAll('{temp_qty}', numberFormat(temp_submission_qty, true))
 
-                .replaceAll('{temp_qty}', numberFormat(temp_po_qty, true))
-
-                .replaceAll('{temp_disc}', numberFormat(temp_po_total_disc, true))
-
-                .replaceAll('{temp_ongkir}', numberFormat(temp_po_ongkir, true))
-
-                .replaceAll('{temp_ed}', temp_po_expire_date)
-
-                .replaceAll('{temp_total}', numberFormat(temp_po_total, true))
-
-                .replaceAll('{temp_id}', temp_po_id)
+                .replaceAll('{temp_id}', temp_submission_id)
 
                 .replaceAll('{data_json}', data_json);
 
@@ -971,7 +655,7 @@ $assetsUrl = base_url('assets');
 
             tbltemp = $('#tbltemp').DataTable(config_tbltemp);
 
-            clearItemInput();
+            clearTempInput();
 
             _initTooltip();
 
@@ -1007,7 +691,7 @@ $assetsUrl = base_url('assets');
             },
             {
 
-                targets: [0, 9],
+                targets: [0, 4],
 
                 orderable: false,
 
@@ -1016,7 +700,7 @@ $assetsUrl = base_url('assets');
             },
             {
 
-                targets: [0, 2, 3, 4, 5, 6],
+                targets: [0, 2, 3, 4],
 
                 className: "text-right",
 
@@ -1026,7 +710,8 @@ $assetsUrl = base_url('assets');
 
         };
 
-        let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+
+        
 
         $('#btnadd').click(function (e) {
             e.preventDefault();
@@ -1042,8 +727,8 @@ $assetsUrl = base_url('assets');
                         $('#supplier_id').prop("disabled", false);
                         loadTempData(items);
                         if (items.length != 0) {
-                            let supplier_ids = items[0].temp_po_supplier_id;
-                            let supplier_names = items[0].temp_po_supplier_name;
+                            let supplier_ids = items[0].temp_submission_supplier_id;
+                            let supplier_names = items[0].temp_submission_supplier_name;
                             setSelect2('#supplier_id', supplier_ids, supplier_names);
                             $('#supplier_id').attr("disabled", true);
                         }
@@ -1052,17 +737,6 @@ $assetsUrl = base_url('assets');
                     } else {
                         message.error(response.result.message);
                     }
-                }
-            })
-        })
-
-
-        $('.close-modal-addsubmission').click(function (e) {
-            e.preventDefault();
-            message.question('Yakin ingin menutup halaman ini?').then(function (answer) {
-                let yes = parseMessageResult(answer);
-                if (yes) {
-                    $('#modal-addsubmission').modal('hide');
                 }
             })
         })
@@ -1077,47 +751,229 @@ $assetsUrl = base_url('assets');
             })
         })
 
-        $("#tblhdsubmission").on('click', '.btnedit', function (e) {
+
+
+        let tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+
+        $('#btnadd_temp').click(function(e) {
+
             e.preventDefault();
-            let id = $(this).attr('data-id');
-            let actUrl = base_url + '/webmin/submission/getbyid/' + id;
-            ajax_get(actUrl, null, {
-                success: function (response) {
-                    if (response.success) {
-                        if (response.result.exist) {
-                            if (response.result.data.submission_status == 'Pending') {
-                                editMode(response.result.data);
+
+            let qty = parseFloat(temp_qty.getNumericString());
+
+            let supplier_id = $('#supplier_id').val();
+
+            let supplier_name = $("#supplier_id option:selected" ).text();
+
+            let submission_type = $('#submission_type').val();
+
+            let salesman_id = $('#salesman_id').val();
+
+            let salesman_name = $("#salesman_id option:selected" ).text();
+
+            let warehouse_id = $('#warehouse').val();
+
+            let warehouse_name = $("#warehouse option:selected" ).text();
+
+            let temp_status = $('#temp_status').val();
+
+            let item_id = $('#item_id').val();
+
+            let product_name = $('#product_name').val();
+
+            let btnSubmit = $('#btnadd_temp');
+
+            let form = $('#frmaddtemp');
+
+            form.parsley().validate();
+
+            if (form.parsley().isValid()) {
+
+                let actUrl = base_url + '/webmin/submission/temp-add';
+
+                let formValues = {
+
+                    supplier_id: $('#supplier_id').val(),
+
+                    supplier_name: supplier_name,
+
+                    product_name:product_name,
+
+                    item_id:item_id,
+
+                    temp_qty:qty,
+
+                    salesman_id:salesman_id,
+
+                    salesman_name:salesman_name,
+
+                    warehouse_id:warehouse_id,
+
+                    warehouse_name:warehouse_name
+                };
+
+                btnSubmit.prop('disabled', true);
+
+                ajax_post(actUrl, formValues, {
+
+                    success: function(response) {
+
+                        if (response.success) {
+
+                            if (response.result.success) {
+
+                                $('#product_name').focus();
+
+                                setSelect2('#supplier_id', supplier_id, supplier_name);
+
+                                $('#supplier_id').attr("disabled", true);
+
+                                if(warehouse_id != null)
+                                {
+                                    setSelect2('#warehouse', warehouse_id, warehouse_name);
+                                }
+                                if(salesman_id != null)
+                                {
+                                    setSelect2('#salesman_id', salesman_id, salesman_name);
+                                }
+
+                                notification.success(response.result.message);
+
                             } else {
-                                message.info('Pesanan yang sudah selesai atau dibatalkan tidak dapat di ubah lagi');
-                            }
+
+                             message.error(response.result.message);
+
+                         }
+
+                         clearTempInput();
+
+                         loadTempData(response.result.data);
+
+                     }
+
+                     btnSubmit.prop('disabled', false);
+
+                 },
+
+                 error: function(response) {
+
+                     btnSubmit.prop('disabled', false);
+
+                 }
+             });
+            }
+        })
+
+        $("#tbltemp").on('click', '.btnedit', function(e) {
+
+            e.preventDefault();
+
+            let json_data = $(this).attr('data-json');
+
+            let [json, is_json, error] = parseJSON(htmlEntities.decode(json_data));
+
+            if (is_json) {
+
+                $('#temp_submission_id').val(json.temp_submission_id);
+
+                $('#item_id').val(json.temp_submission_item_id);
+
+                $('#product_name').val(json.temp_submission_item_name);
+
+                temp_qty.set(json.temp_submission_qty);
+
+            } else {
+
+                getTemp();
+
+                message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
+
+            }
+
+        })  
+
+
+        $("#tbltemp").on('click', '.btndelete', function(e) {
+
+            e.preventDefault();
+
+            let id = $(this).attr('data-id');
+
+            let actUrl = base_url + '/webmin/submission/temp-delete/' + id;
+
+            ajax_get(actUrl, null, {
+
+                success: function(response) {
+
+                    if (response.success) {
+
+                        if (response.result.success) {
+
+                            notification.success(response.result.message);
+
                         } else {
+
                             message.error(response.result.message);
+
                         }
+
+                        loadTempData(response.result.data);
+
                     }
+
+                },
+
+                error: function(response) {
+
+                    getTemp();
+
                 }
+
+            })
+
+
+            $('#btncancel').click(function (e) {
+
+                e.preventDefault();
+
+                let actUrl = base_url + '/webmin/submission/clearTemp/';
+
+                ajax_get(actUrl, null, {
+
+                    success: function(response) {
+
+                        if (response.success) {
+
+                            if (response.result.success) {
+
+                                clearTempInput();
+
+                                clearItemInput();
+
+                                showInputPage(false);
+
+                            } else {
+
+                                message.error(response.result.message);
+
+                            }
+
+
+                        }
+
+                    },
+
+                    error: function(response) {
+
+                        getTemp();
+
+                    }
+
+                })
+
             })
 
         })
-
-        function editMode(data) {
-            let form = $('#frmaddsubmission');
-            $('#title-frmaddsubmission').html('Ubah Pengajuan');
-            form.parsley().reset();
-            formMode = 'edit';
-            $('#submission_id').val(htmlEntities.decode(data.submission_id));
-            $('#submission_order_invoice').val(htmlEntities.decode(data.submission_inv));
-            $('#submission_order_date').val(htmlEntities.decode(data.submission_date));
-            setSelect2("#warehouse", htmlEntities.decode(data.submission_warehouse_id), htmlEntities.decode(data.warehouse_code) + ' - ' + htmlEntities.decode(data.warehouse_name));
-            setSelect2("#salesman_id", htmlEntities.decode(data.submission_salesman_id), htmlEntities.decode(data.salesman_code) + ' - ' + htmlEntities.decode(data.salesman_name));
-            $('#temp_status').val(htmlEntities.decode(data.submission_item_status));
-            $('#submission_type').val(htmlEntities.decode(data.submission_type));
-            $('#item_code').val(htmlEntities.decode(data.item_code));
-            $('#item_id').val(htmlEntities.decode(data.submission_item_id));
-            $('#product_name').val(htmlEntities.decode(data.submission_product_name));
-            temp_qty.set(data.submission_qty);
-            $('#desc').val(htmlEntities.decode(data.submission_desc));
-            $('#modal-addsubmission').modal(configModal);
-        }
 
         $("#tblhdsubmission").on('click', '.btndecline', function (e) {
             e.preventDefault();
@@ -1149,15 +1005,15 @@ $assetsUrl = base_url('assets');
             $('#modal-decline').modal(configModal);
         }
 
-        $('#product_name').autocomplete({
+        $('#product_name').autocomplete({   
 
             minLength: 2,
 
-            source: function (req, add) {
+            source: function(req, add) {
 
                 $.ajax({
 
-                    url: base_url + '/webmin/submission/search-product-submission',
+                    url: base_url + '/webmin/purchase-order/search-product-bysuplier?sup='+$('#supplier_id').val(),
 
                     dataType: 'json',
 
@@ -1165,13 +1021,13 @@ $assetsUrl = base_url('assets');
 
                     data: req,
 
-                    success: function (res) {
+                    success: function(res) {
 
                         if (res.success == true) {
 
                             add(res.data);
 
-                        } else {
+                        }else{
 
                             message.error(res.message);
 
@@ -1185,17 +1041,13 @@ $assetsUrl = base_url('assets');
 
             },
 
-            select: function (event, ui) {
+            select: function(event, ui) {
 
                 $('#item_id').val(ui.item.item_id);
-
-                $('#item_code').val(ui.item.item_code);
 
             },
 
         });
-
-
 
         $("#tblhdsubmission").on('click', '.btndelete', function (e) {
 
@@ -1205,7 +1057,7 @@ $assetsUrl = base_url('assets');
 
             let submission_id_decline = $('#submission_id_decline').val();
 
-            message.question('Yakin ingin Menolak pengajuan ini?').then(function (answer) {
+            message.question('Yakin ingin Menghapus pengajuan ini?').then(function (answer) {
 
                 let yes = parseMessageResult(answer);
 
@@ -1379,6 +1231,92 @@ $assetsUrl = base_url('assets');
         });
 
 
+        $("#tblhdsubmission").on('click', '.btnedit', function(e) {
+
+            e.preventDefault();
+
+            let id = $(this).attr('data-id');
+
+            let actUrl = base_url + '/webmin/submission/edit-submission/' + id;
+
+            ajax_get(actUrl, null, {
+
+                success: function(response) {
+
+                    if (response.success) {
+
+                        if (response.result.success) {
+
+                            let form = $('#frmpurchaseorder');
+
+                            let items = response.result.data;
+
+                            $('#title-frmpurchaseorder').html('Ubah PO');
+
+                            let header = response.result.header;
+
+                            supplier_id = header.submission_supplier_id;
+
+                            supplier_name = header.supplier_name;
+
+                            salesman_id = header.submission_salesman_id;
+
+                            salesman_name = header.salesman_name;
+
+                            warehouse_id = header.submission_warehouse_id;
+
+                            warehouse_name = header.warehouse_name;
+
+                            if (header.submission_status == 'Pending') {
+
+                                console.log(header);
+
+                                $('#title-frmpurchaseorder').html('Ubah Pengajuan Pesanan');
+
+                                formMode = 'edit';
+
+                                $('#submission_id').val(header.submission_id);
+
+                                $('#submission_inv').val(header.submission_inv);
+
+                                setSelect2('#supplier_id', supplier_id, supplier_name);
+
+                                $('#supplier_id').prop("disabled", true);
+
+                                $('#submission_type').val(header.submission_type);
+
+                                setSelect2('#salesman_id', salesman_id, salesman_name);
+
+                                setSelect2('#warehouse', warehouse_id, warehouse_name);
+
+                                $('#display_user').val(header.user_realname);
+
+                                $('#temp_status').val(header.submission_item_status);
+
+                                $('#submission_desc').val(header.submission_desc);
+
+                                loadTempData(items);
+
+                                showInputPage(true);
+
+                            } else {
+
+                                message.info('Pesanan yang sudah selesai atau dibatalkan tidak dapat di ubah lagi');
+
+                            }
+
+                        } else {
+
+                            message.error(response.result.message);
+
+                        }
+
+                    }
+
+                }
+
+            })
+        })
 
         $('#btnsave_submission').click(function (e) {
 
@@ -1388,10 +1326,9 @@ $assetsUrl = base_url('assets');
 
             let form = $('#frmaddsubmission');
 
-            let btnSubmit = $('#btnsave');
+            let btnSubmit = $('#btnsave_submission');
 
             let question = 'Yakin ingin menyimpan data Pengajuan?';
-
 
             form.parsley().validate();
 
@@ -1418,7 +1355,11 @@ $assetsUrl = base_url('assets');
 
                             submission_id: $('#submission_id').val(),
 
+                            submission_inv: $('#submission_inv').val(),
+
                             submission_order_date: $('#submission_order_date').val(),
+
+                            supplier_id: $('#supplier_id').val(),
 
                             submission_warehouse_id: $('#warehouse').val(),
 
@@ -1428,13 +1369,7 @@ $assetsUrl = base_url('assets');
 
                             temp_status: $('#temp_status').val(),
 
-                            item_id: $('#item_id').val(),
-
-                            product_name: $('#product_name').val(),
-
-                            qty: qty,
-
-                            desc: $('#desc').val(),
+                            desc: $('#submission_desc').val(),
 
                         };
 
@@ -1456,9 +1391,7 @@ $assetsUrl = base_url('assets');
 
                                         clearItemInput();
 
-                                        let invoice = response.result.purchase_order_id;
-
-                                        $('#modal-addsubmission').modal('hide');
+                                        showInputPage(false);
 
                                     } else {
 
@@ -1648,15 +1581,13 @@ $assetsUrl = base_url('assets');
 
         function clearItemInput() {
 
-            let form = $('#frmaddsubmission');
+            let form = $('#frmaddtemp');
 
             form.parsley().reset();
 
             setSelect2("#warehouse", '', '');
 
             setSelect2("#salesman_id", '', '');
-
-            $('#temp_status').val('');
 
             $('#item_id').val('');
 
@@ -1666,7 +1597,23 @@ $assetsUrl = base_url('assets');
 
             temp_qty.set(0);
 
-            $('#desc').val('');
+            $('#submission_desc').val('');
+
+        }
+
+        function clearTempInput() {
+
+            let form = $('#frmaddtemp');
+
+            form.parsley().reset();
+
+            $('#item_id').val('');
+
+            $('#item_code').val('');
+
+            $('#product_name').val('');
+
+            temp_qty.set(0);
 
         }
 

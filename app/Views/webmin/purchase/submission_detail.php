@@ -90,6 +90,14 @@ $assetsUrl = base_url('assets');
 
                 </div>
 
+                <div class="col-sm-4 invoice-col">
+
+                       <p>Supplier:<b> <?= esc($hdsubmission['supplier_name']) ?></b></p>
+                       <p>Gudang:<b> <?= esc($hdsubmission['warehouse_name']) ?></b></p>
+                       <p>Sales:<b> <?= esc($hdsubmission['salesman_name']) ?></b></p>
+                       <p>Status:<b> <?= esc($hdsubmission['submission_item_status']) ?></b></p>
+                </div>
+
                 <!-- /.col -->
 
             </div>
@@ -116,38 +124,36 @@ $assetsUrl = base_url('assets');
 
                                 <th>Nama Produk</th>
 
-                                <th>Status Pengajuan</th>
-
                                 <th class="text-right">Qty Order</th>
-
-                                <th>Keterangan</th>
-
-                                <th>Status</th>
-
-                                <th>Catatan Admin</th>
 
                             </tr>
 
                         </thead>
 
                         <tbody>
-                            <tr>
 
-                                <td><?= esc($hdsubmission['item_code']) ?></td>
+                            <?php
 
-                                <td><?= esc($hdsubmission['submission_product_name']) ?></td>
+                            foreach ($dtsubmision as $row) :
 
-                                <td><?= esc($hdsubmission['submission_item_status']) ?></td>
+                                $dt_submission_qty = floatval($row['dt_submission_qty']);
+                                ?>
 
-                                <td class="text-right">Rp <?= numberFormat($hdsubmission['submission_qty'], TRUE) ?></td>
+                                <tr>
 
-                                <td><?= esc($hdsubmission['submission_desc']) ?></td>
+                                    <th><?= esc($row['product_code']) ?></th>
 
-                                <td><?= esc($hdsubmission['submission_status']) ?></td>
+                                    <th><?= esc($row['product_name']) ?>(<?= esc($row['unit_name']) ?>)</th>
 
-                                <td><?= esc($hdsubmission['submission_admin_remark']) ?></td>
+                                    <th class="text-right">Rp <?= numberFormat($dt_submission_qty, TRUE) ?></th>
 
-                            </tr>
+                                </tr>
+
+                                <?php
+
+                            endforeach;
+
+                            ?>
 
                         </tbody>
 

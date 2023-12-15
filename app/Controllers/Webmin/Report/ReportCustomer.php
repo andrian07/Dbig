@@ -563,7 +563,7 @@ class ReportCustomer extends WebminController
                 $receivabledata    = array_chunk($getReportData, $max_page_item);
                 
                 $data = [
-                    'title'                 => 'Laporan Piutang Customer',
+                    'title'                 => 'Laporan Aging Piutang Customer',
                     'start_date'            => $start_date,
                     'end_date'              => $end_date,
                     'customer_name'         => $customer_name,
@@ -756,7 +756,7 @@ class ReportCustomer extends WebminController
                 $receivabledata    = array_chunk($getReportData, $max_page_item);
                 
                 $data = [
-                    'title'                 => 'Laporan Piutang Customer',
+                    'title'                 => 'Laporan Aging Piutang Customer',
                     'start_date'            => $start_date,
                     'end_date'              => $end_date,
                     'customer_name'         => $customer_name,

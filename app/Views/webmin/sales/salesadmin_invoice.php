@@ -384,9 +384,9 @@ $assetsUrl = base_url('assets');
 
 				<td width="20%" class="text-center">Tanda Terima,</td>
 
-				<td width="20%" class="text-center">Hormat Kami,</td>
+				<td width="30%" class="text-center">Hormat Kami,</td>
 
-				<td width="20%" class="text-center">Gudang,</td>
+				<td width="20%" class="text-center"></td>
 
 				<td class="text-right">Disc: <?= floatval($hdSales['sales_admin_discount2_percentage']) ?>%</td>
 
@@ -421,7 +421,7 @@ $assetsUrl = base_url('assets');
 
 				<td class="footer-ttd text-center">--------------------------</td>
 
-				<td class="footer-ttd text-center">--------------------------</td>
+				<td class="footer-ttd text-center"></td>
 
 				<td colspan="3" class="text-center total-all">TOTAL: Rp. <?= numberFormat($hdSales['sales_admin_grand_total']) ?></td>
 
