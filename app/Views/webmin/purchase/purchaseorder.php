@@ -337,7 +337,7 @@ $assetsUrl = base_url('assets');
                                     <!-- text input -->
 
                                     <div class="form-group">
-
+                                        
                                         <label>Harga Beli Per Unit</label>
 
                                         <input id="temp_price" name="temp_price" class="form-control text-right" value="0" data-parsley-vprice required>

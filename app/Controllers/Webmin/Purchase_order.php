@@ -77,6 +77,57 @@ class Purchase_order extends WebminController
         }
     }
 
+    public function searchProductNonsuplier()
+    {
+
+        $this->validationRequest(TRUE, 'GET');
+
+        //$supplier = $this->request->getGet('sup');
+
+        $keyword = $this->request->getGet('term');
+
+        $result = ['success' => FALSE, 'num_product' => 0, 'data' => [], 'message' => ''];
+
+        if (!($keyword == '' || $keyword == NULL)) {
+
+            $M_product = model('M_product');
+
+            $find = $M_product->searchProductNonsuplier($keyword)->getResultArray();
+
+            $find_result = [];
+
+            foreach ($find as $row) {
+
+                $diplay_text = $row['product_name'];
+
+                $find_result[] = [
+
+
+                    'id'                  => $diplay_text,
+
+                    'value'               => $row['product_code'] . ' - ' . $diplay_text . '(' . $row['unit_name'] . ')',
+
+                    'item_id'             => $row['item_id'],
+
+                    'purchase_price'      => $row['purchase_price'],
+
+                    'base_purchase_tax'   => $row['base_purchase_tax'],
+
+                    'has_tax'             => $row['has_tax'],
+
+                    'supplier_id'         => $row['supplier_id'],
+
+                    'supplier_name'       => $row['supplier_code']. ' - ' .$row['supplier_name'],
+
+                ];
+            }
+
+            $result = ['success' => TRUE, 'num_product' => count($find_result), 'data' => $find_result, 'message' => ''];
+        }
+
+        resultJSON($result);
+    }
+
     public function searchProductBysuplier()
     {
 
@@ -362,9 +413,6 @@ class Purchase_order extends WebminController
             'temp_po_discount_total'            => $this->request->getPost('total_temp_discount'),
 
         ];
-
-
-
 
         $validation->setRules([
             'temp_po_item_id'    => ['rules' => 'required'],
@@ -809,7 +857,7 @@ class Purchase_order extends WebminController
 
                 $column[] = esc($row['submission_no']);
                 if ($row['status'] == 'Success') {
-                    $column[] = '<span class="badge badge-success">Selesai</span>';
+                    $column[] = '<span class="badge badge-success">Diajukan</span>';
                 } else if ($row['status'] == 'Pending') {
                     $column[] = '<span class="badge badge-primary">Pending</span>';
                 } else {

@@ -91,8 +91,6 @@ $assetsUrl = base_url('assets');
                 </div>
 
                 <div class="col-sm-4 invoice-col">
-
-                       <p>Supplier:<b> <?= esc($hdsubmission['supplier_name']) ?></b></p>
                        <p>Gudang:<b> <?= esc($hdsubmission['warehouse_name']) ?></b></p>
                        <p>Sales:<b> <?= esc($hdsubmission['salesman_name']) ?></b></p>
                        <p>Status:<b> <?= esc($hdsubmission['submission_item_status']) ?></b></p>

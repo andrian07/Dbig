@@ -561,6 +561,8 @@ $routes->group('webmin/purchase-order', ['filter' => 'webminauth'], static funct
 
     $routes->get('search-product-bysuplier', 'Webmin\Purchase_order::searchProductBysuplier');
 
+    $routes->get('search-product-non-suplier', 'Webmin\Purchase_order::searchProductNonsuplier');
+
     $routes->post('temp-add', 'Webmin\Purchase_order::tempadd');
 
     $routes->get('temp-delete/(:alphanum)', 'Webmin\Purchase_order::deleteTemp/$1');

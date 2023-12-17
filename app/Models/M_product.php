@@ -331,6 +331,32 @@ class M_product extends Model
         return  $builder->limit($limit)->get();
     }
 
+    public function searchProductNonsuplier($keyword, $isItemCode = FALSE, $limit = 10)
+    {
+
+        $builder = $this->db->table('ms_product_unit');
+        $builder->select('ms_product_unit.*,ms_product.base_purchase_tax,ms_product.product_name,(ms_product.base_purchase_price*ms_product_unit.product_content) as purchase_price,(ms_product.base_purchase_tax*ms_product_unit.product_content) as purchase_tax,ms_unit.unit_name,ms_product.is_parcel, product_code, has_tax, supplier_name, ms_supplier.supplier_id as supplier_id,supplier_code')
+            ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+            ->join('ms_product_supplier', 'ms_product_supplier.product_id = ms_product.product_id')
+            ->join('ms_unit', 'ms_unit.unit_id=ms_product_unit.unit_id')
+            ->join('ms_supplier', 'ms_supplier.supplier_id=ms_product_supplier.supplier_id')
+            ->where('ms_product.deleted', 'N')
+            ->where('ms_product.active', 'Y')
+            ->where('ms_product.is_parcel', 'N');
+
+        if ($isItemCode) {
+            $builder->where('ms_product_unit.item_code', $keyword);
+            $builder->orLike('ms_product.product_code', $keyword);
+        } else {
+            $builder->groupStart();
+            $builder->Like('ms_product.product_name', $keyword);
+            $builder->orLike('ms_product_unit.item_code', $keyword);
+            $builder->orLike('ms_product.product_code', $keyword);
+            $builder->groupEnd();
+        }
+        return  $builder->limit($limit)->get();
+    }
+
     public function searchProductBywarehouse($keyword, $warehouse_id = '', $isItemCode = FALSE, $limit = 10)
     {
 

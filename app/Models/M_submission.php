@@ -12,6 +12,8 @@ class M_submission extends Model
     protected $table_warehouse       = 'ms_warehouse';
     protected $log_queries           = 'hd_log_queries';
     protected $table_list_purchase_order   = 'list_purchase_order';
+    protected $table_product_unit    = 'ms_product_unit';
+    protected $list_auto_po = 'list_auto_po';
 
     
 
@@ -146,6 +148,30 @@ class M_submission extends Model
 
         saveQueries($saveQueries, 'declinesubmission', $input['submission_id_decline']);
         return $save;
+    }
+
+    public function insertSubmissiontemp($input_temp)
+    {   
+
+        $item_id = $input_temp['temp_submission_item_id'];
+
+        $supplier_id = $this->db->table($this->table_product_unit)->select('supplier_id')->join('ms_product_supplier','ms_product_supplier.product_id = ms_product_unit.product_id')->get()->getRowArray();
+
+        $temp_submission_item_id        = $input_temp['temp_submission_item_id'];
+        $temp_submission_qty            = $input_temp['temp_submission_qty'];
+        $user_id                        = $input_temp['temp_submission_user_id'];
+        $temp_submission_supplier_id    = $supplier_id['supplier_id'];
+
+        $sqlTempSubmision = "insert into temp_submission(temp_submission_item_id,temp_submission_qty,temp_submission_supplier_id,temp_submission_user_id) VALUES";
+
+        $sqlDtValues[] = "('$temp_submission_item_id','$temp_submission_qty','$temp_submission_supplier_id','$user_id')";
+
+        $sqlTempSubmision .= implode(',', $sqlDtValues);
+
+        $this->db->query($sqlTempSubmision);
+
+        return $supplier_id['supplier_id'];
+
     }
 
     public function insertSubmission($data)
@@ -477,6 +503,38 @@ class M_submission extends Model
         return $save;
 
     }
+
+    public function updatestatuslist($product_id)
+    {
+        $this->db->query('LOCK TABLES list_auto_po WRITE');
+
+        $saveQueries = $this->db->table($this->list_auto_po)->update(['status' => 'Success'], ['product_id ' => $product_id]);
+
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries = $this->db->getLastQuery()->getQuery();
+        }
+
+        if ($this->db->transStatus() === false) {
+
+            $saveQueries = NULL;
+
+            $this->db->transRollback();
+
+            $save = ['success' => FALSE, 'product_id' => 0];
+
+        } else {
+
+            $this->db->transCommit();
+
+            $save = ['success' => TRUE, 'product_id' => $product_id];
+
+        }
+        
+        $this->db->query('UNLOCK TABLES');
+
+        return $save;
+    }
+    
 
     
 

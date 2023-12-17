@@ -50,13 +50,11 @@ $assetsUrl = base_url('assets');
 			<div class="address-content" style="margin-top:-20px;">
 				<div class="left address-content-left">
 					<h4 style="text-decoration: underline;">Kepada Yth</h4>
-					<h4 style="margin-top: -19px;"><?= esc($hdPO['supplier_name']) ?></h4>
                     <p style="width: 80%;"><?= nl2br($hdPO['purchase_order_remark2']) ?></p>
 				</div>
 				<div class="right address-content-right">
-					<h4 style="text-decoration: underline;">Dari </h4>
-					<h4 style="margin-top: -19px;">CV. Depo Bangunan Indo Global </h4>
-					<<p style="width: 80%;"><?= nl2br($hdPO['purchase_order_remark3']) ?></p>
+					<h4 style="text-decoration: underline;">Dari</h4>
+					<p style="width: 80%;"><?= nl2br($hdPO['purchase_order_remark3']) ?></p>
 				</div>
 			</div>
             <p style="margin-top:155px;font-size:15px;">Mohon di berikan barang-barang yang tertera di bawah ini:</p>    

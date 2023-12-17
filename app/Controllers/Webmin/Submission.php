@@ -95,9 +95,7 @@ class Submission extends WebminController
 
         $validation->setRules([
             'temp_submission_item_id'           => ['rules' => 'required'],
-            'temp_submission_qty'               => ['rules' => 'required|greater_than[0]'],
-            'temp_submission_supplier_id'       => ['rules' => 'required|greater_than[0]'],
-            'temp_submission_supplier_name'     => ['rules' => 'required']
+            'temp_submission_qty'               => ['rules' => 'required|greater_than[0]']
         ]);
 
 
@@ -625,26 +623,30 @@ class Submission extends WebminController
 
         $validation =  \Config\Services::validation();
 
-        $input = [
+        $data = [
 
             'submission_warehouse_id'    => $this->request->getPost('submission_warehouse_id'),
             'submission_type'            => $this->request->getPost('submission_type'),
-            'submission_item_id'         => $this->request->getPost('item_id'),
-            'submission_product_name'    => $this->request->getPost('product_name'),
-            'submission_qty'             => $this->request->getPost('qty'),
             'submission_item_status'     => $this->request->getPost('temp_status'), 
             'submission_date'            => $this->request->getPost('submission_order_date'),
             'submission_salesman_id'     => 2,
-            'submission_desc'            => $this->request->getPost('desc')
+            'submission_desc'            => $this->request->getPost('desc'),
+            'submission_user_id'         => $this->userLogin['user_id']
+        ];
+
+
+        $input_temp = [
+            'temp_submission_item_id'     => $this->request->getPost('item_id'),
+            'temp_submission_qty'         => $this->request->getPost('qty'),
+            'temp_submission_user_id'     => $this->userLogin['user_id']
         ];
 
         $validation->setRules([
             'submission_warehouse_id'        => ['rules' => 'required'],
             'submission_desc'                => ['rules' => 'max_length[500]'],
-            'submission_item_id'             => ['rules' => 'required'],
         ]);
 
-        if ($validation->run($input) === FALSE) {
+        if ($validation->run($data) === FALSE) {
 
             $result = ['success' => FALSE, 'message' => 'Input tidak valid'];
 
@@ -656,9 +658,15 @@ class Submission extends WebminController
 
                 $input['submission_status'] = 'Pending';
 
-                $save = $this->M_submission->insertSubmission($input);
+                $save_temp = $this->M_submission->insertSubmissiontemp($input_temp);
+
+                $data['submission_supplier_id'] = $save_temp;
+
+                $save = $this->M_submission->insertSubmission($data);
 
                 $product_id = $this->request->getPost('product_id');
+
+                $saves_status = $this->M_submission->updatestatuslist($product_id);
 
                 $saves = $this->M_submission->updateNotif($product_id);
 

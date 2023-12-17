@@ -220,30 +220,6 @@ $assetsUrl = base_url('assets');
                                 </div>
 
 
-                                <div class="form-group row">
-
-                                    <label for="supplier_id" class="col-sm-1 col-form-label text-right">Supplier
-                                    :</label>
-
-                                    <div class="col-sm-3">
-
-                                        <select id="supplier_id" name="supplier_id" class="form-control"></select>
-
-                                    </div>
-
-
-                                    <div class="col-md-4"></div>
-
-                                    <label for="user" class="col-sm-1 col-form-label text-right">Gudang :</label>
-
-                                    <div class="col-sm-3">
-
-                                        <select id="warehouse" type="text" class="form-control" data-parsley-vwarehousecode
-                                        required></select>
-
-                                    </div>
-
-                                </div>
 
                                 
                                 <div class="form-group row">
@@ -297,24 +273,39 @@ $assetsUrl = base_url('assets');
                         </div>
 
 
-                    </form>
+                        <div class="form-group row">
+                           <label for="user" class="col-sm-1 col-form-label text-right">Gudang :</label>
+
+                           <div class="col-sm-3">
+
+                            <div style="display: none;">
+                                <select id="supplier_id" name="supplier_id"  style="display:none;"></select>
+                            </div>
+                            <select id="warehouse" type="text" class="form-control" data-parsley-vwarehousecode
+                            required></select>
+
+                        </div>
+                    </div>
+
+
+                </form>
 
 
 
 
-                </div><!-- /.card-body -->
-
-            </div>
-
-            <!-- /.card -->
+            </div><!-- /.card-body -->
 
         </div>
 
-        <!-- /.col -->
+        <!-- /.card -->
 
     </div>
 
-    <!-- /.row -->
+    <!-- /.col -->
+
+</div>
+
+<!-- /.row -->
 
 </div><!-- /.container-fluid -->
 
@@ -532,6 +523,7 @@ $assetsUrl = base_url('assets');
         let temp_qty = new AutoNumeric('#temp_qty', configQty);
 
 
+        //$('#supplier_id').hide();
         // init component //
 
         function _initButton() {
@@ -841,26 +833,26 @@ $assetsUrl = base_url('assets');
 
                             } else {
 
-                             message.error(response.result.message);
+                               message.error(response.result.message);
 
-                         }
+                           }
 
-                         clearTempInput();
+                           clearTempInput();
 
-                         loadTempData(response.result.data);
+                           loadTempData(response.result.data);
 
-                     }
+                       }
 
-                     btnSubmit.prop('disabled', false);
+                       btnSubmit.prop('disabled', false);
 
-                 },
+                   },
 
-                 error: function(response) {
+                   error: function(response) {
 
-                     btnSubmit.prop('disabled', false);
+                       btnSubmit.prop('disabled', false);
 
-                 }
-             });
+                   }
+               });
             }
         })
 
@@ -1013,7 +1005,7 @@ $assetsUrl = base_url('assets');
 
                 $.ajax({
 
-                    url: base_url + '/webmin/purchase-order/search-product-bysuplier?sup='+$('#supplier_id').val(),
+                    url: base_url + '/webmin/purchase-order/search-product-non-suplier',
 
                     dataType: 'json',
 
@@ -1044,6 +1036,7 @@ $assetsUrl = base_url('assets');
             select: function(event, ui) {
 
                 $('#item_id').val(ui.item.item_id);
+                setSelect2('#supplier_id', ui.item.supplier_id, ui.item.supplier_name);
 
             },
 
