@@ -166,224 +166,230 @@ class ApiPos extends BaseController
     }
 
     // post to acccounting //
+    // public function postToAccounting_bak()
+    // {
+    //     $result = ['success' => true, 'message' => 'Posting Berhasil!'];
+    //     $getHdPosSession = $this->db->table('hd_pos_session')
+    //         ->select('hd_pos_session.*,user_account.user_realname,ms_store.store_code')
+    //         ->join('user_account', 'user_account.user_id=hd_pos_session.user_id')
+    //         ->join('ms_store', 'ms_store.store_id=hd_pos_session.store_id')
+    //         ->where('hd_pos_session.closed', 'Y')
+    //         ->where('hd_pos_session.posted', 'N')
+    //         ->get()
+    //         ->getResultArray();
+    //     if (count($getHdPosSession) > 0) {
+    //         $list_post_session_key = [];
+    //         $postData = [];
+    //         $samplePostData = [
+    //             'session_key' => [
+    //                 'user_id'       => 1,
+    //                 'user_realname' => 'Eric',
+    //                 'post_date'     => '2023-03-10',
+    //                 'store_id'      => 1,
+    //                 'store_code'    => 'UTM',
+    //                 'sales' => [
+    //                     'sales_total'       => 10000,
+    //                     'sales_dpp'         => 2000,
+    //                     'sales_ppn'         => 7000,
+    //                     'sales_cogs'        => 6000,
+    //                     'margin_allocation' => 3000,
+    //                     'payments'          => [
+    //                         'CASH'  => ['payment_method_id' => 1, 'payment_balance' => 8000],
+    //                         'BCA'   => ['payment_method_id' => 2, 'payment_balance' => 2000]
+    //                     ]
+    //                 ],
+    //                 'sales_return' => [
+    //                     'sales_return_total'        => 4000,
+    //                     'sales_return_no_tax'       => 0,
+    //                     'sales_return_has_tax'      => 3500,
+    //                     'sales_return_tax_out'      => 500,
+    //                     'sales_return_cogs'         => 1800,
+    //                 ],
+    //             ]
+    //         ];
+
+    //         foreach ($getHdPosSession as $hdSession) {
+    //             $session_id     = intval($hdSession['session_id']);
+    //             $session_key    = $hdSession['session_key'];
+    //             $user_id        = $hdSession['user_id'];
+    //             $user_realname  = $hdSession['user_realname'];
+    //             $store_id       = intval($hdSession['store_id']);
+    //             $store_code     = $hdSession['store_code'];
+    //             $post_date      = date('Y-m-d');
+    //             $list_post_session_key[] = $session_key;
+
+
+    //             $getItemSales = $this->db->table('dt_pos_session_transaction')
+    //                 ->select('dt_pos_sales.*,ms_product.product_name,ms_product.has_tax')
+    //                 ->join('dt_pos_sales', 'dt_pos_sales.pos_sales_id=dt_pos_session_transaction.transaction_id')
+    //                 ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales.item_id')
+    //                 ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+
+    //                 ->where('dt_pos_session_transaction.transaction_type', 'SI')
+    //                 ->where('dt_pos_session_transaction.session_id', $session_id)
+    //                 ->get()
+    //                 ->getResultArray();
+
+
+    //             $total_sales_cogs                 = 0;
+    //             $total_sales_dpp                  = 0;
+    //             $total_sales_ppn                  = 0;
+    //             $total_sales_margin_allocation    = 0;
+
+    //             foreach ($getItemSales as $item) {
+    //                 $product_cogs                   = floatval($item['product_cogs']);
+    //                 $sales_qty                      = floatval($item['sales_qty']);
+    //                 $sales_price                    = floatval($item['sales_price']);
+    //                 $sales_dpp                      = floatval($item['sales_dpp']);
+    //                 $sales_ppn                      = floatval($item['sales_ppn']);
+    //                 $margin_allocation              = floatval($item['margin_allocation']);
+
+    //                 $total_sales_cogs               += $sales_qty * $product_cogs;
+    //                 $total_sales_margin_allocation  += $sales_qty * $margin_allocation;
+    //                 $total_sales_dpp                += $sales_qty * $sales_dpp;
+    //                 $total_sales_ppn                += $sales_qty * $sales_ppn;
+    //             }
+
+    //             $payments = [];
+    //             $getPayment = $this->db->table('dt_pos_session_transaction')
+    //                 ->select('dt_pos_sales_payment.payment_method_id,ms_payment_method.payment_method_name,SUM(dt_pos_sales_payment.payment_balance) AS payment_balance')
+    //                 ->join('dt_pos_sales_payment', 'dt_pos_sales_payment.pos_sales_id=dt_pos_session_transaction.transaction_id')
+    //                 ->join('ms_payment_method', 'ms_payment_method.payment_method_id=dt_pos_sales_payment.payment_method_id')
+
+    //                 ->where('dt_pos_session_transaction.transaction_type', 'SI')
+    //                 ->where('dt_pos_session_transaction.session_id', $session_id)
+    //                 ->groupBy('dt_pos_sales_payment.payment_method_id')
+    //                 ->get()
+    //                 ->getResultArray();
+
+    //             foreach ($getPayment as $pay) {
+    //                 $_pay_name = $pay['payment_method_name'];
+    //                 $payments[$_pay_name] = [
+    //                     'payment_method_id' => intval($pay['payment_method_id']),
+    //                     'payment_balance'   => floatval($pay['payment_balance'])
+    //                 ];
+    //             }
+
+
+    //             $total_change = 0;
+    //             $getSales = $this->db->table('dt_pos_session_transaction')
+    //                 ->select('hd_pos_sales.*,(hd_pos_sales.pos_total_payment-hd_pos_sales.pos_sales_total) as payment_change')
+    //                 ->join('hd_pos_sales', 'hd_pos_sales.pos_sales_id=dt_pos_session_transaction.transaction_id')
+    //                 ->where('dt_pos_session_transaction.transaction_type', 'SI')
+    //                 ->where('dt_pos_session_transaction.session_id', $session_id)
+    //                 ->get()
+    //                 ->getResultArray();
+
+    //             foreach ($getSales as $sales) {
+    //                 $payment_change = floatval($sales['payment_change']);
+    //                 if ($payment_change > 0) {
+    //                     $total_change += $payment_change;
+    //                 }
+    //             }
+
+    //             if ($total_change > 0) {
+    //                 $cash_balance                           = $payments['CASH']['payment_balance'];
+    //                 $payments['CASH']['payment_balance']    = $cash_balance - $total_change;
+    //             }
+
+    //             $sales_total = $total_sales_dpp + $total_sales_ppn +  $total_sales_margin_allocation;
+    //             $salesData = [
+    //                 'sales_total'       => $sales_total,
+    //                 'sales_dpp'         => $total_sales_dpp,
+    //                 'sales_ppn'         => $total_sales_ppn,
+    //                 'sales_cogs'        => $total_sales_cogs,
+    //                 'margin_allocation' => $total_sales_margin_allocation,
+    //                 'payments'          => $payments
+    //             ];
+
+    //             $total_sales_return_cogs                = 0;
+    //             $total_sales_return_dpp                 = 0;
+    //             $total_sales_return_ppn                 = 0;
+    //             $total_sales_return_margin_allocation   = 0;
+
+    //             $getItemSalesReturn = $this->db->table('dt_pos_session_transaction')
+    //                 ->select('dt_pos_sales_return.*,ms_product.product_name,ms_product.has_tax')
+    //                 ->join('dt_pos_sales_return', 'dt_pos_sales_return.pos_sales_return_id=dt_pos_session_transaction.transaction_id')
+    //                 ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales_return.item_id')
+    //                 ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
+
+    //                 ->where('dt_pos_session_transaction.transaction_type', 'SR')
+    //                 ->where('dt_pos_session_transaction.session_id', $session_id)
+    //                 ->get()
+    //                 ->getResultArray();
+
+    //             foreach ($getItemSalesReturn as $item) {
+    //                 $product_cogs                           = floatval($item['product_cogs']);
+    //                 $sales_return_qty                       = floatval($item['sales_return_qty']);
+    //                 $sales_return_price                     = floatval($item['sales_return_price']);
+    //                 $sales_return_dpp                       = floatval($item['sales_return_dpp']);
+    //                 $sales_return_ppn                       = floatval($item['sales_return_ppn']);
+    //                 $margin_allocation                      = floatval($item['margin_allocation']);
+
+    //                 $total_sales_return_cogs                += $sales_return_qty * $product_cogs;
+    //                 $total_sales_return_dpp                 += $sales_return_qty * $sales_return_dpp;
+    //                 $total_sales_return_ppn                 += $sales_return_qty * $sales_return_ppn;
+    //                 $total_sales_return_margin_allocation   += $sales_return_qty * $margin_allocation;
+    //             }
+
+    //             $sales_return_total = $total_sales_return_dpp + $total_sales_return_ppn + $total_sales_return_margin_allocation;
+    //             $salesReturnData = [
+    //                 'sales_return_total'                => $sales_return_total,
+    //                 'sales_return_dpp'                  => $total_sales_return_dpp,
+    //                 'sales_return_ppn'                  => $total_sales_return_ppn,
+    //                 'sales_return_cogs'                 => $total_sales_return_cogs,
+    //                 'sales_return_margin_allocation'    => $total_sales_return_margin_allocation
+    //             ];
+
+
+
+    //             $postData[$session_key] = [
+    //                 'user_id'       => $user_id,
+    //                 'user_realname' => $user_realname,
+    //                 'post_date'     => $post_date,
+    //                 'store_id'      => $store_id,
+    //                 'store_code'    => $store_code,
+    //                 'sales'         => $salesData,
+    //                 'sales_return'  => $salesReturnData
+    //             ];
+    //         }
+
+    //         $urlOffline = 'http://localhost:8989/';
+    //         $urlOnline = 'https://accounting.dashboard-dbig.com/';
+    //         $client = \Config\Services::curlrequest([
+    //             'baseURI' => $urlOffline,
+    //         ]);
+
+    //         $accountingApiUri = 'api-accounting/api-pos-sales';
+    //         $postUpdate = $client->request('POST', $accountingApiUri, [
+    //             'form_params' => [
+    //                 'pos_data' => json_encode($postData)
+    //             ],
+    //         ]);
+
+    //         $status_code    = $postUpdate->getStatusCode();
+    //         $status_reason  = $postUpdate->getReason();
+
+    //         if ($status_code == 200) {
+    //             $contents = json_decode($postUpdate->getBody(), true);
+    //             if ($contents['success']) {
+    //                 $this->db->table('hd_pos_session')
+    //                     ->set('posted', 'Y')
+    //                     ->whereIn('session_key', $list_post_session_key)
+    //                     ->update();
+    //             }
+
+    //             $result = ['success' => true, 'message' => 'Posting Berhasil'];
+    //         } else {
+    //             $result = ['success' => false, 'message' => 'Gagal terhubung ke server'];
+    //         }
+    //     }
+    //     resultJSON($result);
+    // }
+
     public function postToAccounting()
     {
         $result = ['success' => true, 'message' => 'Posting Berhasil!'];
-        $getHdPosSession = $this->db->table('hd_pos_session')
-            ->select('hd_pos_session.*,user_account.user_realname,ms_store.store_code')
-            ->join('user_account', 'user_account.user_id=hd_pos_session.user_id')
-            ->join('ms_store', 'ms_store.store_id=hd_pos_session.store_id')
-            ->where('hd_pos_session.closed', 'Y')
-            ->where('hd_pos_session.posted', 'N')
-            ->get()
-            ->getResultArray();
-        if (count($getHdPosSession) > 0) {
-            $list_post_session_key = [];
-            $postData = [];
-            $samplePostData = [
-                'session_key' => [
-                    'user_id'       => 1,
-                    'user_realname' => 'Eric',
-                    'post_date'     => '2023-03-10',
-                    'store_id'      => 1,
-                    'store_code'    => 'UTM',
-                    'sales' => [
-                        'sales_total'       => 10000,
-                        'sales_dpp'         => 2000,
-                        'sales_ppn'         => 7000,
-                        'sales_cogs'        => 6000,
-                        'margin_allocation' => 3000,
-                        'payments'          => [
-                            'CASH'  => ['payment_method_id' => 1, 'payment_balance' => 8000],
-                            'BCA'   => ['payment_method_id' => 2, 'payment_balance' => 2000]
-                        ]
-                    ],
-                    'sales_return' => [
-                        'sales_return_total'        => 4000,
-                        'sales_return_no_tax'       => 0,
-                        'sales_return_has_tax'      => 3500,
-                        'sales_return_tax_out'      => 500,
-                        'sales_return_cogs'         => 1800,
-                    ],
-                ]
-            ];
-
-            foreach ($getHdPosSession as $hdSession) {
-                $session_id     = intval($hdSession['session_id']);
-                $session_key    = $hdSession['session_key'];
-                $user_id        = $hdSession['user_id'];
-                $user_realname  = $hdSession['user_realname'];
-                $store_id       = intval($hdSession['store_id']);
-                $store_code     = $hdSession['store_code'];
-                $post_date      = date('Y-m-d');
-                $list_post_session_key[] = $session_key;
-
-
-                $getItemSales = $this->db->table('dt_pos_session_transaction')
-                    ->select('dt_pos_sales.*,ms_product.product_name,ms_product.has_tax')
-                    ->join('dt_pos_sales', 'dt_pos_sales.pos_sales_id=dt_pos_session_transaction.transaction_id')
-                    ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales.item_id')
-                    ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
-
-                    ->where('dt_pos_session_transaction.transaction_type', 'SI')
-                    ->where('dt_pos_session_transaction.session_id', $session_id)
-                    ->get()
-                    ->getResultArray();
-
-
-                $total_sales_cogs                 = 0;
-                $total_sales_dpp                  = 0;
-                $total_sales_ppn                  = 0;
-                $total_sales_margin_allocation    = 0;
-
-                foreach ($getItemSales as $item) {
-                    $product_cogs                   = floatval($item['product_cogs']);
-                    $sales_qty                      = floatval($item['sales_qty']);
-                    $sales_price                    = floatval($item['sales_price']);
-                    $sales_dpp                      = floatval($item['sales_dpp']);
-                    $sales_ppn                      = floatval($item['sales_ppn']);
-                    $margin_allocation              = floatval($item['margin_allocation']);
-
-                    $total_sales_cogs               += $sales_qty * $product_cogs;
-                    $total_sales_margin_allocation  += $sales_qty * $margin_allocation;
-                    $total_sales_dpp                += $sales_qty * $sales_dpp;
-                    $total_sales_ppn                += $sales_qty * $sales_ppn;
-                }
-
-                $payments = [];
-                $getPayment = $this->db->table('dt_pos_session_transaction')
-                    ->select('dt_pos_sales_payment.payment_method_id,ms_payment_method.payment_method_name,SUM(dt_pos_sales_payment.payment_balance) AS payment_balance')
-                    ->join('dt_pos_sales_payment', 'dt_pos_sales_payment.pos_sales_id=dt_pos_session_transaction.transaction_id')
-                    ->join('ms_payment_method', 'ms_payment_method.payment_method_id=dt_pos_sales_payment.payment_method_id')
-
-                    ->where('dt_pos_session_transaction.transaction_type', 'SI')
-                    ->where('dt_pos_session_transaction.session_id', $session_id)
-                    ->groupBy('dt_pos_sales_payment.payment_method_id')
-                    ->get()
-                    ->getResultArray();
-
-                foreach ($getPayment as $pay) {
-                    $_pay_name = $pay['payment_method_name'];
-                    $payments[$_pay_name] = [
-                        'payment_method_id' => intval($pay['payment_method_id']),
-                        'payment_balance'   => floatval($pay['payment_balance'])
-                    ];
-                }
-
-
-                $total_change = 0;
-                $getSales = $this->db->table('dt_pos_session_transaction')
-                    ->select('hd_pos_sales.*,(hd_pos_sales.pos_total_payment-hd_pos_sales.pos_sales_total) as payment_change')
-                    ->join('hd_pos_sales', 'hd_pos_sales.pos_sales_id=dt_pos_session_transaction.transaction_id')
-                    ->where('dt_pos_session_transaction.transaction_type', 'SI')
-                    ->where('dt_pos_session_transaction.session_id', $session_id)
-                    ->get()
-                    ->getResultArray();
-
-                foreach ($getSales as $sales) {
-                    $payment_change = floatval($sales['payment_change']);
-                    if ($payment_change > 0) {
-                        $total_change += $payment_change;
-                    }
-                }
-
-                if ($total_change > 0) {
-                    $cash_balance                           = $payments['CASH']['payment_balance'];
-                    $payments['CASH']['payment_balance']    = $cash_balance - $total_change;
-                }
-
-                $sales_total = $total_sales_dpp + $total_sales_ppn +  $total_sales_margin_allocation;
-                $salesData = [
-                    'sales_total'       => $sales_total,
-                    'sales_dpp'         => $total_sales_dpp,
-                    'sales_ppn'         => $total_sales_ppn,
-                    'sales_cogs'        => $total_sales_cogs,
-                    'margin_allocation' => $total_sales_margin_allocation,
-                    'payments'          => $payments
-                ];
-
-                $total_sales_return_cogs                = 0;
-                $total_sales_return_dpp                 = 0;
-                $total_sales_return_ppn                 = 0;
-                $total_sales_return_margin_allocation   = 0;
-
-                $getItemSalesReturn = $this->db->table('dt_pos_session_transaction')
-                    ->select('dt_pos_sales_return.*,ms_product.product_name,ms_product.has_tax')
-                    ->join('dt_pos_sales_return', 'dt_pos_sales_return.pos_sales_return_id=dt_pos_session_transaction.transaction_id')
-                    ->join('ms_product_unit', 'ms_product_unit.item_id=dt_pos_sales_return.item_id')
-                    ->join('ms_product', 'ms_product.product_id=ms_product_unit.product_id')
-
-                    ->where('dt_pos_session_transaction.transaction_type', 'SR')
-                    ->where('dt_pos_session_transaction.session_id', $session_id)
-                    ->get()
-                    ->getResultArray();
-
-                foreach ($getItemSalesReturn as $item) {
-                    $product_cogs                           = floatval($item['product_cogs']);
-                    $sales_return_qty                       = floatval($item['sales_return_qty']);
-                    $sales_return_price                     = floatval($item['sales_return_price']);
-                    $sales_return_dpp                       = floatval($item['sales_return_dpp']);
-                    $sales_return_ppn                       = floatval($item['sales_return_ppn']);
-                    $margin_allocation                      = floatval($item['margin_allocation']);
-
-                    $total_sales_return_cogs                += $sales_return_qty * $product_cogs;
-                    $total_sales_return_dpp                 += $sales_return_qty * $sales_return_dpp;
-                    $total_sales_return_ppn                 += $sales_return_qty * $sales_return_ppn;
-                    $total_sales_return_margin_allocation   += $sales_return_qty * $margin_allocation;
-                }
-
-                $sales_return_total = $total_sales_return_dpp + $total_sales_return_ppn + $total_sales_return_margin_allocation;
-                $salesReturnData = [
-                    'sales_return_total'                => $sales_return_total,
-                    'sales_return_dpp'                  => $total_sales_return_dpp,
-                    'sales_return_ppn'                  => $total_sales_return_ppn,
-                    'sales_return_cogs'                 => $total_sales_return_cogs,
-                    'sales_return_margin_allocation'    => $total_sales_return_margin_allocation
-                ];
-
-
-
-                $postData[$session_key] = [
-                    'user_id'       => $user_id,
-                    'user_realname' => $user_realname,
-                    'post_date'     => $post_date,
-                    'store_id'      => $store_id,
-                    'store_code'    => $store_code,
-                    'sales'         => $salesData,
-                    'sales_return'  => $salesReturnData
-                ];
-            }
-
-            $urlOffline = 'http://localhost:8989/';
-            $urlOnline = 'https://accounting.dashboard-dbig.com/';
-            $client = \Config\Services::curlrequest([
-                'baseURI' => $urlOffline,
-            ]);
-
-            $accountingApiUri = 'api-accounting/api-pos-sales';
-            $postUpdate = $client->request('POST', $accountingApiUri, [
-                'form_params' => [
-                    'pos_data' => json_encode($postData)
-                ],
-            ]);
-
-            $status_code    = $postUpdate->getStatusCode();
-            $status_reason  = $postUpdate->getReason();
-
-            if ($status_code == 200) {
-                $contents = json_decode($postUpdate->getBody(), true);
-                if ($contents['success']) {
-                    $this->db->table('hd_pos_session')
-                        ->set('posted', 'Y')
-                        ->whereIn('session_key', $list_post_session_key)
-                        ->update();
-                }
-
-                $result = ['success' => true, 'message' => 'Posting Berhasil'];
-            } else {
-                $result = ['success' => false, 'message' => 'Gagal terhubung ke server'];
-            }
-        }
         resultJSON($result);
     }
 

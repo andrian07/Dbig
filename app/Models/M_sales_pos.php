@@ -62,6 +62,21 @@ class M_sales_pos extends Model
         return $save;
     }
 
+    public function editSales($data)
+    {
+        $this->db->query('LOCK TABLES hd_pos_sales WRITE');
+        $save = $this->db->table($this->table)->update($data, ['pos_sales_id' => $data['pos_sales_id']]);
+
+        $saveQueries = NULL;
+        if ($this->db->affectedRows() > 0) {
+            $saveQueries = $this->db->getLastQuery()->getQuery();
+        }
+        $this->db->query('UNLOCK TABLES');
+
+        saveQueries($saveQueries, 'sales_pos', $data['pos_sales_id'], 'Edit_remark');
+        return $save;
+    }
+
     /* Report Section */
     public function getReportSalesList($start_date, $end_date, $store_id = '', $user_id = '', $product_tax = '')
     {

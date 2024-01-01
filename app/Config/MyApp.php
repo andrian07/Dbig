@@ -508,6 +508,7 @@ class MyApp extends BaseConfig
         'sendVerificationTo'    => [
             'dbig_group'    => '-4073658050'
             // 'eric'          => '5927339770',
+			// 'andrian'		=> '6281274356'		
         ], //chatIds
         'allowedChatIds' => [
             'dbig_group'    => '-4073658050',

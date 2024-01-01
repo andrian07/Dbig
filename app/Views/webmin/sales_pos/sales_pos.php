@@ -133,7 +133,25 @@ $assetsUrl = base_url('assets');
                                         <input id="pos_sales_total" name="pos_sales_total" type="text" class="form-control text-right" value="Rp0" readonly>
                                     </div>
                                 </div>
+
+                                <div class="col-sm-6 col-md-6">
+                                    <!-- text input -->
+                                    <div class="form-group">
+                                        <label>Kepada</label>
+                                        <textarea id="pos_sales_remark" name="pos_sales_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="3"></textarea>
+                                    </div>
+                                </div>
                             </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="justify-content-between">
+                                        <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
+                                        <button id="btnsave" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div><!-- /.card-body -->
                     </div>
                     <!-- /.card -->
@@ -215,7 +233,7 @@ $assetsUrl = base_url('assets');
                                         <label>&nbsp;</label>
                                         <div class="form-group">
                                             <div class="col-12">
-                                                <button id="btnupdatesalesman" class="btn btn-md btn-primary rounded-circle float-right"><i class="fas fa-plus"></i></button>
+                                                <button id="btnupdatesalesman" class="btn btn-md btn-success rounded-circle float-right"><i class="fas fa-save"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -244,13 +262,7 @@ $assetsUrl = base_url('assets');
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="col-12">
-                                        <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                     <!-- /.card -->
@@ -453,6 +465,7 @@ $assetsUrl = base_url('assets');
                             $('#customer_name').val(htmlEntities.decode(data.customer_name));
                             $('#store_name').val(htmlEntities.decode(data.store_name));
                             $('#user_realname').val(htmlEntities.decode(data.user_realname));
+                            $('#pos_sales_remark').val(htmlEntities.decode(data.pos_sales_remark));
                             pos_sales_total.set(parseFloat(data.pos_sales_total));
                             edit_pos_sales_id = id;
                             edit_store_id = data.store_id;
@@ -559,6 +572,43 @@ $assetsUrl = base_url('assets');
 
                 })
             }
+
+        })
+
+
+        $('#btnsave').click(function(e) {
+            e.preventDefault();
+            let btnSubmit = $('#btnsave')
+            let question = 'Yakin ingin menyimpan perubahan catatan kepada?';
+            let actUrl = base_url + '/webmin/sales-pos/change-remark/' + edit_pos_sales_id;
+
+            message.question(question).then(function(answer) {
+                let yes = parseMessageResult(answer);
+                if (yes) {
+                    btnSubmit.prop('disabled', true);
+                    let formValues = {
+                        'pos_sales_remark': $('#pos_sales_remark').val()
+                    };
+                    ajax_post(actUrl, formValues, {
+                        success: function(response) {
+                            if (response.success) {
+                                if (response.result.success) {
+                                    notification.success(response.result.message);
+                                } else {
+                                    message.error(response.result.message);
+                                }
+                            }
+                            btnSubmit.prop('disabled', false);
+
+                        },
+                        error: function(response) {
+                            btnSubmit.prop('disabled', false);
+                        }
+                    }, true);
+                }
+
+            })
+
 
         })
 

@@ -20,7 +20,8 @@ class CronJob extends BaseController
     public function daily01()
     {
         //update safety stock
-        $this->updateSafetyStockBalance();
+        //$this->updateSafetyStockBalance();
+        $this->migrate_suplier_and_customer_to_accounting();
     }
 
     public function daily02()
@@ -196,6 +197,103 @@ class CronJob extends BaseController
             echo "Delete Recap Data : OK";
         } else {
             echo "Delete Recap Data : GAGAL";
+        }
+    }
+
+    public function migrate_suplier_and_customer_to_accounting()
+    {
+        echo "migrate supplier and customer to accounting<br>";
+
+        $db = \Config\Database::connect();
+        $db_accounting = \Config\Database::connect('accounting');
+
+
+        $getSupplier = $db->table('ms_supplier')->get()->getResultArray();
+        $getCustomer = $db->table('ms_customer')->get()->getResultArray();
+
+        $batch_import_supplier = array_chunk($getSupplier, 200);
+        $batch_import_customer = array_chunk($getCustomer, 200);
+
+
+        $supplier_base_query = "INSERT INTO ms_supplier(supplier_id,supplier_code,supplier_name,supplier_phone,supplier_address,mapping_id,supplier_npwp,supplier_remark) VALUES";
+        $supplier_update_key = 'supplier_code,supplier_name,supplier_phone,supplier_address,mapping_id,supplier_npwp,supplier_remark';
+        $supplier_update_list = explode(",", $supplier_update_key);
+        $supplier_on_duplicate_update = [];
+        foreach ($supplier_update_list as $li) {
+            $supplier_on_duplicate_update[] = "$li=VALUES($li)";
+        }
+
+
+        $customer_base_query = "INSERT INTO ms_customer(customer_id,customer_code,customer_name,customer_phone,customer_email,customer_password,customer_address,customer_point,customer_group,customer_gender,customer_job,customer_birth_date,salesman_id,customer_remark,customer_delivery_address,customer_npwp,customer_nik,customer_tax_invoice_name,customer_tax_invoice_address,mapping_id,exp_date,referral_code,invite_by_referral_code,verification_email,last_login,active) VALUES";
+        $customer_update_key = 'customer_code,customer_name,customer_phone,customer_email,customer_password,customer_address,customer_point,customer_group,customer_gender,customer_job,customer_birth_date,salesman_id,customer_remark,customer_delivery_address,customer_npwp,customer_nik,customer_tax_invoice_name,customer_tax_invoice_address,mapping_id,exp_date,referral_code,invite_by_referral_code,verification_email,last_login,active';
+        $customer_update_list = explode(",", $customer_update_key);
+        $customer_on_duplicate_update = [];
+        foreach ($customer_update_list as $li) {
+            $customer_on_duplicate_update[] = "$li=VALUES($li)";
+        }
+
+
+
+        foreach ($batch_import_customer as $queue) {
+            $values = [];
+
+            foreach ($queue as $row) {
+                $customer_id = $row['customer_id'];
+                $customer_code = $row['customer_code'];
+                $customer_name = $row['customer_name'];
+                $customer_phone = $row['customer_phone'];
+                $customer_email = $row['customer_email'];
+                $customer_address = $row['customer_address'];
+                $customer_point = $row['customer_point'];
+                $customer_group = $row['customer_group'];
+                $customer_gender = $row['customer_gender'];
+                $customer_job = $row['customer_job'];
+                $customer_birth_date = $row['customer_birth_date'];
+                $salesman_id = $row['salesman_id'];
+                $customer_remark = $row['customer_remark'];
+                $customer_delivery_address = $row['customer_delivery_address'];
+                $customer_npwp = $row['customer_npwp'];
+                $customer_nik = $row['customer_nik'];
+                $customer_tax_invoice_name = $row['customer_tax_invoice_name'];
+                $customer_tax_invoice_address = $row['customer_tax_invoice_address'];
+                $mapping_id = $row['mapping_id'];
+                $exp_date = $row['exp_date'];
+                $referral_code = $row['referral_code'];
+                $invite_by_referral_code = $row['invite_by_referral_code'];
+                $verification_email = $row['verification_email'];
+                $last_login = $row['last_login'];
+                $active = $row['active'];
+
+
+                $values[] = "('$customer_id','$customer_code','$customer_name','$customer_phone','$customer_email','@','$customer_address','$customer_point','$customer_group','$customer_gender','$customer_job','$customer_birth_date','$salesman_id','$customer_remark','$customer_delivery_address','$customer_npwp','$customer_nik','$customer_tax_invoice_name','$customer_tax_invoice_address','$mapping_id','$exp_date','$referral_code','$invite_by_referral_code','$verification_email','$last_login','$active')";
+            }
+
+            $query_import_customer = $customer_base_query . implode(",", $values) . " ON DUPLICATE KEY UPDATE " . implode(',', $customer_on_duplicate_update);
+            $db_accounting->query($query_import_customer);
+        }
+
+
+
+
+
+        foreach ($batch_import_supplier as $queue) {
+            $values = [];
+
+            foreach ($queue as $row) {
+                $supplier_id        = $row['supplier_id'];
+                $supplier_code      = $row['supplier_code'];
+                $supplier_name      = $row['supplier_name'];
+                $supplier_phone     = $row['supplier_phone'];
+                $supplier_address   = $row['supplier_address'];
+                $mapping_id         = $row['mapping_id'];
+                $supplier_npwp      = $row['supplier_npwp'];
+                $supplier_remark    = $row['supplier_remark'];
+
+                $values[] = "('$supplier_id','$supplier_code','$supplier_name','$supplier_phone','$supplier_address','$mapping_id','$supplier_npwp','$supplier_remark')";
+            }
+
+            $query_import_supplier = $supplier_base_query . implode(",", $values) . " ON DUPLICATE KEY UPDATE " . implode(',', $supplier_on_duplicate_update);
+            $db_accounting->query($query_import_supplier);
         }
     }
 }

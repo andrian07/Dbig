@@ -828,6 +828,7 @@ $routes->group('webmin/sales-pos', ['filter' => 'webminauth'], static function (
     $routes->post('table', 'Webmin\SalesPos::table');
     $routes->post('table-detail-sales', 'Webmin\SalesPos::tableDetailSales');
     $routes->post('change-salesman/(:num)/(:num)', 'Webmin\SalesPos::changeSalesman/$1/$2');
+    $routes->post('change-remark/(:num)', 'Webmin\SalesPos::changeRemark/$1');
 });
 /* end penjualan pos */
 
