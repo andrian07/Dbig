@@ -332,20 +332,25 @@ $assetsUrl = base_url('assets');
 
                                 </div>
 
-                                <div class="col-sm-2">
 
-                                    <!-- text input -->
+                                <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                                    <div class="col-sm-2">
+                                <?php }else{ ?>
+                                    <div class="col-sm-2" style="display:none;">
+                                <?php } ?>
 
-                                    <div class="form-group">
-                                        
-                                        <label>Harga Beli Per Unit</label>
+                                        <!-- text input -->
 
-                                        <input id="temp_price" name="temp_price" class="form-control text-right" value="0" data-parsley-vprice required>
-                                        <input id="temp_dpp" name="temp_dpp" type="hidden" class="form-control text-right" value="0" required>
-                                        <input id="temp_tax" name="temp_tax" type="hidden" class="form-control text-right" value="0" readonly required>
+                                        <div class="form-group">
+                                            
+                                            <label>Harga Beli Per Unit</label>
+
+                                            <input id="temp_price" name="temp_price" class="form-control text-right" value="0" data-parsley-vprice required>
+                                            <input id="temp_dpp" name="temp_dpp" type="hidden" class="form-control text-right" value="0" required>
+                                            <input id="temp_tax" name="temp_tax" type="hidden" class="form-control text-right" value="0" readonly required>
+                                        </div>
+
                                     </div>
-
-                                </div>
 
 
                                 <div class="col-sm-2">
@@ -377,8 +382,13 @@ $assetsUrl = base_url('assets');
                                     </div>
 
                                 </div>
-
-                                <div class="col-md-5"></div>
+                                
+                                <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                                    <div class="col-md-5"></div>
+                                <?php }else{ ?>
+                                    <div class="col-md-1"></div>
+                                <?php } ?>
+                                
 
                                 <div class="col-sm-2" style="display:none;">
 
@@ -415,9 +425,11 @@ $assetsUrl = base_url('assets');
 
                                 </div>
 
-
-                                <div class="col-sm-5">
-
+                                <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                                    <div class="col-sm-5">
+                                <?php }else{ ?>
+                                    <div class="col-sm-5" style="display:none;">
+                                <?php } ?>
                                     <!-- text input -->
 
                                     <div class="form-group">
@@ -468,10 +480,13 @@ $assetsUrl = base_url('assets');
 
                                             <th data-priority="4" width="25%;">Produk</th>
 
+                                            <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
                                             <th data-priority="5">Harga Satuan</th>
+                                            <?php } ?>
 
                                             <th data-priority="6">Qty</th>
-
+                                            
+                                            <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
                                             <th data-priority="7">Diskon</th>
 
                                             <th data-priority="8">Ongkir</th>
@@ -479,6 +494,7 @@ $assetsUrl = base_url('assets');
                                             <th data-priority="9">E.D</th>
 
                                             <th data-priority="10">Total</th>
+                                            <?php } ?>
 
                                             <th data-priority="11">Aksi</th>
 
@@ -502,10 +518,13 @@ $assetsUrl = base_url('assets');
 
                                        <td>{product_name}</td>
 
+                                       <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
                                        <td>{temp_price}</td>
+                                       <?php } ?>
 
                                        <td>{temp_qty}</td>
 
+                                       <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
                                        <td>{temp_disc}</td>
 
                                        <td>{temp_ongkir}</td>
@@ -513,6 +532,7 @@ $assetsUrl = base_url('assets');
                                        <td>{temp_ed}</td>
 
                                        <td>{temp_total}</td>
+                                       <?php } ?>
 
                                        <td>
 
@@ -608,9 +628,14 @@ $assetsUrl = base_url('assets');
                             </div>
 
                         </div>
-
+                    
                         <div class="col-lg-6 text-right">
-
+                            
+                            <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                            <div>
+                            <?php }else{ ?>
+                            <div style="display:none;">
+                            <?php } ?>
                             <div class="form-group row">
                                 <label for="footer_sub_total" class="col-sm-7 col-form-label text-right:">Sub Total:</label>
                                 <div class="col-sm-5">
@@ -661,7 +686,7 @@ $assetsUrl = base_url('assets');
                                     <input id="footer_total_invoice" name="footer_total_invoice" type="text" class="form-control text-right" value="0" readonly>
                                 </div>
                             </div>
-
+                            </div>
 
                             <div class="form-group row">
                                 <div class="col-sm-12">
@@ -1093,28 +1118,23 @@ $assetsUrl = base_url('assets');
 
                             let items = response.result.data;
 
-                              console.log(header);
-
                             if (header.submission_status == 'Pending') {
 
                                 setSelect2("#supplier_id", header.submission_supplier_id, header.supplier_name);
 
-                                $('#supplier_id').prop('disabled', true);
-
                                 setSelect2("#warehouse", header.submission_warehouse_id, header.warehouse_name);
 
-                                setSelect2("#nosubmission", header.submission_id, header.submission_inv);
+                                //setSelect2("#nosubmission", header.submission_id, header.submission_inv);
 
                             } else {
-
-                                $('#supplier_id').prop('disabled', true);
 
                                 cleardiscountfooter();
 
                             }
 
+                            //console.log(items);
 
-                            //loadTempData(items);
+                            loadTempData(items);
 
                             clearItemInput();
 
@@ -1123,8 +1143,6 @@ $assetsUrl = base_url('assets');
                         } else {
 
                             message.error(response.result.message);
-
-                            setSelect2("#purchase_id");
 
                             $('#supplier_id').prop('disabled', false);
 
@@ -1161,7 +1179,6 @@ $assetsUrl = base_url('assets');
                     let supplier_ids = items[0].temp_po_supplier_id;
                     let supplier_names = items[0].temp_po_supplier_name;
                     setSelect2('#supplier_id', supplier_ids, supplier_names);
-                    $('#supplier_id').attr("disabled", true);
                 }
                 clearItemInput();
                 showInputPage(true);
@@ -1463,8 +1480,6 @@ $('#btnadd_temp').click(function(e) {
 
                        setSelect2('#supplier_id', supplier_id, supplier_name);
 
-                       $('#supplier_id').attr("disabled", true);
-
                        notification.success(response.result.message);
 
                    } else {
@@ -1640,8 +1655,6 @@ $("#tblpurchaseorders").on('click', '.btnedit', function(e) {
                         formMode = 'edit';
 
                         setSelect2('#supplier_id', supplier_id, supplier_name);
-
-                        $('#supplier_id').prop("disabled", true);
 
                         setSelect2('#warehouse', warehouse_id, warehouse_name);
 
@@ -1824,7 +1837,7 @@ $("#tbltemp").on('click', '.btnedit', function(e) {
 
  if (is_json) {
 
-    setSelect2('#nosubmission',json.temp_po_submission_id,json.temp_po_submission_invoice);
+    //setSelect2('#nosubmission',json.temp_po_submission_id,json.temp_po_submission_invoice);
 
     $('#submission_id').val(json.temp_po_submission_id);
 
@@ -1872,15 +1885,13 @@ $("#tbltemp").on('click', '.btnedit', function(e) {
 
     $('#temp_qty').focus();
 
-    $('#supplier_id').attr("disabled", true);
-
 } else {
 
- getTemp();
+     getTemp();
 
- message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
+     message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
 
-}
+    }
 
 })  
 
@@ -1890,7 +1901,6 @@ function loadTempData(items) {
     if(items['length'] < 1){
 
      setSelect2('#supplier_id', "", "");
-     $('#supplier_id').prop('disabled', false);
  }
  let template = $('#template_row_temp').html();
 

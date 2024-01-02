@@ -337,7 +337,11 @@ $assetsUrl = base_url('assets');
 
                         </div>
 
-                        <div class="col-sm-2">
+                        <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                            <div class="col-sm-2">
+                        <?php }else{ ?>
+                            <div class="col-sm-2" style="display:none;">
+                        <?php } ?>
 
                             <!-- text input -->
 
@@ -368,8 +372,12 @@ $assetsUrl = base_url('assets');
                             </div>
 
                         </div>
-
-                        <div class="col-sm-2">
+                        
+                        <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                            <div class="col-sm-2">
+                        <?php }else{ ?>
+                            <div class="col-sm-2" style="display:none;">
+                        <?php } ?>
 
                             <!-- text input -->
 
@@ -383,7 +391,11 @@ $assetsUrl = base_url('assets');
 
                         </div>
 
-                        <div class="col-sm-2">
+                        <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                            <div class="col-sm-2">
+                        <?php }else{ ?>
+                            <div class="col-sm-2" style="display:none;">
+                        <?php } ?>
 
                             <!-- text input -->
 
@@ -403,7 +415,12 @@ $assetsUrl = base_url('assets');
 
                         </div>
 
-                        <div class="col-md-5"></div>
+                        <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                            <div class="col-sm-5"></div>
+                        <?php }else{ ?>
+                            <div class="col-sm-5" style="display:none;"></div>
+                        <?php } ?>
+
                         <div class="col-sm-2">
 
                             <!-- text input -->
@@ -419,7 +436,11 @@ $assetsUrl = base_url('assets');
                         </div>
 
 
-                        <div class="col-sm-4">
+                        <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                            <div class="col-sm-4">
+                        <?php }else{ ?>
+                            <div class="col-sm-4" style="display:none;">
+                        <?php } ?>
 
                             <!-- text input -->
 
@@ -473,17 +494,23 @@ $assetsUrl = base_url('assets');
 
                                     <th data-priority="3" width="25%;">Produk</th>
 
+                                    <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
                                     <th data-priority="4">Harga</th>
+                                    <?php } ?>
 
                                     <th data-priority="5">Qty Terima</th>
-
+                                    
+                                    <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
                                     <th data-priority="6">Discount</th>
 
                                     <th data-priority="7">Ongkir</th>
+                                    <?php } ?>
 
                                     <th data-priority="8">E.D</th>
-
+                                    
+                                    <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
                                     <th data-priority="9">Total</th>
+                                    <?php } ?>
 
                                     <th data-priority="10">Aksi</th>
 
@@ -560,7 +587,12 @@ $assetsUrl = base_url('assets');
                 </div>
 
                 <div class="col-lg-6 text-right">
-
+                
+                <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                    <div>
+                <?php }else{ ?>
+                    <div style="display:none;">
+                <?php } ?>
                     <div class="form-group row">
                         <label for="footer_sub_total" class="col-sm-7 col-form-label text-right:">Sub Total:</label>
                         <div class="col-sm-5">
@@ -625,8 +657,7 @@ $assetsUrl = base_url('assets');
                             <input id="footer_total_credit" name="footer_total_credit" type="text" class="form-control text-right" value="0" readonly>
                         </div>
                     </div>
-
-
+                    </div>
                     <div class="form-group row">
                         <div class="col-sm-12">
                             <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
