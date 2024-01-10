@@ -586,7 +586,7 @@ class M_stock_opname extends Model
                 ];
 
                 if ($stock_add != 0) {
-                    $getWarehouseStock = $this->db->table('ms_warehouse_Stock')
+                    $getWarehouseStock = $this->db->table('ms_warehouse_stock')
                         ->where("product_id", $product_id)
                         ->where("exp_date",  $exp_date)
                         ->where("stock>", 0)
