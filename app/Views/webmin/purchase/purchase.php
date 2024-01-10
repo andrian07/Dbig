@@ -261,6 +261,16 @@ $assetsUrl = base_url('assets');
 
                             </div>
 
+                            <div class="col-md-1">
+
+                            </div>
+
+                            <label for="no_tax_faktur" class="col-sm-1 col-form-label text-right">Faktur Pajak:</label>
+
+                            <div class="col-sm-3">
+                                <input id="no_tax_faktur" name="no_tax_faktur" type="text" class="form-control">
+                            </div>
+
                         </div>
 
                         <div class="form-group row">
@@ -1628,6 +1638,8 @@ $assetsUrl = base_url('assets');
 
         let purchase_remaining_debt = parseFloat(footer_total_credit.getNumericString());
 
+        let purchase_no_tax_faktur = $('#no_tax_faktur').val();
+
         let no_po_purchase = $('#no_po_purchase').val();
 
         let warehouse = $('#warehouse').val();
@@ -1686,6 +1698,8 @@ $assetsUrl = base_url('assets');
                         purchase_remark: $('#purchase_remark').val(),
 
                         purchase_suplier_no: $('#no_invoice_suplier').val(),
+
+                        purchase_no_tax_faktur : purchase_no_tax_faktur,
 
                         purchase_sub_total: purchase_sub_total,
 

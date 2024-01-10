@@ -196,8 +196,20 @@ $assetsUrl = base_url('assets');
 
 
                             <div class="form-group row">
+                                
+                                <label for="user" class="col-sm-1 col-form-label text-right">Pengajuan:</label>
 
-                                <div class="col-md-8"></div>
+                                <div class="col-sm-3">
+
+                                    <select id="nosubmission" name="nosubmission" class="form-control"></select>
+
+                                    <input id="submission_id" type="hidden" name="submission_id">
+
+                                </div>
+
+                                <div class="col-md-4">
+                                    
+                                </div>
 
                                 <label for="user" class="col-sm-1 col-form-label text-right">User :</label>
 
@@ -254,16 +266,6 @@ $assetsUrl = base_url('assets');
                                 <input id="item_id" name="item_id" type="hidden" value="">
 
                                 <input id="product_tax" name="product_tax" type="hidden" value="">
-
-                                <div class="col-sm-3">
-
-                                    <label>No Pengajuan:</label>
-
-                                    <select id="nosubmission" name="nosubmission" class="form-control"></select>
-
-                                    <input id="submission_id" type="hidden" name="submission_id">
-
-                                </div>
 
                                 <div class="col-sm-3">
 
@@ -371,50 +373,50 @@ $assetsUrl = base_url('assets');
 
                                 <template id="template_row_temp">
 
-                                   <tr>
+                                 <tr>
 
-                                       <td>{row}</td>
+                                     <td>{row}</td>
 
-                                       <td>{submission_invoice}</td> 
+                                     <td>{submission_invoice}</td> 
 
-                                       <td>{item_code}</td>
+                                     <td>{item_code}</td>
 
-                                       <td>{product_name}</td>
+                                     <td>{product_name}</td>
 
-                                       <td>{temp_qty}</td>
+                                     <td>{temp_qty}</td>
 
-                                       <td>{temp_ed_date}</td>
+                                     <td>{temp_ed_date}</td>
 
-                                       <td>
+                                     <td>
 
-                                           <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+                                         <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
 
-                                               <i class="fas fa-edit"></i>
+                                             <i class="fas fa-edit"></i>
 
-                                           </button>
+                                         </button>
 
-                                           &nbsp;
+                                         &nbsp;
 
-                                           <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+                                         <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
 
-                                               <i class="fas fa-minus"></i>
+                                             <i class="fas fa-minus"></i>
 
-                                           </button>
+                                         </button>
 
-                                       </td>
+                                     </td>
 
-                                   </tr>
+                                 </tr>
 
-                               </template>
-
-
-                           </div>
-
-                       </div>
+                             </template>
 
 
+                         </div>
 
-                       <div class="row form-space">
+                     </div>
+
+
+
+                     <div class="row form-space">
 
                         <div class="col-lg-6">
 
@@ -552,76 +554,61 @@ $assetsUrl = base_url('assets');
 
             let id = $(this).val();
 
-            if (id != null) {
+           if (id != null) {
 
-                if ($("#supplier_id").val() == null) {
+            let actUrl = base_url + '/webmin/consignment/copy-submission/' + id;
 
-                    Swal.fire({
-                      icon: 'error',
-                      title: 'Oops...',
-                      text: 'Silahkan Pilih Suplier Terlebih Dahulu !'
-                  })
+            ajax_get(actUrl, null, {
 
-                    setSelect2('#nosubmission','','');
+                success: function(response) {
 
-                }else{
+                    if (response.success) {
 
-                    let actUrl = base_url + '/webmin/purchase-order/get-submission-detail/' + id;
+                        if (response.result.success) {
 
-                    ajax_get(actUrl, null, {
+                            let header = response.result.header;
 
-                        success: function(response) {
+                            let items = response.result.data;
 
-                            if (response.success) {
+                            if (header.submission_status == 'Pending') {
 
-                                if (response.result.success) {
+                                setSelect2("#supplier_id", header.submission_supplier_id, header.supplier_name);
 
-                                    let header = response.result.header;
+                                setSelect2("#warehouse", header.submission_warehouse_id, header.warehouse_name);
 
-                                    let items = response.result.data;
+                                //setSelect2("#nosubmission", header.submission_id, header.submission_inv);
 
-                                    console.log(header);
+                            } else {
 
-                                    if (header.submission_status == 'Pending') {
-                                        if(header.supplier_id != $('#supplier_id').val()){
-                                            Swal.fire({
-                                              icon: 'error',
-                                              title: 'Oops...',
-                                              text: 'Produk Dan Suplier Tidak Sesuai !'
-                                          })
-                                        }else{
-                                            $('#item_id').val(header.submission_item_id);
-                                            $('#product_name').val(header.submission_product_name);
-                                            temp_qty.set(header.submission_qty);
-                                            $('#submission_id').val(header.submission_id);
-                                        }
-                                    } else {
-
-                                        $('#supplier_id').prop('disabled', true);
-
-                                    }
-
-                                } else {
-
-                                    message.error(response.result.message);
-
-                                    setSelect2("#purchase_order_id");
-
-                                    $('#supplier_id').prop('disabled', false);
-
-                                }
+                                cleardiscountfooter();
 
                             }
 
+                            //console.log(items);
+
+                            loadTempData(items);
+
+                            clearItemInput();
+
+                        } else {
+
+                            message.error(response.result.message);
+
+                            $('#supplier_id').prop('disabled', false);
+
                         }
 
-                    })
+                    }
+
                 }
-            } else {
 
-                $('#supplier_id').prop('disabled', false);
+            })
 
-            }
+        } else {
+
+            $('#supplier_id').prop('disabled', false);
+
+        }
 
         });
 
@@ -673,86 +660,86 @@ $assetsUrl = base_url('assets');
 
         $('#btnadd_temp').click(function(e) {
 
-         e.preventDefault();
+           e.preventDefault();
 
-         let qty = parseFloat(temp_qty.getNumericString());
+           let qty = parseFloat(temp_qty.getNumericString());
 
-         let supplier_id = $('#supplier_id').val();
+           let supplier_id = $('#supplier_id').val();
 
-         let supplier_name = $( "#supplier_id option:selected" ).text();
+           let supplier_name = $( "#supplier_id option:selected" ).text();
 
-         let btnSubmit = $('#btnadd_temp');
+           let btnSubmit = $('#btnadd_temp');
 
-         let form = $('#frmaddtemp');
+           let form = $('#frmaddtemp');
 
-         form.parsley().validate();
+           form.parsley().validate();
 
-         if (form.parsley().isValid()) {
+           if (form.parsley().isValid()) {
 
-             let actUrl = base_url + '/webmin/consignment/temp-add';
+               let actUrl = base_url + '/webmin/consignment/temp-add';
 
-             let formValues = {
+               let formValues = {
 
-                 temp_po_consignment_id: $('#temp_po_consignment_id').val(),
+                   temp_po_consignment_id: $('#temp_po_consignment_id').val(),
 
-                 item_id: $('#item_id').val(),
+                   item_id: $('#item_id').val(),
 
-                 temp_po_consignment_submission_id: $('#nosubmission').val(),
+                   temp_po_consignment_submission_id: $('#nosubmission').val(),
 
-                 temp_po_consignment_submission_invoice: $( "#nosubmission option:selected" ).text(),
+                   temp_po_consignment_submission_invoice: $( "#nosubmission option:selected" ).text(),
 
-                 temp_qty: qty,
+                   temp_qty: qty,
 
-                 temp_supplier_id: supplier_id,
+                   temp_supplier_id: supplier_id,
 
-                 temp_supplier_name: supplier_name,
+                   temp_supplier_name: supplier_name,
 
-                 temp_ed_date: $('#temp_ed_date').val()
+                   temp_ed_date: $('#temp_ed_date').val()
 
-             };
+               };
 
-             btnSubmit.prop('disabled', true);
+               btnSubmit.prop('disabled', true);
 
-             ajax_post(actUrl, formValues, {
+               ajax_post(actUrl, formValues, {
 
-                 success: function(response) {
+                   success: function(response) {
 
-                     if (response.success) {
+                       if (response.success) {
 
-                         if (response.result.success) {
+                           if (response.result.success) {
 
-                             clearItemInput();
+                               clearItemInput();
 
-                             $('#product_name').focus();
+                               $('#product_name').focus();
 
-                             setSelect2('#supplier_id', supplier_id, supplier_name);
+                               setSelect2('#supplier_id', supplier_id, supplier_name);
 
-                             $('#supplier_id').attr("disabled", true);
+                               $('#supplier_id').attr("disabled", true);
 
-                             notification.success(response.result.message);
+                               notification.success(response.result.message);
 
-                         } else {
+                           } else {
 
-                             message.error(response.result.message);
+                               message.error(response.result.message);
 
-                         }
+                           }
 
-                         loadTempData(response.result.data);
+                           loadTempData(response.result.data);
 
-                     }
+                       }
 
-                     btnSubmit.prop('disabled', false);
+                       btnSubmit.prop('disabled', false);
 
-                 },
+                   },
 
-                 error: function(response) {
+                   error: function(response) {
 
-                     btnSubmit.prop('disabled', false);
+                       btnSubmit.prop('disabled', false);
 
-                 }
-             });
-         }
-     })
+                   }
+               });
+           }
+       })
 
 
 
@@ -847,69 +834,69 @@ $assetsUrl = base_url('assets');
             items.forEach((val, key) => {
 
 
-             let item = template;
+               let item = template;
 
-             let data_json = htmlEntities.encode(JSON.stringify(val));
+               let data_json = htmlEntities.encode(JSON.stringify(val));
 
-             let temp_po_consignment_id = val.temp_po_consignment_id;
+               let temp_po_consignment_id = val.temp_po_consignment_id;
 
-             let item_id = val.item_id;
+               let item_id = val.item_id;
 
-             let product_name  = val.product_name+'('+val.unit_name+')';
+               let product_name  = val.product_name+'('+val.unit_name+')';
 
-             let temp_po_consignment_qty = parseFloat(val.temp_po_consignment_qty);
+               let temp_po_consignment_qty = parseFloat(val.temp_po_consignment_qty);
 
-             let temp_po_consignment_expire_date = val.temp_po_consignment_expire_date;
+               let temp_po_consignment_expire_date = val.temp_po_consignment_expire_date;
 
-             let temp_po_consignment_submission_invoice = val.temp_po_consignment_submission_invoice;
+               let temp_po_consignment_submission_invoice = val.temp_po_consignment_submission_invoice;
 
-             let temp_po_consignment_submission_id = val.temp_po_consignment_submission_id;
+               let temp_po_consignment_submission_id = val.temp_po_consignment_submission_id;
 
 
-             item = item.replaceAll('{row}', row)
+               item = item.replaceAll('{row}', row)
 
-             .replaceAll('{item_code}', val.item_code)
+               .replaceAll('{item_code}', val.item_code)
 
-             .replaceAll('{product_name}', product_name)
+               .replaceAll('{product_name}', product_name)
 
-             .replaceAll('{temp_qty}', numberFormat(temp_po_consignment_qty, true))
+               .replaceAll('{temp_qty}', numberFormat(temp_po_consignment_qty, true))
 
-             .replaceAll('{temp_ed_date}', temp_po_consignment_expire_date)
+               .replaceAll('{temp_ed_date}', temp_po_consignment_expire_date)
 
-             .replaceAll('{temp_id}', temp_po_consignment_id)
+               .replaceAll('{temp_id}', temp_po_consignment_id)
 
-             .replaceAll('{submission_id}', temp_po_consignment_submission_id)
+               .replaceAll('{submission_id}', temp_po_consignment_submission_id)
 
-             .replaceAll('{submission_invoice}', temp_po_consignment_submission_invoice)
+               .replaceAll('{submission_invoice}', temp_po_consignment_submission_invoice)
 
-             .replaceAll('{data_json}', data_json);
+               .replaceAll('{data_json}', data_json);
 
-             tbody += item;
+               tbody += item;
 
-             row++;
+               row++;
 
-         });
+           });
 
 
             if ($.fn.DataTable.isDataTable('#tbltemp')) {
 
-             $('#tbltemp').DataTable().destroy();
+               $('#tbltemp').DataTable().destroy();
 
-         }
+           }
 
 
 
-         $('#tbltemp tbody').html('');
+           $('#tbltemp tbody').html('');
 
-         $('#tbltemp tbody').html(tbody);
+           $('#tbltemp tbody').html(tbody);
 
-         tbltemp = $('#tbltemp').DataTable(config_tbltemp);
+           tbltemp = $('#tbltemp').DataTable(config_tbltemp);
 
-         clearItemInput();
+           clearItemInput();
 
-         _initTooltip();
+           _initTooltip();
 
-     }
+       }
         // select2 //
 
 

@@ -294,7 +294,7 @@ class Debt_repayment extends WebminController
 
                 if ($save['success']) {
 
-                    $saveaccounting = $this->save_debt_repayment_accounting($input, $save['payment_debt_id']);
+                    //$saveaccounting = $this->save_debt_repayment_accounting($input, $save['payment_debt_id']);
 
                     $result = ['success' => TRUE, 'message' => 'Data pelunasan hutang berhasil disimpan', 'payment_debt_id' => $save['payment_debt_id']];
 

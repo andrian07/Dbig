@@ -85,7 +85,7 @@ $assetsUrl = base_url('assets');
 
 							<td class="text-center"><?php echo $number; ?></td>
 
-							<td class="text-center"><?= esc($row['product_name']) ?></td>
+							<td class="text-center"><?= esc($row['product_name']) ?><br />(<?= esc($row['detail_purchase_po_ket']) ?>)</td>
 
 							<td class="text-center"><?= numberFormat($detail_purchase_po_qty, TRUE) ?></td>
 

@@ -335,14 +335,14 @@ $assetsUrl = base_url('assets');
 
                                 <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
                                     <div class="col-sm-2">
-                                <?php }else{ ?>
-                                    <div class="col-sm-2" style="display:none;">
-                                <?php } ?>
+                                    <?php }else{ ?>
+                                        <div class="col-sm-2" style="display:none;">
+                                        <?php } ?>
 
                                         <!-- text input -->
 
                                         <div class="form-group">
-                                            
+
                                             <label>Harga Beli Per Unit</label>
 
                                             <input id="temp_price" name="temp_price" class="form-control text-right" value="0" data-parsley-vprice required>
@@ -353,519 +353,537 @@ $assetsUrl = base_url('assets');
                                     </div>
 
 
-                                <div class="col-sm-2">
+                                    <div class="col-sm-2">
 
-                                    <!-- text input -->
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Qty</label>
+
+                                            <input id="temp_qty" name="temp_qty" type="text" class="form-control text-right" value="0" data-parsley-vqty required>
+                                            <input id="total_price" name="total_price" type="hidden" class="form-control text-right" value="0" required>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-sm-2">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Ongkir</label>
+
+                                            <input id="temp_ongkir" name="temp_ongkir" type="text" class="form-control text-right" value="0">
+
+                                        </div>
+
+                                    </div>
+
+                                    <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                                        <div class="col-md-1"></div>
+                                    <?php }else{ ?>
+                                        <div class="col-md-1"></div>
+                                    <?php } ?>
+
+
+                                    <div class="col-sm-2" style="display:none;">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Discount</label>
+
+                                            <input id="temp_discount1" name="temp_discount1" type="hidden" class="form-control text-right" value="0" readonly>
+                                            <input id="temp_discount2" name="temp_discount2" type="hidden" class="form-control text-right" value="0" readonly>
+                                            <input id="temp_discount3" name="temp_discount3" type="hidden" class="form-control text-right" value="0" readonly>
+                                            <input id="temp_discount_percentage1" name="temp_discount_percentage1" type="hidden" class="form-control text-right" value="0" readonly>
+                                            <input id="temp_discount_percentage2" name="temp_discount_percentage2" type="hidden" class="form-control text-right" value="0" readonly>
+                                            <input id="temp_discount_percentage3" name="temp_discount_percentage3" type="hidden" class="form-control text-right" value="0" readonly>
+                                            <input id="total_temp_discount" name="total_temp_discount" type="text" class="form-control text-right" value="0"readonly>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-sm-2" style="display:none;">
+
+                                        <!-- text input -->
+
+                                        <div class="form-group">
+
+                                            <label>Expire Date</label>
+
+                                            <input id="temp_ed_date" name="temp_ed_date" type="date" class="form-control">
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-4">
+
+                                        <div class="form-group">
+
+                                            <label>Keterangan</label>
+
+                                            <input id="temp_ket" name="temp_ket" type="text" class="form-control">
+
+                                        </div>
+                                    </div>
+
+                                    <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                                        <div class="col-sm-5">
+                                        <?php }else{ ?>
+                                            <div class="col-sm-5" style="display:none;">
+                                            <?php } ?>
+                                            <!-- text input -->
+
+
+
+
+                                            <div class="form-group">
+
+                                                <label>Total</label>
+
+                                                <input id="temp_total" name="temp_total" type="text" class="form-control text-right" value="0" readonly>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-sm-1" style="padding-right: 62px;">
+
+                                            <!-- text input -->
+
+                                            <label>&nbsp;</label>
+
+                                            <div class="form-group">
+
+                                                <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle float-right"><i class="fas fa-plus"></i></button>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </form>
+
+
+
+                                <div class="row mb-2">
+
+                                    <div class="col-12">
+
+                                        <table id="tbltemp" class="table table-bordered table-hover" width="100%">
+
+                                            <thead>
+
+                                                <tr>
+
+                                                    <th data-priority="1">#</th>
+
+                                                    <th data-priority="2">No Pengajuan</th>
+
+                                                    <th data-priority="3">Kode Item</th>
+
+                                                    <th data-priority="4" width="25%;">Produk</th>
+
+                                                    <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                                                        <th data-priority="5">Harga Satuan</th>
+                                                    <?php } ?>
+
+                                                    <th data-priority="6">Qty</th>
+
+                                                    <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                                                        <th data-priority="7">Diskon</th>
+
+                                                        <th data-priority="8">Ongkir</th>
+
+                                                        <th data-priority="9">E.D</th>
+
+                                                        <th data-priority="10">Total</th>
+                                                    <?php } ?>
+
+                                                    <th data-priority="11">Keterangan</th>
+
+                                                    <th data-priority="12">Aksi</th>
+
+                                                </tr>
+
+                                            </thead>
+
+                                            <tbody></tbody>
+
+                                        </table>
+
+                                        <template id="template_row_temp">
+
+                                           <tr>
+
+                                               <td>{row}</td>
+
+                                               <td>{submission_invoice}</td>
+
+                                               <td>{item_code}</td>
+
+                                               <td>{product_name}</td>
+
+                                               <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                                                   <td>{temp_price}</td>
+                                               <?php } ?>
+
+                                               <td>{temp_qty}</td>
+
+                                               <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                                                   <td>{temp_disc}</td>
+
+                                                   <td>{temp_ongkir}</td>
+
+                                                   <td>{temp_ed}</td>
+
+                                                   <td>{temp_total}</td>
+                                               <?php } ?>
+
+                                               <td>{temp_ket}</td>
+
+                                               <td>
+
+                                                   <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
+
+                                                       <i class="fas fa-edit"></i>
+
+                                                   </button>
+
+                                                   &nbsp;
+
+                                                   <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
+
+                                                       <i class="fas fa-minus"></i>
+
+                                                   </button>
+
+                                               </td>
+
+                                           </tr>
+
+                                       </template>
+
+                                   </div>
+
+                               </div>
+
+
+
+                               <div class="row form-space">
+
+                                <div class="col-lg-6">
 
                                     <div class="form-group">
 
-                                        <label>Qty</label>
+                                        <div class="col-sm-12">
 
-                                        <input id="temp_qty" name="temp_qty" type="text" class="form-control text-right" value="0" data-parsley-vqty required>
-                                        <input id="total_price" name="total_price" type="hidden" class="form-control text-right" value="0" required>
+
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <div class="col-sm-12">
+                                                        <input type="checkbox" class="form-check-input" id="show_tax_desc">
+                                                        <label class="form-check-label" for="show_tax_desc">Tampilkan Faktur</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <textarea id="purchase_order_remark" name="purchase_order_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="8">- UNTUK SETIAP MOTIF KERAMIK/ GRANIT HARAP DAPAT DIMUATKAN DENGAN NOMOR SERI YANG SAMA
+                                                - Kami meminta support dari Bapak/Ibu jika terdapat brosur & souvenir Sehingga bisa membantu memasarkan produk ke konsumen
+                                                - Kami juga mengharapakan jika untuk keramik bisa mensupport rak display dan sample keramik untuk display
+                                            </textarea>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <div class="col-sm-12">
+
+
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <div class="col-sm-12">
+                                                        <label class="form-check-label" for="show_tax_desc">Dari:</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <textarea id="purchase_order_remark3" name="purchase_order_remark3" class="form-control" placeholder="Catatan" maxlength="500" rows="5"></textarea>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <div class="col-sm-12">
+
+
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <div class="col-sm-12">
+                                                        <label class="form-check-label" for="show_tax_desc">Kepada:</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <textarea id="purchase_order_remark2" name="purchase_order_remark2" class="form-control" placeholder="Catatan" maxlength="500" rows="5"></textarea>
+
+                                        </div>
 
                                     </div>
 
                                 </div>
 
+                                <div class="col-lg-6 text-right">
 
-                                <div class="col-sm-2">
+                                    <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
+                                        <div>
+                                        <?php }else{ ?>
+                                            <div style="display:none;">
+                                            <?php } ?>
+                                            <div class="form-group row">
+                                                <label for="footer_sub_total" class="col-sm-7 col-form-label text-right:">Sub Total:</label>
+                                                <div class="col-sm-5">
+                                                    <input id="footer_sub_total" name="footer_sub_total" type="text" class="form-control text-right" value="0" readonly>
+                                                </div>
+                                            </div>
 
-                                    <!-- text input -->
+                                            <div class="form-group row" style="display:none;">
+                                                <label for="footer_total_discount" class="col-sm-7 col-form-label text-right:">Discount :</label>
+                                                <div class="col-sm-4">
+                                                    <input id="footer_discount1" name="footer_discount1" type="hidden" class="form-control text-right" value="0" readonly>
+                                                    <input id="footer_discount2" name="footer_discount2" type="hidden" class="form-control text-right" value="0" readonly>
+                                                    <input id="footer_discount3" name="footer_discount3" type="hidden" class="form-control text-right" value="0" readonly>
+                                                    <input id="footer_discount_percentage1" name="footer_discount_percentage1" type="hidden" class="form-control text-right" value="0" readonly>
+                                                    <input id="footer_discount_percentage2" name="footer_discount_percentage2" type="hidden" class="form-control text-right" value="0" readonly>
+                                                    <input id="footer_discount_percentage3" name="footer_discount_percentage3" type="hidden" class="form-control text-right" value="0" readonly>
+                                                    <input id="footer_total_discount" name="footer_total_discount" type="text" class="form-control text-right" value="0" readonly>
+                                                </div>
+                                                <div class="col-sm-1">
+                                                    <button id="btnaddfooterdiscount" class="btn btn-warning"><i class="fas fa-tags"></i></button>
+                                                </div>
+                                            </div>
 
-                                    <div class="form-group">
+                                            <div class="form-group row">
+                                                <label for="footer_dpp" class="col-sm-7 col-form-label text-right:">DPP :</label>
+                                                <div class="col-sm-5">
+                                                    <input id="footer_dpp" name="footer_dpp" type="text" class="form-control text-right" value="0" readonly>
+                                                </div>
+                                            </div>
 
-                                        <label>Ongkir</label>
+                                            <div class="form-group row">
+                                                <label for="footer_total_ppn" class="col-sm-7 col-form-label text-right:">PPN <?= PPN_TEXT ?> :</label>
+                                                <div class="col-sm-5">
+                                                    <input id="footer_total_ppn" name="footer_total_ppn" type="text" class="form-control text-right" value="0" readonly>
+                                                </div>
+                                            </div>
 
-                                        <input id="temp_ongkir" name="temp_ongkir" type="text" class="form-control text-right" value="0">
+                                            <div class="form-group row">
+                                                <label for="footer_total_ongkir" class="col-sm-7 col-form-label text-right:">Ongkir:</label>
+                                                <div class="col-sm-5">
+                                                    <input id="footer_total_ongkir" name="footer_total_ongkir" type="text" class="form-control text-right" value="0" readonly>
+                                                </div>
+                                            </div>
 
-                                    </div>
+                                            <div class="form-group row">
+                                                <label for="footer_total_invoice" class="col-sm-7 col-form-label text-right:">Grand Total :</label>
+                                                <div class="col-sm-5">
+                                                    <input id="footer_total_invoice" name="footer_total_invoice" type="text" class="form-control text-right" value="0" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                </div>
-                                
-                                <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
-                                    <div class="col-md-5"></div>
-                                <?php }else{ ?>
-                                    <div class="col-md-1"></div>
-                                <?php } ?>
-                                
-
-                                <div class="col-sm-2" style="display:none;">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Discount</label>
-
-                                        <input id="temp_discount1" name="temp_discount1" type="hidden" class="form-control text-right" value="0" readonly>
-                                        <input id="temp_discount2" name="temp_discount2" type="hidden" class="form-control text-right" value="0" readonly>
-                                        <input id="temp_discount3" name="temp_discount3" type="hidden" class="form-control text-right" value="0" readonly>
-                                        <input id="temp_discount_percentage1" name="temp_discount_percentage1" type="hidden" class="form-control text-right" value="0" readonly>
-                                        <input id="temp_discount_percentage2" name="temp_discount_percentage2" type="hidden" class="form-control text-right" value="0" readonly>
-                                        <input id="temp_discount_percentage3" name="temp_discount_percentage3" type="hidden" class="form-control text-right" value="0" readonly>
-                                        <input id="total_temp_discount" name="total_temp_discount" type="text" class="form-control text-right" value="0"readonly>
-
-                                    </div>
-
-                                </div>
-
-
-                                <div class="col-sm-2" style="display:none;">
-
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Expire Date</label>
-
-                                        <input id="temp_ed_date" name="temp_ed_date" type="date" class="form-control">
-
-                                    </div>
-
-                                </div>
-
-                                <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
-                                    <div class="col-sm-5">
-                                <?php }else{ ?>
-                                    <div class="col-sm-5" style="display:none;">
-                                <?php } ?>
-                                    <!-- text input -->
-
-                                    <div class="form-group">
-
-                                        <label>Total</label>
-
-                                        <input id="temp_total" name="temp_total" type="text" class="form-control text-right" value="0" readonly>
+                                        <div class="form-group row">
+                                            <div class="col-sm-12">
+                                                <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
+                                                <button id="btnsave" class="btn btn-success button-header-custom-save"><i class="fas fa-save"></i> Simpan</button>
+                                            </div>
+                                        </div>
 
                                     </div>
 
-                                </div>
-
-                                <div class="col-sm-1" style="padding-right: 62px;">
-
-                                    <!-- text input -->
-
-                                    <label>&nbsp;</label>
-
-                                    <div class="form-group">
-
-                                        <button id="btnadd_temp" class="btn btn-md btn-primary rounded-circle float-right"><i class="fas fa-plus"></i></button>
-
-                                    </div>
 
                                 </div>
 
                             </div>
 
+                        </div>
+
+                        <!-- /.card -->
+
+                    </div>
+
+                    <!-- /.col -->
+
+                </div>
+
+                <!-- /.row -->
+
+            </div><!-- /.container-fluid -->
+
+            <!-- Temp Modal Discount -->
+            <div class="modal fade" id="modal-tempdiscount">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="title-frmtempdiscount"></h4>
+                            <button type="button" class="close close-modal-temp">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form id="frmtempdiscount" class="form-horizontal">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label for="edit_temp_discount1_lbl" class="col-sm-12">Discount 1</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" id="edit_temp_discount_percentage1" name="edit_temp_discount_percentage1" value="0">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" id="edit_temp_discount1" name="edit_temp_discount1" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label for="edit_temp_discount2_lbl" class="col-sm-12">Discount 2</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" id="edit_temp_discount_percentage2" name="edit_temp_discount_percentage2" value="0">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" id="edit_temp_discount2" name="edit_temp_discount2" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label for="edit_temp_discount2_lbl" class="col-sm-12">Discount 3</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" id="edit_temp_discount_percentage3" name="edit_temp_discount_percentage3" value="0">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" id="edit_temp_discount3" name="edit_temp_discount3" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button id="btncancel" class="btn btn-danger close-modal-temp"><i class="fas fa-times-circle"></i> Batal</button>
+                                <button id="btndisc" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
+                            </div>
                         </form>
-
-
-
-                        <div class="row mb-2">
-
-                            <div class="col-12">
-
-                                <table id="tbltemp" class="table table-bordered table-hover" width="100%">
-
-                                    <thead>
-
-                                        <tr>
-
-                                            <th data-priority="1">#</th>
-
-                                            <th data-priority="2">No Pengajuan</th>
-
-                                            <th data-priority="3">Kode Item</th>
-
-                                            <th data-priority="4" width="25%;">Produk</th>
-
-                                            <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
-                                            <th data-priority="5">Harga Satuan</th>
-                                            <?php } ?>
-
-                                            <th data-priority="6">Qty</th>
-                                            
-                                            <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
-                                            <th data-priority="7">Diskon</th>
-
-                                            <th data-priority="8">Ongkir</th>
-
-                                            <th data-priority="9">E.D</th>
-
-                                            <th data-priority="10">Total</th>
-                                            <?php } ?>
-
-                                            <th data-priority="11">Aksi</th>
-
-                                        </tr>
-
-                                    </thead>
-
-                                    <tbody></tbody>
-
-                                </table>
-
-                                <template id="template_row_temp">
-
-                                   <tr>
-
-                                       <td>{row}</td>
-
-                                       <td>{submission_invoice}</td>
-
-                                       <td>{item_code}</td>
-
-                                       <td>{product_name}</td>
-
-                                       <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
-                                       <td>{temp_price}</td>
-                                       <?php } ?>
-
-                                       <td>{temp_qty}</td>
-
-                                       <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
-                                       <td>{temp_disc}</td>
-
-                                       <td>{temp_ongkir}</td>
-
-                                       <td>{temp_ed}</td>
-
-                                       <td>{temp_total}</td>
-                                       <?php } ?>
-
-                                       <td>
-
-                                           <button data-id="{temp_id}" data-json="{data_json}" class="btn btn-sm btn-warning btnedit rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Edit">
-
-                                               <i class="fas fa-edit"></i>
-
-                                           </button>
-
-                                           &nbsp;
-
-                                           <button data-id="{temp_id}" class="btn btn-sm btn-danger btndelete rounded-circle" data-toggle="tooltip" data-placement="top" data-title="Hapus">
-
-                                               <i class="fas fa-minus"></i>
-
-                                           </button>
-
-                                       </td>
-
-                                   </tr>
-
-                               </template>
-
-                           </div>
-
-                       </div>
-
-
-
-                       <div class="row form-space">
-
-                        <div class="col-lg-6">
-
-                            <div class="form-group">
-
-                                <div class="col-sm-12">
-
-
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <div class="col-sm-12">
-                                                <input type="checkbox" class="form-check-input" id="show_tax_desc">
-                                                <label class="form-check-label" for="show_tax_desc">Tampilkan Faktur</label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <textarea id="purchase_order_remark" name="purchase_order_remark" class="form-control" placeholder="Catatan" maxlength="500" rows="8">- UNTUK SETIAP MOTIF KERAMIK/ GRANIT HARAP DAPAT DIMUATKAN DENGAN NOMOR SERI YANG SAMA
-                                        - Kami meminta support dari Bapak/Ibu jika terdapat brosur & souvenir Sehingga bisa membantu memasarkan produk ke konsumen
-                                        - Kami juga mengharapakan jika untuk keramik bisa mensupport rak display dan sample keramik untuk display
-                                    </textarea>
-
-                                </div>
-
-                            </div>
-
-                            <div class="form-group">
-
-                                <div class="col-sm-12">
-
-
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <div class="col-sm-12">
-                                                <label class="form-check-label" for="show_tax_desc">Dari:</label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <textarea id="purchase_order_remark3" name="purchase_order_remark3" class="form-control" placeholder="Catatan" maxlength="500" rows="5"></textarea>
-
-                                </div>
-
-                            </div>
-
-                            <div class="form-group">
-
-                                <div class="col-sm-12">
-
-
-                                    <div class="form-group">
-                                        <div class="form-check">
-                                            <div class="col-sm-12">
-                                                <label class="form-check-label" for="show_tax_desc">Kepada:</label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <textarea id="purchase_order_remark2" name="purchase_order_remark2" class="form-control" placeholder="Catatan" maxlength="500" rows="5"></textarea>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-                    
-                        <div class="col-lg-6 text-right">
-                            
-                            <?php if($_SESSION['user_login']['group_name'] != "Gudang"){?>
-                            <div>
-                            <?php }else{ ?>
-                            <div style="display:none;">
-                            <?php } ?>
-                            <div class="form-group row">
-                                <label for="footer_sub_total" class="col-sm-7 col-form-label text-right:">Sub Total:</label>
-                                <div class="col-sm-5">
-                                    <input id="footer_sub_total" name="footer_sub_total" type="text" class="form-control text-right" value="0" readonly>
-                                </div>
-                            </div>
-
-                            <div class="form-group row" style="display:none;">
-                                <label for="footer_total_discount" class="col-sm-7 col-form-label text-right:">Discount :</label>
-                                <div class="col-sm-4">
-                                    <input id="footer_discount1" name="footer_discount1" type="hidden" class="form-control text-right" value="0" readonly>
-                                    <input id="footer_discount2" name="footer_discount2" type="hidden" class="form-control text-right" value="0" readonly>
-                                    <input id="footer_discount3" name="footer_discount3" type="hidden" class="form-control text-right" value="0" readonly>
-                                    <input id="footer_discount_percentage1" name="footer_discount_percentage1" type="hidden" class="form-control text-right" value="0" readonly>
-                                    <input id="footer_discount_percentage2" name="footer_discount_percentage2" type="hidden" class="form-control text-right" value="0" readonly>
-                                    <input id="footer_discount_percentage3" name="footer_discount_percentage3" type="hidden" class="form-control text-right" value="0" readonly>
-                                    <input id="footer_total_discount" name="footer_total_discount" type="text" class="form-control text-right" value="0" readonly>
-                                </div>
-                                <div class="col-sm-1">
-                                    <button id="btnaddfooterdiscount" class="btn btn-warning"><i class="fas fa-tags"></i></button>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="footer_dpp" class="col-sm-7 col-form-label text-right:">DPP :</label>
-                                <div class="col-sm-5">
-                                    <input id="footer_dpp" name="footer_dpp" type="text" class="form-control text-right" value="0" readonly>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="footer_total_ppn" class="col-sm-7 col-form-label text-right:">PPN <?= PPN_TEXT ?> :</label>
-                                <div class="col-sm-5">
-                                    <input id="footer_total_ppn" name="footer_total_ppn" type="text" class="form-control text-right" value="0" readonly>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="footer_total_ongkir" class="col-sm-7 col-form-label text-right:">Ongkir:</label>
-                                <div class="col-sm-5">
-                                    <input id="footer_total_ongkir" name="footer_total_ongkir" type="text" class="form-control text-right" value="0" readonly>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="footer_total_invoice" class="col-sm-7 col-form-label text-right:">Grand Total :</label>
-                                <div class="col-sm-5">
-                                    <input id="footer_total_invoice" name="footer_total_invoice" type="text" class="form-control text-right" value="0" readonly>
-                                </div>
-                            </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <div class="col-sm-12">
-                                    <button id="btncancel" class="btn btn-danger"><i class="fas fa-times-circle"></i> Batal</button>
-                                    <button id="btnsave" class="btn btn-success button-header-custom-save"><i class="fas fa-save"></i> Simpan</button>
-                                </div>
-                            </div>
-
-                        </div>
-
-
                     </div>
-
+                    <!-- /.modal-content -->
                 </div>
-
+                <!-- /.modal-dialog -->
             </div>
+            <!-- End Temp Modal Discount -->
 
-            <!-- /.card -->
+            <!-- Footer Modal Discount -->
+            <div class="modal fade" id="modal-footerdiscount">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="title-frmfooterdiscount"></h4>
+                            <button type="button" class="close close-modal-footer">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form id="frmfooterdiscount" class="form-horizontal">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label for="edit_footer_discount1_lbl" class="col-sm-12">Discount 1</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" id="edit_footer_discount_percentage1" name="edit_footer_discount_percentage1" value="0">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" id="edit_footer_discount1" name="edit_footer_discount1" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label for="edit_footer_discount2_lbl" class="col-sm-12">Discount 2</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" id="edit_footer_discount_percentage2" name="edit_footer_discount_percentage2" value="0">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" id="edit_footer_discount2" name="edit_footer_discount2" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label for="edit_footer_discount3_lbl" class="col-sm-12">Discount 3</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" id="edit_footer_discount_percentage3" name="edit_footer_discount_percentage3" value="0">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" id="edit_footer_discount3" name="edit_footer_discount3" value="0">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button id="btncancel" class="btn btn-danger close-modal-footer"><i class="fas fa-times-circle"></i> Batal</button>
+                                <button id="btndiscfooter" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- Footer Modal Discount -->
 
-        </div>
 
-        <!-- /.col -->
+        </section>
+
+
 
     </div>
 
-    <!-- /.row -->
-
-</div><!-- /.container-fluid -->
-
-<!-- Temp Modal Discount -->
-<div class="modal fade" id="modal-tempdiscount">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="title-frmtempdiscount"></h4>
-                <button type="button" class="close close-modal-temp">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="frmtempdiscount" class="form-horizontal">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="row">
-                            <label for="edit_temp_discount1_lbl" class="col-sm-12">Discount 1</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_temp_discount_percentage1" name="edit_temp_discount_percentage1" value="0">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_temp_discount1" name="edit_temp_discount1" value="0">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label for="edit_temp_discount2_lbl" class="col-sm-12">Discount 2</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_temp_discount_percentage2" name="edit_temp_discount_percentage2" value="0">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_temp_discount2" name="edit_temp_discount2" value="0">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label for="edit_temp_discount2_lbl" class="col-sm-12">Discount 3</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_temp_discount_percentage3" name="edit_temp_discount_percentage3" value="0">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_temp_discount3" name="edit_temp_discount3" value="0">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button id="btncancel" class="btn btn-danger close-modal-temp"><i class="fas fa-times-circle"></i> Batal</button>
-                    <button id="btndisc" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
-                </div>
-            </form>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- End Temp Modal Discount -->
-
-<!-- Footer Modal Discount -->
-<div class="modal fade" id="modal-footerdiscount">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="title-frmfooterdiscount"></h4>
-                <button type="button" class="close close-modal-footer">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="frmfooterdiscount" class="form-horizontal">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="row">
-                            <label for="edit_footer_discount1_lbl" class="col-sm-12">Discount 1</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_footer_discount_percentage1" name="edit_footer_discount_percentage1" value="0">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_footer_discount1" name="edit_footer_discount1" value="0">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label for="edit_footer_discount2_lbl" class="col-sm-12">Discount 2</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_footer_discount_percentage2" name="edit_footer_discount_percentage2" value="0">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_footer_discount2" name="edit_footer_discount2" value="0">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <label for="edit_footer_discount3_lbl" class="col-sm-12">Discount 3</label>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_footer_discount_percentage3" name="edit_footer_discount_percentage3" value="0">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" id="edit_footer_discount3" name="edit_footer_discount3" value="0">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button id="btncancel" class="btn btn-danger close-modal-footer"><i class="fas fa-times-circle"></i> Batal</button>
-                    <button id="btndiscfooter" class="btn btn-success"><i class="fas fa-save"></i> Simpan</button>
-                </div>
-            </form>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- Footer Modal Discount -->
 
 
-</section>
+    <!-- /.content -->
+
+    <?= $this->endSection() ?>
 
 
 
-</div>
+    <?= $this->section('js') ?>
 
+    <script>
 
+        $(document).ready(function() {
 
-<!-- /.content -->
+            let temp_price = new AutoNumeric('#temp_price', configRp);
 
-<?= $this->endSection() ?>
+            let temp_tax = new AutoNumeric('#temp_tax', configRp);
 
+            let temp_dpp = new AutoNumeric('#temp_dpp', configRp); 
 
+            let temp_qty = new AutoNumeric('#temp_qty', configQty);
 
-<?= $this->section('js') ?>
+            let temp_ongkir = new AutoNumeric('#temp_ongkir', configRp);
 
-<script>
+            let total_price = new AutoNumeric('#total_price', configRp);
 
-    $(document).ready(function() {
-
-        let temp_price = new AutoNumeric('#temp_price', configRp);
-
-        let temp_tax = new AutoNumeric('#temp_tax', configRp);
-
-        let temp_dpp = new AutoNumeric('#temp_dpp', configRp); 
-
-        let temp_qty = new AutoNumeric('#temp_qty', configQty);
-
-        let temp_ongkir = new AutoNumeric('#temp_ongkir', configRp);
-
-        let total_price = new AutoNumeric('#total_price', configRp);
-
-        let footer_dpp = new AutoNumeric('#footer_dpp', configRp);
+            let footer_dpp = new AutoNumeric('#footer_dpp', configRp);
 
         //popup Temp discount //
 
@@ -1138,8 +1156,6 @@ $assetsUrl = base_url('assets');
 
                             clearItemInput();
 
-
-
                         } else {
 
                             message.error(response.result.message);
@@ -1411,6 +1427,7 @@ $('#btnadd_temp').click(function(e) {
 
    let submission_inv = $("#nosubmission option:selected" ).text();
 
+   let temp_ket_val = $('#temp_ket').val();
 
    let btnSubmit = $('#btnadd_temp');
 
@@ -1441,6 +1458,8 @@ $('#btnadd_temp').click(function(e) {
            temp_qty: qty,
 
            temp_ongkir: ongkir,
+
+           temp_ket:temp_ket_val,
 
            temp_discount1: discount1,
 
@@ -1702,8 +1721,6 @@ $("#tblpurchaseorders").on('click', '.btnedit', function(e) {
 
                         footer_total_invoice.set(footer_total_invoice_val);
 
-                        
-
                         loadTempData(items);
 
                         showInputPage(true);
@@ -1837,6 +1854,8 @@ $("#tbltemp").on('click', '.btnedit', function(e) {
 
  if (is_json) {
 
+    console.log(json);
+    
     //setSelect2('#nosubmission',json.temp_po_submission_id,json.temp_po_submission_invoice);
 
     $('#submission_id').val(json.temp_po_submission_id);
@@ -1877,6 +1896,8 @@ $("#tbltemp").on('click', '.btnedit', function(e) {
 
     $('#temp_tax').val(json.temp_po_ppn);
 
+    $('#temp_ket').val(json.temp_ket);
+
     temp_total.set(json.temp_po_total);
 
     temp_dpp.set(json.temp_po_dpp);
@@ -1887,11 +1908,11 @@ $("#tbltemp").on('click', '.btnedit', function(e) {
 
 } else {
 
-     getTemp();
+ getTemp();
 
-     message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
+ message.error('Terjadi kesalahan dalam memproses data, harap coba lagi');
 
-    }
+}
 
 })  
 
@@ -1900,81 +1921,85 @@ function loadTempData(items) {
 
     if(items['length'] < 1){
 
-     setSelect2('#supplier_id', "", "");
- }
- let template = $('#template_row_temp').html();
+        setSelect2('#supplier_id', "", "");
+    }
+    let template = $('#template_row_temp').html();
 
- let tbody = '';
+    let tbody = '';
 
- let row = 1;
+    let row = 1;
 
- let temp_total_order = 0;
+    let temp_total_order = 0;
 
- items.forEach((val, key) => {
+    items.forEach((val, key) => {
 
-     let item = template;
+        let item = template;
 
-     let data_json = htmlEntities.encode(JSON.stringify(val));
+        let data_json = htmlEntities.encode(JSON.stringify(val));
 
-     let temp_po_id  = val.temp_po_id;
+        let temp_po_id  = val.temp_po_id;
 
-     let temp_po_submission_invoice  = val.temp_po_submission_invoice;
+        let temp_po_submission_invoice  = val.temp_po_submission_invoice;
 
-     let temp_po_item_id = val.temp_po_item_id;
+        let temp_po_item_id = val.temp_po_item_id;
 
-     let item_code = val.item_code;
+        let item_code = val.item_code;
 
-     let product_name  = val.product_name+'('+val.unit_name+')';
+        let product_name  = val.product_name+'('+val.unit_name+')';
 
-     let temp_po_price  = val.temp_po_price;
+        let temp_po_price  = val.temp_po_price;
 
-     let temp_po_qty = parseFloat(val.temp_po_qty);
+        let temp_po_qty = parseFloat(val.temp_po_qty);
 
-     let temp_po_total_disc = val.temp_total_discount;
+        let temp_po_total_disc = val.temp_total_discount;
 
-     let temp_po_ongkir = val.temp_po_ongkir;
+        let temp_po_ongkir = val.temp_po_ongkir;
 
-     let temp_po_expire_date = val.temp_po_expire_date;
+        let temp_po_expire_date = val.temp_po_expire_date;
 
-     let temp_po_total = val.temp_po_total;
+        let temp_po_total = val.temp_po_total;
 
-     let has_tax = val.has_tax;
+        let temp_ket = val.temp_ket;
 
-     item = item.replaceAll('{row}', row)
+        let has_tax = val.has_tax;
 
-     .replaceAll('{submission_invoice}', temp_po_submission_invoice)
+        item = item.replaceAll('{row}', row)
 
-     .replaceAll('{item_code}', item_code)
+        .replaceAll('{submission_invoice}', temp_po_submission_invoice)
 
-     .replaceAll('{product_name}', product_name)
+        .replaceAll('{item_code}', item_code)
 
-     .replaceAll('{temp_price}', numberFormat(temp_po_price, true))
+        .replaceAll('{product_name}', product_name)
 
-     .replaceAll('{temp_qty}', numberFormat(temp_po_qty, true))
+        .replaceAll('{temp_price}', numberFormat(temp_po_price, true))
 
-     .replaceAll('{temp_disc}', numberFormat(temp_po_total_disc, true))
+        .replaceAll('{temp_qty}', numberFormat(temp_po_qty, true))
 
-     .replaceAll('{temp_ongkir}', numberFormat(temp_po_ongkir, true))
+        .replaceAll('{temp_disc}', numberFormat(temp_po_total_disc, true))
 
-     .replaceAll('{temp_ed}', temp_po_expire_date)
+        .replaceAll('{temp_ongkir}', numberFormat(temp_po_ongkir, true))
 
-     .replaceAll('{temp_total}', numberFormat(temp_po_total, true))
+        .replaceAll('{temp_ed}', temp_po_expire_date)
 
-     .replaceAll('{temp_id}', temp_po_id)
+        .replaceAll('{temp_total}', numberFormat(temp_po_total, true))
 
-     .replaceAll('{data_json}', data_json);
+        .replaceAll('{temp_id}', temp_po_id)
 
-     tbody += item;
+        .replaceAll('{temp_ket}', temp_ket)
 
-     row++;
+        .replaceAll('{data_json}', data_json);
+
+        tbody += item;
+
+        row++;
 
 
 
 
- });
+    });
 
 
- if ($.fn.DataTable.isDataTable('#tbltemp')) {
+    if ($.fn.DataTable.isDataTable('#tbltemp')) {
 
      $('#tbltemp').DataTable().destroy();
 
@@ -2000,23 +2025,23 @@ function loadTempData(items) {
 
 const config_tbltemp = {
 
-   pageLength: 10,
+    pageLength: 10,
 
-   autoWidth: false,
+    autoWidth: false,
 
-   select: true,
+    select: true,
 
-   responsive: true,
+    responsive: true,
 
-   fixedColumns: true,
+    fixedColumns: true,
 
-   order: [
+    order: [
 
-   [0, 'desc']
+    [0, 'desc']
 
-   ],
+    ],
 
-   "language": {
+    "language": {
 
        "url": lang_datatables,
 
@@ -2028,7 +2053,7 @@ const config_tbltemp = {
    },
    {
 
-       targets: [0,9],
+    targets: [0,10],
 
        orderable: false,
 
@@ -2521,43 +2546,45 @@ function updateTableHeader() {
 
 function clearItemInput() {
 
- let form = $('#frmaddtemp');
+    let form = $('#frmaddtemp');
 
- form.parsley().reset();
+    form.parsley().reset();
 
- $('#item_id').val('');
+    $('#item_id').val('');
 
- $('#product_name').val('');
+    $('#product_name').val('');
 
- $('#temp_ed_date').val('');
+    $('#temp_ed_date').val('');
 
- temp_qty.set('0.00');
+    $('#temp_ket').val('');
 
- temp_ongkir.set(0);
+    temp_qty.set('0.00');
 
- temp_price.set(0);
+    temp_ongkir.set(0);
 
- temp_total.set(0);
+    temp_price.set(0);
 
- temp_dpp.set(0);
+    temp_total.set(0);
 
- temp_tax.set(0);
+    temp_dpp.set(0);
 
- edit_temp_discount_percentage1.set('0.00%');
+    temp_tax.set(0);
 
- edit_temp_discount_percentage2.set('0.00%');
+    edit_temp_discount_percentage1.set('0.00%');
 
- edit_temp_discount_percentage3.set('0.00%');
+    edit_temp_discount_percentage2.set('0.00%');
 
- edit_temp_discount1.set(0);
+    edit_temp_discount_percentage3.set('0.00%');
 
- edit_temp_discount2.set(0);
+    edit_temp_discount1.set(0);
 
- edit_temp_discount3.set(0);
+    edit_temp_discount2.set(0);
 
- total_temp_discount.set(0);
+    edit_temp_discount3.set(0);
 
- $('#temp_desc').val('');
+    total_temp_discount.set(0);
+
+    $('#temp_desc').val('');
 
  //setSelect2('#nosubmission','','');
 

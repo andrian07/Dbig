@@ -392,9 +392,14 @@ class M_purchase extends Model
 
             $get_last_outstanding_order = $this->db->table($this->list_auto_po)->select('has_order')->where('product_id ', $temp_purchase_item_id)->get()->getRowArray();
 
-            $new_outstanding_order = $get_last_outstanding_order['has_order'] + $temp_purchase_qty;
+            if($get_last_outstanding_order != null){
+                
+                $new_outstanding_order = $get_last_outstanding_order['has_order'] + $temp_purchase_qty;
 
-            $update_outstanding =  $this->db->table($this->list_auto_po)->where('product_id ', $temp_purchase_item_id)->update(['outstanding' => 'N', 'has_order' => $new_outstanding_order]);
+                $update_outstanding =  $this->db->table($this->list_auto_po)->where('product_id ', $temp_purchase_item_id)->update(['outstanding' => 'N', 'has_order' => $new_outstanding_order]);
+            }
+
+
         }
 
         $sqlDtOrder .= implode(',', $sqlDtValues);

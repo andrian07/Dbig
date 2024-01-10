@@ -115,7 +115,7 @@ class M_purchase_order extends Model
 
 
 
-        $sqlDtOrder = "insert into dt_purchase_order(purchase_order_id,detail_submission_id,detail_submission_invoice,detail_purchase_po_item_id,detail_purchase_po_qty,detail_purchase_po_ppn,detail_purchase_po_dpp,detail_purchase_po_price,detail_purchase_po_discount1,detail_purchase_po_discount1_percentage,detail_purchase_po_discount2,detail_purchase_po_discount2_percentage,detail_purchase_po_discount3,detail_purchase_po_discount3_percentage,detail_purchase_po_total_discount,detail_purchase_po_ongkir,detail_purchase_po_expire_date,detail_purchase_po_total,detail_purchase_po_recive, detail_purchase_po_qty_pending) VALUES";
+        $sqlDtOrder = "insert into dt_purchase_order(purchase_order_id,detail_submission_id,detail_submission_invoice,detail_purchase_po_item_id,detail_purchase_po_qty,detail_purchase_po_ppn,detail_purchase_po_dpp,detail_purchase_po_price,detail_purchase_po_discount1,detail_purchase_po_discount1_percentage,detail_purchase_po_discount2,detail_purchase_po_discount2_percentage,detail_purchase_po_discount3,detail_purchase_po_discount3_percentage,detail_purchase_po_total_discount,detail_purchase_po_ongkir,detail_purchase_po_expire_date,detail_purchase_po_total, detail_purchase_po_ket, detail_purchase_po_recive, detail_purchase_po_qty_pending) VALUES";
 
         $sqlDtValues = [];
 
@@ -142,10 +142,11 @@ class M_purchase_order extends Model
             $detail_purchase_po_ongkir               = $row['temp_po_ongkir'];
             $detail_purchase_po_expire_date          = $row['temp_po_expire_date'];
             $detail_purchase_po_total                = $row['temp_po_total'];
+            $detail_purchase_po_ket                  = $row['temp_ket'];
             $detail_purchase_po_recive               = 0;
             $detail_purchase_po_qty_pending          = $row['temp_po_qty'];
 
-            $sqlDtValues[] = "('$purchase_order_id','$detail_purchase_submission_id','$detail_purchase_submission_invoice','$detail_purchase_po_item_id','$detail_purchase_po_qty','$detail_purchase_po_ppn','$detail_purchase_po_dpp','$detail_purchase_po_price','$detail_purchase_po_discount1','$detail_purchase_po_discount1_percentage','$detail_purchase_po_discount2','$detail_purchase_po_discount2_percentage','$detail_purchase_po_discount3','$detail_purchase_po_discount3_percentage','$detail_purchase_po_total_discount','$detail_purchase_po_ongkir','$detail_purchase_po_expire_date','$detail_purchase_po_total','$$detail_purchase_po_recive','$detail_purchase_po_qty_pending')";
+            $sqlDtValues[] = "('$purchase_order_id','$detail_purchase_submission_id','$detail_purchase_submission_invoice','$detail_purchase_po_item_id','$detail_purchase_po_qty','$detail_purchase_po_ppn','$detail_purchase_po_dpp','$detail_purchase_po_price','$detail_purchase_po_discount1','$detail_purchase_po_discount1_percentage','$detail_purchase_po_discount2','$detail_purchase_po_discount2_percentage','$detail_purchase_po_discount3','$detail_purchase_po_discount3_percentage','$detail_purchase_po_total_discount','$detail_purchase_po_ongkir','$detail_purchase_po_expire_date','$detail_purchase_po_total','$detail_purchase_po_ket','$detail_purchase_po_recive','$detail_purchase_po_qty_pending')";
 
             $update_outstanding =  $this->db->table($this->list_auto_po)->where('product_id ', $row['temp_po_item_id'])->update(['outstanding' => 'Y']);
             
@@ -365,9 +366,9 @@ public function copyDtOrderToTemp($datacopy)
 
     $this->clearTemp($user_id);
 
-    $sqlText = "INSERT INTO temp_purchase_order(temp_po_submission_id,temp_po_submission_invoice,temp_po_item_id,temp_po_qty,temp_po_ppn,temp_po_dpp,temp_po_price,temp_po_discount1,temp_po_discount1_percentage,temp_po_discount2,temp_po_discount2_percentage,temp_po_discount3,temp_po_discount3_percentage,temp_po_discount_total,temp_po_ongkir,temp_po_expire_date,temp_po_total,temp_po_supplier_id,temp_po_supplier_name,temp_po_user_id) ";
+    $sqlText = "INSERT INTO temp_purchase_order(temp_po_submission_id,temp_po_submission_invoice,temp_po_item_id,temp_po_qty,temp_po_ppn,temp_po_dpp,temp_po_price,temp_po_discount1,temp_po_discount1_percentage,temp_po_discount2,temp_po_discount2_percentage,temp_po_discount3,temp_po_discount3_percentage,temp_po_discount_total,temp_po_ongkir,temp_po_expire_date,temp_po_total,temp_ket,temp_po_supplier_id,temp_po_supplier_name,temp_po_user_id) ";
 
-    $sqlText .= "SELECT detail_submission_id,detail_submission_invoice,detail_purchase_po_item_id, detail_purchase_po_qty, detail_purchase_po_ppn, detail_purchase_po_dpp,detail_purchase_po_price,detail_purchase_po_discount1,detail_purchase_po_discount1_percentage,detail_purchase_po_discount2,detail_purchase_po_discount2_percentage,detail_purchase_po_discount3,detail_purchase_po_discount3_percentage,detail_purchase_po_total_discount,detail_purchase_po_ongkir,detail_purchase_po_expire_date,detail_purchase_po_total,'".$supplier_id."' as detail_po_supplier_id, '".$supplier_name."' as detail_po_supplier_name,'".$user_id."' as detail_po_user_id";
+    $sqlText .= "SELECT detail_submission_id,detail_submission_invoice,detail_purchase_po_item_id, detail_purchase_po_qty, detail_purchase_po_ppn, detail_purchase_po_dpp,detail_purchase_po_price,detail_purchase_po_discount1,detail_purchase_po_discount1_percentage,detail_purchase_po_discount2,detail_purchase_po_discount2_percentage,detail_purchase_po_discount3,detail_purchase_po_discount3_percentage,detail_purchase_po_total_discount,detail_purchase_po_ongkir,detail_purchase_po_expire_date,detail_purchase_po_total,detail_purchase_po_ket,'".$supplier_id."' as detail_po_supplier_id, '".$supplier_name."' as detail_po_supplier_name,'".$user_id."' as detail_po_user_id";
 
     $sqlText .= " FROM dt_purchase_order WHERE purchase_order_id = '$purchase_order_id'";
 

@@ -112,6 +112,24 @@ class M_consignment extends Model
         return $builder->get();
     }
 
+    public function copySubmissionToTemp($datacopy)
+    {
+        $user_id = $datacopy['user_id'];
+        $submission_id = $datacopy['submission_id'];
+
+        $this->clearTemp($user_id);
+
+        $sqlText = "INSERT INTO temp_purchase_order_consignment(temp_po_consignment_submission_id,temp_po_consignment_submission_invoice,temp_po_consignment_item_id,temp_po_consignment_qty,temp_po_consignment_expire_date,temp_po_consignment_suplier_id,temp_po_consignment_suplier_name,temp_po_consignment_user_id) ";
+
+        $sqlText .= "select submission_id,submission_inv,dt_submission_item_id, dt_submission_qty,'',supplier_id,supplier_name,'".$user_id."' as user_id";
+
+        $sqlText .= " FROM hd_submission a, dt_submission b, ms_product_unit c, ms_product d, ms_supplier e WHERE a.submission_id = b.dt_hd_submision_id and b.dt_submission_item_id = c.item_id and c.product_id = d.product_id and a.submission_supplier_id = e.supplier_id and submission_id = '$submission_id'";
+
+        $this->db->query($sqlText);
+
+        return $this->getTemp($user_id);
+    }
+
     public function copyDtOrderPoToTemp($datacopy)
     {
         $user_id                            = $datacopy['temp_po_consignment_user_id'];

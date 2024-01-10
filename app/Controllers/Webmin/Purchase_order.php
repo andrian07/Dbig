@@ -411,7 +411,7 @@ class Purchase_order extends WebminController
             'temp_po_supplier_id'               => $this->request->getPost('temp_po_suplier_id'),
             'temp_po_supplier_name'             => $this->request->getPost('temp_po_suplier_name'),
             'temp_po_discount_total'            => $this->request->getPost('total_temp_discount'),
-
+            'temp_ket'                          => $this->request->getPost('temp_ket'),
         ];
 
         $validation->setRules([

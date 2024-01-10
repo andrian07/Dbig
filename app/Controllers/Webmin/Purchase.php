@@ -304,6 +304,7 @@ class Purchase extends WebminController
             'purchase_payment_method_id'                => $this->request->getPost('purchase_payment_method_id'),
             'purchase_down_payment'                     => $this->request->getPost('purchase_down_payment'),
             'purchase_remaining_debt'                   => $this->request->getPost('purchase_remaining_debt'),
+            'purchase_no_tax_faktur'                    => $this->request->getPost('purchase_no_tax_faktur'),
         ];
 
         $validation->setRules([

@@ -778,6 +778,10 @@ $routes->group('webmin/consignment', ['filter' => 'webminauth'], static function
     $routes->get('edit-po-consignment/(:alphanum)', 'Webmin\Consignment\Consignment::editPoConsignment/$1');
 
     $routes->get('cancel-po-order/(:alphanum)', 'Webmin\Consignment\Consignment::cancelPoOrder/$1');
+
+    $routes->get('cancel-submission/(:alphanum)', 'Webmin\Consignment\Consignment::copySubmission/$1');
+
+    $routes->get('copy-submission/(:alphanum)', 'Webmin\Consignment\Consignment::copySubmission/$1');
 });
 
 /* end pembelian */
